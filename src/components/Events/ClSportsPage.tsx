@@ -1,14 +1,4 @@
-import type {
-	CampusType,
-	UniversitySportsFieldsFragment,
-	WeekdayType
-} from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
-import SportsRow from '@/components/Rows/SportsRow'
-import PlatformIcon from '@/components/Universal/Icon'
-import { UserKindContext } from '@/components/contexts'
-import { useRefreshByUser } from '@/hooks'
-import { networkError } from '@/utils/api-utils'
+/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 import type { UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
@@ -26,6 +16,17 @@ import {
 } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type {
+	CampusType,
+	UniversitySportsFieldsFragment,
+	WeekdayType
+} from '@/__generated__/gql/graphql'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import SportsRow from '@/components/Rows/SportsRow'
+import PlatformIcon from '@/components/Universal/Icon'
+import { useRefreshByUser } from '@/hooks'
+import { networkError } from '@/utils/api-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 
 export default function ClSportsPage({

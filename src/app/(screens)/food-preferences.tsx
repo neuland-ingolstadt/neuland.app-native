@@ -1,3 +1,9 @@
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { startTransition } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/FoodLanguageSection'
@@ -8,12 +14,6 @@ import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { FormListSections } from '@/types/components'
-import { useRouter } from 'expo-router'
-import type React from 'react'
-import { startTransition } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')

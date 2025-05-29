@@ -1,15 +1,15 @@
-import CalendarEventsPage from '@/components/Calendar/CalendarEventsPage'
-import ExamsPage from '@/components/Calendar/ExamsPage'
-import PagerView from '@/components/Layout/PagerView'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ToggleRow from '@/components/Universal/ToggleRow'
 import { trackEvent } from '@aptabase/react-native'
 import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { Suspense, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, View, useWindowDimensions } from 'react-native'
+import { Linking, useWindowDimensions, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import CalendarEventsPage from '@/components/Calendar/CalendarEventsPage'
+import ExamsPage from '@/components/Calendar/ExamsPage'
+import PagerView from '@/components/Layout/PagerView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
 
 export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

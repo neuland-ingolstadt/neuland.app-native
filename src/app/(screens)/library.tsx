@@ -1,18 +1,3 @@
-import ErrorView from '@/components/Error/ErrorView'
-import LibraryCard from '@/components/Library/LibraryCard'
-import FormList from '@/components/Universal/FormList'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { UserKindContext } from '@/components/contexts'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { libraryLink, vscoutLink } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
-import type { FormListSections } from '@/types/components'
-import {
-	getPersonalData,
-	guestError,
-	networkError,
-	permissionError
-} from '@/utils/api-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
@@ -28,6 +13,26 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import LibraryCard from '@/components/Library/LibraryCard'
+import FormList from '@/components/Universal/FormList'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import {
+	libraryLink,
+	USER_EMPLOYEE,
+	USER_GUEST,
+	USER_STUDENT,
+	vscoutLink
+} from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import type { FormListSections } from '@/types/components'
+import {
+	getPersonalData,
+	guestError,
+	networkError,
+	permissionError
+} from '@/utils/api-utils'
 
 export default function LibraryCode(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

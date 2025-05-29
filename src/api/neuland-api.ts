@@ -1,3 +1,4 @@
+import type { FeatureCollection } from 'geojson'
 import type {
 	AppAnnouncementsQuery,
 	CampusLifeEventsQuery,
@@ -10,7 +11,6 @@ import type {
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
 import type { SpoWeights } from '@/types/asset-api'
-import type { FeatureCollection } from 'geojson'
 
 import packageInfo from '../../package.json'
 import {

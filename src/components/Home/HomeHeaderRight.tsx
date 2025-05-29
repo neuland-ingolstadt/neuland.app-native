@@ -1,8 +1,8 @@
-import PlatformIcon from '@/components/Universal/Icon'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 
 export const HomeHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['accessibility'])

@@ -1,10 +1,15 @@
+import React from 'react'
+import {
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+	type ViewStyle
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
-import React from 'react'
-import { Platform, StyleSheet, Text, View, type ViewStyle } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
 
 import PlatformIcon from './Icon'
 

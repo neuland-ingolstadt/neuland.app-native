@@ -1,12 +1,3 @@
-import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { UserKindContext } from '@/components/contexts'
-import { USER_GUEST } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
-import type { Exam } from '@/types/utils'
-import { guestError, networkError } from '@/utils/api-utils'
-import { loadExamList } from '@/utils/calendar-utils'
 import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -15,6 +6,15 @@ import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, RefreshControl, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { NoSessionError } from '@/api/thi-session-handler'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { USER_GUEST } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import type { Exam } from '@/types/utils'
+import { guestError, networkError } from '@/utils/api-utils'
+import { loadExamList } from '@/utils/calendar-utils'
 import { ExamRow } from '../Rows/CalendarRow'
 
 export default function ExamsPage({
@@ -53,6 +53,7 @@ export default function ExamsPage({
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
 			<View style={styles.footerContainer}>

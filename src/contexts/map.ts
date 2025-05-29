@@ -1,6 +1,6 @@
+import { createContext } from 'react'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
-import { createContext } from 'react'
 
 interface MapContextType {
 	localSearch: string

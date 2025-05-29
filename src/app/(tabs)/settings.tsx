@@ -1,9 +1,9 @@
-import Settings from '@/components/Settings/SettingsScreen'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import Head from 'expo-router/head'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import Settings from '@/components/Settings/SettingsScreen'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)

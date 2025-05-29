@@ -1,14 +1,52 @@
+import { trackEvent } from '@aptabase/react-native'
+import type BottomSheet from '@gorhom/bottom-sheet'
+import type { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { useQuery } from '@tanstack/react-query'
+import {
+	Layer,
+	// biome-ignore lint/suspicious/noShadowRestrictedNames: TODO
+	Map,
+	Marker,
+	NavigationControl,
+	Source
+} from '@vis.gl/react-maplibre'
+import { toast } from 'burnt'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import type { Feature, FeatureCollection, Position } from 'geojson'
+import maplibregl from 'maplibre-gl'
+import type React from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+	Appearance,
+	LayoutAnimation,
+	Linking,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
+import Animated, {
+	runOnJS,
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming
+} from 'react-native-reanimated'
+import {
+	createStyleSheet,
+	UnistylesRuntime,
+	useStyles
+} from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import NeulandAPI from '@/api/neuland-api'
 import {
 	NoSessionError,
 	UnavailableSessionError
 } from '@/api/thi-session-handler'
+import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
-import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
@@ -29,53 +67,18 @@ import {
 	BUILDINGS,
 	FLOOR_ORDER,
 	FLOOR_SUBSTITUTES,
-	INGOLSTADT_CENTER,
-	NEUBURG_CENTER,
 	filterRooms,
 	getCenter,
 	getCenterSingle,
-	getIcon
+	getIcon,
+	INGOLSTADT_CENTER,
+	NEUBURG_CENTER
 } from '@/utils/map-utils'
 import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
-import { trackEvent } from '@aptabase/react-native'
-import type BottomSheet from '@gorhom/bottom-sheet'
-import type { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'burnt'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import type { Feature, FeatureCollection, Position } from 'geojson'
-import type React from 'react'
-import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Appearance, LayoutAnimation, Linking, Text, View } from 'react-native'
-import Animated, {
-	runOnJS,
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
-import {
-	UnistylesRuntime,
-	createStyleSheet,
-	useStyles
-} from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
-
 import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
-
-import {
-	Layer,
-	// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-	Map,
-	Marker,
-	NavigationControl,
-	Source
-} from '@vis.gl/react-maplibre'
-import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export function requestPermission(): void {
@@ -599,7 +602,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		return () => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			clearTimeout(timer)
 		}
 	}, [regionChange, isVisible, opacity])
@@ -690,18 +692,16 @@ const MapScreen = (): React.JSX.Element => {
 
 	return (
 		<View style={styles.map}>
-			<>
-				{mapLoadState === LoadingState.ERROR && (
-					<View style={styles.errorContainer}>
-						<ErrorView title={t('error.map.mapLoadError')} />
-					</View>
-				)}
-				{mapLoadState === LoadingState.LOADING && (
-					<View style={styles.errorContainer}>
-						<LoadingIndicator />
-					</View>
-				)}
-			</>
+			{mapLoadState === LoadingState.ERROR && (
+				<View style={styles.errorContainer}>
+					<ErrorView title={t('error.map.mapLoadError')} />
+				</View>
+			)}
+			{mapLoadState === LoadingState.LOADING && (
+				<View style={styles.errorContainer}>
+					<LoadingIndicator />
+				</View>
+			)}
 
 			<div className="map-container" style={mapContainerStyle}>
 				<Map
@@ -727,7 +727,7 @@ const MapScreen = (): React.JSX.Element => {
 						<Source
 							id="allRoomsSource"
 							type="geojson"
-							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+							// biome-ignore lint/suspicious/noExplicitAny: TODO
 							data={filteredGeoJSON as any}
 						>
 							<Layer
@@ -754,7 +754,7 @@ const MapScreen = (): React.JSX.Element => {
 						<Source
 							id="availableRoomsSource"
 							type="geojson"
-							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+							// biome-ignore lint/suspicious/noExplicitAny: TODO
 							data={availableFilteredGeoJSON as any}
 						>
 							<Layer

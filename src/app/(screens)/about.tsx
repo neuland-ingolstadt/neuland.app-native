@@ -1,12 +1,3 @@
-import FormList from '@/components/Universal/FormList'
-import { linkIcon } from '@/components/Universal/Icon'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
-import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
-import { useFlowStore } from '@/hooks/useFlowStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import i18n from '@/localization/i18n'
-import type { FormListSections } from '@/types/components'
 import { trackEvent } from '@aptabase/react-native'
 import { alert } from 'burnt'
 import * as Application from 'expo-application'
@@ -28,6 +19,15 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import FormList from '@/components/Universal/FormList'
+import { linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import i18n from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
@@ -250,7 +250,6 @@ export default function About(): React.JSX.Element {
 					>
 						<View style={styles.logoIcon}>
 							<Image
-								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
 								source={require('@/assets/appIcons/default.png')}
 								alt="Neuland Next Logo"
 								style={styles.logoImage}

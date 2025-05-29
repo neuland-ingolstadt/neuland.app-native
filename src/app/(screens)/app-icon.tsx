@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-require-imports */
-import ErrorView from '@/components/Error/ErrorView'
-import Divider from '@/components/Universal/Divider'
-import PlatformIcon from '@/components/Universal/Icon'
-import SectionView from '@/components/Universal/SectionsView'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 import {
 	getAppIconName,
 	resetAppIcon,
@@ -24,6 +15,12 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 
 let iconImages: Record<string, ImageProps> = {}
 

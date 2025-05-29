@@ -1,17 +1,3 @@
-import type {
-	UniversitySportsFieldsFragment,
-	WeekdayType
-} from '@/__generated__/gql/graphql'
-import { EventErrorView } from '@/components/Error/EventErrorView'
-import FormList from '@/components/Universal/FormList'
-import type { LucideIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import type { LanguageKey } from '@/localization/i18n'
-import type { FormListSections } from '@/types/components'
-import type { MaterialIcon } from '@/types/material-icons'
-import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { QUERY_KEYS, loadUniversitySportsEvents } from '@/utils/events-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
@@ -32,6 +18,20 @@ import Animated, {
 	useSharedValue
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type {
+	UniversitySportsFieldsFragment,
+	WeekdayType
+} from '@/__generated__/gql/graphql'
+import { EventErrorView } from '@/components/Error/EventErrorView'
+import FormList from '@/components/Universal/FormList'
+import type { LucideIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
+import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)

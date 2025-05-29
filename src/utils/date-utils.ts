@@ -1,7 +1,7 @@
-import i18n from '@/localization/i18n'
-import type { FriendlyDateOptions } from '@/types/utils'
 import { t } from 'i18next'
 import moment from 'moment'
+import i18n from '@/localization/i18n'
+import type { FriendlyDateOptions } from '@/types/utils'
 import 'moment/locale/de'
 
 /**

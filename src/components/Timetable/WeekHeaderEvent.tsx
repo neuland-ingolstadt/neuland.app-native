@@ -1,11 +1,11 @@
-import { getContrastColor } from '@/utils/ui-utils'
 import type { PackedEvent } from '@howljs/calendar-kit'
 import { Text, View } from 'react-native'
 import {
-	type UnistylesTheme,
 	createStyleSheet,
+	type UnistylesTheme,
 	useStyles
 } from 'react-native-unistyles'
+import { getContrastColor } from '@/utils/ui-utils'
 
 const WeekHeaderEvent = ({
 	event

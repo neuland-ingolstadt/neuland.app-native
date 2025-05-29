@@ -1,11 +1,11 @@
-import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
-import i18n, { type LanguageKey } from '@/localization/i18n'
-import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { sportsCategories } from '@/utils/events-utils'
 import { router } from 'expo-router'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
+import i18n, { type LanguageKey } from '@/localization/i18n'
+import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { sportsCategories } from '@/utils/events-utils'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
@@ -46,9 +46,7 @@ const SportsRow = ({
 				</View>
 			}
 			icon={
-				Platform.OS === 'web' ? (
-					<></>
-				) : (
+				Platform.OS === 'web' ? undefined : (
 					<PlatformIcon
 						ios={{
 							name: sportsCategories[event.sportsCategory].iosIcon,

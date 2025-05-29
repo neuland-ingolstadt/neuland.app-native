@@ -1,9 +1,3 @@
-import type {
-	AnnouncementFieldsFragment,
-	Platform as AppPlatform,
-	UserKind
-} from '@/__generated__/gql/graphql'
-import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { memo, use, useCallback, useMemo } from 'react'
@@ -15,19 +9,25 @@ import {
 	Pressable,
 	StyleSheet,
 	Text,
-	View,
-	useWindowDimensions
+	useWindowDimensions,
+	View
 } from 'react-native'
 import Animated, {
+	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
-	withTiming,
-	interpolate
+	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '../Universal/Icon'
+import type {
+	AnnouncementFieldsFragment,
+	Platform as AppPlatform,
+	UserKind
+} from '@/__generated__/gql/graphql'
+import i18n from '@/localization/i18n'
 import { DashboardContext, UserKindContext } from '../contexts'
+import PlatformIcon from '../Universal/Icon'
 
 interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]

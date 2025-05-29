@@ -1,12 +1,10 @@
-import type { AvailableRoom } from '@/types/utils'
-import { formatFriendlyTime } from '@/utils/date-utils'
 import { useRouter } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
+import type { AvailableRoom } from '@/types/utils'
+import { formatFriendlyTime } from '@/utils/date-utils'
 
 import Divider from '../Universal/Divider'
 
@@ -35,8 +33,6 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 							<Text style={styles.roomName}>{room.room}</Text>
 						</Pressable>
 						<Text style={styles.roomDetails} numberOfLines={1}>
-							{/* eslint-disable-next-line
-                            @typescript-eslint/restrict-template-expressions */}
 							{`${t(`roomTypes.${room.type}`, {
 								defaultValue: room.type,
 								ns: 'api',

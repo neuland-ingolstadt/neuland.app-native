@@ -1,12 +1,12 @@
-import FormList from '@/components/Universal/FormList'
-import licensesStatic from '@/data/licenses-static.json'
-import licenses from '@/data/licenses.json'
-import type { FormListSections } from '@/types/components'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import FormList from '@/components/Universal/FormList'
+import licenses from '@/data/licenses.json'
+import licensesStatic from '@/data/licenses-static.json'
+import type { FormListSections } from '@/types/components'
 
 export interface LicenseEntry {
 	licenses: string
@@ -53,7 +53,7 @@ export default function Licenses(): React.JSX.Element {
 				license.platform.includes(Platform.OS) ||
 				license.platform.includes('all')
 		)
-		// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+		// biome-ignore lint/performance/noAccumulatingSpread: TODO
 		.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
 
 	const licensesCombined = { ...licenses, ...licensesStaticFiltered }

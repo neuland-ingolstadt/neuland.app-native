@@ -1,10 +1,10 @@
+import { Platform } from 'react-native'
 import {
 	deleteSecure,
 	loadSecureAsync,
 	saveSecureAsync,
 	storage
 } from '@/utils/storage'
-import { Platform } from 'react-native'
 
 import API from './anonymous-api'
 

@@ -1,18 +1,18 @@
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
-import allergenMap from '@/data/allergens.json'
-import flapMap from '@/data/mensa-flags.json'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import type { LanguageKey } from '@/localization/i18n'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import allergenMap from '@/data/allergens.json'
+import flapMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { LanguageKey } from '@/localization/i18n'
 
 /*
  * Screen for selecting allergens or preferences

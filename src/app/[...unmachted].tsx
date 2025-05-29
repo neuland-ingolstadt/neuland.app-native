@@ -1,9 +1,9 @@
-import ErrorView from '@/components/Error/ErrorView'
 import { trackEvent } from '@aptabase/react-native'
 import { router, useNavigation, usePathname } from 'expo-router'
 import type React from 'react'
 import { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import ErrorView from '@/components/Error/ErrorView'
 
 export default function Unmatched(): React.JSX.Element {
 	const navigation = useNavigation()

@@ -1,10 +1,10 @@
-import { STATUS_URL } from '@/data/constants'
 import * as Application from 'expo-application'
 import { usePathname } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { STATUS_URL } from '@/data/constants'
 
 export const FeedbackButton = ({
 	error,

@@ -1,3 +1,24 @@
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
+import {
+	router,
+	Stack,
+	useFocusEffect,
+	useLocalSearchParams,
+	useNavigation
+} from 'expo-router'
+import type React from 'react'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Share, Text, View } from 'react-native'
+import Animated, {
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
@@ -10,27 +31,8 @@ import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
-import { QUERY_KEYS, loadCampusLifeEvents } from '@/utils/events-utils'
+import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
-import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
-import { Stack, useFocusEffect, useNavigation } from 'expo-router'
-import { router } from 'expo-router'
-import type React from 'react'
-import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
-import { Linking } from 'react-native'
-import { Share } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 

@@ -1,8 +1,8 @@
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
 import SectionView from '@/components/Universal/SectionsView'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import type React from 'react'
-import { useTranslation } from 'react-i18next'
 
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)

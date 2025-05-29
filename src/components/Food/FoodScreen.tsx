@@ -1,14 +1,4 @@
-import ErrorView from '@/components/Error/ErrorView'
-import { MealDay } from '@/components/Food'
-import { AllergensBanner } from '@/components/Food/AllergensBanner'
-import PagerView from '@/components/Layout/PagerView'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { useRefreshByUser } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import type { Food } from '@/types/neuland-api'
-import { networkError } from '@/utils/api-utils'
-import { loadFoodEntries } from '@/utils/food-utils'
-import { pausedToast } from '@/utils/ui-utils'
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: TOOD */
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
@@ -34,6 +24,17 @@ import {
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ErrorView from '@/components/Error/ErrorView'
+import { MealDay } from '@/components/Food'
+import { AllergensBanner } from '@/components/Food/AllergensBanner'
+import PagerView from '@/components/Layout/PagerView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { Food } from '@/types/neuland-api'
+import { networkError } from '@/utils/api-utils'
+import { loadFoodEntries } from '@/utils/food-utils'
+import { pausedToast } from '@/utils/ui-utils'
 
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -101,6 +102,7 @@ function FoodScreen(): React.JSX.Element {
 	 * @param {number} index - The index of the day in the list of days.
 	 * @returns {JSX.Element} - The rendered button component.
 	 */
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const DayButton = memo(
 		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
 			const date = new Date(day.timestamp)
@@ -204,7 +206,6 @@ function FoodScreen(): React.JSX.Element {
 				) : isSuccess && data.length > 0 ? (
 					<>
 						<Animated.View
-							// eslint-disable-next-line react-native/no-inline-styles
 							style={{
 								...styles.animtedContainer,
 

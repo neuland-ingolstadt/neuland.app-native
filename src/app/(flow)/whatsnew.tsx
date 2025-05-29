@@ -1,11 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
-import changelogData from '@/data/changelog.json'
-import { useFlowStore } from '@/hooks/useFlowStore'
-import type { LanguageKey } from '@/localization/i18n'
-import type { Changelog } from '@/types/data'
-import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: not a problem here */
 import * as Application from 'expo-application'
 import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
 import { router } from 'expo-router'
@@ -22,6 +15,13 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import changelogData from '@/data/changelog.json'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Changelog } from '@/types/data'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 
 export default function WhatsNewScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

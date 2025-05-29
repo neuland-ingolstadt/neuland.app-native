@@ -1,12 +1,11 @@
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
-import type { MaterialIcon } from '@/types/material-icons'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useStyles } from 'react-native-unistyles'
-import { createStyleSheet } from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import type { MaterialIcon } from '@/types/material-icons'
 
 interface EventErrorViewProps {
 	eventType: 'clEvents' | 'sports' | 'career' | 'counselling'

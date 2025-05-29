@@ -1,7 +1,7 @@
-import type { MaterialIcon } from '@/types/material-icons'
 import type { FC } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { MaterialIcon } from '@/types/material-icons'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 

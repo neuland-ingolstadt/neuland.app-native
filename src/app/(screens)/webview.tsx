@@ -1,5 +1,3 @@
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useEffect, useLayoutEffect, useState } from 'react'
@@ -8,6 +6,8 @@ import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 
 const PADDING = 16
 const LOADING_TIMEOUT = 100
