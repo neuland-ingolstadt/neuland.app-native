@@ -10,7 +10,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const setTheme = usePreferencesStore((state) => state.setTheme)
-	const { t } = useTranslation(['settings'])
+	const { t } = useTranslation('settings')
 	const { styles } = useStyles(stylesheet)
 
 	const elements = [
