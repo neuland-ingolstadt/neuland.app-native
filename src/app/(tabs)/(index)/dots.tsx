@@ -45,9 +45,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flex: 1,
 		paddingHorizontal: theme.margins.page,
-
 		paddingTop: 10,
-		paddingBottom: 16
+		paddingBottom: 40
 	},
 	headerContainer: {
 		flexDirection: 'row',
