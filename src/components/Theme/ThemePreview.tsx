@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, Text, useColorScheme, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -17,6 +18,8 @@ const ThemePreview = ({
 	onThemeChange
 }: ThemePreviewProps): React.JSX.Element => {
 	const { styles } = useStyles(previewStylesheet)
+	const { t } = useTranslation('settings')
+
 	const systemTheme = useColorScheme() ?? 'light'
 	const actualTheme = theme === 'auto' ? systemTheme : theme
 
@@ -44,7 +47,9 @@ const ThemePreview = ({
 
 		return (
 			<View style={styles.previewWrapper}>
-				<Text style={styles.themeLabel}>{isDark ? 'Dark' : 'Light'}</Text>
+				<Text style={styles.themeLabel}>
+					{isDark ? t('theme.themes.dark') : t('theme.themes.light')}
+				</Text>
 				<Pressable
 					onPressIn={() => {
 						scale.value = withSpring(0.95, { damping: 15 })
