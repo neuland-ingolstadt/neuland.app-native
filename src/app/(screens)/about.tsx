@@ -5,7 +5,7 @@ import Constants from 'expo-constants'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import type React from 'react'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -18,6 +18,14 @@ import {
 	Text,
 	View
 } from 'react-native'
+import Animated, {
+	cancelAnimation,
+	Easing,
+	useAnimatedStyle,
+	useSharedValue,
+	withSequence,
+	withTiming
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
@@ -51,6 +59,64 @@ export default function About(): React.JSX.Element {
 		process.env.EXPO_PUBLIC_GIT_COMMIT_HASH ?? process.env.GIT_COMMIT_HASH
 	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`
 	const commitHashShort = commitHash?.substring(0, 7)
+
+	// Shimmer animation values
+	const shimmerOpacity = useSharedValue(0)
+	const shimmerPosition = useSharedValue(-100)
+	const shimmerScale = useSharedValue(1)
+	const shimmerRotation = useSharedValue(0)
+
+	useEffect(() => {
+		const animate = () => {
+			shimmerPosition.value = -100
+			shimmerOpacity.value = 0
+			shimmerScale.value = 1
+			shimmerRotation.value = 0
+
+			shimmerOpacity.value = withSequence(
+				withTiming(0.6, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+				withTiming(0, { duration: 1200, easing: Easing.inOut(Easing.ease) })
+			)
+
+			shimmerPosition.value = withTiming(200, {
+				duration: 2400,
+				easing: Easing.inOut(Easing.ease)
+			})
+
+			shimmerScale.value = withSequence(
+				withTiming(1.1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+				withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.ease) })
+			)
+
+			shimmerRotation.value = withTiming(25, {
+				duration: 2400,
+				easing: Easing.inOut(Easing.ease)
+			})
+		}
+
+		animate()
+
+		const interval = setInterval(animate, 8000)
+
+		return () => {
+			clearInterval(interval)
+			cancelAnimation(shimmerOpacity)
+			cancelAnimation(shimmerPosition)
+			cancelAnimation(shimmerScale)
+			cancelAnimation(shimmerRotation)
+		}
+	}, [])
+
+	const shimmerStyle = useAnimatedStyle(() => {
+		return {
+			opacity: shimmerOpacity.value,
+			transform: [
+				{ translateX: shimmerPosition.value },
+				{ scale: shimmerScale.value },
+				{ rotate: `${shimmerRotation.value}deg` }
+			]
+		}
+	})
 
 	const toggleVersion = (): void => {
 		let message = `Version: ${version}`
@@ -254,6 +320,8 @@ export default function About(): React.JSX.Element {
 								alt="Neuland Next Logo"
 								style={styles.logoImage}
 							/>
+							<Animated.View style={[styles.shimmer, shimmerStyle]} />
+							<Animated.View style={[styles.shimmerOverlay, shimmerStyle]} />
 						</View>
 					</Pressable>
 
@@ -331,14 +399,19 @@ const stylesheet = createStyleSheet((theme) => ({
 	logoContainer: {
 		alignItems: 'center',
 		flexDirection: 'row',
-		justifyContent: 'space-evenly'
+		justifyContent: 'center',
+		gap: 30,
+		maxWidth: 600,
+		alignSelf: 'center',
+		width: '100%'
 	},
 	logoIcon: {
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: 9,
-		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`
+		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
+		overflow: 'hidden'
 	},
 	logoImage: {
 		borderRadius: 9,
@@ -358,5 +431,27 @@ const stylesheet = createStyleSheet((theme) => ({
 	text: {
 		color: theme.colors.text,
 		fontSize: 16
+	},
+	shimmer: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(255, 255, 255, 0.3)',
+		transform: [{ skewX: '-20deg' }],
+		width: '45%',
+		zIndex: 1
+	},
+	shimmerOverlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(255, 255, 255, 0.15)',
+		transform: [{ skewX: '-20deg' }],
+		width: '55%',
+		zIndex: 2
 	}
 }))
