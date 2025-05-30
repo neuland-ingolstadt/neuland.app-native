@@ -58,10 +58,13 @@ export default function LecturerDetail(): React.JSX.Element {
 					disabled: lecturer?.room_short === '',
 					textColor: theme.colors.primary,
 					onPress: () => {
-						router.dismissTo({
-							pathname: '/(tabs)/map',
-							params: { room: lecturer?.room_short ?? '' }
-						})
+						if (lecturer?.room_short) {
+							router.dismiss()
+							router.push({
+								pathname: '/(tabs)/map',
+								params: { room: lecturer.room_short }
+							})
+						}
 					}
 				},
 				{

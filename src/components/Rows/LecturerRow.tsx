@@ -18,10 +18,13 @@ const LecturerRow = ({
 		(state) => state.setSelectedLecturer
 	)
 	const onPressRoom = (): void => {
-		router.dismissTo({
-			pathname: '/(tabs)/map',
-			params: { room: item.room_short ?? '' }
-		})
+		if (item.room_short) {
+			router.dismiss()
+			router.push({
+				pathname: '/map',
+				params: { room: item.room_short }
+			})
+		}
 	}
 	const onPressRow = (): void => {
 		setSelectedLecturer(item)
