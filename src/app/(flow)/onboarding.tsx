@@ -529,7 +529,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.contrast,
-		flex: 1
+		flex: 1,
+		marginHorizontal: 6
 	},
 	privacyRow: {
 		alignItems: 'center',

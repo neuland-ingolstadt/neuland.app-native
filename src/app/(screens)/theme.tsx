@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
 import ThemePreview from '@/components/Theme/ThemePreview'
@@ -10,7 +10,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const setTheme = usePreferencesStore((state) => state.setTheme)
-	const { t } = useTranslation('settings')
+	const { t } = useTranslation(['settings', 'timetable'])
 	const { styles } = useStyles(stylesheet)
 
 	const elements = [
@@ -30,7 +30,12 @@ export default function Theme(): React.JSX.Element {
 
 	return (
 		<View style={styles.container}>
-			<ThemePreview theme={theme ?? 'auto'} onThemeChange={setTheme} />
+			<View style={styles.preview}>
+				<Text style={styles.previewLabel}>
+					{t('timetable:preferences.preview')}
+				</Text>
+				<ThemePreview theme={theme ?? 'auto'} onThemeChange={setTheme} />
+			</View>
 			<SectionView
 				title={t('theme.themes.title')}
 				footer={t('theme.themes.footer')}
@@ -49,5 +54,16 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flex: 1,
 		backgroundColor: theme.colors.background
+	},
+	preview: {
+		marginHorizontal: theme.margins.page
+	},
+	previewLabel: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: 'normal',
+		marginBottom: 6,
+		marginTop: 16,
+		textTransform: 'uppercase'
 	}
 }))

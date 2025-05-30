@@ -15,6 +15,7 @@ import {
 	Alert,
 	Linking,
 	Platform,
+	Pressable,
 	Share,
 	StyleSheet,
 	Text,
@@ -485,7 +486,7 @@ export default function FoodDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
-			style={styles.page}
+			contentContainerStyle={styles.page}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
@@ -539,7 +540,7 @@ export default function FoodDetail(): React.JSX.Element {
 					</View>
 				)}
 
-				<View style={styles.tagContainer}>
+				<Pressable style={styles.tagContainer} onPress={handlePress}>
 					<PlatformIcon
 						ios={{
 							name: 'mappin.and.ellipse',
@@ -557,7 +558,7 @@ export default function FoodDetail(): React.JSX.Element {
 						style={styles.tagIcon}
 					/>
 					<Text style={styles.tagText}>{humanLocation}</Text>
-				</View>
+				</Pressable>
 			</View>
 
 			{isPriceAvailable && (

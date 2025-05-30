@@ -91,7 +91,7 @@ export default function ExamsPage({
 			) : isPaused && !isSuccess ? (
 				<ErrorView title={networkError} inModal />
 			) : userKind === USER_GUEST ? (
-				<ErrorView title={guestError} inModal />
+				<ErrorView title={guestError} />
 			) : (
 				<View style={styles.examPageContainer}>
 					{exams && exams.length > 0 ? (

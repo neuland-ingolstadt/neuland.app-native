@@ -304,6 +304,12 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/version"
+					options={{
+						title: 'Version Details'
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/legal"
 					options={{
 						title: t('navigation.legal')

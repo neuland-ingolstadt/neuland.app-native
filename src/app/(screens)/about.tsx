@@ -55,10 +55,6 @@ export default function About(): React.JSX.Element {
 		Application.nativeApplicationVersion ??
 		Constants.expoConfig?.version ??
 		'unknown'
-	const commitHash =
-		process.env.EXPO_PUBLIC_GIT_COMMIT_HASH ?? process.env.GIT_COMMIT_HASH
-	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`
-	const commitHashShort = commitHash?.substring(0, 7)
 
 	// Shimmer animation values
 	const shimmerOpacity = useSharedValue(0)
@@ -118,38 +114,6 @@ export default function About(): React.JSX.Element {
 		}
 	})
 
-	const toggleVersion = (): void => {
-		let message = `Version: ${version}`
-		if (Platform.OS !== 'web') {
-			message += `\nBuild: ${Application.nativeBuildVersion ?? '0'}`
-			message += `\nID: ${Application.applicationId ?? '0'}`
-			if (commitHash) {
-				message += `\nCommit: ${commitHashShort}`
-			}
-		} else {
-			if (commitHash) {
-				message += `\nCommit: ${commitHashShort}`
-				message += '\nPress OK to open the commit link.'
-			}
-		}
-		if (Platform.OS === 'web') {
-			if (window.confirm(message)) {
-				if (commitHash) void Linking.openURL(commitUrl)
-			}
-			return
-		}
-		const buttons = commitHash
-			? [
-					{ text: 'Cancel', style: 'cancel' as const },
-					{
-						text: 'Open Commit',
-						onPress: () => void Linking.openURL(commitUrl)
-					}
-				]
-			: [{ text: 'Cancel', style: 'cancel' as const }]
-		Alert.alert('Version Info', message, buttons)
-	}
-
 	const sections: FormListSections[] = [
 		{
 			header: 'App',
@@ -163,7 +127,9 @@ export default function About(): React.JSX.Element {
 					},
 					layout: 'row',
 					value: version,
-					onPress: toggleVersion
+					onPress: () => {
+						router.navigate('/version')
+					}
 				},
 				{
 					title: 'Changelog',
