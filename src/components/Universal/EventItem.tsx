@@ -112,7 +112,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	eventLocation: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 13,
-		marginTop: 2
+		marginTop: 2,
+		marginEnd: 4
 	}
 }))
 

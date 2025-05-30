@@ -87,15 +87,6 @@ export const quicklinks = [
 			android: 'chair',
 			web: 'Armchair'
 		}
-	},
-	{
-		key: 'libraryCatalog',
-		url: libraryLink,
-		icon: {
-			ios: 'text.magnifyingglass',
-			android: 'library_books',
-			web: 'Search'
-		}
 	}
 ]
 

@@ -87,8 +87,7 @@
 		"marketplace": "Marketplace",
 		"thi": "THI",
 		"press": "PressReader",
-		"librarySeat": "Library Seat",
-		"libraryCatalog": "Library Catalog"
+		"librarySeat": "Library Seat"
 	},
 	"pages": {
 		"quicklinks": {
@@ -102,8 +101,7 @@
 				"marketplace": "Marketplace",
 				"thi": "THI Website",
 				"press": "PressReader",
-				"librarySeat": "Library Seat Reservation",
-				"libraryCatalog": "Library Catalog"
+				"librarySeat": "Library Seat Reservation"
 			},
 			"more": "more links"
 		},

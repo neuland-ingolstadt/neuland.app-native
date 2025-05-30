@@ -99,6 +99,7 @@ export function requestPermission(): void {
 const MapScreen = (): React.JSX.Element => {
 	const navigation = useNavigation()
 	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
+	const [mapKey, setMapKey] = useState(0)
 	const { styles, theme } = useStyles(stylesheet)
 	const isDark = UnistylesRuntime.themeName === 'dark'
 	const params = useLocalSearchParams<{ room: string }>()
@@ -619,11 +620,20 @@ const MapScreen = (): React.JSX.Element => {
 		)
 	}, [availableFilteredGeoJSON])
 
+	const handleRefresh = useCallback(() => {
+		setMapLoadState(LoadingState.LOADING)
+		// Force a reload by incrementing the key
+		setMapKey((prev) => prev + 1)
+	}, [])
+
 	return (
 		<View style={styles.map}>
 			{mapLoadState === LoadingState.ERROR && (
 				<View style={styles.errorContainer}>
-					<ErrorView title={t('error.map.mapLoadError')} />
+					<ErrorView
+						title={t('error.map.mapLoadError')}
+						onButtonPress={handleRefresh}
+					/>
 				</View>
 			)}
 			{mapLoadState === LoadingState.LOADING && (
@@ -639,6 +649,7 @@ const MapScreen = (): React.JSX.Element => {
 				}}
 			>
 				<MapView
+					key={mapKey}
 					style={styles.map}
 					tintColor={Platform.OS === 'ios' ? theme.colors.primary : undefined}
 					logoEnabled={false}

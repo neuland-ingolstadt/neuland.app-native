@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
@@ -9,12 +8,12 @@ import { router } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Share, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
-
+import { handleShareModal } from '@/utils/map-utils'
 import FormList from '../Universal/FormList'
 import PlatformIcon from '../Universal/Icon'
 import BottomSheetBackground from './BottomSheetBackground'
@@ -29,16 +28,6 @@ interface BottomSheetDetailModalProps {
 
 interface ReportLinkProps {
 	roomTitle: string
-}
-
-const handleShareModal = (room: string): void => {
-	const payload = `https://neuland.app/rooms/?highlight=${room}`
-	trackEvent('Share', {
-		type: 'room'
-	})
-	void Share.share(
-		Platform.OS === 'android' ? { message: payload } : { url: payload }
-	)
 }
 
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
