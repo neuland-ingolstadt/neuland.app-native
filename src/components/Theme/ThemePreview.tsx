@@ -164,6 +164,9 @@ const ThemePreview = ({
 
 const previewStylesheet = createStyleSheet((theme) => ({
 	container: {
+		width: '100%',
+		maxWidth: 1100,
+		alignSelf: 'center',
 		marginHorizontal: theme.margins.page,
 		padding: 12,
 		backgroundColor: theme.colors.card,
