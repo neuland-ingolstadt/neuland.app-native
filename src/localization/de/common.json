@@ -87,8 +87,7 @@
 		"marketplace": "Marktplatz",
 		"thi": "THI",
 		"press": "PressReader",
-		"librarySeat": "Bibliotheksplatz",
-		"libraryCatalog": "Bibliothekskatalog"
+		"librarySeat": "Bibliotheksplatz"
 	},
 	"pages": {
 		"quicklinks": {
@@ -102,8 +101,7 @@
 				"marketplace": "Marktplatz",
 				"thi": "THI Website",
 				"press": "PressReader",
-				"librarySeat": "Bibliotheksplatzreservierung",
-				"libraryCatalog": "Bibliothekskatalog"
+				"librarySeat": "Bibliotheksplatz"
 			},
 			"more": "Mehr"
 		},
