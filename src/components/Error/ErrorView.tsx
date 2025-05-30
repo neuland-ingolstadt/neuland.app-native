@@ -10,6 +10,7 @@ import {
 	Text,
 	View
 } from 'react-native'
+import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { MaterialIcon } from '@/types/material-icons'
 import { guestError, networkError, permissionError } from '@/utils/api-utils'
@@ -175,7 +176,10 @@ export default function ErrorView({
 			scrollEnabled={!inModal}
 			contentContainerStyle={styles.container(inModal)}
 		>
-			<View style={styles.errorContainer}>
+			<Animated.View
+				entering={FadeIn.duration(400)}
+				style={styles.errorContainer}
+			>
 				<View style={styles.topContainer}>
 					<PlatformIcon
 						ios={{
@@ -206,7 +210,7 @@ export default function ErrorView({
 					<Text style={styles.errorFooter}>{t('error.pull')}</Text>
 				) : null}
 				{showBox && <StatusBox error={new Error(title)} crash={false} />}
-			</View>
+			</Animated.View>
 		</ScrollView>
 	)
 }
@@ -215,7 +219,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: (inModal: boolean) => ({
 		paddingHorizontal: 25,
 		flex: 1,
-		paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0, // iOS has transparent tab bar so we need to add padding
+		paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0,
 		backgroundColor: inModal ? theme.colors.card : undefined,
 		borderRadius: inModal ? 10 : 0,
 		paddingTop: inModal ? 25 : 0
@@ -223,7 +227,9 @@ const stylesheet = createStyleSheet((theme) => ({
 	errorContainer: {
 		flex: 1,
 		gap: 12,
-		justifyContent: 'space-evenly'
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		padding: 20
 	},
 	errorFooter: {
 		color: theme.colors.text,
@@ -232,7 +238,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: 16,
 		textAlign: 'center'
 	},
-
 	errorInfo: {
 		color: theme.colors.text,
 		fontSize: 16,
@@ -242,7 +247,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	errorTitle: {
 		color: theme.colors.text,
-		fontSize: 18,
+		fontSize: 20,
 		fontWeight: 'bold',
 		marginBottom: 8,
 		marginTop: 8,
@@ -267,5 +272,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '600'
 	},
-	topContainer: { alignItems: 'center', gap: 20 }
+	topContainer: {
+		alignItems: 'center',
+		gap: 20
+	}
 }))
