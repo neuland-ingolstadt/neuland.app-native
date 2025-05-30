@@ -155,18 +155,18 @@ export default function Version(): React.JSX.Element {
 									android: 'calendar_today' as MaterialIcon,
 									web: 'Calendar' as LucideIcon
 								}
+							},
+							{
+								title: t('version.formlist.app.uiManager'),
+								value: systemInfo.uiManager,
+								icon: {
+									ios: 'atom',
+									android: 'code' as MaterialIcon,
+									web: 'Atom' as LucideIcon
+								}
 							}
 						]
-					: []),
-				{
-					title: t('version.formlist.app.uiManager'),
-					value: systemInfo.uiManager,
-					icon: {
-						ios: 'atom',
-						android: 'code' as MaterialIcon,
-						web: 'Atom' as LucideIcon
-					}
-				}
+					: [])
 			]
 		},
 		{
