@@ -436,7 +436,7 @@
 		"licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-unistyles@2.41.0": {
+	"react-native-unistyles@2.32.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/jpudysz/react-native-unistyles",
 		"licenseUrl": "https://github.com/jpudysz/react-native-unistyles/raw/master/LICENSE",

@@ -224,7 +224,7 @@ export default function SettingsHeader({
 
 const stylesheet = createStyleSheet((theme) => ({
 	avatarText: {
-		fontSize: 20,
+		fontSize: 22,
 		fontWeight: 'bold'
 	},
 	container: {
@@ -254,7 +254,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	nameInnerContainer: {
 		flexDirection: 'row',
-		paddingVertical: 12,
+		paddingVertical: 15,
 		width: '100%'
 	},
 	nameOuterContainer: { flexDirection: 'column', flex: 1 }

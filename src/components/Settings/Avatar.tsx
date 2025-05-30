@@ -17,7 +17,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
  * @returns A JSX element representing the Avatar component.
  */
 const Avatar = ({
-	size = 50,
+	size = 55,
 	background,
 	children,
 	style

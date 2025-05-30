@@ -53,9 +53,9 @@ const NameBox = ({
 			{showChevron && (
 				<View style={styles.chevronContainer}>
 					<PlatformIcon
-						ios={{ name: 'chevron.forward', size: 16 }}
-						android={{ name: 'chevron_right', size: 26 }}
-						web={{ name: 'ChevronRight', size: 26 }}
+						ios={{ name: 'chevron.forward', size: 20 }}
+						android={{ name: 'chevron_right', size: 28 }}
+						web={{ name: 'ChevronRight', size: 28 }}
 						style={styles.chevronIcon}
 					/>
 				</View>
@@ -82,7 +82,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		maxWidth: '92%'
 	},
 	subtitle: {
-		color: theme.colors.text,
+		color: theme.colors.labelColor,
 		fontSize: 12,
 		lineHeight: 14,
 		overflow: 'hidden'
