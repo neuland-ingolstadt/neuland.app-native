@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'burnt'
-import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
 import React, { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,6 +28,7 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function Profile(): React.JSX.Element {
 	const router = useRouter()
@@ -75,28 +74,6 @@ export default function Profile(): React.JSX.Element {
 			subscription.remove()
 		}
 	}, [])
-
-	const copyToClipboard = async (text: string): Promise<void> => {
-		if (text.length === 0) {
-			return
-		}
-		await Clipboard.setStringAsync(text)
-		// Android shows clipboard toast by default so we don't need to show it
-		if (Platform.OS === 'android') {
-			return
-		}
-
-		toast({
-			title: t('toast.clipboard', {
-				ns: 'common'
-			}),
-			message: text,
-			preset: 'done',
-			haptic: 'success',
-			duration: 2,
-			from: 'top'
-		})
-	}
 
 	const logoutAlert = (): void => {
 		if (Platform.OS === 'web') {

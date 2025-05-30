@@ -578,7 +578,7 @@ const MapScreen = (): React.JSX.Element => {
 		},
 		osmBackground: {
 			backgroundColor: isDark
-				? 'rgba(166, 173, 181, 0.70)'
+				? 'rgba(104, 106, 108, 0.7)'
 				: 'rgba(218, 218, 218, 0.70)',
 			paddingHorizontal: 4,
 			borderRadius: theme.radius.sm
@@ -670,14 +670,7 @@ const MapScreen = (): React.JSX.Element => {
 					onRegionIsChanging={() => {
 						setRegionChange(true)
 					}}
-					compassViewMargins={
-						Platform.OS === 'android'
-							? {
-									x: 5,
-									y: 70
-								}
-							: undefined
-					}
+					compassEnabled={Platform.OS === 'ios'}
 				>
 					<Images
 						nativeAssetImages={['pin']}

@@ -1,9 +1,9 @@
 import { trackEvent } from '@aptabase/react-native'
 import { toast } from 'burnt'
 import Color from 'color'
+import * as Clipboard from 'expo-clipboard'
 import { t } from 'i18next'
-import type { ColorValue } from 'react-native'
-
+import { type ColorValue, Platform } from 'react-native'
 export enum LoadingState {
 	LOADING = 0,
 	LOADED = 1,
@@ -145,4 +145,29 @@ export function getRandomHSLColor(): string {
 	const s = rand(60, 100) // saturation
 	const l = rand(30, 70) // lightness
 	return `hsl(${h},${s}%,${l}%)`
+}
+
+export const copyToClipboard = async (
+	text: string,
+	message?: string
+): Promise<void> => {
+	if (text.length === 0) {
+		return
+	}
+	await Clipboard.setStringAsync(text)
+	// Android shows clipboard toast by default so we don't need to show it
+	if (Platform.OS === 'android') {
+		return
+	}
+
+	toast({
+		title: t('toast.clipboard', {
+			ns: 'common'
+		}),
+		message: message ?? text,
+		preset: 'done',
+		haptic: 'success',
+		duration: 2,
+		from: 'top'
+	})
 }

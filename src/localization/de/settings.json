@@ -216,5 +216,26 @@
 			"exclusive": "Exklusiv"
 		},
 		"exclusive": "Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten."
+	},
+	"version": {
+		"formlist": {
+			"app": {
+				"title": "App-Informationen",
+				"version": "Version",
+				"buildNumber": "Build-Nummer",
+				"commitHash": "Commit-Hash",
+				"firstInstall": "Erste Installation",
+				"uiManager": "UI-Manager"
+			},
+			"system": {
+				"title": "System-Informationen",
+				"osVersion": "Betriebssystem-Version",
+				"deviceModel": "Gerätemodell",
+				"deviceType": "Gerätetyp",
+				"emulator": "Emulator",
+				"browser": "Browser"
+			}
+		},
+		"copyButton": "Alles kopieren"
 	}
 }

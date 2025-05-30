@@ -145,6 +145,7 @@ export default function Settings(): React.JSX.Element {
 			onScroll={(event) => {
 				scrollY.current = event.nativeEvent.contentOffset.y
 			}}
+			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
 			contentInsetAdjustmentBehavior="automatic"
 			contentContainerStyle={styles.contentContainer}

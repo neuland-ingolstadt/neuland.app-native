@@ -186,6 +186,7 @@ export default function ClSportsPage({
 				],
 				{ useNativeDriver: false }
 			)}
+			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
 			refreshControl={
 				<RefreshControl

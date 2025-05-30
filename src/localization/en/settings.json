@@ -48,6 +48,27 @@
 		},
 		"copyright": "© {{year}} by Neuland Ingolstadt e.V."
 	},
+	"version": {
+		"formlist": {
+			"app": {
+				"title": "App Information",
+				"version": "Version",
+				"buildNumber": "Build Number",
+				"commitHash": "Commit Hash",
+				"firstInstall": "First Install",
+				"uiManager": "UI Manager"
+			},
+			"system": {
+				"title": "System Information",
+				"osVersion": "OS Version",
+				"deviceModel": "Device Model",
+				"deviceType": "Device Type",
+				"emulator": "Emulator",
+				"browser": "Browser"
+			}
+		},
+		"copyButton": "Copy All"
+	},
 	"about": {
 		"header": {
 			"developed": "Developed by"
