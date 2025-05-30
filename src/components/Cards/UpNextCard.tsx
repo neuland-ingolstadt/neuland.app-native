@@ -369,7 +369,7 @@ const UpNextCard: React.FC = () => {
 		return (
 			<View style={styles.statsContainer}>
 				{NextEvent}
-				<Pressable style={styles.statsRow} onPress={navigateDots}>
+				<Pressable style={styles.statsRow} onPress={navigateDots} hitSlop={10}>
 					<View style={styles.progressDots}>
 						{Array.from({ length: todayStats.total }).map((_, index) =>
 							index < todayStats.completed ? (
