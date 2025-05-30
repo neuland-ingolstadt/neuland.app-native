@@ -6,6 +6,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
+import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { type Href, router, Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
@@ -41,7 +42,7 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const isPad = DeviceInfo.isTablet()
 	const savedLanguage = usePreferencesStore((state) => state.language)
-
+	useQuickActionRouting()
 	useEffect(() => {
 		if (Platform.OS === 'web') {
 			// do nothing
@@ -56,6 +57,7 @@ function RootLayout(): React.JSX.Element {
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {
+			console.log('handleOpenURL', event.url)
 			const bases = ['https://neuland.app', 'https://dev.neuland.app']
 
 			const matchingBase = bases.find((base) => event.url.startsWith(base))

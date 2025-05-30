@@ -268,7 +268,6 @@ function FoodScreen(): React.JSX.Element {
 									)}
 									key={index}
 									contentContainerStyle={styles.innerScrollContainer}
-									removeClippedSubviews
 								>
 									<MealDay day={data[index]} index={index} key={index} />
 								</ScrollView>

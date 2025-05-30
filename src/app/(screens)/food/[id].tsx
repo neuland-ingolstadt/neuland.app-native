@@ -748,8 +748,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	pricesContainer: {
 		flexDirection: 'row',
 		gap: 8,
-		marginBottom: 16,
-		paddingHorizontal: 4
+		marginBottom: 16
 	},
 	priceCard: {
 		flex: 1,
