@@ -16,7 +16,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B74A5BBC2D46BB2C00D11E5D"
+               BlueprintIdentifier = "B70D14272DECD82800FFD12F"
                BuildableName = "LaunchWidgetExtension.appex"
                BlueprintName = "LaunchWidgetExtension"
                ReferencedContainer = "container:NeulandNext.xcodeproj">
@@ -62,7 +62,7 @@
          BundleIdentifier = "com.apple.springboard">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B74A5BBC2D46BB2C00D11E5D"
+            BlueprintIdentifier = "B70D14272DECD82800FFD12F"
             BuildableName = "LaunchWidgetExtension.appex"
             BlueprintName = "LaunchWidgetExtension"
             ReferencedContainer = "container:NeulandNext.xcodeproj">

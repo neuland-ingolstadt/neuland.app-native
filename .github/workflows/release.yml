@@ -34,7 +34,7 @@ jobs:
       - name: Find latest stable tag
         id: latest_stable_tag
         run: |
-          LATEST_TAG=$(git tag --sort=-creatordate | grep -v "-" | head -n1)
+          LATEST_TAG=$(git tag --sort=-creatordate | grep -v "-" | head -n2 | tail -n1)
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
       - name: Generate changelog
