@@ -2793,9 +2793,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aptabase-react-native: 423bc1190aef4b5ff5ed25656dbde0ff671ff4e4
-  boost: c7db0cf32caf6315b467a902f922c7a38b1ae426
+  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   Burnt: 0616363a206ed96ba9af3e2eb0e184dc97be1458
-  DoubleConversion: 9aae6cc0ecb301224cc36b63bf0ff0d9ea15d00e
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXApplication: 63b87ca5204304007fac6b1be432f8afa3731c17
   EXConstants: 9f310f44bfedba09087042756802040e464323c0
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
@@ -2826,15 +2826,15 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: 2c6050c83bcf267455af384344c12fbfda07c0d6
   ExpoSystemUI: 82c970cf8495449698e7343b4f78a0d04bcec9ee
   EXUpdatesInterface: 7ff005b7af94ee63fa452ea7bb95d7a8ff40277a
-  fast_float: afdfb7d8d5934a5dc225af0c5a7ef27085c03424
+  fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
-  fmt: 793e14dfc270e0be50ff8f6679d6de663e337e16
-  glog: 02d5a79e2d91544a6170b768f0b7791763d6a6ee
-  hermes-engine: 3f6353f50460101e313e45bf4ba6966d3f775658
+  fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
+  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   maplibre-react-native: a47ec64b793ca59f145df029c754a91f0ef4ece6
   MMKV: 383ccfa10ae23ff2a9c0f6130b7136b37b55ac10
   MMKVCore: b0e4c420da85636d7adaa535a53dfade59a22f5c
-  RCT-Folly: 3c12715b5d41a41cda64c46bc7d2f5807bfa0e91
+  RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: 83ffb90c23ee5cea353bd32008a7bca100908f8c
   RCTRequired: eb7c0aba998009f47a540bec9e9d69a54f68136e
   RCTTypeSafety: 659ae318c09de0477fd27bbc9e140071c7ea5c93
