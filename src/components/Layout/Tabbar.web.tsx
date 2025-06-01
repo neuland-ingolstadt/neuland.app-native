@@ -27,6 +27,9 @@ const TabLayout = (): React.JSX.Element => {
 				tabBarStyle: {
 					backgroundColor: styleTheme.colors.card
 				},
+				tabBarIconStyle: {
+					marginTop: isMobile ? 4 : 0
+				},
 				tabBarLabelStyle: {
 					paddingTop: isPad ? 4 : 0
 				},

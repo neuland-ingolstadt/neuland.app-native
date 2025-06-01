@@ -1,211 +1,211 @@
 {
-  "expo": {
-    "name": "Neuland Next",
-    "slug": "neuland-app-native",
-    "scheme": "neuland",
-    "owner": "neuland-ingolstadt",
-    "version": "0.13.2",
-    "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
-    "ios": {
-      "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-      "buildNumber": "199",
-      "supportsTablet": true,
-      "appleTeamId": "FSXB76X6V2",
-      "appStoreUrl": "https://apps.apple.com/us/app/neuland-next/id1617096811",
-      "userInterfaceStyle": "automatic",
-      "associatedDomains": [
-        "webcredentials:neuland.app",
-        "activitycontinuation:neuland.app",
-        "applinks:neuland.app",
-        "applinks:dev.neuland.app",
-        "activitycontinuation:dev.neuland.app"
-      ],
-      "config": {
-        "usesNonExemptEncryption": false
-      },
-      "infoPlist": {
-        "RCTAsyncStorageExcludeFromBackup": false,
-        "CFBundleAllowMixedLocalizations": true,
-        "CFBundleDevelopmentRegion": "en",
-        "UIViewControllerBasedStatusBarAppearance": false,
-        "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
-      },
-      "icon": {
-        "light": "./src/assets/appIcons/default.png",
-        "dark": "./src/assets/appIcons/dark/defaultDark.png",
-        "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-      }
-    },
-    "locales": {
-      "en": "./src/localization/en/ios.json",
-      "de": "./src/localization/de/ios.json"
-    },
-    "android": {
-      "package": "app.neuland",
-      "userInterfaceStyle": "automatic",
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": {
-            "scheme": "https",
-            "host": "dev.neuland.app"
-          },
-          "category": ["BROWSABLE", "DEFAULT"]
-        },
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": {
-            "scheme": "https",
-            "host": "neuland.app"
-          },
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
-    },
-    "sdkVersion": "53.0.0",
-    "experiments": {
-      "reactCompiler": true,
-      "reactCanary": true,
-      "tsconfigPaths": true,
-      "typedRoutes": true,
-      "remoteBuildCache": {
-        "provider": {
-          "plugin": "@eggl-js/expo-github-cache",
-          "options": {
-            "owner": "neuland-ingolstadt",
-            "repo": "neuland.app-build-cache"
-          }
-        }
-      }
-    },
-    "plugins": [
-      [
-        "react-native-edge-to-edge",
-        { "android": { "parentTheme": "Material3" } }
-      ],
-      [
-        "expo-router",
-        {
-          "headOrigin": "https://neuland.app",
-          "sitemap": false
-        }
-      ],
-      [
-        "expo-alternate-app-icons",
-        [
-          {
-            "name": "Cat",
-            "ios": "./src/assets/appIcons/cat.png"
-          },
-          {
-            "name": "RainbowNeon",
-            "ios": "./src/assets/appIcons/rainbowNeon.png"
-          },
-          {
-            "name": "Retro",
-            "ios": "./src/assets/appIcons/retro.png"
-          },
-          {
-            "name": "ModernGreen",
-            "ios": {
-              "light": "./src/assets/appIcons/modernGreen.png",
-              "dark": "./src/assets/appIcons/dark/modernGreenDark.png",
-              "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-            }
-          },
-          {
-            "name": "ModernPink",
-            "ios": {
-              "light": "./src/assets/appIcons/modernPurple.png",
-              "dark": "./src/assets/appIcons/dark/purpleDark.png",
-              "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-            }
-          },
-          {
-            "name": "RainbowMoonLight",
-            "ios": {
-              "light": "./src/assets/appIcons/rainbowMoonLight.png",
-              "dark": "./src/assets/appIcons/dark/darkRainbow.png",
-              "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-            }
-          }
-        ]
-      ],
-      ["expo-secure-store"],
-      ["expo-localization"],
-      ["@maplibre/maplibre-react-native"],
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "deploymentTarget": "15.1",
-            "useFrameworks": "static"
-          }
-        }
-      ],
-      [
-        "expo-screen-orientation",
-        {
-          "initialOrientation": "DEFAULT"
-        }
-      ],
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#ffffff",
-          "image": "./src/assets/splash/splashIconDark.png",
-          "dark": {
-            "image": "./src/assets/splash/splashIconLight.png",
-            "backgroundColor": "#000000"
-          },
-          "imageWidth": 200
-        }
-      ],
-      [
-        "expo-quick-actions",
-        {
-          "androidIcons": {
-            "account": {
-              "foregroundImage": "src/assets/android/account.png",
-              "backgroundColor": "#ffffff"
-            },
-            "calendar": {
-              "foregroundImage": "src/assets/android/calendar.png",
-              "backgroundColor": "#ffffff"
-            },
-            "food": {
-              "foregroundImage": "src/assets/android/food.png",
-              "backgroundColor": "#ffffff"
-            },
-            "link": {
-              "foregroundImage": "src/assets/android/link.png",
-              "backgroundColor": "#ffffff"
-            }
-          }
-        }
-      ],
-      ["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "b0ef9e3f-3115-44b0-abc7-99dd75821353"
-      }
-    },
-    "web": {
-      "favicon": "./src/assets/web/favicon.png",
-      "shortName": "Neuland Next",
-      "name": "Neuland Next - Deine inoffizielle App für die THI",
-      "description": "Neuland Next ist eine inoffizielle App für die Technische Hochschule Ingolstadt. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
-      "lang": "de",
-      "themeColor": "#007aff",
-      "darkThemeColor": "#0e83fd",
-      "preferRelatedApplications": true,
-      "output": "single",
-      "bundler": "metro"
-    }
-  }
+	"expo": {
+		"name": "Neuland Next",
+		"slug": "neuland-app-native",
+		"scheme": "neuland",
+		"owner": "neuland-ingolstadt",
+		"version": "0.13.2",
+		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
+		"userInterfaceStyle": "automatic",
+		"newArchEnabled": false,
+		"ios": {
+			"bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
+			"buildNumber": "199",
+			"supportsTablet": true,
+			"appleTeamId": "FSXB76X6V2",
+			"appStoreUrl": "https://apps.apple.com/us/app/neuland-next/id1617096811",
+			"userInterfaceStyle": "automatic",
+			"associatedDomains": [
+				"webcredentials:neuland.app",
+				"activitycontinuation:neuland.app",
+				"applinks:neuland.app",
+				"applinks:dev.neuland.app",
+				"activitycontinuation:dev.neuland.app"
+			],
+			"config": {
+				"usesNonExemptEncryption": false
+			},
+			"infoPlist": {
+				"RCTAsyncStorageExcludeFromBackup": false,
+				"CFBundleAllowMixedLocalizations": true,
+				"CFBundleDevelopmentRegion": "en",
+				"UIViewControllerBasedStatusBarAppearance": false,
+				"NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
+			},
+			"icon": {
+				"light": "./src/assets/appIcons/default.png",
+				"dark": "./src/assets/appIcons/dark/defaultDark.png",
+				"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+			}
+		},
+		"locales": {
+			"en": "./src/localization/en/ios.json",
+			"de": "./src/localization/de/ios.json"
+		},
+		"android": {
+			"package": "app.neuland",
+			"userInterfaceStyle": "automatic",
+			"intentFilters": [
+				{
+					"action": "VIEW",
+					"autoVerify": true,
+					"data": {
+						"scheme": "https",
+						"host": "dev.neuland.app"
+					},
+					"category": ["BROWSABLE", "DEFAULT"]
+				},
+				{
+					"action": "VIEW",
+					"autoVerify": true,
+					"data": {
+						"scheme": "https",
+						"host": "neuland.app"
+					},
+					"category": ["BROWSABLE", "DEFAULT"]
+				}
+			]
+		},
+		"sdkVersion": "53.0.0",
+		"experiments": {
+			"reactCompiler": true,
+			"reactCanary": true,
+			"tsconfigPaths": true,
+			"typedRoutes": true,
+			"remoteBuildCache": {
+				"provider": {
+					"plugin": "@eggl-js/expo-github-cache",
+					"options": {
+						"owner": "neuland-ingolstadt",
+						"repo": "neuland.app-build-cache"
+					}
+				}
+			}
+		},
+		"plugins": [
+			[
+				"react-native-edge-to-edge",
+				{ "android": { "parentTheme": "Material3" } }
+			],
+			[
+				"expo-router",
+				{
+					"headOrigin": "https://neuland.app",
+					"sitemap": false
+				}
+			],
+			[
+				"expo-alternate-app-icons",
+				[
+					{
+						"name": "Cat",
+						"ios": "./src/assets/appIcons/cat.png"
+					},
+					{
+						"name": "RainbowNeon",
+						"ios": "./src/assets/appIcons/rainbowNeon.png"
+					},
+					{
+						"name": "Retro",
+						"ios": "./src/assets/appIcons/retro.png"
+					},
+					{
+						"name": "ModernGreen",
+						"ios": {
+							"light": "./src/assets/appIcons/modernGreen.png",
+							"dark": "./src/assets/appIcons/dark/modernGreenDark.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					},
+					{
+						"name": "ModernPink",
+						"ios": {
+							"light": "./src/assets/appIcons/modernPurple.png",
+							"dark": "./src/assets/appIcons/dark/purpleDark.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					},
+					{
+						"name": "RainbowMoonLight",
+						"ios": {
+							"light": "./src/assets/appIcons/rainbowMoonLight.png",
+							"dark": "./src/assets/appIcons/dark/darkRainbow.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					}
+				]
+			],
+			["expo-secure-store"],
+			["expo-localization"],
+			["@maplibre/maplibre-react-native"],
+			[
+				"expo-build-properties",
+				{
+					"ios": {
+						"deploymentTarget": "15.1",
+						"useFrameworks": "static"
+					}
+				}
+			],
+			[
+				"expo-screen-orientation",
+				{
+					"initialOrientation": "DEFAULT"
+				}
+			],
+			[
+				"expo-splash-screen",
+				{
+					"backgroundColor": "#ffffff",
+					"image": "./src/assets/splash/splashIconDark.png",
+					"dark": {
+						"image": "./src/assets/splash/splashIconLight.png",
+						"backgroundColor": "#000000"
+					},
+					"imageWidth": 200
+				}
+			],
+			[
+				"expo-quick-actions",
+				{
+					"androidIcons": {
+						"account": {
+							"foregroundImage": "src/assets/android/account.png",
+							"backgroundColor": "#ffffff"
+						},
+						"calendar": {
+							"foregroundImage": "src/assets/android/calendar.png",
+							"backgroundColor": "#ffffff"
+						},
+						"food": {
+							"foregroundImage": "src/assets/android/food.png",
+							"backgroundColor": "#ffffff"
+						},
+						"link": {
+							"foregroundImage": "src/assets/android/link.png",
+							"backgroundColor": "#ffffff"
+						}
+					}
+				}
+			],
+			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"]
+		],
+		"extra": {
+			"eas": {
+				"projectId": "b0ef9e3f-3115-44b0-abc7-99dd75821353"
+			}
+		},
+		"web": {
+			"favicon": "./src/assets/web/favicon.png",
+			"shortName": "Neuland Next",
+			"name": "Neuland Next - Deine inoffizielle App für die THI",
+			"description": "Neuland Next ist eine inoffizielle App für die Technische Hochschule Ingolstadt. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
+			"lang": "de",
+			"themeColor": "#007aff",
+			"darkThemeColor": "#0e83fd",
+			"preferRelatedApplications": true,
+			"output": "single",
+			"bundler": "metro"
+		}
+	}
 }
