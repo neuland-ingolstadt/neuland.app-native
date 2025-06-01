@@ -5,6 +5,5 @@ import SwiftUI
 struct LaunchWidgetBundle: WidgetBundle {
     var body: some Widget {
         LaunchWidgetControl()
-        TimetableWidgetControl()
     }
 }
