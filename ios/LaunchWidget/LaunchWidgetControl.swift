@@ -26,9 +26,7 @@ struct LaunchWidgetIntent: ControlConfigurationIntent {
   static let openAppWhenRun: Bool = true
   
   @MainActor
-  func perform() async throws -> some IntentResult & OpensIntent {    
-    let url = URL(string: "neuland://")!
-    EnvironmentValues().openURL(url);
-    return .result()
+  func perform() async throws -> some IntentResult & OpensIntent {
+    return .result(opensIntent: OpenURLIntent(URL(string: "https://neuland.app")!))
   }
 }
