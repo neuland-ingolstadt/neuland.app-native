@@ -53,7 +53,7 @@ export default function Login(): React.JSX.Element {
 			router.replace('/(tabs)')
 			return
 		}
-		router.dismissAll()
+		router.dismiss()
 	}
 
 	const insets = useSafeAreaInsets()
