@@ -1,8 +1,8 @@
 import { router } from 'expo-router'
 import type React from 'react'
 import { Platform, Pressable, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
 import PlatformIcon from './Icon'
 
 interface ShareButtonProps {
@@ -98,7 +98,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		backgroundColor: Platform.select({
 			android: undefined,
-			ios: theme.colors.sheetButton
+			ios:
+				DeviceInfo.getDeviceType() === 'Desktop'
+					? theme.colors.cardContrast
+					: theme.colors.sheetButton
 		}),
 		borderRadius: Platform.select({
 			android: undefined,

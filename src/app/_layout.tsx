@@ -3,6 +3,7 @@ import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { usePresentationMode } from '@/hooks/usePresentationMode'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
@@ -42,6 +43,7 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const isPad = DeviceInfo.isTablet()
 	const savedLanguage = usePreferencesStore((state) => state.language)
+	const presentationMode = usePresentationMode()
 	useQuickActionRouting()
 	useEffect(() => {
 		if (Platform.OS === 'web') {
@@ -218,14 +220,7 @@ function RootLayout(): React.JSX.Element {
 						title: t('navigation.details'),
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.7, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
@@ -243,14 +238,7 @@ function RootLayout(): React.JSX.Element {
 						title: t('navigation.details'),
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.8, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
@@ -362,15 +350,7 @@ function RootLayout(): React.JSX.Element {
 						title: 'Event Details',
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.7, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16,
-								headerTitleAlign: 'center'
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
@@ -388,15 +368,7 @@ function RootLayout(): React.JSX.Element {
 						title: 'Event Details',
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.7, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16,
-								headerTitleAlign: 'center'
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
@@ -426,14 +398,7 @@ function RootLayout(): React.JSX.Element {
 						title: t('navigation.examDetails'),
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.8, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16,
+								...presentationMode,
 								headerRight: () => (
 									<ShareHeaderButton
 										noShare
@@ -523,15 +488,7 @@ function RootLayout(): React.JSX.Element {
 						title: 'Event Details',
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.7, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16,
-								headerTitleAlign: 'center'
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
@@ -549,15 +506,7 @@ function RootLayout(): React.JSX.Element {
 						title: 'Event Details',
 						...Platform.select({
 							ios: {
-								headerStyle: {
-									backgroundColor: 'transparent'
-								},
-								presentation: 'formSheet',
-								sheetAllowedDetents: [0.7, 1],
-								sheetInitialDetentIndex: 0,
-								sheetGrabberVisible: true,
-								sheetCornerRadius: 16,
-								headerTitleAlign: 'center'
+								...presentationMode
 							}
 						}),
 						headerRight: () => (
