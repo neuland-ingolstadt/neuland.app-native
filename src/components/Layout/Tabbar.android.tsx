@@ -33,7 +33,6 @@ export default function TabLayout(): React.JSX.Element {
 				fontSize: 11
 			}}
 			labeled
-			disablePageAnimations={Platform.OS === 'android'}
 			activeIndicatorColor={
 				isAndroid
 					? UnistylesRuntime.themeName === 'dark'

@@ -119,6 +119,7 @@
   "patchedDependencies": {
     "@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
     "luxon@3.6.1": "patches/luxon@3.6.1.patch",
+    "recyclerlistview@4.2.3": "patches/recyclerlistview@4.2.3.patch",
     "getenv@1.0.0": "patches/getenv@1.0.0.patch",
     "@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
   },

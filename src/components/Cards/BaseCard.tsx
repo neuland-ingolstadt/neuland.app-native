@@ -3,6 +3,7 @@ import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import Animated, {
 	interpolate,
 	useAnimatedStyle,
@@ -115,7 +116,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		</View>
 	)
 
-	if (Platform.OS === 'ios') {
+	if (Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop') {
 		return (
 			<CardContextMenu
 				card={

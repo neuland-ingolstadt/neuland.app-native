@@ -4,6 +4,7 @@ import type React from 'react'
 import { memo, use, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 // @ts-expect-error - no types available
@@ -99,6 +100,154 @@ export const MealEntry = memo(
 				params: { id: meal.id }
 			})
 		}
+
+		const cardContent = (
+			<Pressable
+				onPress={itemPressed}
+				delayLongPress={300}
+				onLongPress={() => {
+					/* nothing */
+				}}
+				style={styles.pressable}
+			>
+				<View key={index} style={styles.container}>
+					<View style={styles.innerContainer}>
+						<Text style={styles.title} numberOfLines={2}>
+							{mealName(
+								meal.name,
+								deferredFoodLanguage,
+								i18n.language as LanguageKey
+							)}
+						</Text>
+						{meal.variants?.length > 0 && (
+							<View style={styles.variantContainer}>
+								<Text style={styles.variantText}>
+									{`+ ${meal.variants.length}`}
+								</Text>
+							</View>
+						)}
+					</View>
+					<View style={styles.detailsContainer}>
+						<View style={styles.detailsColumns}>
+							<View style={styles.flags}>
+								{userFlags.map(
+									(flag: { name: string; isVeg: boolean }, index: number) => (
+										<View key={index} style={styles.flagsBox}>
+											{flag.isVeg && (
+												<PlatformIcon
+													ios={{
+														name: 'leaf.fill',
+														size: 13
+													}}
+													android={{
+														name: 'eco',
+														size: 13,
+														variant: 'filled'
+													}}
+													web={{
+														name: 'Leaf',
+														size: 13,
+														variant: 'filled'
+													}}
+													style={styles.vegIcon}
+												/>
+											)}
+
+											<Text style={styles.flagsText}>{flag.name}</Text>
+										</View>
+									)
+								)}
+							</View>
+							{shouldShowAllergens && (
+								<View style={styles.allergensContainer}>
+									<PlatformIcon
+										ios={{
+											name: iconName,
+											size: 13
+										}}
+										android={{
+											name: androidName,
+											size: 16,
+											variant: 'outlined'
+										}}
+										web={{
+											name: webName,
+											size: 16
+										}}
+										style={styles.icon}
+									/>
+									<Text style={styles.allergene} numberOfLines={3}>
+										{textContent}
+									</Text>
+								</View>
+							)}
+						</View>
+						<View style={styles.priceContainer}>
+							<Text style={styles.price}>
+								{getUserSpecificPrice(meal, userKind ?? 'guest')}
+							</Text>
+							{label !== '' && <Text style={styles.priceLabel}>{label}</Text>}
+						</View>
+					</View>
+				</View>
+			</Pressable>
+		)
+
+		if (Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop') {
+			return (
+				<DragDropView
+					mode="drag"
+					scope="system"
+					dragValue={t('details.share.message', {
+						meal: meal.name[i18n.language as LanguageKey],
+						price: formatPrice(meal.prices[userKind ?? 'guest']),
+						location:
+							humanLocations[meal.restaurant as keyof typeof humanLocations],
+						id: meal.id
+					})}
+				>
+					<ContextMenu
+						title={
+							humanLocations[meal.restaurant as keyof typeof humanLocations]
+						}
+						key={key}
+						style={styles.contextMenu}
+						actions={[
+							{
+								title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
+								subtitle:
+									meal.allergens !== null
+										? t('preferences.formlist.allergens')
+										: undefined,
+								systemIcon:
+									Platform.OS === 'ios'
+										? 'exclamationmark.triangle'
+										: undefined,
+								disabled: true
+							},
+							{
+								title: t('misc.share', { ns: 'common' }),
+								systemIcon:
+									Platform.OS === 'ios' ? 'square.and.arrow.up' : undefined
+							}
+						]}
+						onPreviewPress={itemPressed}
+						onPress={(e) => {
+							if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
+								trackEvent('Share', {
+									type: 'meal'
+								})
+								shareMeal(meal, i18n, userKind)
+							}
+							setKey(Math.random())
+						}}
+					>
+						{cardContent}
+					</ContextMenu>
+				</DragDropView>
+			)
+		}
+
 		return (
 			<DragDropView
 				mode="drag"
@@ -111,133 +260,7 @@ export const MealEntry = memo(
 					id: meal.id
 				})}
 			>
-				<ContextMenu
-					title={humanLocations[meal.restaurant as keyof typeof humanLocations]}
-					key={key}
-					style={styles.contextMenu}
-					actions={[
-						{
-							title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
-							subtitle:
-								meal.allergens !== null
-									? t('preferences.formlist.allergens')
-									: undefined,
-							systemIcon:
-								Platform.OS === 'ios' ? 'exclamationmark.triangle' : undefined,
-							disabled: true
-						},
-						{
-							title: t('misc.share', { ns: 'common' }),
-							systemIcon:
-								Platform.OS === 'ios' ? 'square.and.arrow.up' : undefined
-						}
-					]}
-					onPreviewPress={itemPressed}
-					onPress={(e) => {
-						if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
-							trackEvent('Share', {
-								type: 'meal'
-							})
-							shareMeal(meal, i18n, userKind)
-						}
-						setKey(Math.random())
-					}}
-				>
-					<Pressable
-						onPress={itemPressed}
-						delayLongPress={300}
-						onLongPress={() => {
-							/* nothing */
-						}}
-						style={styles.pressable}
-					>
-						<View key={index} style={styles.container}>
-							<View style={styles.innerContainer}>
-								<Text style={styles.title} numberOfLines={2}>
-									{mealName(
-										meal.name,
-										deferredFoodLanguage,
-										i18n.language as LanguageKey
-									)}
-								</Text>
-								{meal.variants?.length > 0 && (
-									<View style={styles.variantContainer}>
-										<Text style={styles.variantText}>
-											{`+ ${meal.variants.length}`}
-										</Text>
-									</View>
-								)}
-							</View>
-							<View style={styles.detailsContainer}>
-								<View style={styles.detailsColumns}>
-									<View style={styles.flags}>
-										{userFlags.map(
-											(
-												flag: { name: string; isVeg: boolean },
-												index: number
-											) => (
-												<View key={index} style={styles.flagsBox}>
-													{flag.isVeg && (
-														<PlatformIcon
-															ios={{
-																name: 'leaf.fill',
-																size: 13
-															}}
-															android={{
-																name: 'eco',
-																size: 13,
-																variant: 'filled'
-															}}
-															web={{
-																name: 'Leaf',
-																size: 13,
-																variant: 'filled'
-															}}
-															style={styles.vegIcon}
-														/>
-													)}
-
-													<Text style={styles.flagsText}>{flag.name}</Text>
-												</View>
-											)
-										)}
-									</View>
-									{shouldShowAllergens && (
-										<View style={styles.allergensContainer}>
-											<PlatformIcon
-												ios={{
-													name: iconName,
-													size: 13
-												}}
-												android={{
-													name: androidName,
-													size: 16,
-													variant: 'outlined'
-												}}
-												web={{
-													name: webName,
-													size: 16
-												}}
-												style={styles.icon}
-											/>
-											<Text style={styles.allergene} numberOfLines={3}>
-												{textContent}
-											</Text>
-										</View>
-									)}
-								</View>
-								<View style={styles.priceContainer}>
-									<Text style={styles.price}>
-										{getUserSpecificPrice(meal, userKind ?? 'guest')}
-									</Text>
-									{label !== '' && (
-										<Text style={styles.priceLabel}>{label}</Text>
-									)}
-								</View>
-							</View>
-						</View>
-					</Pressable>
-				</ContextMenu>
+				{cardContent}
 			</DragDropView>
 		)
 	}
