@@ -35,6 +35,7 @@ export default function TabLayout(): React.JSX.Element {
 					backgroundColor: theme.colors.card,
 					borderColor: theme.colors.border
 				},
+				tabBarLabelPosition: 'below-icon', // somehow needed to prevent repositioning even tho the label is hidden
 				tabBarShowLabel: false
 			}}
 		>
