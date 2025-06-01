@@ -2,8 +2,9 @@ import type { BottomTabBarProps } from '@bottom-tabs/react-navigation'
 import { BottomTabBar } from '@react-navigation/bottom-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
+import DeviceInfo from 'react-native-device-info'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -21,8 +22,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
 	const { t } = useTranslation('navigation')
-	const isAndroid = Platform.OS === 'android'
-	const isMobile = Dimensions.get('window').width < 900
+
 	return (
 		<Tabs
 			tabBar={CustomTabBar}
@@ -31,15 +31,12 @@ export default function TabLayout(): React.JSX.Element {
 				// @ts-expect-error internally correct
 				tabBarInactiveTintColor: theme.colors.tabbarInactive,
 				tabBarStyle: {
-					paddingTop: Platform.OS === 'ios' ? 10 : 8,
+					paddingTop: DeviceInfo.getDeviceType() === 'Desktop' ? 4 : 10,
 					backgroundColor: theme.colors.card,
 					borderColor: theme.colors.border
 				},
-				tabBarShowLabel: !isMobile,
-				tabBarLabelPosition: isMobile ? undefined : 'below-icon'
+				tabBarShowLabel: false
 			}}
-			disablePageAnimations={isAndroid}
-			translucent
 		>
 			<Tabs.Screen
 				name="(index)"
