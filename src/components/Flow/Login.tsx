@@ -1,4 +1,8 @@
-import { router, useLocalSearchParams } from 'expo-router'
+import {
+	router,
+	useLocalSearchParams,
+	useNavigationContainerRef
+} from 'expo-router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -46,11 +50,13 @@ export default function Login(): React.JSX.Element {
 	const { fromOnboarding } = useLocalSearchParams<{
 		fromOnboarding: string
 	}>()
+	const rootNavigation = useNavigationContainerRef()
 
 	const navigateHome = (): void => {
 		if (fromOnboarding === 'true') {
-			router.dismissAll()
-			router.replace('/(tabs)')
+			rootNavigation.reset({
+				routes: [{ name: '(tabs)' }]
+			})
 			return
 		}
 		router.dismiss()

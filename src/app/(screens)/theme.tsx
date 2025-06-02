@@ -56,7 +56,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.background
 	},
 	preview: {
-		marginHorizontal: theme.margins.page
+		marginHorizontal: theme.margins.page,
+		marginBottom: 24
 	},
 	previewLabel: {
 		color: theme.colors.labelSecondaryColor,

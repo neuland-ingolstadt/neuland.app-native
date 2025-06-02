@@ -448,7 +448,7 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(flow)/onboarding"
+					name="(screens)/onboarding"
 					options={{
 						headerShown: false,
 
@@ -463,7 +463,7 @@ function RootLayout(): React.JSX.Element {
 				/>
 
 				<Stack.Screen
-					name="(flow)/whatsnew"
+					name="(screens)/whatsnew"
 					options={{
 						headerShown: false,
 						gestureEnabled: false,
