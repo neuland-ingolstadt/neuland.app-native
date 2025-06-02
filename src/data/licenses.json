@@ -29,7 +29,7 @@
 		"licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@gorhom/bottom-sheet@5.1.4": {
+	"@gorhom/bottom-sheet@5.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/gorhom/react-native-bottom-sheet",
 		"licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
@@ -47,7 +47,7 @@
 		"licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@maplibre/maplibre-react-native@10.1.4": {
+	"@maplibre/maplibre-react-native@10.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/maplibre/maplibre-react-native",
 		"licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -380,12 +380,6 @@
 		"licenses": "MIT",
 		"repository": "https://github.com/computerjazz/react-native-draggable-flatlist",
 		"licenseUrl": "https://github.com/computerjazz/react-native-draggable-flatlist/raw/master/LICENSE.txt",
-		"parents": "neuland"
-	},
-	"react-native-edge-to-edge@1.6.0": {
-		"licenses": "MIT",
-		"repository": "https://github.com/zoontek/react-native-edge-to-edge",
-		"licenseUrl": "https://github.com/zoontek/react-native-edge-to-edge/raw/master/LICENSE",
 		"parents": "neuland"
 	},
 	"react-native-gesture-handler@2.24.0": {
