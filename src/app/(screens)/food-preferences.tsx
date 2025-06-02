@@ -2,7 +2,8 @@ import { useRouter } from 'expo-router'
 import type React from 'react'
 import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { Pressable, ScrollView, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
@@ -13,6 +14,7 @@ import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { FormListSections } from '@/types/components'
 
 export default function FoodPreferences(): React.JSX.Element {
@@ -45,6 +47,7 @@ export default function FoodPreferences(): React.JSX.Element {
 		{ key: 'en', title: t('preferences.languages.en') }
 	]
 	const { styles } = useStyles(stylesheet)
+	const { iconAnimatedStyle, triggerWiggle } = useWiggleAnimation()
 	const router = useRouter()
 
 	const selectedRestaurants = useFoodFilterStore(
@@ -128,25 +131,29 @@ export default function FoodPreferences(): React.JSX.Element {
 				</SectionView>
 			</View>
 			<View style={styles.sectionContainer}>
-				<View style={styles.notesBox}>
-					<PlatformIcon
-						ios={{
-							name: 'exclamationmark.triangle',
-							variant: 'fill',
-							size: 21
-						}}
-						android={{
-							name: 'warning',
-							size: 24
-						}}
-						web={{
-							name: 'TriangleAlert',
-							size: 24
-						}}
-						style={styles.warningIcon}
-					/>
-					<Text style={styles.notesText}>{t('preferences.footer')}</Text>
-				</View>
+				<Pressable onPress={triggerWiggle}>
+					<View style={styles.notesBox}>
+						<Animated.View style={iconAnimatedStyle}>
+							<PlatformIcon
+								ios={{
+									name: 'exclamationmark.triangle',
+									variant: 'fill',
+									size: 21
+								}}
+								android={{
+									name: 'warning',
+									size: 24
+								}}
+								web={{
+									name: 'TriangleAlert',
+									size: 24
+								}}
+								style={styles.warningIcon}
+							/>
+						</Animated.View>
+						<Text style={styles.notesText}>{t('preferences.footer')}</Text>
+					</View>
+				</Pressable>
 			</View>
 		</ScrollView>
 	)
@@ -161,7 +168,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
 		flexDirection: 'row',
-		gap: 10,
+		gap: 16,
 		paddingHorizontal: 14,
 		paddingVertical: 8,
 		width: '100%'
