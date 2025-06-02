@@ -93,7 +93,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.13.3"
+        versionName "0.13.4"
     }
     flavorDimensions "default"
     productFlavors {
@@ -104,7 +104,7 @@ android {
         }
         production {
             dimension "default"
-            applicationId "app.neuland"
+            applicationId 'app.neuland'
             resValue "string", "app_name", "Neuland Next"
         }
     }

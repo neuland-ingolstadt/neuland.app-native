@@ -341,7 +341,7 @@ export function getCenterSingle(
  * @param room Room name
  */
 export const handleShareModal = (room: string): void => {
-	const payload = `https://neuland.app/map/?room=${room}`
+	const payload = `https://web.neuland.app/map/?room=${room}`
 	trackEvent('Share', {
 		type: 'room'
 	})

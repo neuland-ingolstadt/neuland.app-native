@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.13.3",
+		"version": "0.13.4",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,
@@ -17,10 +17,12 @@
 			"userInterfaceStyle": "automatic",
 			"associatedDomains": [
 				"webcredentials:neuland.app",
-				"activitycontinuation:neuland.app",
-				"applinks:neuland.app",
-				"applinks:dev.neuland.app",
-				"activitycontinuation:dev.neuland.app"
+				"webcredentials:dev.neuland.app",
+				"webcredentials:web.neuland.app",
+				"activitycontinuation:web.neuland.app",
+				"activitycontinuation:dev.neuland.app",
+				"applinks:web.neuland.app",
+				"applinks:dev.neuland.app"
 			],
 			"config": {
 				"usesNonExemptEncryption": false
@@ -60,7 +62,7 @@
 					"autoVerify": true,
 					"data": {
 						"scheme": "https",
-						"host": "neuland.app"
+						"host": "web.neuland.app"
 					},
 					"category": ["BROWSABLE", "DEFAULT"]
 				}
@@ -90,7 +92,7 @@
 			[
 				"expo-router",
 				{
-					"headOrigin": "https://neuland.app",
+					"headOrigin": "https://web.neuland.app",
 					"sitemap": false
 				}
 			],

@@ -100,7 +100,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 										sportsEvent.startTime,
 										sportsEvent.endTime
 									),
-									link: `https://neuland.app/events/sports/${id}`
+									link: `https://web.neuland.app/events/sports/${id}`
 								})
 							})
 						}}

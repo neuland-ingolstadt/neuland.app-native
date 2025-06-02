@@ -93,7 +93,7 @@
 			}
 		},
 		"share": {
-			"message": "Check out \"{{meal}}\" ({{price}}) at {{location}}.\nhttps://neuland.app/food/{{id}}"
+			"message": "Check out \"{{meal}}\" ({{price}}) at {{location}}.\nhttps://werb.neuland.app/food/{{id}}"
 		}
 	}
 }
