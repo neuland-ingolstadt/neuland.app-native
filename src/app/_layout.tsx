@@ -59,8 +59,7 @@ function RootLayout(): React.JSX.Element {
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {
-			console.log('handleOpenURL', event.url)
-			const bases = ['https://neuland.app', 'https://dev.neuland.app']
+			const bases = ['https://dev.neuland.app', 'https://web.neuland.app/']
 
 			const matchingBase = bases.find((base) => event.url.startsWith(base))
 			if (matchingBase) {

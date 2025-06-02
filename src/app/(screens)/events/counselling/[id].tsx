@@ -95,7 +95,7 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 							trackEvent('Share', {
 								type: 'studentCounsellingEvent'
 							})
-							const deepLinkUrl = `https://neuland.app/events/counselling/${id}`
+							const deepLinkUrl = `https://web.neuland.app/events/counselling/${id}`
 							await Share.share({
 								message: t('pages.event.shareCounsellingMessage', {
 									title: eventData?.title,

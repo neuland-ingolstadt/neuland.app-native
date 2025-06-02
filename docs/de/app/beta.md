@@ -18,7 +18,7 @@ Um am Beta-Programm teilzunehmen, musst du die TestFlight-App installieren. Test
 
 ::: tip Feedback geben
 
-Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns entweder eine [E-Mail](mailto:app-feedback@informatik.sexy) oder verwende TestFlight, um Feedback direkt an die Entwickler zu senden. iOS ermöglicht es dir sogar, Screenshots zu machen und zu kommentieren, um visuelles Feedback zu geben.
+Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns entweder eine [E-Mail](mailto:feedback@neuland.app) oder verwende TestFlight, um Feedback direkt an die Entwickler zu senden. iOS ermöglicht es dir sogar, Screenshots zu machen und zu kommentieren, um visuelles Feedback zu geben.
 
 :::
 
@@ -31,7 +31,7 @@ Um am Beta-Programm auf Android teilzunehmen, kannst du dem Beta-Programm auf Go
 
 ::: tip Feedback geben
 
-Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [E-Mail](mailto:app-feedback@informatik.sexy) mit deinen Vorschlägen, Ideen und Fehlerberichten.
+Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [E-Mail](mailto:feedback@neuland.app) mit deinen Vorschlägen, Ideen und Fehlerberichten.
 Wir empfehlen nicht, eine private Bewertung im Google Play Store zu hinterlassen, da wir sie nicht einsehen können.
 
 :::
@@ -45,6 +45,6 @@ Diese Version wird automatisch mit den neuesten Funktionen und Verbesserungen de
 
 ::: tip Feedback geben
 
-Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [email](mailto:app-feedback@informatik.sexy) mit deinen Vorschlägen, Ideen und Fehlerberichten.
+Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [email](mailto:feedback@neuland.app) mit deinen Vorschlägen, Ideen und Fehlerberichten.
 
 :::

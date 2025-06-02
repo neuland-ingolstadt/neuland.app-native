@@ -167,7 +167,7 @@ export default function About(): React.JSX.Element {
 					},
 					onPress: async () =>
 						(await Linking.openURL(
-							'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
+							'mailto:feedback@neuland.app?subject=Feedback%20Neuland-Next'
 						)) as Promise<void>
 				},
 				{

@@ -20,7 +20,7 @@ To join the beta program, you need to install the TestFlight app. TestFlight is 
 
 ::: tip Provide Feedback
 
-Please send us your feedback on the beta version of the app. Either send us an [email](mailto:app-feedback@informatik.sexy) or use TestFlight to provide feedback directly to the developers. iOS even allows you to take screenshots and annotate them to provide visual feedback.
+Please send us your feedback on the beta version of the app. Either send us an [email](mailto:feedback@neuland.app) or use TestFlight to provide feedback directly to the developers. iOS even allows you to take screenshots and annotate them to provide visual feedback.
 
 :::
 
@@ -33,7 +33,7 @@ To join the beta program on Android, you can join the beta program on Google Pla
 
 ::: tip Provide Feedback
 
-Please send us your feedback on the beta version of the app. Please send us an [email](mailto:app-feedback@informatik.sexy) with your suggestions, ideas, and bug reports.
+Please send us your feedback on the beta version of the app. Please send us an [email](mailto:feedback@neuland.app) with your suggestions, ideas, and bug reports.
 We do not suggest leaving a private review on the Google Play Store, since we cannot read them.
 
 :::
@@ -46,6 +46,6 @@ This version is automatically updated with the latest features and improvements 
 
 ::: tip Provide Feedback
 
-Please send us your feedback on the beta version of the app. Please send us an [email](mailto:app-feedback@informatik.sexy) with your suggestions, ideas, and bug reports.
+Please send us your feedback on the beta version of the app. Please send us an [email](mailto:feedback@neuland.app) with your suggestions, ideas, and bug reports.
 
 :::

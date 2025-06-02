@@ -128,7 +128,7 @@ export default function ClEventDetail(): React.JSX.Element {
 										title: eventData?.titles[i18n.language as LanguageKey],
 										organizer: eventData?.host.name,
 										date: dateRange,
-										link: `https://neuland.app/events/cl/${id}`
+										link: `https://web.neuland.app/events/cl/${id}`
 									})
 								})
 							}}
