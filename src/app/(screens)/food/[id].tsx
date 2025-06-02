@@ -38,6 +38,7 @@ import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { Meal } from '@/types/neuland-api'
@@ -156,6 +157,9 @@ export default function FoodDetail(): React.JSX.Element {
 			]
 		}
 	})
+
+	const { iconAnimatedStyle: wiggleIconAnimatedStyle, triggerWiggle } =
+		useWiggleAnimation()
 
 	if (isLoading || !queryData) {
 		return (
@@ -624,30 +628,34 @@ export default function FoodDetail(): React.JSX.Element {
 				<FormList sections={sections} />
 			</View>
 
-			<View style={styles.notesContainer}>
-				<View style={styles.notesBox}>
-					<PlatformIcon
-						ios={{
-							name: 'exclamationmark.triangle',
-							variant: 'fill',
-							size: 21
-						}}
-						android={{
-							name: 'warning',
-							size: 24
-						}}
-						web={{
-							name: 'TriangleAlert',
-							size: 24
-						}}
-						style={styles.iconWarning}
-					/>
-					<Text style={styles.notesText}>
-						{!isTranslated() ? t('details.translated') : ''}
-						{t('details.footer')}
-					</Text>
+			<Pressable onPress={triggerWiggle}>
+				<View style={styles.notesContainer}>
+					<View style={styles.notesBox}>
+						<Animated.View style={wiggleIconAnimatedStyle}>
+							<PlatformIcon
+								ios={{
+									name: 'exclamationmark.triangle',
+									variant: 'fill',
+									size: 21
+								}}
+								android={{
+									name: 'warning',
+									size: 24
+								}}
+								web={{
+									name: 'TriangleAlert',
+									size: 24
+								}}
+								style={styles.iconWarning}
+							/>
+						</Animated.View>
+						<Text style={styles.notesText}>
+							{!isTranslated() ? t('details.translated') : ''}
+							{t('details.footer')}
+						</Text>
+					</View>
 				</View>
-			</View>
+			</Pressable>
 		</Animated.ScrollView>
 	)
 }
@@ -673,7 +681,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
 		flexDirection: 'row',
-		gap: 10,
+		gap: 16,
 		paddingHorizontal: 14,
 		paddingVertical: 8,
 		width: '100%',
