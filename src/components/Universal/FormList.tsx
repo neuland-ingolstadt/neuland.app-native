@@ -10,7 +10,7 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
-
+import { copyToClipboard } from '@/utils/ui-utils'
 import PlatformIcon from './Icon'
 
 interface FormListProps {
@@ -81,6 +81,48 @@ const RenderSectionItems: React.FC<{
 		}
 	}
 
+	const handleTextCopy = async (text: string): Promise<void> => {
+		await copyToClipboard(text)
+	}
+
+	const renderValueText = (item: SectionGroup) => {
+		const textComponent = (
+			<Text
+				style={[
+					item.layout === 'column' ? styles.columnDetails : styles.rowDetails,
+					{
+						color: item.textColor ?? theme.colors.labelColor,
+						fontWeight: item.fontWeight ?? 'normal'
+					}
+				]}
+				selectable={item.selectable ?? false}
+			>
+				{item.value}
+			</Text>
+		)
+
+		if (item.copyable && item.value != null) {
+			return (
+				<Pressable
+					onPress={() =>
+						handleTextCopy(
+							typeof item.copyable === 'string'
+								? item.copyable
+								: (item.value?.toString() ?? '')
+						)
+					}
+					style={({ pressed }) => ({
+						opacity: pressed ? 0.7 : 1
+					})}
+				>
+					{textComponent}
+				</Pressable>
+			)
+		}
+
+		return textComponent
+	}
+
 	return (
 		<View style={styles.blockCard}>
 			{items.map((item, index) => (
@@ -140,22 +182,7 @@ const RenderSectionItems: React.FC<{
 									<Text style={styles.rowTitle}>{item.title}</Text>
 								)}
 
-								{item.value != null && !privacyHidden && (
-									<Text
-										style={[
-											item.layout === 'column'
-												? styles.columnDetails
-												: styles.rowDetails,
-											{
-												color: item.textColor ?? theme.colors.labelColor,
-												fontWeight: item.fontWeight ?? 'normal'
-											}
-										]}
-										selectable={item.selectable ?? false}
-									>
-										{item.value}
-									</Text>
-								)}
+								{item.value != null && !privacyHidden && renderValueText(item)}
 							</View>
 
 							{/* Add right padding container when there's a value but no chevron */}
