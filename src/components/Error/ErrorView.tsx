@@ -13,7 +13,12 @@ import {
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { MaterialIcon } from '@/types/material-icons'
-import { guestError, networkError, permissionError } from '@/utils/api-utils'
+import {
+	guestError,
+	networkError,
+	notLoggedInError,
+	permissionError
+} from '@/utils/api-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import StatusBox from './ActionBox'
@@ -113,6 +118,8 @@ export default function ErrorView({
 				return t('error.guest.description')
 			case permissionError:
 				return t('error.permission.description')
+			case notLoggedInError:
+				return t('error.notLoggedIn.description')
 			default:
 				if (message != null) {
 					return message
@@ -125,7 +132,7 @@ export default function ErrorView({
 	const ErrorButton = (): React.JSX.Element => {
 		const buttonAction = (): void => {
 			switch (title) {
-				case guestError:
+				case guestError || notLoggedInError:
 					router.navigate('/login')
 					break
 				default:
@@ -137,7 +144,7 @@ export default function ErrorView({
 		}
 		let buttonProps = null
 
-		if (title === guestError) {
+		if (title === guestError || title === notLoggedInError) {
 			buttonProps = {
 				onPress: () => {
 					router.navigate('/login')
@@ -150,7 +157,9 @@ export default function ErrorView({
 			buttonProps = { onPress: buttonAction, text: buttonText }
 		}
 
-		return (buttonProps != null || title === guestError) &&
+		return (buttonProps != null ||
+			title === guestError ||
+			title === notLoggedInError) &&
 			title !== permissionError ? (
 			<Pressable
 				style={styles.logoutContainer(inModal)}
@@ -169,7 +178,9 @@ export default function ErrorView({
 	return (
 		<ScrollView
 			refreshControl={
-				refreshing != null && title !== guestError ? (
+				refreshing != null &&
+				title !== guestError &&
+				title !== notLoggedInError ? (
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				) : undefined
 			}
