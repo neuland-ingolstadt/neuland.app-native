@@ -349,7 +349,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	columnDetails: {
 		color: theme.colors.text,
-		fontSize: 16,
+		fontSize: 16.5,
 		paddingTop: 2,
 		textAlign: 'left'
 	},
