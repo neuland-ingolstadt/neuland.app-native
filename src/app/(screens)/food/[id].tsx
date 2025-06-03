@@ -292,7 +292,7 @@ export default function FoodDetail(): React.JSX.Element {
 					copyable: `${foodData?.nutrition?.kj}`
 				},
 				{
-				  title: `${t('details.formlist.nutrition.energy')} (kcal)`,
+					title: `${t('details.formlist.nutrition.energy')} (kcal)`,
 					value: `${(foodData?.nutrition?.kcal ?? 'n/a').toString()} kcal`,
 					copyable: `${foodData?.nutrition?.kcal}`
 				},
