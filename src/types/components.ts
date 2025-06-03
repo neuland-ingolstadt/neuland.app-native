@@ -35,6 +35,7 @@ export interface SectionGroup {
 		| '900'
 		| undefined
 	selectable?: boolean
+	copyable?: boolean | string
 }
 
 export interface FormListSections {
