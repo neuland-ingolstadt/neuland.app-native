@@ -12,6 +12,7 @@ import { loadSecureAsync } from './storage'
 export const networkError = 'Network request failed'
 export const guestError = 'User is logged in as guest'
 export const permissionError = '"Service for user-group not defined" (-120)'
+export const notLoggedInError = 'User is not logged in'
 /**
  * Removes the quotation marks and the error code from the error message.
  * @param str The error message string to be trimmed.
@@ -66,7 +67,8 @@ export const isKnownError = (error: Error | string): boolean => {
 	return (
 		errorString === networkError ||
 		errorString === guestError ||
-		errorString === permissionError
+		errorString === permissionError ||
+		errorString === notLoggedInError
 	)
 }
 

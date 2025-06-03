@@ -16,7 +16,8 @@ const SESSION_ERROR_PATTERNS = [
 	/login/i,
 	/authentication/i,
 	/not authorized/i,
-	/unauthorized/i
+	/unauthorized/i,
+	/wrong credentials/i
 ]
 
 /**
@@ -49,8 +50,7 @@ export class UnavailableSessionError extends Error {
  */
 export async function createSession(
 	username: string,
-	password: string,
-	stayLoggedIn: boolean
+	password: string
 ): Promise<boolean> {
 	// convert to lowercase just to be safe
 	// (the API used to show weird behavior when using upper case usernames)
@@ -67,10 +67,8 @@ export async function createSession(
 
 	storage.set('sessionCreated', Date.now().toString())
 	await saveSecureAsync('session', session)
-	if (stayLoggedIn) {
-		await saveSecureAsync('username', modifiedUsername)
-		await saveSecureAsync('password', password)
-	}
+	await saveSecureAsync('username', username)
+	await saveSecureAsync('password', password)
 	return isStudent
 }
 
@@ -108,7 +106,7 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	const username = await loadSecureAsync('username')
+	let username = await loadSecureAsync('username')
 	const password = await loadSecureAsync('password')
 
 	if (Platform.OS === 'web') {
@@ -116,15 +114,19 @@ export async function callWithSession<T>(
 			throw new NoSessionError()
 		}
 	} else {
-		if (username === null) {
+		if (username === null || username === '') {
 			throw new UnavailableSessionError()
 		}
 
-		if (password === null) {
+		if (password === null || password === '') {
 			throw new UnavailableSessionError()
 		}
 	}
-	// log in if the session is older than SESSION_EXPIRES
+
+	// adresses prior bug where username is an email address
+	username = username!.replace(/@thi\.de$/, '')
+	username = username!.replace(/\s/g, '')
+
 	if (
 		sessionCreated + SESSION_EXPIRES < Date.now() &&
 		username != null &&

@@ -34,6 +34,10 @@
 			"title": "Funktion nicht verfügbar",
 			"description": "Diese Funktion ist für deine Benutzergruppe nicht verfügbar."
 		},
+		"notLoggedIn": {
+			"title": "Nicht angemeldet",
+			"description": "Bitte melde dich an, um diese Funktion zu nutzen."
+		},
 		"map": {
 			"mapLoadError": "Fehler beim Laden der Karte",
 			"mapOverlay": "Fehler beim Laden des Overlays"
