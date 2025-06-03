@@ -21,6 +21,7 @@ import {
 } from 'react-native-unistyles'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
 import {
 	STATUS_URL,
 	USER_EMPLOYEE,
@@ -54,9 +55,10 @@ const LoginForm = ({
 		let showStatus = true
 		try {
 			setLoading(true)
-			const userKind = await createSession(username, password, true)
+			const userKind = await createSession(username, password)
 			toggleUserKind(userKind)
 			resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
+			await queryClient.invalidateQueries()
 			if (Platform.OS === 'ios') {
 				void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 			}

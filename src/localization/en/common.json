@@ -34,6 +34,10 @@
 			"title": "Feature not available",
 			"description": "This feature is not available for your user group."
 		},
+		"notLoggedIn": {
+			"title": "Not signed in",
+			"description": "Please sign in to use this feature."
+		},
 		"map": {
 			"mapLoadError": "Error while loading map",
 			"mapOverlay": "Error while loading overlay"
