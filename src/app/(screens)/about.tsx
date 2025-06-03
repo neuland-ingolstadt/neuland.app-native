@@ -178,28 +178,32 @@ export default function About(): React.JSX.Element {
 							`https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}`
 						)) as Promise<void>
 				},
-				{
-					title:
-						Platform.OS === 'ios'
-							? t('about.formlist.contact.rateiOS')
-							: t('about.formlist.contact.rateAndroid'),
-					icon: {
-						ios: 'star',
-						android: 'star',
-						web: 'Star'
-					},
-					onPress: () => {
-						if (Platform.OS === 'android') {
-							void Linking.openURL(
-								'market://details?id=app.neuland&showAllReviews=true'
-							)
-						} else {
-							void Linking.openURL(
-								'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
-							)
-						}
-					}
-				}
+				...(Platform.OS === 'ios' || Platform.OS === 'android'
+					? [
+							{
+								title:
+									Platform.OS === 'ios'
+										? t('about.formlist.contact.rateiOS')
+										: t('about.formlist.contact.rateAndroid'),
+								icon: {
+									ios: 'star' as const,
+									android: 'star' as const,
+									web: 'Star' as const
+								},
+								onPress: () => {
+									if (Platform.OS === 'android') {
+										void Linking.openURL(
+											'market://details?id=app.neuland&showAllReviews=true'
+										)
+									} else {
+										void Linking.openURL(
+											'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
+										)
+									}
+								}
+							}
+						]
+					: [])
 			]
 		},
 

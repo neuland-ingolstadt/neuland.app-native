@@ -40,10 +40,8 @@ export default function Theme(): React.JSX.Element {
 	]
 	return (
 		<>
-			<ScrollView>
-				<View style={styles.wrapper}>
-					<FormList sections={sections} />
-				</View>
+			<ScrollView contentContainerStyle={styles.scrollView}>
+				<FormList sections={sections} />
 				<View style={styles.notesContainer}>
 					<Text style={styles.notesText}>
 						{t('changelog.footer')}
@@ -67,10 +65,9 @@ export default function Theme(): React.JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
 	notesContainer: {
-		alignSelf: 'center',
 		flexDirection: 'row',
-		marginBottom: 40,
-		width: '92%'
+		marginTop: 8,
+		marginBottom: 60
 	},
 	notesText: {
 		color: theme.colors.labelColor,
@@ -80,9 +77,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	text: {
 		color: theme.colors.primary
 	},
-	wrapper: {
-		alignSelf: 'center',
-		marginVertical: 16,
-		width: '92%'
+
+	scrollView: {
+		flex: 1,
+		marginTop: 12,
+		marginHorizontal: theme.margins.page
 	}
 }))

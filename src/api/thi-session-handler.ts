@@ -124,8 +124,8 @@ export async function callWithSession<T>(
 	}
 
 	// adresses prior bug where username is an email address
-	username = username!.replace(/@thi\.de$/, '')
-	username = username!.replace(/\s/g, '')
+	username = username?.replace(/@thi\.de$/, '') ?? null
+	username = username?.replace(/\s/g, '') ?? null
 
 	if (
 		sessionCreated + SESSION_EXPIRES < Date.now() &&

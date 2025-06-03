@@ -171,7 +171,7 @@
 				"icon": {
 					"ios": "person",
 					"android": "person",
-					"web": "UserCircle"
+					"web": "CircleUser"
 				}
 			},
 			{
