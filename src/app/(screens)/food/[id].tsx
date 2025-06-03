@@ -289,47 +289,47 @@ export default function FoodDetail(): React.JSX.Element {
 				{
 					title: `${t('details.formlist.nutrition.energy')} (kJ)`,
 					value: `${(foodData?.nutrition?.kj ?? 'n/a').toString()} kJ`,
-					copyable: `${(foodData?.nutrition?.kj ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.kj}`
 				},
 				{
-					title: `${t('details.formlist.nutrition.energy')} (kcal)`,
+				  title: `${t('details.formlist.nutrition.energy')} (kcal)`,
 					value: `${(foodData?.nutrition?.kcal ?? 'n/a').toString()} kcal`,
-					copyable: `${(foodData?.nutrition?.kcal ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.kcal}`
 				},
 				{
 					title: t('details.formlist.nutrition.fat'),
 					value: `${(foodData?.nutrition?.fat ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.fat ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.fat}`
 				},
 				{
 					title: t('details.formlist.nutrition.saturated'),
 					value: `${(foodData?.nutrition?.fatSaturated ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.fatSaturated ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.fatSaturated}`
 				},
 				{
 					title: t('details.formlist.nutrition.carbs'),
 					value: `${(foodData?.nutrition?.carbs ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.carbs ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.carbs}`
 				},
 				{
 					title: t('details.formlist.nutrition.sugar'),
 					value: `${(foodData?.nutrition?.sugar ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.sugar ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.sugar}`
 				},
 				{
 					title: t('details.formlist.nutrition.fiber'),
 					value: `${(foodData?.nutrition?.fiber ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.fiber ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.fiber}`
 				},
 				{
 					title: t('details.formlist.nutrition.protein'),
 					value: `${(foodData?.nutrition?.protein ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.protein ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.protein}`
 				},
 				{
 					title: t('details.formlist.nutrition.salt'),
 					value: `${(foodData?.nutrition?.salt ?? 'n/a').toString()} g`,
-					copyable: `${(foodData?.nutrition?.salt ?? 'n/a').toString()}`
+					copyable: `${foodData?.nutrition?.salt}`
 				}
 			]
 		}
