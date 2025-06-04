@@ -59,7 +59,7 @@ const language = Object.keys(resources).includes(languageCode)
 
 void i18n.use(initReactI18next).init({
 	fallbackLng: fallbackLanguage,
-	lng: language,
+	lng: 'de',
 	compatibilityJSON: 'v4',
 	interpolation: {
 		escapeValue: false

@@ -1,38 +1,48 @@
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1 AS base
-WORKDIR /usr/src/app
+FROM node:24-alpine AS base
 
-# Install git
-RUN apt-get update && apt-get install -y git
+FROM oven/bun AS deps
+WORKDIR /app
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile --ignore-scripts
+COPY bun.lock package.json ./
+COPY patches ./patches
+RUN bun install --frozen-lockfile 
 
-# install with --production (exclude devDependencies)
-RUN mkdir -p /temp/prod
-COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production --ignore-scripts
-
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# build the app
-RUN bunx vitepress build
 
-# copy production dependencies and source code into final image
-FROM base AS release
-COPY --chown=bun:bun --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/index.mjs .
-COPY --from=prerelease /usr/src/app/.vitepress/dist .vitepress/dist
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+RUN realpath . 
 
-# run the app
-USER bun
-EXPOSE 8080
-ENTRYPOINT [ "bun", "run", "index.mjs" ]
+RUN npm run build
+
+# Production image, copy all the files and run next
+FROM node:24-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+CMD ["node", "server.js"]

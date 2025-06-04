@@ -1,0 +1,25 @@
+diff --git a/node_modules/nextra-theme-docs/.bun-tag-be6498df5d4a6f31 b/.bun-tag-be6498df5d4a6f31
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/components/sidebar.js b/dist/components/sidebar.js
+index b6e7d777ee4b1c0b50e5c1dab305f64f01370b29..95cc4cf3903446ea13a4cf7e1552aa1b47dd8b02 100644
+--- a/dist/components/sidebar.js
++++ b/dist/components/sidebar.js
+@@ -385,7 +385,7 @@ const MobileNav = () => {
+   useEffect(t2, t3);
+   const themeConfig = useThemeConfig();
+   const hasI18n = themeConfig.i18n.length > 0;
+-  const hasMenu = themeConfig.darkMode || hasI18n;
++  const hasMenu = false;
+   const t4 = menu ? "x:[transform:translate3d(0,0,0)]" : "x:[transform:translate3d(0,-100%,0)]";
+   let t5;
+   if ($[8] !== t4) {
+@@ -502,7 +502,7 @@ const Sidebar = () => {
+   }
+   const anchors = t2;
+   const hasI18n = themeConfig.i18n.length > 0;
+-  const hasMenu = themeConfig.darkMode || hasI18n || themeConfig.sidebar.toggleButton;
++  const hasMenu = false;
+   let t3;
+   if ($[5] !== hideSidebar || $[6] !== includePlaceholder) {
+     t3 = includePlaceholder && hideSidebar && /* @__PURE__ */ jsx("div", { className: "x:max-xl:hidden x:h-0 x:w-64 x:shrink-0" });
