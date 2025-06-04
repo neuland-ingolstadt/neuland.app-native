@@ -74,14 +74,7 @@ const EventItem = ({
 						</Text>
 					</View>
 					{location && (
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								flexShrink: 1,
-								marginLeft: 8
-							}}
-						>
+						<View style={styles.eventLocationContainer}>
 							<Text style={styles.eventLocation} numberOfLines={1}>
 								{location}
 							</Text>
@@ -115,6 +108,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 13,
 		fontWeight: '500',
 		marginStart: 2
+	},
+	eventLocationContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		maxWidth: '60%',
+		flexShrink: 1,
+		marginLeft: 8
 	},
 	eventLocation: {
 		color: theme.colors.labelSecondaryColor,
