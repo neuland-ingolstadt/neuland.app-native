@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, LayoutAnimation, View } from 'react-native'
+import { Dimensions, LayoutAnimation, Platform, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
@@ -12,9 +12,18 @@ import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import { DashboardContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/ErrorView'
+import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 
+const HeaderLeft = () => {
+	const { styles } = useStyles(stylesheet)
+	return (
+		<View style={styles.headerLeft}>
+			<LogoSVG size={24} />
+		</View>
+	)
+}
 export default function HomeRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
@@ -38,6 +47,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 				transparent={true}
 				androidFallback
 				headerRightElement={HomeHeaderRight}
+				headerLeftElement={Platform.OS === 'web' ? HeaderLeft : undefined}
 			/>
 		</>
 	)
@@ -171,5 +181,9 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	page: {
 		backgroundColor: theme.colors.background
+	},
+	headerLeft: {
+		paddingLeft: 16,
+		paddingRight: 8
 	}
 }))

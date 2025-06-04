@@ -19,6 +19,7 @@ export interface WorkaroundStackProps {
 	transparent?: boolean
 	largeTitle?: boolean
 	headerSearchBarOptions?: SearchBarProps
+	headerLeftElement?: ((props: unknown) => ReactNode) | undefined
 	headerRightElement?: ((props: unknown) => ReactNode) | undefined
 	params?: Partial<object | undefined>
 	androidFallback?: boolean
@@ -35,6 +36,8 @@ function WorkaroundStack({
 	transparent = false,
 	largeTitle = false,
 	headerRightElement = undefined,
+	headerLeftElement = undefined,
+
 	headerSearchBarOptions = undefined,
 	params = {},
 	androidFallback = false,
@@ -58,6 +61,7 @@ function WorkaroundStack({
 						),
 						cardStyle: { backgroundColor: theme.colors.background },
 						headerRight: headerRightElement,
+						headerLeft: headerLeftElement,
 						headerStyle: {
 							backgroundColor: styles.headerBackground.backgroundColor
 						},
@@ -81,6 +85,7 @@ function WorkaroundStack({
 					headerShown: true,
 					headerLargeTitle: Platform.OS === 'ios' && largeTitle,
 					headerRight: headerRightElement,
+					headerLeft: headerLeftElement,
 					headerLargeStyle: styles.headerBackground,
 					headerStyle: undefined,
 					headerSearchBarOptions,
