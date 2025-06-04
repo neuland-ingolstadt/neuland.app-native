@@ -74,7 +74,14 @@ const EventItem = ({
 						</Text>
 					</View>
 					{location && (
-						<View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 1, marginLeft: 8 }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								flexShrink: 1,
+								marginLeft: 8
+							}}
+						>
 							<Text style={styles.eventLocation} numberOfLines={1}>
 								{location}
 							</Text>
