@@ -1,5 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import type React from 'react'
 import { memo, use, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -102,95 +102,96 @@ export const MealEntry = memo(
 		}
 
 		const cardContent = (
-			<Pressable
-				onPress={itemPressed}
-				delayLongPress={300}
-				onLongPress={() => {
-					/* nothing */
-				}}
-				style={styles.pressable}
-			>
-				<View key={index} style={styles.container}>
-					<View style={styles.innerContainer}>
-						<Text style={styles.title} numberOfLines={2}>
-							{mealName(
-								meal.name,
-								deferredFoodLanguage,
-								i18n.language as LanguageKey
-							)}
-						</Text>
-						{meal.variants?.length > 0 && (
-							<View style={styles.variantContainer}>
-								<Text style={styles.variantText}>
-									{`+ ${meal.variants.length}`}
-								</Text>
-							</View>
-						)}
-					</View>
-					<View style={styles.detailsContainer}>
-						<View style={styles.detailsColumns}>
-							<View style={styles.flags}>
-								{userFlags.map(
-									(flag: { name: string; isVeg: boolean }, index: number) => (
-										<View key={index} style={styles.flagsBox}>
-											{flag.isVeg && (
-												<PlatformIcon
-													ios={{
-														name: 'leaf.fill',
-														size: 13
-													}}
-													android={{
-														name: 'eco',
-														size: 13,
-														variant: 'filled'
-													}}
-													web={{
-														name: 'Leaf',
-														size: 13,
-														variant: 'filled'
-													}}
-													style={styles.vegIcon}
-												/>
-											)}
-
-											<Text style={styles.flagsText}>{flag.name}</Text>
-										</View>
-									)
+			<Link asChild href={`/food/${meal.id}`}>
+				<Pressable
+					delayLongPress={300}
+					onLongPress={() => {
+						/* nothing */
+					}}
+					style={styles.pressable}
+				>
+					<View key={index} style={styles.container}>
+						<View style={styles.innerContainer}>
+							<Text style={styles.title} numberOfLines={2}>
+								{mealName(
+									meal.name,
+									deferredFoodLanguage,
+									i18n.language as LanguageKey
 								)}
-							</View>
-							{shouldShowAllergens && (
-								<View style={styles.allergensContainer}>
-									<PlatformIcon
-										ios={{
-											name: iconName,
-											size: 13
-										}}
-										android={{
-											name: androidName,
-											size: 16,
-											variant: 'outlined'
-										}}
-										web={{
-											name: webName,
-											size: 16
-										}}
-										style={styles.icon}
-									/>
-									<Text style={styles.allergene} numberOfLines={3}>
-										{textContent}
+							</Text>
+							{meal.variants?.length > 0 && (
+								<View style={styles.variantContainer}>
+									<Text style={styles.variantText}>
+										{`+ ${meal.variants.length}`}
 									</Text>
 								</View>
 							)}
 						</View>
-						<View style={styles.priceContainer}>
-							<Text style={styles.price}>
-								{getUserSpecificPrice(meal, userKind ?? 'guest')}
-							</Text>
-							{label !== '' && <Text style={styles.priceLabel}>{label}</Text>}
+						<View style={styles.detailsContainer}>
+							<View style={styles.detailsColumns}>
+								<View style={styles.flags}>
+									{userFlags.map(
+										(flag: { name: string; isVeg: boolean }, index: number) => (
+											<View key={index} style={styles.flagsBox}>
+												{flag.isVeg && (
+													<PlatformIcon
+														ios={{
+															name: 'leaf.fill',
+															size: 13
+														}}
+														android={{
+															name: 'eco',
+															size: 13,
+															variant: 'filled'
+														}}
+														web={{
+															name: 'Leaf',
+															size: 13,
+															variant: 'filled'
+														}}
+														style={styles.vegIcon}
+													/>
+												)}
+
+												<Text style={styles.flagsText}>{flag.name}</Text>
+											</View>
+										)
+									)}
+								</View>
+								{shouldShowAllergens && (
+									<View style={styles.allergensContainer}>
+										<PlatformIcon
+											ios={{
+												name: iconName,
+												size: 13
+											}}
+											android={{
+												name: androidName,
+												size: 16,
+												variant: 'outlined'
+											}}
+											web={{
+												name: webName,
+												size: 16
+											}}
+											style={styles.icon}
+										/>
+										<Text style={styles.allergene} numberOfLines={3}>
+											{textContent}
+										</Text>
+									</View>
+								)}
+							</View>
+							<View style={styles.priceContainer}>
+								<Text style={styles.price}>
+									{getUserSpecificPrice(meal, userKind ?? 'guest')}
+								</Text>
+								{label !== '' && <Text style={styles.priceLabel}>{label}</Text>}
+							</View>
 						</View>
 					</View>
-				</View>
-			</Pressable>
+				</Pressable>
+			</Link>
 		)
 
 		if (Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop') {

@@ -1,4 +1,4 @@
-import { router } from 'expo-router'
+import { Link } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -13,23 +13,22 @@ export const HomeHeaderRight = (): React.JSX.Element => {
 	}
 
 	return (
-		<Pressable
-			onPress={() => {
-				router.navigate('/dashboard')
-			}}
-			hitSlop={10}
-			style={styles.headerButton}
-			accessibilityLabel={t('button.settingsDashboard')}
-		>
-			<View>
-				<PlatformIcon
-					ios={{ name: 'gear', size: 22 }}
-					android={{ name: 'menu', size: 24 }}
-					web={{ name: 'List', size: 24 }}
-					style={styles.icon}
-				/>
-			</View>
-		</Pressable>
+		<Link asChild href="/dashboard">
+			<Pressable
+				hitSlop={10}
+				style={styles.headerButton}
+				accessibilityLabel={t('button.settingsDashboard')}
+			>
+				<View>
+					<PlatformIcon
+						ios={{ name: 'gear', size: 22 }}
+						android={{ name: 'menu', size: 24 }}
+						web={{ name: 'List', size: 24 }}
+						style={styles.icon}
+					/>
+				</View>
+			</Pressable>
+		</Link>
 	)
 }
 
