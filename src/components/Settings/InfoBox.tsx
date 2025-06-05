@@ -1,9 +1,11 @@
+import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
 import {
 	Platform,
 	Pressable,
 	StyleSheet,
 	Text,
+	type TextStyle,
 	View,
 	type ViewStyle
 } from 'react-native'
@@ -20,50 +22,44 @@ interface InfoBoxProps {
 		web: LucideIcon
 		variant?: 'fill' | 'outline'
 	}
-	onPress?: () => void
 	style?: ViewStyle
+	href: RelativePathString
 }
 
 const InfoBox = ({
 	title,
 	value,
 	icon,
-	onPress,
+	href,
 	style
 }: InfoBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
-		<Pressable
-			style={({ pressed }) => [
-				styles.container,
-				style,
-				pressed && onPress ? { opacity: 0.8 } : {}
-			]}
-			onPress={onPress}
-			disabled={!onPress}
-		>
-			<View style={styles.iconContainer}>
-				<PlatformIcon
-					ios={{
-						name: icon.ios,
-						size: 19,
-						variant: icon.variant
-					}}
-					android={{
-						name: icon.android,
-						size: 24
-					}}
-					web={{
-						name: icon.web,
-						size: 21
-					}}
-					style={{ ...styles.icon }}
-				/>
-			</View>
-			<Text style={styles.value}>{value}</Text>
-			<Text style={styles.title}>{title}</Text>
-		</Pressable>
+		<Link href={href} asChild style={[styles.container, style as TextStyle]}>
+			<Pressable>
+				<View style={styles.iconContainer}>
+					<PlatformIcon
+						ios={{
+							name: icon.ios,
+							size: 19,
+							variant: icon.variant
+						}}
+						android={{
+							name: icon.android,
+							size: 24
+						}}
+						web={{
+							name: icon.web,
+							size: 21
+						}}
+						style={{ ...styles.icon }}
+					/>
+				</View>
+				<Text style={styles.value}>{value}</Text>
+				<Text style={styles.title}>{title}</Text>
+			</Pressable>
+		</Link>
 	)
 }
 

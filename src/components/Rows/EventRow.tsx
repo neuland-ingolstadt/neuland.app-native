@@ -1,4 +1,4 @@
-import { router } from 'expo-router'
+import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -29,16 +29,11 @@ const CLEventRow = ({
 	// Determine if event is active (ongoing)
 	const isActive =
 		begin != null && begin < new Date() && end != null && end > new Date()
-	const onPressRow = (): void => {
-		router.navigate({
-			pathname: '/events/cl/[id]',
-			params: { id: event.id }
-		})
-	}
+
 	return (
 		<RowEntry
+			href={`/events/cl/${event.id}` as RelativePathString}
 			title={event.titles[i18n.language as LanguageKey] ?? ''}
-			onPress={onPressRow}
 			leftChildren={
 				<View style={styles.leftContainer}>
 					<Text style={styles.leftText1} numberOfLines={2}>

@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'
+import type { RelativePathString } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -15,7 +15,6 @@ export default function StudentInfoSection({
 	printerBalance,
 	personalLecturersCount
 }: StudentInfoSectionProps): React.JSX.Element {
-	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('settings')
 
@@ -30,7 +29,7 @@ export default function StudentInfoSection({
 						android: 'bar_chart',
 						web: 'ChartColumnIncreasing'
 					}}
-					onPress={() => router.navigate('/grades')}
+					href={'/grades' as RelativePathString}
 					style={styles.wideBox}
 				/>
 				<InfoBox
@@ -41,7 +40,7 @@ export default function StudentInfoSection({
 						android: 'group',
 						web: 'Users'
 					}}
-					onPress={() => router.navigate('/lecturers')}
+					href={'/lecturers' as RelativePathString}
 					style={styles.narrowBox}
 				/>
 			</View>
@@ -54,7 +53,7 @@ export default function StudentInfoSection({
 						android: 'print',
 						web: 'Printer'
 					}}
-					onPress={() => router.navigate('/profile')}
+					href={'/profile' as RelativePathString}
 					style={styles.narrowBox}
 				/>
 
@@ -66,7 +65,7 @@ export default function StudentInfoSection({
 						android: 'book_5',
 						web: 'Library'
 					}}
-					onPress={() => router.navigate('/library')}
+					href={'/library' as RelativePathString}
 					style={styles.wideBox}
 				/>
 			</View>
