@@ -34,7 +34,6 @@ import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import i18n from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 
 export default function About(): React.JSX.Element {
@@ -174,9 +173,7 @@ export default function About(): React.JSX.Element {
 					title: 'App Website',
 					icon: linkIcon,
 					onPress: async () =>
-						(await Linking.openURL(
-							`https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}`
-						)) as Promise<void>
+						(await Linking.openURL('https://neuland.app')) as Promise<void>
 				},
 				...(Platform.OS === 'ios' || Platform.OS === 'android'
 					? [
@@ -268,7 +265,7 @@ export default function About(): React.JSX.Element {
 	}
 
 	const handleContributorsPress = (): void => {
-		const url = `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}about/contributors`
+		const url = 'https://neuland.app/about/contributors'
 		void Linking.openURL(url)
 	}
 

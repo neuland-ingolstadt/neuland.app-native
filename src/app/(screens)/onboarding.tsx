@@ -37,7 +37,7 @@ import type { OnboardingCardData } from '@/types/data'
 import { getContrastColor } from '@/utils/ui-utils'
 
 export default function OnboardingScreen(): React.JSX.Element {
-	const { t, i18n } = useTranslation('flow')
+	const { t } = useTranslation('flow')
 	const setOnboarded = useFlowStore((state) => state.setOnboarded)
 	const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -440,9 +440,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 			<Animated.View style={helpAnimatedStyle}>
 				<Pressable
 					onPress={() => {
-						void Linking.openURL(
-							`https://next.neuland.app/${i18n.language === 'de' ? '' : 'en/'}app/faq`
-						)
+						void Linking.openURL('https://neuland.app/docs/app/faq')
 					}}
 					style={{}}
 				>
