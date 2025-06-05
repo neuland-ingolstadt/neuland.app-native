@@ -9,10 +9,7 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"src/**",
-			"docs/**",
 			"!src/__generated__/**",
-			"!docs/.vitepress/cache/**",
-			"!docs/.vitepress/dist/**",
 			"patches/**",
 			"plugins/**",
 			"app.config.json",
