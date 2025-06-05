@@ -1,4 +1,4 @@
-import { router } from 'expo-router'
+import { type RelativePathString, router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -28,12 +28,12 @@ const LecturerRow = ({
 	}
 	const onPressRow = (): void => {
 		setSelectedLecturer(item)
-		router.navigate('/lecturer')
 	}
 
 	const { t } = useTranslation('api')
 	return (
 		<RowEntry
+			href={'/lecturer' as RelativePathString}
 			title={`${[item.titel, item.vorname, item.name].join(' ').trim()}`}
 			leftChildren={
 				<>

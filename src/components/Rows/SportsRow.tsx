@@ -1,4 +1,4 @@
-import { router } from 'expo-router'
+import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -16,18 +16,13 @@ const SportsRow = ({
 	event: UniversitySportsFieldsFragment
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const onPressRow = (): void => {
-		router.navigate({
-			pathname: '/events/sports/[id]',
-			params: { id: event.id }
-		})
-	}
+
 	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
 
 	return (
 		<RowEntry
 			title={event.title[i18n.language as LanguageKey] ?? ''}
-			onPress={onPressRow}
+			href={`/events/sports/${event.id}` as RelativePathString}
 			leftChildren={
 				<View style={styles.leftContainer}>
 					<Text style={styles.leftText1} numberOfLines={1}>

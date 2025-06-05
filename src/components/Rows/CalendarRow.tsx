@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router'
+import { type RelativePathString, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -75,7 +75,6 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 
 	const navigateToPage = (): void => {
 		setExam(event)
-		router.navigate('/exam')
 	}
 
 	const { t } = useTranslation('common')
@@ -130,6 +129,7 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 				</View>
 			}
 			onPress={navigateToPage}
+			href={'/exam' as RelativePathString}
 		/>
 	)
 }

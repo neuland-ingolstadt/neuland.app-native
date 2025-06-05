@@ -1,6 +1,7 @@
+import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
 import type { JSX } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
@@ -8,6 +9,7 @@ const RowEntry = ({
 	leftChildren,
 	rightChildren,
 	onPress,
+	href,
 	backgroundColor,
 	icon
 }: {
@@ -15,19 +17,17 @@ const RowEntry = ({
 	leftChildren: JSX.Element
 	rightChildren: JSX.Element
 	onPress?: () => void
+	href?: RelativePathString
 	isExamCard?: boolean
 	backgroundColor?: string
 	icon?: JSX.Element
 }): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
-	return (
-		<Pressable
-			disabled={!onPress}
-			onPress={onPress}
-			style={({ pressed }) => [
+	const content = (
+		<View
+			style={[
 				styles.cardContainer,
-				{ backgroundColor: backgroundColor ?? theme.colors.card },
-				pressed && styles.pressed
+				{ backgroundColor: backgroundColor ?? theme.colors.card }
 			]}
 		>
 			<View style={styles.eventContainer}>
@@ -49,7 +49,17 @@ const RowEntry = ({
 					<View style={styles.rightChildrenContainer}>{rightChildren}</View>
 				</View>
 			</View>
-		</Pressable>
+		</View>
+	)
+
+	if (!href) {
+		return content
+	}
+
+	return (
+		<Link href={href} onPress={onPress}>
+			{content}
+		</Link>
 	)
 }
 
@@ -61,7 +71,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden',
 		paddingHorizontal: 14,
-		paddingVertical: 16
+		paddingVertical: 16,
+		width: '100%'
 	},
 	eventContainer: {
 		flexDirection: 'column',
