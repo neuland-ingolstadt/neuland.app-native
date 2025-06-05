@@ -267,6 +267,7 @@ function FoodScreen(): React.JSX.Element {
 										{ useNativeDriver: false }
 									)}
 									key={index}
+									showsVerticalScrollIndicator={false}
 									contentContainerStyle={styles.innerScrollContainer}
 								>
 									<MealDay day={data[index]} index={index} key={index} />

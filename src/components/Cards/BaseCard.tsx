@@ -1,4 +1,4 @@
-import { type Href, type RelativePathString, router } from 'expo-router'
+import { type Href, Link, type RelativePathString, router } from 'expo-router'
 import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -142,19 +142,19 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		)
 	}
 	return (
-		<Pressable
+		<Link
+			asChild
+			href={onPressRoute as RelativePathString}
 			disabled={onPressRoute == null}
-			onPress={() => {
-				if (onPressRoute != null) {
-					router.navigate(onPressRoute as RelativePathString)
-				}
-			}}
-			onPressIn={handlePressIn}
-			onPressOut={handlePressOut}
-			style={styles.pressable}
 		>
-			{cardContent}
-		</Pressable>
+			<Pressable
+				onPressIn={handlePressIn}
+				onPressOut={handlePressOut}
+				style={styles.pressable}
+			>
+				{cardContent}
+			</Pressable>
+		</Link>
 	)
 }
 
