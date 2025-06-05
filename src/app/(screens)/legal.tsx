@@ -10,7 +10,7 @@ import type { FormListSections } from '@/types/components'
 export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
-	const { t, i18n } = useTranslation(['settings'])
+	const { t } = useTranslation(['settings'])
 
 	const sections: FormListSections[] = [
 		{
@@ -85,7 +85,7 @@ export default function About(): React.JSX.Element {
 					},
 					onPress: async () =>
 						(await Linking.openURL(
-							`https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}app/faq`
+							'https://neuland.app/docs/app/faq'
 						)) as Promise<void>
 				}
 			]

@@ -7,4 +7,4 @@ All contributions are welcome, whether it's fixing bugs, adding new features, im
 ## How to Contribute
 
 The contribution guidelines moved to the documentation site.\
-Please refer to the [Contributing Guide](https://next.neuland.app/en/app/contribute) for detailed instructions on how to contribute to this project.
+Please refer to the [Contributing Guide](https://neuland.app/docs/contribute/contribute) for detailed instructions on how to contribute to this project.

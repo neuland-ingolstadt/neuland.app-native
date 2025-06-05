@@ -78,10 +78,10 @@ jobs:
             https://github.com/neuland-ingolstadt/neuland.app-native/releases/tag/${{github.ref_name}}
 
             📱 Download the app:
-            http://next.neuland.app/get
+            http://neuland.app/get
 
             🧪 Beta Version:
-            https://next.neuland.app/app/beta
+            https://neuland.app/docs/app/beta
           message-color: "48120"
           branch: ${{ github.ref_name }}
           sha: ${{ github.sha }}

@@ -168,7 +168,7 @@ export default function SettingsMenu(): React.JSX.Element {
 						trackEvent('Share', { type: 'app' })
 
 						void Share.share({
-							url: 'https://next.neuland.app/get', // url option is only available on iOS
+							url: 'https://neuland.app/get', // url option is only available on iOS
 							message:
 								Platform.OS === 'ios'
 									? t('menu.formlist.legal.shareMessage')
@@ -186,7 +186,7 @@ export default function SettingsMenu(): React.JSX.Element {
 									web: 'Download' as LucideIcon
 								},
 								onPress: () => {
-									void Linking.openURL('https://next.neuland.app/get')
+									void Linking.openURL('https://neuland.app/get')
 								}
 							}
 						]
