@@ -54,10 +54,15 @@ const RowEntry = ({
 
 	if (!href) {
 		return onPress ? (
-			<Pressable onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
+			<Pressable
+				onPress={onPress}
+				style={({ pressed }) => pressed && styles.pressed}
+			>
 				{content}
 			</Pressable>
-		) : content
+		) : (
+			content
+		)
 	}
 
 	return (

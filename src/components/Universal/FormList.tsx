@@ -183,8 +183,8 @@ const RenderSectionItems: React.FC<{
 								)}
 
 								{item.value != null && !privacyHidden && renderValueText(item)}
-								{item.value === undefined &&
-									item.customComponent != undefined &&
+								{!item.value &&
+									item.customComponent &&
 									!privacyHidden &&
 									item.customComponent([
 										item.layout === 'column'
