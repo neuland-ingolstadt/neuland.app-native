@@ -29,6 +29,7 @@
 	},
 	"login": {
 		"title1": "Anmelden",
+		"title1Sub": "von Neuland Ingolstadt e.V.",
 		"title2": "mit deinem THI-Account",
 		"getStarted": "Los geht's",
 		"toast": "Anmeldung erfolgreich",

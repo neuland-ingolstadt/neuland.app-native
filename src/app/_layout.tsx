@@ -171,7 +171,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/login"
 					options={{
-						title: 'Account',
+						title: 'Neuland Next Login',
 						animation: 'none',
 						gestureEnabled: false,
 						headerShown: false,

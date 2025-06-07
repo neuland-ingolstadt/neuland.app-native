@@ -1,8 +1,8 @@
 import { HeaderTitle } from '@react-navigation/elements'
-import { Stack } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -55,7 +55,62 @@ export default function ExamDetail(): React.JSX.Element {
 
 				{
 					title: t('pages.exam.details.room'),
-					value: exam?.rooms
+					customComponent: (textStyle) => {
+						return exam?.rooms?.includes(',') ? (
+							<View
+								style={{
+									flex: 1,
+									flexDirection: 'row',
+									justifyContent: 'flex-end',
+									flexWrap: 'wrap'
+								}}
+							>
+								{exam.rooms.split(',').map((r, index) => {
+									const room = r.trim()
+									return (
+										<View key={index}>
+											<Pressable
+												style={{ flexDirection: 'row', alignItems: 'center' }}
+												onPress={() => {
+													if (room) {
+														router.dismissTo({
+															pathname: '/map',
+															params: { room: room }
+														})
+													}
+												}}
+											>
+												<Text
+													style={[textStyle, { color: theme.colors.primary }]}
+												>
+													{room}
+												</Text>
+												{index < exam.rooms.split(',').length - 1 && (
+													<Text style={textStyle}>, </Text>
+												)}
+											</Pressable>
+										</View>
+									)
+								})}
+							</View>
+						) : (
+							<Pressable
+								onPress={() => {
+									const singleRoom = exam?.rooms?.trim()
+									if (singleRoom) {
+										router.dismissTo({
+											pathname: '/map',
+											params: { room: singleRoom }
+										})
+									}
+								}}
+							>
+								<Text style={[textStyle, { color: theme.colors.primary }]}>
+									{exam?.rooms?.trim()}
+								</Text>
+							</Pressable>
+						)
+					}
 				},
 				{
 					title: t('pages.exam.details.seat'),
