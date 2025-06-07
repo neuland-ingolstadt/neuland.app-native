@@ -68,16 +68,16 @@ export default function Login(): React.JSX.Element {
 
 	return (
 		<>
-			<ScrollView contentContainerStyle={styles.container}>
-				<View style={styles.headerContainer}>
-					<View style={styles.logoWrapper}>
-						<LogoSVG size={32} />
-						<View style={styles.brandTextContainer}>
-							<Text style={styles.brandText}>Neuland Next</Text>
-							<Text style={styles.brandTextSub}>{t('login.title1Sub')}</Text>
-						</View>
+			<View style={styles.headerContainer}>
+				<View style={styles.logoWrapper}>
+					<LogoSVG size={32} />
+					<View style={styles.brandTextContainer}>
+						<Text style={styles.brandText}>Neuland Next</Text>
+						<Text style={styles.brandTextSub}>{t('login.title1Sub')}</Text>
 					</View>
 				</View>
+			</View>
+			<ScrollView contentContainerStyle={styles.container}>
 				<LoginAnimatedText />
 				<View style={styles.innerContainer}>
 					<LoginForm navigateHome={navigateHome} />
@@ -139,12 +139,23 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		flex: 1,
 		paddingTop: 20,
-		width: '92%'
+		width: '92%',
+		marginTop: 100
 	},
 	headerContainer: {
 		alignItems: 'flex-start',
-		marginBottom: 35,
-		width: '100%'
+		width: '100%',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		zIndex: 1,
+		backgroundColor: theme.colors.background,
+		paddingHorizontal: '4%',
+		paddingTop: 10,
+		paddingBottom: 10,
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		borderBottomColor: theme.colors.border
 	},
 	logoWrapper: {
 		flexDirection: 'row',
