@@ -150,7 +150,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		left: 0,
 		right: 0,
 		zIndex: 1,
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.card,
 		paddingHorizontal: '4%',
 		paddingTop: 10,
 		paddingBottom: 10,
