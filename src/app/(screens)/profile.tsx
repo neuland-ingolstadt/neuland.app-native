@@ -11,6 +11,7 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -229,97 +230,93 @@ export default function Profile(): React.JSX.Element {
 	]
 
 	return (
-		<>
-			<ScrollView
-				contentContainerStyle={styles.contentContainer}
-				refreshControl={
-					isSuccess ? (
-						<RefreshControl
-							refreshing={isRefetchingByUser}
-							onRefresh={() => {
-								void refetchByUser()
-							}}
-						/>
-					) : undefined
-				}
-			>
-				{isLoading && (
-					<View style={styles.loadingContainer}>
-						<LoadingIndicator />
+		<ScrollView
+			contentContainerStyle={styles.contentContainer}
+			refreshControl={
+				isSuccess ? (
+					<RefreshControl
+						refreshing={isRefetchingByUser}
+						onRefresh={() => {
+							void refetchByUser()
+						}}
+					/>
+				) : undefined
+			}
+		>
+			{isLoading && (
+				<View style={styles.loadingContainer}>
+					<LoadingIndicator />
+				</View>
+			)}
+			{isError && (
+				<ErrorView
+					title={error.message}
+					onRefresh={refetchByUser}
+					refreshing={isRefetchingByUser}
+				/>
+			)}
+			{isPaused && (
+				<ErrorView
+					title={networkError}
+					onRefresh={refetchByUser}
+					refreshing={isRefetchingByUser}
+				/>
+			)}
+			{isSuccess &&
+				(data.mtknr !== undefined ? (
+					<View style={styles.container}>
+						<FormList sections={sections} privacyHidden={isBackground} />
 					</View>
-				)}
-				{isError && (
+				) : (
 					<ErrorView
-						title={error.message}
-						onRefresh={refetchByUser}
+						title={t('profile.error.title')}
+						message={t('profile.error.message')}
+						buttonText="Primuss"
+						onButtonPress={() => {
+							void Linking.openURL(
+								'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
+							)
+						}}
 						refreshing={isRefetchingByUser}
-					/>
-				)}
-				{isPaused && (
-					<ErrorView
-						title={networkError}
 						onRefresh={refetchByUser}
-						refreshing={isRefetchingByUser}
+						icon={{
+							ios: 'person.crop.circle.badge.exclamationmark',
+							android: 'account_circle_off',
+							web: 'UserRoundX'
+						}}
+						isCritical={false}
 					/>
-				)}
-				{isSuccess &&
-					(data.mtknr !== undefined ? (
-						<View style={styles.container}>
-							<FormList sections={sections} privacyHidden={isBackground} />
-						</View>
-					) : (
-						<ErrorView
-							title={t('profile.error.title')}
-							message={t('profile.error.message')}
-							buttonText="Primuss"
-							onButtonPress={() => {
-								void Linking.openURL(
-									'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
-								)
-							}}
-							refreshing={isRefetchingByUser}
-							onRefresh={refetchByUser}
-							icon={{
-								ios: 'person.crop.circle.badge.exclamationmark',
-								android: 'account_circle_off',
-								web: 'UserRoundX'
-							}}
-							isCritical={false}
-						/>
-					))}
+				))}
 
-				<Pressable
-					onPress={logoutAlert}
-					style={styles.logoutButton}
-					disabled={isLoggingOut}
-				>
-					{isLoggingOut ? (
-						<LoadingIndicator />
-					) : (
-						<>
-							<PlatformIcon
-								ios={{
-									name: 'rectangle.portrait.and.arrow.right',
-									size: 18
-								}}
-								android={{
-									name: 'logout',
-									size: 22
-								}}
-								web={{
-									name: 'LogOut',
-									size: 22
-								}}
-								style={styles.notification}
-							/>
-							<Text style={styles.logoutText}>
-								{t('profile.logout.button')}
-							</Text>
-						</>
-					)}
-				</Pressable>
-			</ScrollView>
-		</>
+			<Pressable
+				onPress={logoutAlert}
+				style={styles.logoutButton}
+				disabled={isLoggingOut}
+			>
+				{isLoggingOut ? (
+					<LoadingIndicator />
+				) : (
+					<>
+						<PlatformIcon
+							ios={{
+								name: 'rectangle.portrait.and.arrow.right',
+								size: 18
+							}}
+							android={{
+								name: 'logout',
+								size: 22
+							}}
+							web={{
+								name: 'LogOut',
+								size: 22
+							}}
+							style={styles.notification}
+						/>
+						<Text style={styles.logoutText}>{t('profile.logout.button')}</Text>
+					</>
+				)}
+			</Pressable>
+		</ScrollView>
 	)
 }
 
@@ -341,6 +338,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.mg,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		flexDirection: 'row',
 		gap: 10,
 		justifyContent: 'center',

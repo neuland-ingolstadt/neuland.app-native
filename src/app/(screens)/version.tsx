@@ -2,7 +2,14 @@ import * as Application from 'expo-application'
 import Constants from 'expo-constants'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Pressable, ScrollView, Text } from 'react-native'
+import {
+	Linking,
+	Platform,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	Text
+} from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
@@ -260,6 +267,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.mg,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		flexDirection: 'row',
 		gap: 10,
 		justifyContent: 'center',

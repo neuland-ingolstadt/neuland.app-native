@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	Alert,
+	Animated,
 	Linking,
 	Platform,
 	StyleSheet,
@@ -50,6 +51,32 @@ const LoginForm = ({
 	const { t } = useTranslation('flow')
 	const { resetOrder } = use(DashboardContext)
 	const [showPassword, setShowPassword] = useState(false)
+	const shakeAnimation = useState(new Animated.Value(0))[0]
+
+	const shake = () => {
+		Animated.sequence([
+			Animated.timing(shakeAnimation, {
+				toValue: 5,
+				duration: 50,
+				useNativeDriver: true
+			}),
+			Animated.timing(shakeAnimation, {
+				toValue: -5,
+				duration: 50,
+				useNativeDriver: true
+			}),
+			Animated.timing(shakeAnimation, {
+				toValue: 5,
+				duration: 50,
+				useNativeDriver: true
+			}),
+			Animated.timing(shakeAnimation, {
+				toValue: 0,
+				duration: 50,
+				useNativeDriver: true
+			})
+		]).start()
+	}
 
 	async function login(): Promise<void> {
 		let showStatus = true
@@ -72,6 +99,7 @@ const LoginForm = ({
 			navigateHome()
 		} catch (e) {
 			console.error('Failed to login', e)
+			shake()
 
 			const error = e as Error
 			const message = trimErrorMsg(error.message)
@@ -218,7 +246,14 @@ const LoginForm = ({
 						/>
 					</View>
 
-					<View style={styles.inputWrapper}>
+					<Animated.View
+						style={[
+							styles.inputWrapper,
+							{
+								transform: [{ translateX: shakeAnimation }]
+							}
+						]}
+					>
 						<PlatformIcon
 							ios={{
 								name: 'lock',
@@ -279,7 +314,7 @@ const LoginForm = ({
 								style={{ color: theme.colors.labelColor }}
 							/>
 						</TouchableOpacity>
-					</View>
+					</Animated.View>
 				</View>
 
 				<TouchableOpacity
