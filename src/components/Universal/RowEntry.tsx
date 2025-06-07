@@ -1,7 +1,7 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
 import type { JSX } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
@@ -53,12 +53,26 @@ const RowEntry = ({
 	)
 
 	if (!href) {
-		return content
+		return onPress ? (
+			<Pressable
+				onPress={onPress}
+				style={({ pressed }) => pressed && styles.pressed}
+			>
+				{content}
+			</Pressable>
+		) : (
+			content
+		)
 	}
 
 	return (
-		<Link href={href} onPress={onPress}>
-			{content}
+		<Link href={href} asChild>
+			<Pressable
+				onPress={onPress}
+				style={({ pressed }) => pressed && styles.pressed}
+			>
+				{content}
+			</Pressable>
 		</Link>
 	)
 }

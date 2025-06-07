@@ -10,6 +10,7 @@ import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
 import LoginAnimatedText from './LoginAnimatedText'
+import LogoSVG from './svgs/logo'
 
 export default function Login(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -68,6 +69,15 @@ export default function Login(): React.JSX.Element {
 	return (
 		<>
 			<ScrollView contentContainerStyle={styles.container}>
+				<View style={styles.headerContainer}>
+					<View style={styles.logoWrapper}>
+						<LogoSVG size={32} />
+						<View style={styles.brandTextContainer}>
+							<Text style={styles.brandText}>Neuland Next</Text>
+							<Text style={styles.brandTextSub}>{t('login.title1Sub')}</Text>
+						</View>
+					</View>
+				</View>
 				<LoginAnimatedText />
 				<View style={styles.innerContainer}>
 					<LoginForm navigateHome={navigateHome} />
@@ -129,7 +139,32 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		flex: 1,
 		paddingTop: 20,
-		width: '90%'
+		width: '92%'
+	},
+	headerContainer: {
+		alignItems: 'flex-start',
+		marginBottom: 35,
+		width: '100%'
+	},
+	logoWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 12
+	},
+	brandTextContainer: {
+		flexDirection: 'column'
+	},
+	brandText: {
+		color: theme.colors.text,
+		fontSize: 20,
+		fontWeight: '600',
+		letterSpacing: -0.2
+	},
+	brandTextSub: {
+		color: theme.colors.labelColor,
+		fontSize: 14,
+		fontWeight: '400',
+		letterSpacing: -0.5
 	},
 	faqContainer: {
 		alignItems: 'center',

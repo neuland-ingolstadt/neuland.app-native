@@ -1,4 +1,4 @@
-import type { ColorValue } from 'react-native'
+import type { ColorValue, StyleProp, TextStyle } from 'react-native'
 import type { CommunityIcon, LucideIcon } from '@/components/Universal/Icon'
 
 import type { MaterialIcon } from './material-icons'
@@ -6,6 +6,7 @@ import type { MaterialIcon } from './material-icons'
 export interface SectionGroup {
 	title?: string
 	value?: string
+	customComponent?: (textStyle: StyleProp<TextStyle>) => React.ReactNode
 	icon?: {
 		ios: string
 		android: MaterialIcon | CommunityIcon

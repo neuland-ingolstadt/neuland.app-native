@@ -183,10 +183,22 @@ const RenderSectionItems: React.FC<{
 								)}
 
 								{item.value != null && !privacyHidden && renderValueText(item)}
+								{!item.value &&
+									item.customComponent &&
+									!privacyHidden &&
+									item.customComponent([
+										item.layout === 'column'
+											? styles.columnDetails
+											: styles.rowDetails,
+										{
+											color: item.textColor ?? theme.colors.labelColor,
+											fontWeight: item.fontWeight ?? 'normal'
+										}
+									])}
 							</View>
 
 							{/* Add right padding container when there's a value but no chevron */}
-							{item.value != null && (
+							{(item.value != null || item.customComponent != null) && (
 								<View style={styles.rightPaddingContainer} />
 							)}
 

@@ -29,6 +29,7 @@
 	},
 	"login": {
 		"title1": "Sign in",
+		"title1Sub": "by Neuland Ingolstadt e.V.",
 		"getStarted": "Get started",
 		"title2": "with your THI account",
 		"toast": "Login successful",
