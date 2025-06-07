@@ -1,7 +1,6 @@
-import React from 'react'
+import type React from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
 import PlatformIcon from './Icon'
 
 interface SectionPickerProps {
@@ -19,7 +18,7 @@ interface SectionPickerProps {
  * @param {() => void} action - The function to be called when the item is selected.
  * @param {boolean} state - The state of the item.
  * @param {boolean} disabled - Whether the item is disabled.
- * @returns {JSX.Element} - The MultiSectionPicker component.
+ * @returns {JSX.Element} - The SingleSectionPicker component.
  * @example
  * <SingleSectionPicker
  *      title={'Title'}
@@ -38,67 +37,73 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 }) => {
 	const { styles } = useStyles(stylesheet)
 	return (
-		<>
-			<React.Fragment>
-				<Pressable
-					onPress={() => {
-						if (!disabled) {
-							action(!selectedItem)
-						}
-					}}
-					style={({ pressed }) => [
-						styles.button,
-						disabled && styles.disabled,
-						pressed && !disabled && { opacity: 0.8 }
-					]}
-					disabled={disabled}
-				>
-					<View style={styles.container}>
-						<Text style={[styles.text, disabled && styles.textDisabled]}>
-							{title}
-						</Text>
-						{selectedItem ? (
-							<PlatformIcon
-								ios={{
-									name: 'checkmark',
-									size: 15
-								}}
-								android={{
-									name: 'check',
-									size: 18
-								}}
-								web={{
-									name: 'Check',
-									size: 18
-								}}
-								style={disabled ? styles.iconDisabled : undefined}
-							/>
-						) : null}
-					</View>
-				</Pressable>
-			</React.Fragment>
-		</>
+		<View style={styles.itemContainer}>
+			<Pressable
+				onPress={() => {
+					if (!disabled) {
+						action(!selectedItem)
+					}
+				}}
+				style={({ pressed }) => [
+					styles.itemContent,
+					selectedItem && styles.itemContentSelected,
+					disabled && styles.disabled,
+					pressed && !disabled && { opacity: 0.8 }
+				]}
+				disabled={disabled}
+			>
+				<Text style={[styles.itemText, disabled && styles.textDisabled]}>
+					{title}
+				</Text>
+				{selectedItem && (
+					<PlatformIcon
+						ios={{
+							name: 'checkmark.circle.fill',
+							size: 18
+						}}
+						android={{
+							name: 'check_circle',
+							size: 21
+						}}
+						web={{
+							name: 'Check',
+							size: 18
+						}}
+						style={disabled ? styles.iconDisabled : styles.checkIcon}
+					/>
+				)}
+			</Pressable>
+		</View>
 	)
 }
 
 export default SingleSectionPicker
 
 const stylesheet = createStyleSheet((theme) => ({
-	button: {
-		padding: 8
+	itemContainer: {
+		height: 52
 	},
-	container: {
-		alignItems: 'center',
+	itemContent: {
+		backgroundColor: theme.colors.card,
+		borderRadius: 12,
+		padding: 16,
 		flexDirection: 'row',
+		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginRight: 8,
-		paddingHorizontal: 6,
-		paddingVertical: 6
+		height: '100%'
 	},
-	text: {
+	itemContentSelected: {
+		backgroundColor: theme.colors.card,
+		opacity: 0.8
+	},
+	itemText: {
 		color: theme.colors.text,
 		fontSize: 16,
-		paddingVertical: 1
+		flex: 1,
+		marginRight: 8
+	},
+	checkIcon: {
+		color: theme.colors.primary
 	},
 	disabled: {
 		opacity: 0.5
