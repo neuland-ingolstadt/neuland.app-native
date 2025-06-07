@@ -35,36 +35,37 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<Pressable
-						onPress={() => {
-							action(item.key)
-						}}
-						style={({ pressed }) => [
-							{ opacity: pressed ? 0.8 : 1 },
-							{ padding: 8 }
-						]}
-					>
-						<View style={styles.container}>
-							<Text style={styles.text}>{item.title}</Text>
-
-							{selectedItem === item.key ? (
+					<View style={styles.itemContainer}>
+						<Pressable
+							onPress={() => {
+								action(item.key)
+							}}
+							style={({ pressed }) => [
+								styles.itemContent,
+								selectedItem === item.key && styles.itemContentSelected,
+								pressed && { opacity: 0.8 }
+							]}
+						>
+							<Text style={styles.itemText}>{item.title}</Text>
+							{selectedItem === item.key && (
 								<PlatformIcon
 									ios={{
-										name: 'checkmark',
-										size: 15
+										name: 'checkmark.circle.fill',
+										size: 18
 									}}
 									android={{
-										name: 'check',
-										size: 18
+										name: 'check_circle',
+										size: 21
 									}}
 									web={{
 										name: 'Check',
 										size: 18
 									}}
+									style={styles.checkIcon}
 								/>
-							) : undefined}
-						</View>
-					</Pressable>
+							)}
+						</Pressable>
+					</View>
 					{index < elements.length - 1 && (
 						<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 					)}
@@ -73,19 +74,32 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 		</>
 	)
 }
+
 const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginRight: 8,
-		paddingHorizontal: 6,
-		paddingVertical: 6
+	itemContainer: {
+		height: 52
 	},
-	text: {
+	itemContent: {
+		backgroundColor: theme.colors.card,
+		borderRadius: 12,
+		padding: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		height: '100%'
+	},
+	itemContentSelected: {
+		backgroundColor: theme.colors.card,
+		opacity: 0.8
+	},
+	itemText: {
 		color: theme.colors.text,
 		fontSize: 16,
-		paddingVertical: 1
+		flex: 1,
+		marginRight: 8
+	},
+	checkIcon: {
+		color: theme.colors.primary
 	}
 }))
 

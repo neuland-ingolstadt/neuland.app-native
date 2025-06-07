@@ -2,7 +2,6 @@ import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
-
 import PlatformIcon from './Icon'
 
 interface Element {
@@ -35,42 +34,45 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<Pressable
-						onPress={() => {
-							if (!item.disabled) {
-								action(item.key)
-							}
-						}}
-						style={({ pressed }) => [
-							styles.button,
-							item.disabled && styles.disabled,
-							pressed && !item.disabled && { opacity: 0.8 }
-						]}
-						disabled={item.disabled}
-					>
-						<View style={styles.container}>
-							<Text style={[styles.text, item.disabled && styles.textDisabled]}>
+					<View style={styles.itemContainer}>
+						<Pressable
+							onPress={() => {
+								if (!item.disabled) {
+									action(item.key)
+								}
+							}}
+							style={({ pressed }) => [
+								styles.itemContent,
+								selectedItems.includes(item.key) && styles.itemContentSelected,
+								item.disabled && styles.disabled,
+								pressed && !item.disabled && { opacity: 0.8 }
+							]}
+							disabled={item.disabled}
+						>
+							<Text
+								style={[styles.itemText, item.disabled && styles.textDisabled]}
+							>
 								{item.title}
 							</Text>
-							{selectedItems.includes(item.key) ? (
+							{selectedItems.includes(item.key) && (
 								<PlatformIcon
 									ios={{
-										name: 'checkmark',
-										size: 15
+										name: 'checkmark.circle.fill',
+										size: 18
 									}}
 									android={{
-										name: 'check',
-										size: 18
+										name: 'check_circle',
+										size: 21
 									}}
 									web={{
 										name: 'Check',
 										size: 18
 									}}
-									style={item.disabled ? styles.iconDisabled : undefined}
+									style={item.disabled ? styles.iconDisabled : styles.checkIcon}
 								/>
-							) : undefined}
-						</View>
-					</Pressable>
+							)}
+						</Pressable>
+					</View>
 					{index < elements.length - 1 && (
 						<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 					)}
@@ -80,22 +82,33 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 	)
 }
 
+export default MultiSectionPicker
+
 const stylesheet = createStyleSheet((theme) => ({
-	button: {
-		padding: 8
+	itemContainer: {
+		height: 52
 	},
-	container: {
-		alignItems: 'center',
+	itemContent: {
+		backgroundColor: theme.colors.card,
+		borderRadius: 12,
+		padding: 16,
 		flexDirection: 'row',
+		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginRight: 8,
-		paddingHorizontal: 6,
-		paddingVertical: 6
+		height: '100%'
 	},
-	text: {
+	itemContentSelected: {
+		backgroundColor: theme.colors.card,
+		opacity: 0.8
+	},
+	itemText: {
 		color: theme.colors.text,
 		fontSize: 16,
-		paddingVertical: 1
+		flex: 1,
+		marginRight: 8
+	},
+	checkIcon: {
+		color: theme.colors.primary
 	},
 	disabled: {
 		opacity: 0.5
@@ -107,5 +120,3 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor
 	}
 }))
-
-export default MultiSectionPicker

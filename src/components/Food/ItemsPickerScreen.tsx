@@ -1,28 +1,33 @@
+import { FlashList } from '@shopify/flash-list'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, ScrollView, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import {
 	createStyleSheet,
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import PlatformIcon from '@/components/Universal/Icon'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
 
-/*
- * Screen for selecting allergens or preferences
- * @param type - type of the screen, either allergens or flags
- * @returns JSX.Element
- */
-const ItemsPickerScreen = (params: {
-	route: { params: { type: string } }
-}): React.JSX.Element => {
-	const type = params.route.params.type
+interface PickerItem {
+	key: string
+	title: string
+}
+
+interface ItemsPickerScreenProps {
+	type: string
+}
+
+const ItemsPickerScreen = ({
+	type
+}: ItemsPickerScreenProps): React.JSX.Element => {
 	const data = type === 'allergens' ? allergenMap : flapMap
 	const placeholderKey =
 		type === 'allergens' ? 'allergensSearch' : 'flagsSearch'
@@ -31,14 +36,14 @@ const ItemsPickerScreen = (params: {
 	const { t, i18n } = useTranslation('food')
 	const [searchQuery, setSearchQuery] = useState<string>('')
 
-	let filteredEntries = Object.entries(data)
+	let filteredEntries: PickerItem[] = Object.entries(data)
 		.filter(([key]) => key !== '_source')
 		.map(([key, value]) => ({
 			key,
 			title: value[i18n.language as LanguageKey]
 		}))
 
-	if (searchQuery != null) {
+	if (searchQuery) {
 		filteredEntries = filteredEntries.filter((item) =>
 			item.title.toLowerCase().includes(searchQuery.toLowerCase())
 		)
@@ -83,51 +88,134 @@ const ItemsPickerScreen = (params: {
 		})
 	}, [navigation, isDark])
 
-	return (
-		<ScrollView
-			contentInsetAdjustmentBehavior="automatic"
-			contentContainerStyle={styles.contentContainer}
-		>
-			<View style={styles.container}>
-				<MultiSectionPicker
-					elements={filteredEntries}
-					selectedItems={
-						type === 'allergens' ? allergenSelection : preferencesSelection
-					}
-					action={
-						type === 'allergens'
-							? toggleSelectedAllergens
-							: toggleSelectedPreferences
-					}
-				/>
-			</View>
-			{filteredEntries.length === 0 && (
-				<Text style={styles.filteredText}>
-					{t(
-						// @ts-expect-error Translation key is dynamic
-						`empty.${type}`
+	const renderItem = ({ item }: { item: PickerItem }) => {
+		const isSelected =
+			type === 'allergens'
+				? allergenSelection.includes(item.key)
+				: preferencesSelection.includes(item.key)
+
+		const toggleItem = () => {
+			if (type === 'allergens') {
+				toggleSelectedAllergens(item.key)
+			} else {
+				toggleSelectedPreferences(item.key)
+			}
+		}
+
+		return (
+			<View style={styles.itemContainer}>
+				<Pressable
+					style={[styles.itemContent, isSelected && styles.itemContentSelected]}
+					onPress={toggleItem}
+				>
+					<Text style={styles.itemText}>{item.title}</Text>
+					{isSelected && (
+						<PlatformIcon
+							ios={{
+								name: 'checkmark.circle.fill',
+								size: 18
+							}}
+							android={{
+								name: 'check_circle',
+								size: 21
+							}}
+							web={{
+								name: 'Check',
+								size: 18
+							}}
+							style={styles.checkIcon}
+						/>
 					)}
-				</Text>
-			)}
-		</ScrollView>
+				</Pressable>
+			</View>
+		)
+	}
+
+	if (filteredEntries.length > 0) {
+		return (
+			<FlashList
+				data={filteredEntries}
+				renderItem={renderItem}
+				estimatedItemSize={60}
+				contentContainerStyle={styles.listContainer}
+				showsVerticalScrollIndicator={false}
+				scrollEventThrottle={16}
+				disableAutoLayout
+			/>
+		)
+	}
+	return (
+		<View style={styles.emptyContainer}>
+			<Text style={styles.emptyText}>
+				{t(type === 'allergens' ? 'empty.allergens' : 'empty.flags')}
+			</Text>
+		</View>
+	)
+}
+
+const Screen = (params: { route: { params: { type: string } } }) => {
+	const type = params.route.params.type
+	const { styles } = useStyles(stylesheet)
+
+	return (
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.page} edges={['top']}>
+				<ItemsPickerScreen type={type} />
+			</SafeAreaView>
+		</SafeAreaProvider>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+	page: {
+		flex: 1
+	},
 	container: {
-		alignSelf: 'center',
+		flex: 1,
+		backgroundColor: theme.colors.background
+	},
+	listContainer: {
+		paddingHorizontal: theme.margins.page,
+		paddingBottom: theme.margins.bottomSafeArea,
+		paddingTop: 10
+	},
+	itemContainer: {
+		marginBottom: 8,
+		height: 52
+	},
+	itemContent: {
 		backgroundColor: theme.colors.card,
+		borderRadius: 12,
+		padding: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		height: '100%'
+	},
+	itemContentSelected: {
+		backgroundColor: theme.colors.card,
+		opacity: 0.8
+	},
+	itemText: {
+		color: theme.colors.text,
+		fontSize: 16,
+		flex: 1,
+		marginRight: 8
+	},
+	checkIcon: {
+		color: theme.colors.primary
+	},
+	emptyContainer: {
+		flex: 1,
 		justifyContent: 'center',
-		width: '100%'
+		alignItems: 'center',
+		paddingHorizontal: theme.margins.page
 	},
-	contentContainer: {
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	filteredText: {
-		alignSelf: 'center',
+	emptyText: {
 		color: theme.colors.labelColor,
-		marginTop: 20
+		fontSize: 16,
+		textAlign: 'center'
 	}
 }))
 
-export default ItemsPickerScreen
+export default Screen
