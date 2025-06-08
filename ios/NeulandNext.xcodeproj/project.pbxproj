@@ -68,14 +68,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B70D143D2DECD82C00FFD12F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B70D143D2DECD82C00FFD12F /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = B70D14272DECD82800FFD12F /* LaunchWidgetExtension */;
 		};
-		B70D14472DECDED500FFD12F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B70D14472DECDED500FFD12F /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				LaunchWidgetControl.swift,
@@ -85,7 +85,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B70D142D2DECD82900FFD12F /* LaunchWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B70D14472DECDED500FFD12F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B70D143D2DECD82C00FFD12F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LaunchWidget; sourceTree = "<group>"; };
+		B70D142D2DECD82900FFD12F /* LaunchWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B70D14472DECDED500FFD12F /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */,
+				B70D143D2DECD82C00FFD12F /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LaunchWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -638,7 +650,10 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -705,7 +720,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

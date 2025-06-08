@@ -1,3 +1,4 @@
+import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -38,12 +39,14 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 						<Pressable
 							onPress={() => {
 								if (!item.disabled) {
+									if (Platform.OS === 'ios') {
+										void selectionAsync()
+									}
 									action(item.key)
 								}
 							}}
 							style={({ pressed }) => [
 								styles.itemContent,
-								selectedItems.includes(item.key) && styles.itemContentSelected,
 								item.disabled && styles.disabled,
 								pressed && !item.disabled && { opacity: 0.8 }
 							]}
