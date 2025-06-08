@@ -161,7 +161,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-blur@14.1.4": {
+	"expo-blur@14.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -191,13 +191,13 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-crypto@14.1.4": {
+	"expo-crypto@14.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-dev-client@5.1.8": {
+	"expo-dev-client@5.2.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -209,7 +209,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-linear-gradient@14.1.4": {
+	"expo-linear-gradient@14.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -227,7 +227,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-navigation-bar@4.2.4": {
+	"expo-navigation-bar@4.2.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -244,7 +244,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-screen-orientation@8.1.6": {
+	"expo-screen-orientation@8.1.7": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -256,19 +256,19 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-splash-screen@0.30.8": {
+	"expo-splash-screen@0.30.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-system-ui@5.0.7": {
+	"expo-system-ui@5.0.8": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo@53.0.9": {
+	"expo@53.0.10": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -412,7 +412,7 @@
 		"licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-screens@4.10.0": {
+	"react-native-screens@4.11.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/software-mansion/react-native-screens",
 		"licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
@@ -454,7 +454,7 @@
 		"licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native@0.79.2": {
+	"react-native@0.79.3": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react-native",
 		"licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",

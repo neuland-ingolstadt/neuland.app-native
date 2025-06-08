@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list'
+import { selectionAsync } from 'expo-haptics'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useLayoutEffect, useState } from 'react'
@@ -95,6 +96,9 @@ const ItemsPickerScreen = ({
 				: preferencesSelection.includes(item.key)
 
 		const toggleItem = () => {
+			if (Platform.OS === 'ios') {
+				void selectionAsync()
+			}
 			if (type === 'allergens') {
 				toggleSelectedAllergens(item.key)
 			} else {
@@ -104,10 +108,7 @@ const ItemsPickerScreen = ({
 
 		return (
 			<View style={styles.itemContainer}>
-				<Pressable
-					style={[styles.itemContent, isSelected && styles.itemContentSelected]}
-					onPress={toggleItem}
-				>
+				<Pressable style={styles.itemContent} onPress={toggleItem}>
 					<Text style={styles.itemText}>{item.title}</Text>
 					{isSelected && (
 						<PlatformIcon
@@ -191,10 +192,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		height: '100%'
-	},
-	itemContentSelected: {
-		backgroundColor: theme.colors.card,
-		opacity: 0.8
 	},
 	itemText: {
 		color: theme.colors.text,

@@ -1,8 +1,8 @@
+import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
-
 import PlatformIcon from '../Universal/Icon'
 
 export interface FoodLanguageElement {
@@ -38,6 +38,9 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 					<View style={styles.itemContainer}>
 						<Pressable
 							onPress={() => {
+								if (Platform.OS === 'ios') {
+									void selectionAsync()
+								}
 								action(item.key)
 							}}
 							style={({ pressed }) => [

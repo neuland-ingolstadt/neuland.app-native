@@ -1,5 +1,6 @@
+import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from './Icon'
 
@@ -41,12 +42,14 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 			<Pressable
 				onPress={() => {
 					if (!disabled) {
+						if (Platform.OS === 'ios') {
+							void selectionAsync()
+						}
 						action(!selectedItem)
 					}
 				}}
 				style={({ pressed }) => [
 					styles.itemContent,
-					selectedItem && styles.itemContentSelected,
 					disabled && styles.disabled,
 					pressed && !disabled && { opacity: 0.8 }
 				]}
@@ -91,10 +94,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		height: '100%'
-	},
-	itemContentSelected: {
-		backgroundColor: theme.colors.card,
-		opacity: 0.8
 	},
 	itemText: {
 		color: theme.colors.text,
