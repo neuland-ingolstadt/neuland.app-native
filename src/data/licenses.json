@@ -298,7 +298,7 @@
 		"licenseUrl": "https://github.com/jakearchibald/idb/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"lucide-react-native@0.511.0": {
+	"lucide-react-native@0.513.0": {
 		"licenses": "ISC",
 		"repository": "https://github.com/lucide-icons/lucide",
 		"licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",

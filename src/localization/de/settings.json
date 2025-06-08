@@ -161,6 +161,11 @@
 			"dark": "Dunkel",
 			"light": "Hell",
 			"footer": "Ändere das Farbschema der App. Dies ermöglicht es dir, die Systemeinstellungen zu überschreiben."
+		},
+		"splash": {
+			"title": "Startbildschirm",
+			"footer": "Aktiviere oder deaktiviere den animierten Startbildschirm beim Öffnen der App",
+			"showSplash": "Animierten Startbildschirm anzeigen"
 		}
 	},
 	"dashboard": {

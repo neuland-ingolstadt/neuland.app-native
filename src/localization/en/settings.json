@@ -182,6 +182,11 @@
 			"dark": "Dark",
 			"light": "Light",
 			"footer": "Change color scheme of the app. This allows you to override the system settings."
+		},
+		"splash": {
+			"title": "Splash Screen",
+			"footer": "Enable or disable the animated splash screen when opening the app",
+			"showSplash": "Show Animated Splash Screen"
 		}
 	},
 	"dashboard": {

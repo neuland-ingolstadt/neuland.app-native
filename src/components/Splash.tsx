@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import Svg, { G, Path } from 'react-native-svg'
 import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
@@ -50,6 +51,9 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const { theme } = useStyles()
 	const [loaded, setLoaded] = useState(false)
 	const [hideSplash, setHideSplash] = useState(false)
+	const showSplashScreen = usePreferencesStore(
+		(state) => state.showSplashScreen
+	)
 
 	const intro = useSharedValue(0)
 	const introBackground = useSharedValue(0)
@@ -87,26 +91,30 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	useEffect(() => {
 		if (isReady && loaded) {
 			SplashScreen.hideAsync()
-			intro.value = withTiming(0.2, { duration: 100 }, () => {
-				intro.value = withTiming(0.4, { duration: 200 }, () => {
-					intro.value = withTiming(
-						1,
-						{ duration: 500, easing: Easing.out(Easing.exp) },
-						() => {
-							introBackground.value = withTiming(1, { duration: 200 }, () => {
-								runOnJS(setHideSplash)(true)
-							})
-						}
-					)
+			if (showSplashScreen) {
+				intro.value = withTiming(0.2, { duration: 100 }, () => {
+					intro.value = withTiming(0.4, { duration: 200 }, () => {
+						intro.value = withTiming(
+							1,
+							{ duration: 500, easing: Easing.out(Easing.exp) },
+							() => {
+								introBackground.value = withTiming(1, { duration: 200 }, () => {
+									runOnJS(setHideSplash)(true)
+								})
+							}
+						)
+					})
 				})
-			})
+			} else {
+				setHideSplash(true)
+			}
 		}
-	}, [isReady, loaded])
+	}, [isReady, loaded, showSplashScreen])
 
 	return (
 		<View style={StyleSheet.absoluteFill}>
 			{children}
-			{!hideSplash && Platform.OS !== 'web' && (
+			{!hideSplash && Platform.OS !== 'web' && showSplashScreen && (
 				<>
 					<Animated.View
 						style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}

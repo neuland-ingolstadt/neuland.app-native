@@ -64,6 +64,9 @@ export default function Provider({
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
+	const showSplashScreen = usePreferencesStore(
+		(state) => state.showSplashScreen
+	)
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const appIcon = usePreferencesStore((state) => state.appIcon)
 	const selectedRestaurants = useFoodFilterStore(
@@ -100,6 +103,15 @@ export default function Provider({
 			theme: theme
 		})
 	}, [theme, analyticsInitialized])
+
+	useEffect(() => {
+		if (!analyticsInitialized) {
+			return
+		}
+		trackEvent('SplashScreen', {
+			showSplashScreen: showSplashScreen
+		})
+	}, [showSplashScreen, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
