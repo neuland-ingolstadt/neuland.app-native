@@ -44,6 +44,7 @@ function RootLayout(): React.JSX.Element {
 	const isPad = DeviceInfo.isTablet()
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
+
 	useQuickActionRouting()
 	useEffect(() => {
 		if (Platform.OS === 'web') {

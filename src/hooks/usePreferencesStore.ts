@@ -9,11 +9,13 @@ interface PreferencesStore {
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
 	recentQuicklinks: string[]
+	showSplashScreen: boolean
 	setTheme: (theme: string) => void
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
 	addUnlockedAppIcon: (name: string) => void
 	addRecentQuicklink: (quicklink: string) => void
+	setShowSplashScreen: (show: boolean) => void
 	reset: () => void
 }
 
@@ -25,12 +27,14 @@ const initialState: Omit<
 	| 'addRecentQuicklink'
 	| 'reset'
 	| 'setLanguage'
+	| 'setShowSplashScreen'
 > = {
 	appIcon: undefined,
 	language: undefined,
 	theme: 'auto',
 	unlockedAppIcons: [],
-	recentQuicklinks: defaultQuicklinks
+	recentQuicklinks: defaultQuicklinks,
+	showSplashScreen: true
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -45,6 +49,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 			},
 			setAppIcon: (appIcon: string) => {
 				set({ appIcon })
+			},
+			setShowSplashScreen: (showSplashScreen: boolean) => {
+				set({ showSplashScreen })
 			},
 			addUnlockedAppIcon: (name: string) => {
 				set((state) => {
