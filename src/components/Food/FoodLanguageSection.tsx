@@ -23,8 +23,6 @@ export interface FoodLanguagePickerProps {
 	action: (item: string) => void
 }
 
-// ...
-
 const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 	elements,
 	selectedItem,
@@ -45,7 +43,6 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 							}}
 							style={({ pressed }) => [
 								styles.itemContent,
-								selectedItem === item.key && styles.itemContentSelected,
 								pressed && { opacity: 0.8 }
 							]}
 						>
@@ -90,10 +87,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		height: '100%'
-	},
-	itemContentSelected: {
-		backgroundColor: theme.colors.card,
-		opacity: 0.8
 	},
 	itemText: {
 		color: theme.colors.text,
