@@ -70,16 +70,18 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
 
 	const animatedLogoStyle = useAnimatedStyle(() => ({
-		transform: [
-			{
-				scale: interpolate(
-					intro.value,
-					[0, 0.2, 0.4, 1],
-					[1, 1, 0.8, 10],
-					'clamp'
-				)
-			}
-		],
+		transform: showSplashScreen
+			? [
+					{
+						scale: interpolate(
+							intro.value,
+							[0, 0.2, 0.4, 1],
+							[1, 1, 0.8, 10],
+							'clamp'
+						)
+					}
+				]
+			: [],
 		opacity: interpolate(intro.value, [0, 0.7, 0.8, 1], [1, 1, 0.4, 0], 'clamp')
 	}))
 
@@ -106,7 +108,15 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 					})
 				})
 			} else {
-				setHideSplash(true)
+				intro.value = withTiming(
+					1,
+					{ duration: 500, easing: Easing.out(Easing.exp) },
+					() => {
+						introBackground.value = withTiming(1, { duration: 200 }, () => {
+							runOnJS(setHideSplash)(true)
+						})
+					}
+				)
 			}
 		}
 	}, [isReady, loaded, showSplashScreen])
@@ -114,7 +124,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	return (
 		<View style={StyleSheet.absoluteFill}>
 			{children}
-			{!hideSplash && Platform.OS !== 'web' && showSplashScreen && (
+			{!hideSplash && Platform.OS !== 'web' && (
 				<>
 					<Animated.View
 						style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
