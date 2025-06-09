@@ -93,7 +93,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const animateSplashWithTransformation = () => {
 		intro.value = withTiming(0.2, { duration: 100 }, () => {
 			intro.value = withTiming(0.4, { duration: 200 }, () => {
-				animateSplashFadeOut()
+				runOnJS(animateSplashFadeOut)()
 			})
 		})
 	}
