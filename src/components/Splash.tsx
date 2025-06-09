@@ -90,33 +90,33 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		opacity: interpolate(introBackground.value, [0, 1], [1, 0], 'clamp')
 	}))
 
+	const animateSplashWithTransformation = () => {
+		intro.value = withTiming(0.2, { duration: 100 }, () => {
+			intro.value = withTiming(0.4, { duration: 200 }, () => {
+				animateSplashFadeOut()
+			})
+		})
+	}
+
+	const animateSplashFadeOut = () => {
+		intro.value = withTiming(
+			1,
+			{ duration: 500, easing: Easing.out(Easing.exp) },
+			() => {
+				introBackground.value = withTiming(1, { duration: 200 }, () => {
+					runOnJS(setHideSplash)(true)
+				})
+			}
+		)
+	}
+
 	useEffect(() => {
 		if (isReady && loaded) {
 			SplashScreen.hideAsync()
 			if (showSplashScreen) {
-				intro.value = withTiming(0.2, { duration: 100 }, () => {
-					intro.value = withTiming(0.4, { duration: 200 }, () => {
-						intro.value = withTiming(
-							1,
-							{ duration: 500, easing: Easing.out(Easing.exp) },
-							() => {
-								introBackground.value = withTiming(1, { duration: 200 }, () => {
-									runOnJS(setHideSplash)(true)
-								})
-							}
-						)
-					})
-				})
+				animateSplashWithTransformation()
 			} else {
-				intro.value = withTiming(
-					1,
-					{ duration: 500, easing: Easing.out(Easing.exp) },
-					() => {
-						introBackground.value = withTiming(1, { duration: 200 }, () => {
-							runOnJS(setHideSplash)(true)
-						})
-					}
-				)
+				animateSplashFadeOut()
 			}
 		}
 	}, [isReady, loaded, showSplashScreen])
