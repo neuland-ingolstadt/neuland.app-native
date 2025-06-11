@@ -9,7 +9,7 @@ import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
-
+import PulsingDot from '../Universal/PulsingDot'
 import RowEntry from '../Universal/RowEntry'
 
 const CLEventRow = ({
@@ -53,6 +53,7 @@ const CLEventRow = ({
 								? `${t('dates.ends')} ${formatFriendlyRelativeTime(end)}`
 								: formatFriendlyRelativeTime(begin))}
 					</Text>
+					<PulsingDot key={'a'} style={[styles.dot, styles.dotOngoing]} />
 				</View>
 			}
 		/>

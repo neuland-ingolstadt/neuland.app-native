@@ -376,7 +376,10 @@ const UpNextCard: React.FC = () => {
 							index < todayStats.completed ? (
 								<View key={index} style={[styles.dot, styles.dotCompleted]} />
 							) : index < todayStats.completed + todayStats.ongoing ? (
-								<PulsingDot key={index} style={[styles.dot, styles.dotOngoing]} />
+								<PulsingDot
+									key={index}
+									style={[styles.dot, styles.dotOngoing]}
+								/>
 							) : (
 								<View key={index} style={[styles.dot, styles.dotRemaining]} />
 							)

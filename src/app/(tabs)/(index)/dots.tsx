@@ -31,7 +31,9 @@ export default function DotsExplanationScreen(): React.JSX.Element {
 				<View style={[styles.dotExplanationRow, styles.totalExplanationRow]}>
 					<View style={styles.dotsGroup}>
 						<View style={[styles.dot, styles.smallDot, styles.dotCompleted]} />
-						<PulsingDot style={[styles.dot, styles.smallDot, styles.dotOngoing]} />
+						<PulsingDot
+							style={[styles.dot, styles.smallDot, styles.dotOngoing]}
+						/>
 						<View style={[styles.dot, styles.smallDot, styles.dotRemaining]} />
 					</View>
 
@@ -91,7 +93,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 4
 	},
 	dotCompleted: {
-		backgroundColor: theme.colors.completedDot,
+		backgroundColor: theme.colors.completedDot
 	},
 	dotOngoing: {
 		backgroundColor: theme.colors.success
