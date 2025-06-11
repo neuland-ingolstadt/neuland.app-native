@@ -2,6 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PulsingDot from '@/components/Universal/PulsingDot'
 
 export default function DotsExplanationScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -19,7 +20,7 @@ export default function DotsExplanationScreen(): React.JSX.Element {
 					<Text style={styles.explanationText}>{t('dots.completed')}</Text>
 				</View>
 				<View style={styles.dotExplanationRow}>
-					<View style={[styles.dot, styles.dotOngoing]} />
+					<PulsingDot style={[styles.dot, styles.dotOngoing]} />
 					<Text style={styles.explanationText}>{t('dots.ongoing')}</Text>
 				</View>
 				<View style={styles.dotExplanationRow}>
@@ -30,7 +31,9 @@ export default function DotsExplanationScreen(): React.JSX.Element {
 				<View style={[styles.dotExplanationRow, styles.totalExplanationRow]}>
 					<View style={styles.dotsGroup}>
 						<View style={[styles.dot, styles.smallDot, styles.dotCompleted]} />
-						<View style={[styles.dot, styles.smallDot, styles.dotOngoing]} />
+						<PulsingDot
+							style={[styles.dot, styles.smallDot, styles.dotOngoing]}
+						/>
 						<View style={[styles.dot, styles.smallDot, styles.dotRemaining]} />
 					</View>
 
@@ -90,11 +93,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 4
 	},
 	dotCompleted: {
-		backgroundColor: theme.colors.success
+		backgroundColor: theme.colors.completedDot
 	},
 	dotOngoing: {
-		backgroundColor: theme.colors.success,
-		opacity: 0.6
+		backgroundColor: theme.colors.success
 	},
 	dotRemaining: {
 		backgroundColor: theme.colors.soonDot,
