@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
 import ThemePreview from '@/components/Theme/ThemePreview'
@@ -47,17 +47,19 @@ export default function Theme(): React.JSX.Element {
 					action={setTheme as (item: string) => void}
 				/>
 			</SectionView>
-			<SectionView
-				title={t('settings:theme.splash.title')}
-				footer={t('settings:theme.splash.footer')}
-			>
-				<SingleSectionPicker
-					title={t('settings:theme.splash.showSplash')}
-					selectedItem={showSplashScreen}
-					action={setShowSplashScreen}
-					state={showSplashScreen}
-				/>
-			</SectionView>
+			{Platform.OS !== 'web' && (
+				<SectionView
+					title={t('settings:theme.splash.title')}
+					footer={t('settings:theme.splash.footer')}
+				>
+					<SingleSectionPicker
+						title={t('settings:theme.splash.showSplash')}
+						selectedItem={showSplashScreen}
+						action={setShowSplashScreen}
+						state={showSplashScreen}
+					/>
+				</SectionView>
+			)}
 			<View style={styles.preview}>
 				<Text style={styles.previewLabel}>
 					{t('timetable:preferences.preview')}
