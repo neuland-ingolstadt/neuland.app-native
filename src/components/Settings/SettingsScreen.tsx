@@ -29,7 +29,6 @@ import SettingsHeader from './SettingsHeader'
 import SettingsLogo from './SettingsLogo'
 import SettingsMenu from './SettingsMenu'
 import StudentInfoSection from './StudentInfoSection'
-import { useHeaderHeight } from '@react-navigation/elements'
 
 export default function Settings(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -40,7 +39,6 @@ export default function Settings(): React.JSX.Element {
 	const [scrollY, setScrollY] = useState(0)
 	const [size, setSize] = useState({ width: 0, height: 0 })
 	const safeInsets = useSafeAreaInsets()
-	const headerHeight = useHeaderHeight()
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const resetFood = useFoodFilterStore((state) => state.reset)
 
@@ -142,7 +140,7 @@ export default function Settings(): React.JSX.Element {
 				) : undefined
 			}
 			onScroll={(event) => {
-				setScrollY(event.nativeEvent.contentOffset.y + safeInsets.top + headerHeight)
+				setScrollY(event.nativeEvent.contentOffset.y + safeInsets.top)
 			}}
 			onLayout={(event) => {
 				setSize({
