@@ -10,7 +10,6 @@ import {
 	Text,
 	View
 } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
@@ -38,7 +37,6 @@ export default function Settings(): React.JSX.Element {
 	const { t } = useTranslation(['settings'])
 	const [scrollY, setScrollY] = useState(0)
 	const [size, setSize] = useState({ width: 0, height: 0 })
-	const safeInsets = useSafeAreaInsets()
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const resetFood = useFoodFilterStore((state) => state.reset)
 
@@ -140,15 +138,10 @@ export default function Settings(): React.JSX.Element {
 				) : undefined
 			}
 			onScroll={(event) => {
-				setScrollY(event.nativeEvent.contentOffset.y + safeInsets.top)
+				setScrollY(event.nativeEvent.contentOffset.y)
 			}}
 			onLayout={(event) => {
-				setSize({
-					width:
-						event.nativeEvent.layout.width - safeInsets.left - safeInsets.right,
-					height:
-						event.nativeEvent.layout.height - safeInsets.top - safeInsets.bottom
-				})
+				setSize(event.nativeEvent.layout)
 			}}
 			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
