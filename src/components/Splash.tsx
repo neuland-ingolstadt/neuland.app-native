@@ -70,16 +70,18 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
 
 	const animatedLogoStyle = useAnimatedStyle(() => ({
-		transform: [
-			{
-				scale: interpolate(
-					intro.value,
-					[0, 0.2, 0.4, 1],
-					[1, 1, 0.8, 10],
-					'clamp'
-				)
-			}
-		],
+		transform: showSplashScreen
+			? [
+					{
+						scale: interpolate(
+							intro.value,
+							[0, 0.2, 0.4, 1],
+							[1, 1, 0.8, 10],
+							'clamp'
+						)
+					}
+				]
+			: [],
 		opacity: interpolate(intro.value, [0, 0.7, 0.8, 1], [1, 1, 0.4, 0], 'clamp')
 	}))
 
@@ -88,25 +90,33 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		opacity: interpolate(introBackground.value, [0, 1], [1, 0], 'clamp')
 	}))
 
+	const animateSplashWithTransformation = () => {
+		intro.value = withTiming(0.2, { duration: 100 }, () => {
+			intro.value = withTiming(0.4, { duration: 200 }, () => {
+				runOnJS(animateSplashFadeOut)()
+			})
+		})
+	}
+
+	const animateSplashFadeOut = () => {
+		intro.value = withTiming(
+			1,
+			{ duration: 500, easing: Easing.out(Easing.exp) },
+			() => {
+				introBackground.value = withTiming(1, { duration: 200 }, () => {
+					runOnJS(setHideSplash)(true)
+				})
+			}
+		)
+	}
+
 	useEffect(() => {
 		if (isReady && loaded) {
 			SplashScreen.hideAsync()
 			if (showSplashScreen) {
-				intro.value = withTiming(0.2, { duration: 100 }, () => {
-					intro.value = withTiming(0.4, { duration: 200 }, () => {
-						intro.value = withTiming(
-							1,
-							{ duration: 500, easing: Easing.out(Easing.exp) },
-							() => {
-								introBackground.value = withTiming(1, { duration: 200 }, () => {
-									runOnJS(setHideSplash)(true)
-								})
-							}
-						)
-					})
-				})
+				animateSplashWithTransformation()
 			} else {
-				setHideSplash(true)
+				animateSplashFadeOut()
 			}
 		}
 	}, [isReady, loaded, showSplashScreen])
@@ -114,7 +124,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	return (
 		<View style={StyleSheet.absoluteFill}>
 			{children}
-			{!hideSplash && Platform.OS !== 'web' && showSplashScreen && (
+			{!hideSplash && Platform.OS !== 'web' && (
 				<>
 					<Animated.View
 						style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
