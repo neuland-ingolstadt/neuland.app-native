@@ -1,17 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { use, useRef } from 'react'
+import React, { use, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
-	Dimensions,
 	LayoutAnimation,
 	RefreshControl,
 	ScrollView,
 	Text,
 	View
 } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
@@ -35,13 +33,10 @@ export default function Settings(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
-	const insets = useSafeAreaInsets()
-	const windowView = Dimensions.get('window')
-	const width = windowView.width - insets.left - insets.right
-	const height = windowView.height - insets.top - insets.bottom
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
-	const scrollY = useRef(0)
+	const [scrollY, setScrollY] = useState(0)
+	const [size, setSize] = useState({ width: 0, height: 0 })
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const resetFood = useFoodFilterStore((state) => state.reset)
 
@@ -143,7 +138,10 @@ export default function Settings(): React.JSX.Element {
 				) : undefined
 			}
 			onScroll={(event) => {
-				scrollY.current = event.nativeEvent.contentOffset.y
+				setScrollY(event.nativeEvent.contentOffset.y)
+			}}
+			onLayout={(event) => {
+				setSize(event.nativeEvent.layout)
 			}}
 			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
@@ -174,7 +172,7 @@ export default function Settings(): React.JSX.Element {
 				{t('menu.copyright', { year: new Date().getFullYear() })}
 			</Text>
 
-			<SettingsLogo scrollY={scrollY.current} width={width} height={height} />
+			<SettingsLogo scrollY={scrollY} size={size} />
 		</ScrollView>
 	)
 }

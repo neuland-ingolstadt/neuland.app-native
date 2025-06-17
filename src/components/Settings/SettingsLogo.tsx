@@ -1,7 +1,7 @@
 import { useFocusEffect } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import Animated, {
 	cancelAnimation,
 	runOnJS,
@@ -21,14 +21,15 @@ import {
 
 interface SettingsLogoProps {
 	scrollY: number
-	width: number
-	height: number
+	size: {
+		width: number
+		height: number
+	}
 }
 
 export default function SettingsLogo({
 	scrollY,
-	width,
-	height
+	size
 }: SettingsLogoProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
@@ -36,12 +37,10 @@ export default function SettingsLogo({
 	const translateX = useSharedValue(0)
 	const translateY = useSharedValue(0)
 	const logoRotation = useSharedValue(0)
-	const velocity = 110
 	const { color, randomizeColor } = useRandomColor()
+	const velocity = 110
 	const logoWidth = 159
 	const logoHeight = 15
-	const bottomBoundX = 0
-	const topBoundX = width - logoWidth
 
 	const isBouncing = tapCount === 2
 	const logoInactiveOpacity = isBouncing ? 0 : 1
@@ -49,25 +48,28 @@ export default function SettingsLogo({
 	const logoActiveHeight = isBouncing ? 18 : 0
 
 	React.useEffect(() => {
-		const { bottomBoundY, topBoundY } = getBounds()
 		if (isBouncing) {
 			translateX.value = withBouncing(
 				velocity,
-				bottomBoundX,
-				topBoundX,
+				0,
+				size.width - logoWidth,
 				randomizeColor
-			) as unknown as number
+			) as number
 			translateY.value = withBouncing(
 				velocity,
-				bottomBoundY,
-				topBoundY,
+				0,
+				size.height - logoHeight,
 				randomizeColor
-			) as unknown as number
+			) as number
 		} else {
 			cancelAnimation(translateX)
 			cancelAnimation(translateY)
 		}
-	}, [isBouncing])
+	}, [isBouncing, size])
+
+	React.useEffect(() => {
+		setTapCount(0)
+	}, [size])
 
 	useFocusEffect(
 		React.useCallback(() => {
@@ -85,7 +87,7 @@ export default function SettingsLogo({
 		return {
 			transform: [
 				{ translateX: translateX.value },
-				{ translateY: translateY.value }
+				{ translateY: translateY.value + scrollY }
 			]
 		}
 	})
@@ -95,12 +97,6 @@ export default function SettingsLogo({
 			transform: [{ rotateZ: `${logoRotation.value}deg` }]
 		}
 	})
-
-	const getBounds = (): { topBoundY: number; bottomBoundY: number } => {
-		const topBoundY = height - logoHeight + scrollY - 5
-		const bottomBoundY = scrollY
-		return { topBoundY, bottomBoundY }
-	}
 
 	const handlePress = (): void => {
 		setTapCount(tapCount + 1)
@@ -160,7 +156,7 @@ export default function SettingsLogo({
 					onPress={() => {
 						handlePress()
 					}}
-					disabled={isBouncing || Platform.OS === 'web'}
+					disabled={isBouncing}
 					accessibilityLabel={t('button.settingsLogo', {
 						ns: 'accessibility'
 					})}

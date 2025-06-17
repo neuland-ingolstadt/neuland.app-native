@@ -21,6 +21,7 @@ export interface WorkaroundStackProps {
 	headerSearchBarOptions?: SearchBarProps
 	headerLeftElement?: ((props: unknown) => ReactNode) | undefined
 	headerRightElement?: ((props: unknown) => ReactNode) | undefined
+	headerTransparent?: boolean
 	params?: Partial<object | undefined>
 	androidFallback?: boolean
 	freezeOnBlur?: boolean
@@ -37,6 +38,7 @@ function WorkaroundStack({
 	largeTitle = false,
 	headerRightElement = undefined,
 	headerLeftElement = undefined,
+	headerTransparent = true,
 
 	headerSearchBarOptions = undefined,
 	params = {},
@@ -95,7 +97,7 @@ function WorkaroundStack({
 						color: theme.colors.text
 					},
 					headerShadowVisible: transparent,
-					headerTransparent: true,
+					headerTransparent: headerTransparent,
 					headerBlurEffect: UnistylesRuntime.themeName
 				}}
 				component={component}
