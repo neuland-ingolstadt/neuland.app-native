@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
+import PulsingDot from '@/components/Universal/PulsingDot'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import type { FriendlyTimetableEntry } from '@/types/utils'
@@ -375,7 +376,10 @@ const UpNextCard: React.FC = () => {
 							index < todayStats.completed ? (
 								<View key={index} style={[styles.dot, styles.dotCompleted]} />
 							) : index < todayStats.completed + todayStats.ongoing ? (
-								<View key={index} style={[styles.dot, styles.dotOngoing]} />
+								<PulsingDot
+									key={index}
+									style={[styles.dot, styles.dotOngoing]}
+								/>
 							) : (
 								<View key={index} style={[styles.dot, styles.dotRemaining]} />
 							)
@@ -500,11 +504,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderRadius: 4
 	},
 	dotCompleted: {
-		backgroundColor: theme.colors.success
+		backgroundColor: theme.colors.completedDot
 	},
 	dotOngoing: {
-		backgroundColor: theme.colors.success,
-		opacity: 0.5
+		backgroundColor: theme.colors.success
 	},
 	dotRemaining: {
 		backgroundColor: theme.colors.soonDot,
