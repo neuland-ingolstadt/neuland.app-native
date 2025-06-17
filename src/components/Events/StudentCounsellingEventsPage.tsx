@@ -111,7 +111,8 @@ export default function StudentCounsellingEventsPage({
 				/>
 			) : (
 				<ErrorView
-					title={t('error.noData')}
+					title={t('error.noData.title')}
+					message={t('error.noData.message')}
 					icon={{
 						ios: 'calendar.badge.clock',
 						android: 'calendar_clock',
