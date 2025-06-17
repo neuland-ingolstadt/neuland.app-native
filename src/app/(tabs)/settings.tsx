@@ -27,6 +27,7 @@ export default function FoodRootScreen(): React.JSX.Element {
 			<WorkaroundStack
 				name={'profile'}
 				titleKey={'navigation.profile'}
+				headerTransparent={false}
 				component={isPageOpen ? Settings : () => <></>}
 				androidFallback
 			/>
