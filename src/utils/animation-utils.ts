@@ -35,10 +35,12 @@ export function withBouncing(
 	bottomBound: number,
 	topBound: number,
 	randomizeColor: () => void
-): {
-	onFrame: (state: AnimationState, now: number) => boolean
-	onStart: (state: AnimationState, _value: number, now: number) => void
-} {
+):
+	| {
+			onFrame: (state: AnimationState, now: number) => boolean
+			onStart: (state: AnimationState, _value: number, now: number) => void
+	  }
+	| number {
 	'worklet'
 	return defineAnimation(
 		{
