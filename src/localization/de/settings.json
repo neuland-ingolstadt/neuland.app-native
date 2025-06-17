@@ -164,7 +164,7 @@
 		},
 		"splash": {
 			"title": "Startbildschirm",
-			"footer": "Aktiviere oder deaktiviere den animierten Startbildschirm beim Öffnen der App",
+			"footer": "Aktiviere oder deaktiviere den animierten Startbildschirm beim Öffnen der App.",
 			"showSplash": "Animierten Startbildschirm anzeigen"
 		}
 	},

@@ -168,6 +168,15 @@ function RootLayout(): React.JSX.Element {
 						gestureEnabled: false
 					}}
 				/>
+				<Stack.Screen
+					name="index"
+					options={{
+						title: 'Home',
+						headerShown: false,
+						animation: 'none',
+						gestureEnabled: false
+					}}
+				/>
 
 				<Stack.Screen
 					name="(screens)/login"
