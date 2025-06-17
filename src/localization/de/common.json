@@ -17,7 +17,10 @@
 		"button": "Wiederholen",
 		"noSession": "Nicht angemeldet.",
 		"pull": "Zum Aktualisieren nach unten ziehen",
-		"noData": "Keine Daten verfügbar.",
+		"noData": {
+			"title": "Keine Daten verfügbar.",
+			"message": "Bitte versuche es später erneut."
+		},
 		"eventNotFound": "Veranstaltung nicht gefunden",
 		"eventNotFoundDescription": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
 		"backToEventList": "Zurück zu {{type}}",
