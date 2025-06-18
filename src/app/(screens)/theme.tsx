@@ -37,6 +37,16 @@ export default function Theme(): React.JSX.Element {
 
 	return (
 		<View style={styles.container}>
+			{Platform.OS !== 'web' && (
+				<SectionView title={t('settings:theme.splash.title')}>
+					<SingleSectionPicker
+						title={t('settings:theme.splash.showSplash')}
+						selectedItem={showSplashScreen}
+						action={setShowSplashScreen}
+						state={showSplashScreen}
+					/>
+				</SectionView>
+			)}
 			<SectionView
 				title={t('theme.themes.title')}
 				footer={t('theme.themes.footer')}
@@ -47,19 +57,7 @@ export default function Theme(): React.JSX.Element {
 					action={setTheme as (item: string) => void}
 				/>
 			</SectionView>
-			{Platform.OS !== 'web' && (
-				<SectionView
-					title={t('settings:theme.splash.title')}
-					footer={t('settings:theme.splash.footer')}
-				>
-					<SingleSectionPicker
-						title={t('settings:theme.splash.showSplash')}
-						selectedItem={showSplashScreen}
-						action={setShowSplashScreen}
-						state={showSplashScreen}
-					/>
-				</SectionView>
-			)}
+
 			<View style={styles.preview}>
 				<Text style={styles.previewLabel}>
 					{t('timetable:preferences.preview')}
