@@ -22,12 +22,16 @@ interface BaseCardProps {
 	title: string
 	onPressRoute?: Href
 	children?: React.ReactNode
+	noDataComponent?: React.ReactNode
+	noDataPredicate?: () => boolean
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
 	title,
 	onPressRoute,
-	children
+	children,
+	noDataComponent,
+	noDataPredicate
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
@@ -112,6 +116,11 @@ const BaseCard: React.FC<BaseCardProps> = ({
 				{children != null && (
 					<View style={styles.childrenContainer}>{children}</View>
 				)}
+				{noDataComponent != null &&
+					noDataPredicate != null &&
+					noDataPredicate() && (
+						<View style={styles.childrenContainer}>{noDataComponent}</View>
+					)}
 			</View>
 		</View>
 	)
