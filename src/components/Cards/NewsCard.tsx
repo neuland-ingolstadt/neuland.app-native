@@ -12,9 +12,10 @@ import BaseCard from './BaseCard'
 const NewsCard: React.FC = () => {
 	const ref = useRef(null)
 	const { t } = useTranslation('navigation')
+	const { t: tCommon } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const { data } = useQuery({
+	const { data, isSuccess } = useQuery({
 		queryKey: ['thiNews'],
 		queryFn: async () => await API.getThiNews(),
 		staleTime: 1000 * 60 * 10, // 10 minutes
@@ -22,9 +23,18 @@ const NewsCard: React.FC = () => {
 		enabled: userKind !== USER_GUEST
 	})
 
+	const noData = (
+		<Text style={styles.noDataText}>{tCommon('error.noData.title')}</Text>
+	)
+
 	return (
 		<View ref={ref}>
-			<BaseCard title="news" onPressRoute="/news">
+			<BaseCard
+				title="news"
+				onPressRoute="/news"
+				noDataComponent={noData}
+				noDataPredicate={() => isSuccess && data.length === 0}
+			>
 				{data != null && data.length > 0 && (
 					<View style={styles.newsContainer}>
 						{data.slice(0, 2).map((newsItem, index) => (
@@ -95,6 +105,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontSize: 14,
 		fontWeight: '500'
+	},
+	noDataText: {
+		color: theme.colors.text,
+		textAlign: 'center',
+		marginTop: 10
 	}
 }))
 

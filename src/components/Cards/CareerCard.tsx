@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View, Text } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
@@ -107,6 +107,8 @@ const CareerCard = (): React.JSX.Element => {
 			onPressRoute="/thi-services"
 			noDataComponent={noData}
 			noDataPredicate={() =>
+				careerServiceQuery.isSuccess &&
+				studentCounsellingQuery.isSuccess &&
 				careerServiceEvents.length === 0 &&
 				studentCounsellingEvents.length === 0
 			}

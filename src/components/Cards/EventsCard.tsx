@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { LanguageKey } from '@/localization/i18n'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
@@ -12,6 +12,7 @@ import BaseCard from './BaseCard'
 const EventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation('navigation')
+	const { t } = useTranslation('common')
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
 		queryFn: loadCampusLifeEvents,
@@ -36,8 +37,17 @@ const EventsCard = (): React.JSX.Element => {
 		}
 	}
 
+	const noData = (
+		<Text style={styles.noDataTitle}>{t('error.noData.title')}</Text>
+	)
+
 	return (
-		<BaseCard title="events" onPressRoute="/cl-events">
+		<BaseCard
+			title="events"
+			onPressRoute="/cl-events"
+			noDataComponent={noData}
+			noDataPredicate={() => isSuccess && data.length === 0}
+		>
 			{Boolean(isSuccess) && data !== undefined && (
 				<View style={styles.eventsContainer}>
 					{data.slice(0, 2).map((event, index) => (
@@ -70,6 +80,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: 10,
 		gap: 12,
 		borderColor: theme.colors.border
+	},
+	noDataTitle: {
+		color: theme.colors.text,
+		fontSize: 16,
+		fontWeight: '500'
 	}
 }))
 
