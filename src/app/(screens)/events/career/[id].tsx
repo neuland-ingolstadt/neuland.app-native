@@ -21,10 +21,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	type CareerServiceEventFieldsFragment,
-	CareerServiceEventFieldsFragmentDoc,
-	type CareerServiceEventsQuery
+	CareerServiceEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import neulandAPI from '@/api/neuland-api'
 import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
@@ -32,7 +30,7 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { QUERY_KEYS } from '@/utils/events-utils'
+import { loadCareerServiceEvents, QUERY_KEYS } from '@/utils/events-utils'
 
 export default function CareerServiceEvent(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -45,18 +43,35 @@ export default function CareerServiceEvent(): React.JSX.Element {
 		data: queryData,
 		isLoading,
 		error
-	} = useQuery<CareerServiceEventsQuery, Error>({
+	} = useQuery<
+		Array<
+			{ __typename?: 'CareerServiceEvent' } & {
+				' $fragmentRefs'?: {
+					CareerServiceEventFieldsFragment: CareerServiceEventFieldsFragment
+				}
+			}
+		>,
+		Error
+	>({
 		queryKey: [QUERY_KEYS.CAREER_SERVICE_EVENTS],
-		queryFn: () => neulandAPI.getCareerServiceEvents()
+		queryFn: loadCareerServiceEvents
 	})
 
-	const rawEvent = queryData?.careerServiceEvents?.find((eventCandidate) => {
-		const fragment = getFragmentData(
-			CareerServiceEventFieldsFragmentDoc,
-			eventCandidate
-		)
-		return fragment?.id === id
-	})
+	const rawEvent = queryData?.find(
+		(
+			eventCandidate: { __typename?: 'CareerServiceEvent' } & {
+				' $fragmentRefs'?: {
+					CareerServiceEventFieldsFragment: CareerServiceEventFieldsFragment
+				}
+			}
+		) => {
+			const fragment = getFragmentData(
+				CareerServiceEventFieldsFragmentDoc,
+				eventCandidate
+			)
+			return fragment?.id === id
+		}
+	)
 
 	const eventData: CareerServiceEventFieldsFragment | null = rawEvent
 		? getFragmentData(CareerServiceEventFieldsFragmentDoc, rawEvent)

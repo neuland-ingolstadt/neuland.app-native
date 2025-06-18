@@ -13,10 +13,10 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
+	type CareerServiceEventFieldsFragment,
 	CareerServiceEventFieldsFragmentDoc,
-	type CareerServiceEventsQuery,
-	StudentCounsellingEventFieldsFragmentDoc,
-	type StudentCounsellingEventsQuery
+	type StudentCounsellingEventFieldsFragment,
+	StudentCounsellingEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
 import CareerServiceEventsPage from '@/components/Events/CareerServiceEventsPage'
 import StudentCounsellingEventsPage from '@/components/Events/StudentCounsellingEventsPage'
@@ -56,15 +56,30 @@ export default function Events(): React.JSX.Element {
 	})
 
 	const careerServiceResult = results[0] as {
-		data?: CareerServiceEventsQuery
+		data?: Array<
+			{ __typename?: 'CareerServiceEvent' } & {
+				' $fragmentRefs'?: {
+					CareerServiceEventFieldsFragment: CareerServiceEventFieldsFragment
+				}
+			}
+		>
 		isLoading: boolean
 		isPaused: boolean /* ...other useQueryResult props */
 	}
 	const studentCounsellingResult = results[1] as {
-		data?: StudentCounsellingEventsQuery
+		data?: Array<
+			{ __typename?: 'StudentCounsellingEvent' } & {
+				' $fragmentRefs'?: {
+					StudentCounsellingEventFieldsFragment: StudentCounsellingEventFieldsFragment
+				}
+			}
+		>
 		isLoading: boolean
 		isPaused: boolean /* ...other useQueryResult props */
 	}
+
+	console.log(careerServiceResult.data)
+	console.log(studentCounsellingResult.data)
 
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [selectedData, setSelectedData] = useState<number>(
@@ -112,7 +127,7 @@ export default function Events(): React.JSX.Element {
 		}
 
 		if (index === 0) {
-			const rawCareerEventsArray = careerServiceResult.data?.careerServiceEvents
+			const rawCareerEventsArray = careerServiceResult.data
 			const events = (
 				Array.isArray(rawCareerEventsArray)
 					? rawCareerEventsArray.map((event) =>
@@ -124,8 +139,7 @@ export default function Events(): React.JSX.Element {
 			return <CareerServiceEventsPage events={events} />
 		}
 
-		const rawStudentCounsellingEventsArray =
-			studentCounsellingResult.data?.studentCounsellingEvents
+		const rawStudentCounsellingEventsArray = studentCounsellingResult.data
 		const events = (
 			Array.isArray(rawStudentCounsellingEventsArray)
 				? rawStudentCounsellingEventsArray.map((event) =>
