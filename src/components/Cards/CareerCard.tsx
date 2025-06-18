@@ -8,13 +8,14 @@ import { getFragmentData } from '@/__generated__/gql'
 import {
 	type CareerServiceEventFieldsFragment,
 	CareerServiceEventFieldsFragmentDoc,
-	type CareerServiceEventsQuery,
 	type StudentCounsellingEventFieldsFragment,
-	StudentCounsellingEventFieldsFragmentDoc,
-	type StudentCounsellingEventsQuery
+	StudentCounsellingEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import neulandAPI from '@/api/neuland-api'
-import { QUERY_KEYS } from '@/utils/events-utils'
+import {
+	loadCareerServiceEvents,
+	loadStudentCounsellingEvents,
+	QUERY_KEYS
+} from '@/utils/events-utils'
 import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
 
@@ -22,37 +23,49 @@ const CareerCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
-	const careerServiceQuery = useQuery<CareerServiceEventsQuery, Error>({
+	const careerServiceQuery = useQuery<
+		Array<
+			{ __typename?: 'CareerServiceEvent' } & {
+				' $fragmentRefs'?: {
+					CareerServiceEventFieldsFragment: CareerServiceEventFieldsFragment
+				}
+			}
+		>,
+		Error
+	>({
 		queryKey: [QUERY_KEYS.CAREER_SERVICE_EVENTS],
-		queryFn: () => neulandAPI.getCareerServiceEvents(),
+		queryFn: loadCareerServiceEvents,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	const studentCounsellingQuery = useQuery<
-		StudentCounsellingEventsQuery,
+		Array<
+			{ __typename?: 'StudentCounsellingEvent' } & {
+				' $fragmentRefs'?: {
+					StudentCounsellingEventFieldsFragment: StudentCounsellingEventFieldsFragment
+				}
+			}
+		>,
 		Error
 	>({
 		queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
-		queryFn: () => neulandAPI.getStudentCounsellingEvents(),
+		queryFn: loadStudentCounsellingEvents,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const rawCareerEvents = careerServiceQuery.data?.careerServiceEvents
 	const careerServiceEvents: CareerServiceEventFieldsFragment[] = (
-		Array.isArray(rawCareerEvents)
-			? rawCareerEvents.map((event) =>
+		Array.isArray(careerServiceQuery.data)
+			? careerServiceQuery.data.map((event) =>
 					getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
 				)
 			: []
 	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-	const rawStudentCounsellingEvents =
-		studentCounsellingQuery.data?.studentCounsellingEvents
 	const studentCounsellingEvents: StudentCounsellingEventFieldsFragment[] = (
-		Array.isArray(rawStudentCounsellingEvents)
-			? rawStudentCounsellingEvents.map((event) =>
+		Array.isArray(studentCounsellingQuery.data)
+			? studentCounsellingQuery.data.map((event) =>
 					getFragmentData(StudentCounsellingEventFieldsFragmentDoc, event)
 				)
 			: []

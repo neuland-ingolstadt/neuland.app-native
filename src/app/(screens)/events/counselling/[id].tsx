@@ -21,10 +21,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	type StudentCounsellingEventFieldsFragment,
-	StudentCounsellingEventFieldsFragmentDoc,
-	type StudentCounsellingEventsQuery
+	StudentCounsellingEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import neulandAPI from '@/api/neuland-api'
 import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
@@ -32,30 +30,46 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { QUERY_KEYS } from '@/utils/events-utils'
+import { loadStudentCounsellingEvents, QUERY_KEYS } from '@/utils/events-utils'
 
 export default function StudentCounsellingEventDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const { styles, theme } = useStyles(stylesheet)
 	const { id } = useLocalSearchParams<{ id: string }>()
 
 	const {
 		data: queryData,
 		isLoading,
 		error
-	} = useQuery<StudentCounsellingEventsQuery, Error>({
+	} = useQuery<
+		Array<
+			{ __typename?: 'StudentCounsellingEvent' } & {
+				' $fragmentRefs'?: {
+					StudentCounsellingEventFieldsFragment: StudentCounsellingEventFieldsFragment
+				}
+			}
+		>,
+		Error
+	>({
 		queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
-		queryFn: () => neulandAPI.getStudentCounsellingEvents()
+		queryFn: loadStudentCounsellingEvents
 	})
 
-	const rawEventsArray = queryData?.studentCounsellingEvents ?? []
-	const rawEvent = rawEventsArray.find((eventCandidate) => {
-		const fragment = getFragmentData(
-			StudentCounsellingEventFieldsFragmentDoc,
-			eventCandidate
-		)
-		return fragment?.id === id
-	})
+	const rawEvent = queryData?.find(
+		(
+			eventCandidate: { __typename?: 'StudentCounsellingEvent' } & {
+				' $fragmentRefs'?: {
+					StudentCounsellingEventFieldsFragment: StudentCounsellingEventFieldsFragment
+				}
+			}
+		) => {
+			const fragment = getFragmentData(
+				StudentCounsellingEventFieldsFragmentDoc,
+				eventCandidate
+			)
+			return fragment?.id === id
+		}
+	)
 	const eventData: StudentCounsellingEventFieldsFragment | null = rawEvent
 		? getFragmentData(StudentCounsellingEventFieldsFragmentDoc, rawEvent)
 		: null
