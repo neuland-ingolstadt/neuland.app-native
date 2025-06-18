@@ -185,7 +185,6 @@
 		},
 		"splash": {
 			"title": "Splash Screen",
-			"footer": "Enable or disable the animated splash screen when opening the app.",
 			"showSplash": "Show Animated Splash Screen"
 		}
 	},
