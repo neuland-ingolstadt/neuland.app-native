@@ -1,6 +1,9 @@
+![GitHub Release](https://img.shields.io/github/v/release/neuland-ingolstadt/neuland.app-native?display_name=release&label=Version&color=blue)
+[![App Store Rating](https://img.shields.io/badge/App%20Store-5.0%20★-blue?logo=apple&style=flat)](https://apps.apple.com/app/neuland-next/id1617096811)
+[![Google Play Rating](https://img.shields.io/badge/Google%20Play-4.8%20★-blue?logo=google-play&style=flat)](https://play.google.com/store/apps/details?id=app.neuland)
+
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml)
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
-
 # Neuland Next - Your unofficial app for THI
 
 <div style="display: flex; align-items: center; gap: 15px;">
@@ -12,9 +15,11 @@
   </a>
 </div>
 
-Neuland Next is an unofficial app for students of the Technische Hochschule Ingolstadt (THI). It's an open source, mobile app developed using React Native, designed to provide a modern alternative to the official THI app with a better user experience and more features.
+Neuland Next is the unofficial go-to app for students of Technische Hochschule Ingolstadt (THI). Built with React Native and powered by open source, it delivers a sleek, modern experience packed with smart features—designed by students, for students.
 
-## Features
+Learn more about the app on the [Neuland Next website](https://neuland.app).
+
+## ✨ Features
 
 <p align="center">
   <img src="assets/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
@@ -32,15 +37,15 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 - **THI News**: Stay up to date with the latest news from THI
 - **Career Service & Student Counselling**: Discover workshops, counseling sessions, job fairs, and other professional development opportunities.
 
-## About
+## ℹ️ About
 
-### App
+### 📱 App
 
 The app unites all important information for students in one place. It's available for iOS, Android, and MacOS, with a web version that can be used on all common browsers.
 
 Learn more about the app on the [Neuland Next website](https://neuland.app).
 
-### Security & Privacy
+### 🔒 Security & Privacy
 
 - Neuland Next is built with the latest technologies and follows best practices for security and privacy
 - No personal data is stored on our servers - all data is stored locally on your device
@@ -49,11 +54,11 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 - All communication is done directly between your device and university servers
 - The complete source code is open-source and available for review
 
-### Architecture
+### 🏗️ Architecture
 
 <img src="assets/github/architecture.svg" alt="Architecture" width="800px" />
 
-## System Status
+## 📊 System Status
 
 The real-time system status is available at [status.neuland.app](https://status.neuland.app). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
 
@@ -61,10 +66,10 @@ The real-time system status is available at [status.neuland.app](https://status.
 |---------|--------|--------|
 | THI API | ![THI API Status](https://status.neuland.app/api/badge/9/status?upColor=%2331c753) | ![THI API Status](https://status.neuland.app/api/badge/9/uptime?upColor=%2331c753) |
 | Neuland API | ![Neuland API Status](https://status.neuland.app/api/badge/6/status?upColor=%2331c753) | ![Neuland API Status](https://status.neuland.app/api/badge/6/uptime?upColor=%2331c753) |
-| Neuland Next Web | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/uptime?upColor=%2331c753) |
+| Neuland Next Web | ![Neuland Next Web Status](https://status.neuland.app/api/badge/27/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/27/uptime?upColor=%2331c753) |
 | Neuland Next Web (dev) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/8/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/8/uptime?upColor=%2331c753) |
 
-## Contributing
+## 🤝 Contributing
 
 We welcome contributions from the community! Whether you're a developer, designer, or student, you can help improve the app.
 
@@ -72,7 +77,7 @@ We welcome contributions from the community! Whether you're a developer, designe
 2. Check out the [setup guide](https://neuland.app/docs/contribute/setup) for development environment setup
 3. See the [contribution guidelines](https://neuland.app/docs/contribute/contribute) for more information
 
-## Beta Testing
+## 🧪 Beta Testing
 
 Help us test the latest features before they're released to the public:
 
@@ -80,12 +85,12 @@ Help us test the latest features before they're released to the public:
 - Android: [Google Play Beta Program](https://play.google.com/store/apps/details?id=app.neuland)
 - Web: [dev.neuland.app](https://dev.neuland.app)
 
-## Feedback & Support
+## 💬 Feedback & Support
 
 - Report issues and bugs on [GitHub](https://github.com/neuland-ingolstadt/neuland.app-native/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml&title=%5BBug%5D%3A+)
 - Send feedback via email to [feedback@neuland.app](mailto:feedback@neuland.app)
 - Check the [status page](https://status.neuland.app) for any ongoing issues
 
-## About Us
+## 👥 About Us
 
 Neuland Next is developed by [Neuland Ingolstadt e.V.](https://neuland-ingolstadt.de), a non-profit organization founded by students of the THI. We are independent of the university and develop the app in our free time.
