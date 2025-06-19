@@ -11,8 +11,7 @@ import BaseCard from './BaseCard'
 
 const NewsCard: React.FC = () => {
 	const ref = useRef(null)
-	const { t } = useTranslation('navigation')
-	const { t: tCommon } = useTranslation('common')
+	const { t } = useTranslation(['navigation', 'common'])
 	const { styles } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { data, isSuccess } = useQuery({
@@ -24,7 +23,7 @@ const NewsCard: React.FC = () => {
 	})
 
 	const noData = (
-		<Text style={styles.noDataText}>{tCommon('error.noData.title')}</Text>
+		<Text style={styles.noDataText}>{t('common:error.noData.title')}</Text>
 	)
 
 	return (
@@ -62,7 +61,7 @@ const NewsCard: React.FC = () => {
 				{data != null && data.length > 3 && (
 					<View style={styles.cardsFilled}>
 						<Text style={styles.description}>
-							{t('cards.news.more', {
+							{t('navigation:cards.news.more', {
 								count: data.length
 							})}
 						</Text>
