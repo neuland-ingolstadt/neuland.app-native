@@ -113,14 +113,16 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						/>
 					)}
 				</View>
-				{children != null && (
-					<View style={styles.childrenContainer}>{children}</View>
-				)}
-				{noDataComponent != null &&
-					noDataPredicate != null &&
-					noDataPredicate() && (
+				{/* Render either children or noDataComponent based on noDataPredicate */}
+				{noDataPredicate != null && noDataPredicate() ? (
+					noDataComponent != null && (
 						<View style={styles.childrenContainer}>{noDataComponent}</View>
-					)}
+					)
+				) : (
+					children != null && (
+						<View style={styles.childrenContainer}>{children}</View>
+					)
+				)}
 			</View>
 		</View>
 	)
