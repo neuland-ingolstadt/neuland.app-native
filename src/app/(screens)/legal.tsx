@@ -81,7 +81,7 @@ export default function About(): React.JSX.Element {
 					icon: {
 						ios: 'questionmark.circle',
 						android: 'help',
-						web: 'CircleHelp'
+						web: 'CircleQuestionMark'
 					},
 					onPress: async () =>
 						(await Linking.openURL(

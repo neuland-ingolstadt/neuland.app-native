@@ -47,7 +47,7 @@
 		"licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@maplibre/maplibre-react-native@10.1.5": {
+	"@maplibre/maplibre-react-native@10.1.6": {
 		"licenses": "MIT",
 		"repository": "https://github.com/maplibre/maplibre-react-native",
 		"licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -197,7 +197,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-dev-client@5.2.0": {
+	"expo-dev-client@5.2.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -227,7 +227,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-navigation-bar@4.2.5": {
+	"expo-navigation-bar@4.2.6": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -262,13 +262,13 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-system-ui@5.0.8": {
+	"expo-system-ui@5.0.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo@53.0.11": {
+	"expo@53.0.12": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -298,7 +298,7 @@
 		"licenseUrl": "https://github.com/jakearchibald/idb/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"lucide-react-native@0.513.0": {
+	"lucide-react-native@0.518.0": {
 		"licenses": "ISC",
 		"repository": "https://github.com/lucide-icons/lucide",
 		"licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
@@ -454,7 +454,7 @@
 		"licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native@0.79.3": {
+	"react-native@0.79.4": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react-native",
 		"licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",

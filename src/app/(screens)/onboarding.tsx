@@ -457,7 +457,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 							variant: 'outlined'
 						}}
 						web={{
-							name: 'CircleHelp',
+							name: 'CircleQuestionMark',
 							size: 25
 						}}
 					/>

@@ -32,6 +32,9 @@
 			"suspicious": {
 				"noArrayIndexKey": "off"
 			},
+			"nursery": {
+				"useUniqueElementIds": "off"
+			},
 			"correctness": {
 				"useExhaustiveDependencies": "off",
 				"noUnusedImports": "error",
