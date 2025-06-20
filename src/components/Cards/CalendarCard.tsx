@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
@@ -18,7 +18,7 @@ const CalendarCard = (): React.JSX.Element => {
 	type Combined = Calendar | CardExams
 	const router = useRouter()
 	const time = new Date()
-	const { i18n, t } = useTranslation('navigation')
+	const { i18n, t } = useTranslation(['navigation', 'common'])
 	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
@@ -34,7 +34,7 @@ const CalendarCard = (): React.JSX.Element => {
 		let exams: CardExams[] = []
 		try {
 			exams = (await loadExamList()).map((x) => ({
-				name: t('cards.calendar.exam', { name: x.name }),
+				name: t('navigation:cards.calendar.exam', { name: x.name }),
 				begin: new Date(x.date),
 				isExam: true
 			}))
@@ -52,7 +52,7 @@ const CalendarCard = (): React.JSX.Element => {
 		return exams
 	}
 
-	const { data: exams } = useQuery({
+	const { data: exams, isSuccess } = useQuery({
 		queryKey: ['cardExams'],
 		queryFn: loadExams,
 		staleTime: 1000 * 60 * 10, // 10 minutes
@@ -89,8 +89,20 @@ const CalendarCard = (): React.JSX.Element => {
 
 	const { theme, styles } = useStyles(stylesheet)
 
+	const noData = (
+		<Text style={styles.noDataText}>{t('common:error.noData.title')}</Text>
+	)
+
 	return (
-		<BaseCard title="calendar" onPressRoute="/calendar">
+		<BaseCard
+			title="calendar"
+			onPressRoute="/calendar"
+			noDataComponent={noData}
+			noDataPredicate={() =>
+				(userKind === USER_STUDENT ? isSuccess : true) &&
+				mixedCalendar.length === 0
+			}
+		>
 			<View style={styles.calendarContainer}>
 				{mixedCalendar.map((event, index) => (
 					<React.Fragment key={index}>
@@ -113,9 +125,14 @@ const CalendarCard = (): React.JSX.Element => {
 	)
 }
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
 	calendarContainer: {
 		gap: 12,
+		marginTop: 10
+	},
+	noDataText: {
+		color: theme.colors.text,
+		textAlign: 'center',
 		marginTop: 10
 	}
 }))

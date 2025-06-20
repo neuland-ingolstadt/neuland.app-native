@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
@@ -97,8 +97,22 @@ const CareerCard = (): React.JSX.Element => {
 		})
 	}
 
+	const noData = (
+		<Text style={styles.noDataTitle}>{t('error.noData.title')}</Text>
+	)
+
 	return (
-		<BaseCard title="thiServices" onPressRoute="/thi-services">
+		<BaseCard
+			title="thiServices"
+			onPressRoute="/thi-services"
+			noDataComponent={noData}
+			noDataPredicate={() =>
+				careerServiceQuery.isSuccess &&
+				studentCounsellingQuery.isSuccess &&
+				careerServiceEvents.length === 0 &&
+				studentCounsellingEvents.length === 0
+			}
+		>
 			<View style={styles.eventsContainer}>
 				{careerServiceEvents[0] && (
 					<Pressable
@@ -141,10 +155,15 @@ const CareerCard = (): React.JSX.Element => {
 	)
 }
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
 	eventsContainer: {
 		marginTop: 10,
 		gap: 12
+	},
+	noDataTitle: {
+		color: theme.colors.text,
+		fontSize: 16,
+		fontWeight: '500'
 	}
 }))
 
