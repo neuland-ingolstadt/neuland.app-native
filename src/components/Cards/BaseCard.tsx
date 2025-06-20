@@ -113,16 +113,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						/>
 					)}
 				</View>
-				{/* Render either children or noDataComponent based on noDataPredicate */}
-				{noDataPredicate != null && noDataPredicate() ? (
-					noDataComponent != null && (
+				{noDataPredicate?.()
+					? noDataComponent != null && (
 						<View style={styles.childrenContainer}>{noDataComponent}</View>
 					)
-				) : (
-					children != null && (
+					: children != null && (
 						<View style={styles.childrenContainer}>{children}</View>
-					)
-				)}
+					)}
 			</View>
 		</View>
 	)
@@ -141,7 +138,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						delayLongPress={300}
 						onPressIn={handlePressIn}
 						onPressOut={handlePressOut}
-						onLongPress={() => {}}
+						onLongPress={() => { }}
 						style={styles.pressable}
 					>
 						{cardContent}
