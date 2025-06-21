@@ -91,7 +91,7 @@ export const useFoodFilterStore = create<FoodFilterStore>()(
 			},
 			reset: () => {
 				set({ ...initialState })
-				zustandStorage.removeItem('food-filter-store')
+				zustandStorage.removeItem('food-filter-storage')
 			}
 		}),
 		{
