@@ -33,7 +33,7 @@ import { useRefreshByUser } from '@/hooks'
 import { Funktion, type Lecturers } from '@/types/thi-api'
 import type { NormalizedLecturer } from '@/types/utils'
 import {
-	extractFacultyFromPersonal,
+	extractFaculty,
 	getPersonalData,
 	guestError,
 	networkError
@@ -124,7 +124,7 @@ export default function LecturersScreen(): React.JSX.Element {
 
 	useEffect(() => {
 		if (data !== null && data !== undefined) {
-			const faculty = extractFacultyFromPersonal(data)
+			const faculty = extractFaculty(data)
 			setFaculty(faculty ?? null)
 		}
 	}, [data])

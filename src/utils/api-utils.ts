@@ -84,26 +84,6 @@ export async function getPersonalData(): Promise<PersDataDetails> {
 }
 
 /**
- * Determines the users faculty.
- * @param {PersonalData} data Personal data
- * @returns {string} Faculty name (e.g. `Informatik`)
- */
-export function extractFacultyFromPersonal(
-	data: PersDataDetails
-): string | undefined {
-	if (data?.stg == null) {
-		console.error('No personal data found')
-		return undefined
-	}
-	const shortNames: CourseShortNames = courseShortNames
-	const shortName = data.stg
-	const faculty = Object.keys(shortNames).find((faculty) =>
-		(courseShortNames as Record<string, string[]>)[faculty].includes(shortName)
-	)
-	return faculty
-}
-
-/**
  * Determines the users SPO version.
  * @param {PersonalDataDetails} data Personal data
  * @returns {string}
@@ -120,9 +100,9 @@ export function extractSpoName(data: PersDataDetails): string | null {
 /**
  * Determines the users faculty.
  * @param {PersonalData} data Personal data
- * @returns {string} Faculty name (e.g. `Informatik`)
+ * @returns {string} Faculty name (e.g. `Informatik`) or null
  */
-export function extractFacultyFromPersonalData(
+export function extractFaculty(
 	data: PersDataDetails | undefined
 ): string | null {
 	if (data?.stg == null) {

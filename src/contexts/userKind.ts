@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useMMKVString } from 'react-native-mmkv'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import {
-	extractFacultyFromPersonalData,
-	getPersonalData
-} from '@/utils/api-utils'
+import { extractFaculty, getPersonalData } from '@/utils/api-utils'
 
 export interface UserKindContextType {
 	userKind: 'guest' | 'student' | 'employee' | undefined
@@ -33,10 +30,10 @@ export function useUserKind(): UserKindContextType {
 		const loadData = async (): Promise<void> => {
 			if (userFaculty === undefined && userKind === USER_STUDENT) {
 				const persData = await getPersonalData()
-				const faculty = extractFacultyFromPersonalData(persData)
+				const faculty = extractFaculty(persData)
 				setUserFaculty(faculty ?? undefined)
 
-				if (faculty === undefined) {
+				if (faculty === null) {
 					console.warn('Faculty could not be extracted from personal data')
 					setUserCampus(undefined)
 				} else {
