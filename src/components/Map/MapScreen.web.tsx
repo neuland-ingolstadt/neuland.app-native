@@ -817,33 +817,34 @@ const MapScreen = (): React.JSX.Element => {
 					)}
 				</Map>
 			</div>
-			overlayError === null && (
-			<FloorPicker
-				floors={uniqueEtages}
-				showAllFloors={showAllFloors}
-				toggleShowAllFloors={toggleShowAllFloors}
-				setCameraTriggerKey={setCameraTriggerKey}
-			/>
-			)mapLoadState === LoadingState.LOADED && (
-			<Animated.View
-				style={[styles.osmContainer, animatedStyles, { top: -22 }]}
-			>
-				<Pressable
-					onPress={() => {
-						void Linking.openURL('https://www.openstreetmap.org/copyright')
-					}}
-					style={layerStyles.osmBackground}
+			{overlayError === null && (
+				<FloorPicker
+					floors={uniqueEtages}
+					showAllFloors={showAllFloors}
+					toggleShowAllFloors={toggleShowAllFloors}
+					setCameraTriggerKey={setCameraTriggerKey}
+				/>
+			)}
+			{mapLoadState === LoadingState.LOADED && (
+				<Animated.View
+					style={[styles.osmContainer, animatedStyles, { top: -22 }]}
 				>
-					<Text
-						style={styles.osmAtrribution}
-						numberOfLines={1}
-						ellipsizeMode="tail"
+					<Pressable
+						onPress={() => {
+							void Linking.openURL('https://www.openstreetmap.org/copyright')
+						}}
+						style={layerStyles.osmBackground}
 					>
-						{'© OpenStreetMap'}
-					</Text>
-				</Pressable>
-			</Animated.View>
-			)
+						<Text
+							style={styles.osmAtrribution}
+							numberOfLines={1}
+							ellipsizeMode="tail"
+						>
+							{'© OpenStreetMap'}
+						</Text>
+					</Pressable>
+				</Animated.View>
+			)}
 			<MapBottomSheet
 				bottomSheetRef={bottomSheetRef}
 				currentPosition={currentPosition}
