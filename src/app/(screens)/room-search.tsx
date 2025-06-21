@@ -2,7 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { type ChangeEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -129,21 +129,36 @@ export default function AdvancedSearch(): React.JSX.Element {
 								</DropdownButton>
 							)}
 
-							{showDate && (
-								<DateTimePicker
-									value={new Date(`${date}T${time}`)}
-									mode="date"
-									accentColor={theme.colors.primary}
-									locale="de-DE"
-									onChange={(_event, selectedDate) => {
-										setShowDate(Platform.OS !== 'android')
-										setDate(formatISODate(selectedDate))
+							{Platform.OS === 'web' ? (
+								<input
+									type="date"
+									value={date}
+									onChange={(event: ChangeEvent<HTMLInputElement>) => {
+										setDate(event.currentTarget.value)
 									}}
-									minimumDate={new Date()}
-									maximumDate={
+									style={styles.webInput as unknown as React.CSSProperties}
+									min={formatISODate(new Date())}
+									max={formatISODate(
 										new Date(new Date().setDate(new Date().getDate() + 90))
-									}
+									)}
 								/>
+							) : (
+								showDate && (
+									<DateTimePicker
+										value={new Date(`${date}T${time}`)}
+										mode="date"
+										accentColor={theme.colors.primary}
+										locale="de-DE"
+										onChange={(_event, selectedDate) => {
+											setShowDate(Platform.OS !== 'android')
+											setDate(formatISODate(selectedDate))
+										}}
+										minimumDate={new Date()}
+										maximumDate={
+											new Date(new Date().setDate(new Date().getDate() + 90))
+										}
+									/>
+								)
 							)}
 						</View>
 						<Divider />
@@ -162,19 +177,31 @@ export default function AdvancedSearch(): React.JSX.Element {
 								</DropdownButton>
 							)}
 
-							{showTime && (
-								<DateTimePicker
-									value={new Date(`${date}T${time}`)}
-									mode="time"
-									is24Hour={true}
-									accentColor={theme.colors.primary}
-									locale="de-DE"
-									minuteInterval={5}
-									onChange={(_event, selectedDate) => {
-										setShowTime(Platform.OS !== 'android')
-										setTime(formatISOTime(selectedDate))
+							{Platform.OS === 'web' ? (
+								<input
+									type="time"
+									value={time}
+									onChange={(event: ChangeEvent<HTMLInputElement>) => {
+										setTime(event.currentTarget.value)
 									}}
+									style={styles.webInput as unknown as React.CSSProperties}
+									step={300}
 								/>
+							) : (
+								showTime && (
+									<DateTimePicker
+										value={new Date(`${date}T${time}`)}
+										mode="time"
+										is24Hour={true}
+										accentColor={theme.colors.primary}
+										locale="de-DE"
+										minuteInterval={5}
+										onChange={(_event, selectedDate) => {
+											setShowTime(Platform.OS !== 'android')
+											setTime(formatISOTime(selectedDate))
+										}}
+									/>
+								)
 							)}
 						</View>
 						<Divider />
@@ -264,5 +291,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: 'normal',
 		marginBottom: 4,
 		textTransform: 'uppercase'
+	},
+	webInput: {
+		appearance: 'none',
+		backgroundColor: theme.colors.datePickerBackground,
+		border: 'none',
+		borderRadius: theme.radius.md,
+		color: theme.colors.text,
+		height: 32,
+		outline: 'none',
+		paddingLeft: 10,
+		paddingRight: 10,
+		fontSize: 15
 	}
 }))
