@@ -292,6 +292,15 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [mapOverlay])
 
+	const buildingGeoJSON: FeatureCollection = useMemo(() => {
+		return {
+			type: 'FeatureCollection',
+			features: allRooms.features.filter(
+				(f) => f.properties?.rtype === SEARCH_TYPES.BUILDING
+			)
+		}
+	}, [allRooms])
+
 	useEffect(() => {
 		// @ts-expect-error wrong type
 		const unsubscribe = navigation.addListener('tabPress', () => {
@@ -702,7 +711,6 @@ const MapScreen = (): React.JSX.Element => {
 					<LoadingIndicator />
 				</View>
 			)}
-
 			<div className="map-container" style={mapContainerStyle}>
 				<Map
 					mapLib={maplibregl}
@@ -776,6 +784,29 @@ const MapScreen = (): React.JSX.Element => {
 							/>
 						</Source>
 					)}
+					{buildingGeoJSON.features.length > 0 && (
+						<Source
+							id="buildingLettersSource"
+							type="geojson"
+							// biome-ignore lint/suspicious/noExplicitAny: TODO
+							data={buildingGeoJSON as any}
+						>
+							<Layer
+								id="buildingLettersLayer"
+								type="symbol"
+								layout={{
+									'text-field': ['get', 'Raum'],
+									'text-size': 14,
+									'text-allow-overlap': true
+								}}
+								paint={{
+									'text-color': theme.colors.primary,
+									'text-halo-color': theme.colors.background,
+									'text-halo-width': 1
+								}}
+							/>
+						</Source>
+					)}
 
 					{clickedElement?.center && (
 						<Marker
@@ -786,44 +817,39 @@ const MapScreen = (): React.JSX.Element => {
 					)}
 				</Map>
 			</div>
-
-			{overlayError === null && (
-				<FloorPicker
-					floors={uniqueEtages}
-					showAllFloors={showAllFloors}
-					toggleShowAllFloors={toggleShowAllFloors}
-					setCameraTriggerKey={setCameraTriggerKey}
-				/>
-			)}
-
-			{mapLoadState === LoadingState.LOADED && (
-				<Animated.View
-					style={[styles.osmContainer, animatedStyles, { top: -22 }]}
+			overlayError === null && (
+			<FloorPicker
+				floors={uniqueEtages}
+				showAllFloors={showAllFloors}
+				toggleShowAllFloors={toggleShowAllFloors}
+				setCameraTriggerKey={setCameraTriggerKey}
+			/>
+			)mapLoadState === LoadingState.LOADED && (
+			<Animated.View
+				style={[styles.osmContainer, animatedStyles, { top: -22 }]}
+			>
+				<Pressable
+					onPress={() => {
+						void Linking.openURL('https://www.openstreetmap.org/copyright')
+					}}
+					style={layerStyles.osmBackground}
 				>
-					<Pressable
-						onPress={() => {
-							void Linking.openURL('https://www.openstreetmap.org/copyright')
-						}}
-						style={layerStyles.osmBackground}
+					<Text
+						style={styles.osmAtrribution}
+						numberOfLines={1}
+						ellipsizeMode="tail"
 					>
-						<Text
-							style={styles.osmAtrribution}
-							numberOfLines={1}
-							ellipsizeMode="tail"
-						>
-							{'© OpenStreetMap'}
-						</Text>
-					</Pressable>
-				</Animated.View>
-			)}
-
+						{'© OpenStreetMap'}
+					</Text>
+				</Pressable>
+			</Animated.View>
+			)
 			<MapBottomSheet
 				bottomSheetRef={bottomSheetRef}
 				currentPosition={currentPosition}
 				handlePresentModalPress={handlePresentModalPress}
 				allRooms={allRooms}
 			/>
-
 			<BottomSheetDetailModal
 				bottomSheetModalRef={bottomSheetModalRef}
 				handleSheetChangesModal={handleSheetChangesModal}
