@@ -326,6 +326,13 @@
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."
 				}
+			},
+			"clubs": {
+				"title": "Campus Life Vereine",
+				"description": "Folge deinen Lieblingsvereinen, um ihre Veranstaltungen mit Priorität zu sehen und sie in deinem Kalender anzuzeigen.",
+				"followInfo": "Priorisiere Events von gefolgten Vereinen",
+				"calendarInfo": "Events erscheinen in deiner Kalenderansicht",
+				"priorityInfo": "Events werden in der Liste hervorgehoben"
 			}
 		},
 		"careerService": {

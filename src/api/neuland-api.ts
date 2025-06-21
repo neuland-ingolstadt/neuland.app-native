@@ -3,6 +3,7 @@ import type {
 	AppAnnouncementsQuery,
 	CampusLifeEventsQuery,
 	CareerServiceEventsQuery,
+	ClClubsQuery,
 	CreateRoomReportMutation,
 	FoodPlanQuery,
 	RoomReportInput,
@@ -17,6 +18,7 @@ import {
 	ANNOUNCEMENT_QUERY,
 	CAMPUS_LIFE_EVENTS_QUERY,
 	CAREER_SERVICE_EVENTS_QUERY,
+	CL_CLUBS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
 	STUDENT_ADVISORY_EVENTS_QUERY,
@@ -108,6 +110,10 @@ class NeulandAPIClient {
 	 */
 	async getCampusLifeEvents(): Promise<CampusLifeEventsQuery> {
 		return await this.executeGql(CAMPUS_LIFE_EVENTS_QUERY)
+	}
+
+	async getCampusLifeClubs(): Promise<ClClubsQuery> {
+		return await this.executeGql(CL_CLUBS_QUERY)
 	}
 
 	/**

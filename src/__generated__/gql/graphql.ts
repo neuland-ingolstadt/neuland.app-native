@@ -785,6 +785,11 @@ export type StudentCounsellingEventsQuery = { __typename?: 'Query', studentCouns
     & { ' $fragmentRefs'?: { 'StudentCounsellingEventFieldsFragment': StudentCounsellingEventFieldsFragment } }
   )> };
 
+export type ClClubsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClClubsQuery = { __typename?: 'Query', clClubs: Array<{ __typename?: 'Host', name: string, website?: string | null, instagram?: string | null }> };
+
 export type StudentCounsellingEventFieldsFragment = { __typename?: 'StudentCounsellingEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'StudentCounsellingEventFieldsFragment' };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -1138,3 +1143,12 @@ export const StudentCounsellingEventsDocument = new TypedDocumentString(`
   maxWaitingList
   url
 }`) as unknown as TypedDocumentString<StudentCounsellingEventsQuery, StudentCounsellingEventsQueryVariables>;
+export const ClClubsDocument = new TypedDocumentString(`
+    query ClClubs {
+  clClubs {
+    name
+    website
+    instagram
+  }
+}
+    `) as unknown as TypedDocumentString<ClClubsQuery, ClClubsQueryVariables>;
