@@ -85,17 +85,21 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}, [])
 
-	const sections: FormListSections[] = [
-		{
-			header: t('profile.formlist.user.library', { ns: 'settings' }),
-			items: [
+	const hasBibNumber = (data?.bibnr ?? '').trim() !== ''
+
+	const sections: FormListSections[] = hasBibNumber
+		? [
 				{
-					title: t('pages.library.code.number'),
-					value: data?.bibnr ?? ''
+					header: t('profile.formlist.user.library', { ns: 'settings' }),
+					items: [
+						{
+							title: t('pages.library.code.number'),
+							value: data?.bibnr ?? ''
+						}
+					]
 				}
 			]
-		}
-	]
+		: []
 
 	const toggleBrightness = async (): Promise<void> => {
 		if (Platform.OS !== 'ios') {
@@ -129,7 +133,7 @@ export default function LibraryCode(): React.JSX.Element {
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
-			) : isSuccess && data.bibnr !== null ? (
+			) : isSuccess && hasBibNumber ? (
 				<View style={styles.container}>
 					<View>
 						<FormList sections={sections} />
@@ -157,7 +161,7 @@ export default function LibraryCode(): React.JSX.Element {
 						</Text>
 					</View>
 				</View>
-			) : (
+			) : isSuccess ? null : (
 				<ErrorView
 					title={
 						// @ts-expect-error error is type never
