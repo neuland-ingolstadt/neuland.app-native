@@ -239,7 +239,7 @@ export function getMonday(date: Date): Date {
 	const day = newDate.getDay()
 	newDate.setHours(0, 0, 0, 0)
 	newDate.setDate(newDate.getDate() - day + (day === 0 ? -6 : 1))
-	return date
+	return newDate
 }
 
 /**
