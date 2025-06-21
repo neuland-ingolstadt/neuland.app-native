@@ -1,7 +1,8 @@
+import * as Haptics from 'expo-haptics'
 import { useFocusEffect } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 import Animated, {
 	cancelAnimation,
 	runOnJS,
@@ -37,10 +38,37 @@ export default function SettingsLogo({
 	const translateX = useSharedValue(0)
 	const translateY = useSharedValue(0)
 	const logoRotation = useSharedValue(0)
+	const cornerScale = useSharedValue(1)
+	const lastBounceX = React.useRef(0)
+	const lastBounceY = React.useRef(0)
 	const { color, randomizeColor } = useRandomColor()
 	const velocity = 110
 	const logoWidth = 159
 	const logoHeight = 15
+
+	const BOUNCE_CORNER_TOLERANCE = 150
+
+	const handleBounce = (axis: 'x' | 'y'): void => {
+		const now = Date.now()
+		if (axis === 'x') {
+			lastBounceX.current = now
+		} else {
+			lastBounceY.current = now
+		}
+
+		if (
+			Math.abs(lastBounceX.current - lastBounceY.current) <
+			BOUNCE_CORNER_TOLERANCE
+		) {
+			cornerScale.value = withSequence(
+				withTiming(1.3, { duration: 100 }),
+				withTiming(1, { duration: 100 })
+			)
+			if (Platform.OS !== 'web') {
+				void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+			}
+		}
+	}
 
 	const isBouncing = tapCount === 2
 	const logoInactiveOpacity = isBouncing ? 0 : 1
@@ -53,13 +81,15 @@ export default function SettingsLogo({
 				velocity,
 				0,
 				size.width - logoWidth,
-				randomizeColor
+				randomizeColor,
+				() => handleBounce('x')
 			) as number
 			translateY.value = withBouncing(
 				velocity,
 				0,
 				size.height - logoHeight,
-				randomizeColor
+				randomizeColor,
+				() => handleBounce('y')
 			) as number
 		} else {
 			cancelAnimation(translateX)
@@ -87,7 +117,8 @@ export default function SettingsLogo({
 		return {
 			transform: [
 				{ translateX: translateX.value },
-				{ translateY: translateY.value + scrollY }
+				{ translateY: translateY.value + scrollY },
+				{ scale: cornerScale.value }
 			]
 		}
 	})

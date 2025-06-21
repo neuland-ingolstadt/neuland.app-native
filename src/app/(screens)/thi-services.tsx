@@ -64,7 +64,7 @@ export default function Events(): React.JSX.Element {
 			}
 		>
 		isLoading: boolean
-		isPaused: boolean /* ...other useQueryResult props */
+		isPaused: boolean
 	}
 	const studentCounsellingResult = results[1] as {
 		data?: Array<
@@ -75,11 +75,8 @@ export default function Events(): React.JSX.Element {
 			}
 		>
 		isLoading: boolean
-		isPaused: boolean /* ...other useQueryResult props */
+		isPaused: boolean
 	}
-
-	console.log(careerServiceResult.data)
-	console.log(studentCounsellingResult.data)
 
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [selectedData, setSelectedData] = useState<number>(
