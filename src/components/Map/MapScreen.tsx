@@ -799,7 +799,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="buildingLettersLayer"
 								style={{
 									textField: ['get', 'Raum'],
-									textColor: theme.colors.primary,
+									textColor: theme.colors.labelColor,
 									textHaloColor: theme.colors.background,
 									textHaloWidth: 1,
 									textAllowOverlap: true,

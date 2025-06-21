@@ -800,7 +800,7 @@ const MapScreen = (): React.JSX.Element => {
 									'text-allow-overlap': true
 								}}
 								paint={{
-									'text-color': theme.colors.primary,
+									'text-color': theme.colors.labelColor,
 									'text-halo-color': theme.colors.background,
 									'text-halo-width': 1
 								}}
