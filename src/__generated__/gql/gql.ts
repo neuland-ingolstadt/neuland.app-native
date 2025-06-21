@@ -27,6 +27,7 @@ type Documents = {
     "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": typeof types.CareerServiceEventsDocument,
     "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": typeof types.CareerServiceEventFieldsFragmentDoc,
     "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n": typeof types.StudentCounsellingEventsDocument,
+    "\n    query ClClubs {\n        clClubs {\n            name\n            website\n            instagram\n        }\n    }\n": typeof types.ClClubsDocument,
     "\n    fragment StudentCounsellingEventFields on StudentCounsellingEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": typeof types.StudentCounsellingEventFieldsFragmentDoc,
 };
 const documents: Documents = {
@@ -42,6 +43,7 @@ const documents: Documents = {
     "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": types.CareerServiceEventsDocument,
     "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": types.CareerServiceEventFieldsFragmentDoc,
     "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n": types.StudentCounsellingEventsDocument,
+    "\n    query ClClubs {\n        clClubs {\n            name\n            website\n            instagram\n        }\n    }\n": types.ClClubsDocument,
     "\n    fragment StudentCounsellingEventFields on StudentCounsellingEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": types.StudentCounsellingEventFieldsFragmentDoc,
 };
 
@@ -93,6 +95,10 @@ export function graphql(source: "\n    fragment CareerServiceEventFields on Care
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n"): typeof import('./graphql').StudentCounsellingEventsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query ClClubs {\n        clClubs {\n            name\n            website\n            instagram\n        }\n    }\n"): typeof import('./graphql').ClClubsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

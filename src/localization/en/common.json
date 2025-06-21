@@ -326,6 +326,13 @@
 					"title": "No events found",
 					"subtitle": "Check back later."
 				}
+			},
+			"clubs": {
+				"title": "Campus Life Clubs",
+				"description": "Follow your favorite clubs to see their events with priority and view them in your calendar.",
+				"followInfo": "Prioritize events from followed clubs",
+				"calendarInfo": "Events appear in your calendar view",
+				"priorityInfo": "Events are highlighted in the list"
 			}
 		},
 		"careerService": {
