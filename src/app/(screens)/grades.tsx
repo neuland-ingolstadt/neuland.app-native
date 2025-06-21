@@ -88,7 +88,7 @@ export default function GradesSCreen(): React.JSX.Element {
 
 	// TODO: Just cache the spoWeights for the relevant study program
 	const { data: spoWeights, isLoading: isSpoLoading } = useQuery({
-		queryKey: ['spoWefights', packageInfo.version],
+		queryKey: ['spoWeights', packageInfo.version],
 		queryFn: async () => await NeulandAPI.getSpoWeights(),
 		staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
 		gcTime: 1000 * 60 * 60 * 24 * 14 // 2 weeks
