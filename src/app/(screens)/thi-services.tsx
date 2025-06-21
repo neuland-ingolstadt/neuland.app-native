@@ -78,9 +78,6 @@ export default function Events(): React.JSX.Element {
 		isPaused: boolean /* ...other useQueryResult props */
 	}
 
-	console.log(careerServiceResult.data)
-	console.log(studentCounsellingResult.data)
-
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [selectedData, setSelectedData] = useState<number>(
 		tab === 'student-counselling' ? 1 : 0
