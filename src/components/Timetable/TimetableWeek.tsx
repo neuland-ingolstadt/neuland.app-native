@@ -27,7 +27,11 @@ import {
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
-import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
+import type {
+	Exam,
+	FriendlyExamEvent,
+	FriendlyTimetableEntry
+} from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
@@ -164,8 +168,7 @@ export default function TimetableWeek({
 			})
 		)
 
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		let friendlyExams: any[] = []
+		let friendlyExams: FriendlyExamEvent[] = []
 		if (showExams && exams.length > 0) {
 			friendlyExams = exams.map((entry, index) => {
 				const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
