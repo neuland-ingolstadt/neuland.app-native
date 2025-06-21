@@ -369,9 +369,9 @@ PODS:
   - FBLazyVector (0.79.4)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - hermes-engine (0.79.3):
-    - hermes-engine/Pre-built (= 0.79.3)
-  - hermes-engine/Pre-built (0.79.3)
+  - hermes-engine (0.79.4):
+    - hermes-engine/Pre-built (= 0.79.4)
+  - hermes-engine/Pre-built (0.79.4)
   - maplibre-react-native (10.1.6):
     - maplibre-react-native/DynamicLibrary (= 10.1.6)
     - React
@@ -2830,7 +2830,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 15c28682af535aa55b9b31e64deff54b7ed7d453
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  hermes-engine: 94ed01537bdeccaab1adbf94b040d115d6fa1a7f
+  hermes-engine: 8b5a5eb386b990287d072fd7b6f6ebd9544dd251
   maplibre-react-native: fac2379219cce0e4e3a3ebd0d0892761142770ee
   MMKV: 383ccfa10ae23ff2a9c0f6130b7136b37b55ac10
   MMKVCore: b0e4c420da85636d7adaa535a53dfade59a22f5c
