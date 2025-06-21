@@ -1,9 +1,12 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: TODO */
+
+import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Easing,
+	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withDelay,
@@ -30,7 +33,7 @@ interface EventIcon {
 
 const EVENT_ICONS: readonly EventIcon[] = [
 	{
-		ios: 'party.popper',
+		ios: 'party.popper.fill',
 		android: 'celebration',
 		web: 'PartyPopper',
 		delay: 0,
@@ -38,17 +41,24 @@ const EVENT_ICONS: readonly EventIcon[] = [
 	},
 	{
 		ios: 'ticket.fill',
-		android: 'airplane_ticket',
+		android: 'confirmation_number',
 		web: 'Ticket',
 		delay: 400,
-		position: { x: -0.85, y: -0.45 }
+		position: { x: -0.85, y: -0.5 }
 	},
 	{
 		ios: 'megaphone.fill',
 		android: 'campaign',
 		web: 'Megaphone',
 		delay: 800,
-		position: { x: 0.45, y: 0.9 }
+		position: { x: 0.5, y: 0.9 }
+	},
+	{
+		ios: 'person.2.fill',
+		android: 'group',
+		web: 'Users',
+		delay: 1200,
+		position: { x: -0.6, y: 0.7 }
 	}
 ]
 
@@ -60,7 +70,7 @@ export const CalendarAnimation = ({
 	const calendarScale = useSharedValue(0.9)
 	const calendarOpacity = useSharedValue(0)
 	const calendarRotation = useSharedValue(0)
-	const calendarPressPulse = useSharedValue(0)
+	const calendarTapScale = useSharedValue(1)
 
 	const iconsArray = EVENT_ICONS.map(() => ({
 		opacity: useSharedValue(0),
@@ -69,19 +79,40 @@ export const CalendarAnimation = ({
 		rotation: useSharedValue(Math.random() * 0.05 - 0.025)
 	}))
 
+	const triggerHaptic = () => {
+		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	}
+
 	const tapGesture = Gesture.Tap().onBegin(() => {
-		calendarPressPulse.value = withSequence(
-			withTiming(1, { duration: 150, easing: Easing.out(Easing.quad) }),
-			withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) })
+		// Add haptic feedback on iOS
+		runOnJS(triggerHaptic)()
+
+		// Animate calendar icon zoom
+		calendarTapScale.value = withSequence(
+			withTiming(0.95, { duration: 100, easing: Easing.out(Easing.quad) }),
+			withTiming(1, { duration: 200, easing: Easing.bounce })
 		)
 
 		iconsArray.forEach((icon, index) => {
-			const randomDelay = index * 50
+			const randomDelay = index * 80
 			icon.floatY.value = withDelay(
 				randomDelay,
 				withSequence(
-					withTiming(-8, { duration: 300, easing: Easing.out(Easing.quad) }),
-					withTiming(0, { duration: 500, easing: Easing.bounce })
+					withTiming(-12, {
+						duration: 400,
+						easing: Easing.out(Easing.back(1.2))
+					}),
+					withTiming(0, { duration: 600, easing: Easing.bounce })
+				)
+			)
+			icon.scale.value = withDelay(
+				randomDelay,
+				withSequence(
+					withTiming(1.2, {
+						duration: 200,
+						easing: Easing.out(Easing.back(1.5))
+					}),
+					withTiming(1, { duration: 400, easing: Easing.bounce })
 				)
 			)
 		})
@@ -157,20 +188,14 @@ export const CalendarAnimation = ({
 	}, [])
 
 	const calendarStyle = useAnimatedStyle(() => {
-		const tapScale = 1 - calendarPressPulse.value * 0.05
 		return {
 			transform: [
-				{ scale: calendarScale.value * tapScale },
+				{ scale: calendarScale.value * calendarTapScale.value },
 				{ rotate: `${calendarRotation.value}rad` }
 			],
 			opacity: calendarOpacity.value
 		}
 	})
-
-	const calendarPulseStyle = useAnimatedStyle(() => ({
-		opacity: calendarPressPulse.value * 0.3,
-		transform: [{ scale: 1 + calendarPressPulse.value * 0.2 }]
-	}))
 
 	const iconAnimatedStyles = iconsArray.map((icon, index) =>
 		useAnimatedStyle(() => {
@@ -200,10 +225,10 @@ export const CalendarAnimation = ({
 					]}
 				>
 					<PlatformIcon
-						ios={{ name: eventIcon.ios, size: size * 0.25 }}
+						ios={{ name: eventIcon.ios, size: size * 0.23 }}
 						android={{
 							name: eventIcon.android as MaterialIcon,
-							size: size * 0.25,
+							size: size * 0.3,
 							variant: 'outlined'
 						}}
 						web={{ name: eventIcon.web, size: size * 0.25 }}
@@ -214,15 +239,15 @@ export const CalendarAnimation = ({
 
 			<GestureDetector gesture={tapGesture}>
 				<Animated.View style={[styles.calendarContainer, calendarStyle]}>
-					<Animated.View style={[styles.calendarPulse, calendarPulseStyle]} />
 					<PlatformIcon
 						ios={{ name: 'calendar', size: size * 0.8 }}
 						android={{
 							name: 'calendar_month' as MaterialIcon,
-							size: size * 0.8,
+							size: size * 0.85,
 							variant: 'outlined'
 						}}
 						web={{ name: 'Calendar', size: size * 0.8 }}
+						style={styles.calendarIcon}
 					/>
 				</Animated.View>
 			</GestureDetector>
@@ -239,15 +264,14 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	calendarContainer: {
 		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	calendarPulse: {
-		position: 'absolute',
+		justifyContent: 'center',
+		position: 'relative',
 		width: '100%',
-		height: '100%',
-		borderRadius: 999,
-		backgroundColor: theme.colors.primary,
-		opacity: 0
+		height: '100%'
+	},
+	calendarIcon: {
+		color: theme.colors.labelColor,
+		zIndex: 1
 	},
 	iconContainer: {
 		position: 'absolute',

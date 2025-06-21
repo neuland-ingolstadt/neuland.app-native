@@ -4,6 +4,10 @@ import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { CalendarAnimation } from './CalendarAnimation'
 
+/**
+ * An enhanced empty state component for the events screens that displays
+ * a polished animation and guidance for the user.
+ */
 export const EmptyEventsAnimation = ({
 	title,
 	subtitle
@@ -22,6 +26,7 @@ export const EmptyEventsAnimation = ({
 				<View style={styles.animationContainer}>
 					<CalendarAnimation size={130} />
 				</View>
+
 				<View style={styles.textContainer}>
 					<Text style={styles.title}>{title}</Text>
 					<Text style={styles.subtitle}>{subtitle}</Text>
@@ -35,16 +40,17 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		width: '100%',
 		paddingHorizontal: 20,
-		paddingVertical: 10
+		paddingTop: 100,
+		paddingBottom: 10
 	},
 	contentWrapper: {
 		width: '100%',
 		maxWidth: 480,
 		alignItems: 'center',
-		paddingVertical: 16
+		paddingVertical: 8
 	},
 	animationContainer: {
 		marginBottom: 40,
@@ -58,14 +64,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 24,
 		fontWeight: '700',
 		color: theme.colors.text,
-		marginBottom: 14,
+		marginBottom: 12,
 		textAlign: 'center'
 	},
 	subtitle: {
 		fontSize: 16,
 		color: theme.colors.labelColor,
 		textAlign: 'center',
-		marginBottom: 20,
+		marginBottom: 24,
 		lineHeight: 22,
 		maxWidth: '90%'
 	}
