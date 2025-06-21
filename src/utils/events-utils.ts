@@ -3,6 +3,7 @@ import { getFragmentData } from '@/__generated__/gql'
 import {
 	type CampusLifeEventFieldsFragment,
 	CampusLifeEventFieldsFragmentDoc,
+	type Host,
 	type UniversitySportsFieldsFragment,
 	UniversitySportsFieldsFragmentDoc,
 	type WeekdayType
@@ -75,6 +76,11 @@ export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents>
 		.sort((a, b) => weekdays.indexOf(a.title) - weekdays.indexOf(b.title))
 
 	return sections
+}
+
+export async function loadCampusLifeClubs(): Promise<Host[]> {
+	const res = await NeulandAPI.getCampusLifeClubs()
+	return res.clClubs
 }
 
 interface SportsCategory {
@@ -221,7 +227,8 @@ export const QUERY_KEYS = {
 	CAREER_SERVICE_EVENTS: 'thi-services-career',
 	STUDENT_ADVISORY_EVENTS: 'thi-services-student-counselling',
 	UNIVERSITY_SPORTS: 'universitySports',
-	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV5'
+	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV5',
+	CAMPUS_LIFE_CLUBS: 'campusLifeClubs'
 } as const
 
 export const loadCareerServiceEvents = async () => {

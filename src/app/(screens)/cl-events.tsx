@@ -1,8 +1,20 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useQueries } from '@tanstack/react-query'
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import {
+	router,
+	useFocusEffect,
+	useLocalSearchParams,
+	useNavigation
+} from 'expo-router'
 import type React from 'react'
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Animated,
@@ -11,6 +23,7 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { ClEventsHeaderRight } from '@/components/Events/ClEventsHeaderRight'
 import ClEventsPage from '@/components/Events/ClEventsPage'
 import ClSportsPage from '@/components/Events/ClSportsPage'
 import PagerView from '@/components/Layout/PagerView'
@@ -26,11 +39,18 @@ import { pausedToast } from '@/utils/ui-utils'
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
+	const navigation = useNavigation()
 	const { tab, openEvent, id } = useLocalSearchParams<{
 		tab?: string
 		openEvent?: string
 		id?: string
 	}>()
+
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => <ClEventsHeaderRight />
+		})
+	}, [navigation])
 	const results = useQueries({
 		queries: [
 			{

@@ -354,6 +354,12 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/cl-clubs"
+					options={{
+						title: t('navigation.clubs')
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/counselling/[id]"
 					options={{
 						title: 'Event Details',
