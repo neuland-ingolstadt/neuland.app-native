@@ -305,6 +305,15 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [mapOverlay])
 
+	const buildingGeoJSON: FeatureCollection = useMemo(() => {
+		return {
+			type: 'FeatureCollection',
+			features: allRooms.features.filter(
+				(f) => f.properties?.rtype === SEARCH_TYPES.BUILDING
+			)
+		}
+	}, [allRooms])
+
 	useEffect(() => {
 		// @ts-expect-error wrong type
 		const unsubscribe = navigation.addListener('tabPress', () => {
@@ -781,6 +790,22 @@ const MapScreen = (): React.JSX.Element => {
 									lineColor: theme.colors.primary
 								}}
 								layerIndex={103}
+							/>
+						</ShapeSource>
+					)}
+					{buildingGeoJSON.features.length > 0 && (
+						<ShapeSource id="buildingLettersSource" shape={buildingGeoJSON}>
+							<SymbolLayer
+								id="buildingLettersLayer"
+								style={{
+									textField: ['get', 'Raum'],
+									textColor: theme.colors.labelColor,
+									textHaloColor: theme.colors.background,
+									textHaloWidth: 1,
+									textAllowOverlap: true,
+									textSize: 14
+								}}
+								layerIndex={105}
 							/>
 						</ShapeSource>
 					)}
