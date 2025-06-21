@@ -16,7 +16,7 @@ const withDrawableAssets = (expoConfig, files) =>
 		'android',
 		(modConfig) => {
 			if (modConfig.modRequest.platform === 'android') {
-				const androidDwarablePath = join(
+				const androidDrawablePath = join(
 					modConfig.modRequest.platformProjectRoot,
 					...androidFolderPath
 				)
@@ -28,9 +28,9 @@ const withDrawableAssets = (expoConfig, files) =>
 				files.forEach((file) => {
 					const isFile = lstatSync(file).isFile()
 					if (isFile) {
-						copyFileSync(file, join(androidDwarablePath, basename(file)))
+						copyFileSync(file, join(androidDrawablePath, basename(file)))
 					} else {
-						copyFolderRecursiveSync(file, androidDwarablePath)
+						copyFolderRecursiveSync(file, androidDrawablePath)
 					}
 				})
 			}
