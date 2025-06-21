@@ -17,6 +17,17 @@ export interface ExamEntry extends Exam {
 	endDate: Date
 }
 
+export interface FriendlyExamEvent extends Exam {
+	eventType: 'exam'
+	id: string
+	start: {
+		dateTime: Date
+	}
+	end: {
+		dateTime: Date
+	}
+}
+
 export interface FriendlyDateOptions {
 	weekday?: 'short' | 'long'
 	relative?: boolean
