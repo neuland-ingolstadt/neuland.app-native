@@ -1,17 +1,26 @@
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import * as AuthSession from 'expo-auth-session'
+import * as Haptics from 'expo-haptics'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import {
 	Dimensions,
 	Linking,
 	Pressable,
+	Animated as RNAnimated,
 	ScrollView,
 	StyleSheet,
 	Text,
 	View
 } from 'react-native'
+import Animated, {
+	interpolate,
+	SensorType,
+	useAnimatedSensor,
+	useAnimatedStyle,
+	withSpring
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import FormList from '@/components/Universal/FormList'
@@ -20,6 +29,209 @@ import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
 
 const redirectUri = AuthSession.makeRedirectUri({ scheme: 'app.neuland' })
+
+// Animated line component to prevent screenshots
+function AnimatedSecurityLine(): React.JSX.Element {
+	const animatedValue = useRef(new RNAnimated.Value(0)).current
+
+	useEffect(() => {
+		const startAnimation = () => {
+			RNAnimated.loop(
+				RNAnimated.sequence([
+					RNAnimated.timing(animatedValue, {
+						toValue: 1,
+						duration: 2000,
+						useNativeDriver: false
+					}),
+					RNAnimated.timing(animatedValue, {
+						toValue: 0,
+						duration: 2000,
+						useNativeDriver: false
+					})
+				])
+			).start()
+		}
+
+		startAnimation()
+	}, [animatedValue])
+
+	const translateX = animatedValue.interpolate({
+		inputRange: [0, 1],
+		outputRange: [-200, 200]
+	})
+
+	return (
+		<View
+			style={{ height: 2, overflow: 'hidden', marginTop: 8, width: '100%' }}
+		>
+			<RNAnimated.View
+				style={{
+					height: 2,
+					width: '100%',
+					backgroundColor: '#00ff33',
+					transform: [{ translateX }],
+					opacity: 0.8
+				}}
+			/>
+		</View>
+	)
+}
+
+// Interactive ID Card component with sensor-based animations
+// biome-ignore lint/suspicious/noExplicitAny: TODO: fix this
+function InteractiveIDCard({ info }: { info: any }): React.JSX.Element {
+	const { styles } = useStyles(stylesheet)
+
+	// Use gyroscope sensor for smooth 3D-like movement
+	const gyroscope = useAnimatedSensor(SensorType.GYROSCOPE, {
+		interval: 16 // 60fps
+	})
+
+	// Animated styles for the card container
+	const cardAnimatedStyle = useAnimatedStyle(() => {
+		const { x, y } = gyroscope.sensor.value
+
+		// Interpolate sensor values to create smooth movement
+		const translateX = interpolate(x, [-1, 1], [-2, 2], 'clamp')
+		const translateY = interpolate(y, [-1, 1], [-2, 2], 'clamp')
+		const rotateX = interpolate(y, [-1, 1], [-0.5, 0.5], 'clamp')
+		const rotateY = interpolate(x, [-1, 1], [-0.5, 0.5], 'clamp')
+
+		return {
+			transform: [
+				{ translateX: withSpring(translateX, { damping: 15, stiffness: 100 }) },
+				{ translateY: withSpring(translateY, { damping: 15, stiffness: 100 }) },
+				{ rotateX: `${rotateX}deg` },
+				{ rotateY: `${rotateY}deg` }
+			]
+		}
+	})
+
+	// Animated styles for the logo with enhanced movement
+	const logoAnimatedStyle = useAnimatedStyle(() => {
+		const { x, y } = gyroscope.sensor.value
+
+		const translateX = interpolate(x, [-1, 1], [-1, 1], 'clamp')
+		const translateY = interpolate(y, [-1, 1], [-1, 1], 'clamp')
+		const scale = interpolate(
+			Math.abs(x) + Math.abs(y),
+			[0, 1],
+			[1, 1.01],
+			'clamp'
+		)
+
+		return {
+			transform: [
+				{ translateX: withSpring(translateX, { damping: 20, stiffness: 150 }) },
+				{ translateY: withSpring(translateY, { damping: 20, stiffness: 150 }) },
+				{ scale: withSpring(scale, { damping: 20, stiffness: 150 }) }
+			]
+		}
+	})
+
+	// Animated styles for the barcode with subtle movement
+	const barcodeAnimatedStyle = useAnimatedStyle(() => {
+		const { x, y } = gyroscope.sensor.value
+
+		const translateX = interpolate(x, [-1, 1], [-0.5, 0.5], 'clamp')
+		const translateY = interpolate(y, [-1, 1], [-0.5, 0.5], 'clamp')
+
+		return {
+			transform: [
+				{ translateX: withSpring(translateX, { damping: 25, stiffness: 200 }) },
+				{ translateY: withSpring(translateY, { damping: 25, stiffness: 200 }) }
+			]
+		}
+	})
+
+	const handleGroupPress = (_groupName: string) => {
+		Haptics.selectionAsync()
+	}
+
+	return (
+		<>
+			<Animated.View style={[styles.idCardContainer, cardAnimatedStyle]}>
+				<View style={styles.shadow}>
+					<LinearGradient
+						colors={['#0f0f0f', '#002906']}
+						start={{ x: 0, y: 0 }}
+						end={{ x: 1, y: 1 }}
+						style={styles.idCard}
+					>
+						<View style={styles.cardHeader}>
+							<Animated.View style={[styles.logoContainer, logoAnimatedStyle]}>
+								<LogoTextSVG size={16} color="#00ff33" />
+							</Animated.View>
+							<View style={styles.titleContainer}>
+								<Text style={styles.cardTitle}>NEULAND ID</Text>
+								<AnimatedSecurityLine />
+							</View>
+						</View>
+
+						<View style={styles.cardContent}>
+							<View style={styles.nameSection}>
+								<Text style={styles.nameLabel}>NAME</Text>
+								<Text style={styles.name}>{info.name}</Text>
+							</View>
+
+							{info.preferred_username && (
+								<View style={styles.usernameSection}>
+									<Text style={styles.fieldLabel}>USERNAME</Text>
+									<Text style={styles.username}>
+										@{info.preferred_username}
+									</Text>
+								</View>
+							)}
+
+							{info.email && (
+								<View style={styles.emailSection}>
+									<Text style={styles.fieldLabel}>EMAIL</Text>
+									<Text style={styles.email}>{info.email}</Text>
+								</View>
+							)}
+							<Animated.View
+								style={[styles.barcodeContainer, barcodeAnimatedStyle]}
+							>
+								<Barcode
+									value={(info.aud as string).slice(0, 20) ?? ''}
+									format="CODE128"
+									lineColor="#000000"
+									maxWidth={Dimensions.get('window').width - 120}
+									height={50}
+								/>
+							</Animated.View>
+						</View>
+
+						<View style={styles.cardFooter}>
+							<View style={styles.footerLine} />
+							<Text style={styles.footerText}>Official Neuland Member</Text>
+						</View>
+					</LinearGradient>
+				</View>
+			</Animated.View>
+
+			{info.groups && info.groups.length > 0 && (
+				<View style={styles.groupList}>
+					<Text style={styles.groupTitle}>Member Groups</Text>
+					<View style={styles.groupContainer}>
+						{info.groups.map((g: string) => (
+							<Pressable
+								key={g}
+								style={({ pressed }) => [
+									styles.groupBadge,
+									pressed && styles.groupBadgePressed
+								]}
+								onPress={() => handleGroupPress(g)}
+							>
+								<Text style={styles.groupText}>{g}</Text>
+							</Pressable>
+						))}
+					</View>
+				</View>
+			)}
+		</>
+	)
+}
 
 const discovery = {
 	authorizationEndpoint: 'https://sso.informatik.sexy/application/o/authorize/',
@@ -131,71 +343,7 @@ export default function Member(): React.JSX.Element {
 		<ScrollView contentContainerStyle={styles.container}>
 			{info && (
 				<View style={styles.cardWrapper}>
-					<View style={styles.idCardContainer}>
-						<LinearGradient
-							colors={['#000000', '#000000']}
-							start={{ x: 0, y: 0 }}
-							end={{ x: 1, y: 1 }}
-							style={styles.idCard}
-						>
-							<View style={styles.cardHeader}>
-								<View style={styles.logoContainer}>
-									<LogoTextSVG size={16} color="#d1d1d1" />
-								</View>
-								<Text style={styles.cardTitle}>NEULAND ID</Text>
-							</View>
-
-							<View style={styles.cardContent}>
-								<View style={styles.nameSection}>
-									<Text style={styles.nameLabel}>NAME</Text>
-									<Text style={styles.name}>{info.name}</Text>
-								</View>
-
-								{info.preferred_username && (
-									<View style={styles.usernameSection}>
-										<Text style={styles.fieldLabel}>USERNAME</Text>
-										<Text style={styles.username}>
-											@{info.preferred_username}
-										</Text>
-									</View>
-								)}
-
-								{info.email && (
-									<View style={styles.emailSection}>
-										<Text style={styles.fieldLabel}>EMAIL</Text>
-										<Text style={styles.email}>{info.email}</Text>
-									</View>
-								)}
-								<View style={styles.barcodeContainer}>
-									<Barcode
-										value={(info.aud as string) ?? ''}
-										format="CODE128"
-										lineColor="#000000"
-										maxWidth={Dimensions.get('window').width - 120}
-										height={50}
-									/>
-								</View>
-							</View>
-
-							<View style={styles.cardFooter}>
-								<View style={styles.footerLine} />
-								<Text style={styles.footerText}>Official Neuland Member</Text>
-							</View>
-						</LinearGradient>
-
-						{info.groups && info.groups.length > 0 && (
-							<View style={styles.groupList}>
-								<Text style={styles.groupTitle}>Member Groups</Text>
-								<View style={styles.groupContainer}>
-									{info.groups.map((g) => (
-										<View key={g} style={styles.groupBadge}>
-											<Text style={styles.groupText}>{g}</Text>
-										</View>
-									))}
-								</View>
-							</View>
-						)}
-					</View>
+					<InteractiveIDCard info={info} />
 				</View>
 			)}
 			<FormList sections={quickLinksSections} />
@@ -234,17 +382,18 @@ export default function Member(): React.JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
 	center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-	container: { padding: 20 },
+	container: { paddingHorizontal: theme.margins.page, paddingVertical: 30 },
 	cardWrapper: { marginBottom: 30 },
-	idCardContainer: {
-		shadowColor: '#00ff88',
+	shadow: {
+		shadowColor: '#00ff33',
 		shadowOffset: { width: 0, height: 0 },
-		shadowOpacity: 0.4,
+		shadowOpacity: 0.3,
 		shadowRadius: 15,
-		elevation: 15,
+		elevation: 15
+	},
+	idCardContainer: {
 		borderRadius: theme.radius.lg,
-		overflow: 'visible',
-		marginHorizontal: 4
+		overflow: 'visible'
 	},
 	idCard: {
 		borderRadius: theme.radius.lg,
@@ -259,14 +408,20 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		marginBottom: 20
 	},
-	logoContainer: {},
+	logoContainer: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	titleContainer: {
+		alignItems: 'flex-end'
+	},
 	logoText: {
 		color: '#ffffff',
 		fontSize: 20,
 		fontWeight: 'bold'
 	},
 	cardTitle: {
-		color: '#00ff88',
+		color: '#00ff33',
 		fontSize: 12,
 		fontWeight: '700',
 		letterSpacing: 1.5,
@@ -280,7 +435,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 20
 	},
 	nameLabel: {
-		color: '#00ff88',
+		color: theme.colors.neulandGreen,
 		fontSize: 12,
 		fontWeight: '600',
 		letterSpacing: 1,
@@ -301,7 +456,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 12
 	},
 	fieldLabel: {
-		color: '#00ff88',
+		color: theme.colors.neulandGreen,
 		fontSize: 12,
 		fontWeight: '600',
 		letterSpacing: 1,
@@ -334,12 +489,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	footerLine: {
 		height: 1,
-		backgroundColor: '#00ff88',
+		backgroundColor: theme.colors.neulandGreen,
 		marginBottom: 12,
 		opacity: 0.8
 	},
 	footerText: {
-		color: '#00ff88',
+		color: '#e6e6e6',
 		fontSize: 12,
 		fontWeight: '500',
 		opacity: 0.8,
@@ -367,6 +522,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 16,
 		paddingVertical: 8
 	},
+	groupBadgePressed: {
+		backgroundColor: theme.colors.labelBackground,
+		opacity: 0.8
+	},
 	groupText: {
 		color: theme.colors.text,
 		fontSize: 12,
@@ -392,8 +551,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		gap: 10,
 		justifyContent: 'center',
-		marginBottom: 30,
-		marginTop: 10,
+		marginVertical: 30,
 		minWidth: 165,
 		paddingHorizontal: 40,
 		paddingVertical: 12
