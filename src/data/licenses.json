@@ -466,6 +466,12 @@
 		"licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",
 		"parents": "neuland"
 	},
+	"react-qr-code@2.0.16": {
+		"licenses": "MIT",
+		"repository": "https://github.com/rosskhanas/react-qr-code",
+		"licenseUrl": "https://github.com/rosskhanas/react-qr-code/raw/master/LICENSE",
+		"parents": "neuland"
+	},
 	"react@19.1.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react",
