@@ -1,7 +1,25 @@
-import { decodeJwt } from 'jose'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { zustandStorage } from '@/utils/storage'
+
+// Simple JWT decoder using built-in React Native APIs
+// biome-ignore lint/suspicious/noExplicitAny: TODO: fix this
+function decodeJwt(token: string): any {
+	try {
+		const base64Url = token.split('.')[1]
+		const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+		const jsonPayload = decodeURIComponent(
+			atob(base64)
+				.split('')
+				.map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
+				.join('')
+		)
+		return JSON.parse(jsonPayload)
+	} catch (error) {
+		console.error('Failed to decode JWT:', error)
+		return {}
+	}
+}
 
 export interface MemberInfo {
 	email?: string

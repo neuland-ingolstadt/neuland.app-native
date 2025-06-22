@@ -103,6 +103,7 @@
 		"react-native-view-shot": "~4.0.3",
 		"react-native-web": "^0.20.0",
 		"react-native-webview": "13.13.5",
+		"react-qr-code": "^2.0.16",
 		"sanitize-html": "^2.17.0",
 		"sweet-sfsymbols": "0.7.2",
 		"swiftui-react-native": "^6.3.3",

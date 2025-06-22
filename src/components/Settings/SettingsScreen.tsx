@@ -5,10 +5,8 @@ import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	LayoutAnimation,
-	Pressable,
 	RefreshControl,
 	ScrollView,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -16,9 +14,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
-import LogoSVG from '@/components/Flow/svgs/logo'
 import { queryClient } from '@/components/provider'
-import PlatformIcon from '@/components/Universal/Icon'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -27,52 +23,12 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import Avatar from './Avatar'
 import GuestInfoSection from './GuestInfoSection'
+import NeulandBox from './NeulandBox'
 import SettingsHeader from './SettingsHeader'
 import SettingsLogo from './SettingsLogo'
 import SettingsMenu from './SettingsMenu'
 import StudentInfoSection from './StudentInfoSection'
-
-const NeulandBox = () => {
-	const { styles, theme } = useStyles(stylesheet)
-	const router = useRouter()
-	const memberInfo = useMemberStore((s) => s.info)
-
-	if (!memberInfo) {
-		return null
-	}
-
-	return (
-		<View style={styles.neulandContainer}>
-			<Pressable
-				onPress={() => router.push('/(screens)/member')}
-				style={styles.neulandBox}
-			>
-				<View style={styles.neulandBoxContent}>
-					<Avatar
-						background={`${theme.colors.neulandGreen}25`}
-						size={50}
-						style={styles.neulandAvatar}
-					>
-						<LogoSVG size={35} color={theme.colors.text} />
-					</Avatar>
-
-					<View>
-						<Text style={styles.neulandTitle}>Neuland Member</Text>
-						<Text style={styles.neulandName}>{memberInfo.name}</Text>
-					</View>
-				</View>
-				<PlatformIcon
-					ios={{ name: 'chevron.right', size: 18 }}
-					android={{ name: 'chevron_right', size: 24 }}
-					web={{ name: 'ChevronRight', size: 24 }}
-					style={styles.neulandChevron}
-				/>
-			</Pressable>
-		</View>
-	)
-}
 
 export default function Settings(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -83,7 +39,8 @@ export default function Settings(): React.JSX.Element {
 	const [scrollY, setScrollY] = useState(0)
 	const [size, setSize] = useState({ width: 0, height: 0 })
 	const resetPreferences = usePreferencesStore((state) => state.reset)
-	const { idToken } = useMemberStore()
+	const { idToken, refreshToken } = useMemberStore()
+	console.log(refreshToken)
 
 	const logoutAlert = (): void => {
 		Alert.alert(
@@ -236,47 +193,5 @@ const stylesheet = createStyleSheet((theme) => ({
 	infoBoxesSection: {
 		marginTop: 10
 	},
-	wrapper: { paddingHorizontal: 12 },
-	neulandContainer: {
-		marginTop: 10,
-		borderRadius: theme.radius.md,
-		overflow: 'hidden',
-		shadowColor: '#00ff3c',
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 10,
-		elevation: 15
-	},
-	neulandBox: {
-		flex: 1,
-		padding: 16,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	neulandBoxContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 16
-	},
-	neulandTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600'
-	},
-	neulandName: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		marginTop: 4
-	},
-	neulandChevron: {
-		color: theme.colors.labelSecondaryColor
-	},
-	neulandAvatar: {
-		paddingRight: 3
-	}
+	wrapper: { paddingHorizontal: 12 }
 }))
