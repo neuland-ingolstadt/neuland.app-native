@@ -37,6 +37,7 @@ import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
 import EventComponent from './WeekEventComponent'
 import WeekHeaderEvent from './WeekHeaderEvent'
+import WeekLeftArea from './WeekLeftArea'
 
 const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,
@@ -346,13 +347,16 @@ export default function TimetableWeek({
 				onPressDayNumber={(date) => {
 					calendarRef.current?.goToDate({ date })
 				}}
-				showWeekNumber
+				showWeekNumber={false}
 				rightEdgeSpacing={3}
 				overlapEventsSpacing={1}
 				minTimeIntervalHeight={55}
 				scrollToNow={false}
 			>
-				<CalendarHeader renderEvent={renderHeaderEvent} />
+				<CalendarHeader
+					LeftAreaComponent={<WeekLeftArea />}
+					renderEvent={renderHeaderEvent}
+				/>
 				<CalendarBody renderEvent={renderEvent} hourFormat="HH:mm" />
 			</CalendarContainer>
 		</View>
