@@ -85,9 +85,10 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}, [])
 
-	const hasBibNumber = (data?.bibnr ?? '').trim() !== ''
+	// some phd students accounts do not return any personal data, so we need to check if the bibnr is present
+	const isBibNumberPresent = (data?.bibnr ?? '').trim() !== ''
 
-	const sections: FormListSections[] = hasBibNumber
+	const sections: FormListSections[] = isBibNumberPresent
 		? [
 				{
 					header: t('profile.formlist.user.library', { ns: 'settings' }),
@@ -133,7 +134,7 @@ export default function LibraryCode(): React.JSX.Element {
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
-			) : isSuccess && hasBibNumber ? (
+			) : isSuccess && isBibNumberPresent ? (
 				<View style={styles.container}>
 					<View>
 						<FormList sections={sections} />
