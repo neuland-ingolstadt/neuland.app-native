@@ -240,6 +240,10 @@
 			"rainbow": "Rainbow",
 			"exclusive": "Exclusive"
 		},
-		"exclusive": "Attend to our events and find easter eggs to unlock exclusive app icons."
+		"exclusive": "Find easter eggs to unlock exclusive app icons.",
+		"status": {
+			"locked": "Locked",
+			"unlocked": "Unlocked"
+		}
 	}
 }

@@ -219,7 +219,11 @@
 			"rainbow": "Regenbogen",
 			"exclusive": "Exklusiv"
 		},
-		"exclusive": "Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten."
+		"exclusive": "Finde Easter-Eggs, um exklusive App-Icons freizuschalten.",
+		"status": {
+			"locked": "Gesperrt",
+			"unlocked": "Freigeschaltet"
+		}
 	},
 	"version": {
 		"formlist": {
