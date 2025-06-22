@@ -34,7 +34,8 @@ export function withBouncing(
 	velocity: number,
 	bottomBound: number,
 	topBound: number,
-	randomizeColor: () => void
+	randomizeColor: () => void,
+	onBounce?: () => void
 ):
 	| {
 			onFrame: (state: AnimationState, now: number) => boolean
@@ -66,6 +67,7 @@ export function withBouncing(
 
 					runOnJS(randomizeColor)()
 					animatedHapticFeedback()
+					if (onBounce) runOnJS(onBounce)()
 				}
 
 				state.lastTimestamp = now
