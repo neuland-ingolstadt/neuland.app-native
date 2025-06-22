@@ -5,6 +5,7 @@ import {
 	useTheme,
 	useTimezone
 } from '@howljs/calendar-kit'
+// @ts-expect-error no types since it is an internal dependency
 import { DateTime } from 'luxon'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -71,14 +72,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center'
 	},
 	weekText: {
-		fontSize: 12,
+		fontSize: 11,
 		textAlign: 'center',
 		color: theme.colors.text
 	},
 	monthText: {
-		fontSize: 10,
+		fontSize: 12,
 		textAlign: 'center',
-		lineHeight: 12,
+		lineHeight: 13,
+		fontWeight: 500,
 		color: theme.colors.text
 	}
 }))
