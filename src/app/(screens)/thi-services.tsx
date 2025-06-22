@@ -64,7 +64,7 @@ export default function Events(): React.JSX.Element {
 			}
 		>
 		isLoading: boolean
-		isPaused: boolean /* ...other useQueryResult props */
+		isPaused: boolean
 	}
 	const studentCounsellingResult = results[1] as {
 		data?: Array<
@@ -75,7 +75,7 @@ export default function Events(): React.JSX.Element {
 			}
 		>
 		isLoading: boolean
-		isPaused: boolean /* ...other useQueryResult props */
+		isPaused: boolean
 	}
 
 	const scrollY = useRef(new Animated.Value(0)).current
