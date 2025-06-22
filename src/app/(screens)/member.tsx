@@ -3,10 +3,21 @@ import * as AuthSession from 'expo-auth-session'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { useEffect } from 'react'
-import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native'
+import {
+	Dimensions,
+	Linking,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { useMemberStore } from '@/hooks/useMemberStore'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon from '@/components/Universal/Icon'
+import { useMemberStore } from '@/hooks/useMemberStore'
+import type { FormListSections } from '@/types/components'
 
 const redirectUri = AuthSession.makeRedirectUri({ scheme: 'app.neuland' })
 
@@ -15,6 +26,40 @@ const discovery = {
 	tokenEndpoint: 'https://sso.informatik.sexy/application/o/token/',
 	userInfoEndpoint: 'https://sso.informatik.sexy/application/o/userinfo/'
 }
+
+const quickLinksSections: FormListSections[] = [
+	{
+		items: [
+			{
+				title: 'Neuland Website',
+				onPress: () => Linking.openURL('https://neuland-ingolstadt.de'),
+				icon: {
+					ios: 'globe',
+					android: 'public',
+					web: 'Globe'
+				}
+			},
+			{
+				title: 'Wiki',
+				onPress: () => Linking.openURL('https://wiki.informatik.sexy'),
+				icon: {
+					ios: 'book.closed',
+					android: 'menu_book',
+					web: 'BookOpen'
+				}
+			},
+			{
+				title: 'SSO Profile',
+				onPress: () => Linking.openURL('https://sso.informatik.sexy/'),
+				icon: {
+					ios: 'person.crop.circle',
+					android: 'account_circle',
+					web: 'User'
+				}
+			}
+		]
+	}
+]
 
 export default function Member(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -56,7 +101,6 @@ export default function Member(): React.JSX.Element {
 					const result = await tokenResponse.json()
 
 					if (result.id_token) {
-						alert('Tokens' + result.id_token)
 						setTokens(
 							result.id_token as string,
 							result.refresh_token as string | undefined
@@ -96,7 +140,7 @@ export default function Member(): React.JSX.Element {
 						>
 							<View style={styles.cardHeader}>
 								<View style={styles.logoContainer}>
-									<LogoTextSVG size={16} color="#00ff88" />
+									<LogoTextSVG size={16} color="#d1d1d1" />
 								</View>
 								<Text style={styles.cardTitle}>NEULAND ID</Text>
 							</View>
@@ -124,9 +168,7 @@ export default function Member(): React.JSX.Element {
 								)}
 								<View style={styles.barcodeContainer}>
 									<Barcode
-										value={
-											(info.aud as string) ?? ''
-										}
+										value={(info.aud as string) ?? ''}
 										format="CODE128"
 										lineColor="#000000"
 										maxWidth={Dimensions.get('window').width - 120}
@@ -156,8 +198,9 @@ export default function Member(): React.JSX.Element {
 					</View>
 				</View>
 			)}
-			<Text style={styles.header}>Member Data</Text>
-			{info &&
+			<FormList sections={quickLinksSections} />
+			{/* <Text style={styles.header}>Member Data</Text> */}
+			{/* {info &&
 				Object.entries(info).map(([key, value]) => (
 					<View key={key} style={styles.row}>
 						<Text style={styles.key}>{key}</Text>
@@ -166,8 +209,24 @@ export default function Member(): React.JSX.Element {
 						</Text>
 					</View>
 				))}
+			 */}
 			<Pressable onPress={logout} style={styles.logoutButton}>
-				<Text style={styles.link}>Logout</Text>
+				<PlatformIcon
+					ios={{
+						name: 'rectangle.portrait.and.arrow.right',
+						size: 18
+					}}
+					android={{
+						name: 'logout',
+						size: 22
+					}}
+					web={{
+						name: 'LogOut',
+						size: 22
+					}}
+					style={styles.notification}
+				/>
+				<Text style={styles.logoutText}>Logout</Text>
 			</Pressable>
 		</ScrollView>
 	)
@@ -287,8 +346,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'center'
 	},
 	groupList: {
-		padding: 24,
-		
+		padding: 24
 	},
 	groupTitle: {
 		fontSize: 18,
@@ -304,25 +362,47 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center'
 	},
 	groupBadge: {
-		backgroundColor: '#e9ecef',
+		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.infinite,
 		paddingHorizontal: 16,
 		paddingVertical: 8
 	},
 	groupText: {
-		color: '#212529',
+		color: theme.colors.text,
 		fontSize: 12,
 		fontWeight: '600'
 	},
 	header: {
 		fontSize: 22,
 		fontWeight: 'bold',
-		marginBottom: 20,
+		marginVertical: 20,
 		color: theme.colors.text
 	},
 	row: { marginBottom: 10 },
 	key: { fontWeight: 'bold', color: theme.colors.text },
 	value: { color: theme.colors.text },
 	link: { color: theme.colors.primary, fontSize: 16 },
-	logoutButton: { marginTop: 20 }
+	logoutButton: {
+		alignItems: 'center',
+		alignSelf: 'center',
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.mg,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
+		flexDirection: 'row',
+		gap: 10,
+		justifyContent: 'center',
+		marginBottom: 30,
+		marginTop: 10,
+		minWidth: 165,
+		paddingHorizontal: 40,
+		paddingVertical: 12
+	},
+	logoutText: {
+		color: theme.colors.notification,
+		fontSize: 16
+	},
+	notification: {
+		color: theme.colors.notification
+	}
 }))
