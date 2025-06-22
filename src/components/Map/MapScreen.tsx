@@ -731,7 +731,8 @@ const MapScreen = (): React.JSX.Element => {
 									iconImage: 'map-marker',
 									iconColor: theme.colors.primary,
 									iconSize: 0.17,
-									iconAnchor: 'bottom'
+									iconAnchor: 'bottom',
+									iconAllowOverlap: true
 								}}
 								layerIndex={104} // Ensure this layer is above others
 							/>
