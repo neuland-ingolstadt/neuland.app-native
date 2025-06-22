@@ -151,6 +151,17 @@ export default function About(): React.JSX.Element {
 					onPress: () => {
 						void Linking.openURL(STATUS_URL)
 					}
+				},
+				{
+					title: 'Member Area',
+					icon: {
+						ios: 'person.crop.circle.badge.checkmark',
+						android: 'verified_user',
+						web: 'UserCheck'
+					},
+					onPress: () => {
+						router.navigate('/member')
+					}
 				}
 			]
 		},
