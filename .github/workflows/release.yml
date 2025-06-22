@@ -150,8 +150,10 @@ jobs:
             EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
 
   deploy:
+    name: Deploy to production
     needs: build-docker-image
     runs-on: ubuntu-latest
+    if: '!contains(github.ref, "-")'
     steps:
       - name: Create deployment
         uses: actions/github-script@v7
