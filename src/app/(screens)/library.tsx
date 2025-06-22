@@ -85,17 +85,22 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}, [])
 
-	const sections: FormListSections[] = [
-		{
-			header: t('profile.formlist.user.library', { ns: 'settings' }),
-			items: [
+	// some phd students accounts do not return any personal data, so we need to check if the bibnr is present
+	const isBibNumberPresent = (data?.bibnr ?? '').trim() !== ''
+
+	const sections: FormListSections[] = isBibNumberPresent
+		? [
 				{
-					title: t('pages.library.code.number'),
-					value: data?.bibnr ?? ''
+					header: t('profile.formlist.user.library', { ns: 'settings' }),
+					items: [
+						{
+							title: t('pages.library.code.number'),
+							value: data?.bibnr ?? ''
+						}
+					]
 				}
 			]
-		}
-	]
+		: []
 
 	const toggleBrightness = async (): Promise<void> => {
 		if (Platform.OS !== 'ios') {
@@ -129,7 +134,7 @@ export default function LibraryCode(): React.JSX.Element {
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
-			) : isSuccess && data.bibnr !== null ? (
+			) : isSuccess && isBibNumberPresent ? (
 				<View style={styles.container}>
 					<View>
 						<FormList sections={sections} />
@@ -157,7 +162,7 @@ export default function LibraryCode(): React.JSX.Element {
 						</Text>
 					</View>
 				</View>
-			) : (
+			) : isSuccess ? null : (
 				<ErrorView
 					title={
 						// @ts-expect-error error is type never
