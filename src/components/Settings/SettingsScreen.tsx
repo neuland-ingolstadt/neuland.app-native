@@ -39,8 +39,7 @@ export default function Settings(): React.JSX.Element {
 	const [scrollY, setScrollY] = useState(0)
 	const [size, setSize] = useState({ width: 0, height: 0 })
 	const resetPreferences = usePreferencesStore((state) => state.reset)
-	const { idToken, refreshToken } = useMemberStore()
-	console.log(refreshToken)
+	const { idToken } = useMemberStore()
 
 	const logoutAlert = (): void => {
 		Alert.alert(

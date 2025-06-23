@@ -108,8 +108,8 @@ export const stylesheet = createStyleSheet((theme) => ({
 		marginTop: 20,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 120,
-		height: 120,
+		width: 140,
+		height: 140,
 		alignSelf: 'center'
 	},
 	cardFooter: {
@@ -290,5 +290,16 @@ export const stylesheet = createStyleSheet((theme) => ({
 	},
 	buttonPressed: {
 		opacity: 0.8
+	},
+	debugInfo: {
+		marginTop: 20,
+		padding: 10,
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.md,
+		alignItems: 'center'
+	},
+	debugText: {
+		color: theme.colors.text,
+		fontSize: 14
 	}
 }))
