@@ -31,6 +31,7 @@ import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadStudentCounsellingEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function StudentCounsellingEventDetail(): React.JSX.Element {
 	const { t } = useTranslation('common')
@@ -110,12 +111,18 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 								type: 'studentCounsellingEvent'
 							})
 							const deepLinkUrl = `https://web.neuland.app/events/counselling/${id}`
+							const message = t('pages.event.shareCounsellingMessage', {
+								title: eventData?.title,
+								date: formatFriendlyDate(eventData?.date ?? ''),
+								link: deepLinkUrl
+							})
+							if (Platform.OS === 'web') {
+								await copyToClipboard(message)
+								return
+							}
+
 							await Share.share({
-								message: t('pages.event.shareCounsellingMessage', {
-									title: eventData?.title,
-									date: formatFriendlyDate(eventData?.date ?? ''),
-									link: deepLinkUrl
-								})
+								message
 							})
 						}}
 					/>
