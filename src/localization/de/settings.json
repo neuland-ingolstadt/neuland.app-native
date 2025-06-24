@@ -29,7 +29,6 @@
 			},
 			"appearance": {
 				"title": "Darstellung",
-				"accent": "Akzentfarbe",
 				"theme": "Design"
 			},
 			"language": {
@@ -140,21 +139,6 @@
 		}
 	},
 	"theme": {
-		"accent": {
-			"title": "Akzentfarbe"
-		},
-		"colors": {
-			"teal": "Türkis",
-			"blue": "Blau",
-			"contrast": "Kontrast",
-			"pink": "Pink",
-			"brown": "Braun",
-			"purple": "Lila",
-			"yellow": "Gelb",
-			"orange": "Orange",
-			"green": "Neuland"
-		},
-		"footer": "Das ändert die Farbe der Symbole und Schaltflächen in der App.",
 		"themes": {
 			"title": "Design",
 			"default": "Automatisch",
