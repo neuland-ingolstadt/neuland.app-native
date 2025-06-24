@@ -1,5 +1,6 @@
 import { router } from 'expo-router'
 import type React from 'react'
+import { useState } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -15,27 +16,32 @@ export default function ShareHeaderButton({
 	noShare = false
 }: ShareButtonProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
+	const [copied, setCopied] = useState(false)
 	return (
 		<View style={styles.shareRow}>
 			{!noShare && (
 				<Pressable
 					onPress={() => {
 						void onPress()
+						if (Platform.OS === 'web') {
+							setCopied(true)
+							setTimeout(() => setCopied(false), 1000)
+						}
 					}}
 					style={styles.shareButton}
 				>
 					<PlatformIcon
 						ios={{
-							name: 'square.and.arrow.up',
+							name: copied ? 'checkmark' : 'square.and.arrow.up',
 							size: 15,
 							weight: 'bold'
 						}}
 						android={{
-							name: 'share',
+							name: copied ? 'check' : 'share',
 							size: 20
 						}}
 						web={{
-							name: 'Share',
+							name: copied ? 'Check' : 'Share',
 							size: 20
 						}}
 						style={styles.icon}

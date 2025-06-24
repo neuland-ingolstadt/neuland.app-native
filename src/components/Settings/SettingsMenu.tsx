@@ -13,6 +13,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { storage } from '@/utils/storage'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function SettingsMenu(): React.JSX.Element {
 	const router = useRouter()
@@ -167,12 +168,19 @@ export default function SettingsMenu(): React.JSX.Element {
 					onPress: () => {
 						trackEvent('Share', { type: 'app' })
 
+						const message =
+							Platform.OS === 'ios'
+								? t('menu.formlist.legal.shareMessage')
+								: t('menu.formlist.legal.shareMessageAndroid')
+
+						if (Platform.OS === 'web') {
+							void copyToClipboard(message)
+							return
+						}
+
 						void Share.share({
 							url: 'https://neuland.app/get', // url option is only available on iOS
-							message:
-								Platform.OS === 'ios'
-									? t('menu.formlist.legal.shareMessage')
-									: t('menu.formlist.legal.shareMessageAndroid')
+							message
 						})
 					}
 				},
