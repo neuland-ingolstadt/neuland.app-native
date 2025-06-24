@@ -50,6 +50,7 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function FoodDetail(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -470,13 +471,18 @@ export default function FoodDetail(): React.JSX.Element {
 						trackEvent('Share', {
 							type: 'mealVariant'
 						})
+						const message = t('details.share.message', {
+							meal: variant.name[i18n.language as LanguageKey],
+							price: formatPrice(variant.prices[userKind ?? USER_GUEST]),
+							location: restaurant,
+							id: variant?.id
+						})
+						if (Platform.OS === 'web') {
+							void copyToClipboard(message)
+							return
+						}
 						void Share.share({
-							message: t('details.share.message', {
-								meal: variant.name[i18n.language as LanguageKey],
-								price: formatPrice(variant.prices[userKind ?? USER_GUEST]),
-								location: restaurant,
-								id: variant?.id
-							})
+							message
 						})
 					}
 				})) ?? []
