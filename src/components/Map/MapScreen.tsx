@@ -58,13 +58,16 @@ import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import {
 	type ClickedMapElement,
 	type RoomData,
 	SEARCH_TYPES
 } from '@/types/map'
+import type { NormalizedLecturer } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
 import {
 	filterAvailableRooms,
 	filterEtage,
@@ -206,6 +209,18 @@ const MapScreen = (): React.JSX.Element => {
 			}
 			return failureCount < 2
 		},
+		enabled: userKind !== USER_GUEST
+	})
+
+	const { data: lecturers } = useQuery({
+		queryKey: ['allLecturers'],
+		queryFn: async () => {
+			const rawData = await API.getLecturers('0', 'z')
+			const data = normalizeLecturers(rawData)
+			return data
+		},
+		staleTime: 1000 * 60 * 30, // 30 minutes
+		gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
 		enabled: userKind !== USER_GUEST
 	})
 
@@ -519,6 +534,54 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [clickedElement])
 
+	const setSelectedLecturer = useRouteParamsStore(
+		(state) => state.setSelectedLecturer
+	)
+
+	const handleOpenLecturer = useCallback(
+		(lecturer: NormalizedLecturer) => {
+			setSelectedLecturer(lecturer)
+			router.navigate('/lecturer')
+		},
+		[setSelectedLecturer]
+	)
+
+	const lecturerSection = useMemo(() => {
+		if (clickedElement?.type !== SEARCH_TYPES.ROOM || lecturers == null) {
+			return []
+		}
+
+		const filtered = lecturers.filter(
+			(l) => l.room_short === clickedElement.data
+		)
+
+		if (filtered.length === 0) {
+			return []
+		}
+
+		return [
+			{
+				header: t('pages.map.details.room.lecturers', {
+					ns: 'common'
+				}),
+				items: filtered.map((l) => ({
+					title: `${[l.titel, l.vorname, l.name].join(' ').trim()}`,
+					onPress: () => handleOpenLecturer(l)
+				}))
+			}
+		]
+	}, [clickedElement, lecturers, handleOpenLecturer])
+
+	const baseSections = useMemo(
+		() => modalSection(roomData, locations, userKind === USER_GUEST),
+		[roomData, locations, userKind]
+	)
+
+	const allSections = useMemo(
+		() => [...lecturerSection, ...baseSections],
+		[baseSections, lecturerSection]
+	)
+
 	function setView(clickedElement: ClickedMapElement | null = null): void {
 		if (clickedElement?.center == null) {
 			cameraRef.current?.setCamera({
@@ -738,7 +801,8 @@ const MapScreen = (): React.JSX.Element => {
 									iconImage: 'map-marker',
 									iconColor: theme.colors.primary,
 									iconSize: 0.17,
-									iconAnchor: 'bottom'
+									iconAnchor: 'bottom',
+									iconAllowOverlap: true
 								}}
 								layerIndex={104} // Ensure this layer is above others
 							/>
@@ -863,11 +927,7 @@ const MapScreen = (): React.JSX.Element => {
 				handleSheetChangesModal={handleSheetChangesModal}
 				currentPositionModal={currentPositionModal}
 				roomData={roomData}
-				modalSection={modalSection(
-					roomData,
-					locations,
-					userKind === USER_GUEST
-				)}
+				modalSection={allSections}
 			/>
 		</View>
 	)

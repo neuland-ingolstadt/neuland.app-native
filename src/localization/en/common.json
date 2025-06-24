@@ -230,6 +230,7 @@
 					"floor": "Floor",
 					"type": "Type",
 					"equipment": "Equipment",
+					"lecturers": "Lecturers",
 					"available": "Available",
 					"notAvailable": "Not available",
 					"nextTimeSpan": "Next time span",
@@ -362,13 +363,6 @@
 				"unlimitedShort": "Unlimited",
 				"fullyBooked": "Fully booked"
 			}
-		}
-	},
-	"notification": {
-		"permission": {
-			"title": "Notifications",
-			"description": "Open the system settings to enable notifications.",
-			"button": "Settings"
 		}
 	},
 	"submit": "Submit"

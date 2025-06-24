@@ -238,6 +238,7 @@
 					"history": "Zuletzt gesucht",
 					"signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
 					"equipment": "Ausstattung",
+					"lecturers": "Dozenten",
 					"report": "Fehler melden",
 					"reportMail": "mailto:feedback@neuland.app?subject=Raum%20Fehler%20melden&body=Raum%3A%0D%0AProblem%3A%0D%0AVorschlag%3A"
 				},
@@ -362,13 +363,6 @@
 				"unlimitedShort": "Unbegrenzt",
 				"fullyBooked": "Ausgebucht"
 			}
-		}
-	},
-	"notification": {
-		"permission": {
-			"title": "Benachrichtigungen",
-			"description": "Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.",
-			"button": "Einstellungen"
 		}
 	},
 	"submit": "Absenden"
