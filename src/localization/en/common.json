@@ -230,6 +230,7 @@
 					"floor": "Floor",
 					"type": "Type",
 					"equipment": "Equipment",
+					"lecturers": "Lecturers",
 					"available": "Available",
 					"notAvailable": "Not available",
 					"availableRooms": "Available rooms",
