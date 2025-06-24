@@ -51,13 +51,6 @@ export default function AppIconPicker(): React.JSX.Element {
 		rainbow: ['rainbowNeon', 'rainbowMoonLight']
 	}
 
-	categories.exclusive = categories.exclusive.filter((icon) => {
-		if (unlockedAppIcons.includes(icon)) {
-			return true
-		}
-		return false
-	})
-
 	const support = supportsAlternateIcons
 
 	if (!support) {
@@ -79,42 +72,57 @@ export default function AppIconPicker(): React.JSX.Element {
 								// @ts-expect-error cannot verify the type of this prop
 								title={t(`appIcon.categories.${key}`)}
 								key={key}
+								footer={
+									key === 'exclusive' ? t('appIcon.exclusive') : undefined
+								}
 							>
 								<View style={styles.sectionContainer}>
-									{value.map((icon) => {
+									{value.map((icon, index) => {
+										const unlocked =
+											key !== 'exclusive' || unlockedAppIcons.includes(icon)
 										return (
 											<React.Fragment key={icon}>
 												<Pressable
 													style={styles.rowContainer}
-													onPress={async () => {
-														try {
-															if (icon === 'default') {
-																await resetAppIcon()
-																setCurrentIcon('default')
-															} else {
-																await setAlternateAppIcon(
-																	capitalizeFirstLetter(icon)
-																)
-																setCurrentIcon(icon)
-															}
-														} catch (e) {
-															console.log(e)
-														}
-													}}
+													onPress={
+														unlocked
+															? async () => {
+																	try {
+																		if (icon === 'default') {
+																			await resetAppIcon()
+																			setCurrentIcon('default')
+																		} else {
+																			await setAlternateAppIcon(
+																				capitalizeFirstLetter(icon)
+																			)
+																			setCurrentIcon(icon)
+																		}
+																	} catch (e) {
+																		console.log(e)
+																	}
+																}
+															: undefined
+													}
+													disabled={!unlocked}
 												>
 													<View style={styles.rowInnerContainer}>
 														<Image
 															source={iconImages[icon]}
-															style={styles.imageContainer}
+															style={[
+																styles.imageContainer,
+																!unlocked && styles.imageDimmed
+															]}
 														/>
-														<Text style={styles.iconText}>
-															{t(
-																// @ts-expect-error cannot verify the type of this prop
-																`appIcon.names.${icon}`
-															)}
-														</Text>
+														<View style={styles.textContainer}>
+															<Text style={styles.iconText}>
+																{t(
+																	// @ts-expect-error cannot verify the type of this prop
+																	`appIcon.names.${icon}`
+																)}
+															</Text>
+														</View>
 													</View>
-													{currentIcon === icon && (
+													{unlocked && currentIcon === icon && (
 														<PlatformIcon
 															ios={{
 																name: 'checkmark',
@@ -130,21 +138,19 @@ export default function AppIconPicker(): React.JSX.Element {
 															}}
 														/>
 													)}
+													{key === 'exclusive' && !unlocked && (
+														<Text style={styles.statusText}>
+															{t('appIcon.status.locked')}
+														</Text>
+													)}
 												</Pressable>
 
-												{value.indexOf(icon) !== value.length - 1 && (
+												{index !== value.length - 1 && (
 													<Divider paddingLeft={110} />
 												)}
 											</React.Fragment>
 										)
 									})}
-									{key === 'exclusive' && categories.exclusive.length === 0 && (
-										<View style={styles.exclusiveContainer}>
-											<Text style={styles.exclusiveText}>
-												{t('appIcon.exclusive')}
-											</Text>
-										</View>
-									)}
 								</View>
 							</SectionView>
 						)
@@ -161,18 +167,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 50,
 		width: '100%'
 	},
-	exclusiveContainer: {
-		justifyContent: 'center',
-		minHeight: 90,
-		paddingHorizontal: 20,
-		paddingVertical: 20
-	},
-	exclusiveText: {
-		color: theme.colors.text,
-		fontSize: 17,
-		fontWeight: '500',
-		textAlign: 'center'
-	},
 	iconText: {
 		alignSelf: 'center',
 		color: theme.colors.text,
@@ -180,12 +174,22 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '500',
 		textAlign: 'center'
 	},
+	textContainer: {
+		justifyContent: 'center'
+	},
+	statusText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 15
+	},
 	imageContainer: {
 		borderColor: theme.colors.border,
 		borderRadius: 18,
 		borderWidth: 1,
 		height: 80,
 		width: 80
+	},
+	imageDimmed: {
+		opacity: 0.3
 	},
 	rowContainer: {
 		alignItems: 'center',
