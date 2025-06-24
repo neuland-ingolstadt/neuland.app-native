@@ -61,6 +61,7 @@
 		"weekDayShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 		"more": "more"
 	},
+	"weekNumberPrefix": "CW",
 	"weekdays": {
 		"short": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 		"single": ["M", "T", "W", "T", "F", "S", "S"],
