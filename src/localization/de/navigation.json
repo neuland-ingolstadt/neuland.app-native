@@ -14,7 +14,6 @@
 		"allergens": "Allergene",
 		"details": "Details",
 		"theme": "Design",
-		"accent": "Akzentfarbe",
 		"profile": "Profil",
 		"about": "Über",
 		"version": "Versionsdetails",
@@ -33,7 +32,6 @@
 		"news": "THI Neuigkeiten",
 		"library": "Bibliothek",
 		"libraryCode": "Bibliotheksnummer",
-		"notifications": "Benachrichtigungen",
 		"licenses": {
 			"title": "Lizenzen",
 			"search": "Suche Lizenzen"

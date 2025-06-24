@@ -29,7 +29,6 @@
 			},
 			"appearance": {
 				"title": "Appearance",
-				"accent": "Accent Color",
 				"theme": "Design"
 			},
 			"language": {
@@ -161,21 +160,6 @@
 		}
 	},
 	"theme": {
-		"accent": {
-			"title": "Accent color"
-		},
-		"colors": {
-			"teal": "Teal",
-			"blue": "Blue",
-			"contrast": "Contrast",
-			"pink": "Pink",
-			"brown": "Brown",
-			"purple": "Purple",
-			"yellow": "Yellow",
-			"orange": "Orange",
-			"green": "Neuland"
-		},
-		"footer": "This changes the color of the icons and buttons in the app.",
 		"themes": {
 			"title": "Theme",
 			"default": "Automatic",
