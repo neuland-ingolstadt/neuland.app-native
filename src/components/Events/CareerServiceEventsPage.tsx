@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { CareerServiceEventFieldsFragment } from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
 import { formatFriendlyDate } from '@/utils/date-utils'
+import { EmptyEventsAnimation } from './EmptyEventsAnimation'
 
 const MemoizedEventRow = memo(CareerServiceEventRow)
 
@@ -106,15 +106,9 @@ export default function CareerServiceEventsPage({
 					}
 				/>
 			) : (
-				<ErrorView
-					title={t('error.noData.title')}
-					message={t('error.noData.message')}
-					icon={{
-						ios: 'calendar.badge.clock',
-						android: 'calendar_clock',
-						web: 'CalendarClock'
-					}}
-					isCritical={false}
+				<EmptyEventsAnimation
+					title={t('pages.careerService.noEvents.title')}
+					subtitle={t('pages.careerService.noEvents.subtitle')}
 				/>
 			)}
 		</View>

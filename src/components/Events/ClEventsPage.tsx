@@ -12,6 +12,7 @@ import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
+import { EmptyEventsAnimation } from './EmptyEventsAnimation'
 
 const MemoizedEventRow = memo(CLEventRow)
 
@@ -73,15 +74,9 @@ export default function ClEventsPage({
 							}
 						/>
 					) : (
-						<ErrorView
+						<EmptyEventsAnimation
 							title={t('pages.clEvents.events.noEvents.title')}
-							message={t('pages.clEvents.events.noEvents.subtitle')}
-							icon={{
-								ios: 'calendar.badge.clock',
-								android: 'calendar_clock',
-								web: 'CalendarClock'
-							}}
-							isCritical={false}
+							subtitle={t('pages.clEvents.events.noEvents.subtitle')}
 						/>
 					)}
 				</View>

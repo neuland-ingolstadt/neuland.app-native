@@ -28,6 +28,7 @@ import PlatformIcon from '@/components/Universal/Icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
+import { EmptyEventsAnimation } from './EmptyEventsAnimation'
 
 export default function ClSportsPage({
 	sportsResult
@@ -224,15 +225,9 @@ export default function ClSportsPage({
 						{sportsResult.data != null ? (
 							<EventList data={sportsEvents} />
 						) : (
-							<ErrorView
+							<EmptyEventsAnimation
 								title={t('pages.clEvents.sports.noEvents.title')}
-								icon={{
-									ios: 'sportscourt',
-									android: 'sports_gymnastics',
-									web: 'Dumbbell'
-								}}
-								message={t('pages.clEvents.sports.noEvents.subtitle')}
-								isCritical={false}
+								subtitle={t('pages.clEvents.sports.noEvents.subtitle')}
 							/>
 						)}
 					</View>
