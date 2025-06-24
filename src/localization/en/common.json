@@ -232,6 +232,7 @@
 					"equipment": "Equipment",
 					"available": "Available",
 					"notAvailable": "Not available",
+					"nextTimeSpan": "Next time span",
 					"availableRooms": "Available rooms",
 					"nextLecture": "Next lecture",
 					"availableRoomsTitle": "Available rooms",
