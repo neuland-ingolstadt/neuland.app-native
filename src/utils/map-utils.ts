@@ -5,8 +5,8 @@ import { SEARCH_TYPES } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import type { Rooms, TypeStunde } from '@/types/thi-api'
 import type { AvailableRoom } from '@/types/utils'
-
 import { formatISODate } from './date-utils'
+import { copyToClipboard } from './ui-utils'
 
 const IGNORE_GAPS = 15
 
@@ -345,6 +345,11 @@ export const handleShareModal = (room: string): void => {
 	trackEvent('Share', {
 		type: 'room'
 	})
+	if (Platform.OS === 'web') {
+		void copyToClipboard(payload)
+		return
+	}
+
 	void Share.share(
 		Platform.OS === 'android' ? { message: payload } : { url: payload }
 	)

@@ -1,6 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import type { i18n, TFunction } from 'i18next'
-import { Share } from 'react-native'
+import { Platform, Share } from 'react-native'
 import { getFragmentData } from '@/__generated__/gql'
 import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
@@ -11,8 +11,8 @@ import type { FoodLanguage } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Food, Meal, Name } from '@/types/neuland-api'
 import type { Labels, Prices } from '@/types/utils'
-
 import { formatISODate } from './date-utils'
+import { copyToClipboard } from './ui-utils'
 
 export const humanLocations = {
 	IngolstadtMensa: 'Mensa Ingolstadt',
@@ -194,17 +194,24 @@ export function shareMeal(
 	trackEvent('Share', {
 		type: 'meal'
 	})
-	void Share.share({
-		message: i18n.t('details.share.message', {
-			ns: 'food',
-			meal: meal?.name[i18n.language as LanguageKey],
-			price: formatPrice(meal.prices[userKind ?? USER_GUEST]),
-			location:
-				meal?.restaurant != null
-					? humanLocations[meal.restaurant as keyof typeof humanLocations]
-					: i18n.t('misc.unknown', { ns: 'common' }),
+	const message = i18n.t('details.share.message', {
+		ns: 'food',
+		meal: meal?.name[i18n.language as LanguageKey],
+		price: formatPrice(meal.prices[userKind ?? USER_GUEST]),
+		location:
+			meal?.restaurant != null
+				? humanLocations[meal.restaurant as keyof typeof humanLocations]
+				: i18n.t('misc.unknown', { ns: 'common' }),
 
-			id: meal?.id
-		})
+		id: meal?.id
+	})
+
+	if (Platform.OS === 'web') {
+		void copyToClipboard(message)
+		return
+	}
+
+	void Share.share({
+		message
 	})
 }

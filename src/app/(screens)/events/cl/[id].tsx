@@ -33,6 +33,7 @@ import {
 } from '@/utils/date-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 
@@ -123,13 +124,19 @@ export default function ClEventDetail(): React.JSX.Element {
 								trackEvent('Share', {
 									type: 'clEvent'
 								})
+								const message = t('pages.event.shareMessage', {
+									title: eventData?.titles[i18n.language as LanguageKey],
+									organizer: eventData?.host.name,
+									date: dateRange,
+									link: `https://web.neuland.app/events/cl/${id}`
+								})
+								if (Platform.OS === 'web') {
+									await copyToClipboard(message)
+									return
+								}
+
 								await Share.share({
-									message: t('pages.event.shareMessage', {
-										title: eventData?.titles[i18n.language as LanguageKey],
-										organizer: eventData?.host.name,
-										date: dateRange,
-										link: `https://web.neuland.app/events/cl/${id}`
-									})
+									message
 								})
 							}}
 						/>

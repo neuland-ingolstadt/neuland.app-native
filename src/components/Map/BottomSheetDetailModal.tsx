@@ -6,7 +6,7 @@ import {
 import Color from 'color'
 import { router } from 'expo-router'
 import type React from 'react'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
@@ -83,6 +83,7 @@ export const BottomSheetDetailModal = ({
 	modalSection
 }: BottomSheetDetailModalProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
+	const [copied, setCopied] = useState(false)
 	const IOS_SNAP_POINTS = ['36%', '55%', '80%']
 	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
 	return (
@@ -105,22 +106,26 @@ export const BottomSheetDetailModal = ({
 							{roomData.type === SEARCH_TYPES.ROOM && (
 								<Pressable
 									onPress={() => {
+										if (Platform.OS === 'web') {
+											setCopied(true)
+											setTimeout(() => setCopied(false), 1000)
+										}
 										handleShareModal(roomData.title)
 									}}
 									style={styles.roomDetailButton}
 								>
 									<PlatformIcon
 										ios={{
-											name: 'square.and.arrow.up',
+											name: copied ? 'checkmark' : 'square.and.arrow.up',
 											size: 14,
 											weight: 'bold'
 										}}
 										android={{
-											name: 'share',
+											name: copied ? 'check' : 'share',
 											size: 16
 										}}
 										web={{
-											name: 'Share',
+											name: copied ? 'Check' : 'Share',
 											size: 16
 										}}
 										style={styles.shareIcon(Platform.OS)}
