@@ -32,6 +32,7 @@ import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -88,20 +89,26 @@ export default function SportsEventDetail(): React.JSX.Element {
 							trackEvent('Share', {
 								type: 'sportsEvent'
 							})
+							const message = t('pages.event.shareSports', {
+								title: sportsEvent?.title[i18n.language as LanguageKey],
+								weekday: t(
+									`dates.weekdays.${
+										sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
+									}`
+								),
+								time: formatFriendlyTimeRange(
+									sportsEvent.startTime,
+									sportsEvent.endTime
+								),
+								link: `https://web.neuland.app/events/sports/${id}`
+							})
+							if (Platform.OS === 'web') {
+								await copyToClipboard(message)
+								return
+							}
+
 							await Share.share({
-								message: t('pages.event.shareSports', {
-									title: sportsEvent?.title[i18n.language as LanguageKey],
-									weekday: t(
-										`dates.weekdays.${
-											sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
-										}`
-									),
-									time: formatFriendlyTimeRange(
-										sportsEvent.startTime,
-										sportsEvent.endTime
-									),
-									link: `https://web.neuland.app/events/sports/${id}`
-								})
+								message
 							})
 						}}
 					/>

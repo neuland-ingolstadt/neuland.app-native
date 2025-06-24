@@ -31,6 +31,7 @@ import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadCareerServiceEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function CareerServiceEvent(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -108,12 +109,18 @@ export default function CareerServiceEvent(): React.JSX.Element {
 						onPress={async () => {
 							trackEvent('Share', { type: 'careerServiceEvent' })
 							const deepLinkUrl = `https://web.neuland.app/events/career/${id}`
+							const message = t('pages.event.shareCareerMessage', {
+								title: eventData?.title,
+								date: formatFriendlyDate(eventData?.date ?? ''),
+								link: deepLinkUrl
+							})
+							if (Platform.OS === 'web') {
+								await copyToClipboard(message)
+								return
+							}
+
 							await Share.share({
-								message: t('pages.event.shareCareerMessage', {
-									title: eventData?.title,
-									date: formatFriendlyDate(eventData?.date ?? ''),
-									link: deepLinkUrl
-								})
+								message
 							})
 						}}
 					/>

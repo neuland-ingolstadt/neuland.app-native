@@ -13,7 +13,6 @@
 		"allergens": "Allergens",
 		"details": "Details",
 		"theme": "Design",
-		"accent": "Accent Color",
 		"profile": "Profile",
 		"about": "About",
 		"version": "Version Details",
@@ -33,7 +32,6 @@
 		"library": "Library",
 		"legal": "Legal",
 		"libraryCode": "Library Number",
-		"notifications": "Notifications",
 		"licenses": {
 			"title": "Licenses",
 			"search": "Search licenses"
