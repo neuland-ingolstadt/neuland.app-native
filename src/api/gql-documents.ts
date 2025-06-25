@@ -201,6 +201,16 @@ export const STUDENT_ADVISORY_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
+export const CL_CLUBS_QUERY = graphql(/* GraphQL */ `
+    query ClClubs {
+        clClubs {
+            name
+            website
+            instagram
+        }
+    }
+`)
+
 const STUDENT_ADVISORY_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment StudentCounsellingEventFields on StudentCounsellingEvent {
         id
