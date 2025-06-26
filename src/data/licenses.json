@@ -215,6 +215,12 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
+	"expo-image@2.3.0": {
+		"licenses": "MIT",
+		"repository": "https://github.com/expo/expo",
+		"licenseUrl": "https://github.com/expo/expo",
+		"parents": "neuland"
+	},
 	"expo-linear-gradient@14.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
@@ -446,6 +452,12 @@
 		"licenses": "MIT",
 		"repository": "https://github.com/gre/react-native-view-shot",
 		"licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
+		"parents": "neuland"
+	},
+	"react-native-wallet-manager@1.1.1": {
+		"licenses": "MIT",
+		"repository": "https://github.com/dev-family/react-native-wallet-manager",
+		"licenseUrl": "https://github.com/dev-family/react-native-wallet-manager/raw/master/LICENSE",
 		"parents": "neuland"
 	},
 	"react-native-web@0.20.0": {

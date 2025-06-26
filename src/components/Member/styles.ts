@@ -8,7 +8,7 @@ export const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 20,
 		paddingBottom: 30
 	},
-	cardWrapper: { marginBottom: 30 },
+	cardWrapper: { marginBottom: 50 },
 	shadow: {
 		shadowColor: theme.colors.text,
 		shadowOffset: { width: 0, height: 0 },

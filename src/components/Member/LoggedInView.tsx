@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	ActivityIndicator,
 	Linking,
-	Modal,
 	Pressable,
-	Animated as RNAnimated,
-	Animated as RNAnimatedModal,
 	Pressable as RNPressable,
 	ScrollView,
 	Text,
@@ -29,10 +26,14 @@ import PlatformIcon from '@/components/Universal/Icon'
 import type { MemberInfo } from '@/hooks/useMemberStore'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
+import { AddToWalletButton } from './AddToWalletButton'
+import { AnimatedSecurityLine } from './AnimatedSecurityLine'
+import { QRCodeModal } from './QRCodeModal'
 import { stylesheet } from './styles'
 
 const quickLinksSections: FormListSections[] = [
 	{
+		header: 'Quick Links',
 		items: [
 			{
 				title: 'Neuland Website',
@@ -65,70 +66,18 @@ const quickLinksSections: FormListSections[] = [
 	}
 ]
 
-function AnimatedSecurityLine(): React.JSX.Element {
-	const animatedValue = useRef(new RNAnimated.Value(0)).current
-
-	useEffect(() => {
-		const startAnimation = () => {
-			RNAnimated.loop(
-				RNAnimated.sequence([
-					RNAnimated.timing(animatedValue, {
-						toValue: 1,
-						duration: 2000,
-						useNativeDriver: false
-					}),
-					RNAnimated.timing(animatedValue, {
-						toValue: 0,
-						duration: 2000,
-						useNativeDriver: false
-					})
-				])
-			).start()
-		}
-
-		startAnimation()
-	}, [animatedValue])
-
-	const translateX = animatedValue.interpolate({
-		inputRange: [0, 1],
-		outputRange: [-200, 200]
-	})
-
-	return (
-		<View
-			style={{ height: 2, overflow: 'hidden', marginTop: 8, width: '100%' }}
-		>
-			<RNAnimated.View
-				style={{
-					height: 2,
-					width: '100%',
-					backgroundColor: '#00ff33',
-					transform: [{ translateX }],
-					opacity: 0.8
-				}}
-			/>
-		</View>
-	)
-}
-
 function fetchProfileQr(token: string) {
-	return fetch('https://id.neuland.ing/graphql', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Accept: 'application/json'
-		},
-		body: JSON.stringify({
-			query:
-				'query ProfileQr($token: String!) { profileQr(token: $token) { qr iat exp } }',
-			variables: { token }
-		})
-	}).then(async (res) => {
-		const json = await res.json()
-		if (json.data && json.data.profileQr) {
-			return json.data.profileQr
+	return fetch(
+		`https://id.neuland.ing/qr?token=${encodeURIComponent(token)}`
+	).then(async (res) => {
+		if (!res.ok) {
+			throw new Error('Failed to fetch QR code')
 		}
-		throw new Error('Failed to fetch QR code')
+		const json = await res.json()
+		if (json.qr && json.iat && json.exp) {
+			return json
+		}
+		throw new Error('Invalid QR code response')
 	})
 }
 
@@ -152,23 +101,13 @@ function InteractiveIDCard({
 	})
 
 	const [modalVisible, setModalVisible] = useState(false)
-	const scaleAnim = useRef(new RNAnimatedModal.Value(0)).current
 
 	const openModal = () => {
 		setModalVisible(true)
-		RNAnimatedModal.timing(scaleAnim, {
-			toValue: 1,
-			duration: 250,
-			useNativeDriver: true
-		}).start()
 	}
 
 	const closeModal = () => {
-		RNAnimatedModal.timing(scaleAnim, {
-			toValue: 0,
-			duration: 200,
-			useNativeDriver: true
-		}).start(() => setModalVisible(false))
+		setModalVisible(false)
 	}
 
 	const {
@@ -176,7 +115,7 @@ function InteractiveIDCard({
 		isLoading,
 		error
 	} = useQuery<ProfileQrResponse | undefined>({
-		queryKey: ['profileQr', idToken],
+		queryKey: ['proefileQr', idToken],
 		enabled: !!idToken,
 		queryFn: async () => {
 			const result = await fetchProfileQr(idToken!)
@@ -345,56 +284,11 @@ function InteractiveIDCard({
 				</Animated.View>
 			</Animated.View>
 
-			{/* Modal for enlarged QR code */}
-			<Modal
+			<QRCodeModal
 				visible={modalVisible}
-				transparent
-				animationType="fade"
-				onRequestClose={closeModal}
-			>
-				<RNPressable
-					style={{
-						flex: 1,
-						backgroundColor: 'rgba(0,0,0,0.85)',
-						justifyContent: 'center',
-						alignItems: 'center'
-					}}
-					onPress={closeModal}
-				>
-					<RNAnimatedModal.View
-						style={{
-							backgroundColor: '#fff',
-							borderRadius: 20,
-							padding: 24,
-							alignItems: 'center',
-							justifyContent: 'center',
-							transform: [{ scale: scaleAnim }],
-							elevation: 10
-						}}
-					>
-						{profileQrData?.qr && (
-							<QRCode
-								value={profileQrData.qr}
-								size={280}
-								bgColor="#ffffff"
-								fgColor="#000000"
-								level="L"
-							/>
-						)}
-						<Text
-							style={{
-								marginTop: 18,
-								color: '#222',
-								fontWeight: '600',
-								fontSize: 16,
-								textAlign: 'center'
-							}}
-						>
-							Tap anywhere to close
-						</Text>
-					</RNAnimatedModal.View>
-				</RNPressable>
-			</Modal>
+				qrData={profileQrData?.qr}
+				onClose={closeModal}
+			/>
 		</>
 	)
 }
@@ -435,7 +329,10 @@ export function LoggedInView(): React.JSX.Element {
 					<InteractiveIDCard info={info} idToken={idToken} />
 				</View>
 			)}
+
 			<FormList sections={quickLinksSections} />
+
+			<AddToWalletButton />
 
 			<Pressable onPress={logout} style={styles.logoutButton}>
 				<PlatformIcon
