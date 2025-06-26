@@ -59,7 +59,10 @@ export function AddToWalletButton(): React.JSX.Element | null {
 				}
 			}
 
-			const pkpassUrl = `https://id.neuland.ing/pkpass?token=${encodeURIComponent(currentToken!)}`
+			if (!currentToken) {
+				throw new Error('No token available for pkpass URL')
+			}
+			const pkpassUrl = `https://id.neuland.ing/api/pkpass?token=${encodeURIComponent(currentToken)}`
 			await WalletManager.addPassFromUrl(pkpassUrl)
 		} catch (error) {
 			console.error('Failed to add pass to wallet:', error)

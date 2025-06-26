@@ -68,7 +68,7 @@ const quickLinksSections: FormListSections[] = [
 
 function fetchProfileQr(token: string) {
 	return fetch(
-		`https://id.neuland.ing/qr?token=${encodeURIComponent(token)}`
+		`https://id.neuland.ing/api/qr?token=${encodeURIComponent(token)}`
 	).then(async (res) => {
 		if (!res.ok) {
 			throw new Error('Failed to fetch QR code')
@@ -118,7 +118,10 @@ function InteractiveIDCard({
 		queryKey: ['proefileQr', idToken],
 		enabled: !!idToken,
 		queryFn: async () => {
-			const result = await fetchProfileQr(idToken!)
+			if (!idToken) {
+				throw new Error('No idToken available')
+			}
+			const result = await fetchProfileQr(idToken)
 			console.log('[QR] QR code fetched/refetched:', result)
 			return result
 		},
