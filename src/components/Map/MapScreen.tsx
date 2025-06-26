@@ -797,8 +797,7 @@ const MapScreen = (): React.JSX.Element => {
 									iconAnchor: 'bottom',
 									iconAllowOverlap: true
 								}}
-								// place marker above all overlays
-								layerIndex={106}
+								layerIndex={110}
 							/>
 						</ShapeSource>
 					)}
