@@ -231,6 +231,7 @@
 					"type": "Typ",
 					"available": "Verfügbar",
 					"notAvailable": "Nicht verfügbar",
+					"nextTimeSpan": "Nächster Zeitraum",
 					"availableRooms": "Verfügbare Räume",
 					"nextLecture": "Nächste Vorlesung",
 					"availableRoomsTitle": "Verfügbare Räume",
