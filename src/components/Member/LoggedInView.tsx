@@ -19,6 +19,7 @@ import Animated, {
 	useAnimatedStyle,
 	withSpring
 } from 'react-native-reanimated'
+import { useScreenshotAware } from 'react-native-screenshot-aware'
 import { useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
@@ -68,6 +69,17 @@ function InteractiveIDCard({
 	})
 
 	const [modalVisible, setModalVisible] = useState(false)
+	const [isScreenshotTaken, setIsScreenshotTaken] = useState(false)
+
+	// Screenshot detection
+	useScreenshotAware(() => {
+		console.log('A screenshot was taken!')
+		setIsScreenshotTaken(true)
+		// Reset after 3 seconds to allow QR code to be shown again
+		setTimeout(() => {
+			setIsScreenshotTaken(false)
+		}, 3000)
+	})
 
 	const openModal = () => {
 		setModalVisible(true)
@@ -225,7 +237,7 @@ function InteractiveIDCard({
 							<RNPressable
 								style={{ alignSelf: 'center' }}
 								onPress={openModal}
-								disabled={!profileQrData?.qr}
+								disabled={!profileQrData?.qr || isScreenshotTaken}
 							>
 								<Animated.View
 									style={[styles.qrCodeContainer, qrCodeAnimatedStyle]}
@@ -236,6 +248,29 @@ function InteractiveIDCard({
 										<Text style={{ color: 'red', textAlign: 'center' }}>
 											{String(error)}
 										</Text>
+									) : isScreenshotTaken ? (
+										<View
+											style={{
+												width: 120,
+												height: 120,
+												justifyContent: 'center',
+												alignItems: 'center',
+												backgroundColor: '#ffffff',
+												borderRadius: 8
+											}}
+										>
+											<Text
+												style={{
+													color: '#ff0000',
+													textAlign: 'center',
+													fontSize: 12,
+													fontWeight: '500',
+													paddingHorizontal: 8
+												}}
+											>
+												{t('idCard.screenshotError')}
+											</Text>
+										</View>
 									) : profileQrData?.qr ? (
 										<QRCode
 											value={profileQrData.qr}

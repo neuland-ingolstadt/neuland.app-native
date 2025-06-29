@@ -2417,6 +2417,30 @@ PODS:
     - Yoga
   - RNSVG (15.12.0):
     - React-Core
+  - ScreenshotAware (1.3.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SDWebImage (5.21.0):
     - SDWebImage/Core (= 5.21.0)
   - SDWebImage/Core (5.21.0)
@@ -2564,6 +2588,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - ScreenshotAware (from `../node_modules/react-native-screenshot-aware`)
   - SweetSFSymbols (from `../node_modules/sweet-sfsymbols/ios`)
   - SwiftUIReactNative (from `../node_modules/swiftui-react-native/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -2832,6 +2857,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  ScreenshotAware:
+    :path: "../node_modules/react-native-screenshot-aware"
   SweetSFSymbols:
     :path: "../node_modules/sweet-sfsymbols/ios"
   SwiftUIReactNative:
@@ -2968,6 +2995,7 @@ SPEC CHECKSUMS:
   RNReanimated: 8442cd220122765de7d858946846a7513e40fe04
   RNScreens: 7f9d84a9901679dbb435592612d5ac57a044adce
   RNSVG: 4d6e9f0087980e36e14e1739b9c1760e63de5b8c
+  ScreenshotAware: f5406b039e88cefbab888c2781ecc98f72dd8d31
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90
   SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c

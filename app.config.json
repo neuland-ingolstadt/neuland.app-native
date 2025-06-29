@@ -89,6 +89,7 @@
 				"react-native-edge-to-edge",
 				{ "android": { "parentTheme": "Material3" } }
 			],
+
 			[
 				"expo-router",
 				{
@@ -139,6 +140,7 @@
 			],
 			["expo-secure-store"],
 			["expo-localization"],
+			["react-native-screenshot-aware"],
 			["@maplibre/maplibre-react-native"],
 			[
 				"expo-build-properties",

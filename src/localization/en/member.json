@@ -10,7 +10,8 @@
 		"name": "NAME",
 		"username": "USERNAME",
 		"groups": "GROUPS",
-		"footer": "Neuland Ingolstadt e.V."
+		"footer": "Neuland Ingolstadt e.V.",
+		"screenshotError": "Screenshot detected. Neuland ID code temporarily hidden."
 	},
 	"loggedOut": {
 		"welcomeTitle": "Welcome to Neuland",
