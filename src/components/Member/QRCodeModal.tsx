@@ -1,7 +1,17 @@
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { useEffect, useRef } from 'react'
-import { Animated, Modal, Platform, Pressable, Text } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import {
+	ActivityIndicator,
+	Animated,
+	Modal,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
+import { useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
 
 interface QRCodeModalProps {
@@ -15,10 +25,11 @@ export function QRCodeModal({
 	qrData,
 	onClose
 }: QRCodeModalProps): React.JSX.Element {
+	const { t } = useTranslation('member')
 	const scaleAnim = useRef(new Animated.Value(0)).current
 	const pulseAnim = useRef(new Animated.Value(0)).current
 	const brightnessRef = useRef<number>(0)
-
+	const { theme } = useStyles()
 	useEffect(() => {
 		brightnessRef.current = 0
 	}, [])
@@ -159,15 +170,26 @@ export function QRCodeModal({
 						zIndex: 1
 					}}
 				>
-					{qrData && (
-						<QRCode
-							value={qrData}
-							size={280}
-							bgColor="#ffffff"
-							fgColor="#000000"
-							level="M"
-						/>
-					)}
+					<View
+						style={{
+							width: 280,
+							height: 280,
+							alignItems: 'center',
+							justifyContent: 'center'
+						}}
+					>
+						{qrData ? (
+							<QRCode
+								value={qrData}
+								size={280}
+								bgColor="#ffffff"
+								fgColor="#000000"
+								level="M"
+							/>
+						) : (
+							<ActivityIndicator size="large" color={theme.colors.text} />
+						)}
+					</View>
 
 					<Text
 						style={{
@@ -178,7 +200,7 @@ export function QRCodeModal({
 							textAlign: 'center'
 						}}
 					>
-						Tap anywhere to close
+						{t('qrCode.tapToClose')}
 					</Text>
 				</Animated.View>
 			</Pressable>

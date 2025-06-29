@@ -1,5 +1,6 @@
 import type * as AuthSession from 'expo-auth-session'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -16,6 +17,7 @@ export function LoggedOutView({
 	promptAsync
 }: LoggedOutViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('member')
 
 	return (
 		<ScrollView
@@ -26,14 +28,14 @@ export function LoggedOutView({
 			<View style={styles.welcomeCard}>
 				<View style={styles.welcomeGradient}>
 					<LogoSVG size={50} color={theme.colors.neulandGreen} />
-					<Text style={styles.welcomeTitle}>Welcome to Neuland</Text>
+					<Text style={styles.welcomeTitle}>{t('loggedOut.welcomeTitle')}</Text>
 					<Text style={styles.welcomeSubtitle}>
-						Your gateway to the THI student community
+						{t('loggedOut.welcomeSubtitle')}
 					</Text>
 				</View>
 			</View>
 
-			<Text style={styles.sectionTitle}>Why Join Neuland?</Text>
+			<Text style={styles.sectionTitle}>{t('loggedOut.sectionTitle')}</Text>
 
 			<View style={styles.benefitCard}>
 				<View style={styles.benefitIconContainer}>
@@ -45,9 +47,11 @@ export function LoggedOutView({
 					/>
 				</View>
 				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>Community</Text>
+					<Text style={styles.benefitTitle}>
+						{t('loggedOut.benefits.community.title')}
+					</Text>
 					<Text style={styles.benefitDescription}>
-						Connect with fellow students and build lasting friendships
+						{t('loggedOut.benefits.community.description')}
 					</Text>
 				</View>
 			</View>
@@ -62,9 +66,11 @@ export function LoggedOutView({
 					/>
 				</View>
 				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>Learning</Text>
+					<Text style={styles.benefitTitle}>
+						{t('loggedOut.benefits.learning.title')}
+					</Text>
 					<Text style={styles.benefitDescription}>
-						Access workshops, tutorials, and study groups
+						{t('loggedOut.benefits.learning.description')}
 					</Text>
 				</View>
 			</View>
@@ -79,9 +85,11 @@ export function LoggedOutView({
 					/>
 				</View>
 				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>Networking</Text>
+					<Text style={styles.benefitTitle}>
+						{t('loggedOut.benefits.networking.title')}
+					</Text>
 					<Text style={styles.benefitDescription}>
-						Connect with industry professionals and alumni
+						{t('loggedOut.benefits.networking.description')}
 					</Text>
 				</View>
 			</View>
@@ -96,9 +104,11 @@ export function LoggedOutView({
 					/>
 				</View>
 				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>Fun</Text>
+					<Text style={styles.benefitTitle}>
+						{t('loggedOut.benefits.fun.title')}
+					</Text>
 					<Text style={styles.benefitDescription}>
-						Enjoy gaming nights, events, and social activities
+						{t('loggedOut.benefits.fun.description')}
 					</Text>
 				</View>
 			</View>
@@ -111,7 +121,9 @@ export function LoggedOutView({
 						pressed && styles.buttonPressed
 					]}
 				>
-					<Text style={styles.primaryButtonText}>Learn about the Club</Text>
+					<Text style={styles.primaryButtonText}>
+						{t('loggedOut.buttons.learnAboutClub')}
+					</Text>
 				</Pressable>
 				<Pressable
 					disabled={!request}
@@ -121,7 +133,9 @@ export function LoggedOutView({
 						pressed && styles.buttonPressed
 					]}
 				>
-					<Text style={styles.secondaryButtonText}>Sign In</Text>
+					<Text style={styles.secondaryButtonText}>
+						{t('loggedOut.buttons.signIn')}
+					</Text>
 				</Pressable>
 			</View>
 		</ScrollView>

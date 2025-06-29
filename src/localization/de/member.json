@@ -1,0 +1,59 @@
+{
+	"quickLinks": {
+		"title": "Quick Links",
+		"neulandWebsite": "Neuland Website",
+		"wiki": "Wiki",
+		"ssoProfile": "SSO Profil"
+	},
+	"idCard": {
+		"title": "NEULAND ID",
+		"name": "NAME",
+		"username": "BENUTZERNAME",
+		"groups": "GRUPPEN",
+		"footer": "Neuland Ingolstadt e.V."
+	},
+	"loggedOut": {
+		"welcomeTitle": "Willkommen bei Neuland",
+		"welcomeSubtitle": "Dein Tor zur THI-Studentengemeinschaft",
+		"sectionTitle": "Warum Neuland beitreten?",
+		"benefits": {
+			"community": {
+				"title": "Gemeinschaft",
+				"description": "Vernetze dich mit Kommilitonen und baue dauerhafte Freundschaften auf"
+			},
+			"learning": {
+				"title": "Lernen",
+				"description": "Zugang zu Workshops, Tutorials und Lerngruppen"
+			},
+			"networking": {
+				"title": "Netzwerken",
+				"description": "Vernetze dich mit Fachleuten und Alumni"
+			},
+			"fun": {
+				"title": "Spaß",
+				"description": "Genieße Gaming-Abende, Events und soziale Aktivitäten"
+			}
+		},
+		"buttons": {
+			"learnAboutClub": "Mehr über den Verein",
+			"signIn": "Anmelden"
+		}
+	},
+	"qrCode": {
+		"tapToClose": "Tippe irgendwo zum Schließen"
+	},
+	"securityWarning": {
+		"title": "Sicherheitshinweis",
+		"warningText": "Bevor du deinen Pass zu Apple Wallet hinzufügst, beachte bitte:",
+		"points": {
+			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
+			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
+			"semester": "Wallet-Pass ist nur für das aktuelle Semester gültig"
+		},
+		"buttons": {
+			"useAppInstead": "App verwenden",
+			"addToWallet": "Zu Wallet hinzufügen"
+		}
+	},
+	"logout": "Abmelden"
+}

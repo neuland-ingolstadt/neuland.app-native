@@ -1,0 +1,59 @@
+{
+	"quickLinks": {
+		"title": "Quick Links",
+		"neulandWebsite": "Neuland Website",
+		"wiki": "Wiki",
+		"ssoProfile": "SSO Profile"
+	},
+	"idCard": {
+		"title": "NEULAND ID",
+		"name": "NAME",
+		"username": "USERNAME",
+		"groups": "GROUPS",
+		"footer": "Neuland Ingolstadt e.V."
+	},
+	"loggedOut": {
+		"welcomeTitle": "Welcome to Neuland",
+		"welcomeSubtitle": "Your gateway to the THI student community",
+		"sectionTitle": "Why Join Neuland?",
+		"benefits": {
+			"community": {
+				"title": "Community",
+				"description": "Connect with fellow students and build lasting friendships"
+			},
+			"learning": {
+				"title": "Learning",
+				"description": "Access workshops, tutorials, and study groups"
+			},
+			"networking": {
+				"title": "Networking",
+				"description": "Connect with industry professionals and alumni"
+			},
+			"fun": {
+				"title": "Fun",
+				"description": "Enjoy gaming nights, events, and social activities"
+			}
+		},
+		"buttons": {
+			"learnAboutClub": "Learn about the Club",
+			"signIn": "Sign In"
+		}
+	},
+	"qrCode": {
+		"tapToClose": "Tap anywhere to close"
+	},
+	"securityWarning": {
+		"title": "Security Notice",
+		"warningText": "Before adding your pass to Apple Wallet, please note:",
+		"points": {
+			"security": "Only the app pass uses advanced security features",
+			"qrCode": "Some events require the app's QR code specifically",
+			"semester": "Wallet pass is only valid for the current semester"
+		},
+		"buttons": {
+			"useAppInstead": "Use App Instead",
+			"addToWallet": "Add to Wallet"
+		}
+	},
+	"logout": "Logout"
+}

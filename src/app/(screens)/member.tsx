@@ -15,9 +15,7 @@ const discovery = {
 
 export default function Member(): React.JSX.Element {
 	const idToken = useMemberStore((s) => s.idToken)
-	const info = useMemberStore((s) => s.info)
 	const setTokens = useMemberStore((s) => s.setTokens)
-	const logout = useMemberStore((s) => s.logout)
 
 	const [request, response, promptAsync] = AuthSession.useAuthRequest(
 		{
@@ -72,5 +70,5 @@ export default function Member(): React.JSX.Element {
 		return <LoggedOutView request={request} promptAsync={promptAsync} />
 	}
 
-	return <LoggedInView info={info} logout={logout} />
+	return <LoggedInView />
 }

@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
-import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Animated, Modal, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -17,47 +17,7 @@ export function SecurityWarningModal({
 	onCancel
 }: SecurityWarningModalProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const scaleAnim = useRef(new Animated.Value(0)).current
-	const slideAnim = useRef(new Animated.Value(50)).current
-
-	useEffect(() => {
-		if (visible) {
-			// Haptic feedback on open
-			if (Platform.OS === 'ios') {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-			}
-
-			// Animate in
-			Animated.parallel([
-				Animated.spring(scaleAnim, {
-					toValue: 1,
-					tension: 100,
-					friction: 8,
-					useNativeDriver: true
-				}),
-				Animated.spring(slideAnim, {
-					toValue: 0,
-					tension: 100,
-					friction: 8,
-					useNativeDriver: true
-				})
-			]).start()
-		} else {
-			// Animate out
-			Animated.parallel([
-				Animated.timing(scaleAnim, {
-					toValue: 0,
-					duration: 200,
-					useNativeDriver: true
-				}),
-				Animated.timing(slideAnim, {
-					toValue: 50,
-					duration: 200,
-					useNativeDriver: true
-				})
-			]).start()
-		}
-	}, [visible, scaleAnim, slideAnim])
+	const { t } = useTranslation('member')
 
 	const handleConfirm = () => {
 		if (Platform.OS === 'ios') {
@@ -81,31 +41,23 @@ export function SecurityWarningModal({
 			onRequestClose={handleCancel}
 		>
 			<Pressable style={styles.overlay} onPress={handleCancel}>
-				<Animated.View
-					style={[
-						styles.modalContainer,
-						{
-							transform: [{ scale: scaleAnim }, { translateY: slideAnim }]
-						}
-					]}
-				>
+				<Animated.View style={[styles.modalContainer]}>
 					<Pressable onPress={() => {}} style={styles.content}>
 						{/* Warning Icon */}
 						<View style={styles.iconContainer}>
 							<PlatformIcon
 								ios={{ name: 'exclamationmark.triangle.fill', size: 32 }}
 								android={{ name: 'warning', size: 32 }}
-								web={{ name: 'AlertTriangle', size: 32 }}
-								style={styles.warningIcon}
+								web={{ name: 'TriangleAlert', size: 32 }}
 							/>
 						</View>
 
 						{/* Title */}
-						<Text style={styles.title}>Security Notice</Text>
+						<Text style={styles.title}>{t('securityWarning.title')}</Text>
 
 						{/* Warning Text */}
 						<Text style={styles.warningText}>
-							Before adding your pass to Apple Wallet, please note:
+							{t('securityWarning.warningText')}
 						</Text>
 
 						{/* Warning Points */}
@@ -118,7 +70,7 @@ export function SecurityWarningModal({
 									style={styles.pointIcon}
 								/>
 								<Text style={styles.pointText}>
-									Only the app pass uses advanced security features
+									{t('securityWarning.points.security')}
 								</Text>
 							</View>
 
@@ -130,7 +82,7 @@ export function SecurityWarningModal({
 									style={styles.pointIcon}
 								/>
 								<Text style={styles.pointText}>
-									Some events require the app's QR code specifically
+									{t('securityWarning.points.qrCode')}
 								</Text>
 							</View>
 
@@ -142,7 +94,7 @@ export function SecurityWarningModal({
 									style={styles.pointIcon}
 								/>
 								<Text style={styles.pointText}>
-									Wallet pass is only valid for the current semester
+									{t('securityWarning.points.semester')}
 								</Text>
 							</View>
 						</View>
@@ -157,7 +109,9 @@ export function SecurityWarningModal({
 									pressed && styles.buttonPressed
 								]}
 							>
-								<Text style={styles.cancelButtonText}>Use App Instead</Text>
+								<Text style={styles.cancelButtonText}>
+									{t('securityWarning.buttons.useAppInstead')}
+								</Text>
 							</Pressable>
 
 							<Pressable
@@ -168,7 +122,9 @@ export function SecurityWarningModal({
 									pressed && styles.buttonPressed
 								]}
 							>
-								<Text style={styles.confirmButtonText}>Add to Wallet</Text>
+								<Text style={styles.confirmButtonText}>
+									{t('securityWarning.buttons.addToWallet')}
+								</Text>
 							</Pressable>
 						</View>
 					</Pressable>
@@ -204,9 +160,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		marginBottom: 16
 	},
-	warningIcon: {
-		color: theme.colors.warning
-	},
 	title: {
 		fontSize: 20,
 		fontWeight: '700',
@@ -226,14 +179,13 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	point: {
 		flexDirection: 'row',
-		alignItems: 'flex-start',
+		alignItems: 'center',
 		marginBottom: 12,
 		paddingHorizontal: 8
 	},
 	pointIcon: {
 		color: theme.colors.primary,
-		marginRight: 12,
-		marginTop: 2
+		marginRight: 12
 	},
 	pointText: {
 		flex: 1,

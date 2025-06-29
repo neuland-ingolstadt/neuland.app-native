@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WalletManager from 'react-native-wallet-manager'
+// @ts-expect-error no types
 import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
+// @ts-expect-error no types
 import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { SecurityWarningModal } from './SecurityWarningModal'
