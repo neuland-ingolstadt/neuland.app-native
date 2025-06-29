@@ -161,6 +161,12 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
+	"expo-auth-session@6.2.0": {
+		"licenses": "MIT",
+		"repository": "https://github.com/expo/expo",
+		"licenseUrl": "https://github.com/expo/expo",
+		"parents": "neuland"
+	},
 	"expo-blur@14.1.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
@@ -204,6 +210,12 @@
 		"parents": "neuland"
 	},
 	"expo-haptics@14.1.4": {
+		"licenses": "MIT",
+		"repository": "https://github.com/expo/expo",
+		"licenseUrl": "https://github.com/expo/expo",
+		"parents": "neuland"
+	},
+	"expo-image@2.3.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -418,6 +430,12 @@
 		"licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
 		"parents": "neuland"
 	},
+	"react-native-screenshot-aware@1.3.3": {
+		"licenses": "MIT",
+		"repository": "https://github.com/huextrat/react-native-screenshot-aware",
+		"licenseUrl": "https://github.com/huextrat/react-native-screenshot-aware/raw/master/LICENSE",
+		"parents": "neuland"
+	},
 	"react-native-select-dropdown@4.0.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/AdelRedaa97/react-native-select-dropdown",
@@ -442,6 +460,12 @@
 		"licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
 		"parents": "neuland"
 	},
+	"react-native-wallet-manager@1.1.1": {
+		"licenses": "MIT",
+		"repository": "https://github.com/dev-family/react-native-wallet-manager",
+		"licenseUrl": "https://github.com/dev-family/react-native-wallet-manager/raw/master/LICENSE",
+		"parents": "neuland"
+	},
 	"react-native-web@0.20.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/necolas/react-native-web",
@@ -458,6 +482,12 @@
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react-native",
 		"licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",
+		"parents": "neuland"
+	},
+	"react-qr-code@2.0.16": {
+		"licenses": "MIT",
+		"repository": "https://github.com/rosskhanas/react-qr-code",
+		"licenseUrl": "https://github.com/rosskhanas/react-qr-code/raw/master/LICENSE",
 		"parents": "neuland"
 	},
 	"react@19.1.0": {
