@@ -1,19 +1,25 @@
 import { trackEvent } from '@aptabase/react-native'
+import { useQueryClient } from '@tanstack/react-query'
 import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, use, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, useWindowDimensions, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import CalendarEventsPage from '@/components/Calendar/CalendarEventsPage'
 import ExamsPage from '@/components/Calendar/ExamsPage'
+import { UserKindContext } from '@/components/contexts'
 import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
+import { USER_GUEST } from '@/data/constants'
+import { loadExamList } from '@/utils/calendar-utils'
 
 export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const { userKind = USER_GUEST } = use(UserKindContext)
+	const queryClient = useQueryClient()
 	const { event } = useLocalSearchParams<{
 		event: string
 	}>()
@@ -28,6 +34,18 @@ export default function CalendarPage(): React.JSX.Element {
 			selectedData === 0 ? t('pages.calendar.calendar.link') : primussUrl
 		)
 	}
+
+	// Prefetch exam data when calendar page loads
+	useEffect(() => {
+		if (userKind !== USER_GUEST) {
+			void queryClient.prefetchQuery({
+				queryKey: ['examData'],
+				queryFn: loadExamList,
+				staleTime: 1000 * 60 * 10, // 10 minutes
+				gcTime: 1000 * 60 * 60 * 24 // 24 hours
+			})
+		}
+	}, [queryClient, userKind])
 
 	const screenHeight = useWindowDimensions().height
 	const pagerViewRef = useRef<PagerView>(null)
