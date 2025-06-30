@@ -1,5 +1,5 @@
 import { FlashList, MasonryFlashList } from '@shopify/flash-list'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -10,11 +10,13 @@ import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
-import { DashboardContext } from '@/components/contexts'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/ErrorView'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import { USER_GUEST } from '@/data/constants'
+import { loadExamList } from '@/utils/calendar-utils'
 
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)
@@ -56,17 +58,32 @@ export default function HomeRootScreen(): React.JSX.Element {
 const HomeScreen = memo(function HomeScreen() {
 	const { styles, theme } = useStyles(stylesheet)
 	const { shownDashboardEntries } = React.use(DashboardContext)
+	const { userKind = USER_GUEST } = React.use(UserKindContext)
 	const [orientation, setOrientation] = useState(Dimensions.get('window').width)
 	const [columns, setColumns] = useState(
 		Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
 	)
 	const { t } = useTranslation(['navigation', 'settings'])
+	const queryClient = useQueryClient()
+
 	const { data } = useQuery({
 		queryKey: ['announcements'],
 		queryFn: async () => await NeulandAPI.getAnnouncements(),
 		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7 // 7 days
 	})
+
+	// Prefetch exam data when dashboard loads - this will be shared with calendar page
+	useEffect(() => {
+		if (userKind !== USER_GUEST) {
+			void queryClient.prefetchQuery({
+				queryKey: ['examData'],
+				queryFn: loadExamList,
+				staleTime: 1000 * 60 * 10, // 10 minutes
+				gcTime: 1000 * 60 * 60 * 24 // 24 hours
+			})
+		}
+	}, [queryClient, userKind])
 
 	useEffect(() => {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)

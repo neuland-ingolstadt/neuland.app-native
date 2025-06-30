@@ -1,20 +1,16 @@
 import { FlashList } from '@shopify/flash-list'
-import { useQuery } from '@tanstack/react-query'
-import { router } from 'expo-router'
 import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, RefreshControl, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/ErrorView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
-import type { Exam } from '@/types/utils'
+import { useExamData } from '@/hooks/useExamData'
 import { guestError, networkError } from '@/utils/api-utils'
-import { loadExamList } from '@/utils/calendar-utils'
 import { ExamRow } from '../Rows/CalendarRow'
 
 export default function ExamsPage({
@@ -36,20 +32,7 @@ export default function ExamsPage({
 		isPaused,
 		isSuccess,
 		refetch
-	} = useQuery({
-		queryKey: ['examjs'],
-		queryFn: loadExamList,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				router.navigate('/login')
-				return false
-			}
-			return failureCount < 2
-		},
-		enabled: userKind !== USER_GUEST
-	})
+	} = useExamData()
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 

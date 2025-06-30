@@ -1,26 +1,21 @@
-import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { useFlowStore } from '@/hooks/useFlowStore'
+import { transformExamsForCalendar, useExamData } from '@/hooks/useExamData'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar } from '@/types/data'
-import { calendar, loadExamList } from '@/utils/calendar-utils'
+import { calendar } from '@/utils/calendar-utils'
 import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
 
 const CalendarCard = (): React.JSX.Element => {
 	type Combined = Calendar | CardExams
-	const router = useRouter()
 	const time = new Date()
 	const { i18n, t } = useTranslation(['navigation', 'common'])
 	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
-	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
 	interface CardExams {
@@ -30,42 +25,13 @@ const CalendarCard = (): React.JSX.Element => {
 		isExam?: boolean
 	}
 
-	async function loadExams(): Promise<CardExams[]> {
-		let exams: CardExams[] = []
-		try {
-			exams = (await loadExamList()).map((x) => ({
-				name: t('navigation:cards.calendar.exam', { name: x.name }),
-				begin: new Date(x.date),
-				isExam: true
-			}))
-		} catch (e) {
-			if (e instanceof NoSessionError) {
-				if (isOnboarded === true) {
-					router.navigate('/login')
-				}
-			} else if ((e as Error).message === 'Query not possible') {
-				// ignore, leaving examList empty
-			} else {
-				console.log(e as Error)
-			}
-		}
-		return exams
-	}
+	const { data: examData, isSuccess } = useExamData()
 
-	const { data: exams, isSuccess } = useQuery({
-		queryKey: ['cardExams'],
-		queryFn: loadExams,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				router.navigate('/login')
-				return false
-			}
-			return failureCount < 2
-		},
-		enabled: userKind === USER_STUDENT
-	})
+	// Transform exam data for calendar card display
+	const exams = React.useMemo(() => {
+		if (!examData || !isSuccess) return []
+		return transformExamsForCalendar(examData, t)
+	}, [examData, isSuccess, t])
 
 	useEffect(() => {
 		const combined = [
