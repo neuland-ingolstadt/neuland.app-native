@@ -11,8 +11,56 @@ import {
 	Text,
 	View
 } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+
+const stylesheet = createStyleSheet(() => ({
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.85)',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	animatedRing: {
+		position: 'absolute',
+		width: 400,
+		height: 400,
+		borderRadius: 200,
+		borderWidth: 2,
+		borderColor: '#00ff33'
+	},
+	outerRing: {
+		position: 'absolute',
+		width: 500,
+		height: 500,
+		borderRadius: 250,
+		borderWidth: 1,
+		borderColor: '#00ff33'
+	},
+	modalContent: {
+		backgroundColor: '#fff',
+		borderRadius: 20,
+		padding: 24,
+		alignItems: 'center',
+		justifyContent: 'center',
+		elevation: 10,
+		position: 'relative',
+		zIndex: 1
+	},
+	qrCodeContainer: {
+		width: 280,
+		height: 280,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	closeText: {
+		marginTop: 18,
+		color: '#222',
+		fontWeight: '600',
+		fontSize: 16,
+		textAlign: 'center'
+	}
+}))
 
 interface QRCodeModalProps {
 	visible: boolean
@@ -26,10 +74,12 @@ export function QRCodeModal({
 	onClose
 }: QRCodeModalProps): React.JSX.Element {
 	const { t } = useTranslation('member')
+	const { styles } = useStyles(stylesheet)
 	const scaleAnim = useRef(new Animated.Value(0)).current
 	const pulseAnim = useRef(new Animated.Value(0)).current
 	const brightnessRef = useRef<number>(0)
 	const { theme } = useStyles()
+
 	useEffect(() => {
 		brightnessRef.current = 0
 	}, [])
@@ -123,61 +173,35 @@ export function QRCodeModal({
 			animationType="fade"
 			onRequestClose={handleClose}
 		>
-			<Pressable
-				style={{
-					flex: 1,
-					backgroundColor: 'rgba(0,0,0,0.85)',
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}
-				onPress={handleClose}
-			>
+			<Pressable style={styles.modalOverlay} onPress={handleClose}>
 				{/* Cool animated background element */}
 				<Animated.View
-					style={{
-						position: 'absolute',
-						width: 400,
-						height: 400,
-						borderRadius: 200,
-						borderWidth: 2,
-						borderColor: '#00ff33',
-						transform: [{ scale: pulseScale }],
-						opacity: pulseOpacity
-					}}
+					style={[
+						styles.animatedRing,
+						{
+							transform: [{ scale: pulseScale }],
+							opacity: pulseOpacity
+						}
+					]}
 				/>
 				<Animated.View
-					style={{
-						position: 'absolute',
-						width: 500,
-						height: 500,
-						borderRadius: 250,
-						borderWidth: 1,
-						borderColor: '#00ff33',
-						transform: [{ scale: pulseScale }],
-						opacity: outerPulseOpacity
-					}}
+					style={[
+						styles.outerRing,
+						{
+							transform: [{ scale: pulseScale }],
+							opacity: outerPulseOpacity
+						}
+					]}
 				/>
 				<Animated.View
-					style={{
-						backgroundColor: '#fff',
-						borderRadius: 20,
-						padding: 24,
-						alignItems: 'center',
-						justifyContent: 'center',
-						transform: [{ scale: scaleAnim }],
-						elevation: 10,
-						position: 'relative',
-						zIndex: 1
-					}}
+					style={[
+						styles.modalContent,
+						{
+							transform: [{ scale: scaleAnim }]
+						}
+					]}
 				>
-					<View
-						style={{
-							width: 280,
-							height: 280,
-							alignItems: 'center',
-							justifyContent: 'center'
-						}}
-					>
+					<View style={styles.qrCodeContainer}>
 						{qrData ? (
 							<QRCode
 								value={qrData}
@@ -191,17 +215,7 @@ export function QRCodeModal({
 						)}
 					</View>
 
-					<Text
-						style={{
-							marginTop: 18,
-							color: '#222',
-							fontWeight: '600',
-							fontSize: 16,
-							textAlign: 'center'
-						}}
-					>
-						{t('qrCode.tapToClose')}
-					</Text>
+					<Text style={styles.closeText}>{t('qrCode.tapToClose')}</Text>
 				</Animated.View>
 			</Pressable>
 		</Modal>
