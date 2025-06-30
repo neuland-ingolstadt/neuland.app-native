@@ -134,7 +134,7 @@ const stylesheet = createStyleSheet((theme) => ({
 
 function fetchProfileQr(token: string) {
 	return fetch(
-		`https://id.neuland.ing/api/qr?token=${encodeURIComponent(token)}`
+		`https://id.neuland-ingolstadt.de/api/qr?token=${encodeURIComponent(token)}`
 	).then(async (res) => {
 		if (!res.ok) {
 			throw new Error('Failed to fetch QR code')
