@@ -317,6 +317,7 @@ export default function TimetableWeek({
 				</View>
 			)}
 			<CalendarContainer
+				key={effectiveTimetableMode}
 				onLoad={() => {
 					setCalendarLoaded(true)
 				}}
