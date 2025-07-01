@@ -140,7 +140,6 @@
 			],
 			["expo-secure-store"],
 			["expo-localization"],
-			["react-native-screenshot-aware"],
 			["@maplibre/maplibre-react-native"],
 			[
 				"expo-build-properties",
