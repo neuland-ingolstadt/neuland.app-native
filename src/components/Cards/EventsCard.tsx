@@ -82,6 +82,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border
 	},
 	noDataTitle: {
+		marginTop: 10,
 		color: theme.colors.text,
 		fontSize: 16,
 		fontWeight: '500'

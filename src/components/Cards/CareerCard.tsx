@@ -161,6 +161,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 12
 	},
 	noDataTitle: {
+		marginTop: 10,
 		color: theme.colors.text,
 		fontSize: 16,
 		fontWeight: '500'
