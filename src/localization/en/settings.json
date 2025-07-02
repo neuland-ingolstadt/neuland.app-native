@@ -183,6 +183,10 @@
 		"unavailable": {
 			"title": "Unavailable cards",
 			"message": "To use all features of the app, you need to sign in. Tap to continue with your THI account."
+		},
+		"rueWarning": {
+			"title": "Re-enrolment required",
+			"message": "Please re-enrol to remain enrolled next semester."
 		}
 	},
 	"grades": {

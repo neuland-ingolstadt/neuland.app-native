@@ -10,11 +10,16 @@ import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
-import { DashboardContext } from '@/components/contexts'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { RueWarningBanner } from '@/components/Dashboard'
 import ErrorView from '@/components/Error/ErrorView'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useRueWarningStore } from '@/hooks/useRueWarningStore'
+import { getPersonalData } from '@/utils/api-utils'
+import { getNextReRegistrationEvent } from '@/utils/calendar-utils'
 
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)
@@ -67,6 +72,19 @@ const HomeScreen = memo(function HomeScreen() {
 		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7 // 7 days
 	})
+	const { userKind = USER_GUEST } = React.use(UserKindContext)
+	const dismissedEventId = useRueWarningStore((state) => state.dismissedEventId)
+	// Determine the upcoming re-registration period from the static calendar
+	// data. The API only exposes a placeholder for the next semester, so the
+	// calendar event id allows us to track dismissals per term.
+	const nextRueEvent = useMemo(() => getNextReRegistrationEvent(), [])
+	const { data: personalData } = useQuery({
+		queryKey: ['personalData'],
+		queryFn: getPersonalData,
+		staleTime: 1000 * 60 * 60 * 12,
+		gcTime: 1000 * 60 * 60 * 24 * 60,
+		enabled: userKind === USER_STUDENT
+	})
 
 	useEffect(() => {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -96,6 +114,25 @@ const HomeScreen = memo(function HomeScreen() {
 		() =>
 			announcements != null ? <AnnouncementCard data={announcements} /> : null,
 		[data]
+	)
+
+	const showRueWarning =
+		userKind === USER_STUDENT &&
+		personalData?.mtknr !== undefined &&
+		personalData?.rue === '0' &&
+		nextRueEvent != null &&
+		dismissedEventId !== nextRueEvent.id
+
+	const listHeader = useMemo(
+		() => (
+			<>
+				{showRueWarning && nextRueEvent && (
+					<RueWarningBanner eventId={nextRueEvent.id} />
+				)}
+				{announcementHeader}
+			</>
+		),
+		[showRueWarning, announcementHeader, nextRueEvent?.id]
 	)
 
 	const renderSingleColumnItem = useCallback(
@@ -150,7 +187,7 @@ const HomeScreen = memo(function HomeScreen() {
 			data={shownDashboardEntries}
 			renderItem={renderSingleColumnItem}
 			keyExtractor={keyExtractor}
-			ListHeaderComponent={announcementHeader}
+			ListHeaderComponent={listHeader}
 		/>
 	) : (
 		<MasonryFlashList
@@ -164,7 +201,7 @@ const HomeScreen = memo(function HomeScreen() {
 			keyExtractor={keyExtractor}
 			numColumns={2}
 			estimatedItemSize={114}
-			ListHeaderComponent={announcementHeader}
+			ListHeaderComponent={listHeader}
 		/>
 	)
 })

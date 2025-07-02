@@ -162,6 +162,10 @@
 		"unavailable": {
 			"title": "Nicht verfügbare Karten",
 			"message": "Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren."
+		},
+		"rueWarning": {
+			"title": "Rückmeldung fehlt",
+			"message": "Führe die Rückmeldung durch, um im nächsten Semester eingeschrieben zu bleiben."
 		}
 	},
 	"grades": {
