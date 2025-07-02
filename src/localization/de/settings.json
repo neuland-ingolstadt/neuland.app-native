@@ -165,7 +165,8 @@
 		},
 		"rueWarning": {
 			"title": "Rückmeldung fehlt",
-			"message": "Führe die Rückmeldung durch, um im nächsten Semester eingeschrieben zu bleiben."
+			"message": "Führe die Rückmeldung durch, um im nächsten Semester eingeschrieben zu bleiben.",
+			"link": "Primuss öffnen"
 		}
 	},
 	"grades": {

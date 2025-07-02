@@ -186,7 +186,8 @@
 		},
 		"rueWarning": {
 			"title": "Re-enrolment required",
-			"message": "Please re-enrol to remain enrolled next semester."
+			"message": "Please re-enrol to remain enrolled next semester.",
+			"link": "Open Primuss"
 		}
 	},
 	"grades": {

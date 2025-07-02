@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, Text, View } from 'react-native'
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 import { primussLink } from '@/data/constants'
@@ -23,7 +23,7 @@ export default function RueWarningBanner({
 	}
 
 	return (
-		<View style={styles.card}>
+		<Pressable style={styles.card} onPress={() => Linking.openURL(primussLink)}>
 			<View style={styles.contentWrapper}>
 				<View style={styles.titleView}>
 					<View style={styles.iconContainer}>
@@ -55,21 +55,15 @@ export default function RueWarningBanner({
 						{t('dashboard.rueWarning.message', { ns: 'settings' })}
 					</Text>
 				</View>
-				<Pressable
-					onPress={() => {
-						void Linking.openURL(primussLink)
-					}}
-					style={styles.linkArea}
-				>
+				<View style={styles.linkArea}>
 					<Text style={styles.linkText}>
 						{t('dashboard.rueWarning.link', {
-							ns: 'settings',
-							defaultValue: 'Mehr erfahren'
+							ns: 'settings'
 						})}
 					</Text>
-				</Pressable>
+				</View>
 			</View>
-		</View>
+		</Pressable>
 	)
 }
 
@@ -77,7 +71,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	card: {
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
-		borderWidth: 1,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: theme.radius.lg,
 		marginHorizontal: theme.margins.page,
 		marginVertical: 6,
