@@ -56,7 +56,7 @@ export default function Profile(): React.JSX.Element {
 			}
 		})
 
-	console.log(data)
+	
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 	const [isBackground, setIsBackground] = React.useState(false)
 	useEffect(() => {
