@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useFocusEffect } from 'expo-router'
 import type React from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
@@ -26,11 +27,16 @@ import { QRCodeModal } from './QRCodeModal'
 
 const stylesheet = createStyleSheet((theme) => ({
 	shadow: {
-		shadowColor: theme.colors.text,
-		shadowOffset: { width: 0, height: 0 },
-		shadowOpacity: 0.2,
-		shadowRadius: 10,
+		borderColor: theme.colors.datePickerBackground,
+		borderRadius: theme.radius.lg,
+		borderWidth: 1,
 		elevation: 10
+	},
+	cardFooterText: {
+		marginTop: 6,
+		fontSize: 12,
+		paddingHorizontal: 6,
+		color: theme.colors.labelSecondaryColor
 	},
 	idCardContainer: {
 		borderRadius: theme.radius.lg,
@@ -166,10 +172,18 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 		interval: 16 // 60fps
 	})
 
-	ScreenGuardModule.registerWithBlurView({
-		radius: 20,
-		timeAfterResume: 2000
-	})
+	useFocusEffect(
+		useCallback(() => {
+			ScreenGuardModule.registerWithBlurView({
+				radius: 23,
+				timeAfterResume: 2000
+			})
+
+			return () => {
+				ScreenGuardModule.unregister()
+			}
+		}, [])
+	)
 
 	const [modalVisible, setModalVisible] = useState(false)
 
@@ -330,6 +344,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 								style={{ alignSelf: 'center' }}
 								onPress={openModal}
 								disabled={!profileQrData?.qr}
+								hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 							>
 								<Animated.View
 									style={[styles.qrCodeContainer, qrCodeAnimatedStyle]}
@@ -362,6 +377,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 					</LinearGradient>
 				</Animated.View>
 			</Animated.View>
+			<Text style={styles.cardFooterText}>{t('idCard.footerDescription')}</Text>
 
 			<QRCodeModal
 				visible={modalVisible}

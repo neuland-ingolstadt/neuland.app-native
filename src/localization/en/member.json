@@ -11,6 +11,7 @@
 		"username": "USERNAME",
 		"groups": "GROUPS",
 		"footer": "Neuland Ingolstadt e.V.",
+		"footerDescription": "Tap the QR code to open it in full screen mode.",
 		"screenshotError": "Screenshot detected. Neuland ID code temporarily hidden."
 	},
 	"loggedOut": {
@@ -42,6 +43,9 @@
 	},
 	"qrCode": {
 		"tapToClose": "Tap anywhere to close"
+	},
+	"settings": {
+		"title": "Neuland Member"
 	},
 	"securityWarning": {
 		"title": "Security Notice",

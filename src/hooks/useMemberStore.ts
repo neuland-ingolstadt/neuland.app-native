@@ -59,7 +59,6 @@ export const useMemberStore = create<MemberStore>()(
 				refreshToken: string | null = null
 			) => {
 				const info = decodeJwt(idToken) as MemberInfo
-				console.log('New JWT token set:', { idToken, refreshToken, info })
 				set({ idToken, refreshToken, info })
 				await saveSecureAsync('member_id_token', idToken)
 				if (refreshToken) {
@@ -121,7 +120,9 @@ export const useMemberStore = create<MemberStore>()(
 			name: 'member-store',
 			storage: createJSONStorage(() => zustandStorage),
 			partialize: (state) => ({ info: state.info }),
-			onRehydrateStorage: () => async () => {
+			onRehydrateStorage: () => async (state) => {
+				if (!state) return
+
 				try {
 					const [idToken, refreshToken] = await Promise.all([
 						loadSecureAsync('member_id_token'),
@@ -129,11 +130,12 @@ export const useMemberStore = create<MemberStore>()(
 					])
 
 					if (idToken) {
-						set({ idToken, info: decodeJwt(idToken) as MemberInfo })
+						state.idToken = idToken
+						state.info = decodeJwt(idToken) as MemberInfo
 					}
 
 					if (refreshToken) {
-						set({ refreshToken })
+						state.refreshToken = refreshToken
 					}
 				} catch (error) {
 					console.error('Failed to rehydrate member tokens:', error)

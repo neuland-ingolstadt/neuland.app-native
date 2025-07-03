@@ -11,7 +11,11 @@
 		"username": "BENUTZERNAME",
 		"groups": "GRUPPEN",
 		"footer": "Neuland Ingolstadt e.V.",
+		"footerDescription": "Tippe auf den QR-Code, um ihn im Vollbildmodus zu öffnen.",
 		"screenshotError": "Screenshot erkannt. Neuland ID Code temporär ausgeblendet."
+	},
+	"settings": {
+		"title": "Neuland Mitglied"
 	},
 	"loggedOut": {
 		"welcomeTitle": "Willkommen bei Neuland",

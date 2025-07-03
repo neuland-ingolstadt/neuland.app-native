@@ -1,5 +1,6 @@
 import Color from 'color'
 import { useRouter } from 'expo-router'
+import { t } from 'i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoSVG from '@/components/Flow/svgs/logo'
@@ -36,7 +37,9 @@ const NeulandBox = () => {
 					</Avatar>
 
 					<View>
-						<Text style={styles.neulandTitle}>Neuland Member</Text>
+						<Text style={styles.neulandTitle}>
+							{t('member:settings.title')}
+						</Text>
 						<Text style={styles.neulandName}>{memberInfo.name}</Text>
 					</View>
 				</View>
