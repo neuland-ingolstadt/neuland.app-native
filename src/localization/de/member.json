@@ -56,5 +56,9 @@
 			"addToWallet": "Zu Wallet hinzufügen"
 		}
 	},
-	"logout": "Abmelden"
+	"logout": "Abmelden",
+	"web": {
+		"title": "Nicht verfügbar auf Web",
+		"message": "Lade die App herunter, um den NeulandMitgliedsbereich zu nutzen."
+	}
 }

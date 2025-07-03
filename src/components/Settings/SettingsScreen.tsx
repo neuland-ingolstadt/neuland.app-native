@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	LayoutAnimation,
+	Platform,
 	RefreshControl,
 	ScrollView,
 	Text,
@@ -150,7 +151,7 @@ export default function Settings(): React.JSX.Element {
 		>
 			<View style={styles.wrapper}>
 				<SettingsHeader onLogout={logoutAlert} />
-				{idToken && <NeulandBox />}
+				{Platform.OS !== 'web' && idToken && <NeulandBox />}
 				<View style={styles.infoBoxesSection}>
 					{userKind === USER_GUEST ? (
 						<GuestInfoSection />

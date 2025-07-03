@@ -1,6 +1,9 @@
 import * as AuthSession from 'expo-auth-session'
 import type React from 'react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
+import ErrorView from '@/components/Error/ErrorView'
 import { LoggedInView } from '@/components/Member/LoggedInView'
 import { LoggedOutView } from '@/components/Member/LoggedOutView'
 import { useMemberStore } from '@/hooks/useMemberStore'
@@ -16,6 +19,7 @@ const discovery = {
 export default function Member(): React.JSX.Element {
 	const idToken = useMemberStore((s) => s.idToken)
 	const setTokens = useMemberStore((s) => s.setTokens)
+	const { t } = useTranslation('member')
 
 	const [request, response, promptAsync] = AuthSession.useAuthRequest(
 		{
@@ -65,6 +69,16 @@ export default function Member(): React.JSX.Element {
 
 		void handleResponse()
 	}, [request, response])
+
+	if (Platform.OS === 'web') {
+		return (
+			<ErrorView
+				title={t('web.title')}
+				message={t('web.message')}
+				isCritical={false}
+			/>
+		)
+	}
 
 	if (!idToken) {
 		return <LoggedOutView request={request} promptAsync={promptAsync} />

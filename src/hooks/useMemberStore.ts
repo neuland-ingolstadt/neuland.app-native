@@ -1,6 +1,11 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { zustandStorage } from '@/utils/storage'
+import {
+	deleteSecure,
+	loadSecureAsync,
+	saveSecureAsync,
+	zustandStorage
+} from '@/utils/storage'
 
 // Simple JWT decoder using built-in React Native APIs
 // biome-ignore lint/suspicious/noExplicitAny: TODO: fix this
@@ -38,8 +43,8 @@ interface MemberStore {
 	idToken: string | null
 	refreshToken: string | null
 	info: MemberInfo | null
-	setTokens: (idToken: string, refreshToken?: string | null) => void
-	logout: () => void
+	setTokens: (idToken: string, refreshToken?: string | null) => Promise<void>
+	logout: () => Promise<void>
 	refreshTokens: () => Promise<void>
 }
 
@@ -49,16 +54,31 @@ export const useMemberStore = create<MemberStore>()(
 			idToken: null,
 			refreshToken: null,
 			info: null,
-			setTokens: (idToken: string, refreshToken: string | null = null) => {
+			setTokens: async (
+				idToken: string,
+				refreshToken: string | null = null
+			) => {
 				const info = decodeJwt(idToken) as MemberInfo
 				console.log('New JWT token set:', { idToken, refreshToken, info })
 				set({ idToken, refreshToken, info })
+				await saveSecureAsync('member_id_token', idToken)
+				if (refreshToken) {
+					await saveSecureAsync('member_refresh_token', refreshToken)
+				} else {
+					await deleteSecure('member_refresh_token')
+				}
 			},
-			logout: () => set({ idToken: null, refreshToken: null, info: null }),
+			logout: async () => {
+				set({ idToken: null, refreshToken: null, info: null })
+				await Promise.all([
+					deleteSecure('member_id_token'),
+					deleteSecure('member_refresh_token')
+				])
+			},
 			refreshTokens: async () => {
 				const { refreshToken, setTokens, logout } = get()
 				if (!refreshToken) {
-					logout()
+					await logout()
 					return
 				}
 
@@ -83,20 +103,42 @@ export const useMemberStore = create<MemberStore>()(
 
 					if (response.ok && result.id_token) {
 						console.log('Successfully refreshed token')
-						setTokens(result.id_token, result.refresh_token ?? refreshToken)
+						await setTokens(
+							result.id_token,
+							result.refresh_token ?? refreshToken
+						)
 					} else {
 						console.error('Failed to refresh token, logging out.', result)
-						logout()
+						await logout()
 					}
 				} catch (e) {
 					console.error('An error occurred while refreshing token:', e)
-					logout()
+					await logout()
 				}
 			}
 		}),
 		{
 			name: 'member-store',
-			storage: createJSONStorage(() => zustandStorage)
+			storage: createJSONStorage(() => zustandStorage),
+			partialize: (state) => ({ info: state.info }),
+			onRehydrateStorage: () => async () => {
+				try {
+					const [idToken, refreshToken] = await Promise.all([
+						loadSecureAsync('member_id_token'),
+						loadSecureAsync('member_refresh_token')
+					])
+
+					if (idToken) {
+						set({ idToken, info: decodeJwt(idToken) as MemberInfo })
+					}
+
+					if (refreshToken) {
+						set({ refreshToken })
+					}
+				} catch (error) {
+					console.error('Failed to rehydrate member tokens:', error)
+				}
+			}
 		}
 	)
 )

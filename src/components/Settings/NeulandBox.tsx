@@ -1,6 +1,6 @@
 import Color from 'color'
 import { useRouter } from 'expo-router'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -11,6 +11,10 @@ const NeulandBox = () => {
 	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const memberInfo = useMemberStore((s) => s.info)
+
+	if (Platform.OS === 'web') {
+		return null
+	}
 
 	if (!memberInfo) {
 		return null
