@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import React, { use, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
+	Image,
 	LayoutAnimation,
 	RefreshControl,
 	ScrollView,
@@ -171,8 +172,17 @@ export default function Settings(): React.JSX.Element {
 			<Text style={styles.copyright}>
 				{t('menu.copyright', { year: new Date().getFullYear() })}
 			</Text>
-
 			<SettingsLogo scrollY={scrollY} size={size} />
+			<View style={styles.poweredByContainer}>
+				<Text style={styles.poweredByText}>Infrastructure by</Text>
+				<Link href="https://hetzner.com" target="_blank">
+					<Image
+						source={require('@/assets/hetzner.webp')}
+						alt="Hetzner Logo"
+						style={styles.hetznerLogo}
+					/>
+				</Link>
+			</View>
 		</ScrollView>
 	)
 }
@@ -185,12 +195,29 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
 		marginBottom: -10,
-		marginTop: 20,
+		marginTop: 12,
 		textAlign: 'center'
 	},
 	formlistContainer: { marginVertical: 16, marginTop: 24 },
 	infoBoxesSection: {
 		marginTop: 10
+	},
+	poweredByContainer: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginTop: 16,
+		gap: 4
+	},
+	poweredByText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 12,
+		marginRight: 10
+	},
+	hetznerLogo: {
+		width: 140,
+		height: 30,
+		resizeMode: 'contain'
 	},
 	wrapper: { paddingHorizontal: 12 }
 }))
