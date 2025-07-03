@@ -11,6 +11,7 @@ import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import { DashboardContext } from '@/components/contexts'
+import RueWarningBannerContainer from '@/components/Dashboard/RueWarningBannerContainer'
 import ErrorView from '@/components/Error/ErrorView'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
@@ -98,6 +99,16 @@ const HomeScreen = memo(function HomeScreen() {
 		[data]
 	)
 
+	const listHeader = useMemo(
+		() => (
+			<>
+				<RueWarningBannerContainer />
+				{announcementHeader}
+			</>
+		),
+		[announcementHeader]
+	)
+
 	const renderSingleColumnItem = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		({ item }: { item: any }) => <View style={styles.item}>{item.card()}</View>,
@@ -150,7 +161,7 @@ const HomeScreen = memo(function HomeScreen() {
 			data={shownDashboardEntries}
 			renderItem={renderSingleColumnItem}
 			keyExtractor={keyExtractor}
-			ListHeaderComponent={announcementHeader}
+			ListHeaderComponent={listHeader}
 		/>
 	) : (
 		<MasonryFlashList
@@ -164,7 +175,7 @@ const HomeScreen = memo(function HomeScreen() {
 			keyExtractor={keyExtractor}
 			numColumns={2}
 			estimatedItemSize={114}
-			ListHeaderComponent={announcementHeader}
+			ListHeaderComponent={listHeader}
 		/>
 	)
 })

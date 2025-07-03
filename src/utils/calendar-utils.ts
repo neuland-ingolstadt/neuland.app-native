@@ -107,3 +107,24 @@ export function convertCalendarToWeekViewEvents(
 		}
 	})
 }
+
+/**
+ * Returns the next upcoming re-registration event.
+ *
+ * The personal data API does not provide a unique semester identifier
+ * before the user has completed re-enrolment. Instead it only contains
+ * a placeholder such as "das nächste Semester". To reliably determine
+ * which term the user should re-register for we rely on calendar entries
+ * whose ids start with `rereg-`.
+ */
+export function getNextReRegistrationEvent(
+	referenceDate: Date = new Date()
+): Calendar | undefined {
+	// Filter all re-registration events that lie in the future and
+	// return the soonest one. This event id is used to decide whether
+	// the user has already dismissed the warning for the current term.
+	return calendar
+		.filter((event) => event.id.startsWith('rereg-'))
+		.filter((event) => event.begin > referenceDate)
+		.sort((a, b) => a.begin.getTime() - b.begin.getTime())[0]
+}
