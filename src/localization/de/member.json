@@ -1,9 +1,9 @@
 {
 	"quickLinks": {
 		"title": "Quick Links",
-		"neulandWebsite": "Neuland Website",
+		"neulandWebsite": "Website",
 		"wiki": "Wiki",
-		"ssoProfile": "SSO Profil"
+		"ssoProfile": "Alle Apps"
 	},
 	"idCard": {
 		"title": "NEULAND ID",
@@ -53,7 +53,7 @@
 		"points": {
 			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
 			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
-			"semester": "Wallet-Pass ist nur für das aktuelle Semester gültig"
+			"semester": "Der Wallet-Pass ist nur für das aktuelle Semester gültig"
 		},
 		"buttons": {
 			"useAppInstead": "App verwenden",

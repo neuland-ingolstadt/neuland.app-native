@@ -63,9 +63,9 @@ export function LoggedInView(): React.JSX.Element {
 					title: t('quickLinks.ssoProfile'),
 					onPress: () => Linking.openURL('https://sso.informatik.sexy/'),
 					icon: {
-						ios: 'person.crop.circle',
-						android: 'account_circle',
-						web: 'User'
+						ios: 'circle.grid.3x3',
+						android: 'apps',
+						web: 'LayoutGrid'
 					}
 				}
 			]

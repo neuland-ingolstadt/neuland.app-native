@@ -37,7 +37,7 @@ export function SecurityWarningModal({
 		<Modal
 			visible={visible}
 			transparent
-			animationType="fade"
+			animationType="none"
 			onRequestClose={handleCancel}
 		>
 			<Pressable style={styles.overlay} onPress={handleCancel}>

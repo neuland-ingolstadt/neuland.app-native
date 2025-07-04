@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { Image } from 'expo-image'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,7 +31,7 @@ export function AddToWalletButton(): React.JSX.Element | null {
 			return
 		}
 
-		// Show security warning first
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 		setShowSecurityWarning(true)
 	}
 
