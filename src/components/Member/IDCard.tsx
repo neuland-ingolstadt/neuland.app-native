@@ -165,9 +165,9 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 
 	useFocusEffect(
 		useCallback(() => {
-			ScreenGuardModule.registerWithBlurView({
-				radius: 23,
-				timeAfterResume: 2000
+			ScreenGuardModule.register({
+				backgroundColor: '#000000',
+				timeAfterResume: 1500
 			})
 
 			return () => {
