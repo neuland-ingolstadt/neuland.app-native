@@ -148,10 +148,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		maxWidth: 400,
 		width: '100%',
 		elevation: 10,
-		shadowColor: theme.colors.text,
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 8
+		borderColor: theme.colors.border,
+		borderWidth: 1
 	},
 	content: {
 		padding: 24

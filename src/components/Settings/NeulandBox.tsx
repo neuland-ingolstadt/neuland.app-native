@@ -29,7 +29,7 @@ const NeulandBox = () => {
 			>
 				<View style={styles.neulandBoxContent}>
 					<Avatar
-						background={`${theme.colors.neulandGreen}25`}
+						background={`${theme.colors.neulandGreen}30`}
 						size={50}
 						style={styles.neulandAvatar}
 					>

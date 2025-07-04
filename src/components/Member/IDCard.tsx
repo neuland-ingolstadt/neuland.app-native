@@ -10,16 +10,10 @@ import {
 	Text,
 	View
 } from 'react-native'
-import Animated, {
-	interpolate,
-	SensorType,
-	useAnimatedSensor,
-	useAnimatedStyle,
-	withSpring
-} from 'react-native-reanimated'
 import ScreenGuardModule from 'react-native-screenguard'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import type { MemberInfo } from '@/hooks/useMemberStore'
 import { AnimatedSecurityLine } from './AnimatedSecurityLine'
@@ -168,9 +162,6 @@ interface IDCardProps {
 export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
-	const gyroscope = useAnimatedSensor(SensorType.GYROSCOPE, {
-		interval: 16 // 60fps
-	})
 
 	useFocusEffect(
 		useCallback(() => {
@@ -214,70 +205,32 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 		gcTime: 72 * 60 * 60 * 1000 // 72 hours in ms
 	})
 
-	const cardAnimatedStyle = useAnimatedStyle(() => {
-		const { x, y } = gyroscope.sensor.value
-		const translateX = interpolate(x, [-1, 1], [-2, 2], 'clamp')
-		const translateY = interpolate(y, [-1, 1], [-2, 2], 'clamp')
-		const rotateX = interpolate(y, [-1, 1], [-0.5, 0.5], 'clamp')
-		const rotateY = interpolate(x, [-1, 1], [-0.5, 0.5], 'clamp')
-
-		return {
-			transform: [
-				{ translateX: withSpring(translateX, { damping: 15, stiffness: 100 }) },
-				{ translateY: withSpring(translateY, { damping: 15, stiffness: 100 }) },
-				{ rotateX: `${rotateX}deg` },
-				{ rotateY: `${rotateY}deg` }
-			]
-		}
-	})
-
-	const logoAnimatedStyle = useAnimatedStyle(() => {
-		const { x, y } = gyroscope.sensor.value
-		const translateX = interpolate(x, [-1, 1], [-1, 1], 'clamp')
-		const translateY = interpolate(y, [-1, 1], [-1, 1], 'clamp')
-		const scale = interpolate(
-			Math.abs(x) + Math.abs(y),
-			[0, 1],
-			[1, 1.01],
-			'clamp'
-		)
-
-		return {
-			transform: [
-				{ translateX: withSpring(translateX, { damping: 20, stiffness: 150 }) },
-				{ translateY: withSpring(translateY, { damping: 20, stiffness: 150 }) },
-				{ scale: withSpring(scale, { damping: 20, stiffness: 150 }) }
-			]
-		}
-	})
-
-	const qrCodeAnimatedStyle = useAnimatedStyle(() => {
-		const { x, y } = gyroscope.sensor.value
-		const translateX = interpolate(x, [-1, 1], [-0.5, 0.5], 'clamp')
-		const translateY = interpolate(y, [-1, 1], [-0.5, 0.5], 'clamp')
-
-		return {
-			transform: [
-				{ translateX: withSpring(translateX, { damping: 25, stiffness: 200 }) },
-				{ translateY: withSpring(translateY, { damping: 25, stiffness: 200 }) }
-			]
-		}
-	})
-
 	return (
 		<>
-			<Animated.View style={[styles.idCardContainer, cardAnimatedStyle]}>
-				<Animated.View style={styles.shadow}>
+			<View style={styles.idCardContainer}>
+				<View style={styles.shadow}>
 					<LinearGradient
 						colors={['#0f0f0f', '#001f05']}
 						start={{ x: 0, y: 0 }}
 						end={{ x: 1, y: 1 }}
 						style={styles.idCard}
 					>
+						{/* Watermark Logo */}
+						<View
+							style={{
+								position: 'absolute',
+								top: -60,
+								right: -125,
+								zIndex: 0,
+								pointerEvents: 'none'
+							}}
+						>
+							<LogoCardSVG />
+						</View>
 						<View style={styles.cardHeader}>
-							<Animated.View style={[styles.logoContainer, logoAnimatedStyle]}>
+							<View style={[styles.logoContainer]}>
 								<LogoTextSVG size={16} color="#00ff33" />
-							</Animated.View>
+							</View>
 							<View style={styles.titleContainer}>
 								<Text style={styles.cardTitle}>{t('idCard.title')}</Text>
 								<AnimatedSecurityLine />
@@ -346,9 +299,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 								disabled={!profileQrData?.qr}
 								hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 							>
-								<Animated.View
-									style={[styles.qrCodeContainer, qrCodeAnimatedStyle]}
-								>
+								<View style={[styles.qrCodeContainer]}>
 									{isLoading ? (
 										<ActivityIndicator size="small" color="#00ff33" />
 									) : error ? (
@@ -364,7 +315,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 											level="L"
 										/>
 									) : null}
-								</Animated.View>
+								</View>
 							</RNPressable>
 						</View>
 
@@ -375,8 +326,8 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							</View>
 						)}
 					</LinearGradient>
-				</Animated.View>
-			</Animated.View>
+				</View>
+			</View>
 			<Text style={styles.cardFooterText}>{t('idCard.footerDescription')}</Text>
 
 			<QRCodeModal
