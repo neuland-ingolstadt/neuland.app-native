@@ -266,7 +266,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 											marginTop: 4
 										}}
 									>
-										{info.groups.map((group) => (
+										{info.groups.slice(0, 4).map((group) => (
 											<View
 												key={group}
 												style={{
