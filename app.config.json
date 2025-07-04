@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "app.neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.13.7",
+		"version": "0.13.8",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,

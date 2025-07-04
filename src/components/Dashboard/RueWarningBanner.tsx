@@ -30,7 +30,7 @@ export default function RueWarningBanner({
 						<PlatformIcon
 							ios={{ name: 'exclamationmark.triangle.fill', size: 15 }}
 							android={{ name: 'warning', size: 23, variant: 'filled' }}
-							web={{ name: 'Triangle', size: 20 }}
+							web={{ name: 'TriangleAlert', size: 20 }}
 							style={styles.icon}
 						/>
 					</View>
