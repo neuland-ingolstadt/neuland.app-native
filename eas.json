@@ -6,16 +6,14 @@
 	"build": {
 		"development": {
 			"developmentClient": true,
-			"distribution": "internal",
-			"android": { "gradleCommand": ":app:assembleDevelopmentDebug" }
+			"distribution": "internal"
 		},
 		"preview": {
 			"distribution": "internal"
 		},
 		"production": {
 			"autoIncrement": true,
-			"distribution": "store",
-			"android": { "gradleCommand": ":app:bundleProductionRelease" }
+			"distribution": "store"
 		}
 	},
 	"submit": {

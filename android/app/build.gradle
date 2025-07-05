@@ -93,20 +93,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.13.7"
-    }
-    flavorDimensions "default"
-    productFlavors {
-        development {
-            dimension "default"
-            applicationId "app.neuland.dev"
-            resValue "string", "app_name", "Dev Neuland Next"
-        }
-        production {
-            dimension "default"
-            applicationId 'app.neuland'
-            resValue "string", "app_name", "Neuland Next"
-        }
+        versionName "0.13.8"
     }
     signingConfigs {
         debug {

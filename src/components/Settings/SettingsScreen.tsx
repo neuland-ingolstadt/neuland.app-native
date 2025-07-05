@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	LayoutAnimation,
+	Platform,
 	RefreshControl,
 	ScrollView,
 	Text,
@@ -18,12 +19,13 @@ import { queryClient } from '@/components/provider'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { useMemberStore } from '@/hooks/useMemberStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import GuestInfoSection from './GuestInfoSection'
+import NeulandBox from './NeulandBox'
 import SettingsHeader from './SettingsHeader'
 import SettingsLogo from './SettingsLogo'
 import SettingsMenu from './SettingsMenu'
@@ -38,7 +40,7 @@ export default function Settings(): React.JSX.Element {
 	const [scrollY, setScrollY] = useState(0)
 	const [size, setSize] = useState({ width: 0, height: 0 })
 	const resetPreferences = usePreferencesStore((state) => state.reset)
-	const resetFood = useFoodFilterStore((state) => state.reset)
+	const { idToken } = useMemberStore()
 
 	const logoutAlert = (): void => {
 		Alert.alert(
@@ -54,10 +56,9 @@ export default function Settings(): React.JSX.Element {
 					style: 'destructive',
 					onPress: () => {
 						resetPreferences()
-						resetFood()
 						performLogout(toggleUserKind, resetOrder, queryClient).catch(
 							(e) => {
-								console.log(e)
+								console.error(e)
 							}
 						)
 					}
@@ -150,7 +151,7 @@ export default function Settings(): React.JSX.Element {
 		>
 			<View style={styles.wrapper}>
 				<SettingsHeader onLogout={logoutAlert} />
-
+				{Platform.OS !== 'web' && idToken && <NeulandBox />}
 				<View style={styles.infoBoxesSection}>
 					{userKind === USER_GUEST ? (
 						<GuestInfoSection />

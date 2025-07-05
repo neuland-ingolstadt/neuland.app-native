@@ -330,16 +330,16 @@
 			}
 		},
 		"careerService": {
-			"title": "Berufsservice",
+			"title": "Career Service",
 			"noEvents": {
-				"title": "Keine Berufsserviceveranstaltungen",
+				"title": "Keine Career Service Veranstaltungen",
 				"subtitle": "Bitte versuche es später erneut."
 			}
 		},
 		"studentCounselling": {
-			"title": "Studentenberatung",
+			"title": "Studienberatung",
 			"noEvents": {
-				"title": "Keine Studentenberatungveranstaltungen",
+				"title": "Keine Studienberatung Veranstaltungen",
 				"subtitle": "Bitte versuche es später erneut."
 			}
 		},

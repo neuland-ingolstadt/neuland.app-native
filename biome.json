@@ -10,6 +10,7 @@
 		"includes": [
 			"src/**",
 			"!src/__generated__/**",
+			"!src/data/licenses.json",
 			"patches/**",
 			"plugins/**",
 			"app.config.json",

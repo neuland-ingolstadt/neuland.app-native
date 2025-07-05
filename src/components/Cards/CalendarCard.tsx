@@ -46,7 +46,7 @@ const CalendarCard = (): React.JSX.Element => {
 			} else if ((e as Error).message === 'Query not possible') {
 				// ignore, leaving examList empty
 			} else {
-				console.log(e as Error)
+				console.error(e as Error)
 			}
 		}
 		return exams

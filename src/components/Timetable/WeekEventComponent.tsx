@@ -45,7 +45,6 @@ const EventComponent = ({
 			: textColor(theme.colors.primary, background, isDark)
 	const eventName = event?.name as string
 	if (!eventName) {
-		console.log('Event name is empty')
 		return null
 	}
 	const nameToDisplay =
