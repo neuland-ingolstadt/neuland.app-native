@@ -58,11 +58,9 @@ export default function Member(): React.JSX.Element {
 							result.id_token as string,
 							result.refresh_token as string | undefined
 						)
-					} else {
-						console.log('Token exchange error: missing id_token')
 					}
 				} catch (e) {
-					console.log('Token exchange error:', e)
+					console.error('Token exchange error:', e)
 				}
 			}
 		}

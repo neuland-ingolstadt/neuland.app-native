@@ -35,14 +35,7 @@ export function LoggedInView(): React.JSX.Element {
 		const remaining = expirationTime - now
 
 		if (remaining <= 0) {
-			console.log('[JWT] Token expired on mount, attempting refresh...')
 			void refreshTokens()
-		} else {
-			console.log(
-				'[JWT] Token valid on mount, expires in',
-				Math.floor(remaining / 1000),
-				'seconds'
-			)
 		}
 	}, [info, refreshTokens])
 

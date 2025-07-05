@@ -98,7 +98,7 @@ export default function AppIconPicker(): React.JSX.Element {
 																			setCurrentIcon(icon)
 																		}
 																	} catch (e) {
-																		console.log(e)
+																		console.error(e)
 																	}
 																}
 															: undefined

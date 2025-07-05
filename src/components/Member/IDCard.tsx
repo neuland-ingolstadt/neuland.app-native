@@ -201,7 +201,6 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 				throw new Error('No idToken available')
 			}
 			const result = await fetchProfileQr(idToken)
-			console.log('[QR] QR code fetched/refetched:', result)
 			return result
 		},
 		staleTime: 70 * 60 * 60 * 1000, // 70 hours in ms

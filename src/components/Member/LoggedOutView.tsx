@@ -27,7 +27,7 @@ export function LoggedOutView({
 		>
 			<View style={styles.welcomeCard}>
 				<View style={styles.welcomeGradient}>
-					<LogoSVG size={50} color={theme.colors.text} />
+					<LogoSVG size={55} color={theme.colors.text} />
 					<Text style={styles.welcomeTitle}>{t('loggedOut.welcomeTitle')}</Text>
 					<Text style={styles.welcomeSubtitle}>
 						{t('loggedOut.welcomeSubtitle')}

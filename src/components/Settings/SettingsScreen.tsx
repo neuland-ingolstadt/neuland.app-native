@@ -58,7 +58,7 @@ export default function Settings(): React.JSX.Element {
 						resetPreferences()
 						performLogout(toggleUserKind, resetOrder, queryClient).catch(
 							(e) => {
-								console.log(e)
+								console.error(e)
 							}
 						)
 					}

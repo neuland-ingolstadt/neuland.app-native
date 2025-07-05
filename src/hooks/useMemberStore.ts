@@ -101,7 +101,6 @@ export const useMemberStore = create<MemberStore>()(
 					const result = await response.json()
 
 					if (response.ok && result.id_token) {
-						console.log('Successfully refreshed token')
 						await setTokens(
 							result.id_token,
 							result.refresh_token ?? refreshToken
