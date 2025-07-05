@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "Neuland Next",
 		"slug": "neuland-app-native",
-		"scheme": "app.neuland",
+		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
 		"version": "0.13.8",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",

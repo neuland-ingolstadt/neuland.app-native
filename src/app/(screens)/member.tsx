@@ -8,7 +8,10 @@ import { LoggedInView } from '@/components/Member/LoggedInView'
 import { LoggedOutView } from '@/components/Member/LoggedOutView'
 import { useMemberStore } from '@/hooks/useMemberStore'
 
-const redirectUri = AuthSession.makeRedirectUri({ scheme: 'app.neuland' })
+const redirectUri = AuthSession.makeRedirectUri({
+	scheme: 'neuland',
+	path: 'member'
+})
 
 const discovery = {
 	authorizationEndpoint: 'https://sso.informatik.sexy/application/o/authorize/',
