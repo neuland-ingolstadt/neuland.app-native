@@ -115,7 +115,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center'
 	},
 	cardFooter: {
-		marginTop: 20
+		marginTop: 20,
+		marginBottom: -10
 	},
 	footerLine: {
 		height: 1,
@@ -222,7 +223,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							style={{
 								position: 'absolute',
 								top: -60,
-								right: -125,
+								right: -135,
 								zIndex: 0,
 								pointerEvents: 'none'
 							}}
@@ -321,12 +322,10 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							</RNPressable>
 						</View>
 
-						{info.groups && info.groups.length > 0 && (
-							<View style={styles.cardFooter}>
-								<View style={styles.footerLine} />
-								<Text style={styles.footerText}>{t('idCard.footer')}</Text>
-							</View>
-						)}
+						<View style={styles.cardFooter}>
+							<View style={styles.footerLine} />
+							<Text style={styles.footerText}>{t('idCard.footer')}</Text>
+						</View>
 					</LinearGradient>
 				</View>
 			</View>

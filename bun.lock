@@ -50,7 +50,7 @@
         "expo-router": "5.1.3",
         "expo-screen-orientation": "~8.1.7",
         "expo-secure-store": "~14.2.3",
-        "expo-splash-screen": "~0.30.9",
+        "expo-splash-screen": "~0.30.10",
         "expo-system-ui": "~5.0.10",
         "fuse.js": "^7.1.0",
         "graphql": "^16.11.0",
@@ -468,7 +468,7 @@
 
     "@expo/plist": ["@expo/plist@0.3.5", "", { "dependencies": { "@xmldom/xmldom": "^0.8.8", "base64-js": "^1.2.3", "xmlbuilder": "^15.1.1" } }, "sha512-9RYVU1iGyCJ7vWfg3e7c/NVyMFs8wbl+dMWZphtFtsqyN9zppGREU3ctlD3i8KUE0sCUTVnLjCWr+VeUIDep2g=="],
 
-    "@expo/prebuild-config": ["@expo/prebuild-config@9.0.6", "", { "dependencies": { "@expo/config": "~11.0.9", "@expo/config-plugins": "~10.0.2", "@expo/config-types": "^53.0.4", "@expo/image-utils": "^0.7.4", "@expo/json-file": "^9.1.4", "@react-native/normalize-colors": "0.79.2", "debug": "^4.3.1", "resolve-from": "^5.0.0", "semver": "^7.6.0", "xml2js": "0.6.0" } }, "sha512-HDTdlMkTQZ95rd6EpvuLM+xkZV03yGLc38FqI37qKFLJtUN1WnYVaWsuXKoljd1OrVEVsHe6CfqKwaPZ52D56Q=="],
+    "@expo/prebuild-config": ["@expo/prebuild-config@9.0.10", "", { "dependencies": { "@expo/config": "~11.0.12", "@expo/config-plugins": "~10.1.1", "@expo/config-types": "^53.0.5", "@expo/image-utils": "^0.7.6", "@expo/json-file": "^9.1.5", "@react-native/normalize-colors": "0.79.5", "debug": "^4.3.1", "resolve-from": "^5.0.0", "semver": "^7.6.0", "xml2js": "0.6.0" } }, "sha512-lpzuel+Qb3QvGV0mnFOfeiyTq8pTGmnoGIX7p/enEgwjaCOUMSfOkbZkn6QJNAHOgNE1z5PAqzO1EBQPj2jrfA=="],
 
     "@expo/sdk-runtime-versions": ["@expo/sdk-runtime-versions@1.0.0", "", {}, "sha512-Doz2bfiPndXYFPMRwPyGa1k5QaKDVpY806UJj570epIiMzWaYyCtobasyfC++qfIXVb5Ocy7r3tP9d62hAQ7IQ=="],
 
@@ -1508,7 +1508,7 @@
 
     "expo-secure-store": ["expo-secure-store@14.2.3", "", { "peerDependencies": { "expo": "*" } }, "sha512-hYBbaAD70asKTFd/eZBKVu+9RTo9OSTMMLqXtzDF8ndUGjpc6tmRCoZtrMHlUo7qLtwL5jm+vpYVBWI8hxh/1Q=="],
 
-    "expo-splash-screen": ["expo-splash-screen@0.30.9", "", { "dependencies": { "@expo/prebuild-config": "^9.0.6" }, "peerDependencies": { "expo": "*" } }, "sha512-curHUaZxUTZ2dWvz32ao3xPv5mJr1LBqn5V8xm/IULAehB9RGCn8iKiROMN1PYebSG+56vPMuJmBm9P+ayvJpA=="],
+    "expo-splash-screen": ["expo-splash-screen@0.30.10", "", { "dependencies": { "@expo/prebuild-config": "^9.0.10" }, "peerDependencies": { "expo": "*" } }, "sha512-Tt9va/sLENQDQYeOQ6cdLdGvTZ644KR3YG9aRlnpcs2/beYjOX1LHT510EGzVN9ljUTg+1ebEo5GGt2arYtPjw=="],
 
     "expo-system-ui": ["expo-system-ui@5.0.10", "", { "dependencies": { "@react-native/normalize-colors": "0.79.5", "debug": "^4.3.2" }, "peerDependencies": { "expo": "*", "react-native": "*", "react-native-web": "*" }, "optionalPeers": ["react-native-web"] }, "sha512-BTXbSyJr80yuN6VO4XQKZj7BjesZQLHgOYZ0bWyf4VB19GFZq7ZnZOEc/eoKk1B3eIocOMKUfNCrg/Wn8Kfcuw=="],
 
@@ -2980,8 +2980,6 @@
 
     "@expo/cli/@expo/image-utils": ["@expo/image-utils@0.7.6", "", { "dependencies": { "@expo/spawn-async": "^1.7.2", "chalk": "^4.0.0", "getenv": "^2.0.0", "jimp-compact": "0.16.1", "parse-png": "^2.1.0", "resolve-from": "^5.0.0", "semver": "^7.6.0", "temp-dir": "~2.0.0", "unique-string": "~2.0.0" } }, "sha512-GKnMqC79+mo/1AFrmAcUcGfbsXXTRqOMNS1umebuevl3aaw+ztsYEFEiuNhHZW7PQ3Xs3URNT513ZxKhznDscw=="],
 
-    "@expo/cli/@expo/prebuild-config": ["@expo/prebuild-config@9.0.10", "", { "dependencies": { "@expo/config": "~11.0.12", "@expo/config-plugins": "~10.1.1", "@expo/config-types": "^53.0.5", "@expo/image-utils": "^0.7.6", "@expo/json-file": "^9.1.5", "@react-native/normalize-colors": "0.79.5", "debug": "^4.3.1", "resolve-from": "^5.0.0", "semver": "^7.6.0", "xml2js": "0.6.0" } }, "sha512-lpzuel+Qb3QvGV0mnFOfeiyTq8pTGmnoGIX7p/enEgwjaCOUMSfOkbZkn6QJNAHOgNE1z5PAqzO1EBQPj2jrfA=="],
-
     "@expo/cli/ci-info": ["ci-info@3.9.0", "", {}, "sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ=="],
 
     "@expo/cli/ora": ["ora@3.4.0", "", { "dependencies": { "chalk": "^2.4.2", "cli-cursor": "^2.1.0", "cli-spinners": "^2.0.0", "log-symbols": "^2.2.0", "strip-ansi": "^5.2.0", "wcwidth": "^1.0.1" } }, "sha512-eNwHudNbO1folBP3JsZ19v9azXWtQZjICdr3Q0TDPIaeBQ3mXLrh54wM+er0+hSp+dWKf+Z8KM58CYzEyIYxYg=="],
@@ -3032,13 +3030,9 @@
 
     "@expo/package-manager/ora": ["ora@3.4.0", "", { "dependencies": { "chalk": "^2.4.2", "cli-cursor": "^2.1.0", "cli-spinners": "^2.0.0", "log-symbols": "^2.2.0", "strip-ansi": "^5.2.0", "wcwidth": "^1.0.1" } }, "sha512-eNwHudNbO1folBP3JsZ19v9azXWtQZjICdr3Q0TDPIaeBQ3mXLrh54wM+er0+hSp+dWKf+Z8KM58CYzEyIYxYg=="],
 
-    "@expo/prebuild-config/@expo/config-plugins": ["@expo/config-plugins@10.0.2", "", { "dependencies": { "@expo/config-types": "^53.0.3", "@expo/json-file": "~9.1.4", "@expo/plist": "^0.3.4", "@expo/sdk-runtime-versions": "^1.0.0", "chalk": "^4.1.2", "debug": "^4.3.5", "getenv": "^1.0.0", "glob": "^10.4.2", "resolve-from": "^5.0.0", "semver": "^7.5.4", "slash": "^3.0.0", "slugify": "^1.6.6", "xcode": "^3.0.1", "xml2js": "0.6.0" } }, "sha512-TzUn3pPdpwCS0yYaSlZOClgDmCX8N4I2lfgitX5oStqmvpPtB+vqtdyqsVM02fQ2tlJIAqwBW+NHaHqqy8Jv7g=="],
+    "@expo/prebuild-config/@expo/config": ["@expo/config@11.0.12", "", { "dependencies": { "@babel/code-frame": "~7.10.4", "@expo/config-plugins": "~10.1.1", "@expo/config-types": "^53.0.5", "@expo/json-file": "^9.1.5", "deepmerge": "^4.3.1", "getenv": "^2.0.0", "glob": "^10.4.2", "require-from-string": "^2.0.2", "resolve-from": "^5.0.0", "resolve-workspace-root": "^2.0.0", "semver": "^7.6.0", "slugify": "^1.3.4", "sucrase": "3.35.0" } }, "sha512-XEh7g5F8OziJ6eZzBi93qt2YwmPceD3yAEd4Qv/ODK3MrgFCmB5IAJJ2ZFepdeoQFpcxS26Nl4aUuIJYEhJiUw=="],
 
-    "@expo/prebuild-config/@expo/config-types": ["@expo/config-types@53.0.4", "", {}, "sha512-0s+9vFx83WIToEr0Iwy4CcmiUXa5BgwBmEjylBB2eojX5XAMm9mJvw9KpjAb8m7zq2G0Q6bRbeufkzgbipuNQg=="],
-
-    "@expo/prebuild-config/@expo/json-file": ["@expo/json-file@9.1.4", "", { "dependencies": { "@babel/code-frame": "~7.10.4", "json5": "^2.2.3" } }, "sha512-7Bv86X27fPERGhw8aJEZvRcH9sk+9BenDnEmrI3ZpywKodYSBgc8lX9Y32faNVQ/p0YbDK9zdJ0BfAKNAOyi0A=="],
-
-    "@expo/prebuild-config/@react-native/normalize-colors": ["@react-native/normalize-colors@0.79.2", "", {}, "sha512-+b+GNrupWrWw1okHnEENz63j7NSMqhKeFMOyzYLBwKcprG8fqJQhDIGXfizKdxeIa5NnGSAevKL1Ev1zJ56X8w=="],
+    "@expo/prebuild-config/@expo/image-utils": ["@expo/image-utils@0.7.6", "", { "dependencies": { "@expo/spawn-async": "^1.7.2", "chalk": "^4.0.0", "getenv": "^2.0.0", "jimp-compact": "0.16.1", "parse-png": "^2.1.0", "resolve-from": "^5.0.0", "semver": "^7.6.0", "temp-dir": "~2.0.0", "unique-string": "~2.0.0" } }, "sha512-GKnMqC79+mo/1AFrmAcUcGfbsXXTRqOMNS1umebuevl3aaw+ztsYEFEiuNhHZW7PQ3Xs3URNT513ZxKhznDscw=="],
 
     "@expo/prebuild-config/semver": ["semver@7.7.2", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA=="],
 
@@ -3694,11 +3688,7 @@
 
     "@expo/package-manager/ora/strip-ansi": ["strip-ansi@5.2.0", "", { "dependencies": { "ansi-regex": "^4.1.0" } }, "sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA=="],
 
-    "@expo/prebuild-config/@expo/config-plugins/@expo/plist": ["@expo/plist@0.3.4", "", { "dependencies": { "@xmldom/xmldom": "^0.8.8", "base64-js": "^1.2.3", "xmlbuilder": "^15.1.1" } }, "sha512-MhBLaUJNe9FQDDU2xhSNS4SAolr6K2wuyi4+A79vYuXLkAoICsbTwcGEQJN5jPY6D9izO/jsXh5k0h+mIWQMdw=="],
-
-    "@expo/prebuild-config/@expo/config-plugins/getenv": ["getenv@1.0.0", "", {}, "sha512-7yetJWqbS9sbn0vIfliPsFgoXMKn/YMF+Wuiog97x+urnSRRRZ7xB+uVkwGKzRgq9CDFfMQnE9ruL5DHv9c6Xg=="],
-
-    "@expo/prebuild-config/@expo/json-file/@babel/code-frame": ["@babel/code-frame@7.10.4", "", { "dependencies": { "@babel/highlight": "^7.10.4" } }, "sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg=="],
+    "@expo/prebuild-config/@expo/config/@babel/code-frame": ["@babel/code-frame@7.10.4", "", { "dependencies": { "@babel/highlight": "^7.10.4" } }, "sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg=="],
 
     "@formatjs/ts-transformer/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
 

@@ -95,7 +95,7 @@ export function SecurityWarningModal({
 		<Modal
 			visible={visible}
 			transparent
-			animationType="none"
+			animationType="fade"
 			onRequestClose={handleCancel}
 		>
 			<Pressable style={styles.overlay} onPress={handleCancel}>
@@ -206,7 +206,7 @@ export function SecurityWarningModal({
 const stylesheet = createStyleSheet((theme) => ({
 	overlay: {
 		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.75)',
+		backgroundColor: 'rgba(0,0,0,0.70)',
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: theme.margins.page
@@ -275,16 +275,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center'
 	},
 	button: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
+		paddingVertical: 12,
+		paddingHorizontal: 24,
 		borderRadius: theme.radius.md,
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
 	cancelButton: {
-		backgroundColor: 'transparent',
-		borderWidth: 1,
-		borderColor: theme.colors.border
+		backgroundColor: theme.colors.cardButton
 	},
 	buttonPressed: {
 		opacity: 0.7

@@ -11,7 +11,7 @@ import memberDE from './de/member.json'
 import navigationDE from './de/navigation.json'
 import settingsDE from './de/settings.json'
 import timetableDE from './de/timetable.json'
-import accessiblityEN from './en/accessibility.json'
+import accessibilityEN from './en/accessibility.json'
 import apiEN from './en/api.json'
 import commonEN from './en/common.json'
 import flowEN from './en/flow.json'
@@ -29,7 +29,7 @@ const en = {
 	food: foodEN,
 	flow: flowEN,
 	timetable: timetableEN,
-	accessibility: accessiblityEN,
+	accessibility: accessibilityEN,
 	member: memberEN
 }
 

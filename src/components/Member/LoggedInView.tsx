@@ -11,9 +11,10 @@ import {
 } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 import { IDCard } from './IDCard'
 import { SecurityWarningModal } from './SecurityWarningModal'
 import { stylesheet } from './styles'
@@ -106,19 +107,23 @@ export function LoggedInView(): React.JSX.Element {
 				}
 			]
 		},
-		{
-			items: [
-				{
-					title: 'Add to Wallet',
-					onPress: handleAddToWallet,
-					icon: {
-						ios: 'wallet.pass',
-						android: 'wallet',
-						web: 'Wallet'
+		...(Platform.OS === 'ios'
+			? [
+					{
+						items: [
+							{
+								title: 'Add to Wallet',
+								onPress: handleAddToWallet,
+								icon: {
+									ios: 'wallet.pass',
+									android: 'wallet' as MaterialIcon,
+									web: 'Wallet' as LucideIcon
+								}
+							}
+						]
 					}
-				}
-			]
-		}
+				]
+			: [])
 	]
 
 	return (
