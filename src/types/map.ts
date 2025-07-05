@@ -12,6 +12,7 @@ export interface RoomData {
 	subtitle: string
 	properties: GeoJsonProperties | undefined
 	occupancies: AvailableRoom | BuildingOccupancy | null
+	nextAvailable?: AvailableRoom | null
 	type: SEARCH_TYPES
 }
 
