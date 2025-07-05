@@ -87,7 +87,7 @@ export default function Profile(): React.JSX.Element {
 			resetPreferences()
 			performLogout(toggleUserKind, resetOrder, queryClient)
 				.catch((e) => {
-					console.log(e)
+					console.error(e)
 				})
 				.finally(() => {
 					setIsLoggingOut(false)
@@ -111,7 +111,7 @@ export default function Profile(): React.JSX.Element {
 						resetPreferences()
 						performLogout(toggleUserKind, resetOrder, queryClient)
 							.catch((e) => {
-								console.log(e)
+								console.error(e)
 							})
 							.finally(() => {
 								setIsLoggingOut(false)
