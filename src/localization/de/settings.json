@@ -136,6 +136,10 @@
 				"cancel": "Abbrechen",
 				"confirm": "Abmelden"
 			}
+		},
+		"contextMenu": {
+			"libraryCard": "Bibliothekskarte",
+			"neulandArea": "Neuland Mitgliederbereich"
 		}
 	},
 	"theme": {

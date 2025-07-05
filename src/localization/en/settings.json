@@ -157,6 +157,10 @@
 				"cancel": "Cancel",
 				"confirm": "Logout"
 			}
+		},
+		"contextMenu": {
+			"libraryCard": "Library Card",
+			"neulandArea": "Neuland Member Area"
 		}
 	},
 	"theme": {
