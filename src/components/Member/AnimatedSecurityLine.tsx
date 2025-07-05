@@ -11,12 +11,12 @@ export function AnimatedSecurityLine(): React.JSX.Element {
 				RNAnimated.sequence([
 					RNAnimated.timing(animatedValue, {
 						toValue: 1,
-						duration: 2000,
+						duration: 3000,
 						useNativeDriver: false
 					}),
 					RNAnimated.timing(animatedValue, {
 						toValue: 0,
-						duration: 2000,
+						duration: 3000,
 						useNativeDriver: false
 					})
 				])
@@ -28,12 +28,12 @@ export function AnimatedSecurityLine(): React.JSX.Element {
 
 	const translateX = animatedValue.interpolate({
 		inputRange: [0, 1],
-		outputRange: [-200, 200]
+		outputRange: [-90, 90]
 	})
 
 	return (
 		<View
-			style={{ height: 2, overflow: 'hidden', marginTop: 8, width: '100%' }}
+			style={{ height: 2, overflow: 'hidden', marginTop: 6, width: '100%' }}
 		>
 			<RNAnimated.View
 				style={{

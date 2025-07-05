@@ -1,4 +1,3 @@
-import * as Haptics from 'expo-haptics'
 import { Image } from 'expo-image'
 import type React from 'react'
 import { useState } from 'react'
@@ -34,10 +33,6 @@ export function SecurityWarningModal({
 	const currentLanguage = i18n.language || 'en'
 
 	const handleConfirm = async () => {
-		if (Platform.OS === 'ios') {
-			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-		}
-
 		if (Platform.OS !== 'ios' || !idToken) {
 			onConfirm()
 			return
@@ -85,9 +80,6 @@ export function SecurityWarningModal({
 	}
 
 	const handleCancel = () => {
-		if (Platform.OS === 'ios') {
-			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-		}
 		onCancel()
 	}
 

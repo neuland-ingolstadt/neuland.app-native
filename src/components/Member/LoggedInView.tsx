@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -42,6 +43,7 @@ export function LoggedInView(): React.JSX.Element {
 
 	const handleAddToWallet = () => {
 		setShowSecurityWarning(true)
+		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
 	}
 
 	const handleConfirmAddToWallet = async () => {
