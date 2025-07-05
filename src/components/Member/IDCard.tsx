@@ -133,9 +133,12 @@ const stylesheet = createStyleSheet((theme) => ({
 }))
 
 function fetchProfileQr(token: string) {
-	return fetch(
-		`https://id.neuland-ingolstadt.de/api/qr?token=${encodeURIComponent(token)}`
-	).then(async (res) => {
+	return fetch('https://id.neuland-ingolstadt.de/api/qr', {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		}
+	}).then(async (res) => {
 		if (!res.ok) {
 			throw new Error('Failed to fetch QR code')
 		}
@@ -285,7 +288,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 														fontWeight: '500'
 													}}
 												>
-													{group}
+													{group.charAt(0).toUpperCase() + group.slice(1)}
 												</Text>
 											</View>
 										))}

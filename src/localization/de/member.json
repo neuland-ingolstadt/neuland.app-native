@@ -19,7 +19,7 @@
 	},
 	"loggedOut": {
 		"welcomeTitle": "Willkommen bei Neuland",
-		"welcomeSubtitle": "Dein Tor zur THI-Studentengemeinschaft",
+		"welcomeSubtitle": "Der studentische Verein für alle informatikbegeisterten Studierenden der THI.",
 		"sectionTitle": "Warum Neuland beitreten?",
 		"benefits": {
 			"community": {
@@ -40,7 +40,7 @@
 			}
 		},
 		"buttons": {
-			"learnAboutClub": "Mehr über den Verein",
+			"learnAboutClub": "Mehr über Neuland",
 			"signIn": "Anmelden"
 		}
 	},
@@ -60,7 +60,15 @@
 			"addToWallet": "Zu Wallet hinzufügen"
 		}
 	},
-	"logout": "Abmelden",
+	"logout": {
+		"button": "Abmelden",
+		"alert": {
+			"title": "Bestätigen",
+			"message": "Möchtest du dich wirklich abmelden?",
+			"cancel": "Abbrechen",
+			"confirm": "Abmelden"
+		}
+	},
 	"web": {
 		"title": "Nicht verfügbar auf Web",
 		"message": "Lade die App herunter, um den NeulandMitgliedsbereich zu nutzen."

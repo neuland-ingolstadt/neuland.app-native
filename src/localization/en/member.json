@@ -16,7 +16,7 @@
 	},
 	"loggedOut": {
 		"welcomeTitle": "Welcome to Neuland",
-		"welcomeSubtitle": "Your gateway to the THI student community",
+		"welcomeSubtitle": "The student club for all computer science enthusiasts at THI.",
 		"sectionTitle": "Why Join Neuland?",
 		"benefits": {
 			"community": {
@@ -37,7 +37,7 @@
 			}
 		},
 		"buttons": {
-			"learnAboutClub": "Learn about the Club",
+			"learnAboutClub": "Learn about Neuland",
 			"signIn": "Sign In"
 		}
 	},
@@ -60,7 +60,15 @@
 			"addToWallet": "Add to Wallet"
 		}
 	},
-	"logout": "Logout",
+	"logout": {
+		"button": "Logout",
+		"alert": {
+			"title": "Confirm",
+			"message": "Are you sure you want to logout?",
+			"cancel": "Cancel",
+			"confirm": "Logout"
+		}
+	},
 	"web": {
 		"title": "Not available on web",
 		"message": "Download the app to use the Neuland member area."

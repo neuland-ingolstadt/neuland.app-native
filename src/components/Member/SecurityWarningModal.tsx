@@ -1,9 +1,17 @@
 import * as Haptics from 'expo-haptics'
+import { Image } from 'expo-image'
 import type React from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Modal, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import WalletManager from 'react-native-wallet-manager'
+// @ts-expect-error no types
+import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
+// @ts-expect-error no types
+import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
 import PlatformIcon from '@/components/Universal/Icon'
+import { useMemberStore } from '@/hooks/useMemberStore'
 
 interface SecurityWarningModalProps {
 	visible: boolean
@@ -18,12 +26,62 @@ export function SecurityWarningModal({
 }: SecurityWarningModalProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
+	const { info, idToken } = useMemberStore()
+	const [isAddingToWallet, setIsAddingToWallet] = useState(false)
+	const { i18n } = useTranslation()
 
-	const handleConfirm = () => {
+	// Get language with fallback
+	const currentLanguage = i18n.language || 'en'
+
+	const handleConfirm = async () => {
 		if (Platform.OS === 'ios') {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 		}
-		onConfirm()
+
+		if (Platform.OS !== 'ios' || !idToken) {
+			onConfirm()
+			return
+		}
+
+		setIsAddingToWallet(true)
+
+		try {
+			const canAdd = await WalletManager.canAddPasses()
+			if (!canAdd) {
+				onConfirm()
+				return
+			}
+
+			let currentToken = idToken
+			if (info?.exp) {
+				const expirationTime = info.exp * 1000
+				const now = Date.now()
+				const remaining = expirationTime - now
+
+				if (remaining <= 5000) {
+					await useMemberStore.getState().refreshTokens()
+					const updatedToken = useMemberStore.getState().idToken
+					if (updatedToken) {
+						currentToken = updatedToken
+					} else {
+						throw new Error('Failed to refresh token')
+					}
+				}
+			}
+
+			if (!currentToken) {
+				throw new Error('No token available for pkpass URL')
+			}
+			// TODO: Backend needs to be updated to accept Bearer token in Authorization header
+			// For now, keeping the query parameter approach until backend migration is complete
+			const pkpassUrl = `https://id.neuland-ingolstadt.de/api/pkpass?token=${encodeURIComponent(currentToken)}`
+			await WalletManager.addPassFromUrl(pkpassUrl)
+		} catch (error) {
+			console.error('Failed to add pass to wallet:', error)
+		} finally {
+			setIsAddingToWallet(false)
+			onConfirm()
+		}
 	}
 
 	const handleCancel = () => {
@@ -99,6 +157,30 @@ export function SecurityWarningModal({
 							</View>
 						</View>
 
+						{/* Apple Wallet Button */}
+						{Platform.OS === 'ios' && (
+							<View style={styles.walletButtonContainer}>
+								<Pressable
+									onPress={handleConfirm}
+									disabled={isAddingToWallet}
+									style={({ pressed }) => [
+										pressed && styles.walletButtonPressed
+									]}
+								>
+									<Image
+										source={
+											currentLanguage === 'de' ? AppleWalletDE : AppleWalletEN
+										}
+										style={[
+											styles.walletButton,
+											isAddingToWallet && styles.walletButtonDisabled
+										]}
+										contentFit="contain"
+									/>
+								</Pressable>
+							</View>
+						)}
+
 						{/* Buttons */}
 						<View style={styles.buttonContainer}>
 							<Pressable
@@ -111,19 +193,6 @@ export function SecurityWarningModal({
 							>
 								<Text style={styles.cancelButtonText}>
 									{t('securityWarning.buttons.useAppInstead')}
-								</Text>
-							</Pressable>
-
-							<Pressable
-								onPress={handleConfirm}
-								style={({ pressed }) => [
-									styles.button,
-									styles.confirmButton,
-									pressed && styles.buttonPressed
-								]}
-							>
-								<Text style={styles.confirmButtonText}>
-									{t('securityWarning.buttons.addToWallet')}
 								</Text>
 							</Pressable>
 						</View>
@@ -191,26 +260,21 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		lineHeight: 20
 	},
-	recommendationContainer: {
-		backgroundColor: theme.colors.primaryBackground,
-		borderRadius: theme.radius.md,
-		padding: 16,
-		marginBottom: 24,
-		borderLeftWidth: 4,
-		borderLeftColor: theme.colors.primary
+	walletButtonContainer: {
+		alignItems: 'center',
+		marginBottom: 18
 	},
-	recommendationText: {
-		fontSize: 14,
-		color: theme.colors.text,
-		fontWeight: '600',
-		lineHeight: 20
+	walletButton: {
+		width: 160,
+		height: 52
+	},
+	walletButtonDisabled: {
+		opacity: 0.5
 	},
 	buttonContainer: {
-		flexDirection: 'row',
-		gap: 12
+		alignItems: 'center'
 	},
 	button: {
-		flex: 1,
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 		borderRadius: theme.radius.md,
@@ -222,9 +286,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: 1,
 		borderColor: theme.colors.border
 	},
-	confirmButton: {
-		backgroundColor: theme.colors.primary
-	},
 	buttonPressed: {
 		opacity: 0.7
 	},
@@ -232,8 +293,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600',
 		color: theme.colors.text
 	},
-	confirmButtonText: {
-		fontWeight: '600',
-		color: theme.colors.contrast
+	walletButtonPressed: {
+		opacity: 0.7
 	}
 }))

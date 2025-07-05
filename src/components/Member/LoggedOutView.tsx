@@ -3,8 +3,8 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
 import LogoSVG from '../Flow/svgs/logo'
+import { BenefitCard } from './BenefitCard'
 import { stylesheet } from './styles'
 
 interface LoggedOutViewProps {
@@ -27,7 +27,7 @@ export function LoggedOutView({
 		>
 			<View style={styles.welcomeCard}>
 				<View style={styles.welcomeGradient}>
-					<LogoSVG size={50} color={theme.colors.neulandGreen} />
+					<LogoSVG size={50} color={theme.colors.text} />
 					<Text style={styles.welcomeTitle}>{t('loggedOut.welcomeTitle')}</Text>
 					<Text style={styles.welcomeSubtitle}>
 						{t('loggedOut.welcomeSubtitle')}
@@ -37,81 +37,45 @@ export function LoggedOutView({
 
 			<Text style={styles.sectionTitle}>{t('loggedOut.sectionTitle')}</Text>
 
-			<View style={styles.benefitCard}>
-				<View style={styles.benefitIconContainer}>
-					<PlatformIcon
-						ios={{ name: 'person.3.fill', size: 18 }}
-						android={{ name: 'group', size: 18 }}
-						web={{ name: 'Users', size: 18 }}
-						style={styles.benefitIcon}
-					/>
-				</View>
-				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>
-						{t('loggedOut.benefits.community.title')}
-					</Text>
-					<Text style={styles.benefitDescription}>
-						{t('loggedOut.benefits.community.description')}
-					</Text>
-				</View>
-			</View>
+			<BenefitCard
+				title={t('loggedOut.benefits.community.title')}
+				description={t('loggedOut.benefits.community.description')}
+				icon={{
+					ios: { name: 'person.3.fill', size: 15 },
+					android: { name: 'group', size: 18 },
+					web: { name: 'Users', size: 18 }
+				}}
+			/>
 
-			<View style={styles.benefitCard}>
-				<View style={styles.benefitIconContainer}>
-					<PlatformIcon
-						ios={{ name: 'graduationcap.fill', size: 18 }}
-						android={{ name: 'school', size: 18 }}
-						web={{ name: 'GraduationCap', size: 18 }}
-						style={styles.benefitIcon}
-					/>
-				</View>
-				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>
-						{t('loggedOut.benefits.learning.title')}
-					</Text>
-					<Text style={styles.benefitDescription}>
-						{t('loggedOut.benefits.learning.description')}
-					</Text>
-				</View>
-			</View>
+			<BenefitCard
+				title={t('loggedOut.benefits.learning.title')}
+				description={t('loggedOut.benefits.learning.description')}
+				icon={{
+					ios: { name: 'graduationcap.fill', size: 18 },
+					android: { name: 'school', size: 18 },
+					web: { name: 'GraduationCap', size: 18 }
+				}}
+			/>
 
-			<View style={styles.benefitCard}>
-				<View style={styles.benefitIconContainer}>
-					<PlatformIcon
-						ios={{ name: 'network', size: 18 }}
-						android={{ name: 'hub', size: 18 }}
-						web={{ name: 'Network', size: 18 }}
-						style={styles.benefitIcon}
-					/>
-				</View>
-				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>
-						{t('loggedOut.benefits.networking.title')}
-					</Text>
-					<Text style={styles.benefitDescription}>
-						{t('loggedOut.benefits.networking.description')}
-					</Text>
-				</View>
-			</View>
+			<BenefitCard
+				title={t('loggedOut.benefits.networking.title')}
+				description={t('loggedOut.benefits.networking.description')}
+				icon={{
+					ios: { name: 'network', size: 21 },
+					android: { name: 'hub', size: 18 },
+					web: { name: 'Network', size: 18 }
+				}}
+			/>
 
-			<View style={styles.benefitCard}>
-				<View style={styles.benefitIconContainer}>
-					<PlatformIcon
-						ios={{ name: 'gamecontroller.fill', size: 18 }}
-						android={{ name: 'sports_esports', size: 18 }}
-						web={{ name: 'Gamepad2', size: 18 }}
-						style={styles.benefitIcon}
-					/>
-				</View>
-				<View style={styles.benefitTextContainer}>
-					<Text style={styles.benefitTitle}>
-						{t('loggedOut.benefits.fun.title')}
-					</Text>
-					<Text style={styles.benefitDescription}>
-						{t('loggedOut.benefits.fun.description')}
-					</Text>
-				</View>
-			</View>
+			<BenefitCard
+				title={t('loggedOut.benefits.fun.title')}
+				description={t('loggedOut.benefits.fun.description')}
+				icon={{
+					ios: { name: 'gamecontroller.fill', size: 18 },
+					android: { name: 'sports_esports', size: 18 },
+					web: { name: 'Gamepad2', size: 18 }
+				}}
+			/>
 
 			<View style={styles.buttonContainer}>
 				<Pressable

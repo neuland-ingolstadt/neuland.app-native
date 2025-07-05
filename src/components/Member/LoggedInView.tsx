@@ -1,19 +1,28 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
+import {
+	Alert,
+	Linking,
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	View
+} from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
-import { AddToWalletButton } from './AddToWalletButton'
 import { IDCard } from './IDCard'
+import { SecurityWarningModal } from './SecurityWarningModal'
 import { stylesheet } from './styles'
 
 export function LoggedInView(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
+	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
 
 	// JWT refresh logic: only refresh on mount if expired
 	useEffect(() => {
@@ -36,6 +45,40 @@ export function LoggedInView(): React.JSX.Element {
 			)
 		}
 	}, [info, refreshTokens])
+
+	const handleAddToWallet = () => {
+		setShowSecurityWarning(true)
+	}
+
+	const handleConfirmAddToWallet = async () => {
+		setShowSecurityWarning(false)
+		// Wallet logic is now handled directly in the SecurityWarningModal
+	}
+
+	const handleCancelAddToWallet = () => {
+		setShowSecurityWarning(false)
+	}
+
+	const logoutAlert = (): void => {
+		if (Platform.OS === 'web') {
+			if (!window.confirm(t('logout.alert.message'))) {
+				return
+			}
+			logout()
+			return
+		}
+		Alert.alert(t('logout.alert.title'), t('logout.alert.message'), [
+			{
+				text: t('logout.alert.cancel'),
+				style: 'cancel'
+			},
+			{
+				text: t('logout.alert.confirm'),
+				style: 'destructive',
+				onPress: logout
+			}
+		])
+	}
 
 	const quickLinksSections: FormListSections[] = [
 		{
@@ -69,6 +112,19 @@ export function LoggedInView(): React.JSX.Element {
 					}
 				}
 			]
+		},
+		{
+			items: [
+				{
+					title: 'Add to Wallet',
+					onPress: handleAddToWallet,
+					icon: {
+						ios: 'wallet.pass',
+						android: 'wallet',
+						web: 'Wallet'
+					}
+				}
+			]
 		}
 	]
 
@@ -85,9 +141,7 @@ export function LoggedInView(): React.JSX.Element {
 
 			<FormList sections={quickLinksSections} />
 
-			<AddToWalletButton />
-
-			<Pressable onPress={logout} style={styles.logoutButton}>
+			<Pressable onPress={logoutAlert} style={styles.logoutButton}>
 				<PlatformIcon
 					ios={{
 						name: 'rectangle.portrait.and.arrow.right',
@@ -103,8 +157,14 @@ export function LoggedInView(): React.JSX.Element {
 					}}
 					style={styles.notification}
 				/>
-				<Text style={styles.logoutText}>{t('logout')}</Text>
+				<Text style={styles.logoutText}>{t('logout.button')}</Text>
 			</Pressable>
+
+			<SecurityWarningModal
+				visible={showSecurityWarning}
+				onConfirm={handleConfirmAddToWallet}
+				onCancel={handleCancelAddToWallet}
+			/>
 		</ScrollView>
 	)
 }

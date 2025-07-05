@@ -157,12 +157,12 @@ export const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: 'bold'
 	},
 	secondaryButton: {
-		backgroundColor: 'transparent',
+		backgroundColor: theme.colors.card,
 		paddingVertical: 12,
-		borderRadius: theme.radius.md,
-		alignItems: 'center',
 		borderWidth: 1,
-		borderColor: theme.colors.primary
+		borderColor: theme.colors.border,
+		borderRadius: theme.radius.md,
+		alignItems: 'center'
 	},
 	secondaryButtonText: {
 		color: theme.colors.primary,
