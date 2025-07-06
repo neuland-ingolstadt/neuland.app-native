@@ -57,13 +57,7 @@ const NeulandBox = () => {
 const stylesheet = createStyleSheet((theme) => ({
 	neulandContainer: {
 		marginTop: 10,
-		borderRadius: theme.radius.md,
-		overflow: 'hidden',
-		shadowColor: '#00ff3c',
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.3,
-		shadowRadius: 10,
-		elevation: 15
+		borderRadius: theme.radius.md
 	},
 	neulandBox: {
 		flex: 1,
