@@ -8,7 +8,7 @@ export default function LogoCardSVG(): React.JSX.Element {
 			fill="none"
 			width={310}
 			height={310}
-			opacity={0.05}
+			opacity={0.17}
 			style={{
 				overflow: 'visible'
 			}}

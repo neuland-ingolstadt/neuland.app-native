@@ -1,48 +1,54 @@
 import type React from 'react'
-import { useEffect, useRef } from 'react'
-import { Animated as RNAnimated, View } from 'react-native'
+import { useEffect } from 'react'
+import { View } from 'react-native'
+import Animated, {
+	Easing,
+	useAnimatedStyle,
+	useSharedValue,
+	withRepeat,
+	withTiming
+} from 'react-native-reanimated'
 
 export function AnimatedSecurityLine(): React.JSX.Element {
-	const animatedValue = useRef(new RNAnimated.Value(0)).current
+	const translateX = useSharedValue(-90)
 
 	useEffect(() => {
-		const startAnimation = () => {
-			RNAnimated.loop(
-				RNAnimated.sequence([
-					RNAnimated.timing(animatedValue, {
-						toValue: 1,
-						duration: 3000,
-						useNativeDriver: false
-					}),
-					RNAnimated.timing(animatedValue, {
-						toValue: 0,
-						duration: 3000,
-						useNativeDriver: false
-					})
-				])
-			).start()
+		translateX.value = -90
+
+		translateX.value = withRepeat(
+			withTiming(90, {
+				duration: 3000,
+				easing: Easing.inOut(Easing.ease)
+			}),
+			-1,
+			true
+		)
+
+		return () => {
+			translateX.value = -90
 		}
+	}, [])
 
-		startAnimation()
-	}, [animatedValue])
-
-	const translateX = animatedValue.interpolate({
-		inputRange: [0, 1],
-		outputRange: [-90, 90]
+	const animatedStyle = useAnimatedStyle(() => {
+		return {
+			transform: [{ translateX: translateX.value }]
+		}
 	})
 
 	return (
 		<View
 			style={{ height: 2, overflow: 'hidden', marginTop: 6, width: '100%' }}
 		>
-			<RNAnimated.View
-				style={{
-					height: 2,
-					width: '100%',
-					backgroundColor: '#00ff33',
-					transform: [{ translateX }],
-					opacity: 0.8
-				}}
+			<Animated.View
+				style={[
+					{
+						height: 2,
+						width: '100%',
+						backgroundColor: '#00ff33',
+						opacity: 0.8
+					},
+					animatedStyle
+				]}
 			/>
 		</View>
 	)
