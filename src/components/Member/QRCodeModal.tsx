@@ -1,9 +1,10 @@
 import * as Haptics from 'expo-haptics'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	Animated,
+	Linking,
 	Modal,
 	Platform,
 	Pressable,
@@ -12,6 +13,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import PlatformIcon from '@/components/Universal/Icon'
 
 const stylesheet = createStyleSheet(() => ({
 	modalOverlay: {
@@ -58,6 +60,15 @@ const stylesheet = createStyleSheet(() => ({
 		fontWeight: '600',
 		fontSize: 16,
 		textAlign: 'center'
+	},
+	faqButton: {
+		position: 'absolute',
+		top: 70,
+		right: 15,
+		zIndex: 10
+	},
+	faqIcon: {
+		color: 'rgba(255, 255, 255, 0.8)'
 	}
 }))
 
@@ -67,7 +78,6 @@ interface QRCodeModalProps {
 	onClose: () => void
 }
 
-// Memoized QR Code component to prevent unnecessary re-renders
 const MemoizedQRCode = React.memo(({ qrData }: { qrData: string }) => (
 	<QRCode
 		value={qrData}
@@ -87,11 +97,12 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 }: QRCodeModalProps): React.JSX.Element {
 	const { t } = useTranslation('member')
 	const { styles, theme } = useStyles(stylesheet)
+	const [isClosing, setIsClosing] = useState(false)
 	const scaleAnim = useRef(new Animated.Value(0)).current
 	const pulseAnim = useRef(new Animated.Value(0)).current
+	const contentOpacityAnim = useRef(new Animated.Value(1)).current
 	const pulseAnimationRef = useRef<Animated.CompositeAnimation | null>(null)
 
-	// Memoize interpolated values to prevent recalculation on every render
 	const pulseScale = useMemo(
 		() =>
 			pulseAnim.interpolate({
@@ -119,7 +130,6 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 		[pulseAnim]
 	)
 
-	// Memoize animation styles to prevent object recreation
 	const animatedRingStyle = useMemo(
 		() => [
 			styles.animatedRing,
@@ -146,56 +156,59 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 		() => [
 			styles.modalContent,
 			{
-				transform: [{ scale: scaleAnim }]
+				transform: [{ scale: scaleAnim }],
+				opacity: Animated.multiply(scaleAnim, contentOpacityAnim)
 			}
 		],
-		[styles.modalContent, scaleAnim]
+		[styles.modalContent, scaleAnim, contentOpacityAnim]
 	)
 
-	// Memoize close handler to prevent recreation
 	const handleClose = useCallback(() => {
-		// Haptic feedback on close
+		if (isClosing) return
+
+		setIsClosing(true)
+
 		if (Platform.OS === 'ios') {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 		}
 
-		// Stop the pulsing animation loop and reset to 0 to hide rings immediately
 		if (pulseAnimationRef.current) {
 			pulseAnimationRef.current.stop()
 			pulseAnimationRef.current = null
 		}
 		pulseAnim.setValue(0)
 
-		// Create dramatic closing animation
 		Animated.parallel([
-			// Scale down the modal
 			Animated.timing(scaleAnim, {
 				toValue: 0,
 				duration: 300,
 				useNativeDriver: true
 			}),
-			// Expand and fade out the rings
+			Animated.timing(contentOpacityAnim, {
+				toValue: 0,
+				duration: 100,
+				useNativeDriver: true
+			}),
 			Animated.timing(pulseAnim, {
 				toValue: 2,
 				duration: 300,
 				useNativeDriver: true
 			})
 		]).start(() => onClose())
-	}, [pulseAnim, scaleAnim, onClose])
+	}, [pulseAnim, scaleAnim, onClose, isClosing])
 
-	// Memoize press handler
 	const handlePress = useCallback(() => {
 		handleClose()
 	}, [handleClose])
 
 	useEffect(() => {
 		if (visible) {
-			// Haptic feedback on open
+			setIsClosing(false)
+
 			if (Platform.OS === 'ios') {
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 			}
 
-			// Create the pulsing animation loop
 			const pulseLoop = Animated.loop(
 				Animated.sequence([
 					Animated.timing(pulseAnim, {
@@ -212,27 +225,44 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			)
 			pulseAnimationRef.current = pulseLoop
 
-			// Create dramatic opening animation
+			contentOpacityAnim.setValue(1)
+
 			Animated.parallel([
-				// Scale up the modal with bounce effect
 				Animated.spring(scaleAnim, {
 					toValue: 1,
 					tension: 100,
 					friction: 8,
 					useNativeDriver: true
 				}),
-				// Start continuous pulsing immediately
 				pulseLoop
 			]).start()
 		} else {
-			Animated.timing(scaleAnim, {
-				toValue: 0,
-				duration: 200,
-				useNativeDriver: true
-			}).start()
+			setIsClosing(true)
+
+			if (pulseAnimationRef.current) {
+				pulseAnimationRef.current.stop()
+				pulseAnimationRef.current = null
+			}
+
+			Animated.parallel([
+				Animated.timing(scaleAnim, {
+					toValue: 0,
+					duration: 300,
+					useNativeDriver: true
+				}),
+				Animated.timing(contentOpacityAnim, {
+					toValue: 0,
+					duration: 100,
+					useNativeDriver: true
+				}),
+				Animated.timing(pulseAnim, {
+					toValue: 2,
+					duration: 300,
+					useNativeDriver: true
+				})
+			]).start()
 		}
 
-		// Cleanup function to stop animations when component unmounts or visible changes
 		return () => {
 			scaleAnim.stopAnimation()
 			if (pulseAnimationRef.current) {
@@ -250,11 +280,13 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			animationType="fade"
 			onRequestClose={handleClose}
 		>
-			<Pressable style={styles.modalOverlay} onPress={handlePress}>
-				{/* Cool animated background element */}
+			<Pressable
+				style={styles.modalOverlay}
+				onPress={isClosing ? undefined : handlePress}
+			>
 				<Animated.View style={animatedRingStyle} />
 				<Animated.View style={outerRingStyle} />
-				<Animated.View style={modalContentStyle}>
+				<Animated.View style={modalContentStyle} pointerEvents="auto">
 					<View style={styles.qrCodeContainer}>
 						{qrData ? (
 							<MemoizedQRCode qrData={qrData} />
@@ -265,6 +297,33 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 
 					<Text style={styles.closeText}>{t('qrCode.tapToClose')}</Text>
 				</Animated.View>
+
+				{/* FAQ Button */}
+				<Pressable
+					style={styles.faqButton}
+					onPress={(e) => {
+						e.stopPropagation()
+						void Linking.openURL('http://id.neuland-ingolstadt.de/learn-more')
+					}}
+				>
+					<PlatformIcon
+						style={styles.faqIcon}
+						ios={{
+							name: 'questionmark.circle',
+							size: 20,
+							variableValue: 1
+						}}
+						android={{
+							name: 'help',
+							size: 25,
+							variant: 'outlined'
+						}}
+						web={{
+							name: 'CircleQuestionMark',
+							size: 25
+						}}
+					/>
+				</Pressable>
 			</Pressable>
 		</Modal>
 	)

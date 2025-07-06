@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useFocusEffect } from 'expo-router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
@@ -10,7 +9,13 @@ import {
 	Text,
 	View
 } from 'react-native'
-import ScreenGuardModule from 'react-native-screenguard'
+import Animated, {
+	Easing,
+	useAnimatedStyle,
+	useSharedValue,
+	withRepeat,
+	withTiming
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
@@ -151,7 +156,6 @@ function fetchProfileQr(token: string) {
 	})
 }
 
-// Define the type for the profileQr response
 interface ProfileQrResponse {
 	qr: string
 	iat: number
@@ -167,20 +171,26 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
 
-	useFocusEffect(
-		useCallback(() => {
-			ScreenGuardModule.register({
-				backgroundColor: '#000000',
-				timeAfterResume: 1500
-			})
-
-			return () => {
-				ScreenGuardModule.unregister()
-			}
-		}, [])
-	)
-
 	const [modalVisible, setModalVisible] = useState(false)
+
+	const breathingOpacity = useSharedValue(0.3)
+
+	useEffect(() => {
+		breathingOpacity.value = withRepeat(
+			withTiming(0.6, {
+				duration: 4000,
+				easing: Easing.inOut(Easing.ease)
+			}),
+			-1,
+			true
+		)
+	}, [breathingOpacity])
+
+	const breathingAnimatedStyle = useAnimatedStyle(() => {
+		return {
+			opacity: breathingOpacity.value
+		}
+	})
 
 	const openModal = () => {
 		setModalVisible(true)
@@ -204,8 +214,8 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 			const result = await fetchProfileQr(idToken)
 			return result
 		},
-		staleTime: 70 * 60 * 60 * 1000, // 70 hours in ms
-		gcTime: 72 * 60 * 60 * 1000 // 72 hours in ms
+		staleTime: 70 * 60 * 60 * 1000,
+		gcTime: 72 * 60 * 60 * 1000
 	})
 
 	return (
@@ -218,18 +228,20 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 						end={{ x: 1, y: 1 }}
 						style={styles.idCard}
 					>
-						{/* Watermark Logo */}
-						<View
-							style={{
-								position: 'absolute',
-								top: -60,
-								right: -135,
-								zIndex: 0,
-								pointerEvents: 'none'
-							}}
+						<Animated.View
+							style={[
+								{
+									position: 'absolute',
+									top: -60,
+									right: -135,
+									zIndex: 0,
+									pointerEvents: 'none'
+								},
+								breathingAnimatedStyle
+							]}
 						>
 							<LogoCardSVG />
-						</View>
+						</Animated.View>
 						<View style={styles.cardHeader}>
 							<View style={[styles.logoContainer]}>
 								<LogoTextSVG size={16} color="#00ff33" />
@@ -255,7 +267,6 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 								</View>
 							)}
 
-							{/* Show groups on the card instead of email */}
 							{info.groups && info.groups.length > 0 && (
 								<View style={{ marginBottom: 12 }}>
 									<Text style={styles.fieldLabel}>{t('idCard.groups')}</Text>
