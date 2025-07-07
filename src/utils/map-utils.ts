@@ -52,15 +52,9 @@ export const FLOOR_SUBSTITUTES: Record<string, string> = {
  * @returns {Date}
  */
 export function addMinutes(date: Date, minutes: number): Date {
-	return new Date(
-		date.getFullYear(),
-		date.getMonth(),
-		date.getDate(),
-		date.getHours(),
-		Number(date.getMinutes()) + minutes,
-		date.getSeconds(),
-		date.getMilliseconds()
-	)
+	const result = new Date(date.getTime())
+	result.setMinutes(result.getMinutes() + minutes)
+	return result
 }
 
 /**

@@ -19,20 +19,20 @@ export function formatFriendlyDate(
 ): string {
 	const date = moment(datetime)
 	const today = moment()
-	const tomorrow = moment().add(1, 'days')
-
+	
 	if (date.isSame(today, 'day') && options.relative !== false) {
 		return t('dates.today', { ns: 'common' })
 	}
-	if (date.isSame(tomorrow, 'day') && options.relative !== false) {
+	if (date.isSame(today.clone().add(1, 'days'), 'day') && options.relative !== false) {
 		return t('dates.tomorrow', { ns: 'common' })
 	}
-	// Format the weekday in English
+	// Create clones to avoid mutating the original moment object
 	const weekday = date
+		.clone()
 		.locale(i18n.language)
 		.format(options.weekday === 'short' ? 'ddd' : 'dddd')
 	// Format the day, month, and year in German
-	const dayMonthYear = date.locale('de').format('DD.MM.YYYY')
+	const dayMonthYear = date.clone().locale('de').format('DD.MM.YYYY')
 	return `${weekday}, ${dayMonthYear}`
 }
 

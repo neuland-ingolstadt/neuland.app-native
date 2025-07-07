@@ -157,6 +157,8 @@ export async function callWithSession<T>(
 	try {
 		if (session !== null) {
 			return await method(session)
+		} else {
+			throw new NoSessionError()
 		}
 	} catch (e: unknown) {
 		// the backend can throw different errors such as 'No Session' or 'Session Is Over'
@@ -185,7 +187,6 @@ export async function callWithSession<T>(
 		}
 		throw e
 	}
-	return undefined as never
 }
 
 /**
