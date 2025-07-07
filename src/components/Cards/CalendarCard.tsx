@@ -46,7 +46,7 @@ const CalendarCard = (): React.JSX.Element => {
 			} else if ((e as Error).message === 'Query not possible') {
 				// ignore, leaving examList empty
 			} else {
-				console.log(e as Error)
+				console.error(e as Error)
 			}
 		}
 		return exams
@@ -75,13 +75,26 @@ const CalendarCard = (): React.JSX.Element => {
 			.map((item) => ({ ...item, begin: new Date(item.begin) }))
 			.filter((x) => x.begin > time || (x.end ?? time) > time)
 			.sort((a, b) => {
+				// First, prioritize single-day events and exams over multi-day events
+				const aIsSingleDay = !a.end || a.isExam
+				const bIsSingleDay = !b.end || b.isExam
+
+				// If one is single-day and the other is multi-day, prioritize single-day
+				if (aIsSingleDay && !bIsSingleDay) return -1
+				if (!aIsSingleDay && bIsSingleDay) return 1
+
+				// If both are the same type (both single-day or both multi-day), sort by start time
 				const dateComparison = a.begin.getTime() - b.begin.getTime()
-				if (dateComparison === 0) {
-					const aIsSingleDay = !a.end
-					const bIsSingleDay = !b.end
-					return aIsSingleDay ? -1 : bIsSingleDay ? 1 : 0
+				if (dateComparison !== 0) {
+					return dateComparison
 				}
-				return dateComparison
+
+				// If start times are the same, prioritize exams over regular events
+				if (a.isExam && !b.isExam) return -1
+				if (!a.isExam && b.isExam) return 1
+
+				// If both are the same type and have the same start time, maintain original order
+				return 0
 			}) as Combined[]
 
 		setMixedCalendar(combined.slice(0, 2))

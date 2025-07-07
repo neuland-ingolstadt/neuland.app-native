@@ -1,0 +1,76 @@
+{
+	"quickLinks": {
+		"title": "Quick Links",
+		"neulandWebsite": "Website",
+		"wiki": "Wiki",
+		"ssoProfile": "Alle Apps"
+	},
+	"idCard": {
+		"title": "NEULAND ID",
+		"name": "NAME",
+		"username": "BENUTZERNAME",
+		"groups": "GRUPPEN",
+		"footer": "Neuland Ingolstadt e.V.",
+		"footerDescription": "Tippe auf den QR-Code, um ihn im Vollbildmodus zu öffnen.",
+		"screenshotError": "Screenshot erkannt. Neuland ID Code temporär ausgeblendet."
+	},
+	"settings": {
+		"title": "Neuland Mitglied"
+	},
+	"loggedOut": {
+		"welcomeTitle": "Willkommen bei Neuland",
+		"welcomeSubtitle": "Der studentische Verein für alle informatikbegeisterten Studierenden der THI.",
+		"sectionTitle": "Warum Neuland beitreten?",
+		"benefits": {
+			"community": {
+				"title": "Gemeinschaft",
+				"description": "Vernetze dich mit Kommilitonen und baue dauerhafte Freundschaften auf"
+			},
+			"learning": {
+				"title": "Lernen",
+				"description": "Zugang zu Workshops, Tutorials und Lerngruppen"
+			},
+			"networking": {
+				"title": "Netzwerken",
+				"description": "Vernetze dich mit Fachleuten und Alumni"
+			},
+			"fun": {
+				"title": "Spaß",
+				"description": "Genieße Gaming-Abende, Events und soziale Aktivitäten"
+			}
+		},
+		"buttons": {
+			"learnAboutClub": "Mehr über Neuland",
+			"signIn": "Anmelden"
+		}
+	},
+	"qrCode": {
+		"tapToClose": "Tippe irgendwo zum Schließen"
+	},
+	"securityWarning": {
+		"title": "Sicherheitshinweis",
+		"warningText": "Bevor du deinen Pass zu Apple Wallet hinzufügst, beachte bitte:",
+		"points": {
+			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
+			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
+			"semester": "Der Wallet-Pass ist nur für das aktuelle Semester gültig"
+		},
+		"buttons": {
+			"useAppInstead": "App verwenden",
+			"addToWallet": "Zu Wallet hinzufügen"
+		}
+	},
+	"logout": {
+		"button": "Abmelden",
+		"alert": {
+			"title": "Bestätigen",
+			"message": "Möchtest du dich wirklich abmelden?",
+			"cancel": "Abbrechen",
+			"confirm": "Abmelden"
+		}
+	},
+	"web": {
+		"title": "Nicht verfügbar auf Web",
+		"message": "Lade die App herunter, um den Neuland Mitgliedsbereich zu nutzen."
+	}
+}

@@ -95,7 +95,7 @@ export default function TimetableDetails(): React.JSX.Element {
 				url: uri
 			})
 		} catch (e) {
-			console.log(e)
+			console.error(e)
 		}
 	}
 

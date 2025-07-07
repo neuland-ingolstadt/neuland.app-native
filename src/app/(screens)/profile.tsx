@@ -55,6 +55,7 @@ export default function Profile(): React.JSX.Element {
 				return failureCount < 2
 			}
 		})
+
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 	const [isBackground, setIsBackground] = React.useState(false)
 	useEffect(() => {
@@ -86,7 +87,7 @@ export default function Profile(): React.JSX.Element {
 			resetPreferences()
 			performLogout(toggleUserKind, resetOrder, queryClient)
 				.catch((e) => {
-					console.log(e)
+					console.error(e)
 				})
 				.finally(() => {
 					setIsLoggingOut(false)
@@ -110,7 +111,7 @@ export default function Profile(): React.JSX.Element {
 						resetPreferences()
 						performLogout(toggleUserKind, resetOrder, queryClient)
 							.catch((e) => {
-								console.log(e)
+								console.error(e)
 							})
 							.finally(() => {
 								setIsLoggingOut(false)

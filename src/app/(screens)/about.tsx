@@ -28,13 +28,14 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
-import { linkIcon } from '@/components/Universal/Icon'
+import { type LucideIcon, linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
@@ -151,7 +152,22 @@ export default function About(): React.JSX.Element {
 					onPress: () => {
 						void Linking.openURL(STATUS_URL)
 					}
-				}
+				},
+				...(Platform.OS !== 'web'
+					? [
+							{
+								title: 'Member Area',
+								icon: {
+									ios: 'person.crop.circle.badge.checkmark',
+									android: 'verified_user' as MaterialIcon,
+									web: 'UserCheck' as LucideIcon
+								},
+								onPress: () => {
+									router.navigate('/member')
+								}
+							}
+						]
+					: [])
 			]
 		},
 		{
@@ -332,9 +348,8 @@ export default function About(): React.JSX.Element {
 			>
 				<SingleSectionPicker
 					title={t('about.analytics.toggle')}
-					selectedItem={analyticsAllowed ?? false}
+					selectedItem={analyticsAllowed === true}
 					action={setAnalyticsAllowed}
-					state={analyticsAllowed ?? false}
 				/>
 			</SectionView>
 		</ScrollView>
