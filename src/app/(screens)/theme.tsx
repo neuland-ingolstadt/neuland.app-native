@@ -43,7 +43,6 @@ export default function Theme(): React.JSX.Element {
 						title={t('settings:theme.splash.showSplash')}
 						selectedItem={showSplashScreen}
 						action={setShowSplashScreen}
-						state={showSplashScreen}
 					/>
 				</SectionView>
 			)}

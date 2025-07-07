@@ -8,7 +8,6 @@ interface SectionPickerProps {
 	title: string
 	selectedItem: boolean
 	action: (state: boolean) => void
-	state: boolean
 	disabled?: boolean
 }
 
