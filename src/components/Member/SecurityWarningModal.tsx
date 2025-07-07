@@ -9,6 +9,11 @@ import WalletManager from 'react-native-wallet-manager'
 import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
 // @ts-expect-error no types
 import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
+// @ts-expect-error no types
+import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
+// @ts-expect-error no types
+import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
+
 import PlatformIcon from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 
@@ -33,7 +38,7 @@ export function SecurityWarningModal({
 	const currentLanguage = i18n.language || 'en'
 
 	const handleConfirm = async () => {
-		if (Platform.OS !== 'ios' || !idToken) {
+		if (!idToken) {
 			onConfirm()
 			return
 		}
@@ -43,6 +48,7 @@ export function SecurityWarningModal({
 		try {
 			const canAdd = await WalletManager.canAddPasses()
 			if (!canAdd) {
+				console.error('Device does not support adding passes')
 				onConfirm()
 				return
 			}
@@ -67,9 +73,7 @@ export function SecurityWarningModal({
 			if (!currentToken) {
 				throw new Error('No token available for pkpass URL')
 			}
-			// TODO: Backend needs to be updated to accept Bearer token in Authorization header
-			// For now, keeping the query parameter approach until backend migration is complete
-			const pkpassUrl = `https://id.neuland-ingolstadt.de/api/pkpass?token=${encodeURIComponent(currentToken)}`
+			const pkpassUrl = `https://id.neuland-ingolstadt.de/api/${Platform.OS === 'ios' ? 'pkpass' : 'gpass'}?token=${encodeURIComponent(currentToken)}`
 			await WalletManager.addPassFromUrl(pkpassUrl)
 		} catch (error) {
 			console.error('Failed to add pass to wallet:', error)
@@ -149,29 +153,31 @@ export function SecurityWarningModal({
 							</View>
 						</View>
 
-						{/* Apple Wallet Button */}
-						{Platform.OS === 'ios' && (
-							<View style={styles.walletButtonContainer}>
-								<Pressable
-									onPress={handleConfirm}
-									disabled={isAddingToWallet}
-									style={({ pressed }) => [
-										pressed && styles.walletButtonPressed
+						{/* Wallet Button */}
+						<View style={styles.walletButtonContainer}>
+							<Pressable
+								onPress={handleConfirm}
+								disabled={isAddingToWallet}
+								style={({ pressed }) => [pressed && styles.walletButtonPressed]}
+							>
+								<Image
+									source={
+										Platform.OS === 'ios'
+											? currentLanguage === 'de'
+												? AppleWalletDE
+												: AppleWalletEN
+											: currentLanguage === 'de'
+												? GoogleWalletDE
+												: GoogleWalletEN
+									}
+									style={[
+										styles.walletButton,
+										isAddingToWallet && styles.walletButtonDisabled
 									]}
-								>
-									<Image
-										source={
-											currentLanguage === 'de' ? AppleWalletDE : AppleWalletEN
-										}
-										style={[
-											styles.walletButton,
-											isAddingToWallet && styles.walletButtonDisabled
-										]}
-										contentFit="contain"
-									/>
-								</Pressable>
-							</View>
-						)}
+									contentFit="contain"
+								/>
+							</Pressable>
+						</View>
 
 						{/* Buttons */}
 						<View style={styles.buttonContainer}>

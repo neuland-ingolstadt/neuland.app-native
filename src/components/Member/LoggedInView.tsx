@@ -109,23 +109,20 @@ export function LoggedInView(): React.JSX.Element {
 				}
 			]
 		},
-		...(Platform.OS === 'ios'
-			? [
-					{
-						items: [
-							{
-								title: 'Add to Wallet',
-								onPress: handleAddToWallet,
-								icon: {
-									ios: 'wallet.pass',
-									android: 'wallet' as MaterialIcon,
-									web: 'Wallet' as LucideIcon
-								}
-							}
-						]
+
+		{
+			items: [
+				{
+					title: 'Add to Wallet',
+					onPress: handleAddToWallet,
+					icon: {
+						ios: 'wallet.pass',
+						android: 'wallet' as MaterialIcon,
+						web: 'Wallet' as LucideIcon
 					}
-				]
-			: [])
+				}
+			]
+		}
 	]
 
 	return (
