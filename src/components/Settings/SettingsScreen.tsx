@@ -206,17 +206,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 16,
+		marginTop: 18,
 		gap: 4
 	},
 	poweredByText: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
-		marginRight: 10
+		marginBottom: -10
 	},
 	hetznerLogo: {
-		width: 140,
-		height: 30,
+		width: 160,
+		height: 70,
 		resizeMode: 'contain'
 	},
 	wrapper: { paddingHorizontal: 12 }
