@@ -116,7 +116,6 @@ export default function FoodPreferences(): React.JSX.Element {
 						title={t('preferences.formlist.static')}
 						selectedItem={showStatic ?? false}
 						action={handleSetShowStatic}
-						state={false}
 					/>
 				</SectionView>
 				<View style={styles.sectionContainer}>
