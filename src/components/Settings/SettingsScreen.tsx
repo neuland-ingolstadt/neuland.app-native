@@ -1,10 +1,10 @@
+import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useRouter } from 'expo-router'
 import React, { use, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
-	Image,
 	LayoutAnimation,
 	Platform,
 	RefreshControl,
@@ -26,6 +26,7 @@ import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import GuestInfoSection from './GuestInfoSection'
+import HetznerLogo from './Hetzner'
 import NeulandBox from './NeulandBox'
 import SettingsHeader from './SettingsHeader'
 import SettingsLogo from './SettingsLogo'
@@ -33,7 +34,7 @@ import SettingsMenu from './SettingsMenu'
 import StudentInfoSection from './StudentInfoSection'
 
 export default function Settings(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
 	const router = useRouter()
@@ -66,6 +67,12 @@ export default function Settings(): React.JSX.Element {
 				}
 			]
 		)
+	}
+
+	const trackHetznerClick = (): void => {
+		trackEvent('Sponsor', {
+			sponsor: 'Hetzner'
+		})
 	}
 
 	const { data, isLoading, isSuccess, refetch, isError } = useQuery({
@@ -176,12 +183,14 @@ export default function Settings(): React.JSX.Element {
 			<SettingsLogo scrollY={scrollY} size={size} />
 			<View style={styles.poweredByContainer}>
 				<Text style={styles.poweredByText}>Infrastructure by</Text>
-				<Link href="https://hetzner.com" target="_blank">
-					<Image
-						source={require('@/assets/hetzner.webp')}
-						alt="Hetzner Logo"
-						style={styles.hetznerLogo}
-					/>
+				<Link
+					href="https://hetzner.com"
+					target="_blank"
+					onPress={() => {
+						trackHetznerClick()
+					}}
+				>
+					<HetznerLogo subtitleColor={theme.colors.labelSecondaryColor} />
 				</Link>
 			</View>
 		</ScrollView>
@@ -213,7 +222,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	poweredByText: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
-		marginBottom: -10
+		marginBottom: -6
 	},
 	hetznerLogo: {
 		width: 160,
