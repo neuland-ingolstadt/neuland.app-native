@@ -83,6 +83,7 @@ import {
 	getCenter,
 	getCenterSingle,
 	getIcon,
+	getRoomOpenings,
 	INGOLSTADT_CENTER,
 	NEUBURG_CENTER
 } from '@/utils/map-utils'
@@ -119,6 +120,8 @@ const MapScreen = (): React.JSX.Element => {
 		setClickedElement,
 		availableRooms,
 		setAvailableRooms,
+		roomOpenings,
+		setRoomOpenings,
 		currentFloor,
 		setCurrentFloor,
 		setNextLecture
@@ -431,6 +434,8 @@ const MapScreen = (): React.JSX.Element => {
 				const time = formatISOTime(dateObj)
 				const rooms = filterRooms(roomStatusData, date, time)
 				setAvailableRooms(rooms)
+				const openings = getRoomOpenings(roomStatusData, dateObj)
+				setRoomOpenings(openings)
 			} catch (e) {
 				if (
 					e instanceof NoSessionError ||
@@ -443,6 +448,7 @@ const MapScreen = (): React.JSX.Element => {
 			}
 		}
 		setAvailableRooms(null)
+		setRoomOpenings(null)
 		load()
 	}, [userKind, roomStatusData])
 
@@ -511,7 +517,8 @@ const MapScreen = (): React.JSX.Element => {
 					availableRooms,
 					allRooms,
 					i18n,
-					t
+					t,
+					roomOpenings
 				)
 			case SEARCH_TYPES.BUILDING:
 				return getBuildingData(clickedElement.data, allRooms, availableRooms, t)
