@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
+import ContextMenu from '@/components/Flow/ContextMenu'
 import { Avatar } from '@/components/Settings'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useMemberStore } from '@/hooks/useMemberStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
@@ -27,6 +30,7 @@ export const SettingsTabButton = ({
 	const { t } = useTranslation(['navigation', 'settings'])
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
+	const { idToken } = useMemberStore()
 
 	const [username, setUsername] = useState<string>('')
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
@@ -179,7 +183,55 @@ export const SettingsTabButton = ({
 		]
 	)
 
-	return <View accessibilityLabel={t('navigation.settings')}>{MemoIcon}</View>
+	const menuActions = React.useMemo(
+		() => [
+			{
+				title: t('settings:profile.contextMenu.libraryCard'),
+				systemIcon: Platform.OS === 'ios' ? 'books.vertical' : undefined
+			},
+			...(idToken
+				? [
+						{
+							title: t('settings:profile.contextMenu.neulandArea'),
+							systemIcon:
+								Platform.OS === 'ios' ? 'person.crop.circle' : undefined
+						}
+					]
+				: [])
+		],
+		[idToken, t]
+	)
+
+	const handleMenuPress = (e: { nativeEvent: { index: number } }) => {
+		const { index } = e.nativeEvent
+		if (index === 0) {
+			router.push('/(screens)/library')
+		} else if (idToken && index === 1) {
+			router.push('/(screens)/member')
+		}
+	}
+
+	return (
+		<ContextMenu
+			actions={menuActions}
+			onPress={handleMenuPress}
+			style={{ borderRadius: size / 2 }}
+		>
+			<View
+				accessibilityLabel={t('navigation.settings')}
+				style={{
+					width: size,
+					height: size,
+					borderRadius: size / 2,
+					overflow: 'hidden',
+					alignItems: 'center',
+					justifyContent: 'center'
+				}}
+			>
+				{MemoIcon}
+			</View>
+		</ContextMenu>
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
