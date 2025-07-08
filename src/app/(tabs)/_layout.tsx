@@ -18,7 +18,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
-import { storage } from '@/utils/storage'
+import { appStorage, storage } from '@/utils/storage'
 import { appIcons } from '../(screens)/app-icon'
 
 export default function HomeLayout(): React.JSX.Element {
@@ -54,11 +54,11 @@ export default function HomeLayout(): React.JSX.Element {
 	// migration of old settings
 	if (isOnboardedV1 === true) {
 		setOnboarded()
-		storage.delete('isOnboardedv1')
+		appStorage.delete('isOnboardedv1')
 	}
 	if (analyticsV1 === true) {
 		setAnalyticsAllowed(true)
-		storage.delete('analytics')
+		appStorage.delete('analytics')
 	}
 
 	if (oldAllergens != null) {
