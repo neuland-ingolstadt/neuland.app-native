@@ -73,11 +73,16 @@ export function SecurityWarningModal({
 			if (!currentToken) {
 				throw new Error('No token available for pkpass URL')
 			}
-			const passValue = `https://id.neuland-ingolstadt.de/api/${Platform.OS === 'ios' ? 'pkpass' : 'gpass'}?token=${encodeURIComponent(currentToken)}`
 			if (Platform.OS === 'android') {
-				await WalletManager.addPassToGoogleWallet(passValue)
+				const jwt = await fetch(
+					`https://id.neuland-ingolstadt.de/api/gpass?token=${encodeURIComponent(currentToken)}`
+				)
+				const jwtData = await jwt.text()
+				await WalletManager.addPassToGoogleWallet(jwtData)
 			} else {
-				await WalletManager.addPassFromUrl(passValue)
+				await WalletManager.addPassFromUrl(
+					`https://id.neuland-ingolstadt.de/api/pkpass?token=${encodeURIComponent(currentToken)}`
+				)
 			}
 		} catch (error) {
 			console.error('Failed to add pass to wallet:', error)
