@@ -86,7 +86,6 @@ export default function TimetablePreferences(): React.JSX.Element {
 						title={t('timetable:viewModes.list')}
 						selectedItem={timetableMode === TimetableMode.List}
 						action={toggleListMode}
-						state={false}
 					/>
 				</SectionView>
 
