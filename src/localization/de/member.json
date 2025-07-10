@@ -49,7 +49,7 @@
 	},
 	"securityWarning": {
 		"title": "Sicherheitshinweis",
-		"warningText": "Bevor du deinen Pass zu Apple Wallet hinzufügst, beachte bitte:",
+		"warningText": "Bevor du deinen Pass zum Wallet hinzufügst, beachte bitte:",
 		"points": {
 			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
 			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
