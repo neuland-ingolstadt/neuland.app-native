@@ -256,25 +256,27 @@ export default function GradesSCreen(): React.JSX.Element {
 								</View>
 							</SectionView>
 							<SectionView title={t('grades.finished')} hideBackground>
-								<React.Fragment>
+								{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
+								<>
 									{filteredGrades?.finished.map((grade, index) => (
 										<View key={index} style={styles.rowContainer}>
 											<GradesRow item={grade} />
 										</View>
 									))}
-								</React.Fragment>
+								</>
 							</SectionView>
 						</>
 					)}
 					{filteredGrades?.missing.length !== 0 && (
 						<SectionView title={t('grades.open')} hideBackground>
-							<React.Fragment>
+							{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
+							<>
 								{filteredGrades?.missing.map((grade, index) => (
 									<View key={index} style={styles.rowContainer}>
 										<GradesRow item={grade} />
 									</View>
 								))}
-							</React.Fragment>
+							</>
 						</SectionView>
 					)}
 					<View style={styles.notesBox}>

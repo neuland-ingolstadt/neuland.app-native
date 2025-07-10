@@ -39,27 +39,25 @@ export default function Theme(): React.JSX.Element {
 		}))
 	]
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				<FormList sections={sections} />
-				<View style={styles.notesContainer}>
-					<Text style={styles.notesText}>
-						{t('changelog.footer')}
-						<Text
-							style={styles.text}
-							onPress={() => {
-								void Linking.openURL(
-									'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
-								)
-							}}
-						>
-							{'GitHub'}
-						</Text>
-						.
+		<ScrollView contentContainerStyle={styles.scrollView}>
+			<FormList sections={sections} />
+			<View style={styles.notesContainer}>
+				<Text style={styles.notesText}>
+					{t('changelog.footer')}
+					<Text
+						style={styles.text}
+						onPress={() => {
+							void Linking.openURL(
+								'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
+							)
+						}}
+					>
+						{'GitHub'}
 					</Text>
-				</View>
-			</ScrollView>
-		</>
+					.
+				</Text>
+			</View>
+		</ScrollView>
 	)
 }
 

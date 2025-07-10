@@ -24,12 +24,12 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import GuestInfoSection from './GuestInfoSection'
-import NeulandBox from './NeulandBox'
-import SettingsHeader from './SettingsHeader'
-import SettingsLogo from './SettingsLogo'
-import SettingsMenu from './SettingsMenu'
-import StudentInfoSection from './StudentInfoSection'
+import GuestInfoSection from './guest-info-section'
+import NeulandBox from './neuland-box'
+import SettingsHeader from './settings-header'
+import SettingsLogo from './settings-logo'
+import SettingsMenu from './settings-menu'
+import StudentInfoSection from './student-info-section'
 
 export default function Settings(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

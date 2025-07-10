@@ -98,19 +98,17 @@ export default function Licenses(): React.JSX.Element {
 		}
 	]
 	return (
-		<>
-			<ScrollView
-				contentContainerStyle={styles.container}
-				contentInsetAdjustmentBehavior="automatic"
-			>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-					<View style={styles.notesContainer}>
-						<Text style={styles.notesText}>{t('licenses.footer')}</Text>
-					</View>
+		<ScrollView
+			contentContainerStyle={styles.container}
+			contentInsetAdjustmentBehavior="automatic"
+		>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+				<View style={styles.notesContainer}>
+					<Text style={styles.notesText}>{t('licenses.footer')}</Text>
 				</View>
-			</ScrollView>
-		</>
+			</View>
+		</ScrollView>
 	)
 }
 

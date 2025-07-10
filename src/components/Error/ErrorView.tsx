@@ -128,7 +128,6 @@ export default function ErrorView({
 		}
 	}
 
-	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const ErrorButton = (): React.JSX.Element => {
 		const buttonAction = (): void => {
 			switch (title) {

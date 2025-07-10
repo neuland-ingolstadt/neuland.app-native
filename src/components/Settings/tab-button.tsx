@@ -84,7 +84,6 @@ export const SettingsTabButton = ({
 		void fetchUsernameAndSetInitials()
 	}, [persData, userKind, username])
 
-	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const IconComponent = (): React.JSX.Element => {
 		const avatarStyle = focused
 			? { backgroundColor: iconColor, borderWidth: 0 }

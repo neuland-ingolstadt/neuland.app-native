@@ -10,6 +10,7 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('settings')
 	if (item.titel === null || item.titel === '') {
+		// biome-ignore lint/complexity/noUselessFragments: we need to return something
 		return <></>
 	}
 

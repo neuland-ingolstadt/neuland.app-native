@@ -23,19 +23,17 @@ export default function Unmatched(): React.JSX.Element {
 	}, [navigation])
 
 	return (
-		<>
-			<ErrorView
-				title={`${pathname} ${t('unmatched.error.title')}`}
-				message={t('unmatched.error.message')}
-				buttonText={t('unmatched.error.button')}
-				onButtonPress={() => {
-					if (router.canGoBack()) {
-						router.back()
-					} else {
-						router.replace('/(tabs)/(index)')
-					}
-				}}
-			/>
-		</>
+		<ErrorView
+			title={`${pathname} ${t('unmatched.error.title')}`}
+			message={t('unmatched.error.message')}
+			buttonText={t('unmatched.error.button')}
+			onButtonPress={() => {
+				if (router.canGoBack()) {
+					router.back()
+				} else {
+					router.replace('/(tabs)/(index)')
+				}
+			}}
+		/>
 	)
 }

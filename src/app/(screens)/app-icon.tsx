@@ -63,101 +63,97 @@ export default function AppIconPicker(): React.JSX.Element {
 		)
 	}
 	return (
-		<>
-			<ScrollView>
-				<View style={styles.container}>
-					{Object.entries(categories).map(([key, value]) => {
-						return (
-							<SectionView
-								// @ts-expect-error cannot verify the type of this prop
-								title={t(`appIcon.categories.${key}`)}
-								key={key}
-								footer={
-									key === 'exclusive' ? t('appIcon.exclusive') : undefined
-								}
-							>
-								<View style={styles.sectionContainer}>
-									{value.map((icon, index) => {
-										const unlocked =
-											key !== 'exclusive' || unlockedAppIcons.includes(icon)
-										return (
-											<React.Fragment key={icon}>
-												<Pressable
-													style={styles.rowContainer}
-													onPress={
-														unlocked
-															? async () => {
-																	try {
-																		if (icon === 'default') {
-																			await resetAppIcon()
-																			setCurrentIcon('default')
-																		} else {
-																			await setAlternateAppIcon(
-																				capitalizeFirstLetter(icon)
-																			)
-																			setCurrentIcon(icon)
-																		}
-																	} catch (e) {
-																		console.error(e)
+		<ScrollView>
+			<View style={styles.container}>
+				{Object.entries(categories).map(([key, value]) => {
+					return (
+						<SectionView
+							// @ts-expect-error cannot verify the type of this prop
+							title={t(`appIcon.categories.${key}`)}
+							key={key}
+							footer={key === 'exclusive' ? t('appIcon.exclusive') : undefined}
+						>
+							<View style={styles.sectionContainer}>
+								{value.map((icon, index) => {
+									const unlocked =
+										key !== 'exclusive' || unlockedAppIcons.includes(icon)
+									return (
+										<React.Fragment key={icon}>
+											<Pressable
+												style={styles.rowContainer}
+												onPress={
+													unlocked
+														? async () => {
+																try {
+																	if (icon === 'default') {
+																		await resetAppIcon()
+																		setCurrentIcon('default')
+																	} else {
+																		await setAlternateAppIcon(
+																			capitalizeFirstLetter(icon)
+																		)
+																		setCurrentIcon(icon)
 																	}
+																} catch (e) {
+																	console.error(e)
 																}
-															: undefined
-													}
-													disabled={!unlocked}
-												>
-													<View style={styles.rowInnerContainer}>
-														<Image
-															source={iconImages[icon]}
-															style={[
-																styles.imageContainer,
-																!unlocked && styles.imageDimmed
-															]}
-														/>
-														<View style={styles.textContainer}>
-															<Text style={styles.iconText}>
-																{t(
-																	// @ts-expect-error cannot verify the type of this prop
-																	`appIcon.names.${icon}`
-																)}
-															</Text>
-														</View>
-													</View>
-													{unlocked && currentIcon === icon && (
-														<PlatformIcon
-															ios={{
-																name: 'checkmark',
-																size: 20
-															}}
-															android={{
-																name: 'check',
-																size: 24
-															}}
-															web={{
-																name: 'Check',
-																size: 20
-															}}
-														/>
-													)}
-													{key === 'exclusive' && !unlocked && (
-														<Text style={styles.statusText}>
-															{t('appIcon.status.locked')}
+															}
+														: undefined
+												}
+												disabled={!unlocked}
+											>
+												<View style={styles.rowInnerContainer}>
+													<Image
+														source={iconImages[icon]}
+														style={[
+															styles.imageContainer,
+															!unlocked && styles.imageDimmed
+														]}
+													/>
+													<View style={styles.textContainer}>
+														<Text style={styles.iconText}>
+															{t(
+																// @ts-expect-error cannot verify the type of this prop
+																`appIcon.names.${icon}`
+															)}
 														</Text>
-													)}
-												</Pressable>
-
-												{index !== value.length - 1 && (
-													<Divider paddingLeft={110} />
+													</View>
+												</View>
+												{unlocked && currentIcon === icon && (
+													<PlatformIcon
+														ios={{
+															name: 'checkmark',
+															size: 20
+														}}
+														android={{
+															name: 'check',
+															size: 24
+														}}
+														web={{
+															name: 'Check',
+															size: 20
+														}}
+													/>
 												)}
-											</React.Fragment>
-										)
-									})}
-								</View>
-							</SectionView>
-						)
-					})}
-				</View>
-			</ScrollView>
-		</>
+												{key === 'exclusive' && !unlocked && (
+													<Text style={styles.statusText}>
+														{t('appIcon.status.locked')}
+													</Text>
+												)}
+											</Pressable>
+
+											{index !== value.length - 1 && (
+												<Divider paddingLeft={110} />
+											)}
+										</React.Fragment>
+									)
+								})}
+							</View>
+						</SectionView>
+					)
+				})}
+			</View>
+		</ScrollView>
 	)
 }
 

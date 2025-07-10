@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
-import { SettingsTabButton } from '../Settings/TabButton'
+import { SettingsTabButton } from '../Settings/tab-button'
 
 export function useBottomTabBarHeight(): number {
 	return 60

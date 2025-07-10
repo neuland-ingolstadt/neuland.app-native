@@ -93,13 +93,11 @@ export default function About(): React.JSX.Element {
 	]
 
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.contentContainer}>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-				</View>
-			</ScrollView>
-		</>
+		<ScrollView contentContainerStyle={styles.contentContainer}>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+			</View>
+		</ScrollView>
 	)
 }
 

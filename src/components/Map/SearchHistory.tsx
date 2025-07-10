@@ -43,65 +43,63 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
 		updateSearchHistory(newSearchHistory)
 	}
 	return (
-		<>
-			<View style={styles.suggestionContainer}>
-				<View style={styles.suggestionSectionHeaderContainer}>
-					<Text style={styles.suggestionSectionHeader}>
-						{t('pages.map.details.room.history')}
-					</Text>
-				</View>
-				<View style={styles.radius}>
-					{searchHistory?.map((history, index) => (
-						<React.Fragment key={history.title}>
-							<Swipeable
-								renderRightActions={() => (
-									<Pressable
-										style={styles.swipeableActionContainer}
-										onPress={() => {
-											LayoutAnimation.configureNext(
-												LayoutAnimation.Presets.easeInEaseOut
-											)
-											if (Platform.OS === 'ios') {
-												void selectionAsync()
-											}
-											deleteSearchHistoryItem(history)
-										}}
-									>
-										<PlatformIcon
-											ios={{
-												name: 'trash',
-												size: 20
-											}}
-											android={{
-												name: 'delete',
-												size: 24
-											}}
-											web={{
-												name: 'Trash',
-												size: 24
-											}}
-											style={styles.toast}
-										/>
-									</Pressable>
-								)}
-							>
-								<View style={styles.historyRow}>
-									<ResultRow
-										result={history}
-										index={index}
-										handlePresentModalPress={handlePresentModalPress}
-										updateSearchHistory={addToSearchHistory}
-									/>
-								</View>
-							</Swipeable>
-							{index !== searchHistory.length - 1 && (
-								<Divider key={`divider-${index}`} />
-							)}
-						</React.Fragment>
-					))}
-				</View>
+		<View style={styles.suggestionContainer}>
+			<View style={styles.suggestionSectionHeaderContainer}>
+				<Text style={styles.suggestionSectionHeader}>
+					{t('pages.map.details.room.history')}
+				</Text>
 			</View>
-		</>
+			<View style={styles.radius}>
+				{searchHistory?.map((history, index) => (
+					<React.Fragment key={history.title}>
+						<Swipeable
+							renderRightActions={() => (
+								<Pressable
+									style={styles.swipeableActionContainer}
+									onPress={() => {
+										LayoutAnimation.configureNext(
+											LayoutAnimation.Presets.easeInEaseOut
+										)
+										if (Platform.OS === 'ios') {
+											void selectionAsync()
+										}
+										deleteSearchHistoryItem(history)
+									}}
+								>
+									<PlatformIcon
+										ios={{
+											name: 'trash',
+											size: 20
+										}}
+										android={{
+											name: 'delete',
+											size: 24
+										}}
+										web={{
+											name: 'Trash',
+											size: 24
+										}}
+										style={styles.toast}
+									/>
+								</Pressable>
+							)}
+						>
+							<View style={styles.historyRow}>
+								<ResultRow
+									result={history}
+									index={index}
+									handlePresentModalPress={handlePresentModalPress}
+									updateSearchHistory={addToSearchHistory}
+								/>
+							</View>
+						</Swipeable>
+						{index !== searchHistory.length - 1 && (
+							<Divider key={`divider-${index}`} />
+						)}
+					</React.Fragment>
+				))}
+			</View>
+		</View>
 	)
 }
 

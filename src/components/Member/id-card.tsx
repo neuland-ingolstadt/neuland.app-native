@@ -21,8 +21,8 @@ import QRCode from 'react-qr-code'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import type { MemberInfo } from '@/hooks/useMemberStore'
-import { AnimatedSecurityLine } from './AnimatedSecurityLine'
-import { QRCodeModal } from './QRCodeModal'
+import { AnimatedSecurityLine } from './animated-security-line'
+import { QRCodeModal } from './qr-code-modal'
 
 const stylesheet = createStyleSheet((theme) => ({
 	shadow: {

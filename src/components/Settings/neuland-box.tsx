@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import PlatformIcon from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import Avatar from './Avatar'
+import AvatarCircle from './avatar-circle'
 
 const NeulandBox = () => {
 	const { styles, theme } = useStyles(stylesheet)
@@ -28,13 +28,13 @@ const NeulandBox = () => {
 				style={styles.neulandBox}
 			>
 				<View style={styles.neulandBoxContent}>
-					<Avatar
-						background={`${theme.colors.neulandGreen}30`}
+					<AvatarCircle
+						background={`${theme.colors.neulandGreen}25`}
 						size={50}
 						style={styles.neulandAvatar}
 					>
 						<LogoSVG size={35} color={Color(theme.colors.text).toString()} />
-					</Avatar>
+					</AvatarCircle>
 
 					<View>
 						<Text style={styles.neulandTitle}>

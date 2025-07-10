@@ -301,6 +301,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 				{/* FAQ Button */}
 				<Pressable
 					style={styles.faqButton}
+					hitSlop={15}
 					onPress={(e) => {
 						e.stopPropagation()
 						void Linking.openURL('http://id.neuland-ingolstadt.de/learn-more')
