@@ -77,6 +77,9 @@ export function SecurityWarningModal({
 				const jwt = await fetch(
 					`https://id.neuland-ingolstadt.de/api/gpass?token=${encodeURIComponent(currentToken)}`
 				)
+				if (!jwt.ok) {
+					throw new Error('Failed to fetch jwt')
+				}
 				const jwtData = await jwt.text()
 				await WalletManager.addPassToGoogleWallet(jwtData)
 			} else {
