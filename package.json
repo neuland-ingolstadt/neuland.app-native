@@ -139,7 +139,7 @@
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
 		"recyclerlistview@4.2.3": "patches/recyclerlistview@4.2.3.patch",
 		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
-		"luxon@3.6.1": "patches/luxon@3.6.1.patch"
+		"luxon@3.7.1": "patches/luxon@3.7.1.patch"
 	},
 	"trustedDependencies": [
 		"@biomejs/biome"

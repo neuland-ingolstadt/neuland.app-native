@@ -13,9 +13,11 @@ jobs:
   changelog:
     name: Generate changelog
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       release_body: ${{ steps.git-cliff.outputs.content }}
-      upload_url: ${{ steps.upload.outputs.upload_url }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,15 +50,15 @@ jobs:
           OUTPUT: CHANGES.md
           GITHUB_REPO: ${{ github.repository }}
 
-      - name: Upload the binary releases
-        id: upload
-        uses: svenstaro/upload-release-action@v2
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v2
         with:
-          file: /
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
+          draft: false
 
   github-releases-to-discord:
     name: Notify Discord
@@ -290,6 +292,8 @@ jobs:
     name: Publish APK to GitHub Releases
     runs-on: ubuntu-latest
     needs: [build-android, changelog]
+    permissions:
+      contents: write
     steps:
       - name: Download AAB from previous job
         uses: actions/download-artifact@v4
@@ -307,9 +311,10 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Upload APK to release
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ needs.changelog.outputs.upload_url }}
-          asset_path: ${{ steps.convert_aab.outputs.signedReleaseFile }}
-          asset_name: neuland-next.apk
-          asset_content_type: application/vnd.android.package-archive
+          files: ${{ steps.convert_aab.outputs.apkPath }}
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: ${{ needs.changelog.outputs.release_body }}
+          prerelease: ${{ contains(github.ref, '-') }}
