@@ -59,7 +59,6 @@ const EventComponent = ({
 
 	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
-	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const EventLine = ({ color }: { color: string }) => {
 		return (
 			<LinearGradient

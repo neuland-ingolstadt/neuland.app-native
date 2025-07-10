@@ -102,7 +102,6 @@ function FoodScreen(): React.JSX.Element {
 	 * @param {number} index - The index of the day in the list of days.
 	 * @returns {JSX.Element} - The rendered button component.
 	 */
-	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const DayButton = memo(
 		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
 			const date = new Date(day.timestamp)

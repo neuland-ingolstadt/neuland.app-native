@@ -94,7 +94,7 @@
 				"expo-router",
 				{
 					"headOrigin": "https://web.neuland.app",
-					"sitemap": false
+					"sitemap": true
 				}
 			],
 			[

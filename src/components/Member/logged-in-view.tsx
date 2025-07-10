@@ -16,8 +16,8 @@ import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
-import { IDCard } from './IDCard'
-import { SecurityWarningModal } from './SecurityWarningModal'
+import { IDCard } from './id-card'
+import { SecurityWarningModal } from './security-warning-modal'
 import { stylesheet } from './styles'
 
 export function LoggedInView(): React.JSX.Element {
@@ -26,7 +26,7 @@ export function LoggedInView(): React.JSX.Element {
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
 
-	// JWT refresh logic: only refresh on mount if expired
+	// only refresh on mount if expired
 	useEffect(() => {
 		if (!info?.exp) {
 			return
@@ -43,12 +43,13 @@ export function LoggedInView(): React.JSX.Element {
 
 	const handleAddToWallet = () => {
 		setShowSecurityWarning(true)
-		Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
+		if (Platform.OS === 'ios') {
+			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
+		}
 	}
 
 	const handleConfirmAddToWallet = async () => {
 		setShowSecurityWarning(false)
-		// Wallet logic is now handled directly in the SecurityWarningModal
 	}
 
 	const handleCancelAddToWallet = () => {
@@ -109,11 +110,10 @@ export function LoggedInView(): React.JSX.Element {
 				}
 			]
 		},
-
 		{
 			items: [
 				{
-					title: 'Add to Wallet',
+					title: t('securityWarning.buttons.addToWallet'),
 					onPress: handleAddToWallet,
 					icon: {
 						ios: 'wallet.pass',

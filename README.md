@@ -6,14 +6,14 @@
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
 # Neuland Next - Your unofficial app for THI
 
-<div style="display: flex; align-items: center; gap: 15px;">
+<p align="left" style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
-    <img alt="Download on the App Store" src="assets/github/Apple_Badge_EN.svg" height="50px" />
+    <img src="assets/github/Apple_Badge_EN.svg" alt="Download on the App Store" style="height: 50px; margin-top: 3px;" />
   </a>
   <a href="https://play.google.com/store/apps/details?id=app.neuland">
-    <img alt="Get it on Google Play" src="assets/github/Google_Badge_EN.svg" height="50px" />
+    <img src="assets/github/Google_Badge_EN.svg" alt="Get it on Google Play" style="height: 50px;" />
   </a>
-</div>
+</p>
 
 Neuland Next is the unofficial go-to app for students of Technische Hochschule Ingolstadt (THI). Built with React Native and powered by open source, it delivers a sleek, modern experience packed with smart features—designed by students, for students.
 
@@ -94,3 +94,7 @@ Help us test the latest features before they're released to the public:
 ## 👥 About Us
 
 Neuland Next is developed by [Neuland Ingolstadt e.V.](https://neuland-ingolstadt.de), a non-profit organization founded by students of the THI. We are independent of the university and develop the app in our free time.
+
+## 📜 License
+
+Neuland Next is licensed under the [GNU Affero General Public License v3.0](LICENSE).

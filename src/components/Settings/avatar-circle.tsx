@@ -9,14 +9,14 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
- * Avatar component that displays a circular image or icon with optional shadow and background color.
+ * AvatarCircle component that displays a circular image or icon with optional shadow and background color.
  * @param size The size of the avatar in pixels. Defaults to 50.
  * @param background The background color of the avatar.
  * @param children The content to display inside the avatar.
  * @param style Optional additional styles to apply to the avatar.
  * @returns A JSX element representing the Avatar component.
  */
-const Avatar = ({
+const AvatarCircle = ({
 	size = 55,
 	background,
 	children,
@@ -50,4 +50,4 @@ const stylesheet = createStyleSheet({
 	})
 })
 
-export default Avatar
+export default AvatarCircle

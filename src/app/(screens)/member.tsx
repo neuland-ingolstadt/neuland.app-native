@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import ErrorView from '@/components/Error/ErrorView'
-import { LoggedInView } from '@/components/Member/LoggedInView'
-import { LoggedOutView } from '@/components/Member/LoggedOutView'
+import { LoggedInView } from '@/components/Member/logged-in-view'
+import { LoggedOutView } from '@/components/Member/logged-out-view'
 import { useMemberStore } from '@/hooks/useMemberStore'
 
 const redirectUri = AuthSession.makeRedirectUri({

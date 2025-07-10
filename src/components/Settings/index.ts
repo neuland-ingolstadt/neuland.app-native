@@ -1,7 +1,7 @@
-import Avatar from './Avatar'
-import GradesButton from './GradesButton'
-import InfoBox from './InfoBox'
-import NameBox from './NameBox'
-import NeulandBox from './NeulandBox'
+import AvatarCircle from './avatar-circle'
+import GradesButton from './grades-button'
+import InfoBox from './info-box'
+import NameBox from './name-box'
+import NeulandBox from './neuland-box'
 
-export { Avatar, NameBox, GradesButton, InfoBox, NeulandBox }
+export { AvatarCircle as Avatar, NameBox, GradesButton, InfoBox, NeulandBox }

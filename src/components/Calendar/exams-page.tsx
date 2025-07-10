@@ -53,7 +53,6 @@ export default function ExamsPage({
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
 			<View style={styles.footerContainer}>

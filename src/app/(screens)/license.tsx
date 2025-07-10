@@ -86,19 +86,17 @@ export default function License(): React.JSX.Element {
 		}
 	]
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.container}>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-				</View>
+		<ScrollView contentContainerStyle={styles.container}>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+			</View>
 
-				{licenseText !== '' && (
-					<SectionView title={t('navigation.license', { ns: 'navigation' })}>
-						<Text style={styles.text}>{licenseText}</Text>
-					</SectionView>
-				)}
-			</ScrollView>
-		</>
+			{licenseText !== '' && (
+				<SectionView title={t('navigation.license', { ns: 'navigation' })}>
+					<Text style={styles.text}>{licenseText}</Text>
+				</SectionView>
+			)}
+		</ScrollView>
 	)
 }
 
