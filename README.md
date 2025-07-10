@@ -13,6 +13,9 @@
   <a href="https://play.google.com/store/apps/details?id=app.neuland">
     <img src="assets/github/Google_Badge_EN.svg" alt="Get it on Google Play" style="height: 50px;" />
   </a>
+  <a href="https://github.com/neuland-ingolstadt/neuland.app-native/releases/latest">
+    <img src="assets/github/get-it-on-github.png" alt="Get it on GitHub" style="height: 50px;" />
+  </a>
 </p>
 
 Neuland Next is the unofficial go-to app for students of Technische Hochschule Ingolstadt (THI). Built with React Native and powered by open source, it delivers a sleek, modern experience packed with smart features—designed by students, for students.
