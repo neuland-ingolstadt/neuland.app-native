@@ -311,10 +311,41 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Upload APK to release
-        uses: softprops/action-gh-release@v2
+        uses: actions/github-script@v7
         with:
-          files: ${{ steps.convert_aab.outputs.apkPath }}
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
-          body: ${{ needs.changelog.outputs.release_body }}
-          prerelease: ${{ contains(github.ref, '-') }}
+          script: |
+            const fs = require('fs');
+            
+            const apkPath = '${{ steps.convert_aab.outputs.apkPath }}';
+            const assetName = 'neuland-next.apk';
+            
+            if (!fs.existsSync(apkPath)) {
+              throw new Error(`APK file not found at ${apkPath}`);
+            }
+            
+            // Find the release by tag name
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            
+            const release = releases.data.find(r => r.tag_name === '${{ github.ref_name }}');
+            
+            if (!release) {
+              throw new Error(`Release with tag ${{ github.ref_name }} not found`);
+            }
+            
+            const fileBuffer = fs.readFileSync(apkPath);
+            
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              name: assetName,
+              data: fileBuffer,
+              headers: {
+                'Content-Type': 'application/vnd.android.package-archive'
+              }
+            });
+            
+            console.log(`Successfully uploaded ${assetName} to release ${release.id}`);
