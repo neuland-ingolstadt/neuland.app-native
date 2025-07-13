@@ -21,8 +21,8 @@ import QRCode from 'react-qr-code'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import type { MemberInfo } from '@/hooks/useMemberStore'
-import { AnimatedSecurityLine } from './AnimatedSecurityLine'
-import { QRCodeModal } from './QRCodeModal'
+import { AnimatedSecurityLine } from './animated-security-line'
+import { QRCodeModal } from './qr-code-modal'
 
 const stylesheet = createStyleSheet((theme) => ({
 	shadow: {
@@ -39,7 +39,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	idCardContainer: {
 		borderRadius: theme.radius.lg,
-		overflow: 'visible'
+		overflow: 'hidden'
 	},
 	idCard: {
 		borderRadius: theme.radius.lg,
@@ -280,29 +280,34 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 											marginTop: 4
 										}}
 									>
-										{info.groups.slice(0, 4).map((group) => (
-											<View
-												key={group}
-												style={{
-													backgroundColor: '#414141',
-													borderRadius: 8,
-													paddingHorizontal: 10,
-													paddingVertical: 4,
-													marginRight: 6,
-													marginBottom: 6
-												}}
-											>
-												<Text
+										{info.groups
+											.filter(
+												(group) => !group.toLowerCase().startsWith('authentik')
+											)
+											.slice(0, 5)
+											.map((group) => (
+												<View
+													key={group}
 													style={{
-														color: '#ffffff',
-														fontSize: 12,
-														fontWeight: '500'
+														backgroundColor: '#414141',
+														borderRadius: 8,
+														paddingHorizontal: 10,
+														paddingVertical: 4,
+														marginRight: 6,
+														marginBottom: 6
 													}}
 												>
-													{group.charAt(0).toUpperCase() + group.slice(1)}
-												</Text>
-											</View>
-										))}
+													<Text
+														style={{
+															color: '#ffffff',
+															fontSize: 12,
+															fontWeight: '500'
+														}}
+													>
+														{group.charAt(0).toUpperCase() + group.slice(1)}
+													</Text>
+												</View>
+											))}
 									</View>
 								</View>
 							)}

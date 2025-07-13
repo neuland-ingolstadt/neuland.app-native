@@ -348,9 +348,8 @@ export default function About(): React.JSX.Element {
 			>
 				<SingleSectionPicker
 					title={t('about.analytics.toggle')}
-					selectedItem={analyticsAllowed ?? false}
+					selectedItem={analyticsAllowed === true}
 					action={setAnalyticsAllowed}
-					state={analyticsAllowed ?? false}
 				/>
 			</SectionView>
 		</ScrollView>

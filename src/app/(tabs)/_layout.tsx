@@ -7,7 +7,7 @@ import type React from 'react'
 import { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { useMMKVBoolean } from 'react-native-mmkv'
+import { MMKV, useMMKVBoolean } from 'react-native-mmkv'
 import { UserKindContext } from '@/components/contexts'
 import TabLayout from '@/components/Layout/Tabbar'
 import changelog from '@/data/changelog.json'
@@ -50,15 +50,16 @@ export default function HomeLayout(): React.JSX.Element {
 	const updatedVersion = useFlowStore((state) => state.updatedVersion)
 	const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
 	const [analyticsV1] = useMMKVBoolean('analytics')
+	const legacyStorage = new MMKV()
 	const oldAllergens = storage.getString('selectedUserAllergens')
 	// migration of old settings
 	if (isOnboardedV1 === true) {
 		setOnboarded()
-		storage.delete('isOnboardedv1')
+		legacyStorage.delete('isOnboardedv1')
 	}
 	if (analyticsV1 === true) {
 		setAnalyticsAllowed(true)
-		storage.delete('analytics')
+		legacyStorage.delete('analytics')
 	}
 
 	if (oldAllergens != null) {

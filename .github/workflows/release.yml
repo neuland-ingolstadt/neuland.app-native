@@ -13,8 +13,11 @@ jobs:
   changelog:
     name: Generate changelog
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       release_body: ${{ steps.git-cliff.outputs.content }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,14 +50,15 @@ jobs:
           OUTPUT: CHANGES.md
           GITHUB_REPO: ${{ github.repository }}
 
-      - name: Upload the binary releases
-        uses: svenstaro/upload-release-action@v2
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v2
         with:
-          file: /
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
+          draft: false
 
   github-releases-to-discord:
     name: Notify Discord
@@ -246,7 +250,7 @@ jobs:
           retention-days: 1
 
   publish-android:
-    name: Submit and Publish
+    name: Submit to Google Play
     runs-on: ubuntu-latest
     needs: build-android
     steps:
@@ -284,8 +288,64 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas submit --platform android --profile preview --non-interactive --path neuland-next.aab
 
-      - name: Upload artifacts to Github
-        uses: actions/upload-artifact@v4
+  create-apk-release:
+    name: Publish APK to GitHub Releases
+    runs-on: ubuntu-latest
+    needs: [build-android, changelog]
+    permissions:
+      contents: write
+    steps:
+      - name: Download AAB from previous job
+        uses: actions/download-artifact@v4
         with:
-          name: neuland-next-android
-          path: neuland-next.aab
+          name: android-build-artifacts
+
+      - name: Convert AAB to APK
+        id: convert_aab
+        uses: ethanneff/bundletool-action@v1.0.8
+        with:
+          aabFile: neuland-next.aab
+          base64Keystore: ${{ secrets.KEYSTORE_BASE64 }}
+          keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keystoreAlias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
+
+      - name: Upload APK to release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const apkPath = '${{ steps.convert_aab.outputs.apkPath }}';
+            const assetName = 'neuland-next.apk';
+            
+            if (!fs.existsSync(apkPath)) {
+              throw new Error(`APK file not found at ${apkPath}`);
+            }
+            
+            // Find the release by tag name
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            
+            const release = releases.data.find(r => r.tag_name === '${{ github.ref_name }}');
+            
+            if (!release) {
+              throw new Error(`Release with tag ${{ github.ref_name }} not found`);
+            }
+            
+            const fileBuffer = fs.readFileSync(apkPath);
+            
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              name: assetName,
+              data: fileBuffer,
+              headers: {
+                'Content-Type': 'application/vnd.android.package-archive'
+              }
+            });
+            
+            console.log(`Successfully uploaded ${assetName} to release ${release.id}`);

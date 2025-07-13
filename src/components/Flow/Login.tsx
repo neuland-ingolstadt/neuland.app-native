@@ -65,36 +65,34 @@ export default function Login(): React.JSX.Element {
 	const insets = useSafeAreaInsets()
 
 	return (
-		<>
-			<TouchableWithoutFeedback
-				onPress={Keyboard.dismiss}
-				disabled={Platform.OS === 'web'}
-			>
-				<View style={{ ...styles.container, paddingTop: insets.top }}>
-					<KeyboardAvoidingView
-						style={styles.keyboardContainer}
-						behavior="padding"
-						enabled={!floatingKeyboard}
+		<TouchableWithoutFeedback
+			onPress={Keyboard.dismiss}
+			disabled={Platform.OS === 'web'}
+		>
+			<View style={{ ...styles.container, paddingTop: insets.top }}>
+				<KeyboardAvoidingView
+					style={styles.keyboardContainer}
+					behavior="padding"
+					enabled={!floatingKeyboard}
+				>
+					<LoginAnimatedText />
+					<LoginForm navigateHome={navigateHome} />
+					<View />
+					<View />
+				</KeyboardAvoidingView>
+				<View style={styles.linkContainer}>
+					<Pressable
+						onPress={() => {
+							void Linking.openURL(PRIVACY_URL)
+						}}
 					>
-						<LoginAnimatedText />
-						<LoginForm navigateHome={navigateHome} />
-						<View />
-						<View />
-					</KeyboardAvoidingView>
-					<View style={styles.linkContainer}>
-						<Pressable
-							onPress={() => {
-								void Linking.openURL(PRIVACY_URL)
-							}}
-						>
-							<Text style={styles.privacyLink}>
-								{t('onboarding.links.privacy')}
-							</Text>
-						</Pressable>
-					</View>
+						<Text style={styles.privacyLink}>
+							{t('onboarding.links.privacy')}
+						</Text>
+					</Pressable>
 				</View>
-			</TouchableWithoutFeedback>
-		</>
+			</View>
+		</TouchableWithoutFeedback>
 	)
 }
 

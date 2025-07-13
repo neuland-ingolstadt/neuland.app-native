@@ -9,6 +9,7 @@ export const HomeHeaderRight = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	if (Platform.OS === 'ios') {
+		// biome-ignore lint/complexity/noUselessFragments: we need to return something
 		return <></>
 	}
 
