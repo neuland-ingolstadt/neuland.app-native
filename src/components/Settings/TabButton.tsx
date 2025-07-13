@@ -204,10 +204,14 @@ export const SettingsTabButton = ({
 
 	const handleMenuPress = (e: { nativeEvent: { index: number } }) => {
 		const { index } = e.nativeEvent
-		if (index === 0) {
-			router.push('/(screens)/library')
-		} else if (idToken && index === 1) {
-			router.push('/(screens)/member')
+		try {
+			if (index === 0) {
+				router.push('/(screens)/library')
+			} else if (idToken && index === 1) {
+				router.push('/(screens)/member')
+			}
+		} catch (error) {
+			console.error('Navigation error:', error)
 		}
 	}
 
@@ -219,14 +223,7 @@ export const SettingsTabButton = ({
 		>
 			<View
 				accessibilityLabel={t('navigation.settings')}
-				style={{
-					width: size,
-					height: size,
-					borderRadius: size / 2,
-					overflow: 'hidden',
-					alignItems: 'center',
-					justifyContent: 'center'
-				}}
+				style={styles.contextMenuContainer(size)}
 			>
 				{MemoIcon}
 			</View>
@@ -253,5 +250,13 @@ const stylesheet = createStyleSheet((theme) => ({
 			: Platform.OS === 'web'
 				? theme.colors.labelColor
 				: theme.colors.tabbarInactive
+	}),
+	contextMenuContainer: (size: number) => ({
+		width: size,
+		height: size,
+		borderRadius: size / 2,
+		overflow: 'hidden',
+		alignItems: 'center',
+		justifyContent: 'center'
 	})
 }))
