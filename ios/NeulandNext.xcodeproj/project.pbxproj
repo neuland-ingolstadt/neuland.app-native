@@ -248,6 +248,10 @@
 				B70D14392DECD82C00FFD12F /* Embed Foundation Extensions */,
 				5E2C7F424887678D1D9EF485 /* [CP] Embed Pods Frameworks */,
 				A283F86B81295F75F028DDC2 /* [CP] Copy Pods Resources */,
+				624491A8C67141E7A728374A /* Remove signature files (Xcode workaround) */,
+				853407503AAF4DF782B7E59F /* Remove signature files (Xcode workaround) */,
+				0BB8F674D37D4CB583064F97 /* Remove signature files (Xcode workaround) */,
+				BCCBC6AC31DB46B797CD7799 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -482,6 +486,74 @@
 			shellPath = /bin/sh;
 			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
+		624491A8C67141E7A728374A /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
+		853407503AAF4DF782B7E59F /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
+		0BB8F674D37D4CB583064F97 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
+		BCCBC6AC31DB46B797CD7799 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -516,7 +588,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 370DACE70269ED7C222F57A7 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -541,7 +623,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -554,7 +636,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97969E7B185CB44773F9C54B /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -575,7 +667,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -587,7 +679,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -665,7 +767,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -773,6 +885,17 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Debug;
 		};
@@ -817,6 +940,17 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Panda,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Release;
 		};
