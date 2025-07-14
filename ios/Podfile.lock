@@ -398,11 +398,11 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - maplibre-react-native (10.1.6):
-    - maplibre-react-native/DynamicLibrary (= 10.1.6)
+  - maplibre-react-native (10.2.0):
+    - maplibre-react-native/DynamicLibrary (= 10.2.0)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.1.6):
+  - maplibre-react-native/DynamicLibrary (10.2.0):
     - React
     - React-Core
   - MMKV (2.2.2):
@@ -2884,7 +2884,7 @@ SPEC CHECKSUMS:
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  maplibre-react-native: fac2379219cce0e4e3a3ebd0d0892761142770ee
+  maplibre-react-native: 5aadc584d5c05e356dd1c46f9015b16a447070eb
   MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
   MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82

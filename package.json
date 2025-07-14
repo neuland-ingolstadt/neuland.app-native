@@ -32,7 +32,7 @@
 		"@gorhom/bottom-sheet": "^5.1.6",
 		"@howljs/calendar-kit": "^2.2.2",
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
-		"@maplibre/maplibre-react-native": "10.1.6",
+		"@maplibre/maplibre-react-native": "10.2.0",
 		"@react-native-community/datetimepicker": "8.4.2",
 		"@react-native-community/netinfo": "11.4.1",
 		"@react-native-menu/menu": "^1.2.3",
