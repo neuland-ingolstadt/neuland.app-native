@@ -19,8 +19,9 @@
 		"pull": "Zum Aktualisieren nach unten ziehen",
 		"noData": {
 			"title": "Keine Daten verfügbar.",
-			"message": "Bitte versuche es später erneut."
+			"message": "Schau später nochmal vorbei."
 		},
+		"noEvents": "Keine Veranstaltungen verfügbar",
 		"eventNotFound": "Veranstaltung nicht gefunden",
 		"eventNotFoundDescription": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
 		"backToEventList": "Zurück zu {{type}}",
