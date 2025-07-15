@@ -228,7 +228,7 @@ export default function Provider({
 				...t.colors,
 				primary: colors.light,
 				secondary: colors.light,
-				primaryBackground: `${colors.light}15`,
+				primaryBackground: `${colors.light}15`
 			}
 		}))
 		UnistylesRuntime.updateTheme('dark', (t) => ({
