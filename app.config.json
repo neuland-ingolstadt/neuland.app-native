@@ -117,8 +117,8 @@
 						"ios": "./src/assets/appIcons/rainbowGlow.png"
 					},
 					{
-						"name": "Panda",
-						"ios": "./src/assets/appIcons/panda.png"
+						"name": "Hacker",
+						"ios": "./src/assets/appIcons/hacker.png"
 					},
 					{
 						"name": "Retro",

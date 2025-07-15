@@ -224,7 +224,7 @@
 			"cat": "Paradise Cat",
 			"luxury": "Golden Luxury",
 			"rainbowGlow": "Rainbow Glow",
-			"panda": "Panda by Ocean"
+			"hacker": "Hacker"
 		},
 		"categories": {
 			"default": "Default",
@@ -234,8 +234,7 @@
 			"neuland": "Neuland"
 		},
 		"exclusive": "Find easter eggs to unlock exclusive app icons.",
-		"exclusivePreviewSubtitle": "Become a member of Neuland Ingolstadt e.V. to unlock these exclusive icons.",
-		"neulandInfo": "Neuland members get exclusive app icons. Tap to login.",
+		"exclusivePreviewSubtitle": "Exclusive for Neuland members. Tap to learn more.",
 		"status": {
 			"locked": "Locked",
 			"unlocked": "Unlocked"
