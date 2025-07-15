@@ -149,6 +149,14 @@
 		"splash": {
 			"title": "Startbildschirm",
 			"showSplash": "Animierten Startbildschirm anzeigen"
+		},
+		"accent": {
+			"title": "Akzentfarbe",
+			"blue": "Blau",
+			"green": "Grün",
+			"pink": "Pink",
+			"memberOnly": "Als Neuland Mitglied kannst du die Akzentfarbe ändern.",
+			"footer": "Wähle die primäre Akzentfarbe aus."
 		}
 	},
 	"dashboard": {

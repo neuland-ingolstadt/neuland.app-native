@@ -1,16 +1,24 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
+import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
+import AccentColorPicker from '@/components/Theme/AccentColorPicker'
 import ThemePreview from '@/components/Theme/ThemePreview'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useMemberStore } from '@/hooks/useMemberStore'
+import {
+	type AccentColor,
+	usePreferencesStore
+} from '@/hooks/usePreferencesStore'
 
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const setTheme = usePreferencesStore((state) => state.setTheme)
+	const accentColor = usePreferencesStore((s) => s.accentColor)
+	const setAccentColor = usePreferencesStore((s) => s.setAccentColor)
+	const memberInfo = useMemberStore((s) => s.info)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
 	)
@@ -35,8 +43,14 @@ export default function Theme(): React.JSX.Element {
 		}
 	]
 
+	const accentOptions: { key: AccentColor; title: string }[] = [
+		{ key: 'blue', title: t('theme.accent.blue') },
+		{ key: 'green', title: t('theme.accent.green') },
+		{ key: 'pink', title: t('theme.accent.pink') }
+	]
+
 	return (
-		<View style={styles.container}>
+		<ScrollView contentContainerStyle={styles.container}>
 			{Platform.OS !== 'web' && (
 				<SectionView title={t('settings:theme.splash.title')}>
 					<SingleSectionPicker
@@ -57,13 +71,25 @@ export default function Theme(): React.JSX.Element {
 				/>
 			</SectionView>
 
+			{memberInfo && (
+				<SectionView
+					title={t('theme.accent.title')}
+					footer={memberInfo ? t('theme.accent.memberOnly') : undefined}
+				>
+					<AccentColorPicker
+						options={accentOptions}
+						selected={accentColor}
+						onSelect={setAccentColor as (item: AccentColor) => void}
+					/>
+				</SectionView>
+			)}
 			<View style={styles.preview}>
 				<Text style={styles.previewLabel}>
 					{t('timetable:preferences.preview')}
 				</Text>
 				<ThemePreview theme={theme ?? 'auto'} onThemeChange={setTheme} />
 			</View>
-		</View>
+		</ScrollView>
 	)
 }
 
@@ -83,5 +109,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 6,
 		marginTop: 16,
 		textTransform: 'uppercase'
+	},
+	statusText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		textAlign: 'center'
 	}
 }))
