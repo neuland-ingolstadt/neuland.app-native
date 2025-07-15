@@ -252,6 +252,8 @@
 				853407503AAF4DF782B7E59F /* Remove signature files (Xcode workaround) */,
 				0BB8F674D37D4CB583064F97 /* Remove signature files (Xcode workaround) */,
 				BCCBC6AC31DB46B797CD7799 /* Remove signature files (Xcode workaround) */,
+				7737FB6066FB46D38E5042F3 /* Remove signature files (Xcode workaround) */,
+				56A3EF422E6D48D4A11289B3 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -542,6 +544,40 @@
 			shellPath = /bin/sh;
 			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
+		7737FB6066FB46D38E5042F3 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
+		56A3EF422E6D48D4A11289B3 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -576,7 +612,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 370DACE70269ED7C222F57A7 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -601,7 +647,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -614,7 +660,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97969E7B185CB44773F9C54B /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -635,7 +691,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -647,7 +703,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -725,7 +791,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -794,7 +870,17 @@
 		B70D143B2DECD82C00FFD12F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -840,7 +926,17 @@
 		B70D143C2DECD82C00FFD12F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Panda Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;

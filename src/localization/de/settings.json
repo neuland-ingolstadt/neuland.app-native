@@ -202,8 +202,8 @@
 			"rainbowNeon": "Regenbogen Neon",
 			"cat": "Paradies Katze",
 			"luxury": "Goldener Luxus",
-			"rainbowGlow": "Regenbogen Glow",
-			"panda": "Panda am Meer"
+			"rainbowGlow": "Regenbogen Leuchten",
+			"hacker": "Hacker"
 		},
 		"categories": {
 			"default": "Standard",
@@ -213,8 +213,7 @@
 			"neuland": "Neuland"
 		},
 		"exclusive": "Finde Easter-Eggs, um exklusive App-Icons freizuschalten.",
-		"exclusivePreviewSubtitle": "Werde Mitglied von Neuland Ingolstadt e.V. um diese exklusiven Icons zu nutzen.",
-		"neulandInfo": "Neuland-Mitglieder erhalten exklusive App-Icons. Tippe zum Anmelden.",
+		"exclusivePreviewSubtitle": "Nur für Neuland-Mitglieder. Tippe um mehr zu erfahren.",
 		"status": {
 			"locked": "Gesperrt",
 			"unlocked": "Freigeschaltet"
