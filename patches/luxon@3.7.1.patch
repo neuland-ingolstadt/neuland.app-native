@@ -1,12 +1,14 @@
 diff --git a/package.json b/package.json
-index fdbb56cbbfcc5c6aaeb22fd01b339a494a23a057..ee6e526b1fad2e65cb3dd5b3e405d5289059b9cd 100644
+index 8a7dfcfbd5641f0fb62e8aa348b86f6e68e7faff..9aaa0c5ca795be8d51008b9efd7bf5a661030890 100644
 --- a/package.json
 +++ b/package.json
-@@ -10,7 +10,7 @@
+@@ -9,8 +9,8 @@
+   ],
    "repository": "https://github.com/moment/luxon",
    "exports": {
-     ".": {
+-    ".": {
 -      "import": "./src/luxon.js",
++      ".": {
 +      "import": "./build/es6/luxon.js",
        "require": "./build/node/luxon.js"
      },

@@ -81,44 +81,42 @@ const MealCategory = ({
 
 	const { styles } = useStyles(stylesheet)
 	return (
-		<>
-			<View key={category} style={styles.categoryContainerCollapsed}>
-				<Pressable
-					onPress={() => {
-						toggleCollapsed()
-					}}
-					style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
-					hitSlop={{ top: 6, bottom: 6 }}
-				>
-					<View style={styles.categoryContainer}>
-						<Text style={styles.categoryText}>
-							{t(`categories.${category}`, category)}
-						</Text>
-						<PlatformIcon
-							ios={{
-								name: collapsed ? 'chevron.down' : 'chevron.up',
-								size: 13,
-								weight: 'semibold'
-							}}
-							android={{
-								name: collapsed ? 'expand_more' : 'expand_less',
-								size: 20
-							}}
-							web={{
-								name: collapsed ? 'ChevronDown' : 'ChevronUp',
-								size: 20
-							}}
-							style={styles.toggleIcon}
-						/>
-					</View>
-				</Pressable>
-				<Collapsible collapsed={collapsed}>
-					{meals.map((meal: Meal, index: number) => (
-						<MealEntry key={index} meal={meal} index={index} />
-					))}
-				</Collapsible>
-			</View>
-		</>
+		<View key={category} style={styles.categoryContainerCollapsed}>
+			<Pressable
+				onPress={() => {
+					toggleCollapsed()
+				}}
+				style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+				hitSlop={{ top: 6, bottom: 6 }}
+			>
+				<View style={styles.categoryContainer}>
+					<Text style={styles.categoryText}>
+						{t(`categories.${category}`, category)}
+					</Text>
+					<PlatformIcon
+						ios={{
+							name: collapsed ? 'chevron.down' : 'chevron.up',
+							size: 13,
+							weight: 'semibold'
+						}}
+						android={{
+							name: collapsed ? 'expand_more' : 'expand_less',
+							size: 20
+						}}
+						web={{
+							name: collapsed ? 'ChevronDown' : 'ChevronUp',
+							size: 20
+						}}
+						style={styles.toggleIcon}
+					/>
+				</View>
+			</Pressable>
+			<Collapsible collapsed={collapsed}>
+				{meals.map((meal: Meal, index: number) => (
+					<MealEntry key={index} meal={meal} index={index} />
+				))}
+			</Collapsible>
+		</View>
 	)
 }
 

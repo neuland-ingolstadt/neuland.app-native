@@ -19,8 +19,8 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
-import Avatar from './Avatar'
-import NameBox from './NameBox'
+import AvatarCircle from './avatar-circle'
+import NameBox from './name-box'
 
 interface SettingsHeaderProps {
 	onLogout: () => void
@@ -87,7 +87,7 @@ export default function SettingsHeader({
 										subTitle2={data?.fachrich ?? ''}
 										showChevron={true}
 									>
-										<Avatar background={`${theme.colors.primary}25`}>
+										<AvatarCircle background={`${theme.colors.primary}25`}>
 											<Text
 												style={StyleSheet.compose(styles.avatarText, {
 													color: theme.colors.primary
@@ -95,7 +95,7 @@ export default function SettingsHeader({
 											>
 												{getInitials(`${data?.vname} ${data?.name}`)}
 											</Text>
-										</Avatar>
+										</AvatarCircle>
 									</NameBox>
 								</View>
 							</View>
@@ -108,7 +108,9 @@ export default function SettingsHeader({
 										subTitle2={t('menu.error.noData.subtitle2')}
 										showChevron={true}
 									>
-										<Avatar background={`${theme.colors.labelTertiaryColor}25`}>
+										<AvatarCircle
+											background={`${theme.colors.labelTertiaryColor}25`}
+										>
 											<PlatformIcon
 												ios={{
 													name: 'exclamationmark.triangle',
@@ -122,7 +124,7 @@ export default function SettingsHeader({
 													color: theme.colors.labelTertiaryColor
 												}}
 											/>
-										</Avatar>
+										</AvatarCircle>
 									</NameBox>
 								</View>
 							</View>
@@ -140,7 +142,9 @@ export default function SettingsHeader({
 										subTitle1={error?.message ?? 'Unknown error'}
 										subTitle2={t('menu.error.subtitle2')}
 									>
-										<Avatar background={`${theme.colors.labelTertiaryColor}25`}>
+										<AvatarCircle
+											background={`${theme.colors.labelTertiaryColor}25`}
+										>
 											<PlatformIcon
 												ios={{
 													name: 'exclamationmark.triangle',
@@ -154,7 +158,7 @@ export default function SettingsHeader({
 													color: theme.colors.labelTertiaryColor
 												}}
 											/>
-										</Avatar>
+										</AvatarCircle>
 									</NameBox>
 								</View>
 							</View>
@@ -184,7 +188,7 @@ export default function SettingsHeader({
 							subTitle1={t('menu.employee.subtitle1')}
 							subTitle2={t('menu.employee.subtitle2')}
 						>
-							<Avatar background={`${theme.colors.primary}25`}>
+							<AvatarCircle background={`${theme.colors.primary}25`}>
 								<Text
 									style={StyleSheet.compose(styles.avatarText, {
 										color: theme.colors.primary
@@ -192,7 +196,7 @@ export default function SettingsHeader({
 								>
 									{getInitials((username as string) ?? '')}
 								</Text>
-							</Avatar>
+							</AvatarCircle>
 						</NameBox>
 					</View>
 				) : (
@@ -203,7 +207,7 @@ export default function SettingsHeader({
 							subTitle2={''}
 							showChevron={true}
 						>
-							<Avatar background={`${theme.colors.primary}25`}>
+							<AvatarCircle background={`${theme.colors.primary}25`}>
 								<PlatformIcon
 									ios={{ name: 'person', variant: 'fill', size: 26 }}
 									android={{ name: 'account_circle', size: 32 }}
@@ -213,7 +217,7 @@ export default function SettingsHeader({
 										color: theme.colors.primary
 									}}
 								/>
-							</Avatar>
+							</AvatarCircle>
 						</NameBox>
 					</View>
 				)}

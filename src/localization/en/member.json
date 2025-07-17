@@ -49,7 +49,7 @@
 	},
 	"securityWarning": {
 		"title": "Security Notice",
-		"warningText": "Before adding your pass to Apple Wallet, please note:",
+		"warningText": "Before adding your pass to the Wallet, please note:",
 		"points": {
 			"security": "Only the app pass uses advanced security features",
 			"qrCode": "Some events require the app's QR code specifically",

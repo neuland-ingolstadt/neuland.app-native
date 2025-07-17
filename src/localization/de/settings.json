@@ -200,15 +200,20 @@
 			"modernPink": "Modern Pink",
 			"rainbowMoonLight": "Regenbogen Hell",
 			"rainbowNeon": "Regenbogen Neon",
-			"cat": "Paradies Katze"
+			"cat": "Paradies Katze",
+			"luxury": "Goldener Luxus",
+			"rainbowGlow": "Regenbogen Leuchten",
+			"hacker": "Hacker"
 		},
 		"categories": {
 			"default": "Standard",
 			"neon": "Neon",
 			"rainbow": "Regenbogen",
-			"exclusive": "Exklusiv"
+			"exclusive": "Versteckt",
+			"neuland": "Neuland"
 		},
 		"exclusive": "Finde Easter-Eggs, um exklusive App-Icons freizuschalten.",
+		"exclusivePreviewSubtitle": "Nur für Neuland-Mitglieder. Tippe um mehr zu erfahren.",
 		"status": {
 			"locked": "Gesperrt",
 			"unlocked": "Freigeschaltet"

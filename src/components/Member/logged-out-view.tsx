@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import LogoSVG from '../Flow/svgs/logo'
-import { BenefitCard } from './BenefitCard'
+import { BenefitCard } from './benefit-card'
 import { stylesheet } from './styles'
 
 interface LoggedOutViewProps {

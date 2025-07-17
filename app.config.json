@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.13.8",
+		"version": "0.13.9",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,
@@ -94,7 +94,7 @@
 				"expo-router",
 				{
 					"headOrigin": "https://web.neuland.app",
-					"sitemap": false
+					"sitemap": true
 				}
 			],
 			[
@@ -107,6 +107,18 @@
 					{
 						"name": "RainbowNeon",
 						"ios": "./src/assets/appIcons/rainbowNeon.png"
+					},
+					{
+						"name": "Luxury",
+						"ios": "./src/assets/appIcons/luxury.png"
+					},
+					{
+						"name": "RainbowGlow",
+						"ios": "./src/assets/appIcons/rainbowGlow.png"
+					},
+					{
+						"name": "Hacker",
+						"ios": "./src/assets/appIcons/hacker.png"
 					},
 					{
 						"name": "Retro",

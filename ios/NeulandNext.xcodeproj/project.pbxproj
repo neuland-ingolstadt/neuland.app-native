@@ -248,6 +248,12 @@
 				B70D14392DECD82C00FFD12F /* Embed Foundation Extensions */,
 				5E2C7F424887678D1D9EF485 /* [CP] Embed Pods Frameworks */,
 				A283F86B81295F75F028DDC2 /* [CP] Copy Pods Resources */,
+				624491A8C67141E7A728374A /* Remove signature files (Xcode workaround) */,
+				853407503AAF4DF782B7E59F /* Remove signature files (Xcode workaround) */,
+				0BB8F674D37D4CB583064F97 /* Remove signature files (Xcode workaround) */,
+				BCCBC6AC31DB46B797CD7799 /* Remove signature files (Xcode workaround) */,
+				7737FB6066FB46D38E5042F3 /* Remove signature files (Xcode workaround) */,
+				56A3EF422E6D48D4A11289B3 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -361,6 +367,20 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\nexport EXPO_PUBLIC_GIT_COMMIT_HASH=$(git rev-parse HEAD)\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
 		};
+		0BB8F674D37D4CB583064F97 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
 		3FEE22C1B109988900AF17E5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -401,6 +421,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		624491A8C67141E7A728374A /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
 		6E5B52789C48511D9B9F9161 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -419,6 +453,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NeulandNext/expo-configure-project.sh\"\n";
+		};
+		853407503AAF4DF782B7E59F /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
 		A283F86B81295F75F028DDC2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -468,6 +516,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BCCBC6AC31DB46B797CD7799 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
 		BE52285A33BB46AD86262542 /* Remove signature files (Xcode workaround) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -481,6 +543,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
+		7737FB6066FB46D38E5042F3 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
+		};
+		56A3EF422E6D48D4A11289B3 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+          echo \"Remove signature files (Xcode workaround)\";
+          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+        ";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -516,7 +612,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 370DACE70269ED7C222F57A7 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -541,7 +647,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -554,7 +660,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97969E7B185CB44773F9C54B /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -575,7 +691,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -587,7 +703,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -665,7 +791,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Retro ModernGreen ModernPink RainbowMoonLight";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -734,6 +870,17 @@
 		B70D143B2DECD82C00FFD12F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -761,7 +908,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 0.13.8;
+				MARKETING_VERSION = 0.13.9;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
@@ -779,6 +926,17 @@
 		B70D143C2DECD82C00FFD12F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Luxury,
+					RainbowGlow,
+					Hacker,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -807,7 +965,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 0.13.8;
+				MARKETING_VERSION = 0.13.9;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app.LaunchWidget";
@@ -858,7 +1016,7 @@
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
 				kind = exactVersion;
-				version = 6.11.0;
+				version = 6.17.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
