@@ -19,7 +19,7 @@ import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
 import { storage } from '@/utils/storage'
-import { appIcons } from '../(screens)/app-icon'
+import { appIcons } from '../(screens)/app-icon.ios'
 
 export default function HomeLayout(): React.JSX.Element {
 	const router = useRouter()
