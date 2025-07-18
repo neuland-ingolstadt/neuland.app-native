@@ -140,7 +140,7 @@ export default function AppIconPicker(): React.JSX.Element {
 				{/* Neuland section */}
 				<SectionView title={t('appIcon.categories.neuland')}>
 					<View style={styles.sectionContainer}>
-						{!memberInfo ? (
+						{memberInfo ? (
 							categories.neuland.map((icon, index) => (
 								<React.Fragment key={icon}>
 									<Pressable

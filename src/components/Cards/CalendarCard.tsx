@@ -103,7 +103,7 @@ const CalendarCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 
 	const noData = (
-		<Text style={styles.noDataText}>{t('common:error.noData.title')}</Text>
+		<Text style={styles.noDataText}>{t('common:error.noEvents')}</Text>
 	)
 
 	return (

@@ -37,9 +37,7 @@ const EventsCard = (): React.JSX.Element => {
 		}
 	}
 
-	const noData = (
-		<Text style={styles.noDataTitle}>{t('error.noData.title')}</Text>
-	)
+	const noData = <Text style={styles.noDataTitle}>{t('error.noEvents')}</Text>
 
 	return (
 		<BaseCard
