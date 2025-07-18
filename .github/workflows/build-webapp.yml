@@ -39,6 +39,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            type=raw,value=staging-${{ github.run_number }}
+            type=ref,event=branch,pattern=^main$
             type=raw,value=staging-latest
           flavor: |
             latest=false
