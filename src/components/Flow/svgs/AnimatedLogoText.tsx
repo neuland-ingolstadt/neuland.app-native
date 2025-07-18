@@ -48,7 +48,7 @@ const AnimatedLogoText = ({
 		<ContentLoader
 			width={dimensions.logoWidth}
 			height={dimensions.logoHeight}
-			backgroundColor={theme.colors.labelSecondaryColor}
+			backgroundColor={theme.colors.labelColor}
 			foregroundColor={theme.colors.text}
 			speed={speed}
 		>

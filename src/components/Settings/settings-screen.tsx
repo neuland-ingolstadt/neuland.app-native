@@ -1,5 +1,6 @@
+import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import React, { use, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,6 +26,7 @@ import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import GuestInfoSection from './guest-info-section'
+import HetznerLogo from './hetzner-logo'
 import NeulandBox from './neuland-box'
 import SettingsHeader from './settings-header'
 import SettingsLogo from './settings-logo'
@@ -32,7 +34,7 @@ import SettingsMenu from './settings-menu'
 import StudentInfoSection from './student-info-section'
 
 export default function Settings(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
 	const router = useRouter()
@@ -65,6 +67,12 @@ export default function Settings(): React.JSX.Element {
 				}
 			]
 		)
+	}
+
+	const trackHetznerClick = (): void => {
+		trackEvent('Sponsor', {
+			sponsor: 'Hetzner'
+		})
 	}
 
 	const { data, isLoading, isSuccess, refetch, isError } = useQuery({
@@ -172,8 +180,19 @@ export default function Settings(): React.JSX.Element {
 			<Text style={styles.copyright}>
 				{t('menu.copyright', { year: new Date().getFullYear() })}
 			</Text>
-
 			<SettingsLogo scrollY={scrollY} size={size} />
+			<View style={styles.poweredByContainer}>
+				<Text style={styles.poweredByText}>Infrastructure by</Text>
+				<Link
+					href="https://hetzner.com"
+					target="_blank"
+					onPress={() => {
+						trackHetznerClick()
+					}}
+				>
+					<HetznerLogo subtitleColor={theme.colors.labelSecondaryColor} />
+				</Link>
+			</View>
 		</ScrollView>
 	)
 }
@@ -186,12 +205,29 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
 		marginBottom: -10,
-		marginTop: 20,
+		marginTop: 12,
 		textAlign: 'center'
 	},
 	formlistContainer: { marginVertical: 16, marginTop: 24 },
 	infoBoxesSection: {
 		marginTop: 10
+	},
+	poweredByContainer: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginTop: 18,
+		gap: 4
+	},
+	poweredByText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 12,
+		marginBottom: -6
+	},
+	hetznerLogo: {
+		width: 160,
+		height: 70,
+		resizeMode: 'contain'
 	},
 	wrapper: { paddingHorizontal: 12 }
 }))
