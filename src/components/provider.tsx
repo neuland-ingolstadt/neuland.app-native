@@ -28,6 +28,7 @@ import {
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
+import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
@@ -55,9 +56,9 @@ export const accentColorMap: Record<
 	AccentColor,
 	{ light: string; dark: string }
 > = {
-	blue: { light: '#007aff', dark: '#0e83fd' },
-	green: { light: '#34c759', dark: '#30d158' },
-	pink: { light: '#ff2d55', dark: '#ff375f' }
+	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
+	green: { light: '#2bbb4f', dark: '#25db53' },
+	purple: { light: '#800080', dark: '#ac05ac' }
 }
 
 /**

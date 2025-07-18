@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
 
-export type AccentColor = 'blue' | 'green' | 'pink'
+export type AccentColor = 'blue' | 'green' | 'purple'
 
 interface PreferencesStore {
 	theme: string

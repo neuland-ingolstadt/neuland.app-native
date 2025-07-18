@@ -46,7 +46,7 @@ export default function Theme(): React.JSX.Element {
 	const accentOptions: { key: AccentColor; title: string }[] = [
 		{ key: 'blue', title: t('theme.accent.blue') },
 		{ key: 'green', title: t('theme.accent.green') },
-		{ key: 'pink', title: t('theme.accent.pink') }
+		{ key: 'purple', title: t('theme.accent.purple') }
 	]
 
 	return (
@@ -79,7 +79,7 @@ export default function Theme(): React.JSX.Element {
 					<AccentColorPicker
 						options={accentOptions}
 						selected={accentColor}
-						onSelect={setAccentColor as (item: AccentColor) => void}
+						onSelect={setAccentColor}
 					/>
 				</SectionView>
 			)}
