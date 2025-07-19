@@ -6,6 +6,5 @@ metadata:
 spec:
   image: ghcr.io/neuland-ingolstadt/neuland.app-native/webapp
   interval: 5m
-  secretRef:
-    name: ghcr-secret
+
   
