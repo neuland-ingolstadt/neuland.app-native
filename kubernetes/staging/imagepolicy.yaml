@@ -1,0 +1,14 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: neuland-next-staging
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: neuland-next-web
+  policy:
+    numerical:
+      order: asc
+  filterTags:
+    pattern: '^staging-([0-9]+)$'
+    extract: '$1'
