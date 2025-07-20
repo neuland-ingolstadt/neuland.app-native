@@ -218,6 +218,10 @@
 				"confirm": "Nice!"
 			},
 			"noAvailableRooms": "Keine freien Räume verfügbar",
+			"allRoomsAvailable": {
+				"title": "Alle Räume frei",
+				"subtitle": "Aktuell sind alle Räume verfügbar."
+			},
 			"details": {
 				"room": {
 					"details": "Raumdetails",
