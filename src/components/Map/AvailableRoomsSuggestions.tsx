@@ -9,12 +9,12 @@ import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyTime } from '@/utils/date-utils'
+import { ROOMS_ALL } from '@/utils/map-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { UserKindContext } from '../contexts'
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { ROOMS_ALL } from '@/utils/map-utils'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection
