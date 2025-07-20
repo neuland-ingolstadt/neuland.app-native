@@ -14,6 +14,7 @@ import { UserKindContext } from '../contexts'
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
+import { ROOMS_ALL } from '@/utils/map-utils'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection
@@ -78,6 +79,40 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 				) : (
 					(() => {
 						const roomSuggestions = availableRooms.slice(0, 3)
+						if (roomSuggestions.at(0)?.room === ROOMS_ALL) {
+							return (
+								<View style={styles.suggestionRow}>
+									<View style={styles.suggestionInnerRow}>
+										<View style={styles.suggestionIconContainer}>
+											<PlatformIcon
+												ios={{
+													name: 'studentdesk',
+													size: 18
+												}}
+												android={{
+													name: 'school',
+													size: 20
+												}}
+												web={{
+													name: 'Notebook',
+													size: 20
+												}}
+												style={styles.primaryContrast}
+											/>
+										</View>
+
+										<View style={styles.suggestionContent}>
+											<Text style={styles.suggestionTitle}>
+												{t('pages.map.allRoomsAvailable.title')}
+											</Text>
+											<Text style={styles.suggestionSubtitle}>
+												{t('pages.map.allRoomsAvailable.subtitle')}
+											</Text>
+										</View>
+									</View>
+								</View>
+							)
+						}
 						return roomSuggestions.map((room, key) => (
 							<React.Fragment key={key}>
 								<Pressable
