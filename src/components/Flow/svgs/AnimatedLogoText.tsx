@@ -37,7 +37,9 @@ const AnimatedLogoText = ({
 			<Svg
 				width={dimensions.logoWidth}
 				height={dimensions.logoHeight}
+				viewBox="0 0 151.5 15"
 				fill={theme.colors.labelColor}
+				transform={'scale(1.05)'}
 			>
 				<LogoContent />
 			</Svg>
@@ -51,6 +53,8 @@ const AnimatedLogoText = ({
 			backgroundColor={theme.colors.labelColor}
 			foregroundColor={theme.colors.text}
 			speed={speed}
+			viewBox="0 0 151.5 15"
+			transform={'scale(1.05)'}
 		>
 			<LogoContent />
 		</ContentLoader>
