@@ -8,7 +8,7 @@ COPY patches patches
 RUN bun install --ignore-scripts --freeze-lockfile
 
 # Build stage: Use a Node.js image for the build process
-FROM node:23 AS build
+FROM node:24 AS build
 WORKDIR /usr/src/app
 
 # Copy dependencies and project files
