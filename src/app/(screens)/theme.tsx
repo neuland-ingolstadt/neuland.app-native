@@ -109,10 +109,5 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 6,
 		marginTop: 16,
 		textTransform: 'uppercase'
-	},
-	statusText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		textAlign: 'center'
 	}
 }))
