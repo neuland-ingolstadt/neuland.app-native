@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neuland-next-staging
+spec:
+  minReadySeconds: 3
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: neuland-next-staging
+  template:
+    metadata:
+      labels:
+        app: neuland-next-staging
+    spec:
+      containers:
+      - name: neuland-next-staging
+        image: ghcr.io/neuland-ingolstadt/neuland.app-native/webapp
+        imagePullPolicy: Always
+        env:
+        - name: HOSTNAME
+          value: 0.0.0.0
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: production
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi

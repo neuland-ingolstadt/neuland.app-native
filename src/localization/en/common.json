@@ -219,6 +219,10 @@
 				"confirm": "Nice!"
 			},
 			"noAvailableRooms": "No free rooms available",
+			"allRoomsAvailable": {
+				"title": "All rooms available",
+				"subtitle": "Currently all rooms are available."
+			},
 			"details": {
 				"room": {
 					"details": "Room details",
