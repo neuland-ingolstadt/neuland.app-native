@@ -3,14 +3,18 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
 
+export type AccentColor = 'blue' | 'green' | 'purple'
+
 interface PreferencesStore {
 	theme: string
+	accentColor: AccentColor
 	language: 'de' | 'en' | undefined
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
 	recentQuicklinks: string[]
 	showSplashScreen: boolean
 	setTheme: (theme: string) => void
+	setAccentColor: (color: AccentColor) => void
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
 	addUnlockedAppIcon: (name: string) => void
@@ -22,6 +26,7 @@ interface PreferencesStore {
 const initialState: Omit<
 	PreferencesStore,
 	| 'setTheme'
+	| 'setAccentColor'
 	| 'setAppIcon'
 	| 'addUnlockedAppIcon'
 	| 'addRecentQuicklink'
@@ -31,10 +36,11 @@ const initialState: Omit<
 > = {
 	appIcon: undefined,
 	language: undefined,
-	theme: 'auto',
+	theme: 'dark',
+	accentColor: 'blue',
 	unlockedAppIcons: [],
 	recentQuicklinks: defaultQuicklinks,
-	showSplashScreen: true
+	showSplashScreen: false
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -43,6 +49,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 			...initialState,
 			setTheme: (theme: string) => {
 				set({ theme })
+			},
+			setAccentColor: (accentColor: AccentColor) => {
+				set({ accentColor })
 			},
 			setLanguage: (language: 'de' | 'en') => {
 				set({ language })

@@ -216,8 +216,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 18,
-		gap: 4
+		marginTop: 22,
+		gap: 2
 	},
 	poweredByText: {
 		color: theme.colors.labelSecondaryColor,

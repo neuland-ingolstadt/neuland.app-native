@@ -89,12 +89,14 @@ function WorkaroundStack({
 					headerRight: headerRightElement,
 					headerLeft: headerLeftElement,
 					headerLargeStyle: styles.headerBackground,
-					headerStyle: undefined,
 					headerSearchBarOptions,
 					headerTintColor: theme.colors.primary,
 					contentStyle: styles.background,
 					headerTitleStyle: {
 						color: theme.colors.text
+					},
+					headerStyle: {
+						backgroundColor: styles.headerBackground.backgroundColor
 					},
 					headerShadowVisible: transparent,
 					headerTransparent: headerTransparent,

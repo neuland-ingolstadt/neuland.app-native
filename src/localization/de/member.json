@@ -72,5 +72,10 @@
 	"web": {
 		"title": "Nicht verfügbar auf Web",
 		"message": "Lade die App herunter, um den Neuland Mitgliedsbereich zu nutzen."
+	},
+	"perks": {
+		"header": "Vorteile",
+		"theme": "Akzentfarbe",
+		"appIcon": "App-Icon"
 	}
 }

@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -77,6 +78,34 @@ export function LoggedInView(): React.JSX.Element {
 		])
 	}
 
+	const perksSection: FormListSections = {
+		header: t('perks.header', { defaultValue: 'Perks' }),
+		items: [
+			{
+				title: t('perks.theme', { defaultValue: 'Theme & Accent Color' }),
+				icon: {
+					ios: 'paintbrush',
+					android: 'palette',
+					web: 'Palette'
+				},
+				onPress: () => router.navigate('/theme')
+			},
+			...(Platform.OS === 'ios'
+				? [
+						{
+							title: t('perks.appIcon', { defaultValue: 'App Icon' }),
+							icon: {
+								ios: 'star.square.on.square',
+								android: 'apps' as MaterialIcon,
+								web: 'AppWindow' as LucideIcon
+							},
+							onPress: () => router.navigate('/app-icon')
+						}
+					]
+				: [])
+		]
+	}
+
 	const quickLinksSections: FormListSections[] = [
 		{
 			header: t('quickLinks.title'),
@@ -111,6 +140,7 @@ export function LoggedInView(): React.JSX.Element {
 			]
 		},
 		{
+			header: 'Wallet',
 			items: [
 				{
 					title: t('securityWarning.buttons.addToWallet'),
@@ -136,7 +166,7 @@ export function LoggedInView(): React.JSX.Element {
 				</View>
 			)}
 
-			<FormList sections={quickLinksSections} />
+			<FormList sections={[perksSection, ...quickLinksSections]} />
 
 			<Pressable onPress={logoutAlert} style={styles.logoutButton}>
 				<PlatformIcon

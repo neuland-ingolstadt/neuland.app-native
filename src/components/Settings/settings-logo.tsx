@@ -43,8 +43,8 @@ export default function SettingsLogo({
 	const lastBounceY = React.useRef(0)
 	const { color, randomizeColor } = useRandomColor()
 	const velocity = 110
-	const logoWidth = 159
-	const logoHeight = 15
+	const logoWidth = 175
+	const logoHeight = 16
 
 	const BOUNCE_CORNER_TOLERANCE = 150
 
@@ -168,7 +168,7 @@ export default function SettingsLogo({
 					}}
 				>
 					<LogoTextSVG
-						size={15}
+						size={16.5}
 						color={isBouncing ? color : theme.colors.text}
 					/>
 				</Pressable>
@@ -218,6 +218,6 @@ const stylesheet = createStyleSheet(() => ({
 	},
 	whobbleContainer: {
 		alignItems: 'center',
-		paddingTop: 20
+		paddingTop: 22
 	}
 }))

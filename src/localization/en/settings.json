@@ -170,6 +170,13 @@
 		"splash": {
 			"title": "Splash Screen",
 			"showSplash": "Show Animated Splash Screen"
+		},
+		"accent": {
+			"title": "Accent Color",
+			"blue": "Blue",
+			"green": "Green",
+			"purple": "Purple",
+			"memberOnly": "As a Neuland member, you can customize the accent color."
 		}
 	},
 	"dashboard": {

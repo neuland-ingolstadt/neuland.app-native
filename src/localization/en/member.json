@@ -72,5 +72,10 @@
 	"web": {
 		"title": "Not available on web",
 		"message": "Download the app to use the Neuland member area."
+	},
+	"perks": {
+		"header": "Perks",
+		"theme": "Accent Color",
+		"appIcon": "App Icon"
 	}
 }

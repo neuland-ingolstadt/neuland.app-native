@@ -21,10 +21,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import {
+	type AccentColor,
+	usePreferencesStore
+} from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
+import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
@@ -48,6 +52,15 @@ export const queryClient = new QueryClient({
 	}
 })
 
+export const accentColorMap: Record<
+	AccentColor,
+	{ light: string; dark: string }
+> = {
+	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
+	green: { light: '#2bbb4f', dark: '#1beb4f' },
+	purple: { light: '#990eda', dark: '#9e10f0' }
+}
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -64,6 +77,7 @@ export default function Provider({
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
+	const accentColor = usePreferencesStore((state) => state.accentColor)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
 	)
@@ -206,6 +220,28 @@ export default function Provider({
 			subscription.remove()
 		}
 	}, [theme])
+
+	useEffect(() => {
+		const colors = accentColorMap[accentColor]
+		UnistylesRuntime.updateTheme('light', (t) => ({
+			...t,
+			colors: {
+				...t.colors,
+				primary: colors.light,
+				secondary: colors.light,
+				primaryBackground: `${colors.light}15`
+			}
+		}))
+		UnistylesRuntime.updateTheme('dark', (t) => ({
+			...t,
+			colors: {
+				...t.colors,
+				primary: colors.dark,
+				secondary: colors.dark,
+				primaryBackground: `${colors.dark}25`
+			}
+		}))
+	}, [accentColor])
 
 	return (
 		<GestureHandlerRootView style={styles.container}>
