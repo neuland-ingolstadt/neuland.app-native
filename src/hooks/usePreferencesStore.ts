@@ -36,11 +36,11 @@ const initialState: Omit<
 > = {
 	appIcon: undefined,
 	language: undefined,
-	theme: 'auto',
+	theme: 'dark',
 	accentColor: 'blue',
 	unlockedAppIcons: [],
 	recentQuicklinks: defaultQuicklinks,
-	showSplashScreen: true
+	showSplashScreen: false
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(

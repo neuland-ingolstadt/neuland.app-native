@@ -6,6 +6,7 @@ import {
 	saveSecureAsync,
 	zustandStorage
 } from '@/utils/storage'
+import { usePreferencesStore } from './usePreferencesStore'
 
 // Simple JWT decoder using built-in React Native APIs
 // biome-ignore lint/suspicious/noExplicitAny: TODO: fix this
@@ -69,6 +70,8 @@ export const useMemberStore = create<MemberStore>()(
 			},
 			logout: async () => {
 				set({ idToken: null, refreshToken: null, info: null })
+				// Only reset accent color to blue on logout
+				usePreferencesStore.getState().setAccentColor('blue')
 				await Promise.all([
 					deleteSecure('member_id_token'),
 					deleteSecure('member_refresh_token')
