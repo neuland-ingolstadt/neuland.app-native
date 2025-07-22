@@ -34,6 +34,12 @@ const ColorOption = ({
 	const isSelected = option.key === selected
 	const scale = useSharedValue(1)
 
+	// Safety check - this shouldn't happen if option.key is valid, but just in case
+	if (!colors) {
+		console.warn(`Unknown accent color in ColorOption: ${option.key}`)
+		return <View />
+	}
+
 	const animatedStyle = useAnimatedStyle(() => ({
 		transform: [{ scale: scale.value }]
 	}))

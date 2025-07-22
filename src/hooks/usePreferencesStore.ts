@@ -95,7 +95,18 @@ export const usePreferencesStore = create<PreferencesStore>()(
 		}),
 		{
 			name: 'app-storage',
-			storage: createJSONStorage(() => zustandStorage)
+			storage: createJSONStorage(() => zustandStorage),
+			migrate: (persistedState: any, version: number) => {
+				// Migration for version 0 -> 1: Add accentColor field if missing
+				if (version === 0 || !persistedState.accentColor) {
+					return {
+						...persistedState,
+						accentColor: 'blue' // Default accent color for existing users
+					}
+				}
+				return persistedState
+			},
+			version: 1
 		}
 	)
 )

@@ -222,7 +222,35 @@ export default function Provider({
 	}, [theme])
 
 	useEffect(() => {
-		const colors = accentColorMap[accentColor]
+		// Fallback to 'blue' if accentColor is undefined (for users upgrading from older versions)
+		const safeAccentColor = accentColor || 'blue'
+		const colors = accentColorMap[safeAccentColor]
+		
+		// Additional safety check in case the color mapping doesn't exist
+		if (!colors) {
+			console.warn(`Unknown accent color: ${safeAccentColor}, falling back to blue`)
+			const fallbackColors = accentColorMap.blue
+			UnistylesRuntime.updateTheme('light', (t) => ({
+				...t,
+				colors: {
+					...t.colors,
+					primary: fallbackColors.light,
+					secondary: fallbackColors.light,
+					primaryBackground: `${fallbackColors.light}15`
+				}
+			}))
+			UnistylesRuntime.updateTheme('dark', (t) => ({
+				...t,
+				colors: {
+					...t.colors,
+					primary: fallbackColors.dark,
+					secondary: fallbackColors.dark,
+					primaryBackground: `${fallbackColors.dark}25`
+				}
+			}))
+			return
+		}
+		
 		UnistylesRuntime.updateTheme('light', (t) => ({
 			...t,
 			colors: {
