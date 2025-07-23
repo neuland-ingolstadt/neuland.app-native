@@ -71,7 +71,7 @@ export const useMemberStore = create<MemberStore>()(
 			logout: async () => {
 				set({ idToken: null, refreshToken: null, info: null })
 				// Only reset accent color to blue on logout
-				usePreferencesStore.getState().setAccentColor('blue')
+				usePreferencesStore.getState().setThemeColor('blue')
 				await Promise.all([
 					deleteSecure('member_id_token'),
 					deleteSecure('member_refresh_token')

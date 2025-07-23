@@ -22,7 +22,7 @@ import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import {
-	type AccentColor,
+	type ThemeColor,
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
@@ -52,8 +52,8 @@ export const queryClient = new QueryClient({
 	}
 })
 
-export const accentColorMap: Record<
-	AccentColor,
+export const themeColorMap: Record<
+	ThemeColor,
 	{ light: string; dark: string }
 > = {
 	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
@@ -77,7 +77,7 @@ export default function Provider({
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
-	const accentColor = usePreferencesStore((state) => state.accentColor)
+	const themeColor = usePreferencesStore((state) => state.themeColor)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
 	)
@@ -222,7 +222,7 @@ export default function Provider({
 	}, [theme])
 
 	useEffect(() => {
-		const colors = accentColorMap[accentColor]
+		const colors = themeColorMap[themeColor]
 		UnistylesRuntime.updateTheme('light', (t) => ({
 			...t,
 			colors: {
@@ -241,7 +241,7 @@ export default function Provider({
 				primaryBackground: `${colors.dark}25`
 			}
 		}))
-	}, [accentColor])
+	}, [themeColor])
 
 	return (
 		<GestureHandlerRootView style={styles.container}>

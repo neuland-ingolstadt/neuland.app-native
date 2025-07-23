@@ -1,3 +1,4 @@
+import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
@@ -9,15 +10,15 @@ import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import {
-	type AccentColor,
+	type ThemeColor,
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
 
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const setTheme = usePreferencesStore((state) => state.setTheme)
-	const accentColor = usePreferencesStore((s) => s.accentColor)
-	const setAccentColor = usePreferencesStore((s) => s.setAccentColor)
+	const themeColor = usePreferencesStore((s) => s.themeColor)
+	const setThemeColor = usePreferencesStore((s) => s.setThemeColor)
 	const memberInfo = useMemberStore((s) => s.info)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
@@ -27,6 +28,11 @@ export default function Theme(): React.JSX.Element {
 	)
 	const { t } = useTranslation(['settings', 'timetable'])
 	const { styles } = useStyles(stylesheet)
+
+	const onSelectThemeColor = (color: ThemeColor) => {
+		selectionAsync()
+		setThemeColor(color)
+	}
 
 	const elements = [
 		{
@@ -43,7 +49,7 @@ export default function Theme(): React.JSX.Element {
 		}
 	]
 
-	const accentOptions: { key: AccentColor; title: string }[] = [
+	const accentOptions: { key: ThemeColor; title: string }[] = [
 		{ key: 'blue', title: t('theme.accent.blue') },
 		{ key: 'green', title: t('theme.accent.green') },
 		{ key: 'purple', title: t('theme.accent.purple') }
@@ -78,8 +84,8 @@ export default function Theme(): React.JSX.Element {
 				>
 					<AccentColorPicker
 						options={accentOptions}
-						selected={accentColor}
-						onSelect={setAccentColor}
+						selected={themeColor}
+						onSelect={onSelectThemeColor}
 					/>
 				</SectionView>
 			)}
