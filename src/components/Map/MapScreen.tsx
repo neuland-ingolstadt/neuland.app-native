@@ -52,7 +52,7 @@ import {
 	UnavailableSessionError
 } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'

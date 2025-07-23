@@ -11,10 +11,10 @@ import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import { DashboardContext } from '@/components/contexts'
-import RueWarningBannerContainer from '@/components/Dashboard/RueWarningBannerContainer'
-import ErrorView from '@/components/Error/ErrorView'
+import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
+import ErrorView from '@/components/Error/error-view'
 import LogoSVG from '@/components/Flow/svgs/logo'
-import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
+import { HomeHeaderRight } from '@/components/Home/home-header-right'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 
 const HeaderLeft = () => {

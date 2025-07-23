@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import DetailsBody from '@/components/Timetable/DetailsBody'
 import DetailsRow from '@/components/Timetable/DetailsRow'
 import DetailsSymbol from '@/components/Timetable/DetailsSymbol'

@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/EventRow'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { EmptyEventsAnimation } from './EmptyEventsAnimation'
+import { EmptyEventsAnimation } from './empty-events-animation'
 
 const MemoizedEventRow = memo(CLEventRow)
 

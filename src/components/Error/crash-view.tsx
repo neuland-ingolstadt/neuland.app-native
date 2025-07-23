@@ -7,7 +7,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LogoTextSVG from '../Flow/svgs/logoText'
 import PlatformIcon from '../Universal/Icon'
-import StatusBox from './ActionBox'
+import StatusBox from './action-box'
 
 export const ErrorButton = ({
 	onPress

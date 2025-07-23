@@ -23,7 +23,7 @@ import {
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import PagerView from '@/components/Layout/PagerView'
 import LecturerRow from '@/components/Rows/LecturerRow'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'

@@ -21,7 +21,7 @@ import {
 } from '@/utils/api-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
-import StatusBox from './ActionBox'
+import StatusBox from './action-box'
 
 export default function ErrorView({
 	title,

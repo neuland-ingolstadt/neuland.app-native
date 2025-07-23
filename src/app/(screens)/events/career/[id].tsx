@@ -23,7 +23,7 @@ import {
 	type CareerServiceEventFieldsFragment,
 	CareerServiceEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import { EventErrorView } from '@/components/Error/EventErrorView'
+import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'

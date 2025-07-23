@@ -22,13 +22,13 @@ import type {
 	WeekdayType
 } from '@/__generated__/gql/graphql'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import SportsRow from '@/components/Rows/SportsRow'
 import PlatformIcon from '@/components/Universal/Icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { EmptyEventsAnimation } from './EmptyEventsAnimation'
+import { EmptyEventsAnimation } from './empty-events-animation'
 
 export default function ClSportsPage({
 	sportsResult

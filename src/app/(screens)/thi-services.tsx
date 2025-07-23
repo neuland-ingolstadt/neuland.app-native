@@ -18,8 +18,8 @@ import {
 	type StudentCounsellingEventFieldsFragment,
 	StudentCounsellingEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import CareerServiceEventsPage from '@/components/Events/CareerServiceEventsPage'
-import StudentCounsellingEventsPage from '@/components/Events/StudentCounsellingEventsPage'
+import CareerServiceEventsPage from '@/components/Events/career-service-events-page'
+import StudentCounsellingEventsPage from '@/components/Events/student-counselling-events-page'
 import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'

@@ -5,23 +5,23 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import type { StudentCounsellingEventFieldsFragment } from '@/__generated__/gql/graphql'
+import type { CareerServiceEventFieldsFragment } from '@/__generated__/gql/graphql'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { EmptyEventsAnimation } from './EmptyEventsAnimation'
+import { EmptyEventsAnimation } from './empty-events-animation'
 
-const MemoizedEventRow = memo(StudentCounsellingEventRow)
+const MemoizedEventRow = memo(CareerServiceEventRow)
 
-function StudentCounsellingEventRow({
+function CareerServiceEventRow({
 	event
 }: {
-	event: StudentCounsellingEventFieldsFragment
+	event: CareerServiceEventFieldsFragment
 }): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	const handlePress = () => {
 		router.navigate({
-			pathname: '/events/counselling/[id]',
+			pathname: '/events/career/[id]',
 			params: { id: event.id }
 		})
 	}
@@ -74,19 +74,15 @@ function StudentCounsellingEventRow({
 	)
 }
 
-export default function StudentCounsellingEventsPage({
+export default function CareerServiceEventsPage({
 	events
 }: {
-	events: StudentCounsellingEventFieldsFragment[]
+	events: CareerServiceEventFieldsFragment[]
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
-	const renderItem = ({
-		item
-	}: {
-		item: StudentCounsellingEventFieldsFragment
-	}) => (
+	const renderItem = ({ item }: { item: CareerServiceEventFieldsFragment }) => (
 		<View style={styles.rowWrapper}>
 			<MemoizedEventRow event={item} />
 		</View>
@@ -105,14 +101,14 @@ export default function StudentCounsellingEventsPage({
 					disableAutoLayout
 					ListHeaderComponent={
 						<Text style={styles.sectionHeaderText}>
-							{t('pages.events.studentCounselling.title')}
+							{t('pages.events.careerService.title')}
 						</Text>
 					}
 				/>
 			) : (
 				<EmptyEventsAnimation
-					title={t('pages.studentCounselling.noEvents.title')}
-					subtitle={t('pages.studentCounselling.noEvents.subtitle')}
+					title={t('pages.careerService.noEvents.title')}
+					subtitle={t('pages.careerService.noEvents.subtitle')}
 				/>
 			)}
 		</View>

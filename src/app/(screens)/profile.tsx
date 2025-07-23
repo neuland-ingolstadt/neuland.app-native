@@ -18,7 +18,7 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import { queryClient } from '@/components/provider'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon from '@/components/Universal/Icon'
