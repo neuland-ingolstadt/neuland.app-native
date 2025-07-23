@@ -11,8 +11,8 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import ClEventsPage from '@/components/Events/ClEventsPage'
-import ClSportsPage from '@/components/Events/ClSportsPage'
+import ClEventsPage from '@/components/Events/cl-events-page'
+import ClSportsPage from '@/components/Events/cl-sports-page'
 import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'

@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 
 export default function AppIconPicker(): React.JSX.Element {
 	const { t } = useTranslation(['settings'])

@@ -6,7 +6,7 @@ import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRueWarningStore } from '@/hooks/useRueWarningStore'
 import { getPersonalData } from '@/utils/api-utils'
 import { getNextReRegistrationEvent } from '@/utils/calendar-utils'
-import RueWarningBanner from './RueWarningBanner'
+import RueWarningBanner from './rue-warning-banner'
 
 const RueWarningBannerContainer: React.FC = () => {
 	const { userKind = USER_GUEST } = useContext(UserKindContext)

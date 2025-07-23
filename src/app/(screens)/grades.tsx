@@ -15,7 +15,7 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import GradesRow from '@/components/Rows/GradesRow'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import SectionView from '@/components/Universal/SectionsView'

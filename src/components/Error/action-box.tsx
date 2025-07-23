@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { FeedbackButton, StatusButton } from './ActionButtons'
+import { FeedbackButton, StatusButton } from './action-buttons'
 
 export default function StatusBox({
 	error,

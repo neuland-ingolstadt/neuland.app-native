@@ -15,7 +15,7 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import Badge from '@/components/Universal/Badge'

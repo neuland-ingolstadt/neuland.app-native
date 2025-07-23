@@ -24,7 +24,7 @@ import {
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import { MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/AllergensBanner'
 import PagerView from '@/components/Layout/PagerView'

@@ -2,7 +2,7 @@ import type React from 'react'
 import { Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { CalendarAnimation } from './CalendarAnimation'
+import { CalendarAnimation } from './calendar-animation'
 
 /**
  * An enhanced empty state component for the events screens that displays

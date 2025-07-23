@@ -3,7 +3,7 @@ import { router, useNavigation, usePathname } from 'expo-router'
 import type React from 'react'
 import { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 
 export default function Unmatched(): React.JSX.Element {
 	const navigation = useNavigation()

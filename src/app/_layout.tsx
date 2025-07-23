@@ -1,4 +1,4 @@
-import CrashView from '@/components/Error/CrashView'
+import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
