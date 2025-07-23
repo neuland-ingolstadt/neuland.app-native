@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
 	DarkTheme,
@@ -8,7 +7,6 @@ import {
 import { focusManager, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Toaster } from 'burnt/web'
-import { useSegments } from 'expo-router'
 import type React from 'react'
 import { useEffect } from 'react'
 import {
@@ -20,14 +18,11 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import {
 	type ThemeColor,
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
-import { useSessionStore } from '@/hooks/useSessionStore'
-import { useTimetableStore } from '@/hooks/useTimetableStore'
-import i18n from '@/localization/i18n'
+import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
 import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
@@ -72,134 +67,13 @@ export default function Provider({
 }: ProviderProps): React.JSX.Element {
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
-	const segments = useSegments()
 
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
 	const themeColor = usePreferencesStore((state) => state.themeColor)
-	const showSplashScreen = usePreferencesStore(
-		(state) => state.showSplashScreen
-	)
-	const timetableMode = useTimetableStore((state) => state.timetableMode)
-	const appIcon = usePreferencesStore((state) => state.appIcon)
-	const selectedRestaurants = useFoodFilterStore(
-		(state) => state.selectedRestaurants
-	)
-	const analyticsInitialized = useSessionStore(
-		(state) => state.analyticsInitialized
-	)
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 
-	useEffect(() => {
-		// This effect uses segments instead of usePathname which resolves some issues with the router.
-		if (!analyticsInitialized || !Array.isArray(segments)) {
-			return
-		}
-
-		const lastSegment = segments[segments.length - 1]
-
-		const path =
-			typeof lastSegment === 'string'
-				? `/${lastSegment.replace(/[()]/g, '')}`
-				: '/'
-
-		requestAnimationFrame(() => {
-			trackEvent('Route', { path })
-		})
-	}, [segments, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Theme', {
-			theme: theme
-		})
-	}, [theme, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('SplashScreen', {
-			showSplashScreen: showSplashScreen
-		})
-	}, [showSplashScreen, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		if (Platform.OS === 'ios') {
-			trackEvent('AppIcon', {
-				appIcon: appIcon ?? 'default'
-			})
-		}
-	}, [appIcon, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized || userKind.userKind === undefined) {
-			return
-		}
-		trackEvent('UserKind', {
-			userKind: userKind.userKind
-		})
-	}, [userKind.userKind, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-
-		trackEvent('SelectedRestaurants', {
-			selectedRestaurants: selectedRestaurants.join(',')
-		})
-	}, [selectedRestaurants, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-
-		const entries: Record<string, string> = {}
-		dashboard.shownDashboardEntries.forEach((entry, index) => {
-			if (entry !== undefined) {
-				entries[entry.key] = `Position ${(index + 1).toString()}`
-			}
-		})
-
-		if (Object.keys(entries).length > 0) {
-			trackEvent('Dashboard', entries)
-		}
-	}, [dashboard.shownDashboardEntries, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Language', {
-			food: foodLanguage
-		})
-	}, [foodLanguage, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Language', {
-			app: i18n.language
-		})
-	}, [i18n.language, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('TimetableMode', {
-			timetableMode: timetableMode ?? 'list'
-		})
-	}, [timetableMode, analyticsInitialized])
+	usePreferenceTracking()
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
