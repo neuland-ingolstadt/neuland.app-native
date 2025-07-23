@@ -1,4 +1,6 @@
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, {
+	DateTimePickerAndroid
+} from '@react-native-community/datetimepicker'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import type React from 'react'
@@ -58,6 +60,34 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
+
+	const openAndroidDatePicker = (): void => {
+		DateTimePickerAndroid.open({
+			value: new Date(`${date}T${time}`),
+			mode: 'date',
+			minimumDate: new Date(),
+			maximumDate: new Date(new Date().setDate(new Date().getDate() + 90)),
+			onChange: (event, selectedDate) => {
+				if (event.type === 'set' && selectedDate != null) {
+					setDate(formatISODate(selectedDate))
+				}
+			}
+		})
+	}
+
+	const openAndroidTimePicker = (): void => {
+		DateTimePickerAndroid.open({
+			value: new Date(`${date}T${time}`),
+			mode: 'time',
+			is24Hour: true,
+			minuteInterval: 5,
+			onChange: (event, selectedDate) => {
+				if (event.type === 'set' && selectedDate != null) {
+					setTime(formatISOTime(selectedDate))
+				}
+			}
+		})
+	}
 	const [filterState, setFilterState] = useState<LoadingState>(
 		LoadingState.LOADING
 	)
@@ -119,11 +149,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Text>
 
 						{Platform.OS === 'android' && (
-							<DropdownButton
-								onPress={() => {
-									setShowDate(true)
-								}}
-							>
+							<DropdownButton onPress={openAndroidDatePicker}>
 								{date.split('-').reverse().join('.')}
 							</DropdownButton>
 						)}
@@ -167,11 +193,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Text>
 
 						{Platform.OS === 'android' && (
-							<DropdownButton
-								onPress={() => {
-									setShowTime(true)
-								}}
-							>
+							<DropdownButton onPress={openAndroidTimePicker}>
 								{time}
 							</DropdownButton>
 						)}
