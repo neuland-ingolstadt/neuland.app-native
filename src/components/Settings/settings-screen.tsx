@@ -217,7 +217,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginTop: 22,
-		gap: 2
+		gap: 1
 	},
 	poweredByText: {
 		color: theme.colors.labelSecondaryColor,

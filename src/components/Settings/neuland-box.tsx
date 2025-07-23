@@ -1,4 +1,3 @@
-import Color from 'color'
 import { useRouter } from 'expo-router'
 import { t } from 'i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
@@ -29,11 +28,11 @@ const NeulandBox = () => {
 			>
 				<View style={styles.neulandBoxContent}>
 					<AvatarCircle
-						background={`${theme.colors.neulandGreen}25`}
+						background={`${theme.colors.primary}25`}
 						size={50}
 						style={styles.neulandAvatar}
 					>
-						<LogoSVG size={35} color={Color(theme.colors.text).toString()} />
+						<LogoSVG size={35} color={theme.colors.primary} />
 					</AvatarCircle>
 
 					<View>

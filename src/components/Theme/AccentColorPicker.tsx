@@ -10,18 +10,18 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import { accentColorMap } from '@/components/provider'
-import type { AccentColor } from '@/hooks/usePreferencesStore'
+import { themeColorMap } from '@/components/provider'
+import type { ThemeColor } from '@/hooks/usePreferencesStore'
 
 interface AccentOption {
-	key: AccentColor
+	key: ThemeColor
 	title: string
 }
 
 interface ColorOptionProps {
 	option: AccentOption
-	selected: AccentColor
-	onSelect: (color: AccentColor) => void
+	selected: ThemeColor
+	onSelect: (color: ThemeColor) => void
 }
 
 const ColorOption = ({
@@ -30,7 +30,7 @@ const ColorOption = ({
 	onSelect
 }: ColorOptionProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const colors = accentColorMap[option.key]
+	const colors = themeColorMap[option.key]
 	const isSelected = option.key === selected
 	const scale = useSharedValue(1)
 
@@ -71,8 +71,8 @@ const ColorOption = ({
 
 interface AccentColorPickerProps {
 	options: AccentOption[]
-	selected: AccentColor
-	onSelect: (color: AccentColor) => void
+	selected: ThemeColor
+	onSelect: (color: ThemeColor) => void
 }
 
 const AccentColorPicker = ({
