@@ -14,7 +14,7 @@ export default function Unmatched(): React.JSX.Element {
 
 	useEffect(() => {
 		trackEvent('Unmatched', { pathname })
-	})
+	}, [pathname])
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
