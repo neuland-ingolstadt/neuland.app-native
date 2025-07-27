@@ -3,6 +3,7 @@ import { useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { Platform } from 'react-native'
 import { useDashboard, useUserKind } from '@/contexts'
+import { useMemberStore } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
@@ -12,6 +13,7 @@ import i18n from '@/localization/i18n'
 export function usePreferenceTracking(): void {
 	const segments = useSegments()
 	const theme = usePreferencesStore((state) => state.theme)
+	const themeColor = usePreferencesStore((state) => state.themeColor)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
 	)
@@ -24,6 +26,7 @@ export function usePreferenceTracking(): void {
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
+	const isNeulandMember = useMemberStore((state) => state.idToken !== null)
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
 
@@ -46,6 +49,11 @@ export function usePreferenceTracking(): void {
 
 	useEffect(() => {
 		if (!analyticsInitialized) return
+		trackEvent('AccentColor', { themeColor })
+	}, [themeColor, analyticsInitialized])
+
+	useEffect(() => {
+		if (!analyticsInitialized) return
 		trackEvent('SplashScreen', { showSplashScreen })
 	}, [showSplashScreen, analyticsInitialized])
 
@@ -60,6 +68,11 @@ export function usePreferenceTracking(): void {
 		if (!analyticsInitialized || userKind.userKind === undefined) return
 		trackEvent('UserKind', { userKind: userKind.userKind })
 	}, [userKind.userKind, analyticsInitialized])
+
+	useEffect(() => {
+		if (!analyticsInitialized) return
+		trackEvent('NeulandMember', { isMember: isNeulandMember })
+	}, [isNeulandMember, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) return
