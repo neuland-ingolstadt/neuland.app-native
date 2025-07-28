@@ -214,7 +214,8 @@
 		"gradesAndSubjects": "Grades & Subjects",
 		"lecturers": "Lecturers",
 		"library": "Your card",
-		"view": "Library"
+		"view": "Library",
+		"open": "View"
 	},
 	"appIcon": {
 		"error": {

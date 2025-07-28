@@ -193,7 +193,8 @@
 		"gradesAndSubjects": "Noten & Fächer",
 		"lecturers": "Dozenten",
 		"library": "Deine Karte",
-		"view": "Bibliothek"
+		"view": "Bibliothek",
+		"open": "Anzeigen"
 	},
 	"appIcon": {
 		"error": {
