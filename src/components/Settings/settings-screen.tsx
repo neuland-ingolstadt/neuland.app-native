@@ -18,13 +18,14 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import type { UserKindContextType } from '@/contexts/userKind'
-import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
+import EmployeeInfoSection from './employee-info-section'
 import GuestInfoSection from './guest-info-section'
 import HetznerLogo from './hetzner-logo'
 import NeulandBox from './neuland-box'
@@ -169,6 +170,8 @@ export default function Settings(): React.JSX.Element {
 							printerBalance={data?.pcounter?.toString() ?? '0'}
 							personalLecturersCount={personalLecturers}
 						/>
+					) : userKind === USER_EMPLOYEE ? (
+						<EmployeeInfoSection />
 					) : undefined}
 				</View>
 
