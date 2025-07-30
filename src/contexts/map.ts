@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
+import type { RoomOpenings } from '@/utils/map-utils'
 
 interface MapContextType {
 	localSearch: string
@@ -9,6 +10,8 @@ interface MapContextType {
 	setClickedElement: (value: ClickedMapElement | null) => void
 	availableRooms: AvailableRoom[] | null
 	setAvailableRooms: (value: AvailableRoom[] | null) => void
+	roomOpenings: RoomOpenings | null
+	setRoomOpenings: (value: RoomOpenings | null) => void
 	nextLecture: FriendlyTimetableEntry[] | null
 	setNextLecture: (value: FriendlyTimetableEntry[] | null) => void
 	currentFloor: { floor: string; manual: boolean } | null
@@ -31,6 +34,10 @@ export const MapContext = createContext<MapContextType>({
 	availableRooms: null,
 	setAvailableRooms: () => {
 		throw new Error('setAvailableRooms must be overridden')
+	},
+	roomOpenings: null,
+	setRoomOpenings: () => {
+		throw new Error('setRoomOpenings must be overridden')
 	},
 
 	currentFloor: null,
