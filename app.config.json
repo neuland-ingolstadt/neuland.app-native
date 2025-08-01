@@ -4,7 +4,8 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.13.11",
+		"version": "0.14.0",
+		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,
@@ -160,12 +161,6 @@
 						"deploymentTarget": "15.1",
 						"useFrameworks": "static"
 					}
-				}
-			],
-			[
-				"expo-screen-orientation",
-				{
-					"initialOrientation": "DEFAULT"
 				}
 			],
 			[
