@@ -2,7 +2,7 @@ import Svg, { Path } from 'react-native-svg'
 
 function HetznerLogo({
 	subtitleColor = '#A8A8A8',
-	width = 182,
+	width = 180,
 	height = 70
 }: {
 	subtitleColor?: string

@@ -16,6 +16,7 @@ import {
 	StyleSheet
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
 import {
@@ -119,27 +120,29 @@ export default function Provider({
 
 	return (
 		<GestureHandlerRootView style={styles.container}>
-			<PersistQueryClientProvider
-				client={queryClient}
-				persistOptions={{ persister: syncStoragePersister }}
-			>
-				<UnistylesProvider>
-					<ThemeProvider
-						value={
-							UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
-						}
-					>
-						<BottomSheetModalProvider>
-							<UserKindContext.Provider value={userKind}>
-								<DashboardContext.Provider value={dashboard}>
-									<Toaster />
-									{children}
-								</DashboardContext.Provider>
-							</UserKindContext.Provider>
-						</BottomSheetModalProvider>
-					</ThemeProvider>
-				</UnistylesProvider>
-			</PersistQueryClientProvider>
+			<SafeAreaProvider>
+				<PersistQueryClientProvider
+					client={queryClient}
+					persistOptions={{ persister: syncStoragePersister }}
+				>
+					<UnistylesProvider>
+						<ThemeProvider
+							value={
+								UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
+							}
+						>
+							<BottomSheetModalProvider>
+								<UserKindContext.Provider value={userKind}>
+									<DashboardContext.Provider value={dashboard}>
+										<Toaster />
+										{children}
+									</DashboardContext.Provider>
+								</UserKindContext.Provider>
+							</BottomSheetModalProvider>
+						</ThemeProvider>
+					</UnistylesProvider>
+				</PersistQueryClientProvider>
+			</SafeAreaProvider>
 		</GestureHandlerRootView>
 	)
 }
