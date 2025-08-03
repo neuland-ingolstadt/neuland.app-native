@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,12 +10,11 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import PlatformIcon from '@/components/Universal/Icon'
 import type { UserKindContextType } from '@/contexts/userKind'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { getPersonalData } from '@/utils/api-utils'
+import { USER_EMPLOYEE, USER_GUEST } from '@/data/constants'
+import type { PersDataDetails } from '@/types/thi-api'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
 import AvatarCircle from './avatar-circle'
@@ -24,10 +22,18 @@ import NameBox from './name-box'
 
 interface SettingsHeaderProps {
 	onLogout: () => void
+	personalData?: PersDataDetails
+	isLoading?: boolean
+	isSuccess?: boolean
+	error?: Error
 }
 
 export default function SettingsHeader({
-	onLogout
+	onLogout,
+	personalData,
+	isLoading,
+	isSuccess,
+	error
 }: SettingsHeaderProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
@@ -47,24 +53,6 @@ export default function SettingsHeader({
 		void loadUsername()
 	}, [userKind])
 
-	const { data, error, isLoading, isSuccess } = useQuery({
-		queryKey: ['personalData'],
-		queryFn: getPersonalData,
-		staleTime: 1000 * 60 * 60 * 12,
-		gcTime: 1000 * 60 * 60 * 24 * 60,
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				router.replace('/login')
-				return false
-			}
-			if (userKind !== 'student') {
-				return false
-			}
-			return failureCount < 2
-		},
-		enabled: userKind === USER_STUDENT
-	})
-
 	if (userKind === 'student') {
 		return (
 			<View style={styles.container}>
@@ -78,13 +66,13 @@ export default function SettingsHeader({
 					}}
 				>
 					<View style={styles.nameBox}>
-						{isSuccess && data?.mtknr !== undefined ? (
+						{isSuccess && personalData?.mtknr !== undefined ? (
 							<View style={styles.nameOuterContainer}>
 								<View style={styles.nameInnerContainer}>
 									<NameBox
-										title={`${data?.vname} ${data?.name}`}
-										subTitle1={`${data?.stgru ?? ''}. Semester`}
-										subTitle2={data?.fachrich ?? ''}
+										title={`${personalData?.vname} ${personalData?.name}`}
+										subTitle1={`${personalData?.stgru ?? ''}. Semester`}
+										subTitle2={personalData?.fachrich ?? ''}
 										showChevron={true}
 									>
 										<AvatarCircle background={`${theme.colors.primary}25`}>
@@ -93,7 +81,9 @@ export default function SettingsHeader({
 													color: theme.colors.primary
 												})}
 											>
-												{getInitials(`${data?.vname} ${data?.name}`)}
+												{getInitials(
+													`${personalData?.vname} ${personalData?.name}`
+												)}
 											</Text>
 										</AvatarCircle>
 									</NameBox>

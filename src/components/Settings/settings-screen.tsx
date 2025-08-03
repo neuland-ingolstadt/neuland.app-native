@@ -86,7 +86,7 @@ export default function Settings(): React.JSX.Element {
 				router.replace('/login')
 				return false
 			}
-			if (userKind !== 'student') {
+			if (userKind !== USER_STUDENT) {
 				return false
 			}
 			return failureCount < 2
@@ -116,7 +116,7 @@ export default function Settings(): React.JSX.Element {
 				router.replace('/login')
 				return false
 			}
-			if (userKind !== 'student') {
+			if (userKind !== USER_STUDENT) {
 				return false
 			}
 			return failureCount < 2
@@ -159,7 +159,15 @@ export default function Settings(): React.JSX.Element {
 			contentContainerStyle={styles.contentContainer}
 		>
 			<View style={styles.wrapper}>
-				<SettingsHeader onLogout={logoutAlert} />
+				<SettingsHeader
+					onLogout={logoutAlert}
+					personalData={data}
+					isLoading={isLoading}
+					isSuccess={isSuccess}
+					error={
+						isError ? new Error('Failed to load personal data') : undefined
+					}
+				/>
 				{Platform.OS !== 'web' && idToken && <NeulandBox />}
 				<View style={styles.infoBoxesSection}>
 					{userKind === USER_GUEST ? (
