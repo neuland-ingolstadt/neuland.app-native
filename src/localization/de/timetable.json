@@ -30,6 +30,7 @@
 		"empty": {
 			"title": "Stundenplan nicht konfiguriert",
 			"title2": "Keine Vorlesungen gefunden",
+			"subtitle": "Dein Stundenplan wird hier angezeigt, sobald er konfiguriert ist",
 			"message": "Um deinen Stundenplan anzuzeigen, musst du ihn über die THI Stundenplan Webseite konfigurieren.",
 			"button": "Jetzt konfigurieren"
 		},

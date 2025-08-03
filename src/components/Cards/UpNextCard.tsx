@@ -40,11 +40,11 @@ const UpNextCard: React.FC = () => {
 		remaining: 0
 	})
 	const [currentTime, setCurrentTime] = useState(() => new Date())
-	const { t } = useTranslation('navigation')
+	const { t } = useTranslation(['navigation', 'timetable'])
 	const [appState, setAppState] = useState<AppStateStatus>(
 		AppState.currentState
 	)
-	const [screenIsFocused, setScreenIsFocused] = useState(false) // Default to false, only true when focused
+	const [screenIsFocused, setScreenIsFocused] = useState(false)
 	const routeFocusRef = useRef(false)
 
 	const isMountedRef = useRef(true)
@@ -69,7 +69,7 @@ const UpNextCard: React.FC = () => {
 		return timetable
 	}, [])
 
-	const { data: timetable } = useQuery({
+	const { data: timetable, error: timetableError } = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
 		staleTime: 10 * 60 * 1000,
@@ -214,6 +214,16 @@ const UpNextCard: React.FC = () => {
 			refreshAll()
 		}
 	}, [timetable])
+
+	useEffect(() => {
+		if (timetableError) {
+			if (timetableError.message === '"Time table does not exist" (-202)') {
+				setLoadingState(LoadingState.LOADED)
+			} else {
+				setLoadingState(LoadingState.ERROR)
+			}
+		}
+	}, [timetableError])
 
 	const eventStatus = useMemo(() => {
 		if (!currentEvent) return null
@@ -405,6 +415,23 @@ const UpNextCard: React.FC = () => {
 		[t]
 	)
 
+	const NotYetSetUp = useMemo(
+		() => (
+			<View style={styles.emptyContainer}>
+				<Text style={styles.emptyTitle}>
+					{t('timetable:error.empty.title')}
+				</Text>
+				<Text style={styles.emptySubtitle}>
+					{t('timetable:error.empty.subtitle')}
+				</Text>
+			</View>
+		),
+		[t]
+	)
+
+	const isNotYetSetUp =
+		timetableError?.message === '"Time table does not exist" (-202)'
+
 	return (
 		<BaseCard title="timetable" onPressRoute="/timetable">
 			{loadingState === LoadingState.LOADED &&
@@ -433,6 +460,8 @@ const UpNextCard: React.FC = () => {
 
 						{Stats}
 					</View>
+				) : isNotYetSetUp ? (
+					NotYetSetUp
 				) : (
 					NoEvents
 				))}
