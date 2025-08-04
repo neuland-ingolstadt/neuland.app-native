@@ -5,7 +5,7 @@ import { Pressable, Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
-import { PlateAnimation } from './PlateAnimation'
+import { PlateAnimation } from './plate-animation'
 
 /**
  * An enhanced empty state component for the food screens that displays

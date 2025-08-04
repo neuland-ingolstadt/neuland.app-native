@@ -23,12 +23,12 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
-import AttributionLink from './AttributionLink'
-import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'
-import BottomSheetBackground from './BottomSheetBackground'
-import NextLectureSuggestion from './NextLectureSuggestion'
-import SearchHistory from './SearchHistory'
-import SearchResults from './SearchResuts'
+import AttributionLink from './attribution-link'
+import AvailableRoomsSuggestions from './available-rooms-suggestions'
+import BottomSheetBackground from './bottom-sheet-background'
+import NextLectureSuggestion from './next-lecture-suggestion'
+import SearchResults from './search-esuts'
+import SearchHistory from './search-history'
 
 interface MapBottomSheetProps {
 	bottomSheetRef: React.RefObject<BottomSheet | null>

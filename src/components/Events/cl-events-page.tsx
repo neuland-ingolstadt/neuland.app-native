@@ -7,11 +7,11 @@ import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/error-view'
-import CLEventRow from '@/components/Rows/EventRow'
+import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 
-import LoadingIndicator from '../Universal/LoadingIndicator'
+import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
 const MemoizedEventRow = memo(CLEventRow)

@@ -9,7 +9,7 @@ import type { SearchResult } from '@/types/map'
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
-import ResultRow from './SearchResultRow'
+import ResultRow from './search-result-row'
 
 interface SearchHistoryProps {
 	handlePresentModalPress: () => void

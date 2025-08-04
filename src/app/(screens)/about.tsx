@@ -27,10 +27,10 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import { type LucideIcon, linkIcon } from '@/components/Universal/Icon'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import SectionView from '@/components/Universal/sections-view'
+import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'

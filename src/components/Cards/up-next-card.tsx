@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import Divider from '@/components/Universal/Divider'
-import PulsingDot from '@/components/Universal/PulsingDot'
+import PulsingDot from '@/components/Universal/pulsing-dot'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import type { FriendlyTimetableEntry } from '@/types/utils'
@@ -22,7 +22,7 @@ import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { UserKindContext } from '../contexts'
-import BaseCard from './BaseCard'
+import BaseCard from './base-card'
 
 const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)

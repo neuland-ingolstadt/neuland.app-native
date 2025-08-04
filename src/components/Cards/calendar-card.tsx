@@ -11,8 +11,8 @@ import { useFlowStore } from '@/hooks/useFlowStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import EventItem from '../Universal/EventItem'
-import BaseCard from './BaseCard'
+import EventItem from '../Universal/event-item'
+import BaseCard from './base-card'
 
 const CalendarCard = (): React.JSX.Element => {
 	type Combined = Calendar | CardExams

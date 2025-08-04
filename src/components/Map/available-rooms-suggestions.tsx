@@ -14,7 +14,7 @@ import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { UserKindContext } from '../contexts'
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
-import LoadingIndicator from '../Universal/LoadingIndicator'
+import LoadingIndicator from '../Universal/loading-indicator'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection

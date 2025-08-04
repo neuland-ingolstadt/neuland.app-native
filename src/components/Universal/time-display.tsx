@@ -1,7 +1,7 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import TimeSeparator from './TimeSeparator'
+import TimeSeparator from './time-separator'
 
 interface TimeDisplayProps {
 	startTime: string

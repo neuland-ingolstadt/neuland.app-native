@@ -6,8 +6,8 @@ import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { LanguageKey } from '@/localization/i18n'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
-import EventItem from '../Universal/EventItem'
-import BaseCard from './BaseCard'
+import EventItem from '../Universal/event-item'
+import BaseCard from './base-card'
 
 const EventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)

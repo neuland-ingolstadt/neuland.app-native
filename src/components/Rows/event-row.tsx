@@ -9,7 +9,7 @@ import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
-import RowEntry from '../Universal/RowEntry'
+import RowEntry from '../Universal/row-entry'
 
 const CLEventRow = ({
 	event

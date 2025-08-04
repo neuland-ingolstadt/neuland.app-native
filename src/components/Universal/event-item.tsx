@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
-import VerticalLine from '@/components/Universal/VerticalLine'
+import VerticalLine from '@/components/Universal/vertical-line'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 
 interface EventItemProps {

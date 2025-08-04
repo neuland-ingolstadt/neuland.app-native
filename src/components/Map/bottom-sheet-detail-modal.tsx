@@ -14,9 +14,9 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { handleShareModal } from '@/utils/map-utils'
-import FormList from '../Universal/FormList'
+import FormList from '../Universal/form-list'
 import PlatformIcon from '../Universal/Icon'
-import BottomSheetBackground from './BottomSheetBackground'
+import BottomSheetBackground from './bottom-sheet-background'
 
 interface BottomSheetDetailModalProps {
 	bottomSheetModalRef: React.RefObject<BottomSheetModal | null>

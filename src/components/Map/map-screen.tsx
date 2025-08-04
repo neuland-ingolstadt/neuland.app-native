@@ -53,9 +53,9 @@ import {
 } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
-import MapBottomSheet from '@/components/Map/BottomSheetMap'
-import FloorPicker from '@/components/Map/FloorPicker'
+import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-modal'
+import MapBottomSheet from '@/components/Map/bottom-sheet-map'
+import FloorPicker from '@/components/Map/floor-picker'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
@@ -90,8 +90,8 @@ import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 
 import packageInfo from '../../../package.json'
-import LoadingIndicator from '../Universal/LoadingIndicator'
-import { modalSection } from './ModalSections'
+import LoadingIndicator from '../Universal/loading-indicator'
+import { modalSection } from './modal-sections'
 
 export function requestPermission(): void {
 	if (Platform.OS === 'android') {

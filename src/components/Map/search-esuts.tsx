@@ -11,7 +11,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { SearchResult } from '@/types/map'
 
 import Divider from '../Universal/Divider'
-import ResultRow from './SearchResultRow'
+import ResultRow from './search-result-row'
 
 interface SearchResultsProps {
 	handlePresentModalPress: () => void

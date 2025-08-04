@@ -15,7 +15,7 @@ import {
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
 
-import RowEntry from '../Universal/RowEntry'
+import RowEntry from '../Universal/row-entry'
 
 const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')

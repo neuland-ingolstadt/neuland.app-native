@@ -15,7 +15,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { MaterialIcon } from '@/types/material-icons'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
-import BaseCard from './BaseCard'
+import BaseCard from './base-card'
 
 const LinkCard = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)

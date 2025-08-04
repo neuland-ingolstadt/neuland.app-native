@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { Grade } from '@/types/thi-api'
 
-import RowEntry from '../Universal/RowEntry'
+import RowEntry from '../Universal/row-entry'
 
 const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
