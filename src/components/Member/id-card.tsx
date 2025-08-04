@@ -168,7 +168,7 @@ interface IDCardProps {
 }
 
 export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
 
 	const [modalVisible, setModalVisible] = useState(false)
@@ -320,7 +320,10 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							>
 								<View style={[styles.qrCodeContainer]}>
 									{isLoading ? (
-										<ActivityIndicator size="small" color="#00ff33" />
+										<ActivityIndicator
+											size="small"
+											color={theme.colors.labelBackground}
+										/>
 									) : error ? (
 										<Text style={{ color: 'red', textAlign: 'center' }}>
 											{String(error)}

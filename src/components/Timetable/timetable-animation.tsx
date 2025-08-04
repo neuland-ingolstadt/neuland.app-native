@@ -277,6 +277,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		height: 80
 	},
 	calendarIcon: {
-		color: theme.colors.text
+		color: theme.colors.labelColor
 	}
 }))

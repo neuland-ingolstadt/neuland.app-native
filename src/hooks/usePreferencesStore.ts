@@ -36,7 +36,7 @@ const initialState: Omit<
 > = {
 	appIcon: undefined,
 	language: undefined,
-	theme: 'dark',
+	theme: 'auto',
 	themeColor: 'blue',
 	unlockedAppIcons: [],
 	recentQuicklinks: defaultQuicklinks,
