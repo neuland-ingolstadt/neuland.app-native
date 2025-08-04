@@ -2,7 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useColorScheme, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import ThemePreviewCard from './ThemePreviewCard'
+import ThemePreviewCard from './theme-preview-card'
 
 interface ThemePreviewProps {
 	theme: string
