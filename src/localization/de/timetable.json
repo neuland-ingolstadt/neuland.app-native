@@ -34,7 +34,7 @@
 			"message": "Um deinen Stundenplan anzuzeigen, musst du ihn über die THI Stundenplan Webseite konfigurieren.",
 			"button": "Jetzt konfigurieren",
 			"tip1": "Konfiguriere deinen Stundenplan auf der THI Webseite",
-			"tip2": "Nach der Einrichtung synchronisiert er automatisch Dozenten und Updates in der App",
+			"tip2": "Nach der Einrichtung werden Vorlesungen und Dozenten automatisch synchronisiert",
 			"tip3": "Nutze den Aktualisieren-Button nach der Konfiguration",
 			"refresh": "Aktualisieren"
 		},
