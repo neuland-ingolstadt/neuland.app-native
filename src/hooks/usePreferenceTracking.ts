@@ -26,7 +26,7 @@ export function usePreferenceTracking(): void {
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
-	const isNeulandMember = useMemberStore((state) => state.idToken !== null)
+	const isNeulandMember = useMemberStore((state) => !!state.idToken)
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
 
