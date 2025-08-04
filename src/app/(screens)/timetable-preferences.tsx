@@ -4,7 +4,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/FoodLanguageSection'
-import TimetablePreview from '@/components/Timetable/TimetablePreview'
+import TimetablePreview from '@/components/Timetable/timetable-preview'
 import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'

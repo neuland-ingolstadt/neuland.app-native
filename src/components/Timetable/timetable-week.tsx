@@ -34,10 +34,10 @@ import type {
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderRight } from './HeaderButtons'
-import EventComponent from './WeekEventComponent'
-import WeekHeaderEvent from './WeekHeaderEvent'
-import WeekLeftArea from './WeekLeftArea'
+import { HeaderRight } from './header-buttons'
+import EventComponent from './week-event-component'
+import WeekHeaderEvent from './week-header-event'
+import WeekLeftArea from './week-left-area'
 
 const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,

@@ -412,7 +412,7 @@ const UpNextCard: React.FC = () => {
 				</Text>
 			</View>
 		),
-		[t]
+		[t, theme]
 	)
 
 	const NotYetSetUp = useMemo(
@@ -426,7 +426,7 @@ const UpNextCard: React.FC = () => {
 				</Text>
 			</View>
 		),
-		[t]
+		[t, theme]
 	)
 
 	const isNotYetSetUp =

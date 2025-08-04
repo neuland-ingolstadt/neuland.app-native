@@ -8,9 +8,9 @@ import PlatformIcon from '@/components/Universal/Icon'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 
-import DetailsBody from './DetailsBody'
-import DetailsRow from './DetailsRow'
-import DetailsSymbol from './DetailsSymbol'
+import DetailsBody from './details-body'
+import DetailsRow from './details-row'
+import DetailsSymbol from './details-symbol'
 import Separator from './Separator'
 
 interface ShareCardProps {
