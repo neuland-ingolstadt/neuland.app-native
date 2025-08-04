@@ -1,0 +1,12 @@
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "app.neuland",
+			"sha256_cert_fingerprints": [
+				"6B:31:76:72:C0:F6:59:4A:58:43:AF:DE:6E:76:A1:CE:8A:D9:17:B9:99:BC:30:31:D6:FB:E9:AD:3B:25:B9:45"
+			]
+		}
+	}
+]

@@ -1,24 +1,25 @@
 {
     "webcredentials": {
-        "apps": [
-            "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
-        ]
+      "apps": [
+        "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
+      ]
     },
     "activitycontinuation": {
-        "apps": [
-            "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
-        ]
+      "apps": [
+        "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
+      ]
     },
     "applinks": {
-        "details": [
+      "details": [
+        {
+          "appID": "FSXB76X6V2.de.neuland-ingolstadt.neuland-app",
+          "components": [
             {
-                "appID": "FSXB76X6V2.de.neuland-ingolstadt.neuland-app",
-                "components": [
-                    {
-                        "/": "*"
-                    }
-                ]
+              "/": "*"
             }
-        ]
+          ]
+        }
+      ]
     }
-}
+  }
+  
