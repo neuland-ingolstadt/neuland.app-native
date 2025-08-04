@@ -5,7 +5,7 @@ import { Platform } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
 
-import { Tabs } from './NativeBottomTabs'
+import { Tabs } from './native-bottom-tabs'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
 

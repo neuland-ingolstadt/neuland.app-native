@@ -1,7 +1,7 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import ShareHeaderButton from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import i18n from '@/localization/i18n'

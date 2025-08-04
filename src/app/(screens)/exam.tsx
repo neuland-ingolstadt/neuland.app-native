@@ -10,7 +10,7 @@ import Animated, {
 	useScrollViewOffset
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDateTime } from '@/utils/date-utils'

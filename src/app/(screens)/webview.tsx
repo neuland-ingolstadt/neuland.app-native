@@ -6,7 +6,7 @@ import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 
 const PADDING = 16

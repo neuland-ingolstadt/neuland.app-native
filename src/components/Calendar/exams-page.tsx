@@ -9,13 +9,13 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import type { Exam } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
-import { ExamRow } from '../Rows/CalendarRow'
+import { ExamRow } from '../Rows/calendar-row'
 
 export default function ExamsPage({
 	primussUrl,

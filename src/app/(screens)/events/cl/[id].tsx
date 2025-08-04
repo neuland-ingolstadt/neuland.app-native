@@ -21,10 +21,10 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/event-error-view'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
+import ShareHeaderButton from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {

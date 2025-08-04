@@ -15,7 +15,7 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
-import CurvedText from './CurvedText'
+import CurvedText from './curved-text'
 
 interface PlateAnimationProps {
 	size?: number

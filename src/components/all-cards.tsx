@@ -8,7 +8,7 @@ import {
 	LoginCard,
 	UpNextCard
 } from './Cards'
-import NewsCard from './Cards/NewsCard'
+import NewsCard from './Cards/news-card'
 
 export const AllCards: Card[] = [
 	{

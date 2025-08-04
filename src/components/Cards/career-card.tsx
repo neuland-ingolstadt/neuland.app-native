@@ -16,8 +16,8 @@ import {
 	loadStudentCounsellingEvents,
 	QUERY_KEYS
 } from '@/utils/events-utils'
-import EventItem from '../Universal/EventItem'
-import BaseCard from './BaseCard'
+import EventItem from '../Universal/event-item'
+import BaseCard from './base-card'
 
 const CareerCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)

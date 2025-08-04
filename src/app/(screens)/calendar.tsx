@@ -7,9 +7,9 @@ import { Linking, useWindowDimensions, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import CalendarEventsPage from '@/components/Calendar/calendar-events-page'
 import ExamsPage from '@/components/Calendar/exams-page'
-import PagerView from '@/components/Layout/PagerView'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ToggleRow from '@/components/Universal/ToggleRow'
+import PagerView from '@/components/Layout/pager-view'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
+import ToggleRow from '@/components/Universal/toggle-row'
 
 export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

@@ -15,7 +15,7 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import WhatsNewBox from '@/components/Flow/whats-new-box'
 import changelogData from '@/data/changelog.json'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { LanguageKey } from '@/localization/i18n'

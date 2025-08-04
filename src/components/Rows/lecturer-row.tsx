@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { NormalizedLecturer } from '@/types/utils'
 
-import RowEntry from '../Universal/RowEntry'
+import RowEntry from '../Universal/row-entry'
 
 const LecturerRow = ({
 	item

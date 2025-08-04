@@ -14,7 +14,7 @@ import {
 } from 'react-native-unistyles'
 import { RoomReportCategory } from '@/__generated__/gql/graphql'
 import neulandApi from '@/api/neuland-api'
-import { CustomDropdown } from '@/components/Menu/CustomDropdown'
+import { CustomDropdown } from '@/components/Menu/custom-dropdown'
 import { getContrastColor } from '@/utils/ui-utils'
 
 export default function RoomReport(): React.JSX.Element {

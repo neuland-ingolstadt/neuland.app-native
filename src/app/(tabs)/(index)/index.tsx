@@ -9,13 +9,13 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
-import AnnouncementCard from '@/components/Cards/AnnouncementCard'
+import AnnouncementCard from '@/components/Cards/announcement-card'
 import { DashboardContext } from '@/components/contexts'
 import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
 import ErrorView from '@/components/Error/error-view'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/home-header-right'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)

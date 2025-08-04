@@ -1,4 +1,4 @@
-import { MealDay } from './MealDay'
-import { MealEntry } from './MealEntry'
+import { MealDay } from './meal-day'
+import { MealEntry } from './meal-entry'
 
 export { MealEntry, MealDay }

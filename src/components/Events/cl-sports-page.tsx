@@ -23,11 +23,11 @@ import type {
 } from '@/__generated__/gql/graphql'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import SportsRow from '@/components/Rows/SportsRow'
+import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/Icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
-import LoadingIndicator from '../Universal/LoadingIndicator'
+import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
 export default function ClSportsPage({

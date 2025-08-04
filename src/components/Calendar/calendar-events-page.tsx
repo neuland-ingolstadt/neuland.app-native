@@ -5,7 +5,7 @@ import { SectionList, type SectionListData, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { Calendar } from '@/types/data'
 import { semesters } from '@/utils/calendar-utils'
-import { CalendarRow } from '../Rows/CalendarRow'
+import { CalendarRow } from '../Rows/calendar-row'
 
 type Section = {
 	title: string

@@ -20,10 +20,10 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import LoginForm from '@/components/Universal/LoginForm'
+import LoginForm from '@/components/Universal/login-form'
 import { PRIVACY_URL } from '@/data/constants'
 
-import LoginAnimatedText from './LoginAnimatedText'
+import LoginAnimatedText from './login-animated-text'
 
 const useIsFloatingKeyboard = (): boolean => {
 	const windowWidth = Dimensions.get('window').width

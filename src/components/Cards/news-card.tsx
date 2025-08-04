@@ -7,7 +7,7 @@ import API from '@/api/authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 
-import BaseCard from './BaseCard'
+import BaseCard from './base-card'
 
 const NewsCard: React.FC = () => {
 	const ref = useRef(null)

@@ -4,9 +4,9 @@ import type React from 'react'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import FoodScreen from '@/components/Food/FoodScreen'
-import { FoodHeaderRight } from '@/components/Food/HeaderRight'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import FoodScreen from '@/components/Food/food-screen'
+import { FoodHeaderRight } from '@/components/Food/header-right'
+import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)

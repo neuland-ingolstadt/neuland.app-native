@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard'
+import BaseCard from './base-card'
 
 const LoginCard = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)

@@ -33,7 +33,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
-import LoadingIndicator from '../Universal/LoadingIndicator'
+import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
 import WeekHeaderEvent from './week-header-event'

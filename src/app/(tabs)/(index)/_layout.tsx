@@ -1,8 +1,8 @@
-import BottomSheet from '@/components/Layout/BottomSheet'
+import BottomSheet from '@/components/Layout/bottom-sheet'
 import {
 	BottomSheetRootBackground,
 	renderBackdrop
-} from '@/components/Universal/BottomSheetRootBackground'
+} from '@/components/Universal/bottom-sheet-root-background'
 import '@react-navigation/elements'
 import { Slot } from 'expo-router'
 import type React from 'react'

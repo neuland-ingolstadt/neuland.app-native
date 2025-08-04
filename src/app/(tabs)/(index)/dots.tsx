@@ -2,7 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PulsingDot from '@/components/Universal/PulsingDot'
+import PulsingDot from '@/components/Universal/pulsing-dot'
 
 export default function DotsExplanationScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

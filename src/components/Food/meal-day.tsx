@@ -6,9 +6,9 @@ import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 import type { Food, Meal } from '@/types/neuland-api'
-import { EmptyFoodAnimation } from './EmptyFoodAnimation'
+import { EmptyFoodAnimation } from './empty-food-animation'
 
-import { MealEntry } from './MealEntry'
+import { MealEntry } from './meal-entry'
 
 /**
  * Sorts categories by priority with main dishes first, soups lower in the order

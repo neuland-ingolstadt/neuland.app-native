@@ -8,7 +8,7 @@ import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
 
 import PlatformIcon from '../Universal/Icon'
-import RowEntry from '../Universal/RowEntry'
+import RowEntry from '../Universal/row-entry'
 
 const SportsRow = ({
 	event

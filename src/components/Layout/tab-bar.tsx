@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 import { SettingsTabButton } from '../Settings/tab-button'
-import { Tabs } from './NativeBottomTabs'
+import { Tabs } from './native-bottom-tabs'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
 
