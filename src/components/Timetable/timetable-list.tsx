@@ -40,7 +40,7 @@ import {
 	formatISODate
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
-import { HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './header-buttons'
 
 type TimetableSection = {
 	title: Date

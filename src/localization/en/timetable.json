@@ -32,7 +32,11 @@
 			"title2": "No lectures found",
 			"subtitle": "Your timetable will appear here once it's configured",
 			"message": "To display your timetable, you have to configure it using the THI timetable website.",
-			"button": "Configure now"
+			"button": "Configure now",
+			"tip1": "Configure your timetable on the THI website",
+			"tip2": "Once set up, it automatically syncs lecturers and updates in the app",
+			"tip3": "Tap the refresh button after configuration",
+			"refresh": "Refresh"
 		},
 		"filtered": {
 			"title": "No future lectures found",
