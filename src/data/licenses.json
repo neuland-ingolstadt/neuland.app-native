@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@gorhom/bottom-sheet@5.1.6": {
+    "@gorhom/bottom-sheet@5.1.8": {
         "licenses": "MIT",
         "repository": "https://github.com/gorhom/react-native-bottom-sheet",
         "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
@@ -65,7 +65,7 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-menu/menu@1.2.3": {
+    "@react-native-menu/menu@1.2.4": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-menu/menu",
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
@@ -346,7 +346,7 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@15.6.0": {
+    "react-i18next@15.6.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
@@ -430,7 +430,7 @@
         "licenseUrl": "https://github.com/AdelRedaa97/react-native-select-dropdown/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-svg@15.12.0": {
+    "react-native-svg@15.12.1": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/react-native-svg",
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",

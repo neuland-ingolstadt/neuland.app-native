@@ -418,9 +418,6 @@ const UpNextCard: React.FC = () => {
 	const NotYetSetUp = useMemo(
 		() => (
 			<View style={styles.emptyContainer}>
-				<Text style={styles.emptyTitle}>
-					{t('timetable:error.empty.title')}
-				</Text>
 				<Text style={styles.emptySubtitle}>
 					{t('timetable:error.empty.subtitle')}
 				</Text>
@@ -564,8 +561,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	emptySubtitle: {
 		color: theme.colors.labelColor,
-		fontSize: 14,
-		marginTop: 4
+		fontSize: 14
 	},
 	nextEventContainer: {
 		flexDirection: 'row',
