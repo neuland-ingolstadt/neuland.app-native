@@ -1,7 +1,7 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import ShareHeaderButton from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import i18n from '@/localization/i18n'
@@ -11,12 +11,10 @@ import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { type Href, router, Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
-import * as ScreenOrientation from 'expo-screen-orientation'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Linking, LogBox, Platform } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import {
@@ -41,22 +39,10 @@ LogBox.ignoreLogs([
 
 function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
-	const isPad = DeviceInfo.isTablet()
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
 
 	useQuickActionRouting()
-	useEffect(() => {
-		if (Platform.OS === 'web') {
-			// do nothing
-		} else if (isPad) {
-			void ScreenOrientation.unlockAsync()
-		} else {
-			void ScreenOrientation.lockAsync(
-				ScreenOrientation.OrientationLock.PORTRAIT_UP
-			)
-		}
-	}, [isPad])
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {

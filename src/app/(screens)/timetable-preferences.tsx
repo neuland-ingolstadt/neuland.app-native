@@ -3,11 +3,11 @@ import { ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
-} from '@/components/Food/FoodLanguageSection'
-import TimetablePreview from '@/components/Timetable/TimetablePreview'
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+} from '@/components/Food/food-language-section'
+import TimetablePreview from '@/components/Timetable/timetable-preview'
+import MultiSectionPicker from '@/components/Universal/multi-section-picker'
+import SectionView from '@/components/Universal/sections-view'
+import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 
 export default function TimetablePreferences(): React.JSX.Element {

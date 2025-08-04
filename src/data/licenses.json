@@ -95,25 +95,25 @@
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@shopify/flash-list@1.8.1": {
+    "@shopify/flash-list@1.8.3": {
         "licenses": "MIT",
         "repository": "https://github.com/Shopify/flash-list",
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.82.0": {
+    "@tanstack/query-sync-storage-persister@5.83.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.82.0": {
+    "@tanstack/react-query-persist-client@5.84.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.82.0": {
+    "@tanstack/react-query@5.84.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -149,7 +149,7 @@
         "licenseUrl": "https://github.com/Qix-/color/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "expo-alternate-app-icons@1.5.0": {
+    "expo-alternate-app-icons@2.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/pchalupa/expo-alternate-app-icons",
         "licenseUrl": "https://github.com/pchalupa/expo-alternate-app-icons/raw/master/LICENSE",
@@ -215,7 +215,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-image@2.3.2": {
+    "expo-image@2.4.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -251,12 +251,6 @@
         "parents": "neuland"
     },
     "expo-router@5.1.4": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "neuland"
-    },
-    "expo-screen-orientation@8.1.7": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -298,7 +292,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@25.3.0": {
+    "i18next@25.3.2": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -310,7 +304,7 @@
         "licenseUrl": "https://github.com/jakearchibald/idb/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "lucide-react-native@0.525.0": {
+    "lucide-react-native@0.536.0": {
         "licenses": "ISC",
         "repository": "https://github.com/lucide-icons/lucide",
         "licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
@@ -340,13 +334,13 @@
         "licenseUrl": "https://github.com/moment/moment/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-content-loader@7.0.2": {
+    "react-content-loader@7.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/danilowoz/react-content-loader",
         "licenseUrl": "https://github.com/danilowoz/react-content-loader/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-dom@19.1.0": {
+    "react-dom@19.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
@@ -442,7 +436,7 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-unistyles@2.32.0": {
+    "react-native-unistyles@2.43.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jpudysz/react-native-unistyles",
         "licenseUrl": "https://github.com/jpudysz/react-native-unistyles/raw/master/LICENSE",
@@ -484,7 +478,7 @@
         "licenseUrl": "https://github.com/rosskhanas/react-qr-code/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react@19.1.0": {
+    "react@19.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
@@ -508,7 +502,7 @@
         "licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "zustand@5.0.6": {
+    "zustand@5.0.7": {
         "licenses": "MIT",
         "repository": "https://github.com/pmndrs/zustand",
         "licenseUrl": "https://github.com/pmndrs/zustand/raw/master/LICENSE",
