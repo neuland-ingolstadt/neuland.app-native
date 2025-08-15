@@ -30,7 +30,7 @@
 		"empty": {
 			"title": "Timetable not configured",
 			"title2": "No lectures found",
-			"subtitle": "Your timetable will appear here once it's configured",
+			"subtitle": "Timetable not configured yet.",
 			"message": "To display your timetable, you have to configure it using the THI timetable website.",
 			"button": "Configure now",
 			"tip1": "Configure your timetable on the THI website",

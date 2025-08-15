@@ -11,7 +11,7 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.9.2": {
+    "@bottom-tabs/react-navigation@0.10.0": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
@@ -35,7 +35,7 @@
         "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@howljs/calendar-kit@2.2.2": {
+    "@howljs/calendar-kit@2.4.0": {
         "licenses": "MIT",
         "repository": "https://github.com/howljs/react-native-calendar-kit",
         "licenseUrl": "https://github.com/howljs/react-native-calendar-kit/raw/master/LICENSE",
@@ -304,7 +304,7 @@
         "licenseUrl": "https://github.com/jakearchibald/idb/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "lucide-react-native@0.536.0": {
+    "lucide-react-native@0.539.0": {
         "licenses": "ISC",
         "repository": "https://github.com/lucide-icons/lucide",
         "licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
@@ -352,7 +352,7 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.9.2": {
+    "react-native-bottom-tabs@0.10.0": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",

@@ -25,10 +25,9 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
-import { MealDay } from '@/components/Food'
+import { FoodLoadingIndicator, MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/allergens-banner'
 import PagerView from '@/components/Layout/pager-view'
-import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { Food } from '@/types/neuland-api'
@@ -63,7 +62,7 @@ function FoodScreen(): React.JSX.Element {
 		isSuccess,
 		refetch
 	} = useQuery({
-		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
+		queryKey: ['menals', deferredSelectedRestaurants, deferredShowStatic],
 		queryFn: async () =>
 			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
 		staleTime: 1000 * 60 * 10, // 10 minutes
@@ -184,7 +183,7 @@ function FoodScreen(): React.JSX.Element {
 			<SafeAreaView style={styles.page} edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
 					<View style={styles.loadingContainer}>
-						<LoadingIndicator />
+						<FoodLoadingIndicator size={140} />
 					</View>
 				) : isError ? (
 					<ErrorView
@@ -324,7 +323,8 @@ export const stylesheet = createStyleSheet((theme) => ({
 	loadingContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingTop: 40
+		paddingTop: 80,
+		paddingBottom: 40
 	},
 	page: {
 		flex: 1
