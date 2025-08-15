@@ -1,6 +1,8 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
 import {
 	Easing,
+	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withDelay,
@@ -44,6 +46,7 @@ export const useSharedPlateAnimations = ({
 	const platePressPulse = useSharedValue(0)
 	const plateRotation = useSharedValue(0)
 	const isAnimatingTap = useSharedValue(false)
+	const innerPlateColorIntensity = useSharedValue(0)
 
 	// Start animations on mount
 	useEffect(() => {
@@ -174,7 +177,10 @@ export const useSharedPlateAnimations = ({
 
 	const plateInnerAnimatedStyle = useAnimatedStyle(() => {
 		return {
-			shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1
+			shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1,
+			backgroundColor: enableTapAnimations
+				? `rgba(0, 122, 255, ${innerPlateColorIntensity.value * 0.3})`
+				: undefined
 		}
 	})
 
@@ -224,6 +230,9 @@ export const useSharedPlateAnimations = ({
 
 		if (!enableTapAnimations) return
 
+		// Trigger haptic feedback on JS thread
+		runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
+
 		isAnimatingTap.value = true
 		platePressPulse.value = withSequence(
 			withTiming(1, { duration: 150, easing: Easing.out(Easing.quad) }),
@@ -247,6 +256,12 @@ export const useSharedPlateAnimations = ({
 		plateGlowIntensity.value = withSequence(
 			withTiming(1.5, { duration: 150, easing: Easing.out(Easing.quad) }),
 			withTiming(0.3, { duration: 800, easing: Easing.out(Easing.quad) })
+		)
+
+		// Inner plate color animation on tap
+		innerPlateColorIntensity.value = withSequence(
+			withTiming(1, { duration: 150, easing: Easing.out(Easing.quad) }),
+			withTiming(0, { duration: 800, easing: Easing.out(Easing.quad) })
 		)
 
 		// Make icons jump in response to tap
@@ -283,6 +298,7 @@ export const useSharedPlateAnimations = ({
 		platePressPulse,
 		plateRotation,
 		isAnimatingTap,
+		innerPlateColorIntensity,
 		icon0Opacity,
 		icon0Scale,
 		icon0FloatY,
