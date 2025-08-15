@@ -62,7 +62,7 @@ function FoodScreen(): React.JSX.Element {
 		isSuccess,
 		refetch
 	} = useQuery({
-		queryKey: ['menals', deferredSelectedRestaurants, deferredShowStatic],
+		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
 		queryFn: async () =>
 			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
 		staleTime: 1000 * 60 * 10, // 10 minutes
