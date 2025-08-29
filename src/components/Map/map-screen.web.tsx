@@ -241,7 +241,10 @@ const MapScreen = (): React.JSX.Element => {
 			if (
 				geometry == null ||
 				properties == null ||
-				geometry.type !== 'Polygon'
+				geometry.type !== 'Polygon' ||
+				!('coordinates' in geometry) ||
+				geometry.coordinates == null ||
+				geometry.coordinates.length === 0
 			) {
 				return []
 			}

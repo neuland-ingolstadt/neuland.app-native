@@ -25,6 +25,7 @@ export const BUILDINGS_IN = [
 	'M',
 	'P',
 	'X',
+	'W',
 	'Z'
 ]
 export const INGOLSTADT_CENTER = [11.4328, 48.7663]
@@ -317,7 +318,7 @@ export function getCenter(rooms: Position[][][]): Position {
 export function getCenterSingle(
 	coordinates: number[][][] | undefined
 ): number[] {
-	if (coordinates == null) {
+	if (coordinates == null || coordinates.length === 0) {
 		return INGOLSTADT_CENTER
 	}
 	const centerPoints = coordinates[0].reduce(
