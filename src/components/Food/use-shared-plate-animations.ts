@@ -2,6 +2,7 @@ import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
 import {
 	Easing,
+	interpolateColor,
 	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
@@ -14,11 +15,15 @@ import {
 interface UseSharedPlateAnimationsProps {
 	size: number
 	enableTapAnimations?: boolean
+	baseInnerColor: string
+	tapTintColor?: string
 }
 
 export const useSharedPlateAnimations = ({
 	size,
-	enableTapAnimations = false
+	enableTapAnimations = false,
+	baseInnerColor,
+	tapTintColor = '#007aff'
 }: UseSharedPlateAnimationsProps) => {
 	// Plate animation values
 	const plateScale = useSharedValue(0.9)
@@ -176,11 +181,26 @@ export const useSharedPlateAnimations = ({
 	})
 
 	const plateInnerAnimatedStyle = useAnimatedStyle(() => {
+		// Always provide an opaque background color so the inner never becomes transparent.
+		// Blend subtly towards a tint color when tapping.
+		if (enableTapAnimations) {
+			const progress = Math.max(
+				0,
+				Math.min(0.3, innerPlateColorIntensity.value * 0.3)
+			)
+			const mixed = interpolateColor(
+				progress,
+				[0, 0.3],
+				[baseInnerColor as unknown as number, tapTintColor as unknown as number]
+			)
+			return {
+				shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1,
+				backgroundColor: mixed as unknown as string
+			}
+		}
 		return {
 			shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1,
-			backgroundColor: enableTapAnimations
-				? `rgba(0, 122, 255, ${innerPlateColorIntensity.value * 0.3})`
-				: undefined
+			backgroundColor: baseInnerColor
 		}
 	})
 
