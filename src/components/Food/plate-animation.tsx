@@ -39,7 +39,7 @@ const FOOD_ICONS = [
 export const PlateAnimation = ({
 	size = 120
 }: PlateAnimationProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 
 	// Use shared animations hook with tap animations enabled
 	const {
@@ -49,7 +49,12 @@ export const PlateAnimation = ({
 		icon1Style,
 		icon2Style,
 		triggerTapAnimation
-	} = useSharedPlateAnimations({ size, enableTapAnimations: true })
+	} = useSharedPlateAnimations({
+		size,
+		enableTapAnimations: true,
+		baseInnerColor: theme.colors.plateInner,
+		tapTintColor: theme.colors.primary
+	})
 
 	// Create a tap gesture using the modern Gesture API
 	const tapGesture = Gesture.Tap().onBegin(() => {

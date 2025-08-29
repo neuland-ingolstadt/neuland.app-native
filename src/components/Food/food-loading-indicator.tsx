@@ -50,7 +50,7 @@ const FOOD_ICONS = [
 export const FoodLoadingIndicator = ({
 	size = 120
 }: FoodLoadingIndicatorProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 
 	// Use shared animations hook
 	const {
@@ -59,7 +59,12 @@ export const FoodLoadingIndicator = ({
 		icon0Style,
 		icon1Style,
 		icon2Style
-	} = useSharedPlateAnimations({ size, enableTapAnimations: false })
+	} = useSharedPlateAnimations({
+		size,
+		enableTapAnimations: false,
+		baseInnerColor: theme.colors.plateInner,
+		tapTintColor: theme.colors.primary
+	})
 
 	// Loading dots animation
 	const dot1Opacity = useSharedValue(0.6)
