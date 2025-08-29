@@ -42,8 +42,6 @@
     </array>
     <key>CFBundleVersion</key>
     <string>199</string>
-    <key>EXDefaultScreenOrientationMask</key>
-    <string>UIInterfaceOrientationMaskAllButUpsideDown</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSMinimumSystemVersion</key>
@@ -67,6 +65,8 @@
     </array>
     <key>RCTAsyncStorageExcludeFromBackup</key>
     <false/>
+    <key>RCTNewArchEnabled</key>
+    <true/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
