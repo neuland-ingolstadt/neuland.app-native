@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Animated, Text, TouchableOpacity, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { getContrastColor } from '@/utils/ui-utils'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -77,24 +76,35 @@ export const AllergensBanner = ({
 
 const stylesheet = createStyleSheet((theme) => ({
 	bannerContainer: {
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.primaryBackground,
 		borderRadius: theme.radius.md,
 		marginBottom: 10,
 		marginTop: 2,
-		padding: 10
+		padding: 10,
+		borderWidth: 1,
+		borderColor: `${theme.colors.primary}20`,
+		shadowColor: theme.colors.primary,
+		shadowOffset: {
+			width: 0,
+			height: 1
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 2
 	},
 	bannerText: {
-		color: getContrastColor(theme.colors.secondary),
+		color: theme.colors.text,
 		fontSize: 14,
-		marginTop: 3
+		marginTop: 3,
+		opacity: 0.8
 	},
 	bannerTitle: {
-		color: getContrastColor(theme.colors.secondary),
+		color: theme.colors.primary,
 		fontSize: 16,
 		fontWeight: 'bold'
 	},
 	contrastColor: {
-		color: getContrastColor(theme.colors.secondary)
+		color: theme.colors.primary
 	},
 	dismissButton: {
 		borderRadius: theme.radius.md,
