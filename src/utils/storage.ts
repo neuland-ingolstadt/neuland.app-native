@@ -90,7 +90,7 @@ export async function deleteSecure(key: string): Promise<void> {
 const clientStorage = {
 	setItem: (key: string, value: string | number | boolean | ArrayBuffer) => {
 		if (value instanceof ArrayBuffer) {
-			storage.set(key, new Uint8Array(value))
+			storage.set(key, value)
 		} else {
 			storage.set(key, value)
 		}

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { Host, Picker } from '@expo/ui/swift-ui'
+import { Picker, useBinding } from 'swiftui-react-native'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/error-view'
@@ -52,7 +52,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { t } = useTranslation('common')
 
 	const { startDate, wasModified } = getNextValidDate()
-	const [building, setBuilding] = useState(BUILDINGS_ALL)
+	const building = useBinding(BUILDINGS_ALL)
 	const [date, setDate] = useState(formatISODate(startDate))
 
 	const [time, setTime] = useState(formatISOTime(startDate))
@@ -75,7 +75,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 		)
 	}
 
-	const [duration, setDuration] = useState(DURATION_PRESET)
+	const duration = useBinding(DURATION_PRESET)
 
 	const [filterState, setFilterState] = useState<LoadingState>(
 		LoadingState.LOADING
@@ -106,7 +106,13 @@ export default function AdvancedSearch(): React.JSX.Element {
 					return
 				}
 
-				const rooms = filterRooms(data, date, time, building, duration)
+				const rooms = filterRooms(
+					data,
+					date,
+					time,
+					building.value,
+					duration.value
+				)
 				if (rooms == null) {
 					throw new Error('Error while filtering rooms')
 				}
@@ -122,7 +128,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 		setTimeout(() => {
 			fetchRooms()
 		})
-	}, [date, time, building, duration, data])
+	}, [date, time, building.value, duration.value, data])
 
 	const { refetchByUser } = useRefreshByUser(refetch)
 
@@ -177,17 +183,16 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.duration')}
 						</Text>
 
-						<Host style={{ height: 100 }}>
-							<Picker
-								options={DURATIONS}
-								selectedIndex={DURATIONS.indexOf(duration)}
-								onOptionSelected={({ nativeEvent: { index } }) => {
-									setDuration(DURATIONS[index])
-								}}
-								variant="menu"
-								color={theme.colors.primary}
-							/>
-						</Host>
+						<Picker
+							selection={duration}
+							pickerStyle="menu"
+							tint={theme.colors.primary}
+							offset={{ x: 15, y: 0 }}
+						>
+							{DURATIONS.map((option) => (
+								<Text key={option}>{option}</Text>
+							))}
+						</Picker>
 					</View>
 					<Divider paddingLeft={16} />
 					<View style={styles.optionsRow}>
@@ -195,17 +200,16 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.building')}
 						</Text>
 
-						<Host style={{ height: 100 }}>
-							<Picker
-								options={ALL_BUILDINGS}
-								selectedIndex={ALL_BUILDINGS.indexOf(building)}
-								onOptionSelected={({ nativeEvent: { index } }) => {
-									setBuilding(ALL_BUILDINGS[index])
-								}}
-								variant="menu"
-								color={theme.colors.primary}
-							/>
-						</Host>
+						<Picker
+							selection={building}
+							pickerStyle="menu"
+							tint={theme.colors.primary}
+							offset={{ x: 20, y: 0 }}
+						>
+							{ALL_BUILDINGS.map((option) => (
+								<Text key={option}>{option}</Text>
+							))}
+						</Picker>
 					</View>
 				</View>
 				{wasModified && isDateAndTimeEqualToStart() && (

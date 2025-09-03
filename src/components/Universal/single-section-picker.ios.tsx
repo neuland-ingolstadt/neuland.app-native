@@ -2,7 +2,7 @@ import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { Host, Switch } from '@expo/ui/swift-ui'
+import { Toggle, useBinding } from 'swiftui-react-native'
 
 interface SectionPickerProps {
 	title: string
@@ -36,13 +36,14 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 	disabled = false
 }) => {
 	const { styles } = useStyles(stylesheet)
+	const isOn = useBinding(selectedItem)
 
-	const handleToggleChange = (checked: boolean) => {
+	const handleToggleChange = (value?: boolean) => {
 		if (!disabled) {
 			if (Platform.OS === 'ios') {
 				void selectionAsync()
 			}
-			action(checked)
+			action(value ?? !selectedItem)
 		}
 	}
 
@@ -52,15 +53,11 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 				<Text style={[styles.itemText, disabled && styles.textDisabled]}>
 					{title}
 				</Text>
-				<Host matchContents>
-					<Switch
-						value={selectedItem}
-						onValueChange={handleToggleChange}
-						color="#007AFF"
-						label={title}
-						variant="switch"
-					/>
-				</Host>
+				<Toggle
+					isOn={isOn}
+					onChange={handleToggleChange}
+					style={disabled && styles.toggleDisabled}
+				/>
 			</View>
 		</View>
 	)
@@ -87,6 +84,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		flex: 1,
 		marginRight: 8
+	},
+	toggleDisabled: {
+		opacity: 0.5
 	},
 	disabled: {
 		opacity: 0.5

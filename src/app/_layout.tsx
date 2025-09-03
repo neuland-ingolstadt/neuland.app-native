@@ -15,13 +15,8 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Linking, LogBox, Platform } from 'react-native'
-import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 configureReanimatedLogger({
 	strict: false
@@ -132,11 +127,6 @@ function RootLayout(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			{Platform.OS === 'android' && (
-				<SystemBars
-					style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
-				/>
-			)}
 			<Stack
 				screenOptions={{
 					contentStyle: styles.background,
