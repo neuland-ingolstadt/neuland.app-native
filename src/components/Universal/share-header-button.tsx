@@ -1,8 +1,7 @@
 import { router } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
-import { Platform, Pressable, View } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
+import { Platform, Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from './Icon'
 
@@ -11,69 +10,74 @@ interface ShareButtonProps {
 	noShare?: boolean
 }
 
-export default function ShareHeaderButton({
+export function ShareHeaderButton({
 	onPress,
 	noShare = false
-}: ShareButtonProps): React.JSX.Element {
+}: ShareButtonProps): React.JSX.Element | undefined {
 	const { styles } = useStyles(stylesheet)
+
 	const [copied, setCopied] = useState(false)
+	if (noShare) {
+		return undefined
+	}
+
 	return (
-		<View style={styles.shareRow}>
-			{!noShare && (
-				<Pressable
-					onPress={() => {
-						void onPress()
-						if (Platform.OS === 'web') {
-							setCopied(true)
-							setTimeout(() => setCopied(false), 1000)
-						}
-					}}
-					style={styles.shareButton}
-				>
-					<PlatformIcon
-						ios={{
-							name: copied ? 'checkmark' : 'square.and.arrow.up',
-							size: 15,
-							weight: 'bold'
-						}}
-						android={{
-							name: copied ? 'check' : 'share',
-							size: 20
-						}}
-						web={{
-							name: copied ? 'Check' : 'Share',
-							size: 20
-						}}
-						style={styles.icon}
-					/>
-				</Pressable>
-			)}
-			{Platform.OS === 'ios' && (
-				<Pressable
-					onPress={() => {
-						router.back()
-					}}
-					style={styles.shareButton}
-				>
-					<PlatformIcon
-						ios={{
-							name: 'xmark',
-							size: 15,
-							weight: 'bold'
-						}}
-						android={{
-							name: 'expand_more',
-							size: 20
-						}}
-						web={{
-							name: 'Share',
-							size: 20
-						}}
-						style={styles.iconClose}
-					/>
-				</Pressable>
-			)}
-		</View>
+		<Pressable
+			onPress={() => {
+				void onPress()
+				if (Platform.OS === 'web') {
+					setCopied(true)
+					setTimeout(() => setCopied(false), 1000)
+				}
+			}}
+			style={styles.shareButton}
+		>
+			<PlatformIcon
+				ios={{
+					name: copied ? 'checkmark' : 'square.and.arrow.up',
+					size: 16,
+					weight: 'bold'
+				}}
+				android={{
+					name: copied ? 'check' : 'share',
+					size: 20
+				}}
+				web={{
+					name: copied ? 'Check' : 'Share',
+					size: 20
+				}}
+				style={styles.icon}
+			/>
+		</Pressable>
+	)
+}
+
+export function CloseButton(): React.JSX.Element {
+	const { styles } = useStyles(stylesheet)
+	return (
+		<Pressable
+			onPress={() => {
+				router.back()
+			}}
+			style={styles.shareButton}
+		>
+			<PlatformIcon
+				ios={{
+					name: 'xmark',
+					size: 16,
+					weight: 'bold'
+				}}
+				android={{
+					name: 'expand_more',
+					size: 20
+				}}
+				web={{
+					name: 'Share',
+					size: 20
+				}}
+				style={styles.iconClose}
+			/>
+		</Pressable>
 	)
 }
 
@@ -85,7 +89,6 @@ const stylesheet = createStyleSheet((theme) => ({
 				color: theme.colors.text
 			},
 			ios: {
-				marginBottom: 3,
 				color: theme.colors.labelColor
 			}
 		})
@@ -102,26 +105,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	shareButton: {
 		alignItems: 'center',
-		backgroundColor: Platform.select({
-			android: undefined,
-			ios:
-				DeviceInfo.getDeviceType() === 'Desktop'
-					? theme.colors.cardContrast
-					: theme.colors.sheetButton
-		}),
-		borderRadius: Platform.select({
-			android: undefined,
-			ios: theme.radius.infinite
-		}),
-		height: 30,
-		justifyContent: 'center',
-		marginEnd: Platform.OS === 'web' ? 14 : -8,
-		padding: 5,
-		width: 30
-	},
-	shareRow: {
-		flexDirection: 'row',
-		gap: 20,
-		paddingStart: 12
+		alignSelf: 'center',
+
+		justifyContent: 'center'
 	}
 }))

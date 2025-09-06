@@ -24,7 +24,10 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import {
+	CloseButton,
+	ShareHeaderButton
+} from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
@@ -118,7 +121,8 @@ export default function ClEventDetail(): React.JSX.Element {
 		useCallback(() => {
 			if (eventData) {
 				navigation.setOptions({
-					headerRight: () => (
+					headerRight: () => <CloseButton />,
+					headerLeft: () => (
 						<ShareHeaderButton
 							onPress={async () => {
 								trackEvent('Share', {

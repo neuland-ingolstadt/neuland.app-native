@@ -8,7 +8,7 @@ import {
 	useNavigation
 } from 'expo-router'
 import type React from 'react'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Share, Text, View } from 'react-native'
 import Animated, {
@@ -26,7 +26,10 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import {
+	CloseButton,
+	ShareHeaderButton
+} from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -77,13 +80,16 @@ export default function SportsEventDetail(): React.JSX.Element {
 		}
 	})
 	const navigation = useNavigation()
+	const [count, setCount] = useState(0)
 	useFocusEffect(
 		useCallback(() => {
-			if (sportsEvent == null) {
+			if (sportsEvent == null || count > 0) {
 				return
 			}
+			setCount(count + 1)
 			navigation.setOptions({
-				headerRight: () => (
+				headerRight: () => <CloseButton />,
+				headerLeft: () => (
 					<ShareHeaderButton
 						onPress={async () => {
 							trackEvent('Share', {

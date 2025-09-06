@@ -1,7 +1,10 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import {
+	CloseButton,
+	ShareHeaderButton
+} from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import i18n from '@/localization/i18n'
@@ -208,13 +211,14 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
+						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {
 									/* do nothing yet */
 								}}
 							/>
-						)
+						),
+						headerRight: () => <CloseButton />
 					}}
 				/>
 				<Stack.Screen
@@ -226,13 +230,14 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
+						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {
 									/* do nothing yet */
 								}}
 							/>
-						)
+						),
+						headerRight: () => <CloseButton />
 					}}
 				/>
 				<Stack.Screen
@@ -344,7 +349,8 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
+						headerRight: () => <CloseButton />,
+						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {
 									/* do nothing yet */
@@ -362,7 +368,8 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
+						headerRight: () => <CloseButton />,
+						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {
 									/* do nothing yet */
@@ -390,14 +397,15 @@ function RootLayout(): React.JSX.Element {
 						...Platform.select({
 							ios: {
 								...presentationMode,
-								headerRight: () => (
+								headerLeft: () => (
 									<ShareHeaderButton
 										noShare
 										onPress={() => {
 											/* do nothing yet */
 										}}
 									/>
-								)
+								),
+								headerRight: () => <CloseButton />
 							}
 						})
 					}}
@@ -482,13 +490,14 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
+						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {
 									/* do nothing yet */
 								}}
 							/>
-						)
+						),
+						headerRight: () => <CloseButton />
 					}}
 				/>
 				<Stack.Screen
@@ -499,14 +508,7 @@ function RootLayout(): React.JSX.Element {
 							ios: {
 								...presentationMode
 							}
-						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						})
 					}}
 				/>
 			</Stack>

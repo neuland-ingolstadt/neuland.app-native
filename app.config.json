@@ -8,7 +8,7 @@
 		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
+		"newArchEnabled": false,
 		"ios": {
 			"bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
 			"buildNumber": "199",
@@ -154,7 +154,8 @@
 				{
 					"ios": {
 						"deploymentTarget": "15.1",
-						"useFrameworks": "static"
+						"useFrameworks": "static",
+						"buildReactNativeFromSource": true
 					}
 				}
 			],

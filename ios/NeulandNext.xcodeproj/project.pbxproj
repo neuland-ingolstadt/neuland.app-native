@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		1925FB03E4262B64D67DD7AB /* Pods_NeulandNext.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A45801902702EA184578956 /* Pods_NeulandNext.framework */; };
 		23C20ED40BA4FE4443AA70AE /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC936AC39ADD2A76CF61DC /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		85FD112616ADA9883850D8BE /* Pods_NeulandNext.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A03BDB54742D489112B0849 /* Pods_NeulandNext.framework */; };
+		B7DBCC4C2E6C79BF001137FB /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = A2411495F4271F50FD45A345 /* MapLibre */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		D4B968D80FBF48199EBEBD1F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D5D7850687A421B96FFE41A /* InfoPlist.strings */; };
 		E2BA4C34F20B540CCC7D0E3E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1BB9B41ECD51B0832C505C4F /* PrivacyInfo.xcprivacy */; };
@@ -19,16 +20,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0D0F996CC548009D02E9B26F /* Pods-NeulandNext.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.debug.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.debug.xcconfig"; sourceTree = "<group>"; };
+		0A45801902702EA184578956 /* Pods_NeulandNext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeulandNext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D5D7850687A421B96FFE41A /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		10D888B8E6721845609D37E3 /* Pods-NeulandNext.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.release.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* NeulandNext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeulandNext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NeulandNext/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NeulandNext/Info.plist; sourceTree = "<group>"; };
-		1BB9B41ECD51B0832C505C4F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = NeulandNext/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		3A03BDB54742D489112B0849 /* Pods_NeulandNext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeulandNext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BB9B41ECD51B0832C505C4F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NeulandNext/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7F4216C87C25401A8BE3F3F1 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A32E5BFF0656B31A21ACC942 /* Pods-NeulandNext.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.debug.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = NeulandNext/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B7FB21392CBEBC622B3B6A58 /* Pods-NeulandNext.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.release.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NeulandNext/AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,23 +42,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85FD112616ADA9883850D8BE /* Pods_NeulandNext.framework in Frameworks */,
+				B7DBCC4C2E6C79BF001137FB /* MapLibre in Frameworks */,
+				1925FB03E4262B64D67DD7AB /* Pods_NeulandNext.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01CE8EC57F40F8837F9C0F3D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0D0F996CC548009D02E9B26F /* Pods-NeulandNext.debug.xcconfig */,
-				B7FB21392CBEBC622B3B6A58 /* Pods-NeulandNext.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* NeulandNext */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,14 +70,13 @@
 				7F4216C87C25401A8BE3F3F1 /* InfoPlist.strings */,
 			);
 			name = en.lproj;
-			path = "";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				3A03BDB54742D489112B0849 /* Pods_NeulandNext.framework */,
+				0A45801902702EA184578956 /* Pods_NeulandNext.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,7 +103,6 @@
 				0D5D7850687A421B96FFE41A /* InfoPlist.strings */,
 			);
 			name = de.lproj;
-			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -130,7 +120,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				6B535A074BC87C2011F7D323 /* ExpoModulesProviders */,
-				01CE8EC57F40F8837F9C0F3D /* Pods */,
+				C2CC35038407FE09BF46213A /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -156,6 +146,15 @@
 			path = NeulandNext/Supporting;
 			sourceTree = "<group>";
 		};
+		C2CC35038407FE09BF46213A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A32E5BFF0656B31A21ACC942 /* Pods-NeulandNext.debug.xcconfig */,
+				10D888B8E6721845609D37E3 /* Pods-NeulandNext.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -163,16 +162,16 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NeulandNext" */;
 			buildPhases = (
-				CB1028D5A8EB1335CBCC52DA /* [CP] Check Pods Manifest.lock */,
+				C7A9EFD4CDD7DB137C4CCD44 /* [CP] Check Pods Manifest.lock */,
 				17B4A621DF040B357932559D /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				3A3CDAC7200C42C5A79C02C4 /* Remove signature files (Xcode workaround) */,
-				9A8564150FA10E655C3370F9 /* [CP] Embed Pods Frameworks */,
-				D9B4298DAD44E447F8322A1B /* [CP] Copy Pods Resources */,
 				D9B36B520BBB4564A3FD76E0 /* Remove signature files (Xcode workaround) */,
+				74543330FB0C045A89C17C87 /* [CP] Embed Pods Frameworks */,
+				65BAE9AFE7EC3F276080D8B5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -292,61 +291,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
-		9A8564150FA10E655C3370F9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CB1028D5A8EB1335CBCC52DA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NeulandNext-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D9B36B520BBB4564A3FD76E0 /* Remove signature files (Xcode workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
-		};
-		D9B4298DAD44E447F8322A1B /* [CP] Copy Pods Resources */ = {
+		65BAE9AFE7EC3F276080D8B5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -394,6 +339,60 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		74543330FB0C045A89C17C87 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C7A9EFD4CDD7DB137C4CCD44 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NeulandNext-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D9B36B520BBB4564A3FD76E0 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -411,7 +410,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D0F996CC548009D02E9B26F /* Pods-NeulandNext.debug.xcconfig */;
+			baseConfigurationReference = A32E5BFF0656B31A21ACC942 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -449,12 +448,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B7FB21392CBEBC622B3B6A58 /* Pods-NeulandNext.release.xcconfig */;
+			baseConfigurationReference = 10D888B8E6721845609D37E3 /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FSXB76X6V2;
 				INFOPLIST_FILE = NeulandNext/Info.plist;
@@ -472,6 +473,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
 				PRODUCT_NAME = NeulandNext;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

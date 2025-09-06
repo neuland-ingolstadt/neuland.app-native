@@ -33,7 +33,10 @@ import ErrorView from '@/components/Error/error-view'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import {
+	CloseButton,
+	ShareHeaderButton
+} from '@/components/Universal/share-header-button'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
@@ -120,17 +123,18 @@ export default function FoodDetail(): React.JSX.Element {
 		useCallback(() => {
 			if (!foodData) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					headerLeft: () => undefined
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => (
+					headerLeft: () => (
 						<ShareHeaderButton
 							onPress={() => {
 								shareMeal(foodData, i18n, userKind)
 							}}
 						/>
-					)
+					),
+					headerRight: () => <CloseButton />
 				})
 			}
 		}, [foodData, i18n, userKind, navigation])
