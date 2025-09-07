@@ -47,6 +47,8 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const toggleListMode = (isSelected: boolean) => {
 		if (isSelected) {
 			setTimetableMode(TimetableMode.List)
+		} else if (timetableMode === TimetableMode.List) {
+			setTimetableMode(TimetableMode.Timeline3)
 		}
 	}
 
