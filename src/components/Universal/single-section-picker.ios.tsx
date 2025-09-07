@@ -1,5 +1,6 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
+import { useEffect } from 'react'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Toggle, useBinding } from 'swiftui-react-native'
@@ -37,6 +38,10 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const isOn = useBinding(selectedItem)
+
+	useEffect(() => {
+		isOn.setValue(selectedItem)
+	}, [selectedItem])
 
 	const handleToggleChange = (value?: boolean) => {
 		if (!disabled) {
