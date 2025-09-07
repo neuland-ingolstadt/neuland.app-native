@@ -186,7 +186,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	itemContent: {
 		backgroundColor: theme.colors.card,
-		borderRadius: 12,
+		borderRadius: 16,
 		padding: 16,
 		flexDirection: 'row',
 		alignItems: 'center',
