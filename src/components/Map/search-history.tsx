@@ -114,7 +114,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 
 	radius: {
-		borderRadius: 14,
+		borderRadius: 16,
 		overflow: 'hidden'
 	},
 

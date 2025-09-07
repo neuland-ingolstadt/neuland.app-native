@@ -91,7 +91,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '30%',
 		maxWidth: 200,
 		height: 65,
-		borderRadius: theme.radius.sm,
+		borderRadius: 14,
 		marginRight: 12
 	},
 	newsTitle: {

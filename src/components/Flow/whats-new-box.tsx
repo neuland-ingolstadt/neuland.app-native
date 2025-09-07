@@ -80,7 +80,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	iconContainer: {
 		backgroundColor: theme.colors.primaryBackground,
-		borderRadius: 12,
+		borderRadius: 16,
 		padding: 12,
 		flexShrink: 0
 	},

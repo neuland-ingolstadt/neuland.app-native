@@ -220,7 +220,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 14,
+		borderRadius: 18,
 		overflow: 'hidden'
 	},
 	suggestionContent: {

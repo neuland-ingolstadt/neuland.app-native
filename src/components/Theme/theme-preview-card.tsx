@@ -150,7 +150,7 @@ const previewCardStylesheet = createStyleSheet((theme) => ({
 	},
 	preview: {
 		flex: 1,
-		borderRadius: 12,
+		borderRadius: 16,
 		overflow: 'hidden',
 		borderWidth: 2,
 		borderColor: 'transparent'

@@ -79,7 +79,7 @@ const RowEntry = ({
 
 const stylesheet = createStyleSheet((theme) => ({
 	cardContainer: {
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.mg,
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,

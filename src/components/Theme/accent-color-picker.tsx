@@ -109,7 +109,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	swatch: {
 		width: 56,
 		height: 56,
-		borderRadius: 12,
+		borderRadius: 16,
 		marginBottom: 8,
 		shadowColor: theme.colors.text,
 		shadowOffset: {
