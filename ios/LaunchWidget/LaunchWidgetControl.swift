@@ -27,6 +27,6 @@ struct LaunchWidgetIntent: ControlConfigurationIntent {
   
   @MainActor
   func perform() async throws -> some IntentResult & OpensIntent {
-    return .result(opensIntent: OpenURLIntent(URL(string: "https://neuland.app")!))
+    return .result(opensIntent: OpenURLIntent(URL(string: "https://web.neuland.app")!))
   }
 }
