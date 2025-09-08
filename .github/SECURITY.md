@@ -15,7 +15,7 @@ If you discover a security vulnerability, we encourage responsible disclosure. P
 
 ### How to Report
 
-- Email: [feedback@neuland.app](mailto:security@neuland.app)
+- Email: [security@neuland-ingolstadt.de](mailto:security@neuland-ingolstadt.de)
 - GitHub: [Report a vulnerability](https://github.com/neuland-ingolstadt/neuland.app-native/security/advisories)
 
 ### What to Expect
