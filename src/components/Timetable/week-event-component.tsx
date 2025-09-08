@@ -11,6 +11,25 @@ import {
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { formatFriendlyTime } from '@/utils/date-utils'
 
+const EventLine = ({
+	color,
+	background,
+	isDark
+}: {
+	color: string
+	background: string
+	isDark: boolean
+}) => {
+	const { styles } = useStyles(stylesheetLine)
+	return (
+		<LinearGradient
+			colors={[color, lineColor(color, background, isDark)]}
+			start={[0, 0.2]}
+			end={[1, 0.8]}
+			style={styles.eventLine}
+		/>
+	)
+}
 const EventComponent = ({
 	event,
 	theme,
@@ -59,17 +78,6 @@ const EventComponent = ({
 
 	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
-	const EventLine = ({ color }: { color: string }) => {
-		return (
-			<LinearGradient
-				colors={[color, lineColor(color, background, isDark)]}
-				start={[0, 0.2]}
-				end={[1, 0.8]}
-				style={styles.eventLine}
-			/>
-		)
-	}
-
 	const lineColorByType = isExam
 		? theme.colors.notification
 		: isCalendar
@@ -83,7 +91,11 @@ const EventComponent = ({
 				backgroundColor: background
 			}}
 		>
-			<EventLine color={lineColorByType} />
+			<EventLine
+				color={lineColorByType}
+				background={background}
+				isDark={isDark}
+			/>
 			<View style={styles.eventText}>
 				<View>
 					<Text
@@ -197,6 +209,14 @@ const stylesheet = createStyleSheet(() => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		gap: 4
+	}
+}))
+
+const stylesheetLine = createStyleSheet(() => ({
+	eventLine: {
+		borderBottomStartRadius: 5,
+		borderTopStartRadius: 5,
+		width: 4
 	}
 }))
 

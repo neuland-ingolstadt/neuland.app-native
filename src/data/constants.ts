@@ -13,8 +13,7 @@ const marketplaceLink = 'https://www.thi.de/service/marketplace/'
 export const libraryLink = 'https://opac.ku.de/index-hi.html'
 export const vscoutLink = 'https://vscout.thi.de'
 const thiLink = 'https://www.thi.de'
-const pressReaderLink =
-	'https://thi.idm.oclc.org/login?url=https://www.pressreader.com/catalog'
+const printLink = 'https://print.thi.de'
 
 export const quicklinks = [
 	{
@@ -72,12 +71,12 @@ export const quicklinks = [
 		}
 	},
 	{
-		key: 'press',
-		url: pressReaderLink,
+		key: 'print',
+		url: printLink,
 		icon: {
-			ios: 'newspaper',
-			android: 'newspaper',
-			web: 'Newspaper'
+			ios: 'printer',
+			android: 'print',
+			web: 'Printer'
 		}
 	},
 	{

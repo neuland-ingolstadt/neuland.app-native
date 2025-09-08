@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: not a problem here */
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'

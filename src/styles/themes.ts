@@ -45,9 +45,9 @@ export const lightTheme = {
 	},
 	radius: {
 		sm: 4,
-		md: 16,
-		mg: 16,
-		lg: 20,
+		md: 17,
+		mg: 17,
+		lg: 22,
 		infinite: 9999
 	}
 }
@@ -99,9 +99,9 @@ export const darkTheme = {
 	},
 	radius: {
 		sm: 4,
-		md: 16,
-		mg: 16,
-		lg: 20,
+		md: 17,
+		mg: 17,
+		lg: 22,
 		infinite: 9999
 	}
 }
