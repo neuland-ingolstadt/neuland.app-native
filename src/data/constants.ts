@@ -13,7 +13,7 @@ const marketplaceLink = 'https://www.thi.de/service/marketplace/'
 export const libraryLink = 'https://opac.ku.de/index-hi.html'
 export const vscoutLink = 'https://vscout.thi.de'
 const thiLink = 'https://www.thi.de'
-const printLink = 'https://print.thi.de'
+export const printLink = 'https://print.thi.de'
 
 export const quicklinks = [
 	{

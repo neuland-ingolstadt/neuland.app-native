@@ -23,7 +23,7 @@ import { queryClient } from '@/components/provider'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { USER_STUDENT } from '@/data/constants'
+import { printLink, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -146,7 +146,10 @@ export default function Profile(): React.JSX.Element {
 				},
 				{
 					title: t('profile.formlist.user.printer'),
-					value: data?.pcounter
+					value: data?.pcounter,
+					onPress: () => {
+						void Linking.openURL(printLink)
+					}
 				}
 			]
 		},
