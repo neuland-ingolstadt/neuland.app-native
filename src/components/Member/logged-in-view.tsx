@@ -121,7 +121,7 @@ export function LoggedInView(): React.JSX.Element {
 				},
 				{
 					title: t('quickLinks.wiki'),
-					onPress: () => Linking.openURL('https://wiki.informatik.sexy'),
+					onPress: () => Linking.openURL('https://notes.neuland-ingolstadt.de'),
 					icon: {
 						ios: 'book.closed',
 						android: 'menu_book',
