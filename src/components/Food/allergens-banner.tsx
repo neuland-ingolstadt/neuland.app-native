@@ -76,7 +76,7 @@ export const AllergensBanner = ({
 
 const stylesheet = createStyleSheet((theme) => ({
 	bannerContainer: {
-		backgroundColor: theme.colors.primaryBackground,
+		backgroundColor: `${theme.colors.primary}33`,
 		borderRadius: theme.radius.md,
 		marginBottom: 10,
 		marginTop: 2,

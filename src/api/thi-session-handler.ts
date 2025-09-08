@@ -96,7 +96,8 @@ export async function callWithSession<T>(
 ): Promise<T> {
 	const session = await loadSecureAsync('session')
 	const sessionCreated = Number.parseInt(
-		storage.getString('sessionCreated') ?? '0'
+		storage.getString('sessionCreated') ?? '0',
+		10
 	)
 
 	if (session == null) {

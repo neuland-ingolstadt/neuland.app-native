@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'

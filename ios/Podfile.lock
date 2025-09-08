@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.15.0)
   - EXManifests (0.16.6):
     - ExpoModulesCore
-  - Expo (53.0.20):
+  - Expo (53.0.22):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -295,7 +295,7 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (14.1.4):
     - ExpoModulesCore
-  - ExpoHead (5.1.4):
+  - ExpoHead (5.1.5):
     - ExpoModulesCore
   - ExpoImage (2.4.0):
     - ExpoModulesCore
@@ -339,11 +339,11 @@ PODS:
     - Yoga
   - ExpoQuickActions (5.0.0):
     - ExpoModulesCore
-  - ExpoSecureStore (14.2.3):
+  - ExpoSecureStore (14.2.4):
     - ExpoModulesCore
   - ExpoSplashScreen (0.30.10):
     - ExpoModulesCore
-  - ExpoSystemUI (5.0.10):
+  - ExpoSystemUI (5.0.11):
     - ExpoModulesCore
   - ExpoWebBrowser (14.2.0):
     - ExpoModulesCore
@@ -373,16 +373,16 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - maplibre-react-native (10.2.0):
-    - maplibre-react-native/DynamicLibrary (= 10.2.0)
+  - maplibre-react-native (10.2.1):
+    - maplibre-react-native/DynamicLibrary (= 10.2.1)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.2.0):
+  - maplibre-react-native/DynamicLibrary (10.2.1):
     - React
     - React-Core
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
+  - MMKV (2.2.3):
+    - MMKVCore (~> 2.2.3)
+  - MMKVCore (2.2.3)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1707,7 +1707,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-bottom-tabs (0.10.0):
+  - react-native-bottom-tabs (0.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2392,9 +2392,9 @@ PODS:
     - Yoga
   - RNSVG (15.12.1):
     - React-Core
-  - SDWebImage (5.21.1):
-    - SDWebImage/Core (= 5.21.1)
-  - SDWebImage/Core (5.21.1)
+  - SDWebImage (5.21.2):
+    - SDWebImage/Core (= 5.21.2)
+  - SDWebImage/Core (5.21.2)
   - SDWebImageAVIFCoder (0.11.0):
     - libavif/core (>= 0.11.0)
     - SDWebImage (~> 5.10)
@@ -2820,7 +2820,7 @@ SPEC CHECKSUMS:
   EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 691a779b04e4f2c96da46fb9bef4f86174fefcb5
-  Expo: e9d4d515ca938a730408da243ea9c9688db72149
+  Expo: b96d996622fd948d43ec3507c33e62c7ef3dd303
   expo-dev-client: 9b1e78baf0dd87b005f035d180bbb07c05917fad
   expo-dev-launcher: e240b09f9fef555916cc71feb30ef5cfaf23f257
   expo-dev-menu: 726077cd701594a14227043186369d86bbade0d9
@@ -2834,7 +2834,7 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 7f92f7be2f5c5ed40a7c9efc8fa30821181d9d63
   ExpoFont: cf508bc2e6b70871e05386d71cab927c8524cc8e
   ExpoHaptics: 0ff6e0d83cd891178a306e548da1450249d54500
-  ExpoHead: a7b66cbaeeb51f4a85338d335a0f5467e29a2c90
+  ExpoHead: 54d7ce2efb9ecb9920b585051f5d0fbc96464234
   ExpoImage: e4102c93d1dbe99ff54b075452d1bc9d6ec21b7c
   ExpoKeepAwake: bf0811570c8da182bfb879169437d4de298376e7
   ExpoLinearGradient: 7734c8059972fcf691fb4330bcdf3390960a152d
@@ -2842,9 +2842,9 @@ SPEC CHECKSUMS:
   ExpoLocalization: 999a1ff61a7f5917d65c2bd9234883009019ca9f
   ExpoModulesCore: 9c1392e0564a7d937cab9390c3668a0573357cb3
   ExpoQuickActions: fdbda7f5874aed3dd2b1d891ec00ab3300dc7541
-  ExpoSecureStore: b367d9f62c9102d808afbeb1561636d4276e439d
+  ExpoSecureStore: 3f1b632d6d40bcc62b4983ef9199cd079592a50a
   ExpoSplashScreen: 1c22c5d37647106e42d4ae1582bb6d0dda3b2385
-  ExpoSystemUI: c2724f9d5af6b1bb74e013efadf9c6a8fae547a2
+  ExpoSystemUI: 433a971503b99020318518ed30a58204288bab2d
   ExpoWebBrowser: dc39a88485f007e61a3dff05d6a75f22ab4a2e92
   EXUpdatesInterface: 7ff005b7af94ee63fa452ea7bb95d7a8ff40277a
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -2855,9 +2855,9 @@ SPEC CHECKSUMS:
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  maplibre-react-native: 5aadc584d5c05e356dd1c46f9015b16a447070eb
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
+  maplibre-react-native: 1d6165b6573c07116275e69a35c4c0f90a8f6bc1
+  MMKV: 941e8774da0e6fdf12c6b3fcc833ca687ae5a42d
+  MMKVCore: 6d5cc1bacce539f4c974985dfe646fb65a5d27d2
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: 5f638f65935e273753b1f31a365db6a8d6dc53b5
   RCTRequired: 8b46a520ea9071e2bc47d474aa9ca31b4a935bd8
@@ -2889,7 +2889,7 @@ SPEC CHECKSUMS:
   React-logger: 85fa3509931497c72ccd2547fcc91e7299d8591e
   React-Mapbuffer: 4141a0d94d47529afb85341b9c02baa3cc2a1fd5
   React-microtasksnativemodule: 4b0f5a344ca5ce6692650fae4fb67f7672bbd1b6
-  react-native-bottom-tabs: ae8fd5da75b4598cebb577107436252f3a1bbaaa
+  react-native-bottom-tabs: 8c1f7c539f0e84b4883ff8b2dfde40fdd42395eb
   react-native-context-menu-view: 3a8fb510448efa9d477f645dafa889ef1c78daaa
   react-native-drag-drop-ios: ddadc130a754bd9feb2249440a49baf983fa8296
   react-native-menu: 475e400d9b57949c076a0844e130044b45f2aa3d
@@ -2939,7 +2939,7 @@ SPEC CHECKSUMS:
   RNReanimated: 8442cd220122765de7d858946846a7513e40fe04
   RNScreens: 7f9d84a9901679dbb435592612d5ac57a044adce
   RNSVG: 3544def7b3ddc43c7ba69dade91bacf99f10ec46
-  SDWebImage: f29024626962457f3470184232766516dee8dfea
+  SDWebImage: 9f177d83116802728e122410fb25ad88f5c7608a
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90
   SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380

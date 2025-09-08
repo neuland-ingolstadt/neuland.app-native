@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 import type { UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
