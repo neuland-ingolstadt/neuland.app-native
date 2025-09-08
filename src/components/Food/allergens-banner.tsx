@@ -96,7 +96,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 14,
 		marginTop: 3,
-		opacity: 0.8
+		opacity: 0.9
 	},
 	bannerTitle: {
 		color: theme.colors.primary,
