@@ -89,8 +89,7 @@ const stylesheet = createStyleSheet((theme) => ({
 			height: 1
 		},
 		shadowOpacity: 0.1,
-		shadowRadius: 2,
-		elevation: 2
+		shadowRadius: 2
 	},
 	bannerText: {
 		color: theme.colors.text,

@@ -239,7 +239,13 @@ export const TimetableAnimation = ({
 			))}
 
 			<GestureDetector gesture={tapGesture}>
-				<Animated.View style={[styles.calendarContainer, calendarStyle]}>
+				<Animated.View
+					style={[
+						styles.calendarContainer,
+						{ width: size, height: size },
+						calendarStyle
+					]}
+				>
 					<PlatformIcon
 						ios={{ name: 'calendar', size: size * 0.8 }}
 						android={{
@@ -260,12 +266,15 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		position: 'relative'
+		position: 'relative',
+		overflow: 'visible'
 	},
 	iconContainer: {
 		position: 'absolute',
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		zIndex: 2,
+		elevation: 2
 	},
 	icon: {
 		color: theme.colors.primary
@@ -274,7 +283,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: 80,
-		height: 80
+		height: 80,
+		overflow: 'visible',
+		zIndex: 1,
+		elevation: 1
 	},
 	calendarIcon: {
 		color: theme.colors.labelColor
