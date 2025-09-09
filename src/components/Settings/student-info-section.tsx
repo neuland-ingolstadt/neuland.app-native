@@ -2,6 +2,7 @@ import type { RelativePathString } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { printLink } from '@/data/constants'
 import InfoBox from './info-box'
 
 interface StudentInfoSectionProps {
@@ -53,7 +54,8 @@ export default function StudentInfoSection({
 						android: 'print',
 						web: 'Printer'
 					}}
-					href={'/profile' as RelativePathString}
+					href={printLink as RelativePathString}
+					isExternalLink
 					style={styles.narrowBox}
 				/>
 
