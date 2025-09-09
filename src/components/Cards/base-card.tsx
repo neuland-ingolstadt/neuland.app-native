@@ -132,7 +132,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						disabled={onPressRoute == null}
 						onPress={() => {
 							if (onPressRoute != null) {
-								router.navigate(onPressRoute as RelativePathString)
+								router.push(onPressRoute as RelativePathString)
 							}
 						}}
 						delayLongPress={300}
