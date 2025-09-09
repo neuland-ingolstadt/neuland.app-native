@@ -111,7 +111,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	externalLink: {
 		color: theme.colors.labelColor,
-		marginBottom: Platform.OS === 'ios' ? -4 : -3
+		marginBottom: Platform.OS === 'ios' ? -1 : -3
 	}
 }))
 
