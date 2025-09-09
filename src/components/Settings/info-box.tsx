@@ -24,6 +24,7 @@ interface InfoBoxProps {
 	}
 	style?: ViewStyle
 	href: RelativePathString
+	isExternalLink?: boolean
 }
 
 const InfoBox = ({
@@ -31,7 +32,8 @@ const InfoBox = ({
 	value,
 	icon,
 	href,
-	style
+	style,
+	isExternalLink
 }: InfoBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
@@ -57,7 +59,20 @@ const InfoBox = ({
 					/>
 				</View>
 				<Text style={styles.value}>{value}</Text>
-				<Text style={styles.title}>{title}</Text>
+				<Text style={styles.title}>
+					{title}
+					{isExternalLink && Platform.OS !== 'android' && (
+						<>
+							<Text> </Text>
+							<PlatformIcon
+								ios={{ name: 'arrow.up.right', size: 10 }}
+								android={{ name: 'search', size: 14 }}
+								web={{ name: 'ArrowUpRight', size: 14 }}
+								style={styles.externalLink}
+							/>
+						</>
+					)}
+				</Text>
 			</Pressable>
 		</Link>
 	)
@@ -93,6 +108,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontSize: 13,
 		marginTop: 4
+	},
+	externalLink: {
+		color: theme.colors.labelColor,
+		marginBottom: Platform.OS === 'ios' ? -4 : -3
 	}
 }))
 

@@ -50,7 +50,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 
 	const handlePressIn = () => {
 		scale.value = withSpring(1.15, { damping: 10, stiffness: 100 })
-		rotation.value = withTiming(1, { duration: 175 })
+		rotation.value = withTiming(1, { duration: 150 })
 	}
 
 	const handlePressOut = () => {
