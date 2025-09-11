@@ -15,18 +15,19 @@ export default function TabLayout(): React.JSX.Element {
 	return (
 		<NativeTabs
 			// Shared styling
-			backgroundColor={theme.colors.card}
 			badgeBackgroundColor={theme.colors.primary}
 			iconColor={theme.colors.tabbarInactive}
-			tintColor={theme.colors.text}
-			indicatorColor={
-				Platform.OS === 'android' ? theme.colors.primary : undefined
-			}
+			tintColor={theme.colors.primary}
+			indicatorColor={theme.colors.primary}
+			backgroundColor={theme.colors.card}
 		>
 			<NativeTabs.Trigger name="(index)">
 				<Label>{'Home'}</Label>
 				{Platform.OS === 'ios' ? (
-					<Icon sf={{ default: 'house', selected: 'house.fill' }} />
+					<Icon
+						sf={{ default: 'house', selected: 'house.fill' }}
+						selectedColor={theme.colors.primary}
+					/>
 				) : (
 					<Icon
 						src={{
@@ -39,7 +40,10 @@ export default function TabLayout(): React.JSX.Element {
 			<NativeTabs.Trigger name="timetable">
 				<Label>{t('navigation.timetable')}</Label>
 				{Platform.OS === 'ios' ? (
-					<Icon sf={{ default: 'clock', selected: 'clock.fill' }} />
+					<Icon
+						sf={{ default: 'clock', selected: 'clock.fill' }}
+						selectedColor={theme.colors.primary}
+					/>
 				) : (
 					<Icon
 						src={{
@@ -52,7 +56,10 @@ export default function TabLayout(): React.JSX.Element {
 			<NativeTabs.Trigger name="map">
 				<Label>{t('navigation.map')}</Label>
 				{Platform.OS === 'ios' ? (
-					<Icon sf={{ default: 'map', selected: 'map.fill' }} />
+					<Icon
+						sf={{ default: 'map', selected: 'map.fill' }}
+						selectedColor={theme.colors.primary}
+					/>
 				) : (
 					<Icon
 						src={{
@@ -65,7 +72,10 @@ export default function TabLayout(): React.JSX.Element {
 			<NativeTabs.Trigger name="food">
 				<Label>{t('navigation.food')}</Label>
 				{Platform.OS === 'ios' ? (
-					<Icon sf={{ default: 'fork.knife', selected: 'fork.knife' }} />
+					<Icon
+						sf={{ default: 'fork.knife', selected: 'fork.knife' }}
+						selectedColor={theme.colors.primary}
+					/>
 				) : (
 					<Icon
 						src={{
@@ -78,7 +88,10 @@ export default function TabLayout(): React.JSX.Element {
 			<NativeTabs.Trigger name="settings">
 				<Label>{t('navigation.profile')}</Label>
 				{Platform.OS === 'ios' ? (
-					<Icon sf={{ default: 'person', selected: 'person.fill' }} />
+					<Icon
+						sf={{ default: 'person', selected: 'person.fill' }}
+						selectedColor={theme.colors.primary}
+					/>
 				) : (
 					<Icon
 						src={{

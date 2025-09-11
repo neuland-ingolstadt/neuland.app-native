@@ -45,7 +45,6 @@ export default function HomeRootScreen(): React.JSX.Element {
 				titleKey={'navigation.dashboard'}
 				component={isPageOpen ? HomeScreen : () => <></>}
 				largeTitle={true}
-				transparent={false}
 				androidFallback
 				headerRightElement={HomeHeaderRight}
 				headerLeftElement={Platform.OS === 'web' ? HeaderLeft : undefined}

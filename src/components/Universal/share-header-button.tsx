@@ -105,6 +105,9 @@ const stylesheet = createStyleSheet((theme) => ({
 			ios: -12
 		}),
 		padding: Platform.OS !== 'ios' ? 5 : 0,
-		width: Platform.OS !== 'ios' ? 30 : 0
+		width:
+			Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+				? 0
+				: 30
 	}
 }))

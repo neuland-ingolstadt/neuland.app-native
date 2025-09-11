@@ -68,6 +68,8 @@ function WorkaroundStack({
 			</StackAndroid.Navigator>
 		)
 	}
+	const transparent =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
@@ -91,8 +93,8 @@ function WorkaroundStack({
 					headerStyle: {
 						backgroundColor: undefined
 					},
-					headerShadowVisible: false,
-					headerTransparent: true
+					headerShadowVisible: true,
+					headerTransparent: transparent
 				}}
 				component={component}
 				initialParams={params}

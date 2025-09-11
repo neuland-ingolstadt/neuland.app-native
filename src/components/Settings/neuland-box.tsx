@@ -43,7 +43,7 @@ const NeulandBox = () => {
 					</View>
 				</View>
 				<PlatformIcon
-					ios={{ name: 'chevron.right', size: 18 }}
+					ios={{ name: 'chevron.right', size: 14 }}
 					android={{ name: 'chevron_right', size: 24 }}
 					web={{ name: 'ChevronRight', size: 24 }}
 					style={styles.neulandChevron}
