@@ -7,14 +7,14 @@ PODS:
     - SPAlert (~> 4.2)
     - SPIndicator (~> 1.6)
   - DoubleConversion (1.1.6)
-  - EXApplication (7.0.6):
+  - EXApplication (7.0.7):
     - ExpoModulesCore
   - EXConstants (18.0.8):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
-  - EXManifests (1.0.7):
+  - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.1):
+  - Expo (54.0.2):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -45,17 +45,17 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-client (6.0.11):
+  - expo-dev-client (6.0.12):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (6.0.10):
+  - expo-dev-launcher (6.0.11):
     - boost
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 6.0.10)
+    - expo-dev-launcher/Main (= 6.0.11)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -88,7 +88,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-launcher/Main (6.0.10):
+  - expo-dev-launcher/Main (6.0.11):
     - boost
     - DoubleConversion
     - EXManifests
@@ -125,7 +125,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-launcher/Unsafe (6.0.10):
+  - expo-dev-launcher/Unsafe (6.0.11):
     - boost
     - DoubleConversion
     - EXManifests
@@ -161,11 +161,11 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-menu (7.0.10):
+  - expo-dev-menu (7.0.11):
     - boost
     - DoubleConversion
-    - expo-dev-menu/Main (= 7.0.10)
-    - expo-dev-menu/ReactNativeCompatibles (= 7.0.10)
+    - expo-dev-menu/Main (= 7.0.11)
+    - expo-dev-menu/ReactNativeCompatibles (= 7.0.11)
     - fast_float
     - fmt
     - glog
@@ -192,7 +192,7 @@ PODS:
     - SocketRocket
     - Yoga
   - expo-dev-menu-interface (2.0.0)
-  - expo-dev-menu/Main (7.0.10):
+  - expo-dev-menu/Main (7.0.11):
     - boost
     - DoubleConversion
     - EXManifests
@@ -225,7 +225,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - expo-dev-menu/ReactNativeCompatibles (7.0.10):
+  - expo-dev-menu/ReactNativeCompatibles (7.0.11):
     - boost
     - DoubleConversion
     - fast_float
@@ -257,37 +257,37 @@ PODS:
     - ExpoModulesCore
   - ExpoAsset (12.0.8):
     - ExpoModulesCore
-  - ExpoBlur (15.0.6):
+  - ExpoBlur (15.0.7):
     - ExpoModulesCore
-  - ExpoBrightness (14.0.6):
+  - ExpoBrightness (14.0.7):
     - ExpoModulesCore
-  - ExpoClipboard (8.0.6):
+  - ExpoClipboard (8.0.7):
     - ExpoModulesCore
-  - ExpoCrypto (15.0.6):
+  - ExpoCrypto (15.0.7):
     - ExpoModulesCore
-  - ExpoFileSystem (19.0.11):
+  - ExpoFileSystem (19.0.12):
     - ExpoModulesCore
-  - ExpoFont (14.0.7):
+  - ExpoFont (14.0.8):
     - ExpoModulesCore
-  - ExpoHaptics (15.0.6):
+  - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.0):
+  - ExpoHead (6.0.1):
     - ExpoModulesCore
     - RNScreens
-  - ExpoImage (3.0.7):
+  - ExpoImage (3.0.8):
     - ExpoModulesCore
     - libavif/libdav1d
     - SDWebImage (~> 5.21.0)
     - SDWebImageAVIFCoder (~> 0.11.0)
     - SDWebImageSVGCoder (~> 1.7.0)
     - SDWebImageWebPCoder (~> 0.14.6)
-  - ExpoKeepAwake (15.0.6):
+  - ExpoKeepAwake (15.0.7):
     - ExpoModulesCore
-  - ExpoLinearGradient (15.0.6):
+  - ExpoLinearGradient (15.0.7):
     - ExpoModulesCore
-  - ExpoLinking (8.0.7):
+  - ExpoLinking (8.0.8):
     - ExpoModulesCore
-  - ExpoLocalization (17.0.6):
+  - ExpoLocalization (17.0.7):
     - ExpoModulesCore
   - ExpoModulesCore (3.0.15):
     - boost
@@ -320,15 +320,15 @@ PODS:
     - Yoga
   - ExpoQuickActions (5.0.0):
     - ExpoModulesCore
-  - ExpoSecureStore (15.0.6):
+  - ExpoSecureStore (15.0.7):
     - ExpoModulesCore
-  - ExpoSplashScreen (31.0.8):
+  - ExpoSplashScreen (31.0.9):
     - ExpoModulesCore
-  - ExpoSymbols (1.0.6):
+  - ExpoSymbols (1.0.7):
     - ExpoModulesCore
   - ExpoSystemUI (6.0.7):
     - ExpoModulesCore
-  - ExpoWebBrowser (15.0.6):
+  - ExpoWebBrowser (15.0.7):
     - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
     - ExpoModulesCore
@@ -2106,37 +2106,6 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-bottom-tabs (0.11.1):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SDWebImage (>= 5.19.1)
-    - SDWebImageSVGCoder (>= 1.7.0)
-    - SocketRocket
-    - SwiftUIIntrospect (~> 1.0)
-    - Yoga
   - react-native-context-menu-view (1.19.0):
     - React
   - react-native-drag-drop-ios (0.1.1):
@@ -3049,7 +3018,6 @@ PODS:
   - SocketRocket (0.7.1)
   - SPAlert (4.2.0)
   - SPIndicator (1.6.4)
-  - SwiftUIIntrospect (1.3.0)
   - SwiftUIReactNative (5.0.0):
     - ExpoModulesCore
   - Yoga (0.0.0)
@@ -3131,7 +3099,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-bottom-tabs (from `../node_modules/react-native-bottom-tabs`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
   - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
@@ -3198,7 +3165,6 @@ SPEC REPOS:
     - SocketRocket
     - SPAlert
     - SPIndicator
-    - SwiftUIIntrospect
 
 EXTERNAL SOURCES:
   aptabase-react-native:
@@ -3352,8 +3318,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
-  react-native-bottom-tabs:
-    :path: "../node_modules/react-native-bottom-tabs"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-drag-drop-ios:
@@ -3460,37 +3424,37 @@ SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   Burnt: 0616363a206ed96ba9af3e2eb0e184dc97be1458
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
-  EXApplication: f5219af375d2bcff2596ac5c586d3b62c587c0d8
+  EXApplication: 296622817d459f46b6c5fe8691f4aac44d2b79e7
   EXConstants: 7e4654405af367ff908c863fe77a8a22d60bd37d
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
-  EXManifests: 8c3a1dc3d2cd353107616180b090b6cb8424e0ca
-  Expo: c4fbd9ca0caa2cd9925e81217bdf062e7d1a52be
-  expo-dev-client: 81f6f338e921d1449f5e07ffc635ff5c9fcd890e
-  expo-dev-launcher: daa1070b18c9c2587fd879b3b9d93a512d7120fa
-  expo-dev-menu: 2f3c99298d1d5e67b8d8388488ff4d8fcf7f4c36
+  EXManifests: 224345a575fca389073c416297b6348163f28d1a
+  Expo: c7d48c0ba039c72956940997dca17dedf482de9f
+  expo-dev-client: f3434d6ca09ecb14ae48c2a3912bdbb07464cc85
+  expo-dev-launcher: 7cda78fc0db5de354799e2aa420318df6bed8ea6
+  expo-dev-menu: eb0aee41eaafbfec0fa94f0d0a3f23e4a7fa5a21
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
   ExpoAlternateAppIcons: 8fef6e0d7cfb11bf5486e62657736ba836859781
   ExpoAsset: 84810d6fed8179f04d4a7a4a6b37028bbd726e26
-  ExpoBlur: 9bde58a4de1d24a02575d0e24290f2026ce8dc3a
-  ExpoBrightness: 44da0051eb2cddfba9df7344ba5ecbbe3bf06dd2
-  ExpoClipboard: c87f8148d16283e65a164a619232350312333c96
-  ExpoCrypto: 834a7a7dd02fe646690f9316e8ce0abdb9f4a821
-  ExpoFileSystem: 7b4a4f6c67a738e826fd816139bac9d098b3b084
-  ExpoFont: 74a14c605637c2d32337a2f542065408a8ca3454
-  ExpoHaptics: e0912a9cf05ba958eefdc595f1990b8f89aa1f3f
-  ExpoHead: 83084875a29bc46c0afa13268ecedf09e3026281
-  ExpoImage: 18d9836939f8e271364a5a2a3566f099ea73b2e4
-  ExpoKeepAwake: eba81dfb5728be8c46e382b9314dfa14f40d8764
-  ExpoLinearGradient: 74d67832cdb0d2ef91f718d50dd82b273ce2812e
-  ExpoLinking: dadcc1205351c1108b7c5bab4b7891e744fc8c89
-  ExpoLocalization: 540bc28ae55353eff0dfd1f092d389741c6f575e
+  ExpoBlur: 2dd8f64aa31f5d405652c21d3deb2d2588b1852f
+  ExpoBrightness: 32672952bf8b152d0cceaf8ec9f1def3a9a5e0d9
+  ExpoClipboard: af650d14765f19c60ce2a1eaf9dfe6445eff7365
+  ExpoCrypto: c1fbce112d1b6b79652bbe380b4fd4cc91676595
+  ExpoFileSystem: d243a08638f102d83c139de7e558aa62a59c4ca7
+  ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
+  ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
+  ExpoHead: cf50403298c3b66d4fbcffad77d539e29002dc26
+  ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
+  ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
+  ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
+  ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
+  ExpoLocalization: b852a5d8ec14c5349c1593eca87896b5b3ebfcca
   ExpoModulesCore: 4c8c4b9e7dd9e1e47d3cb92fffb32524ae056112
   ExpoQuickActions: fdbda7f5874aed3dd2b1d891ec00ab3300dc7541
-  ExpoSecureStore: 57327b9a484ad730cf823c82d092e0bf71e11512
-  ExpoSplashScreen: 6f041ee000c393a6afc53ba13bb40cf2483c48dc
-  ExpoSymbols: 3efee6865b1955fe3805ca88b36e8674ce6970dd
+  ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
+  ExpoSplashScreen: 9a3be7432695a8fa47fb2e0bcdb1e9389ecb03e9
+  ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
   ExpoSystemUI: 6cd74248a2282adf6dec488a75fa532d69dee314
-  ExpoWebBrowser: 84d4438464d9754a4c1f1eaa97cd747f3752187e
+  ExpoWebBrowser: 533bc2a1b188eec1c10e4926decf658f1687b5e5
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 941bef1c8eeabd9fe1f501e30a5220beee913886
@@ -3536,7 +3500,6 @@ SPEC CHECKSUMS:
   React-logger: a3cb5b29c32b8e447b5a96919340e89334062b48
   React-Mapbuffer: e4a65db5f4df53369f39558c0cf2f480f6d3d6c7
   React-microtasksnativemodule: 86334c5c06315e0bccb7b6e6f2c905e92f98b615
-  react-native-bottom-tabs: 6f9a86f3986618019bf188bd3cb08eda585889aa
   react-native-context-menu-view: 3a8fb510448efa9d477f645dafa889ef1c78daaa
   react-native-drag-drop-ios: ddadc130a754bd9feb2249440a49baf983fa8296
   react-native-menu: 475e400d9b57949c076a0844e130044b45f2aa3d
@@ -3592,7 +3555,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SPAlert: 735da1f16a887e294719217572ce1f936d8c8782
   SPIndicator: 93e0a4fb23de51294ac48e874c0f081a5e293e4f
-  SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
   SwiftUIReactNative: 6af1ddbecf2c93011a8047f9897907b741c3f0df
   Yoga: 9b30b783a17681321b52ac507a37219d7d795ace
 
