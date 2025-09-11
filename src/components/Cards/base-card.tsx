@@ -99,7 +99,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						<PlatformIcon
 							ios={{
 								name: 'chevron.forward',
-								size: 16
+								size: 12
 							}}
 							android={{
 								name: 'chevron_right',

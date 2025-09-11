@@ -55,7 +55,7 @@ const LibraryCard = ({
 				</Text>
 			</View>
 			<PlatformIcon
-				ios={{ name: 'chevron.forward', size: 18 }}
+				ios={{ name: 'chevron.forward', size: 14 }}
 				android={{ name: 'chevron_right', size: 24 }}
 				web={{ name: 'ChevronRight', size: 24 }}
 				style={{ color: theme.colors.labelColor }}

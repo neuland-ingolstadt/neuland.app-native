@@ -26,7 +26,7 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import { ShareHeaderButton } from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -83,7 +83,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 				return
 			}
 			navigation.setOptions({
-				headerRight: () => (
+				headerLeft: () => (
 					<ShareHeaderButton
 						onPress={async () => {
 							trackEvent('Share', {

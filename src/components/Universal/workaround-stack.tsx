@@ -5,11 +5,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import type { SearchBarProps } from 'react-native-screens'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export interface WorkaroundStackProps {
 	name: string
@@ -34,11 +30,9 @@ function WorkaroundStack({
 	name,
 	titleKey,
 	component,
-	transparent = false,
 	largeTitle = false,
 	headerRightElement = undefined,
 	headerLeftElement = undefined,
-	headerTransparent = true,
 
 	headerSearchBarOptions = undefined,
 	params = {},
@@ -88,19 +82,17 @@ function WorkaroundStack({
 					headerLargeTitle: Platform.OS === 'ios' && largeTitle,
 					headerRight: headerRightElement,
 					headerLeft: headerLeftElement,
-					headerLargeStyle: styles.headerBackground,
+					contentStyle: { backgroundColor: theme.colors.background },
 					headerSearchBarOptions,
 					headerTintColor: theme.colors.primary,
-					contentStyle: styles.background,
 					headerTitleStyle: {
 						color: theme.colors.text
 					},
 					headerStyle: {
-						backgroundColor: styles.headerBackground.backgroundColor
+						backgroundColor: undefined
 					},
-					headerShadowVisible: transparent,
-					headerTransparent: headerTransparent,
-					headerBlurEffect: UnistylesRuntime.themeName
+					headerShadowVisible: false,
+					headerTransparent: true
 				}}
 				component={component}
 				initialParams={params}

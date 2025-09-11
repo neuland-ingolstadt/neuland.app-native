@@ -104,7 +104,7 @@ export default function NewsScreen(): React.JSX.Element {
 												<PlatformIcon
 													ios={{
 														name: 'chevron.forward',
-														size: 15
+														size: 12
 													}}
 													android={{
 														name: 'chevron_right',

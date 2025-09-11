@@ -35,11 +35,7 @@
 				"UIViewControllerBasedStatusBarAppearance": false,
 				"NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
 			},
-			"icon": {
-				"light": "./src/assets/appIcons/default.png",
-				"dark": "./src/assets/appIcons/dark/defaultDark.png",
-				"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-			}
+			"icon": "./src/assets/appIcons/Default.icon"
 		},
 		"locales": {
 			"en": "./src/localization/en/ios.json",
@@ -69,87 +65,27 @@
 				}
 			]
 		},
-		"sdkVersion": "53.0.0",
+		"sdkVersion": "54.0.0",
 		"experiments": {
 			"reactCompiler": true,
 			"reactCanary": true,
 			"tsconfigPaths": true,
-			"typedRoutes": true,
-			"remoteBuildCache": {
-				"provider": {
-					"plugin": "@eggl-js/expo-github-cache",
-					"options": {
-						"owner": "neuland-ingolstadt",
-						"repo": "neuland.app-build-cache"
-					}
-				}
+			"typedRoutes": true
+		},
+		"buildCacheProvider": {
+			"plugin": "@eggl-js/expo-github-cache",
+			"options": {
+				"owner": "neuland-ingolstadt",
+				"repo": "neuland.app-build-cache"
 			}
 		},
 		"plugins": [
-			[
-				"react-native-edge-to-edge",
-				{ "android": { "parentTheme": "Material3" } }
-			],
-
 			[
 				"expo-router",
 				{
 					"headOrigin": "https://web.neuland.app",
 					"sitemap": true
 				}
-			],
-			[
-				"expo-alternate-app-icons",
-				[
-					{
-						"name": "Cat",
-						"ios": "./src/assets/appIcons/cat.png"
-					},
-					{
-						"name": "RainbowNeon",
-						"ios": "./src/assets/appIcons/rainbowNeon.png"
-					},
-					{
-						"name": "Luxury",
-						"ios": "./src/assets/appIcons/luxury.png"
-					},
-					{
-						"name": "RainbowGlow",
-						"ios": "./src/assets/appIcons/rainbowGlow.png"
-					},
-					{
-						"name": "Hacker",
-						"ios": "./src/assets/appIcons/hacker.png"
-					},
-					{
-						"name": "Retro",
-						"ios": "./src/assets/appIcons/retro.png"
-					},
-					{
-						"name": "ModernGreen",
-						"ios": {
-							"light": "./src/assets/appIcons/modernGreen.png",
-							"dark": "./src/assets/appIcons/dark/modernGreenDark.png",
-							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-						}
-					},
-					{
-						"name": "ModernPink",
-						"ios": {
-							"light": "./src/assets/appIcons/modernPurple.png",
-							"dark": "./src/assets/appIcons/dark/purpleDark.png",
-							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-						}
-					},
-					{
-						"name": "RainbowMoonLight",
-						"ios": {
-							"light": "./src/assets/appIcons/rainbowMoonLight.png",
-							"dark": "./src/assets/appIcons/dark/darkRainbow.png",
-							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-						}
-					}
-				]
 			],
 			["expo-secure-store"],
 			["expo-localization"],
@@ -198,7 +134,8 @@
 					}
 				}
 			],
-			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"]
+			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"],
+			"expo-font"
 		],
 		"extra": {
 			"eas": {

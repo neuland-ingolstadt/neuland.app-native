@@ -42,8 +42,6 @@
     </array>
     <key>CFBundleVersion</key>
     <string>199</string>
-    <key>EXDefaultScreenOrientationMask</key>
-    <string>UIInterfaceOrientationMaskAllButUpsideDown</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSMinimumSystemVersion</key>
@@ -66,6 +64,8 @@
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>RCTAsyncStorageExcludeFromBackup</key>
+    <false/>
+    <key>RCTNewArchEnabled</key>
     <false/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>

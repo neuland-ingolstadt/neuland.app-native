@@ -21,7 +21,7 @@ import Separator from '@/components/Timetable/Separator'
 import ShareCard from '@/components/Timetable/share-card'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import { ShareHeaderButton } from '@/components/Universal/share-header-button'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
@@ -59,11 +59,11 @@ export default function TimetableDetails(): React.JSX.Element {
 				Platform.OS === 'android'
 			) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					headerLeft: () => undefined
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => <ShareHeaderButton onPress={shareEvent} />
+					headerLeft: () => <ShareHeaderButton onPress={shareEvent} />
 				})
 			}
 		}, [])

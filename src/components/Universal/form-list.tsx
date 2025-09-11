@@ -232,7 +232,7 @@ const RenderSectionItems: React.FC<{
 										<PlatformIcon
 											ios={{
 												name: 'chevron.right',
-												size: 14,
+												size: 10,
 												weight: 'semibold'
 											}}
 											android={{

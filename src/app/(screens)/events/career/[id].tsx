@@ -27,7 +27,7 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
+import { ShareHeaderButton } from '@/components/Universal/share-header-button'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadCareerServiceEvents, QUERY_KEYS } from '@/utils/events-utils'
@@ -104,7 +104,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 	useFocusEffect(
 		useCallback(() => {
 			navigation.setOptions({
-				headerRight: () => (
+				headerLeft: () => (
 					<ShareHeaderButton
 						onPress={async () => {
 							trackEvent('Share', { type: 'careerServiceEvent' })
