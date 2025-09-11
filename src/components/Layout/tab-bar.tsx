@@ -3,10 +3,7 @@ import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import { useStyles } from 'react-native-unistyles'
-
-export const useBottomTabBarHeight = _useBottomTabBarHeight
 
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
