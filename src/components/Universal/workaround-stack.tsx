@@ -91,7 +91,9 @@ function WorkaroundStack({
 						color: theme.colors.text
 					},
 					headerStyle: {
-						backgroundColor: undefined
+						backgroundColor: transparent
+							? undefined
+							: styles.headerBackground.backgroundColor
 					},
 					headerShadowVisible: true,
 					headerTransparent: transparent
