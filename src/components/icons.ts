@@ -28,6 +28,7 @@ export const cardIcons: CardIcons = {
 	},
 	events: {
 		ios: 'figure.2',
+		iosScale: 1.2,
 		android: 'celebration',
 		web: 'PartyPopper'
 	},

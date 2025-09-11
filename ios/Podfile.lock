@@ -3049,8 +3049,6 @@ PODS:
   - SocketRocket (0.7.1)
   - SPAlert (4.2.0)
   - SPIndicator (1.6.4)
-  - SweetSFSymbols (0.7.2):
-    - ExpoModulesCore
   - SwiftUIIntrospect (1.3.0)
   - SwiftUIReactNative (5.0.0):
     - ExpoModulesCore
@@ -3183,7 +3181,6 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - SocketRocket (~> 0.7.1)
-  - SweetSFSymbols (from `../node_modules/sweet-sfsymbols/ios`)
   - SwiftUIReactNative (from `../node_modules/swiftui-react-native/ios`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -3453,8 +3450,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  SweetSFSymbols:
-    :path: "../node_modules/sweet-sfsymbols/ios"
   SwiftUIReactNative:
     :path: "../node_modules/swiftui-react-native/ios"
   Yoga:
@@ -3597,7 +3592,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SPAlert: 735da1f16a887e294719217572ce1f936d8c8782
   SPIndicator: 93e0a4fb23de51294ac48e874c0f081a5e293e4f
-  SweetSFSymbols: cb38963b4b1cffa0ea2eacc5fe6a8a2a2f4f740f
   SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
   SwiftUIReactNative: 6af1ddbecf2c93011a8047f9897907b741c3f0df
   Yoga: 9b30b783a17681321b52ac507a37219d7d795ace

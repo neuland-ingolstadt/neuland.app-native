@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		B7A10B312E72F89700578355 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A10B302E72F89700578355 /* WidgetKit.framework */; };
 		B7A10B332E72F89700578355 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A10B322E72F89700578355 /* SwiftUI.framework */; };
 		B7A10B3E2E72F89900578355 /* LaunchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B7A10B2F2E72F89700578355 /* LaunchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B7A10C632E73624300578355 /* Default.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3898AA7806D44973872BCB37 /* Default.icon */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BE7393049611E068770F6168 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 62DFF530279243F8180DBB9E /* PrivacyInfo.xcprivacy */; };
 		C2978E8824A44989B225AC44 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EE6C8E67FFE64425B4EFB2AB /* InfoPlist.strings */; };
@@ -70,19 +71,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B7A10B422E72F89900578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */;
-		};
-		B7A10B4C2E72F8B800578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				LaunchWidgetControl.swift,
-			);
-			target = 13B07F861A680F5B00A75B9A /* NeulandNext */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -90,8 +84,7 @@
 		B7A10B342E72F89700578355 /* LaunchWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				B7A10B4C2E72F8B800578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
-				B7A10B422E72F89900578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */,
 			);
 			explicitFileTypes = {
 			};
@@ -346,6 +339,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A10C632E73624300578355 /* Default.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,17 +508,14 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Remove signature files (Xcode workaround)";
 			inputPaths = (
 			);
+			name = "Remove signature files (Xcode workaround)";
 			outputPaths = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-          echo \"Remove signature files (Xcode workaround)\";
-          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
-        ";
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -584,7 +575,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = "NeulandNext";
+				PRODUCT_NAME = NeulandNext;
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -616,7 +607,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = "NeulandNext";
+				PRODUCT_NAME = NeulandNext;
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
