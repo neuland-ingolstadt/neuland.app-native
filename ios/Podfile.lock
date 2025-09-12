@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.2):
+  - Expo (54.0.4):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -265,13 +265,13 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (15.0.7):
     - ExpoModulesCore
-  - ExpoFileSystem (19.0.12):
+  - ExpoFileSystem (19.0.13):
     - ExpoModulesCore
   - ExpoFont (14.0.8):
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.1):
+  - ExpoHead (6.0.2):
     - ExpoModulesCore
     - RNScreens
   - ExpoImage (3.0.8):
@@ -328,7 +328,7 @@ PODS:
     - ExpoModulesCore
   - ExpoSystemUI (6.0.7):
     - ExpoModulesCore
-  - ExpoUI (0.2.0-beta.1):
+  - ExpoUI (0.2.0-beta.2):
     - ExpoModulesCore
   - ExpoWebBrowser (15.0.7):
     - ExpoModulesCore
@@ -3428,7 +3428,7 @@ SPEC CHECKSUMS:
   EXConstants: 7e4654405af367ff908c863fe77a8a22d60bd37d
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: c7d48c0ba039c72956940997dca17dedf482de9f
+  Expo: 440bef641043af2a634bae6cfaf3f7163a158b87
   expo-dev-client: f3434d6ca09ecb14ae48c2a3912bdbb07464cc85
   expo-dev-launcher: 7cda78fc0db5de354799e2aa420318df6bed8ea6
   expo-dev-menu: eb0aee41eaafbfec0fa94f0d0a3f23e4a7fa5a21
@@ -3439,10 +3439,10 @@ SPEC CHECKSUMS:
   ExpoBrightness: 32672952bf8b152d0cceaf8ec9f1def3a9a5e0d9
   ExpoClipboard: af650d14765f19c60ce2a1eaf9dfe6445eff7365
   ExpoCrypto: c1fbce112d1b6b79652bbe380b4fd4cc91676595
-  ExpoFileSystem: d243a08638f102d83c139de7e558aa62a59c4ca7
+  ExpoFileSystem: a56d630f242e866b9f23373b811ee92b9d045c59
   ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: cf50403298c3b66d4fbcffad77d539e29002dc26
+  ExpoHead: e7b001f8025a8937ad2fbde39d92dca8e29279b2
   ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
@@ -3454,7 +3454,7 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: 9a3be7432695a8fa47fb2e0bcdb1e9389ecb03e9
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
   ExpoSystemUI: 6cd74248a2282adf6dec488a75fa532d69dee314
-  ExpoUI: 1e4b3045678eb66004d78d9a6602afdcbdc06bbd
+  ExpoUI: 0f109b0549d1ae2fd955d3b8733b290c5cdeec7e
   ExpoWebBrowser: 533bc2a1b188eec1c10e4926decf658f1687b5e5
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6

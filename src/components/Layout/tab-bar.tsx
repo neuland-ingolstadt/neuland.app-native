@@ -8,7 +8,8 @@ import { useStyles } from 'react-native-unistyles'
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
 	const { t } = useTranslation('navigation')
-const isIos26 = Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+	const isIos26 =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	return (
 		<NativeTabs
 			// Shared styling

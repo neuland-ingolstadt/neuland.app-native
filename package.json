@@ -26,8 +26,8 @@
 	"dependencies": {
 		"@aptabase/react-native": "^0.3.10",
 		"@babel/runtime": "^7.27.6",
-		"@expo/metro-runtime": "~6.1.1",
-		"@expo/ui": "~0.2.0-beta.1",
+		"@expo/metro-runtime": "~6.1.2",
+		"@expo/ui": "~0.2.0-beta.2",
 		"@expo/vector-icons": "^15.0.2",
 		"@gorhom/bottom-sheet": "^5.2.6",
 		"@howljs/calendar-kit": "2.5.1",
@@ -49,7 +49,7 @@
 		"babel-plugin-react-compiler": "^19.1.0-rc.3",
 		"burnt": "0.13.0",
 		"color": "^5.0.0",
-		"expo": "54.0.2",
+		"expo": "54.0.4",
 		"expo-alternate-app-icons": "2.1.0",
 		"expo-application": "~7.0.7",
 		"expo-auth-session": "~7.0.8",
@@ -68,7 +68,7 @@
 		"expo-localization": "~17.0.7",
 		"expo-navigation-bar": "~5.0.8",
 		"expo-quick-actions": "^5.0.0",
-		"expo-router": "~6.0.1",
+		"expo-router": "~6.0.2",
 		"expo-secure-store": "~15.0.7",
 		"expo-splash-screen": "~31.0.9",
 		"expo-symbols": "~1.0.7",
@@ -139,5 +139,13 @@
 	},
 	"trustedDependencies": [
 		"@biomejs/biome"
-	]
+	],
+	"expo": {
+		"install": {
+			"exclude": [
+				"@shopify/flash-list",
+				"react-native-reanimated"
+			]
+		}
+	}
 }
