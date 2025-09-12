@@ -170,7 +170,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	card: {
 		backgroundColor: theme.colors.card,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: theme.radius.lg,
+		borderRadius: Platform.OS === 'ios' ? 28 : theme.radius.lg,
 		borderColor: theme.colors.border,
 		width: '100%'
 	},

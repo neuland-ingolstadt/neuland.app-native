@@ -17,6 +17,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "@expo/ui@0.2.0-beta.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@15.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -203,6 +209,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "expo-font@14.0.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "expo-haptics@15.0.7": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -370,12 +382,6 @@
         "licenseUrl": "https://github.com/react-native-device-info/react-native-device-info/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-drag-drop-ios@0.1.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/jacobp100/react-native-drag-drop-ios",
-        "licenseUrl": "https://github.com/jacobp100/react-native-drag-drop-ios/raw/master/LICENSE",
-        "parents": "neuland"
-    },
     "react-native-draggable-flatlist@4.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/computerjazz/react-native-draggable-flatlist",
@@ -388,10 +394,10 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-mmkv@2.12.2": {
+    "react-native-mmkv@3.3.1": {
         "licenses": "(MIT AND BSD-3-Clause)",
         "repository": "https://github.com/mrousavy/react-native-mmkv",
-        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv/raw/master/LICENSE",
+        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
         "parents": "neuland"
     },
     "react-native-pager-view@6.9.1": {
@@ -400,7 +406,7 @@
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-reanimated@3.19.1": {
+    "react-native-reanimated@4.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
         "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",

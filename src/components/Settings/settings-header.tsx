@@ -61,7 +61,7 @@ export default function SettingsHeader({
 						router.navigate('/profile')
 					}}
 					style={{
-						borderRadius: theme.radius.mg,
+						borderRadius: Platform.OS === 'ios' ? 26 : theme.radius.mg,
 						overflow: 'hidden'
 					}}
 				>
@@ -224,7 +224,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
+		borderRadius: Platform.OS === 'ios' ? 26 : theme.radius.mg,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		width: '100%',
