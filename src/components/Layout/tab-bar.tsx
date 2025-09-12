@@ -8,7 +8,7 @@ import { useStyles } from 'react-native-unistyles'
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
 	const { t } = useTranslation('navigation')
-
+const isIos26 = Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	return (
 		<NativeTabs
 			// Shared styling
@@ -17,6 +17,7 @@ export default function TabLayout(): React.JSX.Element {
 			tintColor={theme.colors.primary}
 			indicatorColor={theme.colors.primary}
 			backgroundColor={theme.colors.card}
+			disableTransparentOnScrollEdge={!isIos26}
 		>
 			<NativeTabs.Trigger name="(index)">
 				<Label>{'Home'}</Label>
