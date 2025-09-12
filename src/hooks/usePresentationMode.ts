@@ -29,6 +29,8 @@ export const usePresentationMode = (): PresentationMode => {
 		sheetAllowedDetents: [0.7, 1],
 		sheetInitialDetentIndex: 0,
 		sheetCornerRadius: 30,
-		headerStyle: undefined
+		headerStyle: {
+			backgroundColor: 'transparent'
+		}
 	}
 }

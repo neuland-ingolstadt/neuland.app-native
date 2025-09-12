@@ -509,9 +509,6 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLargeTitle: true,
-						headerShown: true,
-						headerTransparent: true,
 						headerLeft: () => (
 							<ShareHeaderButton
 								onPress={() => {

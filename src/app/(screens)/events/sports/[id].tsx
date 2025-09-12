@@ -1,6 +1,8 @@
 import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import {
+	Stack,
 	useFocusEffect,
 	useLocalSearchParams,
 	useNavigation
@@ -8,8 +10,13 @@ import {
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share, View } from 'react-native'
-import Animated from 'react-native-reanimated'
+import { Linking, Platform, Share, Text, View } from 'react-native'
+import Animated, {
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type {
 	UniversitySportsFieldsFragment,
@@ -46,6 +53,29 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const sportsEvent: UniversitySportsFieldsFragment | null | undefined =
 		queryData?.flatMap((group) => group.data).find((event) => event.id === id)
 
+	const scrollOffset = useSharedValue(0)
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = event.contentOffset.y
+			}
+		}
+	})
+
+	const headerStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{
+					translateY: interpolate(
+						scrollOffset.value,
+						[0, 30, 65],
+						[25, 25, 0],
+						'clamp'
+					)
+				}
+			]
+		}
+	})
 	const navigation = useNavigation()
 	useFocusEffect(
 		useCallback(() => {
@@ -53,7 +83,6 @@ export default function SportsEventDetail(): React.JSX.Element {
 				return
 			}
 			navigation.setOptions({
-				title: sportsEvent?.title[i18n.language as LanguageKey] ?? '',
 				headerLeft: () => (
 					<ShareHeaderButton
 						onPress={async () => {
@@ -206,11 +235,38 @@ export default function SportsEventDetail(): React.JSX.Element {
 		}
 	]
 
+	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
 	return (
 		<Animated.ScrollView
 			style={styles.page}
 			contentContainerStyle={styles.container}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
 		>
+			<Stack.Screen
+				options={{
+					headerTitle: (props) => (
+						<View style={styles.headerTitle}>
+							<Animated.View style={headerStyle}>
+								<HeaderTitle {...props} tintColor={theme.colors.text}>
+									{title}
+								</HeaderTitle>
+							</Animated.View>
+						</View>
+					)
+				}}
+			/>
+
+			<View style={styles.titleContainer}>
+				<Text
+					style={styles.titleText}
+					allowFontScaling={true}
+					minimumFontScale={0.8}
+					numberOfLines={2}
+				>
+					{title}
+				</Text>
+			</View>
 			<View style={styles.formList}>
 				<FormList sections={sections} />
 			</View>
@@ -221,8 +277,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		gap: 12,
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingTop: 140
+		paddingBottom: theme.margins.bottomSafeArea
 	},
 	formList: {
 		alignSelf: 'center',
@@ -240,6 +295,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	titleContainer: {
 		alignItems: 'flex-start',
 		flexDirection: 'row',
+		paddingLeft: 6,
+		paddingBottom: 6,
 		justifyContent: 'space-between'
 	},
 	titleText: {
