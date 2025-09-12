@@ -319,7 +319,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	blockCard: {
 		backgroundColor: theme.colors.card,
-		borderRadius: Platform.OS === 'ios' ? 26 : theme.radius.mg,
+		borderRadius: theme.radius.ios,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden'

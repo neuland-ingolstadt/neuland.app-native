@@ -19,6 +19,7 @@ import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { breakpoints } from '@/styles/breakpoints'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -26,6 +27,7 @@ import { formatFriendlyDate } from '@/utils/date-utils'
 export default function NewsScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { width } = useWindowDimensions()
+	const headerPadding = useTransparentHeaderPadding()
 	const isLargeScreen = width >= breakpoints.md
 	const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
 		useQuery({
@@ -76,7 +78,10 @@ export default function NewsScreen(): React.JSX.Element {
 						) : undefined
 					}
 					keyExtractor={(item) => item.href}
-					contentContainerStyle={styles.contentContainer}
+					contentContainerStyle={[
+						styles.contentContainer,
+						{ paddingTop: headerPadding }
+					]}
 					renderItem={({ item }) => (
 						<View style={styles.sectionContainer} key={item.title}>
 							<Text style={styles.dateText}>

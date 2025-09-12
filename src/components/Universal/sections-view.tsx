@@ -61,7 +61,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	sectionBox: {
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: Platform.OS === 'ios' ? 26 : theme.radius.mg,
+		borderRadius: theme.radius.ios,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		justifyContent: 'center',

@@ -149,23 +149,24 @@ export const CalendarAnimation = ({
 		iconsArray.forEach((icon, index) => {
 			const delay = EVENT_ICONS[index].delay
 
-			// Add haptic feedback for each icon pop-up on iOS
+			// Trigger haptic feedback right when the icon starts appearing
+			setTimeout(() => {
+				runOnJS(triggerSuperLightHaptic)()
+			}, delay)
+
 			icon.opacity.value = withDelay(
 				delay,
-				withTiming(
-					1,
-					{
-						duration: 800,
-						easing: Easing.out(Easing.cubic)
-					},
-					() => {
-						runOnJS(triggerSuperLightHaptic)()
-					}
-				)
+				withTiming(1, {
+					duration: 800,
+					easing: Easing.out(Easing.cubic)
+				})
 			)
 			icon.scale.value = withDelay(
 				delay,
-				withTiming(1, { duration: 800, easing: Easing.out(Easing.back(1.5)) })
+				withTiming(1, {
+					duration: 800,
+					easing: Easing.out(Easing.back(1.5))
+				})
 			)
 			icon.floatY.value = withDelay(
 				delay,

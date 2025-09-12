@@ -13,10 +13,12 @@ import {
 	type ThemeColor,
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function Theme(): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const setTheme = usePreferencesStore((state) => state.setTheme)
+	const headerPadding = useTransparentHeaderPadding()
 	const themeColor = usePreferencesStore((s) => s.themeColor)
 	const setThemeColor = usePreferencesStore((s) => s.setThemeColor)
 	const memberInfo = useMemberStore((s) => s.info)
@@ -56,7 +58,9 @@ export default function Theme(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView contentContainerStyle={styles.container}>
+		<ScrollView
+			contentContainerStyle={[styles.container, { paddingTop: headerPadding }]}
+		>
 			{Platform.OS !== 'web' && (
 				<SectionView title={t('settings:theme.splash.title')}>
 					<SingleSectionPicker

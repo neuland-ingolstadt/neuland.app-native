@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export const lightTheme = {
 	colors: {
 		typography: '#000000',
@@ -48,6 +50,7 @@ export const lightTheme = {
 		md: 17,
 		mg: 17,
 		lg: 22,
+		ios: Platform.OS === 'ios' ? 26 : 17,
 		infinite: 9999
 	}
 }
@@ -102,6 +105,7 @@ export const darkTheme = {
 		md: 17,
 		mg: 17,
 		lg: 22,
+		ios: Platform.OS === 'ios' ? 26 : 17,
 		infinite: 9999
 	}
 }

@@ -7,6 +7,7 @@ import {
 } from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
+import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
@@ -39,6 +40,7 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
+	const transparentHeaderStyle = useTransparentHeaderStyle()
 
 	useQuickActionRouting()
 
@@ -115,8 +117,6 @@ function RootLayout(): React.JSX.Element {
 		setIsReady(true)
 	}, [])
 
-	const isIos26 =
-		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	return (
 		<Splash isReady={isReady}>
 			<Head>
@@ -179,7 +179,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/food-preferences"
 					options={{
-						title: t('navigation.preferences')
+						title: t('navigation.preferences'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -256,13 +257,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/theme"
 					options={{
-						title: t('navigation.theme')
+						title: t('navigation.theme'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/timetable-preferences"
 					options={{
-						title: t('navigation.timetablePreferences')
+						title: t('navigation.timetablePreferences'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -280,7 +283,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/about"
 					options={{
-						title: t('navigation.about')
+						title: t('navigation.about'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -292,13 +296,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/legal"
 					options={{
-						title: t('navigation.legal')
+						title: t('navigation.legal'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/licenses"
 					options={{
-						title: t('navigation.licenses.title')
+						title: t('navigation.licenses.title'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -315,7 +321,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/dashboard"
 					options={{
-						title: 'Dashboard'
+						title: 'Dashboard',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -327,13 +334,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/room-search"
 					options={{
-						title: t('navigation.advancedSearch')
+						title: t('navigation.advancedSearch'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/cl-events"
 					options={{
-						title: 'Campus Life Events'
+						title: 'Campus Life Events',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -383,7 +392,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/thi-services"
 					options={{
-						title: t('navigation.thiServices')
+						title: t('navigation.thiServices'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -438,12 +448,7 @@ function RootLayout(): React.JSX.Element {
 					name="(screens)/news"
 					options={{
 						title: t('navigation.news'),
-						...Platform.select({
-							ios: {
-								headerStyle: undefined,
-								headerTransparent: isIos26
-							}
-						})
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
