@@ -65,7 +65,7 @@ const InfoBox = ({
 						<>
 							<Text> </Text>
 							<PlatformIcon
-								ios={{ name: 'arrow.up.right', size: 6 }}
+								ios={{ name: 'arrow.up.right', size: 5 }}
 								android={{ name: 'search', size: 14 }}
 								web={{ name: 'ArrowUpRight', size: 14 }}
 								style={styles.externalLink}

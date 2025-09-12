@@ -115,6 +115,8 @@ function RootLayout(): React.JSX.Element {
 		setIsReady(true)
 	}, [])
 
+	const isIos26 =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	return (
 		<Splash isReady={isReady}>
 			<Head>
@@ -439,8 +441,7 @@ function RootLayout(): React.JSX.Element {
 						...Platform.select({
 							ios: {
 								headerStyle: undefined,
-								headerTransparent: true,
-								headerBlurEffect: 'regular'
+								headerTransparent: isIos26
 							}
 						})
 					}}

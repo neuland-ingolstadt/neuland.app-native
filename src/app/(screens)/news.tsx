@@ -167,7 +167,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
 		gap: 18,
 		paddingBottom: theme.margins.modalBottomMargin,
-		paddingTop: Platform.OS === 'ios' ? 105 : 5,
+		paddingTop: Platform.OS === 'ios' ? 130 : 5,
 		padding: theme.margins.page
 	},
 	dateText: {
