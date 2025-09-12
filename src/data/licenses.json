@@ -394,10 +394,10 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-mmkv@3.3.1": {
+    "react-native-mmkv@2.12.2": {
         "licenses": "(MIT AND BSD-3-Clause)",
         "repository": "https://github.com/mrousavy/react-native-mmkv",
-        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
+        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-pager-view@6.9.1": {
@@ -406,7 +406,7 @@
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-reanimated@4.1.0": {
+    "react-native-reanimated@3.19.1": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
         "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
