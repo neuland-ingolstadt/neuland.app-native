@@ -56,7 +56,6 @@ const NeulandBox = () => {
 const stylesheet = createStyleSheet((theme) => ({
 	neulandContainer: {
 		marginTop: 10,
-		borderRadius: Platform.OS === 'ios' ? 26 : theme.radius.mg
 	},
 	neulandBox: {
 		flex: 1,
@@ -65,7 +64,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
+		borderRadius:Platform.OS === 'ios' ? 26 : theme.radius.mg,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border
 	},
