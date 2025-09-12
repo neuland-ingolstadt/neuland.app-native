@@ -271,7 +271,7 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.2):
+  - ExpoHead (6.0.3):
     - ExpoModulesCore
     - RNScreens
   - ExpoImage (3.0.8):
@@ -322,7 +322,7 @@ PODS:
     - ExpoModulesCore
   - ExpoSecureStore (15.0.7):
     - ExpoModulesCore
-  - ExpoSplashScreen (31.0.9):
+  - ExpoSplashScreen (31.0.10):
     - ExpoModulesCore
   - ExpoSymbols (1.0.7):
     - ExpoModulesCore
@@ -3442,7 +3442,7 @@ SPEC CHECKSUMS:
   ExpoFileSystem: a56d630f242e866b9f23373b811ee92b9d045c59
   ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: e7b001f8025a8937ad2fbde39d92dca8e29279b2
+  ExpoHead: 81a3cf21714aaea66439a09b9e8728acb1f68432
   ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
@@ -3451,7 +3451,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 4c8c4b9e7dd9e1e47d3cb92fffb32524ae056112
   ExpoQuickActions: fdbda7f5874aed3dd2b1d891ec00ab3300dc7541
   ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
-  ExpoSplashScreen: 9a3be7432695a8fa47fb2e0bcdb1e9389ecb03e9
+  ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
   ExpoSystemUI: 6cd74248a2282adf6dec488a75fa532d69dee314
   ExpoUI: 0f109b0549d1ae2fd955d3b8733b290c5cdeec7e

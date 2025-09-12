@@ -256,7 +256,7 @@
         "licenseUrl": "https://github.com/evanbacon/expo-quick-actions/",
         "parents": "neuland"
     },
-    "expo-router@6.0.2": {
+    "expo-router@6.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -268,7 +268,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@31.0.9": {
+    "expo-splash-screen@31.0.10": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
