@@ -43,7 +43,7 @@ const NeulandBox = () => {
 					</View>
 				</View>
 				<PlatformIcon
-					ios={{ name: 'chevron.right', size: 18 }}
+					ios={{ name: 'chevron.right', size: 14 }}
 					android={{ name: 'chevron_right', size: 24 }}
 					web={{ name: 'ChevronRight', size: 24 }}
 					style={styles.neulandChevron}
@@ -55,8 +55,7 @@ const NeulandBox = () => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	neulandContainer: {
-		marginTop: 10,
-		borderRadius: theme.radius.md
+		marginTop: 10
 	},
 	neulandBox: {
 		flex: 1,
@@ -65,7 +64,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.ios,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border
 	},

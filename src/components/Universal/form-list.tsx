@@ -232,7 +232,7 @@ const RenderSectionItems: React.FC<{
 										<PlatformIcon
 											ios={{
 												name: 'chevron.right',
-												size: 14,
+												size: 10,
 												weight: 'semibold'
 											}}
 											android={{
@@ -319,7 +319,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	blockCard: {
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
+		borderRadius: theme.radius.ios,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden'
@@ -330,11 +330,21 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '400'
 	},
 	blockHeader: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		textTransform: 'uppercase'
+		...(Platform.OS === 'ios'
+			? {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 16,
+					marginLeft: 18,
+					fontWeight: '600'
+				}
+			: {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 13,
+					fontWeight: 'normal',
+					textTransform: 'uppercase'
+				})
 	},
+
 	cardColumn: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',

@@ -117,7 +117,7 @@ export default function DashboardEdit(): React.JSX.Element {
 					{userKind === USER_GUEST && <GuestUserNote />}
 
 					<View style={styles.block}>
-						<Text style={styles.sectionHeaderText}>{t('dashboard.shown')}</Text>
+						<Text style={styles.blockHeader}>{t('dashboard.shown')}</Text>
 						<View style={[styles.card, styles.shownBg]}>
 							{transShownDashboardEntries.length === 0 ? (
 								<View

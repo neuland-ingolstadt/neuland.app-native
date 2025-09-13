@@ -28,11 +28,9 @@ export const usePresentationMode = (): PresentationMode => {
 		presentation: 'formSheet',
 		sheetAllowedDetents: [0.7, 1],
 		sheetInitialDetentIndex: 0,
-		sheetGrabberVisible: true,
-		sheetCornerRadius: 16,
+		sheetCornerRadius: 30,
 		headerStyle: {
 			backgroundColor: 'transparent'
-		},
-		headerTitleAlign: 'center'
+		}
 	}
 }

@@ -53,7 +53,7 @@ const NameBox = ({
 			{showChevron && (
 				<View style={styles.chevronContainer}>
 					<PlatformIcon
-						ios={{ name: 'chevron.forward', size: 20 }}
+						ios={{ name: 'chevron.forward', size: 14 }}
 						android={{ name: 'chevron_right', size: 28 }}
 						web={{ name: 'ChevronRight', size: 28 }}
 						style={styles.chevronIcon}

@@ -14,11 +14,13 @@ import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { FormListSections } from '@/types/components'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
+	const headerPadding = useTransparentHeaderPadding()
 	const elemtents = [
 		{
 			key: 'IngolstadtMensa',
@@ -102,7 +104,7 @@ export default function FoodPreferences(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
 			<View style={styles.container}>
 				<SectionView title={'Restaurants'}>
 					<MultiSectionPicker

@@ -33,7 +33,6 @@ import ErrorView from '@/components/Error/error-view'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
@@ -50,6 +49,7 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function FoodDetail(): React.JSX.Element {
@@ -120,17 +120,15 @@ export default function FoodDetail(): React.JSX.Element {
 		useCallback(() => {
 			if (!foodData) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					...getPlatformHeaderButtons({})
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => (
-						<ShareHeaderButton
-							onPress={() => {
-								shareMeal(foodData, i18n, userKind)
-							}}
-						/>
-					)
+					...getPlatformHeaderButtons({
+						onShare: () => {
+							shareMeal(foodData, i18n, userKind)
+						}
+					})
 				})
 			}
 		}, [foodData, i18n, userKind, navigation])
@@ -543,7 +541,6 @@ export default function FoodDetail(): React.JSX.Element {
 						<PlatformIcon
 							ios={{
 								name: 'calendar',
-								variant: 'fill',
 								size: 13
 							}}
 							android={{

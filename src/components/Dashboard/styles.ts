@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import { createStyleSheet } from 'react-native-unistyles'
 
 export const dashboardStyles = createStyleSheet((theme) => ({
@@ -58,11 +59,21 @@ export const dashboardStyles = createStyleSheet((theme) => ({
 		minHeight: 50,
 		paddingHorizontal: 16
 	},
-	sectionHeaderText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		textTransform: 'uppercase'
+	blockHeader: {
+		...(Platform.OS === 'ios'
+			? {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 16,
+					marginLeft: 18,
+					fontWeight: '600',
+					paddingBottom: 4
+				}
+			: {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 13,
+					fontWeight: 'normal',
+					textTransform: 'uppercase'
+				})
 	},
 	shownBg: {
 		backgroundColor: theme.colors.background

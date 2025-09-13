@@ -21,7 +21,7 @@ const AttributionLink: React.FC = () => {
 				<PlatformIcon
 					ios={{
 						name: 'chevron.forward',
-						size: 11
+						size: 6
 					}}
 					android={{
 						name: 'chevron_right',
