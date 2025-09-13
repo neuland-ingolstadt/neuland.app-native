@@ -1,23 +1,50 @@
+import Color from 'color'
 import { Icon, Label } from 'expo-router/build/native-tabs/common/elements'
 import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
 
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
 	const { t } = useTranslation('navigation')
 	const isIos26 =
 		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+	const isAndroid = Platform.OS === 'android'
 	return (
 		<NativeTabs
 			// Shared styling
 			badgeBackgroundColor={theme.colors.primary}
 			iconColor={theme.colors.tabbarInactive}
 			tintColor={theme.colors.primary}
-			indicatorColor={theme.colors.primary}
-			backgroundColor={theme.colors.card}
+			indicatorColor={
+				isAndroid
+					? UnistylesRuntime.themeName === 'dark'
+						? Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.06)
+								.lighten(1.4)
+								.saturate(1)
+								.hex()
+						: Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.3)
+								.darken(0.05)
+								.saturate(0.1)
+								.hex()
+					: undefined
+			}
+			labelVisibilityMode="labeled"
+			backgroundColor={
+				isAndroid
+					? UnistylesRuntime.themeName === 'dark'
+						? Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.04)
+								.hex()
+						: Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.1)
+								.hex()
+					: theme.colors.card
+			}
 			disableTransparentOnScrollEdge={!isIos26}
 		>
 			<NativeTabs.Trigger name="(index)">

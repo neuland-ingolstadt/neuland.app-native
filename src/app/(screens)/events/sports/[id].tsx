@@ -26,12 +26,12 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { ShareHeaderButton } from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
@@ -83,36 +83,34 @@ export default function SportsEventDetail(): React.JSX.Element {
 				return
 			}
 			navigation.setOptions({
-				headerLeft: () => (
-					<ShareHeaderButton
-						onPress={async () => {
-							trackEvent('Share', {
-								type: 'sportsEvent'
-							})
-							const message = t('pages.event.shareSports', {
-								title: sportsEvent?.title[i18n.language as LanguageKey],
-								weekday: t(
-									`dates.weekdays.${
-										sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
-									}`
-								),
-								time: formatFriendlyTimeRange(
-									sportsEvent.startTime,
-									sportsEvent.endTime
-								),
-								link: `https://web.neuland.app/events/sports/${id}`
-							})
-							if (Platform.OS === 'web') {
-								await copyToClipboard(message)
-								return
-							}
+				...getPlatformHeaderButtons({
+					onShare: async () => {
+						trackEvent('Share', {
+							type: 'sportsEvent'
+						})
+						const message = t('pages.event.shareSports', {
+							title: sportsEvent?.title[i18n.language as LanguageKey],
+							weekday: t(
+								`dates.weekdays.${
+									sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
+								}`
+							),
+							time: formatFriendlyTimeRange(
+								sportsEvent.startTime,
+								sportsEvent.endTime
+							),
+							link: `https://web.neuland.app/events/sports/${id}`
+						})
+						if (Platform.OS === 'web') {
+							await copyToClipboard(message)
+							return
+						}
 
-							await Share.share({
-								message
-							})
-						}}
-					/>
-				)
+						await Share.share({
+							message
+						})
+					}
+				})
 			})
 		}, [navigation, sportsEvent, t, i18n.language])
 	)

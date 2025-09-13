@@ -1,14 +1,11 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
-import {
-	CloseHeaderButton,
-	ShareHeaderButton
-} from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
 import i18n from '@/localization/i18n'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
@@ -214,14 +211,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -233,14 +227,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -360,14 +351,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -379,14 +367,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -409,14 +394,12 @@ function RootLayout(): React.JSX.Element {
 						...Platform.select({
 							ios: {
 								...presentationMode,
-								headerRight: () => (
-									<ShareHeaderButton
-										noShare
-										onPress={() => {
-											/* do nothing yet */
-										}}
-									/>
-								)
+								...getPlatformHeaderButtons({
+									onShare: () => {
+										/* do nothing yet */
+									},
+									noShare: true
+								})
 							}
 						})
 					}}
@@ -495,14 +478,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -514,14 +494,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerLeft: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						),
-						headerRight: () => <CloseHeaderButton />
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 			</Stack>
