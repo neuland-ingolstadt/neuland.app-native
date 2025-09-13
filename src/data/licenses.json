@@ -65,7 +65,7 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-menu/menu@1.2.4": {
+    "@react-native-menu/menu@2.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-menu/menu",
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
@@ -286,7 +286,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@54.0.4": {
+    "expo@54.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
