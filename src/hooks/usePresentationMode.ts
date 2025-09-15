@@ -11,6 +11,9 @@ type PresentationMode = {
 		backgroundColor: string
 	}
 	headerTitleAlign?: 'center'
+	contentStyle?: {
+		backgroundColor: string
+	}
 }
 
 export const usePresentationMode = (): PresentationMode => {
@@ -30,6 +33,9 @@ export const usePresentationMode = (): PresentationMode => {
 		sheetInitialDetentIndex: 0,
 		sheetCornerRadius: 30,
 		headerStyle: {
+			backgroundColor: 'transparent'
+		},
+		contentStyle: {
 			backgroundColor: 'transparent'
 		}
 	}

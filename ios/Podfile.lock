@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.4):
+  - Expo (54.0.7):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -265,13 +265,13 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (15.0.7):
     - ExpoModulesCore
-  - ExpoFileSystem (19.0.13):
+  - ExpoFileSystem (19.0.14):
     - ExpoModulesCore
   - ExpoFont (14.0.8):
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.3):
+  - ExpoHead (6.0.4):
     - ExpoModulesCore
     - RNScreens
   - ExpoImage (3.0.8):
@@ -2110,8 +2110,34 @@ PODS:
     - SocketRocket
   - react-native-context-menu-view (1.19.0):
     - React
-  - react-native-menu (1.2.4):
-    - React
+  - react-native-menu (2.0.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - react-native-mmkv (2.12.2):
     - boost
     - DoubleConversion
@@ -3428,7 +3454,7 @@ SPEC CHECKSUMS:
   EXConstants: 7e4654405af367ff908c863fe77a8a22d60bd37d
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: 440bef641043af2a634bae6cfaf3f7163a158b87
+  Expo: 059959e42773bfab95d626bbe2d02f4473765798
   expo-dev-client: f3434d6ca09ecb14ae48c2a3912bdbb07464cc85
   expo-dev-launcher: 7cda78fc0db5de354799e2aa420318df6bed8ea6
   expo-dev-menu: eb0aee41eaafbfec0fa94f0d0a3f23e4a7fa5a21
@@ -3439,10 +3465,10 @@ SPEC CHECKSUMS:
   ExpoBrightness: 32672952bf8b152d0cceaf8ec9f1def3a9a5e0d9
   ExpoClipboard: af650d14765f19c60ce2a1eaf9dfe6445eff7365
   ExpoCrypto: c1fbce112d1b6b79652bbe380b4fd4cc91676595
-  ExpoFileSystem: a56d630f242e866b9f23373b811ee92b9d045c59
+  ExpoFileSystem: 4fb06865906e781329eb67166bd64fc4749c3019
   ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: 81a3cf21714aaea66439a09b9e8728acb1f68432
+  ExpoHead: 11c056e0853e63c37382abef56e804ee90dc2b8f
   ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
@@ -3502,7 +3528,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: e4a65db5f4df53369f39558c0cf2f480f6d3d6c7
   React-microtasksnativemodule: 86334c5c06315e0bccb7b6e6f2c905e92f98b615
   react-native-context-menu-view: 3a8fb510448efa9d477f645dafa889ef1c78daaa
-  react-native-menu: 475e400d9b57949c076a0844e130044b45f2aa3d
+  react-native-menu: 690e4db2a75d2a282d789b56f64801e0c5e92f99
   react-native-mmkv: 24a01d36594757d1b5412550d83d8434dbb2e8b7
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: 3d6161515c4f121854b8c82278007892ddb77b5d
