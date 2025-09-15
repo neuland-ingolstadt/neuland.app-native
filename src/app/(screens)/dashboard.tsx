@@ -23,7 +23,7 @@ import { arraysEqual } from '@/utils/app-utils'
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
-	const headerPadding = useTransparentHeaderPadding()
+	const headerPadding = useTransparentHeaderPadding() + 12
 
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		use(DashboardContext)
@@ -108,7 +108,9 @@ export default function DashboardEdit(): React.JSX.Element {
 			<ScrollView
 				contentContainerStyle={[styles.page, { paddingTop: headerPadding }]}
 				bounces={false}
-				contentInsetAdjustmentBehavior="automatic"
+				contentInsetAdjustmentBehavior={
+					headerPadding > 12 ? 'never' : 'automatic'
+				}
 			>
 				<View style={styles.wrapper}>
 					{userKind === USER_GUEST && <GuestUserNote />}

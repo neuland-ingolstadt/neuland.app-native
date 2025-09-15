@@ -39,7 +39,8 @@ export const dashboardStyles = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border
 	},
 	page: {
-		padding: theme.margins.page
+		paddingHorizontal: theme.margins.page,
+		paddingBottom: theme.margins.page
 	},
 	reset: (hasUserDefaultOrder: boolean) => ({
 		fontSize: 16,

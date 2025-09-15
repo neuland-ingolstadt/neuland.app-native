@@ -27,7 +27,7 @@ import { formatFriendlyDate } from '@/utils/date-utils'
 export default function NewsScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { width } = useWindowDimensions()
-	const headerPadding = useTransparentHeaderPadding()
+	const headerPadding = useTransparentHeaderPadding() + 12
 	const isLargeScreen = width >= breakpoints.md
 	const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
 		useQuery({
@@ -172,7 +172,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
 		gap: 18,
 		paddingBottom: theme.margins.modalBottomMargin,
-		paddingTop: Platform.OS === 'ios' ? 130 : 5,
 		padding: theme.margins.page
 	},
 	dateText: {

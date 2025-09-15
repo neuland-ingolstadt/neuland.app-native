@@ -10,10 +10,12 @@ import ExamsPage from '@/components/Calendar/exams-page'
 import PagerView from '@/components/Layout/pager-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import ToggleRow from '@/components/Universal/toggle-row'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const headerPadding = useTransparentHeaderPadding() + 12
 	const { event } = useLocalSearchParams<{
 		event: string
 	}>()
@@ -74,8 +76,8 @@ export default function CalendarPage(): React.JSX.Element {
 	return (
 		<View
 			style={{
-				...styles.viewTop,
-				...styles.pagerContainer
+				...styles.pagerContainer,
+				paddingTop: headerPadding
 			}}
 		>
 			<View style={styles.toggleContainer}>
@@ -127,9 +129,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border,
 		paddingBottom: 14,
 		paddingHorizontal: theme.margins.page
-	},
-	viewTop: {
-		paddingTop: theme.margins.page
 	},
 	pageContainer: {
 		flex: 1
