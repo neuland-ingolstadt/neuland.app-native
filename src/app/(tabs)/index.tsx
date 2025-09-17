@@ -17,6 +17,10 @@ import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/home-header-right'
 import WorkaroundStack from '@/components/Universal/workaround-stack'
 
+export const unstable_settings = {
+	initialRouteName: '/'
+}
+
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)
 	return (

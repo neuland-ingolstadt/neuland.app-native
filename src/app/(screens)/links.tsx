@@ -2,7 +2,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Text, View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
@@ -55,19 +55,13 @@ const LinkScreen = (): React.JSX.Element => {
 	const sections = generateSections(typedQuicklinks)
 
 	return (
-		<View>
-			<View style={styles.headerContainer}>
-				<Text style={styles.headerText}>{t('pages.quicklinks.title')}</Text>
-			</View>
-			<View style={styles.page}>
-				<FormList sections={sections} rowStyle={styles.formlistRow} />
-			</View>
+		<View style={styles.page}>
+			<FormList sections={sections} />
 		</View>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	formlistRow: { marginVertical: 1 },
 	headerContainer: {
 		alignItems: 'center',
 		flexDirection: 'row',

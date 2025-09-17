@@ -17,7 +17,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "@expo/ui@0.2.0-beta.2": {
+    "@expo/ui@0.2.0-canary-20250912-b5ce2a8": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -191,12 +191,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-constants@18.0.8": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "neuland"
-    },
     "expo-crypto@15.0.7": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -256,7 +250,7 @@
         "licenseUrl": "https://github.com/evanbacon/expo-quick-actions/",
         "parents": "neuland"
     },
-    "expo-router@6.0.4": {
+    "expo-router@6.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -286,7 +280,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@54.0.7": {
+    "expo@54.0.8": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",

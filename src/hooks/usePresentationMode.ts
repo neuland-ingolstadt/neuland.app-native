@@ -16,7 +16,7 @@ type PresentationMode = {
 	}
 }
 
-export const usePresentationMode = (): PresentationMode => {
+export const usePresentationMode = (smallSheet = false): PresentationMode => {
 	if (Platform.OS !== 'ios') {
 		return {}
 	}
@@ -29,9 +29,8 @@ export const usePresentationMode = (): PresentationMode => {
 
 	return {
 		presentation: 'formSheet',
-		sheetAllowedDetents: [0.7, 1],
+		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
-		sheetCornerRadius: 30,
 		headerStyle: {
 			backgroundColor: 'transparent'
 		},

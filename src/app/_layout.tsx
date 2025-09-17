@@ -37,6 +37,7 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
+	const smallSheetPresentationMode = usePresentationMode(true)
 	const transparentHeaderStyle = useTransparentHeaderStyle()
 
 	useQuickActionRouting()
@@ -396,9 +397,34 @@ function RootLayout(): React.JSX.Element {
 							ios: {
 								...presentationMode,
 								...getPlatformHeaderButtons({
-									onShare: () => {
-										/* do nothing yet */
-									},
+									noShare: true
+								})
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/links"
+					options={{
+						title: t('navigation.quicklinks'),
+						...Platform.select({
+							ios: {
+								...smallSheetPresentationMode,
+								...getPlatformHeaderButtons({
+									noShare: true
+								})
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/dots"
+					options={{
+						title: t('navigation.dots'),
+						...Platform.select({
+							ios: {
+								...smallSheetPresentationMode,
+								...getPlatformHeaderButtons({
 									noShare: true
 								})
 							}

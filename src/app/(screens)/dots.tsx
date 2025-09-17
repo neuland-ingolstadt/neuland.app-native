@@ -10,10 +10,6 @@ export default function DotsExplanationScreen(): React.JSX.Element {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.headerContainer}>
-				<Text style={styles.headerText}>{t('dots.title')}</Text>
-			</View>
-
 			<View style={styles.explanationContainer}>
 				<View style={styles.dotExplanationRow}>
 					<View style={[styles.dot, styles.dotCompleted]} />

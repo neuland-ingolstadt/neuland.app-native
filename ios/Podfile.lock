@@ -271,7 +271,7 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.4):
+  - ExpoHead (6.0.5):
     - ExpoModulesCore
     - RNScreens
   - ExpoImage (3.0.8):
@@ -328,7 +328,7 @@ PODS:
     - ExpoModulesCore
   - ExpoSystemUI (6.0.7):
     - ExpoModulesCore
-  - ExpoUI (0.2.0-beta.2):
+  - ExpoUI (0.2.0-canary-20250912-b5ce2a8):
     - ExpoModulesCore
   - ExpoWebBrowser (15.0.7):
     - ExpoModulesCore
@@ -3468,7 +3468,7 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 4fb06865906e781329eb67166bd64fc4749c3019
   ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: 11c056e0853e63c37382abef56e804ee90dc2b8f
+  ExpoHead: 78721203bc9da05b67b6a02b09c72e8ff2bec7ef
   ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
@@ -3480,7 +3480,7 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
   ExpoSystemUI: 6cd74248a2282adf6dec488a75fa532d69dee314
-  ExpoUI: 0f109b0549d1ae2fd955d3b8733b290c5cdeec7e
+  ExpoUI: 469b070b2837be619c3e08645abac7dd839b5e08
   ExpoWebBrowser: 533bc2a1b188eec1c10e4926decf658f1687b5e5
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
