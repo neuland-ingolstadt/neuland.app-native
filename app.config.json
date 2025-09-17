@@ -87,6 +87,59 @@
 					"sitemap": true
 				}
 			],
+			[
+				"expo-alternate-app-icons",
+				[
+					{
+						"name": "Cat",
+						"ios": "./src/assets/appIcons/cat.png"
+					},
+					{
+						"name": "RainbowNeon",
+						"ios": "./src/assets/appIcons/rainbowNeon.png"
+					},
+					{
+						"name": "Luxury",
+						"ios": "./src/assets/appIcons/luxury.png"
+					},
+					{
+						"name": "RainbowGlow",
+						"ios": "./src/assets/appIcons/rainbowGlow.png"
+					},
+					{
+						"name": "Hacker",
+						"ios": "./src/assets/appIcons/hacker.png"
+					},
+					{
+						"name": "Retro",
+						"ios": "./src/assets/appIcons/retro.png"
+					},
+					{
+						"name": "ModernGreen",
+						"ios": {
+							"light": "./src/assets/appIcons/modernGreen.png",
+							"dark": "./src/assets/appIcons/dark/modernGreenDark.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					},
+					{
+						"name": "ModernPink",
+						"ios": {
+							"light": "./src/assets/appIcons/modernPurple.png",
+							"dark": "./src/assets/appIcons/dark/purpleDark.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					},
+					{
+						"name": "RainbowMoonLight",
+						"ios": {
+							"light": "./src/assets/appIcons/rainbowMoonLight.png",
+							"dark": "./src/assets/appIcons/dark/darkRainbow.png",
+							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						}
+					}
+				]
+			],
 			["expo-secure-store"],
 			["expo-localization"],
 			["@maplibre/maplibre-react-native"],

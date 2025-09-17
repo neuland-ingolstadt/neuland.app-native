@@ -9,12 +9,12 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (7.0.7):
     - ExpoModulesCore
-  - EXConstants (18.0.8):
+  - EXConstants (18.0.9):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.7):
+  - Expo (54.0.8):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -271,7 +271,7 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.5):
+  - ExpoHead (6.0.6):
     - ExpoModulesCore
     - RNScreens
   - ExpoImage (3.0.8):
@@ -289,7 +289,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (17.0.7):
     - ExpoModulesCore
-  - ExpoModulesCore (3.0.15):
+  - ExpoModulesCore (3.0.16):
     - boost
     - DoubleConversion
     - fast_float
@@ -3451,10 +3451,10 @@ SPEC CHECKSUMS:
   Burnt: 0616363a206ed96ba9af3e2eb0e184dc97be1458
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXApplication: 296622817d459f46b6c5fe8691f4aac44d2b79e7
-  EXConstants: 7e4654405af367ff908c863fe77a8a22d60bd37d
+  EXConstants: a95804601ee4a6aa7800645f9b070d753b1142b3
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: 059959e42773bfab95d626bbe2d02f4473765798
+  Expo: 83f3c39552fe0f92d723ac9d905ab6b4e6fee48a
   expo-dev-client: f3434d6ca09ecb14ae48c2a3912bdbb07464cc85
   expo-dev-launcher: 7cda78fc0db5de354799e2aa420318df6bed8ea6
   expo-dev-menu: eb0aee41eaafbfec0fa94f0d0a3f23e4a7fa5a21
@@ -3468,13 +3468,13 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 4fb06865906e781329eb67166bd64fc4749c3019
   ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: 78721203bc9da05b67b6a02b09c72e8ff2bec7ef
+  ExpoHead: 17ce1830f110e6016249fb84c3fb0fc4a1b1e70d
   ExpoImage: e88f500585913969b930e13a4be47277eb7c6de8
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
   ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
   ExpoLocalization: b852a5d8ec14c5349c1593eca87896b5b3ebfcca
-  ExpoModulesCore: 4c8c4b9e7dd9e1e47d3cb92fffb32524ae056112
+  ExpoModulesCore: 0a7c0eabccec8d6c31510eb7fdeaba3b7dd0d482
   ExpoQuickActions: fdbda7f5874aed3dd2b1d891ec00ab3300dc7541
   ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
   ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be

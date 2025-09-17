@@ -254,6 +254,7 @@
 				F08ED420825B4DA18BC5BD37 /* Remove signature files (Xcode workaround) */,
 				155F89D90B8A39C668014476 /* [CP] Embed Pods Frameworks */,
 				725A0CDB3EF0B335466CE27C /* [CP] Copy Pods Resources */,
+				C2CE6B58524943988B85BE34 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -511,6 +512,20 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NeulandNext/expo-configure-project.sh\"\n";
 		};
+		C2CE6B58524943988B85BE34 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
+		};
 		F08ED420825B4DA18BC5BD37 /* Remove signature files (Xcode workaround) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -559,6 +574,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF83917C5B5A091693280E92 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -596,6 +612,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 870951EE83FF4648D34994F9 /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
@@ -627,6 +644,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
@@ -714,6 +732,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
@@ -792,6 +811,7 @@
 		B7A10B402E72F89900578355 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -841,6 +861,7 @@
 		B7A10B412E72F89900578355 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
