@@ -35,7 +35,7 @@
         "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@howljs/calendar-kit@2.5.1": {
+    "@howljs/calendar-kit@2.5.2": {
         "licenses": "MIT",
         "repository": "https://github.com/howljs/react-native-calendar-kit",
         "licenseUrl": "https://github.com/howljs/react-native-calendar-kit/raw/master/LICENSE",
@@ -101,19 +101,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.87.1": {
+    "@tanstack/query-sync-storage-persister@5.89.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.87.1": {
+    "@tanstack/react-query-persist-client@5.89.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.87.1": {
+    "@tanstack/react-query@5.89.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -143,13 +143,13 @@
         "licenseUrl": "https://github.com/nandorojo/burnt/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "color@5.0.0": {
+    "color@5.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/Qix-/color",
         "licenseUrl": "https://github.com/Qix-/color/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "expo-alternate-app-icons@2.1.0": {
+    "expo-alternate-app-icons@3.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/pchalupa/expo-alternate-app-icons",
         "licenseUrl": "https://github.com/pchalupa/expo-alternate-app-icons/raw/master/LICENSE",
@@ -245,9 +245,10 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-quick-actions@5.0.0": {
+    "expo-quick-actions@6.0.0": {
         "licenses": "MIT",
-        "licenseUrl": "https://github.com/evanbacon/expo-quick-actions/",
+        "repository": "https://github.com/evanbacon/expo-quick-actions",
+        "licenseUrl": "https://github.com/evanbacon/expo-quick-actions/raw/master/LICENSE",
         "parents": "neuland"
     },
     "expo-router@6.0.6": {
@@ -298,7 +299,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@25.3.2": {
+    "i18next@25.5.2": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -316,7 +317,7 @@
         "licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "maplibre-gl@5.7.1": {
+    "maplibre-gl@5.7.2": {
         "licenses": "BSD-3-Clause",
         "repository": "https://github.com/maplibre/maplibre-gl-js",
         "licenseUrl": "https://github.com/maplibre/maplibre-gl-js/raw/master/LICENSE.txt",

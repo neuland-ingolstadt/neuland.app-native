@@ -253,7 +253,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ExpoAlternateAppIcons (2.1.0):
+  - ExpoAlternateAppIcons (3.0.0):
     - ExpoModulesCore
   - ExpoAsset (12.0.8):
     - ExpoModulesCore
@@ -318,7 +318,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ExpoQuickActions (5.0.0):
+  - ExpoQuickActions (6.0.0):
     - ExpoModulesCore
   - ExpoSecureStore (15.0.7):
     - ExpoModulesCore
@@ -3459,7 +3459,7 @@ SPEC CHECKSUMS:
   expo-dev-launcher: 7cda78fc0db5de354799e2aa420318df6bed8ea6
   expo-dev-menu: eb0aee41eaafbfec0fa94f0d0a3f23e4a7fa5a21
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
-  ExpoAlternateAppIcons: 8fef6e0d7cfb11bf5486e62657736ba836859781
+  ExpoAlternateAppIcons: e4c659c814aa9717055a5b6c8e10118f419e3c11
   ExpoAsset: 84810d6fed8179f04d4a7a4a6b37028bbd726e26
   ExpoBlur: 2dd8f64aa31f5d405652c21d3deb2d2588b1852f
   ExpoBrightness: 32672952bf8b152d0cceaf8ec9f1def3a9a5e0d9
@@ -3475,7 +3475,7 @@ SPEC CHECKSUMS:
   ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
   ExpoLocalization: b852a5d8ec14c5349c1593eca87896b5b3ebfcca
   ExpoModulesCore: 0a7c0eabccec8d6c31510eb7fdeaba3b7dd0d482
-  ExpoQuickActions: fdbda7f5874aed3dd2b1d891ec00ab3300dc7541
+  ExpoQuickActions: 31a70aa6a606128de4416a4830e09cfabfe6667f
   ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
   ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68
