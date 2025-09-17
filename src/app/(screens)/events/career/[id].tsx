@@ -226,7 +226,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 				</Text>
 			</View>
 			<View style={styles.formListContainer}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)

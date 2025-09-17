@@ -640,7 +640,7 @@ export default function FoodDetail(): React.JSX.Element {
 			)}
 
 			<View style={styles.formList}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 
 			<Pressable onPress={triggerWiggle}>
@@ -693,7 +693,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		borderRadius: theme.radius.md,
 		flexDirection: 'row',
 		gap: 16,
@@ -754,7 +754,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 6,
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		paddingHorizontal: 12,
 		paddingVertical: 6,
 		borderRadius: theme.radius.md,
@@ -776,7 +776,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	priceCard: {
 		flex: 1,
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		borderRadius: theme.radius.md,
 		padding: 12,
 		alignItems: 'center',

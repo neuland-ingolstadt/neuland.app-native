@@ -229,7 +229,7 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 				</Text>
 			</View>
 			<View style={styles.formList}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)
