@@ -56,7 +56,7 @@ const LinkScreen = (): React.JSX.Element => {
 
 	return (
 		<View style={styles.page}>
-			<FormList sections={sections} />
+			<FormList sections={sections} sheet />
 		</View>
 	)
 }
