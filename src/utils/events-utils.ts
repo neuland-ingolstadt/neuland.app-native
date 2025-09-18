@@ -1,4 +1,4 @@
-import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
+import type { SFSymbol } from 'expo-symbols'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	type CampusLifeEventFieldsFragment,
@@ -78,8 +78,8 @@ export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents>
 }
 
 interface SportsCategory {
-	iosIcon: SystemName
-	iosFallback?: SystemName
+	iosIcon: SFSymbol
+	iosFallback?: SFSymbol
 	androidIcon: MaterialIcon
 }
 

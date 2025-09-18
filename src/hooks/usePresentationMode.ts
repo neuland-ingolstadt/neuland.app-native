@@ -11,9 +11,12 @@ type PresentationMode = {
 		backgroundColor: string
 	}
 	headerTitleAlign?: 'center'
+	contentStyle?: {
+		backgroundColor: string
+	}
 }
 
-export const usePresentationMode = (): PresentationMode => {
+export const usePresentationMode = (smallSheet = false): PresentationMode => {
 	if (Platform.OS !== 'ios') {
 		return {}
 	}
@@ -26,13 +29,13 @@ export const usePresentationMode = (): PresentationMode => {
 
 	return {
 		presentation: 'formSheet',
-		sheetAllowedDetents: [0.7, 1],
+		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
-		sheetGrabberVisible: true,
-		sheetCornerRadius: 16,
 		headerStyle: {
 			backgroundColor: 'transparent'
 		},
-		headerTitleAlign: 'center'
+		contentStyle: {
+			backgroundColor: 'transparent'
+		}
 	}
 }

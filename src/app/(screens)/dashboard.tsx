@@ -18,10 +18,12 @@ import {
 } from '@/components/Dashboard'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { arraysEqual } from '@/utils/app-utils'
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
+	const headerPadding = useTransparentHeaderPadding() + 12
 
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		use(DashboardContext)
@@ -104,15 +106,17 @@ export default function DashboardEdit(): React.JSX.Element {
 	return (
 		<View>
 			<ScrollView
-				contentContainerStyle={styles.page}
+				contentContainerStyle={[styles.page, { paddingTop: headerPadding }]}
 				bounces={false}
-				contentInsetAdjustmentBehavior="automatic"
+				contentInsetAdjustmentBehavior={
+					headerPadding > 12 ? 'never' : 'automatic'
+				}
 			>
 				<View style={styles.wrapper}>
 					{userKind === USER_GUEST && <GuestUserNote />}
 
 					<View style={styles.block}>
-						<Text style={styles.sectionHeaderText}>{t('dashboard.shown')}</Text>
+						<Text style={styles.blockHeader}>{t('dashboard.shown')}</Text>
 						<View style={[styles.card, styles.shownBg]}>
 							{shownDashboardEntries.length === 0 ? (
 								<View

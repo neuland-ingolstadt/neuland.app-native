@@ -29,7 +29,7 @@ export function HeaderRight({
 				<PlatformIcon
 					ios={{
 						name: 'arrow.uturn.left',
-						size: 22
+						size: 20
 					}}
 					android={{
 						name: 'calendar_today',
@@ -50,7 +50,7 @@ export function HeaderRight({
 						accessibilityLabel={t('button.previous')}
 					>
 						<PlatformIcon
-							ios={{ name: 'chevron-left', size: 22 }}
+							ios={{ name: 'chevron-left', size: 20 }}
 							android={{ name: 'chevron_right', size: 24 }}
 							web={{ name: 'ChevronLeft', size: 24 }}
 							style={styles.icon}
@@ -62,7 +62,7 @@ export function HeaderRight({
 						accessibilityLabel={t('button.next')}
 					>
 						<PlatformIcon
-							ios={{ name: 'chevron-right', size: 22 }}
+							ios={{ name: 'chevron-right', size: 20 }}
 							android={{ name: 'chevron_right', size: 24 }}
 							web={{ name: 'ChevronRight', size: 24 }}
 							style={styles.icon}
@@ -76,7 +76,7 @@ export function HeaderRight({
 				hitSlop={10}
 			>
 				<PlatformIcon
-					ios={{ name: 'gear', size: 22 }}
+					ios={{ name: 'gear', size: 20 }}
 					android={{ name: 'settings', size: 24, variant: 'filled' }}
 					web={{ name: 'Settings', size: 24 }}
 					style={styles.icon}
@@ -93,7 +93,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flexDirection: 'row',
 		gap: Platform.OS !== 'ios' ? 10 : 20,
-		marginHorizontal: Platform.OS !== 'ios' ? 6 : 0
+		marginHorizontal: Platform.OS !== 'ios' ? 6 : 3
 	},
 	subButtons: {
 		marginLeft: 8,

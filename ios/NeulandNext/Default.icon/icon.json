@@ -1,0 +1,66 @@
+{
+	"color-space-for-untagged-svg-colors": "display-p3",
+	"fill": "automatic",
+	"groups": [
+		{
+			"layers": [
+				{
+					"blend-mode-specializations": [
+						{
+							"value": "normal"
+						},
+						{
+							"appearance": "dark",
+							"value": "normal"
+						},
+						{
+							"appearance": "tinted",
+							"value": "normal"
+						}
+					],
+					"fill-specializations": [
+						{
+							"value": {
+								"solid": "extended-gray:0.00000,1.00000"
+							}
+						},
+						{
+							"appearance": "dark",
+							"value": {
+								"linear-gradient": [
+									"extended-gray:1.00000,1.00000",
+									"extended-gray:0.50000,1.00000"
+								]
+							}
+						},
+						{
+							"appearance": "tinted",
+							"value": {
+								"solid": "extended-gray:1.00000,1.00000"
+							}
+						}
+					],
+					"glass": true,
+					"hidden": false,
+					"image-name": "neuland_palm_icon_black.svg",
+					"name": "neuland_palm_icon_black",
+					"position": {
+						"scale": 1.7,
+						"translation-in-points": [-15, -3.1]
+					}
+				}
+			],
+			"shadow": {
+				"kind": "neutral",
+				"opacity": 0.5
+			},
+			"translucency": {
+				"enabled": true,
+				"value": 0.5
+			}
+		}
+	],
+	"supported-platforms": {
+		"squares": "shared"
+	}
+}

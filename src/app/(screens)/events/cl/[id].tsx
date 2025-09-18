@@ -24,7 +24,6 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
@@ -32,6 +31,7 @@ import {
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
 
@@ -118,29 +118,27 @@ export default function ClEventDetail(): React.JSX.Element {
 		useCallback(() => {
 			if (eventData) {
 				navigation.setOptions({
-					headerRight: () => (
-						<ShareHeaderButton
-							onPress={async () => {
-								trackEvent('Share', {
-									type: 'clEvent'
-								})
-								const message = t('pages.event.shareMessage', {
-									title: eventData?.titles[i18n.language as LanguageKey],
-									organizer: eventData?.host.name,
-									date: dateRange,
-									link: `https://web.neuland.app/events/cl/${id}`
-								})
-								if (Platform.OS === 'web') {
-									await copyToClipboard(message)
-									return
-								}
+					...getPlatformHeaderButtons({
+						onShare: async () => {
+							trackEvent('Share', {
+								type: 'clEvent'
+							})
+							const message = t('pages.event.shareMessage', {
+								title: eventData?.titles[i18n.language as LanguageKey],
+								organizer: eventData?.host.name,
+								date: dateRange,
+								link: `https://web.neuland.app/events/cl/${id}`
+							})
+							if (Platform.OS === 'web') {
+								await copyToClipboard(message)
+								return
+							}
 
-								await Share.share({
-									message
-								})
-							}}
-						/>
-					)
+							await Share.share({
+								message
+							})
+						}
+					})
 				})
 			}
 		}, [navigation, t, eventData, id, i18n.language, dateRange])
@@ -317,7 +315,7 @@ export default function ClEventDetail(): React.JSX.Element {
 				</Text>
 			</View>
 			<View style={styles.formList}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)

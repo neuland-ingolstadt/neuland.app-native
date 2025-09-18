@@ -19,6 +19,8 @@
 		"advancedSearch": "Advanced Search",
 		"calendar": "THI Calendar",
 		"examDetails": "Exam Details",
+		"quicklinks": "Quick Links",
+		"dots": "Lecture Status",
 		"lecturers": {
 			"title": "Lecturers",
 			"search": "Search all lecturers"

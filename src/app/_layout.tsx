@@ -1,10 +1,11 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
+import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
 import i18n from '@/localization/i18n'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
@@ -15,13 +16,8 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Linking, LogBox, Platform } from 'react-native'
-import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 configureReanimatedLogger({
 	strict: false
@@ -41,6 +37,8 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
+	const smallSheetPresentationMode = usePresentationMode(true)
+	const transparentHeaderStyle = useTransparentHeaderStyle()
 
 	useQuickActionRouting()
 
@@ -132,11 +130,6 @@ function RootLayout(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			{Platform.OS === 'android' && (
-				<SystemBars
-					style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
-				/>
-			)}
 			<Stack
 				screenOptions={{
 					contentStyle: styles.background,
@@ -184,7 +177,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/food-preferences"
 					options={{
-						title: t('navigation.preferences')
+						title: t('navigation.preferences'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -218,13 +212,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -236,13 +228,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -259,13 +249,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/theme"
 					options={{
-						title: t('navigation.theme')
+						title: t('navigation.theme'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/timetable-preferences"
 					options={{
-						title: t('navigation.timetablePreferences')
+						title: t('navigation.timetablePreferences'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -283,7 +275,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/about"
 					options={{
-						title: t('navigation.about')
+						title: t('navigation.about'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -295,13 +288,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/legal"
 					options={{
-						title: t('navigation.legal')
+						title: t('navigation.legal'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/licenses"
 					options={{
-						title: t('navigation.licenses.title')
+						title: t('navigation.licenses.title'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -318,7 +313,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/dashboard"
 					options={{
-						title: 'Dashboard'
+						title: 'Dashboard',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -330,13 +326,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/room-search"
 					options={{
-						title: t('navigation.advancedSearch')
+						title: t('navigation.advancedSearch'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/cl-events"
 					options={{
-						title: 'Campus Life Events'
+						title: 'Campus Life Events',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -354,13 +352,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -372,25 +368,25 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/thi-services"
 					options={{
-						title: t('navigation.thiServices')
+						title: t('navigation.thiServices'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/calendar"
 					options={{
-						title: t('navigation.calendar')
+						title: t('navigation.calendar'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -400,14 +396,37 @@ function RootLayout(): React.JSX.Element {
 						...Platform.select({
 							ios: {
 								...presentationMode,
-								headerRight: () => (
-									<ShareHeaderButton
-										noShare
-										onPress={() => {
-											/* do nothing yet */
-										}}
-									/>
-								)
+								...getPlatformHeaderButtons({
+									noShare: true
+								})
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/links"
+					options={{
+						title: t('navigation.quicklinks'),
+						...Platform.select({
+							ios: {
+								...smallSheetPresentationMode,
+								...getPlatformHeaderButtons({
+									noShare: true
+								})
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/dots"
+					options={{
+						title: t('navigation.dots'),
+						...Platform.select({
+							ios: {
+								...smallSheetPresentationMode,
+								...getPlatformHeaderButtons({
+									noShare: true
+								})
 							}
 						})
 					}}
@@ -439,13 +458,7 @@ function RootLayout(): React.JSX.Element {
 					name="(screens)/news"
 					options={{
 						title: t('navigation.news'),
-						...Platform.select({
-							ios: {
-								headerStyle: undefined,
-								headerTransparent: true,
-								headerBlurEffect: 'regular'
-							}
-						})
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -492,13 +505,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 				<Stack.Screen
@@ -510,13 +521,11 @@ function RootLayout(): React.JSX.Element {
 								...presentationMode
 							}
 						}),
-						headerRight: () => (
-							<ShareHeaderButton
-								onPress={() => {
-									/* do nothing yet */
-								}}
-							/>
-						)
+						...getPlatformHeaderButtons({
+							onShare: () => {
+								/* do nothing yet */
+							}
+						})
 					}}
 				/>
 			</Stack>
