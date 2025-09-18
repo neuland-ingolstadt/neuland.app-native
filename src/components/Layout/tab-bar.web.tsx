@@ -38,7 +38,7 @@ const TabLayout = (): React.JSX.Element => {
 			}}
 		>
 			<Tabs.Screen
-				name="(index)"
+				name="index"
 				options={{
 					title: 'Home',
 					headerShown: false,
