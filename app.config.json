@@ -87,6 +87,7 @@
 					"sitemap": true
 				}
 			],
+			["react-native-bottom-tabs"],
 			[
 				"expo-alternate-app-icons",
 				[

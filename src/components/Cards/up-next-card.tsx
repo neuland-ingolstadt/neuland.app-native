@@ -418,7 +418,7 @@ const UpNextCard: React.FC = () => {
 	const NotYetSetUp = useMemo(
 		() => (
 			<View style={styles.emptyContainer}>
-				<Text style={styles.emptySubtitle}>
+				<Text style={styles.emptyTitle}>
 					{t('timetable:error.empty.subtitle')}
 				</Text>
 			</View>
