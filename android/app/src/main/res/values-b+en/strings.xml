@@ -1,0 +1,5 @@
+<resources>
+  <string name="CFBundleDisplayName">"Neuland Next"</string>
+  <string name="NSFaceIDUsageDescription">"Allow Neuland Next to use Face ID."</string>
+  <string name="NSLocationWhenInUseUsageDescription">"Allow Neuland Next to access your location to show your location on the map."</string>
+</resources>

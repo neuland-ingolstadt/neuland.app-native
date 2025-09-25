@@ -15,6 +15,7 @@ import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -50,6 +51,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
+	const headerPadding = useTransparentHeaderPadding() + 10
 
 	const { startDate, wasModified } = getNextValidDate()
 	const building = useBinding(BUILDINGS_ALL)
@@ -133,7 +135,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<ScrollView style={styles.scrollView}>
+		<ScrollView style={[styles.scrollView, { paddingTop: headerPadding }]}>
 			<View>
 				<Text style={styles.sectionHeader}>
 					{t('pages.rooms.options.title')}

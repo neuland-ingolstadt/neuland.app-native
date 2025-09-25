@@ -9,10 +9,12 @@ import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
 	const { styles } = useStyles(stylesheet)
+	const headerPadding = useTransparentHeaderPadding()
 
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const setTimetableMode = useTimetableStore((state) => state.setTimetableMode)
@@ -81,7 +83,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
 			<View style={styles.container}>
 				<SectionView title={t('timetable:preferences.title')}>
 					<SingleSectionPicker

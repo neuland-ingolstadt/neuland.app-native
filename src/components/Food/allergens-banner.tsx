@@ -39,7 +39,7 @@ export const AllergensBanner = ({
 					<PlatformIcon
 						ios={{
 							name: 'xmark',
-							size: 16
+							size: 12
 						}}
 						android={{
 							name: 'close',

@@ -1,6 +1,6 @@
 import type React from 'react'
 import type { JSX } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const SectionView = ({
@@ -21,7 +21,7 @@ const SectionView = ({
 		<>
 			<View style={styles.sectionContainer}>
 				{title !== '' && title !== undefined && (
-					<Text style={styles.labelText}>{title}</Text>
+					<Text style={styles.blockHeader}>{title}</Text>
 				)}
 				<View
 					style={[styles.sectionBox, hideBackground && styles.noBackground]}
@@ -61,7 +61,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	sectionBox: {
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.ios,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		justifyContent: 'center',
@@ -77,6 +77,22 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: 16,
 		paddingHorizontal: theme.margins.page,
 		width: '100%'
+	},
+	blockHeader: {
+		...(Platform.OS === 'ios'
+			? {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 16,
+					marginLeft: 18,
+					fontWeight: '600',
+					paddingBottom: 4
+				}
+			: {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 13,
+					fontWeight: 'normal',
+					textTransform: 'uppercase'
+				})
 	}
 }))
 

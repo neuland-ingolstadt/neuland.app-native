@@ -2,7 +2,7 @@
 
 import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Easing,
@@ -83,6 +83,12 @@ export const CalendarAnimation = ({
 		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 	}
 
+	const triggerSuperLightHaptic = () => {
+		if (Platform.OS === 'ios') {
+			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+		}
+	}
+
 	const tapGesture = Gesture.Tap().onBegin(() => {
 		// Add haptic feedback on iOS
 		runOnJS(triggerHaptic)()
@@ -142,13 +148,25 @@ export const CalendarAnimation = ({
 
 		iconsArray.forEach((icon, index) => {
 			const delay = EVENT_ICONS[index].delay
+
+			// Trigger haptic feedback right when the icon starts appearing
+			setTimeout(() => {
+				runOnJS(triggerSuperLightHaptic)()
+			}, delay)
+
 			icon.opacity.value = withDelay(
 				delay,
-				withTiming(1, { duration: 800, easing: Easing.out(Easing.cubic) })
+				withTiming(1, {
+					duration: 800,
+					easing: Easing.out(Easing.cubic)
+				})
 			)
 			icon.scale.value = withDelay(
 				delay,
-				withTiming(1, { duration: 800, easing: Easing.out(Easing.back(1.5)) })
+				withTiming(1, {
+					duration: 800,
+					easing: Easing.out(Easing.back(1.5))
+				})
 			)
 			icon.floatY.value = withDelay(
 				delay,

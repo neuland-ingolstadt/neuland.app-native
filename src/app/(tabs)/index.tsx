@@ -17,6 +17,10 @@ import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/home-header-right'
 import WorkaroundStack from '@/components/Universal/workaround-stack'
 
+export const unstable_settings = {
+	initialRouteName: '/'
+}
+
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)
 	return (
@@ -45,7 +49,6 @@ export default function HomeRootScreen(): React.JSX.Element {
 				titleKey={'navigation.dashboard'}
 				component={isPageOpen ? HomeScreen : () => <></>}
 				largeTitle={true}
-				transparent={true}
 				androidFallback
 				headerRightElement={HomeHeaderRight}
 				headerLeftElement={Platform.OS === 'web' ? HeaderLeft : undefined}

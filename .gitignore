@@ -51,3 +51,5 @@ service.json
 android/.kotlin
 
 my-release-key.jks
+
+*.geojson

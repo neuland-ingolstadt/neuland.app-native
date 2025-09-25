@@ -1,8 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { use } from 'react'
-import { View } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Platform, View } from 'react-native'
+import {
+	type Edges,
+	SafeAreaProvider,
+	SafeAreaView
+} from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
@@ -75,9 +79,13 @@ function TimetableScreen(): React.JSX.Element {
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
+	const edges =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+			? (['top'] as Edges)
+			: (['bottom', 'top'] as Edges)
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView style={styles.page} edges={edges}>
 				{isLoading ? (
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (

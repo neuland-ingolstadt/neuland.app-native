@@ -3,6 +3,11 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
+import {
+	type Edges,
+	SafeAreaProvider,
+	SafeAreaView
+} from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MapScreen, { requestPermission } from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
@@ -77,6 +82,10 @@ export default function MapRootScreen(): React.JSX.Element {
 		void requestPermission()
 	}
 
+	const edges =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+			? []
+			: ['bottom']
 	return (
 		<>
 			<Head>
@@ -88,7 +97,11 @@ export default function MapRootScreen(): React.JSX.Element {
 			<View style={styles.page}>
 				{isPageOpen ? (
 					<MapContext.Provider value={contextValue}>
-						<MapScreen />
+						<SafeAreaProvider>
+							<SafeAreaView style={styles.page} edges={edges as Edges}>
+								<MapScreen />
+							</SafeAreaView>
+						</SafeAreaProvider>
 					</MapContext.Provider>
 				) : undefined}
 			</View>

@@ -16,6 +16,7 @@ import ClSportsPage from '@/components/Events/cl-sports-page'
 import PagerView from '@/components/Layout/pager-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import ToggleRow from '@/components/Universal/toggle-row'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import {
 	loadCampusLifeEvents,
 	loadUniversitySportsEvents,
@@ -26,6 +27,7 @@ import { pausedToast } from '@/utils/ui-utils'
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
+	const headerPadding = useTransparentHeaderPadding()
 	const { tab, openEvent, id } = useLocalSearchParams<{
 		tab?: string
 		openEvent?: string
@@ -123,7 +125,7 @@ export default function Events(): React.JSX.Element {
 	)
 
 	return (
-		<View style={styles.page}>
+		<View style={[styles.page, { paddingTop: headerPadding }]}>
 			<Animated.View
 				style={{
 					borderBottomWidth: scrollY.interpolate({

@@ -81,7 +81,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	itemContent: {
 		backgroundColor: theme.colors.card,
-		borderRadius: 16,
+		borderRadius: theme.radius.ios,
 		padding: 16,
 		flexDirection: 'row',
 		alignItems: 'center',

@@ -36,8 +36,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	bottomSheet: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: theme.colors.background,
-		borderTopLeftRadius: theme.radius.lg,
-		borderTopRightRadius: theme.radius.lg,
+		borderTopLeftRadius: 30,
+		borderTopRightRadius: 30,
 		overflow: 'hidden'
 	}
 }))

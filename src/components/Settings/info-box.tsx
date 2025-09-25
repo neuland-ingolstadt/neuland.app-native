@@ -65,7 +65,7 @@ const InfoBox = ({
 						<>
 							<Text> </Text>
 							<PlatformIcon
-								ios={{ name: 'arrow.up.right', size: 10 }}
+								ios={{ name: 'arrow.up.right', size: 5 }}
 								android={{ name: 'search', size: 14 }}
 								web={{ name: 'ArrowUpRight', size: 14 }}
 								style={styles.externalLink}
@@ -83,7 +83,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.ios,
 		borderWidth: StyleSheet.hairlineWidth,
 		flex: 1,
 		justifyContent: 'center',

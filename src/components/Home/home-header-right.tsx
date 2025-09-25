@@ -4,13 +4,12 @@ import { Platform, Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 
-export const HomeHeaderRight = (): React.JSX.Element => {
+export const HomeHeaderRight = (): React.JSX.Element | undefined => {
 	const { t } = useTranslation(['accessibility'])
 	const { styles } = useStyles(stylesheet)
 
 	if (Platform.OS === 'ios') {
-		// biome-ignore lint/complexity/noUselessFragments: we need to return something
-		return <></>
+		return undefined
 	}
 
 	return (

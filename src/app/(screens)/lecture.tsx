@@ -21,10 +21,10 @@ import Separator from '@/components/Timetable/Separator'
 import ShareCard from '@/components/Timetable/share-card'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
-import ShareHeaderButton from '@/components/Universal/share-header-button'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 
 export default function TimetableDetails(): React.JSX.Element {
@@ -53,20 +53,18 @@ export default function TimetableDetails(): React.JSX.Element {
 	})
 	useFocusEffect(
 		useCallback(() => {
-			if (
-				lecture === undefined ||
-				Platform.OS === 'web' ||
-				Platform.OS === 'android'
-			) {
+			if (lecture === undefined) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					...getPlatformHeaderButtons({})
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => <ShareHeaderButton onPress={shareEvent} />
+					...getPlatformHeaderButtons({
+						onShare: shareEvent
+					})
 				})
 			}
-		}, [])
+		}, [lecture, navigation])
 	)
 
 	if (lecture === undefined) {

@@ -1,5 +1,5 @@
 // See: https://stackoverflow.com/a/76773373
-const { withDangerousMod } = require('@expo/config-plugins')
+const { withDangerousMod } = require('expo/config-plugins')
 const {
 	copyFileSync,
 	existsSync,
