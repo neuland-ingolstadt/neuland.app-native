@@ -1,5 +1,6 @@
 import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { useStyles } from 'react-native-unistyles'
 
 type PresentationMode = {
 	presentation?: 'formSheet' | 'modal'
@@ -17,9 +18,13 @@ type PresentationMode = {
 }
 
 export const usePresentationMode = (smallSheet = false): PresentationMode => {
+	const styles = useStyles()
 	if (Platform.OS !== 'ios') {
 		return {}
 	}
+
+	const isIos26Plus =
+		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 
 	if (DeviceInfo.getDeviceType() === 'Desktop') {
 		return {
@@ -32,10 +37,12 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
 		headerStyle: {
-			backgroundColor: 'transparent'
+			backgroundColor: isIos26Plus ? 'transparent' : styles.theme.colors.card
 		},
 		contentStyle: {
-			backgroundColor: 'transparent'
+			backgroundColor: isIos26Plus
+				? 'transparent'
+				: styles.theme.colors.background
 		}
 	}
 }

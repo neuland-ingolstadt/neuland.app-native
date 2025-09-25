@@ -41,7 +41,7 @@ const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
 	const { styles } = useStyles(stylesheet)
 	return (
 		<View key={sectionIndex} style={styles.block}>
-			<View style={[styles.blockCard(sheet), styles.itemBlock]}>
+			<View style={[styles.blockCard(sheet), styles.itemBlock(sheet)]}>
 				{typeof section.item === 'string' ? (
 					<Text style={styles.columnDetails}>{section.item}</Text>
 				) : (
@@ -372,12 +372,12 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 2,
 		textAlign: 'left'
 	},
-	itemBlock: {
-		backgroundColor: theme.colors.card,
+	itemBlock: (sheet: boolean) => ({
+		backgroundColor: sheet ? theme.colors.cardSheet : theme.colors.card,
 		borderRadius: theme.radius.md,
 		paddingHorizontal: 16,
 		paddingVertical: 13
-	},
+	}),
 	rowDetails: {
 		fontSize: 16,
 		textAlign: 'right',

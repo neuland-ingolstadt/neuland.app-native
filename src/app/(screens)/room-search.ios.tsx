@@ -51,7 +51,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
-	const headerPadding = useTransparentHeaderPadding()
+	const headerPadding = useTransparentHeaderPadding() + 10
 
 	const { startDate, wasModified } = getNextValidDate()
 	const building = useBinding(BUILDINGS_ALL)
