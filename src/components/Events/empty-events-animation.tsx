@@ -1,4 +1,5 @@
 import type React from 'react'
+
 import { Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'

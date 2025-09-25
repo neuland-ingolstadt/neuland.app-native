@@ -51,7 +51,7 @@ export const performLogout = async (
 		resetDashboard(USER_GUEST)
 		await createGuestSession()
 		queryClient.clear()
-		router.navigate('/(tabs)/(index)')
+		router.navigate('/(tabs)')
 	} catch (e) {
 		console.debug(e)
 	}

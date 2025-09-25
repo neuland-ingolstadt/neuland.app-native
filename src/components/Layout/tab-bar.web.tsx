@@ -6,12 +6,7 @@ import { useStyles } from 'react-native-unistyles'
 import PlatformIcon from '@/components/Universal/Icon'
 import { SettingsTabButton } from '../Settings/tab-button'
 
-export function useBottomTabBarHeight(): number {
-	return 60
-}
-
 const TabLayout = (): React.JSX.Element => {
-	'use no memo'
 	const { theme: styleTheme } = useStyles()
 	const { t } = useTranslation('navigation')
 	const isMobile = Dimensions.get('window').width < 900
@@ -43,7 +38,7 @@ const TabLayout = (): React.JSX.Element => {
 			}}
 		>
 			<Tabs.Screen
-				name="(index)"
+				name="index"
 				options={{
 					title: 'Home',
 					headerShown: false,

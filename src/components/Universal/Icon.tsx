@@ -1,10 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { type SFSymbol, SymbolView } from 'expo-symbols'
 import { FileWarning, icons } from 'lucide-react-native'
 import type React from 'react'
 import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import SweetSFSymbol from 'sweet-sfsymbols'
-import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 import type { MaterialIcon } from '@/types/material-icons'
 
 export type LucideIcon = keyof typeof icons
@@ -98,18 +97,26 @@ const PlatformIcon = ({
 				}}
 			/>
 		) : (
-			<SweetSFSymbol
-				name={ios.name as SystemName}
-				size={ios.size}
-				colors={[
-					style?.color ?? theme.colors.primary,
-					...(ios.additionalColor != null ? [ios.additionalColor] : [])
-				]}
+			<SymbolView
+				name={
+					ios.variant === 'fill' && !ios.name.includes('.')
+						? (`${ios.name}.fill` as SFSymbol)
+						: (ios.name as SFSymbol)
+				}
+				size={ios.size + 5}
 				weight={ios.weight ?? 'regular'}
+				colors={
+					ios.renderMode === 'palette' || ios.renderMode === 'hierarchical'
+						? [
+								style?.color ?? theme.colors.primary,
+								...(ios.additionalColor != null ? [ios.additionalColor] : [])
+							]
+						: undefined
+				}
+				tintColor={style?.color ?? theme.colors.primary}
+				type={ios.renderMode as never}
+				resizeMode="scaleAspectFit"
 				style={style as ViewStyle}
-				variant={ios.variant as never}
-				variableValue={ios.variableValue}
-				renderingMode={ios.renderMode}
 			/>
 		)
 	}

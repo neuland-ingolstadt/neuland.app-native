@@ -34,6 +34,7 @@ import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 
@@ -41,6 +42,7 @@ export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
+	const headerPadding = useTransparentHeaderPadding()
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -286,7 +288,12 @@ export default function About(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView contentContainerStyle={styles.contentContainer}>
+		<ScrollView
+			contentContainerStyle={[
+				styles.contentContainer,
+				{ paddingTop: headerPadding }
+			]}
+		>
 			<View style={styles.container}>
 				<View style={styles.logoContainer}>
 					<Pressable

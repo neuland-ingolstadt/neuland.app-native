@@ -35,11 +35,7 @@
 				"UIViewControllerBasedStatusBarAppearance": false,
 				"NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
 			},
-			"icon": {
-				"light": "./src/assets/appIcons/default.png",
-				"dark": "./src/assets/appIcons/dark/defaultDark.png",
-				"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-			}
+			"icon": "./src/assets/appIcons/Default.icon"
 		},
 		"locales": {
 			"en": "./src/localization/en/ios.json",
@@ -69,28 +65,21 @@
 				}
 			]
 		},
-		"sdkVersion": "53.0.0",
+		"sdkVersion": "54.0.0",
 		"experiments": {
 			"reactCompiler": true,
 			"reactCanary": true,
 			"tsconfigPaths": true,
-			"typedRoutes": true,
-			"remoteBuildCache": {
-				"provider": {
-					"plugin": "@eggl-js/expo-github-cache",
-					"options": {
-						"owner": "neuland-ingolstadt",
-						"repo": "neuland.app-build-cache"
-					}
-				}
+			"typedRoutes": true
+		},
+		"buildCacheProvider": {
+			"plugin": "@eggl-js/expo-github-cache",
+			"options": {
+				"owner": "neuland-ingolstadt",
+				"repo": "neuland.app-build-cache"
 			}
 		},
 		"plugins": [
-			[
-				"react-native-edge-to-edge",
-				{ "android": { "parentTheme": "Material3" } }
-			],
-
 			[
 				"expo-router",
 				{
@@ -98,6 +87,7 @@
 					"sitemap": true
 				}
 			],
+			["react-native-bottom-tabs"],
 			[
 				"expo-alternate-app-icons",
 				[
@@ -198,7 +188,8 @@
 					}
 				}
 			],
-			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"]
+			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"],
+			"expo-font"
 		],
 		"extra": {
 			"eas": {

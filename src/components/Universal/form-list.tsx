@@ -17,6 +17,7 @@ interface FormListProps {
 	sections: FormListSections[]
 	rowStyle?: ViewStyle
 	privacyHidden?: boolean
+	sheet?: boolean
 }
 
 interface RenderSectionFrameProps {
@@ -29,16 +30,18 @@ interface RenderSectionFrameProps {
 interface RenderSectionItemProps {
 	sectionIndex: number
 	section: FormListSections
+	sheet: boolean
 }
 
 const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
 	sectionIndex,
-	section
+	section,
+	sheet
 }) => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<View key={sectionIndex} style={styles.block}>
-			<View style={[styles.blockCard, styles.itemBlock]}>
+			<View style={[styles.blockCard(sheet), styles.itemBlock(sheet)]}>
 				{typeof section.item === 'string' ? (
 					<Text style={styles.columnDetails}>{section.item}</Text>
 				) : (
@@ -70,7 +73,8 @@ const RenderSectionItems: React.FC<{
 	items: SectionGroup[]
 	privacyHidden: boolean
 	rowStyle?: ViewStyle
-}> = ({ items, privacyHidden, rowStyle }) => {
+	sheet: boolean
+}> = ({ items, privacyHidden, rowStyle, sheet }) => {
 	const { styles, theme } = useStyles(stylesheet)
 
 	const handlePress = (onPress?: () => Promise<void> | void): void => {
@@ -124,7 +128,7 @@ const RenderSectionItems: React.FC<{
 	}
 
 	return (
-		<View style={styles.blockCard}>
+		<View style={styles.blockCard(sheet)}>
 			{items.map((item, index) => (
 				<React.Fragment key={index}>
 					<Pressable
@@ -232,7 +236,7 @@ const RenderSectionItems: React.FC<{
 										<PlatformIcon
 											ios={{
 												name: 'chevron.right',
-												size: 14,
+												size: 10,
 												weight: 'semibold'
 											}}
 											android={{
@@ -278,7 +282,8 @@ const RenderSectionItems: React.FC<{
 const FormList: React.FC<FormListProps> = ({
 	sections,
 	rowStyle,
-	privacyHidden
+	privacyHidden,
+	sheet = false
 }) => {
 	const { styles } = useStyles(stylesheet)
 
@@ -296,6 +301,7 @@ const FormList: React.FC<FormListProps> = ({
 							items={section.items}
 							rowStyle={rowStyle}
 							privacyHidden={privacyHidden ?? false}
+							sheet={sheet}
 						/>
 					</RenderSectionFrame>
 				) : section.item != null ? (
@@ -305,7 +311,11 @@ const FormList: React.FC<FormListProps> = ({
 						header={section.header}
 						footer={section.footer}
 					>
-						<RenderSectionItem sectionIndex={sectionIndex} section={section} />
+						<RenderSectionItem
+							sectionIndex={sectionIndex}
+							section={section}
+							sheet={sheet}
+						/>
 					</RenderSectionFrame>
 				) : null
 			)}
@@ -317,24 +327,34 @@ const stylesheet = createStyleSheet((theme) => ({
 	block: {
 		gap: 6
 	},
-	blockCard: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
+	blockCard: (sheet: boolean) => ({
+		backgroundColor: sheet ? theme.colors.cardSheet : theme.colors.card,
+		borderRadius: theme.radius.ios,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden'
-	},
+	}),
 	blockFooter: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
 		fontWeight: '400'
 	},
 	blockHeader: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		textTransform: 'uppercase'
+		...(Platform.OS === 'ios'
+			? {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 16,
+					marginLeft: 18,
+					fontWeight: '600'
+				}
+			: {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 13,
+					fontWeight: 'normal',
+					textTransform: 'uppercase'
+				})
 	},
+
 	cardColumn: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
@@ -352,12 +372,12 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 2,
 		textAlign: 'left'
 	},
-	itemBlock: {
-		backgroundColor: theme.colors.card,
+	itemBlock: (sheet: boolean) => ({
+		backgroundColor: sheet ? theme.colors.cardSheet : theme.colors.card,
 		borderRadius: theme.radius.md,
 		paddingHorizontal: 16,
 		paddingVertical: 13
-	},
+	}),
 	rowDetails: {
 		fontSize: 16,
 		textAlign: 'right',

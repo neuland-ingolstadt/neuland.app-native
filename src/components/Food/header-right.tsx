@@ -20,7 +20,7 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 					<PlatformIcon
 						ios={{
 							name: 'line.3.horizontal.decrease',
-							size: 22
+							size: 20
 						}}
 						android={{
 							name: 'filter_list',
@@ -40,7 +40,7 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	headerButton: {
-		marginHorizontal: Platform.OS !== 'ios' ? 14 : 0
+		marginHorizontal: Platform.OS !== 'ios' ? 14 : 4
 	},
 	icon: {
 		color: theme.colors.text
