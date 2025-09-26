@@ -434,7 +434,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/lecturers"
 					options={{
-						title: t('navigation.lecturers.title')
+						title: t('navigation.lecturers.title'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -443,9 +444,10 @@ function RootLayout(): React.JSX.Element {
 						title: t('navigation.lecturer'),
 						...Platform.select({
 							ios: {
-								presentation: 'modal'
+								...presentationMode
 							}
-						})
+						}),
+						...getPlatformHeaderButtons({})
 					}}
 				/>
 				<Stack.Screen

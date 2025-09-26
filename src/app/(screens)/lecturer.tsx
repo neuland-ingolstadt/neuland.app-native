@@ -1,7 +1,14 @@
-import { Redirect, router } from 'expo-router'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Redirect, router, Stack } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, Platform, Text, View } from 'react-native'
+import Animated, {
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
@@ -12,9 +19,38 @@ export default function LecturerDetail(): React.JSX.Element {
 	const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
 	const { t } = useTranslation('common')
 
+	const scrollOffset = useSharedValue(0)
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = event.contentOffset.y
+			}
+		}
+	})
+
+	const headerStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{
+					translateY: interpolate(
+						scrollOffset.value,
+						[0, 30, 65],
+						[25, 25, 0],
+						'clamp'
+					)
+				}
+			]
+		}
+	})
+
 	if (lecturer == null) {
 		return <Redirect href="/lecturers" />
 	}
+
+	const lecturerName = `${[lecturer?.titel, lecturer?.vorname, lecturer?.name]
+		.join(' ')
+		.trim()}`
+
 	const validEmail =
 		lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false)
 
@@ -107,7 +143,26 @@ export default function LecturerDetail(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView style={styles.page}>
+		<Animated.ScrollView
+			style={styles.page}
+			contentContainerStyle={styles.container}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
+		>
+			<Stack.Screen
+				options={{
+					headerTitle: (props) => (
+						<View style={styles.headerTitle}>
+							<Animated.View style={headerStyle}>
+								<HeaderTitle {...props} tintColor={theme.colors.text}>
+									{lecturerName}
+								</HeaderTitle>
+							</Animated.View>
+						</View>
+					)
+				}}
+			/>
+
 			<View style={styles.titleContainer}>
 				<Text
 					style={styles.titleText}
@@ -115,41 +170,45 @@ export default function LecturerDetail(): React.JSX.Element {
 					minimumFontScale={0.8}
 					numberOfLines={3}
 				>
-					{`${[lecturer?.titel, lecturer?.vorname, lecturer?.name]
-						.join(' ')
-						.trim()}`}
+					{lecturerName}
 				</Text>
 			</View>
 			<View style={styles.formList}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
-		</ScrollView>
+		</Animated.ScrollView>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+	container: {
+		gap: 12,
+		paddingBottom: theme.margins.modalBottomMargin
+	},
 	formList: {
 		alignSelf: 'center',
-		width: '100%'
+		width: '100%',
+		paddingBottom: 100
+	},
+	headerTitle: {
+		marginBottom: Platform.OS === 'ios' ? -10 : 0,
+		overflow: 'hidden',
+		paddingRight: Platform.OS === 'ios' ? 0 : 50
 	},
 	page: {
-		padding: theme.margins.page
+		paddingHorizontal: theme.margins.page
 	},
 	titleContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		marginBottom: 20,
-		paddingHorizontal: 5,
-		paddingVertical: 10,
-		width: '100%'
+		alignItems: 'flex-start',
+		flexDirection: 'row',
+		justifyContent: 'space-between'
 	},
 	titleText: {
 		color: theme.colors.text,
-		fontSize: 18,
-		textAlign: 'center'
+		flex: 1,
+		fontSize: 24,
+		fontWeight: '600',
+		paddingTop: 16,
+		textAlign: 'left'
 	}
 }))
