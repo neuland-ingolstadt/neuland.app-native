@@ -71,14 +71,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B7A10B422E72F89900578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */;
 		};
-		B7F83D172E739EE800529E70 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B7F83D172E739EE800529E70 /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				LaunchWidgetControl.swift,
@@ -88,7 +88,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B7A10B342E72F89700578355 /* LaunchWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B7F83D172E739EE800529E70 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B7A10B422E72F89900578355 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LaunchWidget; sourceTree = "<group>"; };
+		B7A10B342E72F89700578355 /* LaunchWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B7F83D172E739EE800529E70 /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */,
+				B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LaunchWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
