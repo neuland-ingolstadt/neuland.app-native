@@ -93,21 +93,17 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const animateSplashWithTransformation = () => {
 		intro.value = withTiming(0.2, { duration: 100 }, () => {
 			intro.value = withTiming(0.4, { duration: 200 }, () => {
-				runOnJS(animateSplashFadeOut)()
+				intro.value = withTiming(
+					1,
+					{ duration: 500, easing: Easing.out(Easing.exp) },
+					() => {
+						introBackground.value = withTiming(1, { duration: 200 }, () => {
+							runOnJS(setHideSplash)(true)
+						})
+					}
+				)
 			})
 		})
-	}
-
-	const animateSplashFadeOut = () => {
-		intro.value = withTiming(
-			1,
-			{ duration: 500, easing: Easing.out(Easing.exp) },
-			() => {
-				introBackground.value = withTiming(1, { duration: 200 }, () => {
-					runOnJS(setHideSplash)(true)
-				})
-			}
-		)
 	}
 
 	useEffect(() => {
@@ -116,7 +112,8 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 			if (showSplashScreen) {
 				animateSplashWithTransformation()
 			} else {
-				animateSplashFadeOut()
+				// No animation - directly hide splash
+				setHideSplash(true)
 			}
 		}
 	}, [isReady, loaded, showSplashScreen])
