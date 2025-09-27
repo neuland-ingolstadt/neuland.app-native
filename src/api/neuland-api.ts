@@ -1,4 +1,5 @@
 import type { FeatureCollection } from 'geojson'
+import { Platform } from 'react-native'
 import type {
 	AppAnnouncementsQuery,
 	CareerServiceEventsQuery,
@@ -14,7 +15,6 @@ import type {
 	PublicEventResponse,
 	PublicOrganizerResponse
 } from '@/types/campus-life'
-
 import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
@@ -44,10 +44,13 @@ class NeulandAPIClient {
 	 * @throws {Error} If the API returns an error
 	 */
 	async performRequest(url: string): Promise<unknown> {
+		const headers: Record<string, string> = {}
+		if (Platform.OS !== 'web') {
+			headers['User-Agent'] = USER_AGENT
+		}
+
 		const resp = await fetch(`${url}`, {
-			headers: {
-				'User-Agent': USER_AGENT
-			}
+			headers
 		})
 
 		if (resp.status === 200) {
