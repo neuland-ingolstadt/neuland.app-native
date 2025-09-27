@@ -398,12 +398,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 9,
+		borderRadius: 18,
 		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
 		overflow: 'hidden'
 	},
 	logoImage: {
-		borderRadius: 9,
 		flex: 1,
 		height: 100,
 		resizeMode: 'contain',
