@@ -2,7 +2,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, View } from 'react-native'
+import { Linking, Platform, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
@@ -76,6 +76,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 5
 	},
 	page: {
+		marginTop: Platform.OS === 'ios' ? 0 : 14,
 		paddingHorizontal: theme.margins.page
 	}
 }))

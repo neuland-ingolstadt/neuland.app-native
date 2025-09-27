@@ -13,6 +13,7 @@ import {
 	Appearance,
 	type AppStateStatus,
 	Platform,
+	StatusBar,
 	StyleSheet
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -134,6 +135,13 @@ export default function Provider({
 							<BottomSheetModalProvider>
 								<UserKindContext.Provider value={userKind}>
 									<DashboardContext.Provider value={dashboard}>
+										<StatusBar
+											barStyle={
+												UnistylesRuntime.themeName === 'dark'
+													? 'light-content'
+													: 'dark-content'
+											}
+										/>
 										<Toaster />
 										{children}
 									</DashboardContext.Provider>
