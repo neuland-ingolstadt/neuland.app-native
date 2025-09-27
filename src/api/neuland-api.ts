@@ -1,7 +1,6 @@
 import type { FeatureCollection } from 'geojson'
 import type {
 	AppAnnouncementsQuery,
-	CampusLifeEventsQuery,
 	CareerServiceEventsQuery,
 	CreateRoomReportMutation,
 	FoodPlanQuery,
@@ -11,11 +10,14 @@ import type {
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
 import type { SpoWeights } from '@/types/asset-api'
+import type {
+	PublicEventResponse,
+	PublicOrganizerResponse
+} from '@/types/campus-life'
 
 import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
-	CAMPUS_LIFE_EVENTS_QUERY,
 	CAREER_SERVICE_EVENTS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
@@ -28,6 +30,7 @@ const GRAPHQL_ENDPOINT: string =
 	'https://api.neuland.app/graphql'
 const GRAPHQL_ENDPOINT_PROD = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT = 'https://assets.neuland.app'
+const CAMPUS_LIFE_API_ENDPOINT = 'https://cl.neuland-ingolstadt.de'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
@@ -51,6 +54,21 @@ class NeulandAPIClient {
 			return (await resp.json()) as unknown
 		}
 		throw new Error(`API returned an error: ${await resp.text()}`)
+	}
+
+	private async performCampusLifeRequest<TResult>(
+		path: string,
+		params?: Record<string, string | number | boolean | undefined>
+	): Promise<TResult> {
+		const url = new URL(`${CAMPUS_LIFE_API_ENDPOINT}${path}`)
+		if (params != null) {
+			Object.entries(params).forEach(([key, value]) => {
+				if (value != null) {
+					url.searchParams.set(key, String(value))
+				}
+			})
+		}
+		return (await this.performRequest(url.toString())) as TResult
 	}
 
 	/**
@@ -106,8 +124,39 @@ class NeulandAPIClient {
 	 * Gets the campus life events
 	 * @returns {Promise<any>} A promise that resolves with the campus life events data
 	 */
-	async getCampusLifeEvents(): Promise<CampusLifeEventsQuery> {
-		return await this.executeGql(CAMPUS_LIFE_EVENTS_QUERY)
+	async getPublicCampusLifeEvents(options?: {
+		organizerId?: number
+		upcomingOnly?: boolean
+		limit?: number
+		offset?: number
+	}): Promise<PublicEventResponse[]> {
+		return await this.performCampusLifeRequest<PublicEventResponse[]>(
+			'/api/v1/public/events',
+			{
+				organizer_id: options?.organizerId,
+				upcoming_only: options?.upcomingOnly,
+				limit: options?.limit,
+				offset: options?.offset
+			}
+		)
+	}
+
+	async getPublicCampusLifeEvent(id: number): Promise<PublicEventResponse> {
+		return await this.performCampusLifeRequest<PublicEventResponse>(
+			`/api/v1/public/events/${id}`
+		)
+	}
+
+	async getPublicOrganizers(): Promise<PublicOrganizerResponse[]> {
+		return await this.performCampusLifeRequest<PublicOrganizerResponse[]>(
+			'/api/v1/public/organizers'
+		)
+	}
+
+	async getPublicOrganizer(id: number): Promise<PublicOrganizerResponse> {
+		return await this.performCampusLifeRequest<PublicOrganizerResponse>(
+			`/api/v1/public/organizers/${id}`
+		)
 	}
 
 	/**

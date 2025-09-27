@@ -19,12 +19,11 @@ import Animated, {
 	useSharedValue
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import type { LanguageKey } from '@/localization/i18n'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
@@ -69,20 +68,29 @@ export default function ClEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { t, i18n } = useTranslation('common')
+	const getLocalizedValue = useCallback(
+		(values?: { de?: string | null; en?: string | null } | null) => {
+			if (values == null) {
+				return ''
+			}
+			const locale: 'de' | 'en' = i18n.language.startsWith('de') ? 'de' : 'en'
+			return values[locale] ?? values.en ?? values.de ?? ''
+		},
+		[i18n.language]
+	)
 
 	const {
-		data: queryData,
+		data: queryData = [],
 		isLoading,
 		error
-	} = useQuery({
+	} = useQuery<CampusLifeEvent[]>({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
-		queryFn: loadCampusLifeEvents,
+		queryFn: () => loadCampusLifeEvents(),
 		staleTime: 1000 * 60 * 5, // 5 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 
-	const event = queryData?.find((event) => event.id === id)
-	const eventData: CampusLifeEventFieldsFragment | null = event ?? null
+	const eventData = queryData.find((item) => item.id === id) ?? null
 	const navigation = useNavigation()
 
 	const scrollOffset = useSharedValue(0)
@@ -113,6 +121,7 @@ export default function ClEventDetail(): React.JSX.Element {
 		eventData?.startDateTime != null ? new Date(eventData.startDateTime) : null,
 		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
+	const eventTitle = getLocalizedValue(eventData?.titles ?? null)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -124,7 +133,7 @@ export default function ClEventDetail(): React.JSX.Element {
 								type: 'clEvent'
 							})
 							const message = t('pages.event.shareMessage', {
-								title: eventData?.titles[i18n.language as LanguageKey],
+								title: eventTitle,
 								organizer: eventData?.host.name,
 								date: dateRange,
 								link: `https://web.neuland.app/events/cl/${id}`
@@ -141,7 +150,7 @@ export default function ClEventDetail(): React.JSX.Element {
 					})
 				})
 			}
-		}, [navigation, t, eventData, id, i18n.language, dateRange])
+		}, [navigation, t, eventData, id, i18n.language, dateRange, eventTitle])
 	)
 
 	if (isLoading || !queryData) {
@@ -162,8 +171,50 @@ export default function ClEventDetail(): React.JSX.Element {
 		new Date(eventData.startDateTime).toDateString() !==
 			new Date(eventData.endDateTime).toDateString()
 
-	const isWebsiteAvailable = eventData?.host.website != null
-	const isInstagramAvailable = eventData?.host.instagram != null
+	const isWebsiteAvailable = Boolean(eventData?.host.website)
+	const isInstagramAvailable = Boolean(eventData?.host.instagram)
+	const isEventUrlAvailable = Boolean(eventData?.eventUrl)
+	const descriptionText = getLocalizedValue(eventData?.descriptions)
+
+	const linkItems: SectionGroup[] = []
+	const eventUrl = eventData?.eventUrl ?? null
+	const organizerWebsite = eventData?.host.website ?? null
+	const organizerInstagram = eventData?.host.instagram ?? null
+
+	if (isEventUrlAvailable && eventUrl != null) {
+		linkItems.push({
+			title: t('pages.event.eventLink'),
+			icon: linkIcon,
+			onPress: () => {
+				void Linking.openURL(eventUrl)
+			}
+		})
+	}
+
+	if (isWebsiteAvailable && organizerWebsite != null) {
+		linkItems.push({
+			title: t('pages.event.organizerDetails.website'),
+			icon: linkIcon,
+			onPress: () => {
+				void Linking.openURL(organizerWebsite)
+			}
+		})
+	}
+
+	if (isInstagramAvailable && organizerInstagram != null) {
+		linkItems.push({
+			title: t('pages.event.organizerDetails.instagram'),
+			icon: {
+				ios: 'instagram',
+				android: 'instagram',
+				web: 'Instagram',
+				iosFallback: true
+			},
+			onPress: () => {
+				void Linking.openURL(organizerInstagram)
+			}
+		})
+	}
 
 	const sections: FormListSections[] = [
 		{
@@ -223,60 +274,37 @@ export default function ClEventDetail(): React.JSX.Element {
 							)
 						]
 					: []),
-
 				{
 					title: t('pages.event.organizer'),
-					value: eventData?.host.name
+					value: eventData?.host.name,
+					onPress: () => {
+						if (eventData?.host?.id != null) {
+							console.log('eventData.host.id', eventData.host.id)
+							router.dismissTo({
+								pathname: '/events/organizer/[id]',
+								params: { id: eventData.host.id.toString() }
+							})
+						}
+					},
+					textColor: theme.colors.primary,
+					disabled: eventData?.host?.id == null
 				}
 			]
 		},
-		...(isWebsiteAvailable || isInstagramAvailable
+		...(linkItems.length > 0
 			? [
 					{
 						header: t('pages.event.links'),
-						items: [
-							isWebsiteAvailable
-								? {
-										title: 'Website',
-										icon: linkIcon,
-										onPress: () => {
-											if (eventData?.host.website) {
-												void Linking.openURL(eventData.host.website)
-											}
-										}
-									}
-								: null,
-							isInstagramAvailable
-								? {
-										title: 'Instagram',
-										icon: {
-											ios: 'instagram',
-											android: 'instagram',
-											web: 'Instagram',
-											iosFallback: true
-										},
-										onPress: () => {
-											if (eventData?.host.instagram) {
-												void Linking.openURL(eventData.host.instagram)
-											}
-										}
-									}
-								: null
-						].filter((item) => item != null) as SectionGroup[]
+						items: linkItems
 					}
 				]
 			: []),
-		...(eventData?.descriptions != null
+		...(descriptionText.trim() !== ''
 			? [
 					{
 						header: t('pages.event.description'),
 						item: (
-							<LinkText
-								text={
-									eventData.descriptions[i18n.language as LanguageKey] ?? ''
-								}
-								color={theme.colors.primary}
-							/>
+							<LinkText text={descriptionText} color={theme.colors.primary} />
 						)
 					}
 				]
@@ -296,7 +324,7 @@ export default function ClEventDetail(): React.JSX.Element {
 						<View style={styles.headerTitle}>
 							<Animated.View style={headerStyle}>
 								<HeaderTitle {...props} tintColor={theme.colors.text}>
-									{eventData.titles[i18n.language as LanguageKey] ?? ''}
+									{eventTitle}
 								</HeaderTitle>
 							</Animated.View>
 						</View>
@@ -311,7 +339,7 @@ export default function ClEventDetail(): React.JSX.Element {
 					minimumFontScale={0.8}
 					numberOfLines={3}
 				>
-					{eventData.titles[i18n.language as LanguageKey] ?? ''}
+					{eventTitle}
 				</Text>
 			</View>
 			<View style={styles.formList}>

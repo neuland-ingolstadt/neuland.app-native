@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import React from 'react'
+import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { LanguageKey } from '@/localization/i18n'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
@@ -13,9 +14,9 @@ const EventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation('navigation')
 	const { t } = useTranslation('common')
-	const { data, isSuccess } = useQuery({
+	const { data: events = [], isSuccess } = useQuery<CampusLifeEvent[]>({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
-		queryFn: loadCampusLifeEvents,
+		queryFn: () => loadCampusLifeEvents(),
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 60 * 24
 	})
@@ -44,28 +45,29 @@ const EventsCard = (): React.JSX.Element => {
 			title="events"
 			onPressRoute="/cl-events"
 			noDataComponent={noData}
-			noDataPredicate={() => isSuccess && data.length === 0}
+			noDataPredicate={() => isSuccess && events.length === 0}
 		>
-			{Boolean(isSuccess) && data !== undefined && (
+			{isSuccess && events.length > 0 && (
 				<View style={styles.eventsContainer}>
-					{data.slice(0, 2).map((event, index) => (
-						<React.Fragment key={index}>
-							<Pressable onPress={() => handleEventItemPress(event.id)}>
-								<EventItem
-									title={event.titles[i18n.language as LanguageKey] ?? ''}
-									subtitle={event.host.name ?? ''}
-									startDateTime={
-										event.startDateTime
-											? new Date(event.startDateTime)
-											: undefined
-									}
-									location={event.location ?? undefined}
-									subtitleTranslationKey="cards.events.by"
-									subtitleTranslationParams={{ name: event.host.name ?? '' }}
-									color={theme.colors.primary}
-								/>
-							</Pressable>
-						</React.Fragment>
+					{events.slice(0, 2).map((event) => (
+						<Pressable
+							key={event.id}
+							onPress={() => handleEventItemPress(event.id)}
+						>
+							<EventItem
+								title={event.titles[i18n.language as LanguageKey] ?? ''}
+								subtitle={event.host.name ?? ''}
+								startDateTime={
+									event.startDateTime
+										? new Date(event.startDateTime)
+										: undefined
+								}
+								location={event.location ?? undefined}
+								subtitleTranslationKey="cards.events.by"
+								subtitleTranslationParams={{ name: event.host.name ?? '' }}
+								color={theme.colors.primary}
+							/>
+						</Pressable>
 					))}
 				</View>
 			)}

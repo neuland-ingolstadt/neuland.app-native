@@ -515,6 +515,18 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/events/organizer/[id]"
+					options={{
+						title: t('navigation.details'),
+						...Platform.select({
+							ios: {
+								...presentationMode
+							}
+						}),
+						...getPlatformHeaderButtons({ noShare: true })
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/sports/[id]"
 					options={{
 						title: 'Event Details',
