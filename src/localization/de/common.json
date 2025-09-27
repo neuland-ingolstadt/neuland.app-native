@@ -201,7 +201,15 @@
 			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
-			"registerNow": "Jetzt anmelden"
+			"registerNow": "Jetzt anmelden",
+			"eventLink": "Veranstaltungslink",
+			"organizerDetails": {
+				"website": "Website",
+				"instagram": "Instagram",
+				"location": "Ort",
+				"info": "Informationen zum Veranstalter",
+				"noDescription": "Noch keine zusätzlichen Informationen vorhanden."
+			}
 		},
 		"map": {
 			"search": {

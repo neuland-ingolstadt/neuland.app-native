@@ -1,5 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
-import { useQueries } from '@tanstack/react-query'
+import { type UseQueryResult, useQueries } from '@tanstack/react-query'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
@@ -17,6 +17,7 @@ import PagerView from '@/components/Layout/pager-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import ToggleRow from '@/components/Universal/toggle-row'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import {
 	loadCampusLifeEvents,
 	loadUniversitySportsEvents,
@@ -37,20 +38,20 @@ export default function Events(): React.JSX.Element {
 		queries: [
 			{
 				queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
-				queryFn: loadCampusLifeEvents,
+				queryFn: () => loadCampusLifeEvents(),
 				staleTime: 1000 * 60 * 60, // 60 minutes
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours
 			},
 			{
 				queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
-				queryFn: loadUniversitySportsEvents,
+				queryFn: () => loadUniversitySportsEvents(),
 				staleTime: 1000 * 60 * 60, // 60 minutes
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours
 			}
 		]
 	})
 
-	const clEventsResult = results[0]
+	const clEventsResult = results[0] as UseQueryResult<CampusLifeEvent[], Error>
 	const sportsResult = results[1]
 
 	const scrollY = useRef(new Animated.Value(0)).current
@@ -94,9 +95,9 @@ export default function Events(): React.JSX.Element {
 					}
 				>
 					{index === 0 ? (
-						<ClEventsPage clEventsResult={results[0]} />
+						<ClEventsPage clEventsResult={clEventsResult} />
 					) : (
-						<ClSportsPage sportsResult={results[1]} />
+						<ClSportsPage sportsResult={sportsResult} />
 					)}
 				</Suspense>
 			</View>

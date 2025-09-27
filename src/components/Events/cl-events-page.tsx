@@ -5,10 +5,10 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import { networkError } from '@/utils/api-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
@@ -19,7 +19,7 @@ const MemoizedEventRow = memo(CLEventRow)
 export default function ClEventsPage({
 	clEventsResult
 }: {
-	clEventsResult: UseQueryResult<CampusLifeEventFieldsFragment[], Error>
+	clEventsResult: UseQueryResult<CampusLifeEvent[], Error>
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
@@ -29,7 +29,7 @@ export default function ClEventsPage({
 		refetchByUser: refetchByUserClEvents
 	} = useRefreshByUser(clEventsResult.refetch)
 
-	const renderItem = ({ item }: { item: CampusLifeEventFieldsFragment }) => (
+	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
 		<View style={styles.rowWrapper}>
 			<MemoizedEventRow event={item} />
 		</View>

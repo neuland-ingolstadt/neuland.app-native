@@ -201,7 +201,15 @@
 			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
-			"registerNow": "Register now"
+			"registerNow": "Register now",
+			"eventLink": "Event website",
+			"organizerDetails": {
+				"website": "Website",
+				"instagram": "Instagram",
+				"location": "Location",
+				"info": "Organizer details",
+				"noDescription": "No additional information available yet."
+			}
 		},
 		"map": {
 			"search": {
@@ -332,6 +340,9 @@
 					"title": "No events found",
 					"subtitle": "Check back later."
 				}
+			},
+			"organizer": {
+				"subtitle": "Events of the club"
 			}
 		},
 		"careerService": {

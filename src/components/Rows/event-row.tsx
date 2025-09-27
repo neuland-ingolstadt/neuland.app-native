@@ -3,8 +3,8 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import type { LanguageKey } from '@/localization/i18n'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
@@ -12,11 +12,13 @@ import {
 import RowEntry from '../Universal/row-entry'
 
 const CLEventRow = ({
-	event
+	event,
+	inSheet = false
 }: {
-	event: CampusLifeEventFieldsFragment
+	event: CampusLifeEvent
+	inSheet?: boolean
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 
 	const { t, i18n } = useTranslation('common')
 	let begin = null
@@ -31,6 +33,7 @@ const CLEventRow = ({
 
 	return (
 		<RowEntry
+			backgroundColor={inSheet ? theme.colors.cardSheet : theme.colors.card}
 			href={`/events/cl/${event.id}` as RelativePathString}
 			title={event.titles[i18n.language as LanguageKey] ?? ''}
 			leftChildren={
