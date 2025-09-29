@@ -29,7 +29,10 @@ function mapOrganizerResponse(
 		},
 		location: organizer?.location ?? null,
 		instagram: organizer?.instagram_url ?? null,
-		website: organizer?.website_url ?? null
+		website: organizer?.website_url ?? null,
+		linkedin: organizer?.linkedin_url ?? null,
+		nonProfit: organizer?.non_profit ?? null,
+		registrationNumber: organizer?.registration_number ?? null
 	}
 }
 
@@ -71,35 +74,21 @@ export async function loadCampusLifeEvents(
 ): Promise<CampusLifeEvent[]> {
 	const { organizerId, upcomingOnly = true, limit, offset } = options
 
-	const eventsPromise = NeulandAPI.getPublicCampusLifeEvents({
+	const events = await NeulandAPI.getPublicCampusLifeEvents({
 		organizerId,
 		upcomingOnly,
 		limit,
 		offset
 	})
-	const organizersPromise =
-		organizerId != null
-			? NeulandAPI.getPublicOrganizer(organizerId)
-					.then((organizer) => [organizer])
-					.catch(() => [])
-			: NeulandAPI.getPublicOrganizers()
-	const [events, organizers] = await Promise.all([
-		eventsPromise,
-		organizersPromise
-	])
-
-	const organizerById = new Map(
-		organizers.map((organizer) => [organizer.id, organizer])
-	)
 
 	const now = Date.now()
 
 	return events
 		.map((event) => {
-			const organizer = mapOrganizerResponse(
-				organizerById.get(event.organizer_id),
-				{ id: event.organizer_id }
-			)
+			const organizer = mapOrganizerResponse(null, {
+				id: event.organizer_id,
+				name: event.organizer_name ?? undefined
+			})
 			return mapEventResponse(event, organizer)
 		})
 		.filter((event) => {
@@ -310,8 +299,8 @@ export const QUERY_KEYS = {
 	CAREER_SERVICE_EVENTS: 'thi-services-career',
 	STUDENT_ADVISORY_EVENTS: 'thi-services-student-counselling',
 	UNIVERSITY_SPORTS: 'universitySports',
-	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV6',
-	CAMPUS_LIFE_ORGANIZER: 'campusLifeOrganizerV1'
+	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV7',
+	CAMPUS_LIFE_ORGANIZER: 'campusLifeOrganizerV2'
 } as const
 
 export const loadCareerServiceEvents = async () => {
