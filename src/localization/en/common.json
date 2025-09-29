@@ -10,6 +10,8 @@
 		"dashboard": "Drag & drop to reorder",
 		"tryAgain": "Please try again"
 	},
+	"showMore": "Show more",
+	"showLess": "Show less",
 	"error": {
 		"title": "An error occurred",
 		"description": "An error occurred while loading the data.",

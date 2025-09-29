@@ -22,6 +22,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
+import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { CampusLifeEvent, CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -37,36 +38,6 @@ import {
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
-
-const URL_REGEX = /(https?:\/\/[^\s]+)/g
-
-const LinkText: React.FC<{ text: string; color: string }> = ({
-	text,
-	color
-}) => {
-	const { styles } = useStyles(stylesheet)
-	const parts = text.split(URL_REGEX)
-	return (
-		<Text style={styles.columnDetails}>
-			{parts.map((part, index) => {
-				if (part.match(URL_REGEX)) {
-					return (
-						<Text
-							key={index}
-							onPress={() => {
-								void Linking.openURL(part)
-							}}
-							style={{ color }}
-						>
-							{part}
-						</Text>
-					)
-				}
-				return part
-			})}
-		</Text>
-	)
-}
 
 export default function ClEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -298,7 +269,13 @@ export default function ClEventDetail(): React.JSX.Element {
 					{
 						header: t('pages.event.description'),
 						item: (
-							<LinkText text={descriptionText} color={theme.colors.primary} />
+							<LinkText
+								text={descriptionText}
+								linkColor={theme.colors.primary}
+								textStyle={styles.columnDetails}
+								containerStyle={styles.linkTextContainer}
+								toggleStyle={styles.showMoreButton}
+							/>
 						)
 					}
 				]
@@ -353,6 +330,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%',
 		paddingBottom: 100
 	},
+	linkTextContainer: {
+		gap: 8
+	},
 	headerTitle: {
 		marginBottom: Platform.OS === 'ios' ? -10 : 0,
 		overflow: 'hidden',
@@ -379,6 +359,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16.5,
 		paddingTop: 2,
 		textAlign: 'left'
+	},
+	showMoreButton: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '600'
 	},
 	loadingContainer: {
 		flex: 1,
