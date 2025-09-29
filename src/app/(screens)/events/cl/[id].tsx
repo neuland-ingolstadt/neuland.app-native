@@ -331,7 +331,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 100
 	},
 	linkTextContainer: {
-		gap: 8
+		gap: 8,
+		marginTop: 4
 	},
 	headerTitle: {
 		marginBottom: Platform.OS === 'ios' ? -10 : 0,

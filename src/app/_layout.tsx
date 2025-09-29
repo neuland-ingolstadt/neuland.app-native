@@ -34,7 +34,7 @@ LogBox.ignoreLogs([
 ])
 
 function RootLayout(): React.JSX.Element {
-	const { t } = useTranslation(['navigation'])
+	const { t } = useTranslation(['navigation', 'common'])
 	const savedLanguage = usePreferencesStore((state) => state.language)
 	const presentationMode = usePresentationMode()
 	const smallSheetPresentationMode = usePresentationMode(true)
@@ -512,6 +512,13 @@ function RootLayout(): React.JSX.Element {
 								/* do nothing yet */
 							}
 						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/cl-clubs"
+					options={{
+						title: t('common:pages.clEvents.clubs.title'),
+						presentation: 'card'
 					}}
 				/>
 				<Stack.Screen

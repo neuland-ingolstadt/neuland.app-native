@@ -326,7 +326,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	linkTextContainer: {
-		gap: 8
+		gap: 8,
+		marginTop: 4
 	},
 	showMoreButton: {
 		color: theme.colors.primary,
