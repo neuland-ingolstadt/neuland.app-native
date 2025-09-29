@@ -343,6 +343,10 @@
 					"subtitle": "Check back later."
 				}
 			},
+			"clubs": {
+				"title": "Discover clubs",
+				"viewAll": "All clubs"
+			},
 			"events": {
 				"title": "Events",
 				"subtitle": "Events of the clubs",

@@ -1,15 +1,24 @@
 import { FlashList } from '@shopify/flash-list'
-import type { UseQueryResult } from '@tanstack/react-query'
+import { type UseQueryResult, useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import type React from 'react'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, Text, View } from 'react-native'
+import {
+	Pressable,
+	RefreshControl,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
-import type { CampusLifeEvent } from '@/types/campus-life'
+import type { CampusLifeEvent, CampusLifeOrganizer } from '@/types/campus-life'
 import { networkError } from '@/utils/api-utils'
+import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
@@ -23,6 +32,20 @@ export default function ClEventsPage({
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+
+	const organizersQuery = useQuery({
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
+		queryFn: loadCampusLifeOrganizers,
+		staleTime: 1000 * 60 * 60, // 60 minutes
+		gcTime: 1000 * 60 * 60 * 24
+	})
+
+	const featuredOrganizers = useMemo<CampusLifeOrganizer[]>(() => {
+		if (organizersQuery.data == null) {
+			return []
+		}
+		return organizersQuery.data.slice(0, 12)
+	}, [organizersQuery.data])
 
 	const {
 		isRefetchingByUser: isRefetchingByUserClEvents,
@@ -68,9 +91,60 @@ export default function ClEventsPage({
 								/>
 							}
 							ListHeaderComponent={
-								<Text style={styles.sectionHeaderText}>
-									{t('pages.clEvents.events.subtitle')}
-								</Text>
+								<View style={styles.listHeaderContainer}>
+									{organizersQuery.isLoading ? (
+										<View style={styles.clubsLoadingContainer}>
+											<LoadingIndicator />
+										</View>
+									) : featuredOrganizers.length > 0 ? (
+										<View style={styles.clubsContainer}>
+											<View style={styles.clubsHeaderRow}>
+												<Text style={styles.clubsTitle}>
+													{t('pages.clEvents.clubs.title')}
+												</Text>
+												<Pressable
+													onPress={() => {
+														router.push('/cl-clubs')
+													}}
+												>
+													<Text style={styles.viewAllText}>
+														{t('pages.clEvents.clubs.viewAll')}
+													</Text>
+												</Pressable>
+											</View>
+											<ScrollView
+												horizontal
+												showsHorizontalScrollIndicator={false}
+												contentContainerStyle={styles.clubsScrollContent}
+											>
+												{featuredOrganizers.map((organizer, index) => (
+													<Pressable
+														key={organizer.id}
+														style={({ pressed }) => [
+															styles.clubChip,
+															index === featuredOrganizers.length - 1 &&
+																styles.lastClubChip,
+															{ opacity: pressed ? 0.85 : 1 }
+														]}
+														onPress={() => {
+															router.push({
+																pathname: '/events/organizer/[id]',
+																params: { id: organizer.id.toString() }
+															})
+														}}
+													>
+														<Text style={styles.clubChipText}>
+															{organizer.name}
+														</Text>
+													</Pressable>
+												))}
+											</ScrollView>
+										</View>
+									) : null}
+									<Text style={styles.sectionHeaderText}>
+										{t('pages.clEvents.events.subtitle')}
+									</Text>
+								</View>
 							}
 						/>
 					) : (
@@ -97,6 +171,54 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	flashListContainer: {
 		paddingBottom: theme.margins.bottomSafeArea
+	},
+	listHeaderContainer: {
+		gap: 12,
+		marginBottom: 12,
+		marginHorizontal: -theme.margins.page,
+		paddingHorizontal: theme.margins.page
+	},
+	clubsLoadingContainer: {
+		alignItems: 'flex-start'
+	},
+	clubsContainer: {
+		gap: 12
+	},
+	clubsHeaderRow: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	clubsTitle: {
+		color: theme.colors.text,
+		fontSize: 18,
+		fontWeight: '600'
+	},
+	viewAllText: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '600'
+	},
+	clubsScrollContent: {
+		paddingRight: theme.margins.page,
+		paddingVertical: 2
+	},
+	clubChip: {
+		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderRadius: 999,
+		borderWidth: StyleSheet.hairlineWidth,
+		marginRight: 8,
+		paddingHorizontal: 16,
+		paddingVertical: 10
+	},
+	lastClubChip: {
+		marginRight: 0
+	},
+	clubChipText: {
+		color: theme.colors.text,
+		fontSize: 14,
+		fontWeight: '600'
 	},
 	rowWrapper: {
 		marginBottom: 8

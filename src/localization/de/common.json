@@ -343,6 +343,10 @@
 					"subtitle": "Bitte versuche es später erneut."
 				}
 			},
+			"clubs": {
+				"title": "Clubs entdecken",
+				"viewAll": "Alle Clubs"
+			},
 			"events": {
 				"title": "Veranstaltungen",
 				"subtitle": "Veranstaltungen der Vereine",
