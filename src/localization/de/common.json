@@ -10,6 +10,8 @@
 		"dashboard": "Drag & Drop zum Sortieren",
 		"tryAgain": "Versuche es erneut"
 	},
+	"showMore": "Mehr anzeigen",
+	"showLess": "Weniger anzeigen",
 	"error": {
 		"title": "Ein Fehler ist aufgetreten",
 		"description": "Beim Laden der Daten ist ein Fehler aufgetreten.",

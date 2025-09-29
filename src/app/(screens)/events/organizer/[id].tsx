@@ -2,7 +2,6 @@ import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Text, View } from 'react-native'
 import Animated, {
@@ -16,6 +15,7 @@ import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
+import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { CampusLifeEvent } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -25,37 +25,6 @@ import {
 	QUERY_KEYS
 } from '@/utils/events-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
-
-const URL_REGEX = /(https?:\/\/[^\s]+)/g
-
-const LinkText: React.FC<{ text: string; color: string }> = ({
-	text,
-	color
-}) => {
-	const { styles } = useStyles(stylesheet)
-	const parts = useMemo(() => text.split(URL_REGEX), [text])
-
-	return (
-		<Text style={styles.descriptionText}>
-			{parts.map((part, index) => {
-				if (part.match(URL_REGEX)) {
-					return (
-						<Text
-							key={index}
-							onPress={() => {
-								void Linking.openURL(part)
-							}}
-							style={{ color }}
-						>
-							{part}
-						</Text>
-					)
-				}
-				return <Text key={index}>{part}</Text>
-			})}
-		</Text>
-	)
-}
 
 export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -203,7 +172,13 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		header: t('pages.event.description'),
 		item:
 			description.trim() !== '' ? (
-				<LinkText text={description} color={theme.colors.primary} />
+				<LinkText
+					text={description}
+					linkColor={theme.colors.primary}
+					textStyle={styles.descriptionText}
+					containerStyle={styles.linkTextContainer}
+					toggleStyle={styles.showMoreButton}
+				/>
 			) : (
 				<Text style={styles.emptyDescriptionText}>
 					{t('pages.event.organizerDetails.noDescription')}
@@ -334,7 +309,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	formList: {
 		alignSelf: 'center',
-		width: '100%'
+		width: '100%',
+		paddingBottom: 12
 	},
 	titleContainer: {
 		alignItems: 'flex-start',
@@ -348,5 +324,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600',
 		paddingTop: 16,
 		textAlign: 'left'
+	},
+	linkTextContainer: {
+		gap: 8
+	},
+	showMoreButton: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '600'
 	}
 }))
