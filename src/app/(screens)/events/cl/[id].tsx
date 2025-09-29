@@ -23,13 +23,17 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import type { CampusLifeEvent } from '@/types/campus-life'
+import type { CampusLifeEvent, CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
-import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
+import {
+	loadCampusLifeEvents,
+	loadCampusLifeOrganizer,
+	QUERY_KEYS
+} from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
@@ -91,6 +95,16 @@ export default function ClEventDetail(): React.JSX.Element {
 	})
 
 	const eventData = queryData.find((item) => item.id === id) ?? null
+	const organizerId = eventData?.host.id
+	const organizerQuery = useQuery<CampusLifeOrganizer>({
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZER, organizerId],
+		queryFn: () => loadCampusLifeOrganizer(organizerId as number),
+		enabled: organizerId != null,
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24
+	})
+	const organizerDetails = organizerQuery.data ?? null
+	const organizerName = organizerDetails?.name ?? eventData?.host.name ?? ''
 	const navigation = useNavigation()
 
 	const scrollOffset = useSharedValue(0)
@@ -134,7 +148,7 @@ export default function ClEventDetail(): React.JSX.Element {
 							})
 							const message = t('pages.event.shareMessage', {
 								title: eventTitle,
-								organizer: eventData?.host.name,
+								organizer: organizerName,
 								date: dateRange,
 								link: `https://web.neuland.app/events/cl/${id}`
 							})
@@ -150,7 +164,16 @@ export default function ClEventDetail(): React.JSX.Element {
 					})
 				})
 			}
-		}, [navigation, t, eventData, id, i18n.language, dateRange, eventTitle])
+		}, [
+			navigation,
+			t,
+			eventData,
+			id,
+			i18n.language,
+			dateRange,
+			eventTitle,
+			organizerName
+		])
 	)
 
 	if (isLoading || !queryData) {
@@ -171,15 +194,11 @@ export default function ClEventDetail(): React.JSX.Element {
 		new Date(eventData.startDateTime).toDateString() !==
 			new Date(eventData.endDateTime).toDateString()
 
-	const isWebsiteAvailable = Boolean(eventData?.host.website)
-	const isInstagramAvailable = Boolean(eventData?.host.instagram)
 	const isEventUrlAvailable = Boolean(eventData?.eventUrl)
 	const descriptionText = getLocalizedValue(eventData?.descriptions)
 
 	const linkItems: SectionGroup[] = []
 	const eventUrl = eventData?.eventUrl ?? null
-	const organizerWebsite = eventData?.host.website ?? null
-	const organizerInstagram = eventData?.host.instagram ?? null
 
 	if (isEventUrlAvailable && eventUrl != null) {
 		linkItems.push({
@@ -191,34 +210,10 @@ export default function ClEventDetail(): React.JSX.Element {
 		})
 	}
 
-	if (isWebsiteAvailable && organizerWebsite != null) {
-		linkItems.push({
-			title: t('pages.event.organizerDetails.website'),
-			icon: linkIcon,
-			onPress: () => {
-				void Linking.openURL(organizerWebsite)
-			}
-		})
-	}
-
-	if (isInstagramAvailable && organizerInstagram != null) {
-		linkItems.push({
-			title: t('pages.event.organizerDetails.instagram'),
-			icon: {
-				ios: 'instagram',
-				android: 'instagram',
-				web: 'Instagram',
-				iosFallback: true
-			},
-			onPress: () => {
-				void Linking.openURL(organizerInstagram)
-			}
-		})
-	}
-
 	const sections: FormListSections[] = [
 		{
 			header: t('pages.event.details'),
+			footer: t('pages.event.organizerDetails.tapHint'),
 			items: [
 				...(!isMultiDayEvent
 					? [
@@ -276,10 +271,9 @@ export default function ClEventDetail(): React.JSX.Element {
 					: []),
 				{
 					title: t('pages.event.organizer'),
-					value: eventData?.host.name,
+					value: organizerName,
 					onPress: () => {
 						if (eventData?.host?.id != null) {
-							console.log('eventData.host.id', eventData.host.id)
 							router.dismissTo({
 								pathname: '/events/organizer/[id]',
 								params: { id: eventData.host.id.toString() }

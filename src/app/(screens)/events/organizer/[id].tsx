@@ -4,7 +4,13 @@ import { router, Stack, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, ScrollView, Text, View } from 'react-native'
+import { Linking, Platform, Text, View } from 'react-native'
+import Animated, {
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
@@ -58,7 +64,27 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const organizerId = Number(id)
 
 	const isIdValid = Number.isInteger(organizerId)
+	const scrollOffset = useSharedValue(0)
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			if (typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = event.contentOffset.y
+			}
+		}
+	})
 
+	const headerStyle = useAnimatedStyle(() => ({
+		transform: [
+			{
+				translateY: interpolate(
+					scrollOffset.value,
+					[0, 30, 65],
+					[25, 25, 0],
+					'clamp'
+				)
+			}
+		]
+	}))
 	const organizerQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZER, organizerId],
 		queryFn: () => loadCampusLifeOrganizer(organizerId),
@@ -90,6 +116,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	}
 
 	const organizer = organizerQuery.data
+
 	const locale: 'de' | 'en' = i18n.language.startsWith('de') ? 'de' : 'en'
 	const description =
 		organizer.descriptions[locale] ??
@@ -118,11 +145,27 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		})
 	}
 
+	if (organizer.registrationNumber) {
+		infoItems.push({
+			title: t('pages.event.organizerDetails.registrationNumber'),
+			value: organizer.registrationNumber
+		})
+	}
+
+	if (organizer.nonProfit != null) {
+		infoItems.push({
+			title: t('pages.event.organizerDetails.nonProfit.label'),
+			value: organizer.nonProfit
+				? t('pages.event.organizerDetails.nonProfit.yes')
+				: t('pages.event.organizerDetails.nonProfit.no')
+		})
+	}
+
 	const linkItems: SectionGroup[] = []
 
 	if (organizer.website) {
 		linkItems.push({
-			title: t('pages.event.organizerDetails.website'),
+			title: t('pages.event.organizerDetails.clubWebsite'),
 			icon: linkIcon,
 			onPress: () => {
 				void Linking.openURL(organizer.website as string)
@@ -141,6 +184,16 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 			},
 			onPress: () => {
 				void Linking.openURL(organizer.instagram as string)
+			}
+		})
+	}
+
+	if (organizer.linkedin) {
+		linkItems.push({
+			title: t('pages.event.organizerDetails.linkedin'),
+			icon: linkIcon,
+			onPress: () => {
+				void Linking.openURL(organizer.linkedin as string)
 			}
 		})
 	}
@@ -173,24 +226,38 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const organizerEvents = eventsQuery.data ?? []
 
 	return (
-		<ScrollView style={styles.page} contentContainerStyle={styles.container}>
+		<Animated.ScrollView
+			style={styles.page}
+			contentContainerStyle={styles.container}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
+		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
 						<View style={styles.headerTitle}>
-							<HeaderTitle {...props} tintColor={theme.colors.text}>
-								{organizer.name}
-							</HeaderTitle>
+							<Animated.View style={headerStyle}>
+								<HeaderTitle {...props} tintColor={theme.colors.text}>
+									{organizer.name}
+								</HeaderTitle>
+							</Animated.View>
 						</View>
 					)
 				}}
 			/>
 
 			<View style={styles.titleContainer}>
-				<Text style={styles.titleText}>{organizer.name}</Text>
+				<Text
+					style={styles.titleText}
+					adjustsFontSizeToFit
+					minimumFontScale={0.8}
+					numberOfLines={3}
+				>
+					{organizer.name}
+				</Text>
 			</View>
 
-			<View style={styles.sectionSpacing}>
+			<View style={styles.formList}>
 				<FormList sections={sections} sheet />
 			</View>
 
@@ -218,7 +285,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 					</Text>
 				)}
 			</View>
-		</ScrollView>
+		</Animated.ScrollView>
 	)
 }
 
@@ -229,7 +296,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center'
 	},
 	container: {
-		gap: 20,
+		gap: 12,
 		paddingBottom: theme.margins.bottomSafeArea + 20
 	},
 	descriptionText: {
@@ -252,26 +319,34 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 12
 	},
 	headerTitle: {
-		paddingRight: Platform.OS === 'ios' ? 0 : 32
+		marginBottom: Platform.OS === 'ios' ? -10 : 0,
+		overflow: 'hidden',
+		paddingRight: Platform.OS === 'ios' ? 0 : 50
 	},
 	page: {
 		flex: 1,
 		paddingHorizontal: theme.margins.page
-	},
-	sectionSpacing: {
-		gap: 12
 	},
 	sectionTitle: {
 		color: theme.colors.text,
 		fontSize: 20,
 		fontWeight: '600'
 	},
+	formList: {
+		alignSelf: 'center',
+		width: '100%'
+	},
 	titleContainer: {
-		paddingTop: 16
+		alignItems: 'flex-start',
+		flexDirection: 'row',
+		justifyContent: 'space-between'
 	},
 	titleText: {
 		color: theme.colors.text,
+		flex: 1,
 		fontSize: 26,
-		fontWeight: '600'
+		fontWeight: '600',
+		paddingTop: 16,
+		textAlign: 'left'
 	}
 }))

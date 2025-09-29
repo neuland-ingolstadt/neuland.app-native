@@ -204,11 +204,19 @@
 			"registerNow": "Register now",
 			"eventLink": "Event website",
 			"organizerDetails": {
-				"website": "Website",
+				"clubWebsite": "Club website",
 				"instagram": "Instagram",
+				"linkedin": "LinkedIn",
 				"location": "Location",
+				"registrationNumber": "Registration number",
+				"nonProfit": {
+					"label": "Non-profit status",
+					"yes": "Registered non-profit",
+					"no": "Not registered as non-profit"
+				},
 				"info": "Organizer details",
-				"noDescription": "No additional information available yet."
+				"noDescription": "No additional information available yet.",
+				"tapHint": "Tap the organizer entry above to learn more about the club."
 			}
 		},
 		"map": {

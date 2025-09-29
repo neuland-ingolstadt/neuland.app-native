@@ -204,11 +204,19 @@
 			"registerNow": "Jetzt anmelden",
 			"eventLink": "Veranstaltungslink",
 			"organizerDetails": {
-				"website": "Website",
+				"clubWebsite": "Club-Website",
 				"instagram": "Instagram",
+				"linkedin": "LinkedIn",
 				"location": "Ort",
+				"registrationNumber": "Registrierungsnummer",
+				"nonProfit": {
+					"label": "Gemeinnützigkeit",
+					"yes": "Als gemeinnützig registriert",
+					"no": "Nicht als gemeinnützig registriert"
+				},
 				"info": "Informationen zum Veranstalter",
-				"noDescription": "Noch keine zusätzlichen Informationen vorhanden."
+				"noDescription": "Noch keine zusätzlichen Informationen vorhanden.",
+				"tapHint": "Tippe auf den Veranstalter, um mehr über den Club zu erfahren."
 			}
 		},
 		"map": {

@@ -517,7 +517,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/events/organizer/[id]"
 					options={{
-						title: t('navigation.details'),
+						title: 'Organizer Details',
 						...Platform.select({
 							ios: {
 								...presentationMode
