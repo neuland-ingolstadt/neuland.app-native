@@ -217,6 +217,7 @@
 					"no": "Nicht als gemeinnützig registriert"
 				},
 				"info": "Informationen zum Veranstalter",
+				"stats": "Rechtliches",
 				"noDescription": "Noch keine zusätzlichen Informationen vorhanden.",
 				"tapHint": "Tippe auf den Veranstalter, um mehr über den Club zu erfahren."
 			}
@@ -346,6 +347,7 @@
 			"clubs": {
 				"title": "Vereine entdecken",
 				"viewAll": "Alle Vereine",
+				"clubs": "Vereine",
 				"missingDescription": "Keine Beschreibung verfügbar."
 			},
 			"events": {

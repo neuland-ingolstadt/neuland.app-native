@@ -112,11 +112,9 @@ export async function loadCampusLifeOrganizers(): Promise<
 	CampusLifeOrganizer[]
 > {
 	const organizers = await NeulandAPI.getPublicOrganizers()
-	return organizers
-		.map((organizer) => mapOrganizerResponse(organizer, { id: organizer.id }))
-		.sort((a, b) =>
-			a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-		)
+	return organizers.map((organizer) =>
+		mapOrganizerResponse(organizer, { id: organizer.id })
+	)
 }
 
 /**
@@ -312,7 +310,7 @@ export const QUERY_KEYS = {
 	UNIVERSITY_SPORTS: 'universitySports',
 	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV7',
 	CAMPUS_LIFE_ORGANIZER: 'campusLifeOrganizerV2',
-	CAMPUS_LIFE_ORGANIZERS: 'campusLifeOrganizersV1'
+	CAMPUS_LIFE_ORGANIZERS: 'campusLifeOrganizersV3'
 } as const
 
 export const loadCareerServiceEvents = async () => {

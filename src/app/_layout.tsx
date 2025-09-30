@@ -522,9 +522,9 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/events/organizer/[id]"
+					name="(screens)/events/club/[id]"
 					options={{
-						title: 'Organizer Details',
+						title: t('navigation.club'),
 						...Platform.select({
 							ios: {
 								...presentationMode

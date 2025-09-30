@@ -216,7 +216,8 @@
 					"yes": "Registered non-profit",
 					"no": "Not registered as non-profit"
 				},
-				"info": "Organizer details",
+				"info": "Club details",
+				"stats": "Legal",
 				"noDescription": "No additional information available yet.",
 				"tapHint": "Tap the organizer entry above to learn more about the club."
 			}
@@ -346,6 +347,7 @@
 			"clubs": {
 				"title": "Discover clubs",
 				"viewAll": "All clubs",
+				"clubs": "clubs",
 				"missingDescription": "No description available."
 			},
 			"events": {
