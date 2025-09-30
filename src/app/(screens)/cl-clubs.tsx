@@ -76,7 +76,7 @@ const OrganizerListItem = ({
 				backgroundColor={theme.colors.card}
 				onPress={() => {
 					router.push({
-						pathname: '/events/organizer/[id]',
+						pathname: '/events/club/[id]',
 						params: { id: organizer.id.toString() }
 					})
 				}}

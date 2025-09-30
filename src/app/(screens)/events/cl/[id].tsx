@@ -246,7 +246,7 @@ export default function ClEventDetail(): React.JSX.Element {
 					onPress: () => {
 						if (eventData?.host?.id != null) {
 							router.dismissTo({
-								pathname: '/events/organizer/[id]',
+								pathname: '/events/club/[id]',
 								params: { id: eventData.host.id.toString() }
 							})
 						}
@@ -331,8 +331,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 100
 	},
 	linkTextContainer: {
-		gap: 8,
-		marginTop: 4
+		gap: 8
 	},
 	headerTitle: {
 		marginBottom: Platform.OS === 'ios' ? -10 : 0,

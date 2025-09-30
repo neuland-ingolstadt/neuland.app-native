@@ -1,15 +1,8 @@
-import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
@@ -33,27 +26,6 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const organizerId = Number(id)
 
 	const isIdValid = Number.isInteger(organizerId)
-	const scrollOffset = useSharedValue(0)
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			if (typeof scrollOffset.value !== 'undefined') {
-				scrollOffset.value = event.contentOffset.y
-			}
-		}
-	})
-
-	const headerStyle = useAnimatedStyle(() => ({
-		transform: [
-			{
-				translateY: interpolate(
-					scrollOffset.value,
-					[0, 30, 65],
-					[25, 25, 0],
-					'clamp'
-				)
-			}
-		]
-	}))
 	const organizerQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZER, organizerId],
 		queryFn: () => loadCampusLifeOrganizer(organizerId),
@@ -114,15 +86,16 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		})
 	}
 
+	const statsItems: SectionGroup[] = []
 	if (organizer.registrationNumber) {
-		infoItems.push({
+		statsItems.push({
 			title: t('pages.event.organizerDetails.registrationNumber'),
 			value: organizer.registrationNumber
 		})
 	}
 
 	if (organizer.nonProfit != null) {
-		infoItems.push({
+		statsItems.push({
 			title: t('pages.event.organizerDetails.nonProfit.label'),
 			value: organizer.nonProfit
 				? t('pages.event.organizerDetails.nonProfit.yes')
@@ -198,29 +171,18 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		})
 	}
 
+	const statsSections: FormListSections[] = []
+	if (statsItems.length > 0) {
+		statsSections.push({
+			header: t('pages.event.organizerDetails.stats' as const),
+			items: statsItems
+		})
+	}
+
 	const organizerEvents = eventsQuery.data ?? []
 
 	return (
-		<Animated.ScrollView
-			style={styles.page}
-			contentContainerStyle={styles.container}
-			onScroll={scrollHandler}
-			scrollEventThrottle={16}
-		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
-									{organizer.name}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
-
+		<ScrollView style={styles.page} contentContainerStyle={styles.container}>
 			<View style={styles.titleContainer}>
 				<Text
 					style={styles.titleText}
@@ -261,7 +223,13 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 					</Text>
 				)}
 			</View>
-		</Animated.ScrollView>
+
+			{statsSections.length > 0 && (
+				<View style={styles.statsFormList}>
+					<FormList sections={statsSections} sheet />
+				</View>
+			)}
+		</ScrollView>
 	)
 }
 
@@ -295,9 +263,16 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 12
 	},
 	headerTitle: {
+		alignItems: 'center',
 		marginBottom: Platform.OS === 'ios' ? -10 : 0,
 		overflow: 'hidden',
 		paddingRight: Platform.OS === 'ios' ? 0 : 50
+	},
+	headerSubtitle: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 12,
+		fontWeight: '400',
+		marginTop: -2
 	},
 	page: {
 		flex: 1,
@@ -313,6 +288,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%',
 		paddingBottom: 12
 	},
+	statsFormList: {
+		alignSelf: 'center',
+		width: '100%',
+		paddingTop: 12
+	},
 	titleContainer: {
 		alignItems: 'flex-start',
 		flexDirection: 'row',
@@ -327,8 +307,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	linkTextContainer: {
-		gap: 8,
-		marginTop: 4
+		gap: 8
 	},
 	showMoreButton: {
 		color: theme.colors.primary,

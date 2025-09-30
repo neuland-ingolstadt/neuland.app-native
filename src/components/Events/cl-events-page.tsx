@@ -36,7 +36,7 @@ export default function ClEventsPage({
 	const organizersQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
 		queryFn: loadCampusLifeOrganizers,
-		staleTime: 1000 * 60 * 60, // 60 minutes
+		staleTime: 1000 * 60 * 30, // 30 minutes
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
@@ -44,7 +44,14 @@ export default function ClEventsPage({
 		if (organizersQuery.data == null) {
 			return []
 		}
-		return organizersQuery.data.slice(0, 12)
+		return organizersQuery.data.slice(0, 8)
+	}, [organizersQuery.data])
+
+	const remainingOrganizersCount = useMemo(() => {
+		if (organizersQuery.data == null) {
+			return 0
+		}
+		return Math.max(0, organizersQuery.data.length - 8)
 	}, [organizersQuery.data])
 
 	const {
@@ -117,18 +124,16 @@ export default function ClEventsPage({
 												showsHorizontalScrollIndicator={false}
 												contentContainerStyle={styles.clubsScrollContent}
 											>
-												{featuredOrganizers.map((organizer, index) => (
+												{featuredOrganizers.map((organizer) => (
 													<Pressable
 														key={organizer.id}
 														style={({ pressed }) => [
 															styles.clubChip,
-															index === featuredOrganizers.length - 1 &&
-																styles.lastClubChip,
 															{ opacity: pressed ? 0.85 : 1 }
 														]}
 														onPress={() => {
 															router.push({
-																pathname: '/events/organizer/[id]',
+																pathname: '/events/club/[id]',
 																params: { id: organizer.id.toString() }
 															})
 														}}
@@ -138,6 +143,23 @@ export default function ClEventsPage({
 														</Text>
 													</Pressable>
 												))}
+												{remainingOrganizersCount > 0 && (
+													<Pressable
+														style={({ pressed }) => [
+															styles.clubChip,
+															styles.addClubChip,
+															{ opacity: pressed ? 0.85 : 1 }
+														]}
+														onPress={() => {
+															router.push('/cl-clubs')
+														}}
+													>
+														<Text style={styles.addClubChipText}>
+															+{remainingOrganizersCount}{' '}
+															{t('pages.clEvents.clubs.clubs')}
+														</Text>
+													</Pressable>
+												)}
 											</ScrollView>
 										</View>
 									) : null}
@@ -217,6 +239,16 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	clubChipText: {
 		color: theme.colors.text,
+		fontSize: 14,
+		fontWeight: '600'
+	},
+	addClubChip: {
+		backgroundColor: theme.colors.primary,
+		borderColor: theme.colors.primary,
+		marginRight: 0
+	},
+	addClubChipText: {
+		color: theme.colors.background,
 		fontSize: 14,
 		fontWeight: '600'
 	},
