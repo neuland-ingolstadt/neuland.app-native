@@ -231,7 +231,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flex: 1,
 		paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0,
 		backgroundColor: inModal ? theme.colors.card : undefined,
-		borderRadius: inModal ? 10 : 0,
+		borderRadius: inModal ? theme.radius.ios : 0,
 		paddingTop: inModal ? 25 : 0
 	}),
 	errorContainer: {
