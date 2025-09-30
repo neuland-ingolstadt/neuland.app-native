@@ -345,7 +345,8 @@
 			},
 			"clubs": {
 				"title": "Discover clubs",
-				"viewAll": "All clubs"
+				"viewAll": "All clubs",
+				"missingDescription": "No description available."
 			},
 			"events": {
 				"title": "Events",
@@ -356,7 +357,7 @@
 				}
 			},
 			"organizer": {
-				"subtitle": "Events of the club"
+				"subtitle": "Upcoming events"
 			}
 		},
 		"careerService": {
