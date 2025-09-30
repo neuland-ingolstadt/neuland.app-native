@@ -344,8 +344,9 @@
 				}
 			},
 			"clubs": {
-				"title": "Clubs entdecken",
-				"viewAll": "Alle Clubs"
+				"title": "Vereine entdecken",
+				"viewAll": "Alle Vereine",
+				"missingDescription": "Keine Beschreibung verfügbar."
 			},
 			"events": {
 				"title": "Veranstaltungen",
@@ -354,6 +355,9 @@
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."
 				}
+			},
+			"organizer": {
+				"subtitle": "Anstehende Veranstaltungen"
 			}
 		},
 		"careerService": {

@@ -2,17 +2,11 @@ import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import {
-	Linking,
-	Pressable,
-	RefreshControl,
-	StyleSheet,
-	Text,
-	View
-} from 'react-native'
+import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import RowEntry from '@/components/Universal/row-entry'
 import { useRefreshByUser } from '@/hooks'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
@@ -74,45 +68,46 @@ const OrganizerListItem = ({
 	organizer: CampusLifeOrganizer
 }): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
-	const { t } = useTranslation('common')
 
 	return (
 		<View style={styles.itemContainer}>
-			<Pressable
-				style={({ pressed }) => [
-					styles.itemPressable,
-					{ opacity: pressed ? 0.85 : 1 }
-				]}
+			<RowEntry
+				title={organizer.name}
+				backgroundColor={theme.colors.card}
 				onPress={() => {
 					router.push({
 						pathname: '/events/organizer/[id]',
 						params: { id: organizer.id.toString() }
 					})
 				}}
-			>
-				<View style={styles.itemHeaderRow}>
-					<Text style={styles.itemTitle}>{organizer.name}</Text>
-					{organizer.website != null && organizer.website !== '' && (
-						<Text
-							style={[styles.itemLink, { color: theme.colors.primary }]}
-							onPress={() => {
-								void Linking.openURL(organizer.website as string)
-							}}
-						>
-							{t('pages.event.organizerDetails.clubWebsite')}
-						</Text>
-					)}
-				</View>
-				{organizer.location != null && organizer.location !== '' && (
-					<Text style={styles.itemSubtitle}>{organizer.location}</Text>
-				)}
-				{organizer.descriptions.en != null ||
-				organizer.descriptions.de != null ? (
-					<Text style={styles.itemDescription} numberOfLines={2}>
-						{organizer.descriptions.en ?? organizer.descriptions.de ?? ''}
-					</Text>
-				) : null}
-			</Pressable>
+				// biome-ignore lint/complexity/noUselessFragments: no
+				rightChildren={<></>}
+				leftChildren={<OrganizerRowContent organizer={organizer} />}
+			/>
+		</View>
+	)
+}
+
+const OrganizerRowContent = ({
+	organizer
+}: {
+	organizer: CampusLifeOrganizer
+}): React.JSX.Element => {
+	const { styles } = useStyles(stylesheet)
+	const { t, i18n } = useTranslation('common')
+
+	const localizedDescription = i18n.language.startsWith('de')
+		? (organizer.descriptions.de ?? organizer.descriptions.en)
+		: (organizer.descriptions.en ?? organizer.descriptions.de)
+
+	return (
+		<View style={styles.rowContent}>
+			{organizer.location != null && organizer.location.trim() !== '' && (
+				<Text style={styles.itemSubtitle}>{organizer.location}</Text>
+			)}
+			<Text style={styles.itemDescription} numberOfLines={2}>
+				{localizedDescription ?? t('pages.clEvents.clubs.missingDescription')}
+			</Text>
 		</View>
 	)
 }
@@ -133,37 +128,18 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: theme.margins.bottomSafeArea + 32
 	},
 	itemContainer: {
-		borderRadius: 16,
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
 		marginBottom: 12
 	},
-	itemPressable: {
-		paddingHorizontal: 20,
-		paddingVertical: 16
-	},
-	itemHeaderRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		gap: 12
-	},
-	itemTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		flex: 1
+	rowContent: {
+		gap: 6
 	},
 	itemSubtitle: {
 		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		marginTop: 4
+		fontSize: 14
 	},
 	itemDescription: {
 		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		marginTop: 6
+		fontSize: 13
 	},
 	itemLink: {
 		fontSize: 14,

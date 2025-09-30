@@ -256,6 +256,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 					))
 				) : (
 					<Text style={styles.emptyEventsText}>
+						{t('pages.clEvents.events.noEvents.title')}.{' '}
 						{t('pages.clEvents.events.noEvents.subtitle')}
 					</Text>
 				)}
