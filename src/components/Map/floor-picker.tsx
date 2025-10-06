@@ -176,7 +176,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	buttonAreaSection: {
 		borderColor: theme.colors.border,
-		borderRadius: 7,
+		borderRadius: 10,
 		borderWidth: 1,
 		marginTop: 5,
 		overflow: 'hidden'

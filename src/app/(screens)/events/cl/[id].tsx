@@ -320,6 +320,8 @@ export default function ClEventDetail(): React.JSX.Element {
 	)
 }
 
+const isIoS26 =
+	Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		gap: 12,
@@ -352,6 +354,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 24,
 		fontWeight: '600',
 		paddingTop: 16,
+		marginLeft: isIoS26 ? 6 : 0,
 		textAlign: 'left'
 	},
 	columnDetails: {

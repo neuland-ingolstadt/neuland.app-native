@@ -233,6 +233,9 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	)
 }
 
+const isIoS26 =
+	Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+
 const stylesheet = createStyleSheet((theme) => ({
 	centered: {
 		alignItems: 'center',
@@ -304,6 +307,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 26,
 		fontWeight: '600',
 		paddingTop: 16,
+		marginLeft: isIoS26 ? 6 : 0,
 		textAlign: 'left'
 	},
 	linkTextContainer: {

@@ -195,8 +195,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: theme.margins.bottomSafeArea
 	},
 	listHeaderContainer: {
-		gap: 12,
-		marginBottom: 12,
+		gap: 24,
+		marginBottom: 8,
 		marginHorizontal: -theme.margins.page,
 		paddingHorizontal: theme.margins.page
 	},
