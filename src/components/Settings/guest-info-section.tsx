@@ -40,7 +40,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: theme.radius.mg,
+		borderRadius: theme.radius.ios,
 		padding: 20,
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -63,7 +63,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	iconContainer: {
 		backgroundColor: `${theme.colors.secondary}20`,
-		borderRadius: theme.radius.lg,
+		borderRadius: theme.radius.infinite,
 		padding: 12
 	},
 	guestBannerIcon: {

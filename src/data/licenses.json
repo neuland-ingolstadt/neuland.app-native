@@ -209,7 +209,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-dev-client@6.0.12": {
+	"expo-dev-client@6.0.13": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -263,7 +263,7 @@
 		"licenseUrl": "https://github.com/evanbacon/expo-quick-actions/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"expo-router@6.0.8": {
+	"expo-router@6.0.10": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -293,7 +293,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo@54.0.10": {
+	"expo@54.0.12": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",

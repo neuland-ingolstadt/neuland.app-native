@@ -41,7 +41,7 @@ export function LoggedOutView({
 				title={t('loggedOut.benefits.community.title')}
 				description={t('loggedOut.benefits.community.description')}
 				icon={{
-					ios: { name: 'person.3.fill', size: 15 },
+					ios: { name: 'person.3.fill', size: 21 },
 					android: { name: 'group', size: 18 },
 					web: { name: 'Users', size: 18 }
 				}}
