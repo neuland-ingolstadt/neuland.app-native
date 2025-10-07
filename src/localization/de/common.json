@@ -206,7 +206,7 @@
 			"registerNow": "Jetzt anmelden",
 			"eventLink": "Veranstaltungslink",
 			"organizerDetails": {
-				"clubWebsite": "Club-Website",
+				"clubWebsite": "Vereins-Website",
 				"instagram": "Instagram",
 				"linkedin": "LinkedIn",
 				"location": "Ort",
@@ -216,10 +216,10 @@
 					"yes": "Als gemeinnützig registriert",
 					"no": "Nicht als gemeinnützig registriert"
 				},
-				"info": "Informationen zum Veranstalter",
+				"info": "Standort",
 				"stats": "Rechtliches",
-				"noDescription": "Noch keine zusätzlichen Informationen vorhanden.",
-				"tapHint": "Tippe auf den Veranstalter, um mehr über den Club zu erfahren."
+				"noDescription": "Noch keine Beschreibung vorhanden.",
+				"tapHint": "Tippe auf den Veranstalter, um mehr über den Verein zu erfahren."
 			}
 		},
 		"map": {
@@ -348,7 +348,8 @@
 				"title": "Vereine entdecken",
 				"viewAll": "Alle Vereine",
 				"clubs": "Vereine",
-				"missingDescription": "Keine Beschreibung verfügbar."
+				"missingDescription": "Keine Beschreibung verfügbar.",
+				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
 			},
 			"events": {
 				"title": "Veranstaltungen",

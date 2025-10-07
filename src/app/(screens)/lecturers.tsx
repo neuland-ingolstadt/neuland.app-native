@@ -331,12 +331,12 @@ export default function LecturersScreen(): React.JSX.Element {
 							styles.rowContainer,
 							{
 								overflow: 'hidden',
-								borderTopStartRadius: index === 0 ? theme.radius.md : 0,
-								borderTopEndRadius: index === 0 ? theme.radius.md : 0,
+								borderTopStartRadius: index === 0 ? theme.radius.mg : 0,
+								borderTopEndRadius: index === 0 ? theme.radius.mg : 0,
 								borderBottomStartRadius:
-									index === lecturers.length - 1 ? theme.radius.md : 0,
+									index === lecturers.length - 1 ? theme.radius.mg : 0,
 								borderBottomEndRadius:
-									index === lecturers.length - 1 ? theme.radius.md : 0
+									index === lecturers.length - 1 ? theme.radius.mg : 0
 							}
 						]}
 					>
@@ -411,23 +411,8 @@ export default function LecturersScreen(): React.JSX.Element {
 				<SectionList
 					sections={sections}
 					keyExtractor={(_, index) => index.toString()}
-					renderItem={({ item, index, section }) => (
-						<View
-							key={index}
-							style={[
-								styles.rowContainer,
-								{
-									overflow: 'hidden',
-									backgroundColor: theme.colors.card,
-									borderTopLeftRadius: index === 0 ? 8 : 0,
-									borderTopRightRadius: index === 0 ? 8 : 0,
-									borderBottomLeftRadius:
-										index === section.data.length - 1 ? 8 : 0,
-									borderBottomRightRadius:
-										index === section.data.length - 1 ? 8 : 0
-								}
-							]}
-						>
+					renderItem={({ item, index }) => (
+						<View key={index} style={[styles.rowContainer]}>
 							<LecturerRow item={item} />
 						</View>
 					)}
@@ -527,7 +512,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	resultsCountContainer: {
 		left: 0,
-		position: 'absolute',
+		position: 'relative',
 		right: 0,
 		zIndex: 1
 	},

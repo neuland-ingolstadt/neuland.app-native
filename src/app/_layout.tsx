@@ -333,7 +333,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/cl-events"
 					options={{
-						title: 'Campus Life Events',
+						title: 'Campus Life',
 						...transparentHeaderStyle
 					}}
 				/>
@@ -517,8 +517,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/cl-clubs"
 					options={{
-						title: t('common:pages.clEvents.clubs.title'),
-						presentation: 'card'
+						title: t('common:pages.clEvents.clubs.title')
 					}}
 				/>
 				<Stack.Screen

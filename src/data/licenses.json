@@ -23,12 +23,6 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"@expo/ui@0.2.0-canary-20250912-b5ce2a8": {
-		"licenses": "MIT",
-		"repository": "https://github.com/expo/expo",
-		"licenseUrl": "https://github.com/expo/expo",
-		"parents": "neuland"
-	},
 	"@expo/vector-icons@15.0.2": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/vector-icons",
@@ -227,7 +221,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-image@3.0.8": {
+	"expo-image@3.0.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
