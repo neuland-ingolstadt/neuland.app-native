@@ -148,7 +148,7 @@ const PlatformIcon = ({
 
 export default PlatformIcon
 
-const communityIcons: string[] = ['instagram', 'github']
+const communityIcons: string[] = ['instagram', 'github', 'linkedin']
 
 export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 

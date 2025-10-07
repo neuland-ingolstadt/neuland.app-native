@@ -147,7 +147,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	footerText2: {
 		color: theme.colors.text,
-		textDecorationLine: 'underline'
+		fontWeight: 600
 	},
 	rowWrapper: {
 		marginBottom: 8

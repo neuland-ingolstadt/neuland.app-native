@@ -48,6 +48,13 @@ export default function ClClubsScreen(): React.JSX.Element {
 					estimatedItemSize={64}
 					renderItem={({ item }) => <OrganizerListItem organizer={item} />}
 					contentContainerStyle={styles.listContent}
+					ListFooterComponent={
+						<View style={styles.footerContainer}>
+							<Text style={styles.footerText}>
+								{t('pages.clEvents.clubs.footerInfo')}
+							</Text>
+						</View>
+					}
 					refreshControl={
 						<RefreshControl
 							refreshing={isRefetchingByUser}
@@ -144,5 +151,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	itemLink: {
 		fontSize: 14,
 		fontWeight: '600'
+	},
+	footerContainer: {
+		marginTop: 12
+	},
+	footerText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 12
 	}
 }))
