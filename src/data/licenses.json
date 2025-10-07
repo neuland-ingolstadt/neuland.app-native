@@ -71,25 +71,25 @@
 		"licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/elements@2.6.4": {
+	"@react-navigation/elements@2.6.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/native-stack@7.3.26": {
+	"@react-navigation/native-stack@7.3.27": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/native@7.1.17": {
+	"@react-navigation/native@7.1.18": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/stack@7.4.8": {
+	"@react-navigation/stack@7.4.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
@@ -125,13 +125,13 @@
 		"licenseUrl": "https://github.com/th3rdwave/react-navigation-bottom-sheet/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@vis.gl/react-maplibre@8.0.4": {
+	"@vis.gl/react-maplibre@8.1.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/visgl/react-map-gl",
 		"licenseUrl": "https://github.com/visgl/react-map-gl/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"babel-plugin-react-compiler@19.1.0-rc.3": {
+	"babel-plugin-react-compiler@1.0.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react",
 		"licenseUrl": "https://github.com/facebook/react",
@@ -174,12 +174,6 @@
 		"parents": "neuland"
 	},
 	"expo-brightness@14.0.7": {
-		"licenses": "MIT",
-		"repository": "https://github.com/expo/expo",
-		"licenseUrl": "https://github.com/expo/expo",
-		"parents": "neuland"
-	},
-	"expo-build-properties@1.0.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -329,7 +323,7 @@
 		"licenseUrl": "https://github.com/maplibre/maplibre-gl-js/raw/master/LICENSE.txt",
 		"parents": "neuland"
 	},
-	"metro@0.83.1": {
+	"metro@0.83.3": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/metro",
 		"licenseUrl": "https://github.com/facebook/metro",
@@ -359,7 +353,7 @@
 		"licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-i18next@15.7.3": {
+	"react-i18next@15.7.4": {
 		"licenses": "MIT",
 		"repository": "https://github.com/i18next/react-i18next",
 		"licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
@@ -377,13 +371,13 @@
 		"licenseUrl": "https://oblador@github.com/oblador/react-native-collapsible/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-context-menu-view@1.19.0": {
+	"react-native-context-menu-view@1.20.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/mpiannucci/react-native-context-menu-view",
 		"licenseUrl": "https://github.com/mpiannucci/react-native-context-menu-view/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-device-info@14.0.4": {
+	"react-native-device-info@14.1.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-native-device-info/react-native-device-info",
 		"licenseUrl": "https://github.com/react-native-device-info/react-native-device-info/raw/master/LICENSE",
