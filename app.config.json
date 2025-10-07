@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.14.0",
+		"version": "0.14.1",
 		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
@@ -144,15 +144,6 @@
 			["expo-secure-store"],
 			["expo-localization"],
 			["@maplibre/maplibre-react-native"],
-			[
-				"expo-build-properties",
-				{
-					"ios": {
-						"deploymentTarget": "15.1",
-						"useFrameworks": "static"
-					}
-				}
-			],
 			[
 				"expo-splash-screen",
 				{

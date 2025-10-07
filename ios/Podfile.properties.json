@@ -3,6 +3,6 @@
   "EX_DEV_CLIENT_NETWORK_INSPECTOR": "true",
   "newArchEnabled": "false",
   "ios.deploymentTarget": "15.1",
-  "ios.useFrameworks": "static",
+  "ios.forceStaticLinking": "[]",
   "apple.privacyManifestAggregationEnabled": "true"
 }
