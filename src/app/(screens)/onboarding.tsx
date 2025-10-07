@@ -522,7 +522,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontWeight: 'bold'
 	},
-	logoTextGroup: { flex: 1, justifyContent: 'center' },
+	logoTextGroup: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 	page: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.contrast,
