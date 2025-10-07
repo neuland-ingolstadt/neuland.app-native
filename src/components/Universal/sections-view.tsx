@@ -49,7 +49,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: 6,
 		fontSize: 12.5,
 		paddingHorizontal: theme.margins.page,
-		color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor
+		color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor,
+		...(Platform.OS === 'ios'
+			? {
+					marginHorizontal: 16
+				}
+			: {
+					marginHorizontal: 0
+				})
 	}),
 	labelText: {
 		color: theme.colors.labelSecondaryColor,

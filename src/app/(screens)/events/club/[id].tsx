@@ -263,7 +263,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	eventRow: {},
 	eventsContainer: {
-		gap: 12
+		gap: 6
 	},
 	headerTitle: {
 		alignItems: 'center',

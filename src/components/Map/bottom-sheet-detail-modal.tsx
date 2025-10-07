@@ -51,7 +51,7 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 					style={styles.chevronIcon}
 					ios={{
 						name: 'chevron.forward',
-						size: 11
+						size: 6
 					}}
 					android={{
 						name: 'chevron_right',

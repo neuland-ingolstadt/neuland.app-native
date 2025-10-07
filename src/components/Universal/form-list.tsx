@@ -337,7 +337,14 @@ const stylesheet = createStyleSheet((theme) => ({
 	blockFooter: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
-		fontWeight: '400'
+		fontWeight: '400',
+		...(Platform.OS === 'ios'
+			? {
+					marginHorizontal: 16
+				}
+			: {
+					marginHorizontal: 0
+				})
 	},
 	blockHeader: {
 		...(Platform.OS === 'ios'
