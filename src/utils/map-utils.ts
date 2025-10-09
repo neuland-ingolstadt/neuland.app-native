@@ -100,7 +100,7 @@ function isInBuilding(room: string, building: string): boolean {
  * @param {Date} date Date to filter for
  * @returns {object}
  */
-type RoomOpenings = Record<
+export type RoomOpenings = Record<
 	string,
 	{
 		type: string

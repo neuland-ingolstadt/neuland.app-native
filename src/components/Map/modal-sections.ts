@@ -49,7 +49,17 @@ export const modalSection = (
 												value: t('pages.map.details.room.notAvailable', {
 													ns: 'common'
 												})
-											}
+											},
+											...(roomData.nextAvailable != null
+												? [
+														{
+															title: t('pages.map.details.room.nextTimeSpan', {
+																ns: 'common'
+															}),
+															value: `${formatFriendlyTime(roomData.nextAvailable.from)} - ${formatFriendlyTime(roomData.nextAvailable.until)}`
+														}
+													]
+												: [])
 										]
 									: [
 											{

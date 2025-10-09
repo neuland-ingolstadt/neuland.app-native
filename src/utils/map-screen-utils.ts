@@ -3,6 +3,7 @@ import type { i18n, TFunction } from 'i18next'
 import type { FeatureProperties } from '@/types/asset-api'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
+import type { RoomOpenings } from '@/utils/map-utils'
 
 /**
  * Get the ongoing event or next upcoming event from a timetable
@@ -86,12 +87,17 @@ export function getRoomData(
 	availableRooms: Array<{ room: string }> | null,
 	allRoomsFeatures: Feature[] | FeatureCollection,
 	i18n: i18n,
-	t: TFunction<'common', undefined>
+	t: TFunction<'common', undefined>,
+	roomOpenings?: RoomOpenings | null
 ): RoomData {
 	const features = ensureFeaturesArray(allRoomsFeatures)
 	const occupancies = availableRooms?.find((x) => x.room === room)
 	const properties = features.find((x) => x.properties?.Raum === room)
 		?.properties as FeatureProperties | undefined
+
+	const openings = roomOpenings?.[room]
+	const now = new Date()
+	const nextAvailable = openings?.find((o) => o.from > now) ?? null
 
 	return {
 		title: room,
@@ -103,6 +109,7 @@ export function getRoomData(
 				: t('misc.unknown'),
 		properties,
 		occupancies,
+		nextAvailable,
 		type: SEARCH_TYPES.ROOM
 	} as RoomData
 }
