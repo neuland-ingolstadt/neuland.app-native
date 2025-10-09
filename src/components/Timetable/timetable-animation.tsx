@@ -273,8 +273,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		position: 'absolute',
 		alignItems: 'center',
 		justifyContent: 'center',
-		zIndex: 2,
-		elevation: 2
+		zIndex: 2
 	},
 	icon: {
 		color: theme.colors.primary
@@ -285,8 +284,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 80,
 		height: 80,
 		overflow: 'visible',
-		zIndex: 1,
-		elevation: 1
+		zIndex: 1
 	},
 	calendarIcon: {
 		color: theme.colors.labelColor

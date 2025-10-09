@@ -117,15 +117,13 @@ const stylesheet = createStyleSheet((theme) => ({
 			height: 2
 		},
 		shadowOpacity: 0.1,
-		shadowRadius: 4,
-		elevation: 3
+		shadowRadius: 4
 	},
 	selected: {
 		borderWidth: 2,
 		borderColor: theme.colors.text,
 		shadowOpacity: 0.2,
-		shadowRadius: 6,
-		elevation: 5
+		shadowRadius: 6
 	},
 	label: {
 		color: theme.colors.labelColor,
