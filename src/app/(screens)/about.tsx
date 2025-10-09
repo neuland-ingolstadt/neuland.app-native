@@ -27,19 +27,22 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
-import { linkIcon } from '@/components/Universal/Icon'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import FormList from '@/components/Universal/form-list'
+import { type LucideIcon, linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/sections-view'
+import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
+	const headerPadding = useTransparentHeaderPadding()
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -151,7 +154,22 @@ export default function About(): React.JSX.Element {
 					onPress: () => {
 						void Linking.openURL(STATUS_URL)
 					}
-				}
+				},
+				...(Platform.OS !== 'web'
+					? [
+							{
+								title: 'Member Area',
+								icon: {
+									ios: 'person.crop.circle.badge.checkmark',
+									android: 'verified_user' as MaterialIcon,
+									web: 'UserCheck' as LucideIcon
+								},
+								onPress: () => {
+									router.navigate('/member')
+								}
+							}
+						]
+					: [])
 			]
 		},
 		{
@@ -270,7 +288,12 @@ export default function About(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView contentContainerStyle={styles.contentContainer}>
+		<ScrollView
+			contentContainerStyle={[
+				styles.contentContainer,
+				{ paddingTop: headerPadding }
+			]}
+		>
 			<View style={styles.container}>
 				<View style={styles.logoContainer}>
 					<Pressable
@@ -332,9 +355,8 @@ export default function About(): React.JSX.Element {
 			>
 				<SingleSectionPicker
 					title={t('about.analytics.toggle')}
-					selectedItem={analyticsAllowed ?? false}
+					selectedItem={analyticsAllowed === true}
 					action={setAnalyticsAllowed}
-					state={analyticsAllowed ?? false}
 				/>
 			</SectionView>
 		</ScrollView>
@@ -376,12 +398,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 9,
+		borderRadius: 18,
 		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
 		overflow: 'hidden'
 	},
 	logoImage: {
-		borderRadius: 9,
 		flex: 1,
 		height: 100,
 		resizeMode: 'contain',

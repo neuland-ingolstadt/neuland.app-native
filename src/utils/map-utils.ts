@@ -25,6 +25,7 @@ export const BUILDINGS_IN = [
 	'M',
 	'P',
 	'X',
+	'W',
 	'Z'
 ]
 export const INGOLSTADT_CENTER = [11.4328, 48.7663]
@@ -317,7 +318,7 @@ export function getCenter(rooms: Position[][][]): Position {
 export function getCenterSingle(
 	coordinates: number[][][] | undefined
 ): number[] {
-	if (coordinates == null) {
+	if (coordinates == null || coordinates.length === 0) {
 		return INGOLSTADT_CENTER
 	}
 	const centerPoints = coordinates[0].reduce(
@@ -353,30 +354,6 @@ export const handleShareModal = (room: string): void => {
 	void Share.share(
 		Platform.OS === 'android' ? { message: payload } : { url: payload }
 	)
-}
-
-/**
- * Determines the type of search based on the search string.
- * @param search Search string
- * @returns The search type
- */
-export const determineSearchType = (search: string): SEARCH_TYPES => {
-	if (
-		(search.length === 1 || search.length === 2) &&
-		Number.isNaN(Number(search[1]))
-	) {
-		return SEARCH_TYPES.ROOM
-	}
-
-	if (/^[A-Z](G|[0-9E]\.)?\d*$/.test(search)) {
-		return SEARCH_TYPES.ROOM
-	}
-
-	if (/^[A-Z]+$/.test(search)) {
-		return SEARCH_TYPES.ROOM
-	}
-
-	return SEARCH_TYPES.ROOM
 }
 
 export const getIcon = (

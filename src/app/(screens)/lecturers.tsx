@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -23,11 +22,11 @@ import {
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
-import PagerView from '@/components/Layout/PagerView'
-import LecturerRow from '@/components/Rows/LecturerRow'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ToggleRow from '@/components/Universal/ToggleRow'
+import ErrorView from '@/components/Error/error-view'
+import PagerView from '@/components/Layout/pager-view'
+import LecturerRow from '@/components/Rows/lecturer-row'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
+import ToggleRow from '@/components/Universal/toggle-row'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { Funktion, type Lecturers } from '@/types/thi-api'
@@ -332,12 +331,12 @@ export default function LecturersScreen(): React.JSX.Element {
 							styles.rowContainer,
 							{
 								overflow: 'hidden',
-								borderTopStartRadius: index === 0 ? theme.radius.md : 0,
-								borderTopEndRadius: index === 0 ? theme.radius.md : 0,
+								borderTopStartRadius: index === 0 ? theme.radius.mg : 0,
+								borderTopEndRadius: index === 0 ? theme.radius.mg : 0,
 								borderBottomStartRadius:
-									index === lecturers.length - 1 ? theme.radius.md : 0,
+									index === lecturers.length - 1 ? theme.radius.mg : 0,
 								borderBottomEndRadius:
-									index === lecturers.length - 1 ? theme.radius.md : 0
+									index === lecturers.length - 1 ? theme.radius.mg : 0
 							}
 						]}
 					>
@@ -412,23 +411,8 @@ export default function LecturersScreen(): React.JSX.Element {
 				<SectionList
 					sections={sections}
 					keyExtractor={(_, index) => index.toString()}
-					renderItem={({ item, index, section }) => (
-						<View
-							key={index}
-							style={[
-								styles.rowContainer,
-								{
-									overflow: 'hidden',
-									backgroundColor: theme.colors.card,
-									borderTopLeftRadius: index === 0 ? 8 : 0,
-									borderTopRightRadius: index === 0 ? 8 : 0,
-									borderBottomLeftRadius:
-										index === section.data.length - 1 ? 8 : 0,
-									borderBottomRightRadius:
-										index === section.data.length - 1 ? 8 : 0
-								}
-							]}
-						>
+					renderItem={({ item, index }) => (
+						<View key={index} style={[styles.rowContainer]}>
 							<LecturerRow item={item} />
 						</View>
 					)}
@@ -528,7 +512,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	resultsCountContainer: {
 		left: 0,
-		position: 'absolute',
+		position: 'relative',
 		right: 0,
 		zIndex: 1
 	},

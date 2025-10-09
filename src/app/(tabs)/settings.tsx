@@ -2,8 +2,8 @@ import Head from 'expo-router/head'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import Settings from '@/components/Settings/SettingsScreen'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import Settings from '@/components/Settings/settings-screen'
+import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
@@ -27,7 +27,6 @@ export default function FoodRootScreen(): React.JSX.Element {
 			<WorkaroundStack
 				name={'profile'}
 				titleKey={'navigation.profile'}
-				headerTransparent={false}
 				component={isPageOpen ? Settings : () => <></>}
 				androidFallback
 			/>

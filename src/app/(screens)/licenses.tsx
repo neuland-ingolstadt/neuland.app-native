@@ -3,9 +3,10 @@ import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import licenses from '@/data/licenses.json'
 import licensesStatic from '@/data/licenses-static.json'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 
 export interface LicenseEntry {
@@ -19,6 +20,7 @@ export default function Licenses(): React.JSX.Element {
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
 	const { styles, theme } = useStyles(stylesheet)
+	const headerPadding = useTransparentHeaderPadding()
 	const numberRegex = /\d+(\.\d+)*/
 	const atRegex = /(?:@)/gi
 	const navigation = useNavigation()
@@ -98,19 +100,17 @@ export default function Licenses(): React.JSX.Element {
 		}
 	]
 	return (
-		<>
-			<ScrollView
-				contentContainerStyle={styles.container}
-				contentInsetAdjustmentBehavior="automatic"
-			>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-					<View style={styles.notesContainer}>
-						<Text style={styles.notesText}>{t('licenses.footer')}</Text>
-					</View>
+		<ScrollView
+			contentContainerStyle={[styles.container, { paddingTop: headerPadding }]}
+			contentInsetAdjustmentBehavior="automatic"
+		>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+				<View style={styles.notesContainer}>
+					<Text style={styles.notesText}>{t('licenses.footer')}</Text>
 				</View>
-			</ScrollView>
-		</>
+			</View>
+		</ScrollView>
 	)
 }
 

@@ -3,16 +3,18 @@ import { ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
-} from '@/components/Food/FoodLanguageSection'
-import TimetablePreview from '@/components/Timetable/TimetablePreview'
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+} from '@/components/Food/food-language-section'
+import TimetablePreview from '@/components/Timetable/timetable-preview'
+import MultiSectionPicker from '@/components/Universal/multi-section-picker'
+import SectionView from '@/components/Universal/sections-view'
+import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
 	const { styles } = useStyles(stylesheet)
+	const headerPadding = useTransparentHeaderPadding()
 
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const setTimetableMode = useTimetableStore((state) => state.setTimetableMode)
@@ -47,6 +49,8 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const toggleListMode = (isSelected: boolean) => {
 		if (isSelected) {
 			setTimetableMode(TimetableMode.List)
+		} else if (timetableMode === TimetableMode.List) {
+			setTimetableMode(TimetableMode.Timeline3)
 		}
 	}
 
@@ -79,14 +83,13 @@ export default function TimetablePreferences(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
 			<View style={styles.container}>
 				<SectionView title={t('timetable:preferences.title')}>
 					<SingleSectionPicker
 						title={t('timetable:viewModes.list')}
 						selectedItem={timetableMode === TimetableMode.List}
 						action={toggleListMode}
-						state={false}
 					/>
 				</SectionView>
 

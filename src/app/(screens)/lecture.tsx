@@ -13,18 +13,18 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
-import ErrorView from '@/components/Error/ErrorView'
-import DetailsBody from '@/components/Timetable/DetailsBody'
-import DetailsRow from '@/components/Timetable/DetailsRow'
-import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
+import ErrorView from '@/components/Error/error-view'
+import DetailsBody from '@/components/Timetable/details-body'
+import DetailsRow from '@/components/Timetable/details-row'
+import DetailsSymbol from '@/components/Timetable/details-symbol'
 import Separator from '@/components/Timetable/Separator'
-import ShareCard from '@/components/Timetable/ShareCard'
-import FormList from '@/components/Universal/FormList'
+import ShareCard from '@/components/Timetable/share-card'
+import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 
 export default function TimetableDetails(): React.JSX.Element {
@@ -53,20 +53,18 @@ export default function TimetableDetails(): React.JSX.Element {
 	})
 	useFocusEffect(
 		useCallback(() => {
-			if (
-				lecture === undefined ||
-				Platform.OS === 'web' ||
-				Platform.OS === 'android'
-			) {
+			if (lecture === undefined) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					...getPlatformHeaderButtons({})
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => <ShareHeaderButton onPress={shareEvent} />
+					...getPlatformHeaderButtons({
+						onShare: shareEvent
+					})
 				})
 			}
-		}, [])
+		}, [lecture, navigation])
 	)
 
 	if (lecture === undefined) {
@@ -95,7 +93,7 @@ export default function TimetableDetails(): React.JSX.Element {
 				url: uri
 			})
 		} catch (e) {
-			console.log(e)
+			console.error(e)
 		}
 	}
 

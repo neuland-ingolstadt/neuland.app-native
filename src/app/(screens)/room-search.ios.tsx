@@ -9,12 +9,13 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
-import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import ErrorView from '@/components/Error/error-view'
+import { FreeRoomsList } from '@/components/Map/free-roomsk-list'
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -50,6 +51,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
+	const headerPadding = useTransparentHeaderPadding() + 10
 
 	const { startDate, wasModified } = getNextValidDate()
 	const building = useBinding(BUILDINGS_ALL)
@@ -133,145 +135,143 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<>
-			<ScrollView style={styles.scrollView}>
-				<View>
-					<Text style={styles.sectionHeader}>
-						{t('pages.rooms.options.title')}
-					</Text>
-					<View style={styles.section}>
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.date')}
-							</Text>
+		<ScrollView style={[styles.scrollView, { paddingTop: headerPadding }]}>
+			<View>
+				<Text style={styles.sectionHeader}>
+					{t('pages.rooms.options.title')}
+				</Text>
+				<View style={styles.section}>
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.date')}
+						</Text>
 
-							<DateTimePicker
-								value={new Date(`${date}T${time}`)}
-								mode="date"
-								accentColor={theme.colors.primary}
-								locale="de-DE"
-								onChange={(_event, selectedDate) => {
-									setDate(formatISODate(selectedDate))
-								}}
-								minimumDate={new Date()}
-								maximumDate={
-									new Date(new Date().setDate(new Date().getDate() + 90))
-								}
-							/>
-						</View>
-
-						<Divider paddingLeft={16} />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.time')}
-							</Text>
-
-							<DateTimePicker
-								value={new Date(`${date}T${time}`)}
-								mode="time"
-								is24Hour={true}
-								accentColor={theme.colors.primary}
-								locale="de-DE"
-								minuteInterval={5}
-								onChange={(_event, selectedDate) => {
-									setTime(formatISOTime(selectedDate))
-								}}
-							/>
-						</View>
-						<Divider paddingLeft={16} />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.duration')}
-							</Text>
-
-							<Picker
-								selection={duration}
-								pickerStyle="menu"
-								tint={theme.colors.primary}
-								offset={{ x: 15, y: 0 }}
-							>
-								{DURATIONS.map((option) => (
-									<Text key={option}>{option}</Text>
-								))}
-							</Picker>
-						</View>
-						<Divider paddingLeft={16} />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.building')}
-							</Text>
-
-							<Picker
-								selection={building}
-								pickerStyle="menu"
-								tint={theme.colors.primary}
-								offset={{ x: 20, y: 0 }}
-							>
-								{ALL_BUILDINGS.map((option) => (
-									<Text key={option}>{option}</Text>
-								))}
-							</Picker>
-						</View>
+						<DateTimePicker
+							value={new Date(`${date}T${time}`)}
+							mode="date"
+							accentColor={theme.colors.primary}
+							locale="de-DE"
+							onChange={(_event, selectedDate) => {
+								setDate(formatISODate(selectedDate))
+							}}
+							minimumDate={new Date()}
+							maximumDate={
+								new Date(new Date().setDate(new Date().getDate() + 90))
+							}
+						/>
 					</View>
-					{wasModified && isDateAndTimeEqualToStart() && (
-						<View style={styles.section}>
-							<View style={styles.adjustContainer}>
-								<PlatformIcon
-									ios={{
-										name: 'sparkles',
-										size: 18
-									}}
-									android={{
-										name: 'update',
-										size: 20
-									}}
-									web={{
-										name: 'Sparkles',
-										size: 20
-									}}
-								/>
-								<Text style={styles.adjustedTitle}>
-									{t('pages.rooms.modified.title')}
-								</Text>
-							</View>
 
-							<Text style={styles.adjustText}>
-								{t('pages.rooms.modified.description', {
-									date,
-									time
-								})}
-							</Text>
-						</View>
-					)}
-					<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-					<View style={styles.sectionContainer}>
-						<View style={styles.section}>
-							{filterState === LoadingState.LOADING || isLoading ? (
-								<LoadingIndicator style={styles.loadingIndicator} />
-							) : isPaused ? (
-								<ErrorView
-									title={networkError}
-									onButtonPress={() => {
-										void refetchByUser()
-									}}
-									inModal
-								/>
-							) : isError || filterState === LoadingState.ERROR ? (
-								<ErrorView
-									title={error?.message ?? t('error.title')}
-									onButtonPress={() => {
-										void refetchByUser()
-									}}
-									inModal
-								/>
-							) : filterState === LoadingState.LOADED ? (
-								<FreeRoomsList rooms={rooms} />
-							) : null}
-						</View>
+					<Divider paddingLeft={16} />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.time')}
+						</Text>
+
+						<DateTimePicker
+							value={new Date(`${date}T${time}`)}
+							mode="time"
+							is24Hour={true}
+							accentColor={theme.colors.primary}
+							locale="de-DE"
+							minuteInterval={5}
+							onChange={(_event, selectedDate) => {
+								setTime(formatISOTime(selectedDate))
+							}}
+						/>
+					</View>
+					<Divider paddingLeft={16} />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.duration')}
+						</Text>
+
+						<Picker
+							selection={duration}
+							pickerStyle="menu"
+							tint={theme.colors.primary}
+							offset={{ x: 15, y: 0 }}
+						>
+							{DURATIONS.map((option) => (
+								<Text key={option}>{option}</Text>
+							))}
+						</Picker>
+					</View>
+					<Divider paddingLeft={16} />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.building')}
+						</Text>
+
+						<Picker
+							selection={building}
+							pickerStyle="menu"
+							tint={theme.colors.primary}
+							offset={{ x: 20, y: 0 }}
+						>
+							{ALL_BUILDINGS.map((option) => (
+								<Text key={option}>{option}</Text>
+							))}
+						</Picker>
 					</View>
 				</View>
-			</ScrollView>
-		</>
+				{wasModified && isDateAndTimeEqualToStart() && (
+					<View style={styles.section}>
+						<View style={styles.adjustContainer}>
+							<PlatformIcon
+								ios={{
+									name: 'sparkles',
+									size: 18
+								}}
+								android={{
+									name: 'update',
+									size: 20
+								}}
+								web={{
+									name: 'Sparkles',
+									size: 20
+								}}
+							/>
+							<Text style={styles.adjustedTitle}>
+								{t('pages.rooms.modified.title')}
+							</Text>
+						</View>
+
+						<Text style={styles.adjustText}>
+							{t('pages.rooms.modified.description', {
+								date,
+								time
+							})}
+						</Text>
+					</View>
+				)}
+				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
+				<View style={styles.sectionContainer}>
+					<View style={styles.section}>
+						{filterState === LoadingState.LOADING || isLoading ? (
+							<LoadingIndicator style={styles.loadingIndicator} />
+						) : isPaused ? (
+							<ErrorView
+								title={networkError}
+								onButtonPress={() => {
+									void refetchByUser()
+								}}
+								inModal
+							/>
+						) : isError || filterState === LoadingState.ERROR ? (
+							<ErrorView
+								title={error?.message ?? t('error.title')}
+								onButtonPress={() => {
+									void refetchByUser()
+								}}
+								inModal
+							/>
+						) : filterState === LoadingState.LOADED ? (
+							<FreeRoomsList rooms={rooms} />
+						) : null}
+					</View>
+				</View>
+			</View>
+		</ScrollView>
 	)
 }
 

@@ -15,7 +15,7 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import WhatsNewBox from '@/components/Flow/whats-new-box'
 import changelogData from '@/data/changelog.json'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { LanguageKey } from '@/localization/i18n'
@@ -32,7 +32,7 @@ export default function WhatsNewScreen(): React.JSX.Element {
 	)
 	const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
 	if (changelog.version[version] === undefined) {
-		router.navigate('/(tabs)/(index)')
+		router.navigate('/(tabs)')
 	}
 	const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
 		(key) => changelog.version[key]
@@ -151,7 +151,7 @@ export default function WhatsNewScreen(): React.JSX.Element {
 					style={styles.button}
 					onPress={() => {
 						toggleUpdated()
-						router.replace('/(tabs)/(index)')
+						router.replace('/(tabs)')
 					}}
 				>
 					<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>

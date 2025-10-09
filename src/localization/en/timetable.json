@@ -30,8 +30,13 @@
 		"empty": {
 			"title": "Timetable not configured",
 			"title2": "No lectures found",
+			"subtitle": "Timetable not configured yet.",
 			"message": "To display your timetable, you have to configure it using the THI timetable website.",
-			"button": "Configure now"
+			"button": "Configure now",
+			"tip1": "Configure your timetable on the THI website",
+			"tip2": "Once set up, it automatically syncs lectures and lecturers",
+			"tip3": "Tap the refresh button after configuration",
+			"refresh": "Refresh"
 		},
 		"filtered": {
 			"title": "No future lectures found",

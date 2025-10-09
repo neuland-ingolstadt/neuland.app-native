@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
-import SectionView from '@/components/Universal/SectionsView'
+import SectionView from '@/components/Universal/sections-view'
 import type { FormListSections } from '@/types/components'
 
 export default function License(): React.JSX.Element {
@@ -86,19 +86,17 @@ export default function License(): React.JSX.Element {
 		}
 	]
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.container}>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-				</View>
+		<ScrollView contentContainerStyle={styles.container}>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+			</View>
 
-				{licenseText !== '' && (
-					<SectionView title={t('navigation.license', { ns: 'navigation' })}>
-						<Text style={styles.text}>{licenseText}</Text>
-					</SectionView>
-				)}
-			</ScrollView>
-		</>
+			{licenseText !== '' && (
+				<SectionView title={t('navigation.license', { ns: 'navigation' })}>
+					<Text style={styles.text}>{licenseText}</Text>
+				</SectionView>
+			)}
+		</ScrollView>
 	)
 }
 

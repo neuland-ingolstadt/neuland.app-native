@@ -10,6 +10,8 @@
 		"dashboard": "Drag & drop to reorder",
 		"tryAgain": "Please try again"
 	},
+	"showMore": "Show more",
+	"showLess": "Show less",
 	"error": {
 		"title": "An error occurred",
 		"description": "An error occurred while loading the data.",
@@ -19,8 +21,9 @@
 		"pull": "Pull down to refresh",
 		"noData": {
 			"title": "No data available",
-			"message": "Please try again later."
+			"message": "Check back later."
 		},
+		"noEvents": "No events available",
 		"eventNotFound": "Event not found",
 		"eventNotFoundDescription": "The event you're looking for doesn't exist or has been removed.",
 		"backToEventList": "Back to {{type}}",
@@ -93,7 +96,7 @@
 		"studVer": "StudVer",
 		"marketplace": "Marketplace",
 		"thi": "THI",
-		"press": "PressReader",
+		"print": "Print",
 		"librarySeat": "Library Seat"
 	},
 	"pages": {
@@ -107,7 +110,7 @@
 				"studVer": "Student Representation",
 				"marketplace": "Marketplace",
 				"thi": "THI Website",
-				"press": "PressReader",
+				"print": "Print",
 				"librarySeat": "Library Seat Reservation"
 			},
 			"more": "more links"
@@ -200,7 +203,24 @@
 			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
-			"registerNow": "Register now"
+			"registerNow": "Register now",
+			"eventLink": "Event website",
+			"organizerDetails": {
+				"clubWebsite": "Club website",
+				"instagram": "Instagram",
+				"linkedin": "LinkedIn",
+				"location": "Location",
+				"registrationNumber": "Registration number",
+				"nonProfit": {
+					"label": "Non-profit status",
+					"yes": "Registered non-profit",
+					"no": "Not registered as non-profit"
+				},
+				"info": "Location",
+				"stats": "Legal",
+				"noDescription": "No description available yet.",
+				"tapHint": "Tap the organizer entry above to learn more about the club."
+			}
 		},
 		"map": {
 			"search": {
@@ -218,6 +238,10 @@
 				"confirm": "Nice!"
 			},
 			"noAvailableRooms": "No free rooms available",
+			"allRoomsAvailable": {
+				"title": "All rooms available",
+				"subtitle": "Currently all rooms are available."
+			},
 			"details": {
 				"room": {
 					"details": "Room details",
@@ -321,6 +345,13 @@
 					"subtitle": "Check back later."
 				}
 			},
+			"clubs": {
+				"title": "Discover clubs",
+				"viewAll": "All clubs",
+				"clubs": "clubs",
+				"missingDescription": "No description available.",
+				"footerInfo": "The clubs are ordered by activity and profile completeness."
+			},
 			"events": {
 				"title": "Events",
 				"subtitle": "Events of the clubs",
@@ -328,6 +359,9 @@
 					"title": "No events found",
 					"subtitle": "Check back later."
 				}
+			},
+			"organizer": {
+				"subtitle": "Upcoming events"
 			}
 		},
 		"careerService": {

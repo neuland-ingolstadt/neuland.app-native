@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.0-beta.5/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -9,7 +9,7 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"src/**",
-			"!src/__generated__/**",
+			"!src/__generated__",
 			"patches/**",
 			"plugins/**",
 			"app.config.json",
@@ -32,13 +32,12 @@
 			"suspicious": {
 				"noArrayIndexKey": "off"
 			},
-			"nursery": {
-				"useUniqueElementIds": "off"
-			},
 			"correctness": {
 				"useExhaustiveDependencies": "off",
 				"noUnusedImports": "error",
-				"noUnusedVariables": "error"
+				"noUnusedVariables": "error",
+				"noNestedComponentDefinitions": "off",
+				"useUniqueElementIds": "off"
 			},
 			"style": {
 				"noParameterAssign": "error",

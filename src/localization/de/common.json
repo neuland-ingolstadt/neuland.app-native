@@ -10,6 +10,8 @@
 		"dashboard": "Drag & Drop zum Sortieren",
 		"tryAgain": "Versuche es erneut"
 	},
+	"showMore": "Mehr anzeigen",
+	"showLess": "Weniger anzeigen",
 	"error": {
 		"title": "Ein Fehler ist aufgetreten",
 		"description": "Beim Laden der Daten ist ein Fehler aufgetreten.",
@@ -19,8 +21,9 @@
 		"pull": "Zum Aktualisieren nach unten ziehen",
 		"noData": {
 			"title": "Keine Daten verfügbar.",
-			"message": "Bitte versuche es später erneut."
+			"message": "Schau später nochmal vorbei."
 		},
+		"noEvents": "Keine Veranstaltungen verfügbar",
 		"eventNotFound": "Veranstaltung nicht gefunden",
 		"eventNotFoundDescription": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
 		"backToEventList": "Zurück zu {{type}}",
@@ -93,7 +96,7 @@
 		"studVer": "StudVer",
 		"marketplace": "Marktplatz",
 		"thi": "THI",
-		"press": "PressReader",
+		"print": "Drucken",
 		"librarySeat": "Bibliotheksplatz"
 	},
 	"pages": {
@@ -107,7 +110,7 @@
 				"studVer": "Studierendenvertretung",
 				"marketplace": "Marktplatz",
 				"thi": "THI Website",
-				"press": "PressReader",
+				"print": "Drucken",
 				"librarySeat": "Bibliotheksplatz"
 			},
 			"more": "Mehr"
@@ -200,7 +203,24 @@
 			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
-			"registerNow": "Jetzt anmelden"
+			"registerNow": "Jetzt anmelden",
+			"eventLink": "Veranstaltungslink",
+			"organizerDetails": {
+				"clubWebsite": "Vereins-Website",
+				"instagram": "Instagram",
+				"linkedin": "LinkedIn",
+				"location": "Ort",
+				"registrationNumber": "Registrierungsnummer",
+				"nonProfit": {
+					"label": "Gemeinnützigkeit",
+					"yes": "Als gemeinnützig registriert",
+					"no": "Nicht als gemeinnützig registriert"
+				},
+				"info": "Standort",
+				"stats": "Rechtliches",
+				"noDescription": "Noch keine Beschreibung vorhanden.",
+				"tapHint": "Tippe auf den Veranstalter, um mehr über den Verein zu erfahren."
+			}
 		},
 		"map": {
 			"search": {
@@ -218,6 +238,10 @@
 				"confirm": "Nice!"
 			},
 			"noAvailableRooms": "Keine freien Räume verfügbar",
+			"allRoomsAvailable": {
+				"title": "Alle Räume frei",
+				"subtitle": "Aktuell sind alle Räume verfügbar."
+			},
 			"details": {
 				"room": {
 					"details": "Raumdetails",
@@ -321,6 +345,13 @@
 					"subtitle": "Bitte versuche es später erneut."
 				}
 			},
+			"clubs": {
+				"title": "Vereine entdecken",
+				"viewAll": "Alle Vereine",
+				"clubs": "Vereine",
+				"missingDescription": "Keine Beschreibung verfügbar.",
+				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
+			},
 			"events": {
 				"title": "Veranstaltungen",
 				"subtitle": "Veranstaltungen der Vereine",
@@ -328,19 +359,22 @@
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."
 				}
+			},
+			"organizer": {
+				"subtitle": "Anstehende Veranstaltungen"
 			}
 		},
 		"careerService": {
-			"title": "Berufsservice",
+			"title": "Career Service",
 			"noEvents": {
-				"title": "Keine Berufsserviceveranstaltungen",
+				"title": "Keine Career Service Veranstaltungen",
 				"subtitle": "Bitte versuche es später erneut."
 			}
 		},
 		"studentCounselling": {
-			"title": "Studentenberatung",
+			"title": "Studienberatung",
 			"noEvents": {
-				"title": "Keine Studentenberatungveranstaltungen",
+				"title": "Keine Studienberatung Veranstaltungen",
 				"subtitle": "Bitte versuche es später erneut."
 			}
 		},

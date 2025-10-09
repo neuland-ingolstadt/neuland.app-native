@@ -29,11 +29,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
-import FormList from '@/components/Universal/FormList'
+import ErrorView from '@/components/Error/error-view'
+import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
@@ -50,6 +49,7 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function FoodDetail(): React.JSX.Element {
@@ -120,17 +120,15 @@ export default function FoodDetail(): React.JSX.Element {
 		useCallback(() => {
 			if (!foodData) {
 				navigation.setOptions({
-					headerRight: () => undefined
+					...getPlatformHeaderButtons({})
 				})
 			} else {
 				navigation.setOptions({
-					headerRight: () => (
-						<ShareHeaderButton
-							onPress={() => {
-								shareMeal(foodData, i18n, userKind)
-							}}
-						/>
-					)
+					...getPlatformHeaderButtons({
+						onShare: () => {
+							shareMeal(foodData, i18n, userKind)
+						}
+					})
 				})
 			}
 		}, [foodData, i18n, userKind, navigation])
@@ -543,7 +541,6 @@ export default function FoodDetail(): React.JSX.Element {
 						<PlatformIcon
 							ios={{
 								name: 'calendar',
-								variant: 'fill',
 								size: 13
 							}}
 							android={{
@@ -643,7 +640,7 @@ export default function FoodDetail(): React.JSX.Element {
 			)}
 
 			<View style={styles.formList}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 
 			<Pressable onPress={triggerWiggle}>
@@ -696,7 +693,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		borderRadius: theme.radius.md,
 		flexDirection: 'row',
 		gap: 16,
@@ -757,7 +754,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 6,
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		paddingHorizontal: 12,
 		paddingVertical: 6,
 		borderRadius: theme.radius.md,
@@ -779,7 +776,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	priceCard: {
 		flex: 1,
-		backgroundColor: theme.colors.card,
+		backgroundColor: theme.colors.cardSheet,
 		borderRadius: theme.radius.md,
 		padding: 12,
 		alignItems: 'center',

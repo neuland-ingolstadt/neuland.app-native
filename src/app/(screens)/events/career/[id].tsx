@@ -23,14 +23,14 @@ import {
 	type CareerServiceEventFieldsFragment,
 	CareerServiceEventFieldsFragmentDoc
 } from '@/__generated__/gql/graphql'
-import { EventErrorView } from '@/components/Error/EventErrorView'
-import FormList from '@/components/Universal/FormList'
+import { EventErrorView } from '@/components/Error/event-error-view'
+import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadCareerServiceEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function CareerServiceEvent(): React.JSX.Element {
@@ -104,27 +104,25 @@ export default function CareerServiceEvent(): React.JSX.Element {
 	useFocusEffect(
 		useCallback(() => {
 			navigation.setOptions({
-				headerRight: () => (
-					<ShareHeaderButton
-						onPress={async () => {
-							trackEvent('Share', { type: 'careerServiceEvent' })
-							const deepLinkUrl = `https://web.neuland.app/events/career/${id}`
-							const message = t('pages.event.shareCareerMessage', {
-								title: eventData?.title,
-								date: formatFriendlyDate(eventData?.date ?? ''),
-								link: deepLinkUrl
-							})
-							if (Platform.OS === 'web') {
-								await copyToClipboard(message)
-								return
-							}
+				...getPlatformHeaderButtons({
+					onShare: async () => {
+						trackEvent('Share', { type: 'careerServiceEvent' })
+						const deepLinkUrl = `https://web.neuland.app/events/career/${id}`
+						const message = t('pages.event.shareCareerMessage', {
+							title: eventData?.title,
+							date: formatFriendlyDate(eventData?.date ?? ''),
+							link: deepLinkUrl
+						})
+						if (Platform.OS === 'web') {
+							await copyToClipboard(message)
+							return
+						}
 
-							await Share.share({
-								message
-							})
-						}}
-					/>
-				)
+						await Share.share({
+							message
+						})
+					}
+				})
 			})
 		}, [navigation, t, eventData, id])
 	)
@@ -228,7 +226,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 				</Text>
 			</View>
 			<View style={styles.formListContainer}>
-				<FormList sections={sections} />
+				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)

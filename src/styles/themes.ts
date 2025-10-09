@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export const lightTheme = {
 	colors: {
 		typography: '#000000',
@@ -8,8 +10,10 @@ export const lightTheme = {
 		labelBackground: '#e5dede',
 		tabbarInactive: '#999999',
 		success: '#21bc21',
+		neulandGreen: '#00ff3c',
 		datePickerBackground: '#ebebec',
 		card: 'rgb(255, 255, 255)',
+		cardSheet: 'rgb(255, 255, 255)',
 		cardButton: '#f2f2f2',
 		notification: 'rgb(255, 59, 48)',
 		warning: '#f48e00',
@@ -44,12 +48,13 @@ export const lightTheme = {
 	},
 	radius: {
 		sm: 4,
-		md: 8,
-		mg: 10,
-		lg: 12,
+		md: 17,
+		mg: 17,
+		lg: 22,
+		ios: Platform.OS === 'ios' ? 26 : 17,
 		infinite: 9999
 	}
-} as const
+}
 
 export const darkTheme = {
 	colors: {
@@ -61,8 +66,10 @@ export const darkTheme = {
 		labelBackground: '#444444',
 		tabbarInactive: '#757575',
 		success: '#37d837',
+		neulandGreen: '#00ff3c',
 		datePickerBackground: '#2a2a2c',
 		card: 'rgb(18, 18, 18)',
+		cardSheet: Platform.OS === 'ios' ? 'rgb(6, 6, 6)' : 'rgb(18, 18, 18)',
 		cardButton: '#262626',
 		notification: 'rgb(255, 69, 58)',
 		warning: '#ff9900',
@@ -97,9 +104,10 @@ export const darkTheme = {
 	},
 	radius: {
 		sm: 4,
-		md: 8,
-		mg: 10,
-		lg: 12,
+		md: 17,
+		mg: 17,
+		lg: 22,
+		ios: Platform.OS === 'ios' ? 26 : 17,
 		infinite: 9999
 	}
-} as const
+}

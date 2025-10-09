@@ -20,10 +20,10 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import LoginForm from '@/components/Universal/LoginForm'
+import LoginForm from '@/components/Universal/login-form'
 import { PRIVACY_URL } from '@/data/constants'
 
-import LoginAnimatedText from './LoginAnimatedText'
+import LoginAnimatedText from './login-animated-text'
 
 const useIsFloatingKeyboard = (): boolean => {
 	const windowWidth = Dimensions.get('window').width
@@ -65,36 +65,34 @@ export default function Login(): React.JSX.Element {
 	const insets = useSafeAreaInsets()
 
 	return (
-		<>
-			<TouchableWithoutFeedback
-				onPress={Keyboard.dismiss}
-				disabled={Platform.OS === 'web'}
-			>
-				<View style={{ ...styles.container, paddingTop: insets.top }}>
-					<KeyboardAvoidingView
-						style={styles.keyboardContainer}
-						behavior="padding"
-						enabled={!floatingKeyboard}
+		<TouchableWithoutFeedback
+			onPress={Keyboard.dismiss}
+			disabled={Platform.OS === 'web'}
+		>
+			<View style={{ ...styles.container, paddingTop: insets.top }}>
+				<KeyboardAvoidingView
+					style={styles.keyboardContainer}
+					behavior="padding"
+					enabled={!floatingKeyboard}
+				>
+					<LoginAnimatedText />
+					<LoginForm navigateHome={navigateHome} />
+					<View />
+					<View />
+				</KeyboardAvoidingView>
+				<View style={styles.linkContainer}>
+					<Pressable
+						onPress={() => {
+							void Linking.openURL(PRIVACY_URL)
+						}}
 					>
-						<LoginAnimatedText />
-						<LoginForm navigateHome={navigateHome} />
-						<View />
-						<View />
-					</KeyboardAvoidingView>
-					<View style={styles.linkContainer}>
-						<Pressable
-							onPress={() => {
-								void Linking.openURL(PRIVACY_URL)
-							}}
-						>
-							<Text style={styles.privacyLink}>
-								{t('onboarding.links.privacy')}
-							</Text>
-						</Pressable>
-					</View>
+						<Text style={styles.privacyLink}>
+							{t('onboarding.links.privacy')}
+						</Text>
+					</Pressable>
 				</View>
-			</TouchableWithoutFeedback>
-		</>
+			</View>
+		</TouchableWithoutFeedback>
 	)
 }
 

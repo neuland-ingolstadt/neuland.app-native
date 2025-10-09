@@ -18,12 +18,12 @@ import {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
+import ErrorView from '@/components/Error/error-view'
 import { queryClient } from '@/components/provider'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { USER_STUDENT } from '@/data/constants'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { printLink, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -55,6 +55,7 @@ export default function Profile(): React.JSX.Element {
 				return failureCount < 2
 			}
 		})
+
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 	const [isBackground, setIsBackground] = React.useState(false)
 	useEffect(() => {
@@ -86,7 +87,7 @@ export default function Profile(): React.JSX.Element {
 			resetPreferences()
 			performLogout(toggleUserKind, resetOrder, queryClient)
 				.catch((e) => {
-					console.log(e)
+					console.error(e)
 				})
 				.finally(() => {
 					setIsLoggingOut(false)
@@ -110,7 +111,7 @@ export default function Profile(): React.JSX.Element {
 						resetPreferences()
 						performLogout(toggleUserKind, resetOrder, queryClient)
 							.catch((e) => {
-								console.log(e)
+								console.error(e)
 							})
 							.finally(() => {
 								setIsLoggingOut(false)
@@ -145,7 +146,10 @@ export default function Profile(): React.JSX.Element {
 				},
 				{
 					title: t('profile.formlist.user.printer'),
-					value: data?.pcounter
+					value: data?.pcounter,
+					onPress: () => {
+						void Linking.openURL(printLink)
+					}
 				}
 			]
 		},

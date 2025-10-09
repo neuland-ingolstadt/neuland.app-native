@@ -12,5 +12,9 @@
       <string>applinks:web.neuland.app</string>
       <string>applinks:dev.neuland.app</string>
     </array>
+    <key>com.apple.developer.pass-type-identifiers</key>
+    <array>
+      <string>$(TeamIdentifierPrefix)pass.member.neuland.app</string>
+    </array>
   </dict>
 </plist>

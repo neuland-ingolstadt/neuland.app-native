@@ -1,4 +1,6 @@
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, {
+	DateTimePickerAndroid
+} from '@react-native-community/datetimepicker'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import type React from 'react'
@@ -8,11 +10,11 @@ import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
-import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import ErrorView from '@/components/Error/error-view'
+import { FreeRoomsList } from '@/components/Map/free-roomsk-list'
 import Divider from '@/components/Universal/Divider'
 import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import type { AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -58,6 +60,34 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
+
+	const openAndroidDatePicker = (): void => {
+		DateTimePickerAndroid.open({
+			value: new Date(`${date}T${time}`),
+			mode: 'date',
+			minimumDate: new Date(),
+			maximumDate: new Date(new Date().setDate(new Date().getDate() + 90)),
+			onChange: (event, selectedDate) => {
+				if (event.type === 'set' && selectedDate != null) {
+					setDate(formatISODate(selectedDate))
+				}
+			}
+		})
+	}
+
+	const openAndroidTimePicker = (): void => {
+		DateTimePickerAndroid.open({
+			value: new Date(`${date}T${time}`),
+			mode: 'time',
+			is24Hour: true,
+			minuteInterval: 5,
+			onChange: (event, selectedDate) => {
+				if (event.type === 'set' && selectedDate != null) {
+					setTime(formatISOTime(selectedDate))
+				}
+			}
+		})
+	}
 	const [filterState, setFilterState] = useState<LoadingState>(
 		LoadingState.LOADING
 	)
@@ -107,155 +137,145 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<>
-			<ScrollView style={styles.scrollView}>
-				<View>
-					<Text style={styles.sectionHeader}>
-						{t('pages.rooms.options.title')}
-					</Text>
-					<View style={styles.section}>
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.date')}
-							</Text>
+		<ScrollView style={styles.scrollView}>
+			<View>
+				<Text style={styles.sectionHeader}>
+					{t('pages.rooms.options.title')}
+				</Text>
+				<View style={styles.section}>
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.date')}
+						</Text>
 
-							{Platform.OS === 'android' && (
-								<DropdownButton
-									onPress={() => {
-										setShowDate(true)
-									}}
-								>
-									{date.split('-').reverse().join('.')}
-								</DropdownButton>
-							)}
+						{Platform.OS === 'android' && (
+							<DropdownButton onPress={openAndroidDatePicker}>
+								{date.split('-').reverse().join('.')}
+							</DropdownButton>
+						)}
 
-							{Platform.OS === 'web' ? (
-								<input
-									type="date"
-									value={date}
-									onChange={(event: ChangeEvent<HTMLInputElement>) => {
-										setDate(event.currentTarget.value)
+						{Platform.OS === 'web' ? (
+							<input
+								type="date"
+								value={date}
+								onChange={(event: ChangeEvent<HTMLInputElement>) => {
+									setDate(event.currentTarget.value)
+								}}
+								style={styles.webInput as unknown as React.CSSProperties}
+								min={formatISODate(new Date())}
+								max={formatISODate(
+									new Date(new Date().setDate(new Date().getDate() + 90))
+								)}
+							/>
+						) : (
+							showDate && (
+								<DateTimePicker
+									value={new Date(`${date}T${time}`)}
+									mode="date"
+									accentColor={theme.colors.primary}
+									locale="de-DE"
+									onChange={(_event, selectedDate) => {
+										setShowDate(Platform.OS !== 'android')
+										setDate(formatISODate(selectedDate))
 									}}
-									style={styles.webInput as unknown as React.CSSProperties}
-									min={formatISODate(new Date())}
-									max={formatISODate(
+									minimumDate={new Date()}
+									maximumDate={
 										new Date(new Date().setDate(new Date().getDate() + 90))
-									)}
+									}
 								/>
-							) : (
-								showDate && (
-									<DateTimePicker
-										value={new Date(`${date}T${time}`)}
-										mode="date"
-										accentColor={theme.colors.primary}
-										locale="de-DE"
-										onChange={(_event, selectedDate) => {
-											setShowDate(Platform.OS !== 'android')
-											setDate(formatISODate(selectedDate))
-										}}
-										minimumDate={new Date()}
-										maximumDate={
-											new Date(new Date().setDate(new Date().getDate() + 90))
-										}
-									/>
-								)
-							)}
-						</View>
-						<Divider />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.time')}
-							</Text>
-
-							{Platform.OS === 'android' && (
-								<DropdownButton
-									onPress={() => {
-										setShowTime(true)
-									}}
-								>
-									{time}
-								</DropdownButton>
-							)}
-
-							{Platform.OS === 'web' ? (
-								<input
-									type="time"
-									value={time}
-									onChange={(event: ChangeEvent<HTMLInputElement>) => {
-										setTime(event.currentTarget.value)
-									}}
-									style={styles.webInput as unknown as React.CSSProperties}
-									step={300}
-								/>
-							) : (
-								showTime && (
-									<DateTimePicker
-										value={new Date(`${date}T${time}`)}
-										mode="time"
-										is24Hour={true}
-										accentColor={theme.colors.primary}
-										locale="de-DE"
-										minuteInterval={5}
-										onChange={(_event, selectedDate) => {
-											setShowTime(Platform.OS !== 'android')
-											setTime(formatISOTime(selectedDate))
-										}}
-									/>
-								)
-							)}
-						</View>
-						<Divider />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.duration')}
-							</Text>
-							<Dropdown
-								data={DURATIONS}
-								defaultValue={DURATION_PRESET}
-								onSelect={setDuration}
-							/>
-						</View>
-						<Divider />
-						<View style={styles.optionsRow}>
-							<Text style={styles.optionTitle}>
-								{t('pages.rooms.options.building')}
-							</Text>
-							<Dropdown
-								data={ALL_BUILDINGS}
-								defaultValue={BUILDINGS_ALL}
-								onSelect={setBuilding}
-							/>
-						</View>
+							)
+						)}
 					</View>
-					<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-					<View style={styles.sectionContainer}>
-						<View style={styles.section}>
-							{filterState === LoadingState.LOADING || isLoading ? (
-								<LoadingIndicator style={styles.loadingIndicator} />
-							) : isPaused ? (
-								<ErrorView
-									title={networkError}
-									onButtonPress={() => {
-										void refetchByUser()
+					<Divider />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.time')}
+						</Text>
+
+						{Platform.OS === 'android' && (
+							<DropdownButton onPress={openAndroidTimePicker}>
+								{time}
+							</DropdownButton>
+						)}
+
+						{Platform.OS === 'web' ? (
+							<input
+								type="time"
+								value={time}
+								onChange={(event: ChangeEvent<HTMLInputElement>) => {
+									setTime(event.currentTarget.value)
+								}}
+								style={styles.webInput as unknown as React.CSSProperties}
+								step={300}
+							/>
+						) : (
+							showTime && (
+								<DateTimePicker
+									value={new Date(`${date}T${time}`)}
+									mode="time"
+									is24Hour={true}
+									accentColor={theme.colors.primary}
+									locale="de-DE"
+									minuteInterval={5}
+									onChange={(_event, selectedDate) => {
+										setShowTime(Platform.OS !== 'android')
+										setTime(formatISOTime(selectedDate))
 									}}
-									inModal
 								/>
-							) : isError || filterState === LoadingState.ERROR ? (
-								<ErrorView
-									title={error?.message ?? t('error.title')}
-									onButtonPress={() => {
-										void refetchByUser()
-									}}
-									inModal
-								/>
-							) : filterState === LoadingState.LOADED ? (
-								<FreeRoomsList rooms={rooms} />
-							) : null}
-						</View>
+							)
+						)}
+					</View>
+					<Divider />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.duration')}
+						</Text>
+						<Dropdown
+							data={DURATIONS}
+							defaultValue={DURATION_PRESET}
+							onSelect={setDuration}
+						/>
+					</View>
+					<Divider />
+					<View style={styles.optionsRow}>
+						<Text style={styles.optionTitle}>
+							{t('pages.rooms.options.building')}
+						</Text>
+						<Dropdown
+							data={ALL_BUILDINGS}
+							defaultValue={BUILDINGS_ALL}
+							onSelect={setBuilding}
+						/>
 					</View>
 				</View>
-			</ScrollView>
-		</>
+				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
+				<View style={styles.sectionContainer}>
+					<View style={styles.section}>
+						{filterState === LoadingState.LOADING || isLoading ? (
+							<LoadingIndicator style={styles.loadingIndicator} />
+						) : isPaused ? (
+							<ErrorView
+								title={networkError}
+								onButtonPress={() => {
+									void refetchByUser()
+								}}
+								inModal
+							/>
+						) : isError || filterState === LoadingState.ERROR ? (
+							<ErrorView
+								title={error?.message ?? t('error.title')}
+								onButtonPress={() => {
+									void refetchByUser()
+								}}
+								inModal
+							/>
+						) : filterState === LoadingState.LOADED ? (
+							<FreeRoomsList rooms={rooms} />
+						) : null}
+					</View>
+				</View>
+			</View>
+		</ScrollView>
 	)
 }
 

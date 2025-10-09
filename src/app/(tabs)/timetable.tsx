@@ -2,8 +2,8 @@ import Head from 'expo-router/head'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import TimetableScreen from '@/components/Timetable/TimetableScreen'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import TimetableScreen from '@/components/Timetable/timetable-screen'
+import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function TimetableRootScreen(): React.JSX.Element {
 	const { t } = useTranslation('navigation')

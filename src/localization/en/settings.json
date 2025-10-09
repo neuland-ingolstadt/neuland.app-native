@@ -170,6 +170,13 @@
 		"splash": {
 			"title": "Splash Screen",
 			"showSplash": "Show Animated Splash Screen"
+		},
+		"accent": {
+			"title": "Accent Color",
+			"blue": "Blue",
+			"green": "Green",
+			"purple": "Purple",
+			"memberOnly": "As a Neuland member, you can customize the accent color."
 		}
 	},
 	"dashboard": {
@@ -183,6 +190,11 @@
 		"unavailable": {
 			"title": "Unavailable cards",
 			"message": "To use all features of the app, you need to sign in. Tap to continue with your THI account."
+		},
+		"rueWarning": {
+			"title": "Re-enrolment pending",
+			"message": "Please re-enrol in Primuss to remain enrolled next semester.",
+			"link": "Open Primuss"
 		}
 	},
 	"grades": {
@@ -202,7 +214,8 @@
 		"gradesAndSubjects": "Grades & Subjects",
 		"lecturers": "Lecturers",
 		"library": "Your card",
-		"view": "Library"
+		"view": "Library",
+		"open": "View"
 	},
 	"appIcon": {
 		"error": {
@@ -216,15 +229,20 @@
 			"modernPink": "Modern Pink",
 			"rainbowMoonLight": "Rainbow Light",
 			"rainbowNeon": "Rainbow Neon",
-			"cat": "Paradise Cat"
+			"cat": "Paradise Cat",
+			"luxury": "Golden Luxury",
+			"rainbowGlow": "Rainbow Glow",
+			"hacker": "Hacker"
 		},
 		"categories": {
 			"default": "Default",
 			"neon": "Neon",
 			"rainbow": "Rainbow",
-			"exclusive": "Exclusive"
+			"exclusive": "Hidden",
+			"neuland": "Neuland"
 		},
 		"exclusive": "Find easter eggs to unlock exclusive app icons.",
+		"exclusivePreviewSubtitle": "Exclusive for Neuland members. Tap to learn more.",
 		"status": {
 			"locked": "Locked",
 			"unlocked": "Unlocked"

@@ -87,7 +87,7 @@ export async function calculateECTS(): Promise<number> {
 
 	let j = 0
 	for (let i = finished.length - 1; i >= 0; i--) {
-		j = j + Number.parseInt(finished[i].ects)
+		j = j + Number.parseInt(finished[i].ects, 10)
 	}
 
 	return j

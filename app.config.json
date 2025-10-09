@@ -4,7 +4,8 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.13.7",
+		"version": "0.14.1",
+		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,
@@ -34,11 +35,7 @@
 				"UIViewControllerBasedStatusBarAppearance": false,
 				"NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
 			},
-			"icon": {
-				"light": "./src/assets/appIcons/default.png",
-				"dark": "./src/assets/appIcons/dark/defaultDark.png",
-				"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
-			}
+			"icon": "./src/assets/appIcons/Default.icon"
 		},
 		"locales": {
 			"en": "./src/localization/en/ios.json",
@@ -68,34 +65,29 @@
 				}
 			]
 		},
-		"sdkVersion": "53.0.0",
+		"sdkVersion": "54.0.0",
 		"experiments": {
 			"reactCompiler": true,
 			"reactCanary": true,
 			"tsconfigPaths": true,
-			"typedRoutes": true,
-			"remoteBuildCache": {
-				"provider": {
-					"plugin": "@eggl-js/expo-github-cache",
-					"options": {
-						"owner": "neuland-ingolstadt",
-						"repo": "neuland.app-build-cache"
-					}
-				}
+			"typedRoutes": true
+		},
+		"buildCacheProvider": {
+			"plugin": "@eggl-js/expo-github-cache",
+			"options": {
+				"owner": "neuland-ingolstadt",
+				"repo": "neuland.app-build-cache"
 			}
 		},
 		"plugins": [
 			[
-				"react-native-edge-to-edge",
-				{ "android": { "parentTheme": "Material3" } }
-			],
-			[
 				"expo-router",
 				{
 					"headOrigin": "https://web.neuland.app",
-					"sitemap": false
+					"sitemap": true
 				}
 			],
+			["react-native-bottom-tabs", { "theme": "material3" }],
 			[
 				"expo-alternate-app-icons",
 				[
@@ -106,6 +98,18 @@
 					{
 						"name": "RainbowNeon",
 						"ios": "./src/assets/appIcons/rainbowNeon.png"
+					},
+					{
+						"name": "Luxury",
+						"ios": "./src/assets/appIcons/luxury.png"
+					},
+					{
+						"name": "RainbowGlow",
+						"ios": "./src/assets/appIcons/rainbowGlow.png"
+					},
+					{
+						"name": "Hacker",
+						"ios": "./src/assets/appIcons/hacker.png"
 					},
 					{
 						"name": "Retro",
@@ -141,21 +145,6 @@
 			["expo-localization"],
 			["@maplibre/maplibre-react-native"],
 			[
-				"expo-build-properties",
-				{
-					"ios": {
-						"deploymentTarget": "15.1",
-						"useFrameworks": "static"
-					}
-				}
-			],
-			[
-				"expo-screen-orientation",
-				{
-					"initialOrientation": "DEFAULT"
-				}
-			],
-			[
 				"expo-splash-screen",
 				{
 					"backgroundColor": "#ffffff",
@@ -190,7 +179,8 @@
 					}
 				}
 			],
-			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"]
+			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"],
+			"expo-font"
 		],
 		"extra": {
 			"eas": {

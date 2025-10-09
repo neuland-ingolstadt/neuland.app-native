@@ -19,10 +19,13 @@
 		"advancedSearch": "Advanced Search",
 		"calendar": "THI Calendar",
 		"examDetails": "Exam Details",
+		"quicklinks": "Quick Links",
+		"dots": "Lecture Status",
 		"lecturers": {
 			"title": "Lecturers",
 			"search": "Search all lecturers"
 		},
+		"club": "Club Details",
 		"lecturer": "Lecturer Details",
 		"grades": {
 			"title": "Grades",
@@ -43,7 +46,8 @@
 		"roomReport": "Report Room Issue",
 		"thiServices": "THI Services",
 		"clEvents": "Campus Life Events",
-		"counselling": "Student Counselling"
+		"counselling": "Student Counselling",
+		"neulandMember": "Neuland Member Area"
 	},
 	"cards": {
 		"titles": {

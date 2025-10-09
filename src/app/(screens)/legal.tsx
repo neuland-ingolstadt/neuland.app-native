@@ -3,14 +3,16 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
+	const headerPadding = useTransparentHeaderPadding()
 
 	const sections: FormListSections[] = [
 		{
@@ -93,13 +95,16 @@ export default function About(): React.JSX.Element {
 	]
 
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.contentContainer}>
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-				</View>
-			</ScrollView>
-		</>
+		<ScrollView
+			contentContainerStyle={[
+				styles.contentContainer,
+				{ paddingTop: headerPadding }
+			]}
+		>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+			</View>
+		</ScrollView>
 	)
 }
 

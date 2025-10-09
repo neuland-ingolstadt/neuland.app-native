@@ -7,18 +7,20 @@ import Animated from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
-} from '@/components/Food/FoodLanguageSection'
-import FormList from '@/components/Universal/FormList'
+} from '@/components/Food/food-language-section'
+import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/Icon'
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
-import SectionView from '@/components/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import MultiSectionPicker from '@/components/Universal/multi-section-picker'
+import SectionView from '@/components/Universal/sections-view'
+import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { FormListSections } from '@/types/components'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
+	const headerPadding = useTransparentHeaderPadding()
 	const elemtents = [
 		{
 			key: 'IngolstadtMensa',
@@ -102,7 +104,7 @@ export default function FoodPreferences(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
 			<View style={styles.container}>
 				<SectionView title={'Restaurants'}>
 					<MultiSectionPicker
@@ -116,7 +118,6 @@ export default function FoodPreferences(): React.JSX.Element {
 						title={t('preferences.formlist.static')}
 						selectedItem={showStatic ?? false}
 						action={handleSetShowStatic}
-						state={false}
 					/>
 				</SectionView>
 				<View style={styles.sectionContainer}>

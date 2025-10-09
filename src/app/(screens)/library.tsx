@@ -14,10 +14,10 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
-import ErrorView from '@/components/Error/ErrorView'
-import LibraryCard from '@/components/Library/LibraryCard'
-import FormList from '@/components/Universal/FormList'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ErrorView from '@/components/Error/error-view'
+import LibraryCard from '@/components/Library/library-card'
+import FormList from '@/components/Universal/form-list'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import {
 	libraryLink,
 	USER_EMPLOYEE,

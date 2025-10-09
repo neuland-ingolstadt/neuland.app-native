@@ -20,6 +20,9 @@
 		"advancedSearch": "Erweiterte Suche",
 		"calendar": "THI Kalender",
 		"examDetails": "Prüfungsdetails",
+		"quicklinks": "Quick Links",
+		"dots": "Vorlesungsstatus",
+		"club": "Verein Details",
 		"lecturers": {
 			"title": "Dozenten",
 			"search": "Suche alle Dozenten"
@@ -43,7 +46,8 @@
 		"roomReport": "Problem mit einem Raum melden",
 		"thiServices": "THI Services",
 		"clEvents": "Campus Life Veranstaltungen",
-		"counselling": "Studienberatung"
+		"counselling": "Studienberatung",
+		"neulandMember": "Neuland Mitgliederbereich"
 	},
 	"cards": {
 		"titles": {

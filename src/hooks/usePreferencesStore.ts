@@ -3,14 +3,18 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
 
+export type ThemeColor = 'blue' | 'green' | 'purple'
+
 interface PreferencesStore {
 	theme: string
+	themeColor: ThemeColor
 	language: 'de' | 'en' | undefined
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
 	recentQuicklinks: string[]
 	showSplashScreen: boolean
 	setTheme: (theme: string) => void
+	setThemeColor: (color: ThemeColor) => void
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
 	addUnlockedAppIcon: (name: string) => void
@@ -22,6 +26,7 @@ interface PreferencesStore {
 const initialState: Omit<
 	PreferencesStore,
 	| 'setTheme'
+	| 'setThemeColor'
 	| 'setAppIcon'
 	| 'addUnlockedAppIcon'
 	| 'addRecentQuicklink'
@@ -32,9 +37,10 @@ const initialState: Omit<
 	appIcon: undefined,
 	language: undefined,
 	theme: 'auto',
+	themeColor: 'blue',
 	unlockedAppIcons: [],
 	recentQuicklinks: defaultQuicklinks,
-	showSplashScreen: true
+	showSplashScreen: false
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -43,6 +49,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 			...initialState,
 			setTheme: (theme: string) => {
 				set({ theme })
+			},
+			setThemeColor: (themeColor: ThemeColor) => {
+				set({ themeColor })
 			},
 			setLanguage: (language: 'de' | 'en') => {
 				set({ language })

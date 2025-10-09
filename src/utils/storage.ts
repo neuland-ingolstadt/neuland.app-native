@@ -1,11 +1,12 @@
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import * as SecureStore from 'expo-secure-store'
 import { Platform } from 'react-native'
-import { MMKV } from 'react-native-mmkv'
+import { createMMKV } from 'react-native-mmkv'
+
 import type { StateStorage } from 'zustand/middleware'
 import CredentialStorage from './credentialStorage'
 
-export const storage = new MMKV({
+export const storage = createMMKV({
 	id: 'query-client-storage'
 })
 
@@ -90,7 +91,7 @@ export async function deleteSecure(key: string): Promise<void> {
 const clientStorage = {
 	setItem: (key: string, value: string | number | boolean | ArrayBuffer) => {
 		if (value instanceof ArrayBuffer) {
-			storage.set(key, new Uint8Array(value))
+			storage.set(key, value)
 		} else {
 			storage.set(key, value)
 		}
@@ -100,7 +101,7 @@ const clientStorage = {
 		return value ?? null
 	},
 	removeItem: (key: string) => {
-		storage.delete(key)
+		storage.remove(key)
 	}
 }
 
@@ -108,7 +109,7 @@ export const syncStoragePersister = createSyncStoragePersister({
 	storage: clientStorage
 })
 
-export const appStorage = new MMKV({
+export const appStorage = createMMKV({
 	id: 'user-settings-storage'
 })
 
@@ -121,6 +122,6 @@ export const zustandStorage: StateStorage = {
 		return value ?? null
 	},
 	removeItem(name) {
-		appStorage.delete(name)
+		appStorage.remove(name)
 	}
 }

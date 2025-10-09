@@ -49,3 +49,7 @@ service.json
 
 # kotlin
 android/.kotlin
+
+my-release-key.jks
+
+*.geojson

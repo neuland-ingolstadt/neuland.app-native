@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: not a problem here */
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -26,10 +25,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import AnimatedText from '@/components/Flow/svgs/AnimatedText'
+import AnimatedText from '@/components/Flow/svgs/animated-text'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import WhatsNewBox from '@/components/Flow/whats-new-box'
 import PlatformIcon from '@/components/Universal/Icon'
 import { PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
@@ -523,7 +522,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontWeight: 'bold'
 	},
-	logoTextGroup: { flex: 1, justifyContent: 'center' },
+	logoTextGroup: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 	page: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.contrast,

@@ -2,7 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import FormList from '@/components/Universal/FormList'
+import FormList from '@/components/Universal/form-list'
 import changelogData from '@/data/changelog.json'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
@@ -39,27 +39,25 @@ export default function Theme(): React.JSX.Element {
 		}))
 	]
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				<FormList sections={sections} />
-				<View style={styles.notesContainer}>
-					<Text style={styles.notesText}>
-						{t('changelog.footer')}
-						<Text
-							style={styles.text}
-							onPress={() => {
-								void Linking.openURL(
-									'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
-								)
-							}}
-						>
-							{'GitHub'}
-						</Text>
-						.
+		<ScrollView contentContainerStyle={styles.scrollView}>
+			<FormList sections={sections} />
+			<View style={styles.notesContainer}>
+				<Text style={styles.notesText}>
+					{t('changelog.footer')}
+					<Text
+						style={styles.text}
+						onPress={() => {
+							void Linking.openURL(
+								'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
+							)
+						}}
+					>
+						{'GitHub'}
 					</Text>
-				</View>
-			</ScrollView>
-		</>
+					.
+				</Text>
+			</View>
+		</ScrollView>
 	)
 }
 

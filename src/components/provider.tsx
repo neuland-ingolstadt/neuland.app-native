@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
 	DarkTheme,
@@ -8,7 +7,6 @@ import {
 import { focusManager, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Toaster } from 'burnt/web'
-import { useSegments } from 'expo-router'
 import type React from 'react'
 import { useEffect } from 'react'
 import {
@@ -18,13 +16,15 @@ import {
 	StyleSheet
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { useSessionStore } from '@/hooks/useSessionStore'
-import { useTimetableStore } from '@/hooks/useTimetableStore'
-import i18n from '@/localization/i18n'
+import {
+	type ThemeColor,
+	usePreferencesStore
+} from '@/hooks/usePreferencesStore'
+import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
+import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
@@ -48,6 +48,15 @@ export const queryClient = new QueryClient({
 	}
 })
 
+export const themeColorMap: Record<
+	ThemeColor,
+	{ light: string; dark: string }
+> = {
+	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
+	green: { light: '#2bbb4f', dark: '#1beb4f' },
+	purple: { light: '#990eda', dark: '#9e10f0' }
+}
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -59,133 +68,13 @@ export default function Provider({
 }: ProviderProps): React.JSX.Element {
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
-	const segments = useSegments()
 
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
-	const showSplashScreen = usePreferencesStore(
-		(state) => state.showSplashScreen
-	)
-	const timetableMode = useTimetableStore((state) => state.timetableMode)
-	const appIcon = usePreferencesStore((state) => state.appIcon)
-	const selectedRestaurants = useFoodFilterStore(
-		(state) => state.selectedRestaurants
-	)
-	const analyticsInitialized = useSessionStore(
-		(state) => state.analyticsInitialized
-	)
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+	const themeColor = usePreferencesStore((state) => state.themeColor)
 
-	useEffect(() => {
-		// This effect uses segments instead of usePathname which resolves some issues with the router.
-		if (!analyticsInitialized || !Array.isArray(segments)) {
-			return
-		}
-
-		const lastSegment = segments[segments.length - 1]
-
-		const path =
-			typeof lastSegment === 'string'
-				? `/${lastSegment.replace(/[()]/g, '')}`
-				: '/'
-
-		requestAnimationFrame(() => {
-			trackEvent('Route', { path })
-		})
-	}, [segments, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Theme', {
-			theme: theme
-		})
-	}, [theme, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('SplashScreen', {
-			showSplashScreen: showSplashScreen
-		})
-	}, [showSplashScreen, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-		if (Platform.OS === 'ios') {
-			trackEvent('AppIcon', {
-				appIcon: appIcon ?? 'default'
-			})
-		}
-	}, [appIcon, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized || userKind.userKind === undefined) {
-			return
-		}
-		trackEvent('UserKind', {
-			userKind: userKind.userKind
-		})
-	}, [userKind.userKind, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-
-		trackEvent('SelectedRestaurants', {
-			selectedRestaurants: selectedRestaurants.join(',')
-		})
-	}, [selectedRestaurants, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-
-		const entries: Record<string, string> = {}
-		dashboard.shownDashboardEntries.forEach((entry, index) => {
-			if (entry !== undefined) {
-				entries[entry.key] = `Position ${(index + 1).toString()}`
-			}
-		})
-
-		if (Object.keys(entries).length > 0) {
-			trackEvent('Dashboard', entries)
-		}
-	}, [dashboard.shownDashboardEntries, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Language', {
-			food: foodLanguage
-		})
-	}, [foodLanguage, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('Language', {
-			app: i18n.language
-		})
-	}, [i18n.language, analyticsInitialized])
-
-	useEffect((): void => {
-		if (!analyticsInitialized) {
-			return
-		}
-		trackEvent('TimetableMode', {
-			timetableMode: timetableMode ?? 'list'
-		})
-	}, [timetableMode, analyticsInitialized])
+	usePreferenceTracking()
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
@@ -207,29 +96,53 @@ export default function Provider({
 		}
 	}, [theme])
 
+	useEffect(() => {
+		const colors = themeColorMap[themeColor]
+		UnistylesRuntime.updateTheme('light', (t) => ({
+			...t,
+			colors: {
+				...t.colors,
+				primary: colors.light,
+				secondary: colors.light,
+				primaryBackground: `${colors.light}15`
+			}
+		}))
+		UnistylesRuntime.updateTheme('dark', (t) => ({
+			...t,
+			colors: {
+				...t.colors,
+				primary: colors.dark,
+				secondary: colors.dark,
+				primaryBackground: `${colors.dark}25`
+			}
+		}))
+	}, [themeColor])
+
 	return (
 		<GestureHandlerRootView style={styles.container}>
-			<PersistQueryClientProvider
-				client={queryClient}
-				persistOptions={{ persister: syncStoragePersister }}
-			>
-				<UnistylesProvider>
-					<ThemeProvider
-						value={
-							UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
-						}
-					>
-						<BottomSheetModalProvider>
-							<UserKindContext.Provider value={userKind}>
-								<DashboardContext.Provider value={dashboard}>
-									<Toaster />
-									{children}
-								</DashboardContext.Provider>
-							</UserKindContext.Provider>
-						</BottomSheetModalProvider>
-					</ThemeProvider>
-				</UnistylesProvider>
-			</PersistQueryClientProvider>
+			<SafeAreaProvider>
+				<PersistQueryClientProvider
+					client={queryClient}
+					persistOptions={{ persister: syncStoragePersister }}
+				>
+					<UnistylesProvider>
+						<ThemeProvider
+							value={
+								UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
+							}
+						>
+							<BottomSheetModalProvider>
+								<UserKindContext.Provider value={userKind}>
+									<DashboardContext.Provider value={dashboard}>
+										<Toaster />
+										{children}
+									</DashboardContext.Provider>
+								</UserKindContext.Provider>
+							</BottomSheetModalProvider>
+						</ThemeProvider>
+					</UnistylesProvider>
+				</PersistQueryClientProvider>
+			</SafeAreaProvider>
 		</GestureHandlerRootView>
 	)
 }
