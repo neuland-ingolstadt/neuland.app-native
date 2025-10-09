@@ -133,6 +133,13 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
 	const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
+	const pressLink = (url: string | null | undefined) => {
+		if (url) {
+			trackEvent('EventLink', { link: `sportsEvent-${id}` })
+			Linking.openURL(url)
+		}
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: 'Details',
@@ -223,7 +230,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 									web: 'Link' as LucideIcon
 								},
 								onPress: () => {
-									void Linking.openURL(sportsEvent.invitationLink ?? '')
+									pressLink(sportsEvent.invitationLink)
 								},
 								textColor: theme.colors.primary
 							}

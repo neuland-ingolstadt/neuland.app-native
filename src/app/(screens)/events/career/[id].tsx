@@ -139,6 +139,13 @@ export default function CareerServiceEvent(): React.JSX.Element {
 		return <EventErrorView eventType="career" />
 	}
 
+	const pressLink = (url: string | null | undefined) => {
+		if (url) {
+			trackEvent('EventLink', { link: `careerServiceEvent-${id}` })
+			Linking.openURL(url)
+		}
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: t('pages.event.details') as string,
@@ -185,9 +192,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 					title: t('pages.event.registerNow') as string,
 					icon: linkIcon,
 					onPress: () => {
-						if (eventData.url) {
-							Linking.openURL(eventData.url)
-						}
+						pressLink(eventData.url)
 					}
 				}
 			]

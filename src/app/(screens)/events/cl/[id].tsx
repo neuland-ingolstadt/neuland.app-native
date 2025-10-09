@@ -159,6 +159,13 @@ export default function ClEventDetail(): React.JSX.Element {
 		return <EventErrorView eventType="clEvents" />
 	}
 
+	const pressLink = (url: string | null | undefined) => {
+		if (url) {
+			trackEvent('EventLink', { link: `clEvent-${id}` })
+			Linking.openURL(url)
+		}
+	}
+
 	const isMultiDayEvent =
 		eventData?.startDateTime != null &&
 		eventData.endDateTime != null &&
@@ -176,7 +183,7 @@ export default function ClEventDetail(): React.JSX.Element {
 			title: t('pages.event.eventLink'),
 			icon: linkIcon,
 			onPress: () => {
-				void Linking.openURL(eventUrl)
+				pressLink(eventUrl)
 			}
 		})
 	}

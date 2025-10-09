@@ -141,6 +141,13 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 		return <EventErrorView eventType="counselling" />
 	}
 
+	const pressLink = (url: string | null | undefined) => {
+		if (url) {
+			trackEvent('EventLink', { link: `counsellingEvent-${id}` })
+			Linking.openURL(url)
+		}
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: t('pages.event.details') as string,
@@ -186,9 +193,7 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 								title: t('pages.event.registerNow') as string,
 								icon: linkIcon,
 								onPress: () => {
-									if (eventData.url) {
-										void Linking.openURL(eventData.url)
-									}
+									pressLink(eventData.url)
 								}
 							}
 						]
