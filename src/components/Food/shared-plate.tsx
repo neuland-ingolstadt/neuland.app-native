@@ -88,8 +88,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		shadowColor: theme.colors.plateShadow,
 		shadowOffset: { width: 0, height: 6 },
 		shadowOpacity: 0.25,
-		shadowRadius: 15,
-		elevation: 10
+		shadowRadius: 15
 	},
 	plateOuter: {
 		alignItems: 'center',
@@ -100,7 +99,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		shadowOffset: { width: 0, height: 4 },
 		shadowOpacity: 0.2,
 		shadowRadius: 10,
-		elevation: 8,
 		borderWidth: 0.5,
 		borderColor: theme.colors.plateOuterBorder
 	},
@@ -121,7 +119,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.15,
 		shadowRadius: 5,
-		elevation: 4,
 		overflow: 'hidden',
 		borderWidth: 0.5,
 		borderColor: theme.colors.plateInnerBorder
