@@ -32,6 +32,7 @@ import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
+import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
@@ -133,6 +134,10 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
 	const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
+	const pressLink = (url: string | null | undefined) => {
+		pressLinkUtil(url, `sportsEvent-${id}`)
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: 'Details',
@@ -223,7 +228,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 									web: 'Link' as LucideIcon
 								},
 								onPress: () => {
-									void Linking.openURL(sportsEvent.invitationLink ?? '')
+									pressLink(sportsEvent.invitationLink)
 								},
 								textColor: theme.colors.primary
 							}
