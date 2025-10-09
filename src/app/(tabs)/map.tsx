@@ -13,6 +13,7 @@ import MapScreen, { requestPermission } from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
+import type { RoomOpenings } from '@/utils/map-utils'
 import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {
@@ -28,6 +29,7 @@ export default function MapRootScreen(): React.JSX.Element {
 	const [availableRooms, setAvailableRooms] = useState<AvailableRoom[] | null>(
 		null
 	)
+	const [roomOpenings, setRoomOpenings] = useState<RoomOpenings | null>(null)
 	const [currentFloor, setCurrentFloor] = useState({
 		floor: 'EG',
 		manual: false
@@ -69,6 +71,8 @@ export default function MapRootScreen(): React.JSX.Element {
 		setClickedElement,
 		availableRooms,
 		setAvailableRooms,
+		roomOpenings,
+		setRoomOpenings,
 		currentFloor,
 		setCurrentFloor,
 		nextLecture,
