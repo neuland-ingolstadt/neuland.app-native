@@ -10,7 +10,7 @@ import {
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share, Text, View } from 'react-native'
+import { Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
@@ -31,6 +31,7 @@ import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadCareerServiceEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
+import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function CareerServiceEvent(): React.JSX.Element {
@@ -140,10 +141,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 	}
 
 	const pressLink = (url: string | null | undefined) => {
-		if (url) {
-			trackEvent('EventLink', { link: `careerServiceEvent-${id}` })
-			Linking.openURL(url)
-		}
+		pressLinkUtil(url, `careerServiceEvent-${id}`)
 	}
 
 	const sections: FormListSections[] = [

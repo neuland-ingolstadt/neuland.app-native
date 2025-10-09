@@ -11,7 +11,7 @@ import {
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share, Text, View } from 'react-native'
+import { Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
@@ -36,6 +36,7 @@ import {
 	QUERY_KEYS
 } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
+import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
 
@@ -160,10 +161,7 @@ export default function ClEventDetail(): React.JSX.Element {
 	}
 
 	const pressLink = (url: string | null | undefined) => {
-		if (url) {
-			trackEvent('EventLink', { link: `clEvent-${id}` })
-			Linking.openURL(url)
-		}
+		pressLinkUtil(url, `clEvent-${id}`)
 	}
 
 	const isMultiDayEvent =

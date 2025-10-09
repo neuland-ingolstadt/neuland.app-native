@@ -10,7 +10,7 @@ import {
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share, Text, View } from 'react-native'
+import { Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
@@ -31,6 +31,7 @@ import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { loadStudentCounsellingEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
+import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function StudentCounsellingEventDetail(): React.JSX.Element {
@@ -142,10 +143,7 @@ export default function StudentCounsellingEventDetail(): React.JSX.Element {
 	}
 
 	const pressLink = (url: string | null | undefined) => {
-		if (url) {
-			trackEvent('EventLink', { link: `counsellingEvent-${id}` })
-			Linking.openURL(url)
-		}
+		pressLinkUtil(url, `counsellingEvent-${id}`)
 	}
 
 	const sections: FormListSections[] = [
