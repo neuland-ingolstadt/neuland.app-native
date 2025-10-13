@@ -340,7 +340,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 		paddingVertical: 16,
 		paddingHorizontal: 16,
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.ios,
 		shadowColor: theme.colors.text,
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.05,
