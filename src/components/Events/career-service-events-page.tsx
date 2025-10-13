@@ -16,8 +16,7 @@ function CareerServiceEventRow({
 }: {
 	event: CareerServiceEventFieldsFragment
 }): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
-	const { t } = useTranslation('common')
+	const { styles } = useStyles(stylesheet)
 
 	const handlePress = () => {
 		router.navigate({
@@ -31,44 +30,6 @@ function CareerServiceEventRow({
 			<View style={styles.eventContent}>
 				<Text style={styles.eventTitle}>{event.title}</Text>
 				<Text style={styles.eventDate}>{formatFriendlyDate(event.date)}</Text>
-				<View style={styles.slotsContainer}>
-					{event.unlimitedSlots ? (
-						<Text style={styles.slotsText}>
-							{t('pages.events.registration.unlimitedSlots')}
-						</Text>
-					) : typeof event.availableSlots === 'number' &&
-						event.availableSlots > 0 ? (
-						<Text style={styles.slotsText}>
-							{t('pages.events.registration.availableSlots', {
-								available: event.availableSlots,
-								total: event.totalSlots
-							})}
-						</Text>
-					) : event.waitingList && event.waitingList > 0 ? (
-						<Text
-							style={[
-								styles.waitingListText,
-								event.waitingList >= (event.maxWaitingList ?? 0) && {
-									color: theme.colors.notification
-								}
-							]}
-						>
-							{t('pages.events.registration.waitingList.row', {
-								current: event.waitingList,
-								max: event.maxWaitingList
-							})}
-						</Text>
-					) : (
-						<Text
-							style={[
-								styles.waitingListText,
-								{ color: theme.colors.notification }
-							]}
-						>
-							{t('pages.events.registration.fullyBooked')}
-						</Text>
-					)}
-				</View>
 			</View>
 		</Pressable>
 	)

@@ -53,6 +53,24 @@ input AnnouncementInput {
   userKind: [UserKind!]!
 }
 
+"""Entry of the audit log for data mutations."""
+type AuditLogEntry {
+  """Creation date and time of the audit log entry"""
+  createdAt: DateTime!
+  """Entity of the audit log entry"""
+  entity: String!
+  """Entity ID of the audit log entry"""
+  entityId: Int
+  """Unique identifier of the audit log entry"""
+  id: ID!
+  """Name of the user who made the mutation"""
+  name: String
+  """Operation of the audit log entry"""
+  operation: String!
+  """User ID of the user who made the mutation"""
+  userId: String
+}
+
 """
 Enum representing the different locations of THI. This is used to categorize the sports events.
 """
@@ -66,23 +84,27 @@ Career Service Event data type. Information about a specific event from the care
 """
 type CareerServiceEvent {
   """Available slots for the event"""
-  availableSlots: Int
+  availableSlots: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
   """Date of the event"""
   date: DateTime!
+  """Description of the event"""
+  description: String!
   """Unique identifier of the event"""
   id: ID!
   """Maximum waiting list for the event"""
-  maxWaitingList: Int
+  maxWaitingList: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
+  """Published date of the event"""
+  publishedDate: DateTime!
   """Title of the event in German"""
   title: String!
   """Total slots for the event"""
-  totalSlots: Int
+  totalSlots: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
   """Unlimited slots for the event"""
-  unlimitedSlots: Boolean!
+  unlimitedSlots: Boolean @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
   """URL for more information about the event"""
-  url: String
+  url: String!
   """Waiting list for the event"""
-  waitingList: Int
+  waitingList: Int @deprecated(reason: "This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.")
 }
 
 """
@@ -406,12 +428,16 @@ type Query {
   announcements: [Announcement!]! @deprecated(reason: "Use appAnnouncements query instead")
   """Get the current in app announcements."""
   appAnnouncements(active: Boolean): [Announcement!]!
+  """
+  Get the audit log entries. Note: This query is only available for authenticated admin users.
+  """
+  auditLog(limit: Int, offset: Int): [AuditLogEntry!]!
   """Get all events of the career service."""
   careerServiceEvents: [CareerServiceEvent!]!
   """Get all campus life clubs"""
-  clClubs: [Host!]!
+  clClubs: [Host!]! @deprecated(reason: "Use Campus Life API instead")
   """Get the campus life events"""
-  clEvents: [ClEvent!]!
+  clEvents: [ClEvent!]! @deprecated(reason: "Use Campus Life API instead")
   """Get the meal plan for a specific restaurant."""
   food(locations: [LocationInput!]!): FoodResponse!
   """Get all events by Neuland Ingolstadt e.V."""

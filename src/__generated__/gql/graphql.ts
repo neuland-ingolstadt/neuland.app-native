@@ -77,6 +77,25 @@ export type AnnouncementInput = {
   userKind: Array<UserKind>;
 };
 
+/** Entry of the audit log for data mutations. */
+export type AuditLogEntry = {
+  __typename?: 'AuditLogEntry';
+  /** Creation date and time of the audit log entry */
+  createdAt: Scalars['DateTime']['output'];
+  /** Entity of the audit log entry */
+  entity: Scalars['String']['output'];
+  /** Entity ID of the audit log entry */
+  entityId?: Maybe<Scalars['Int']['output']>;
+  /** Unique identifier of the audit log entry */
+  id: Scalars['ID']['output'];
+  /** Name of the user who made the mutation */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Operation of the audit log entry */
+  operation: Scalars['String']['output'];
+  /** User ID of the user who made the mutation */
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
 /** Enum representing the different locations of THI. This is used to categorize the sports events. */
 export enum CampusType {
   Ingolstadt = 'Ingolstadt',
@@ -86,23 +105,42 @@ export enum CampusType {
 /** Career Service Event data type. Information about a specific event from the career service. */
 export type CareerServiceEvent = {
   __typename?: 'CareerServiceEvent';
-  /** Available slots for the event */
+  /**
+   * Available slots for the event
+   * @deprecated This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.
+   */
   availableSlots?: Maybe<Scalars['Int']['output']>;
   /** Date of the event */
   date: Scalars['DateTime']['output'];
+  /** Description of the event */
+  description: Scalars['String']['output'];
   /** Unique identifier of the event */
   id: Scalars['ID']['output'];
-  /** Maximum waiting list for the event */
+  /**
+   * Maximum waiting list for the event
+   * @deprecated This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.
+   */
   maxWaitingList?: Maybe<Scalars['Int']['output']>;
+  /** Published date of the event */
+  publishedDate: Scalars['DateTime']['output'];
   /** Title of the event in German */
   title: Scalars['String']['output'];
-  /** Total slots for the event */
+  /**
+   * Total slots for the event
+   * @deprecated This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.
+   */
   totalSlots?: Maybe<Scalars['Int']['output']>;
-  /** Unlimited slots for the event */
-  unlimitedSlots: Scalars['Boolean']['output'];
+  /**
+   * Unlimited slots for the event
+   * @deprecated This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.
+   */
+  unlimitedSlots?: Maybe<Scalars['Boolean']['output']>;
   /** URL for more information about the event */
-  url?: Maybe<Scalars['String']['output']>;
-  /** Waiting list for the event */
+  url: Scalars['String']['output'];
+  /**
+   * Waiting list for the event
+   * @deprecated This field is no longer available. Career service events are now sourced from Handshake RSS feed which doesn't provide slot information.
+   */
   waitingList?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -467,11 +505,19 @@ export type Query = {
   announcements: Array<Announcement>;
   /** Get the current in app announcements. */
   appAnnouncements: Array<Announcement>;
+  /** Get the audit log entries. Note: This query is only available for authenticated admin users. */
+  auditLog: Array<AuditLogEntry>;
   /** Get all events of the career service. */
   careerServiceEvents: Array<CareerServiceEvent>;
-  /** Get all campus life clubs */
+  /**
+   * Get all campus life clubs
+   * @deprecated Use Campus Life API instead
+   */
   clClubs: Array<Host>;
-  /** Get the campus life events */
+  /**
+   * Get the campus life events
+   * @deprecated Use Campus Life API instead
+   */
   clEvents: Array<ClEvent>;
   /** Get the meal plan for a specific restaurant. */
   food: FoodResponse;
@@ -489,6 +535,13 @@ export type Query = {
 /** Root query */
 export type QueryAppAnnouncementsArgs = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+/** Root query */
+export type QueryAuditLogArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -775,7 +828,7 @@ export type CareerServiceEventsQuery = { __typename?: 'Query', careerServiceEven
     & { ' $fragmentRefs'?: { 'CareerServiceEventFieldsFragment': CareerServiceEventFieldsFragment } }
   )> };
 
-export type CareerServiceEventFieldsFragment = { __typename?: 'CareerServiceEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'CareerServiceEventFieldsFragment' };
+export type CareerServiceEventFieldsFragment = { __typename?: 'CareerServiceEvent', id: string, title: string, description: string, date: Date, url: string, publishedDate: Date } & { ' $fragmentName'?: 'CareerServiceEventFieldsFragment' };
 
 export type StudentCounsellingEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -791,7 +844,7 @@ export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
 {
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  __apiType?: NonNullable<DocumentTypeDecoration<TResult, TVariables>['__apiType']>;
   private value: string;
   public __meta__?: Record<string, any> | undefined;
 
@@ -801,7 +854,7 @@ export class TypedDocumentString<TResult, TVariables>
     this.__meta__ = __meta__;
   }
 
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+  override toString(): string & DocumentTypeDecoration<TResult, TVariables> {
     return this.value;
   }
 }
@@ -934,13 +987,10 @@ export const CareerServiceEventFieldsFragmentDoc = new TypedDocumentString(`
     fragment CareerServiceEventFields on CareerServiceEvent {
   id
   title
+  description
   date
-  unlimitedSlots
-  availableSlots
-  totalSlots
-  waitingList
-  maxWaitingList
   url
+  publishedDate
 }
     `, {"fragmentName":"CareerServiceEventFields"}) as unknown as TypedDocumentString<CareerServiceEventFieldsFragment, unknown>;
 export const StudentCounsellingEventFieldsFragmentDoc = new TypedDocumentString(`
@@ -1113,13 +1163,10 @@ export const CareerServiceEventsDocument = new TypedDocumentString(`
     fragment CareerServiceEventFields on CareerServiceEvent {
   id
   title
+  description
   date
-  unlimitedSlots
-  availableSlots
-  totalSlots
-  waitingList
-  maxWaitingList
   url
+  publishedDate
 }`) as unknown as TypedDocumentString<CareerServiceEventsQuery, CareerServiceEventsQueryVariables>;
 export const StudentCounsellingEventsDocument = new TypedDocumentString(`
     query StudentCounsellingEvents {

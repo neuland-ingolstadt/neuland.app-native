@@ -99,6 +99,89 @@ const CareerCard = (): React.JSX.Element => {
 
 	const noData = <Text style={styles.noDataTitle}>{t('error.noEvents')}</Text>
 
+	// Determine which events to show based on availability
+	const hasCareerServiceEvents = careerServiceEvents.length > 0
+	const hasStudentCounsellingEvents = studentCounsellingEvents.length > 0
+
+	// Logic: if one type has no events, show two of the other type
+	const eventsToShow = (() => {
+		if (!hasCareerServiceEvents && hasStudentCounsellingEvents) {
+			// No career service events, show two student counselling events
+			return studentCounsellingEvents.slice(0, 2).map((event, index) => (
+				<Pressable
+					key={`student-counselling-${event.id}-${index}`}
+					onPress={() => handleEventItemPress(event.id, true)}
+				>
+					<EventItem
+						title={event.title}
+						subtitle={t('pages.events.studentCounselling.title')}
+						startDateTime={event.date ? new Date(event.date) : undefined}
+						subtitleTranslationKey="pages.events.studentCounselling.title"
+						color={theme.colors.primary}
+					/>
+				</Pressable>
+			))
+		}
+		if (!hasStudentCounsellingEvents && hasCareerServiceEvents) {
+			// No student counselling events, show two career service events
+			return careerServiceEvents.slice(0, 2).map((event, index) => (
+				<Pressable
+					key={`career-service-${event.id}-${index}`}
+					onPress={() => handleEventItemPress(event.id)}
+				>
+					<EventItem
+						title={event.title}
+						subtitle={t('pages.events.careerService.title')}
+						startDateTime={event.date ? new Date(event.date) : undefined}
+						subtitleTranslationKey="pages.events.careerService.title"
+						color={theme.colors.primary}
+					/>
+				</Pressable>
+			))
+		}
+		// Both types have events, show one of each (original behavior)
+		return [
+			careerServiceEvents[0] && (
+				<Pressable
+					key={`career-service-${careerServiceEvents[0].id}`}
+					onPress={() => handleEventItemPress(careerServiceEvents[0].id)}
+				>
+					<EventItem
+						title={careerServiceEvents[0].title}
+						subtitle={t('pages.events.careerService.title')}
+						startDateTime={
+							careerServiceEvents[0].date
+								? new Date(careerServiceEvents[0].date)
+								: undefined
+						}
+						subtitleTranslationKey="pages.events.careerService.title"
+						color={theme.colors.primary}
+					/>
+				</Pressable>
+			),
+			studentCounsellingEvents[0] && (
+				<Pressable
+					key={`student-counselling-${studentCounsellingEvents[0].id}`}
+					onPress={() =>
+						handleEventItemPress(studentCounsellingEvents[0].id, true)
+					}
+				>
+					<EventItem
+						title={studentCounsellingEvents[0].title}
+						subtitle={t('pages.events.studentCounselling.title')}
+						startDateTime={
+							studentCounsellingEvents[0].date
+								? new Date(studentCounsellingEvents[0].date)
+								: undefined
+						}
+						subtitleTranslationKey="pages.events.studentCounselling.title"
+						color={theme.colors.primary}
+					/>
+				</Pressable>
+			)
+		].filter(Boolean)
+	})()
+
 	return (
 		<BaseCard
 			title="thiServices"
@@ -111,44 +194,7 @@ const CareerCard = (): React.JSX.Element => {
 				studentCounsellingEvents.length === 0
 			}
 		>
-			<View style={styles.eventsContainer}>
-				{careerServiceEvents[0] && (
-					<Pressable
-						onPress={() => handleEventItemPress(careerServiceEvents[0].id)}
-					>
-						<EventItem
-							title={careerServiceEvents[0].title}
-							subtitle={t('pages.events.careerService.title')}
-							startDateTime={
-								careerServiceEvents[0].date
-									? new Date(careerServiceEvents[0].date)
-									: undefined
-							}
-							subtitleTranslationKey="pages.events.careerService.title"
-							color={theme.colors.primary}
-						/>
-					</Pressable>
-				)}
-				{studentCounsellingEvents[0] && (
-					<Pressable
-						onPress={() =>
-							handleEventItemPress(studentCounsellingEvents[0].id, true)
-						}
-					>
-						<EventItem
-							title={studentCounsellingEvents[0].title}
-							subtitle={t('pages.events.studentCounselling.title')}
-							startDateTime={
-								studentCounsellingEvents[0].date
-									? new Date(studentCounsellingEvents[0].date)
-									: undefined
-							}
-							subtitleTranslationKey="pages.events.studentCounselling.title"
-							color={theme.colors.primary}
-						/>
-					</Pressable>
-				)}
-			</View>
+			<View style={styles.eventsContainer}>{eventsToShow}</View>
 		</BaseCard>
 	)
 }

@@ -183,13 +183,10 @@ const CAREER_SERVICE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CareerServiceEventFields on CareerServiceEvent {
         id
         title
+        description
         date
-        unlimitedSlots
-        availableSlots
-        totalSlots
-        waitingList
-        maxWaitingList
         url
+        publishedDate
     }
 `)
 
