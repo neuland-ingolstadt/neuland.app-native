@@ -26,6 +26,7 @@ import {
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
+import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -55,7 +56,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 		>,
 		Error
 	>({
-		queryKey: [QUERY_KEYS.CAREER_SERVICE_EVENTS],
+		queryKey: [QUERY_KEYS.CAREER_SERVICE_EVENTS + 1],
 		queryFn: loadCareerServiceEvents
 	})
 
@@ -144,6 +145,19 @@ export default function CareerServiceEvent(): React.JSX.Element {
 		pressLinkUtil(url, `careerServiceEvent-${id}`)
 	}
 
+	const descSection = {
+		header: t('pages.event.description') as string,
+		item: (
+			<LinkText
+				text={eventData.description}
+				linkColor={theme.colors.primary}
+				textStyle={styles.columnDetails}
+				containerStyle={styles.linkTextContainer}
+				toggleStyle={styles.showMoreButton}
+			/>
+		)
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: t('pages.event.details') as string,
@@ -151,35 +165,10 @@ export default function CareerServiceEvent(): React.JSX.Element {
 				{
 					title: t('pages.event.date') as string,
 					value: formatFriendlyDate(new Date(eventData.date))
-				},
-				{
-					title: t('pages.event.registration') as string,
-					value: eventData.unlimitedSlots
-						? (t('pages.events.registration.unlimitedSlots') as string)
-						: (t('pages.events.registration.availableSlots', {
-								available: eventData.availableSlots ?? 0,
-								total: eventData.totalSlots ?? 0
-							}) as string)
-				},
-				...(eventData.waitingList != null && eventData.waitingList > 0
-					? [
-							{
-								title: t(
-									'pages.events.registration.waitingList.title'
-								) as string,
-								value: t('pages.events.registration.waitingList.value', {
-									current: eventData.waitingList,
-									max:
-										eventData.maxWaitingList === null ||
-										eventData.maxWaitingList === undefined
-											? t('pages.events.registration.unlimitedShort')
-											: eventData.maxWaitingList
-								}) as string
-							}
-						]
-					: [])
+				}
 			]
-		}
+		},
+		...(eventData.description ? [descSection] : [])
 	]
 
 	if (eventData.url) {
@@ -271,5 +260,19 @@ const stylesheet = createStyleSheet((theme) => ({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+	linkTextContainer: {
+		gap: 8
+	},
+	columnDetails: {
+		color: theme.colors.text,
+		fontSize: 16.5,
+		paddingTop: 2,
+		textAlign: 'left'
+	},
+	showMoreButton: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '600'
 	}
 }))
