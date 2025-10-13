@@ -150,7 +150,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 						style={styles.closeButton}
 					>
 						<PlatformIcon
-							ios={{ name: 'xmark', size: 16 }}
+							ios={{ name: 'xmark', size: 14 }}
 							android={{ name: 'close', size: 24 }}
 							web={{ name: 'X', size: 20 }}
 							style={styles.closeIcon}
