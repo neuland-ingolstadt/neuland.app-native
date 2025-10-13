@@ -241,8 +241,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	page: {
 		flex: 1,
-		paddingHorizontal: theme.margins.page,
-		backgroundColor: theme.colors.background
+		paddingHorizontal: theme.margins.page
 	},
 	titleContainerView: {
 		alignItems: 'flex-start',
