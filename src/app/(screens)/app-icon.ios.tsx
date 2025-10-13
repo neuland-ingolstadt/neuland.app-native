@@ -63,213 +63,215 @@ export default function AppIconPicker(): React.JSX.Element {
 		)
 	}
 	return (
-		<ScrollView>
-			<View style={styles.container}>
-				{/* Exclusive section */}
-				<SectionView
-					title={t('appIcon.categories.exclusive')}
-					footer={t('appIcon.exclusive')}
-				>
-					<View style={styles.sectionContainer}>
-						{categories.exclusive.map((icon, index) => {
-							const unlocked = unlockedAppIcons.includes(icon)
-							return (
-								<React.Fragment key={icon}>
-									<Pressable
-										style={styles.rowContainer}
-										onPress={
-											unlocked
-												? async () => {
-														try {
-															if (icon === 'default') {
-																await resetAppIcon()
-																setCurrentIcon('default')
-															} else {
-																await setAlternateAppIcon(
-																	capitalizeFirstLetter(icon)
-																)
-																setCurrentIcon(icon)
-															}
-														} catch (e) {
-															console.error(e)
+		<ScrollView
+			contentContainerStyle={styles.container}
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
+		>
+			{/* Exclusive section */}
+			<SectionView
+				title={t('appIcon.categories.exclusive')}
+				footer={t('appIcon.exclusive')}
+			>
+				<View style={styles.sectionContainer}>
+					{categories.exclusive.map((icon, index) => {
+						const unlocked = unlockedAppIcons.includes(icon)
+						return (
+							<React.Fragment key={icon}>
+								<Pressable
+									style={styles.rowContainer}
+									onPress={
+										unlocked
+											? async () => {
+													try {
+														if (icon === 'default') {
+															await resetAppIcon()
+															setCurrentIcon('default')
+														} else {
+															await setAlternateAppIcon(
+																capitalizeFirstLetter(icon)
+															)
+															setCurrentIcon(icon)
 														}
+													} catch (e) {
+														console.error(e)
 													}
-												: undefined
-										}
-										disabled={!unlocked}
-									>
-										<View style={styles.rowInnerContainer}>
-											<Image
-												source={iconImages[icon]}
-												style={[
-													styles.imageContainer,
-													!unlocked && styles.imageDimmed
-												]}
-											/>
-											<View style={styles.textContainer}>
-												<Text style={styles.iconText}>
-													{t(
-														// @ts-expect-error - icon is a valid key
-														`appIcon.names.${icon}`
-													)}
-												</Text>
-											</View>
-										</View>
-										{unlocked && currentIcon === icon && (
-											<PlatformIcon
-												ios={{ name: 'checkmark', size: 20 }}
-												android={{ name: 'check', size: 24 }}
-												web={{ name: 'Check', size: 20 }}
-											/>
-										)}
-										{!unlocked && (
-											<Text style={styles.statusText}>
-												{t('appIcon.status.locked')}
-											</Text>
-										)}
-									</Pressable>
-									{index !== categories.exclusive.length - 1 && (
-										<Divider paddingLeft={110} />
-									)}
-								</React.Fragment>
-							)
-						})}
-					</View>
-				</SectionView>
-
-				{/* Neuland section */}
-				<SectionView title={t('appIcon.categories.neuland')}>
-					<View style={styles.sectionContainer}>
-						{memberInfo ? (
-							categories.neuland.map((icon, index) => (
-								<React.Fragment key={icon}>
-									<Pressable
-										style={styles.rowContainer}
-										onPress={async () => {
-											try {
-												await setAlternateAppIcon(capitalizeFirstLetter(icon))
-												setCurrentIcon(icon)
-											} catch (e) {
-												console.error(e)
-											}
-										}}
-										disabled={false}
-									>
-										<View style={styles.rowInnerContainer}>
-											<Image
-												source={iconImages[icon]}
-												style={styles.imageContainer}
-											/>
-											<View style={styles.textContainer}>
-												<Text style={styles.iconText}>
-													{
-														// @ts-expect-error - icon is a valid key
-														t(`appIcon.names.${icon}`)
-													}
-												</Text>
-											</View>
-										</View>
-										{currentIcon === icon && (
-											<PlatformIcon
-												ios={{ name: 'checkmark', size: 20 }}
-												android={{ name: 'check', size: 24 }}
-												web={{ name: 'Check', size: 20 }}
-											/>
-										)}
-									</Pressable>
-									{index !== categories.neuland.length - 1 && (
-										<Divider paddingLeft={110} />
-									)}
-								</React.Fragment>
-							))
-						) : (
-							<Pressable
-								style={{ alignItems: 'center', paddingVertical: 12 }}
-								onPress={() => {
-									router.navigate('/member')
-								}}
-							>
-								<View
-									style={{
-										flexDirection: 'row',
-										justifyContent: 'center',
-										gap: 16,
-										marginVertical: 8
-									}}
+												}
+											: undefined
+									}
+									disabled={!unlocked}
 								>
-									{['rainbowGlow', 'luxury', 'hacker'].map((icon) => (
+									<View style={styles.rowInnerContainer}>
 										<Image
-											key={icon}
 											source={iconImages[icon]}
 											style={[
 												styles.imageContainer,
-												{ marginHorizontal: 4, opacity: 0.6 }
+												!unlocked && styles.imageDimmed
 											]}
 										/>
-									))}
-								</View>
-								<Text style={styles.statusText}>
-									{t('appIcon.exclusivePreviewSubtitle')}
-								</Text>
-							</Pressable>
-						)}
+										<View style={styles.textContainer}>
+											<Text style={styles.iconText}>
+												{t(
+													// @ts-expect-error - icon is a valid key
+													`appIcon.names.${icon}`
+												)}
+											</Text>
+										</View>
+									</View>
+									{unlocked && currentIcon === icon && (
+										<PlatformIcon
+											ios={{ name: 'checkmark', size: 20 }}
+											android={{ name: 'check', size: 24 }}
+											web={{ name: 'Check', size: 20 }}
+										/>
+									)}
+									{!unlocked && (
+										<Text style={styles.statusText}>
+											{t('appIcon.status.locked')}
+										</Text>
+									)}
+								</Pressable>
+								{index !== categories.exclusive.length - 1 && (
+									<Divider paddingLeft={110} />
+								)}
+							</React.Fragment>
+						)
+					})}
+				</View>
+			</SectionView>
+
+			{/* Neuland section */}
+			<SectionView title={t('appIcon.categories.neuland')}>
+				<View style={styles.sectionContainer}>
+					{memberInfo ? (
+						categories.neuland.map((icon, index) => (
+							<React.Fragment key={icon}>
+								<Pressable
+									style={styles.rowContainer}
+									onPress={async () => {
+										try {
+											await setAlternateAppIcon(capitalizeFirstLetter(icon))
+											setCurrentIcon(icon)
+										} catch (e) {
+											console.error(e)
+										}
+									}}
+									disabled={false}
+								>
+									<View style={styles.rowInnerContainer}>
+										<Image
+											source={iconImages[icon]}
+											style={styles.imageContainer}
+										/>
+										<View style={styles.textContainer}>
+											<Text style={styles.iconText}>
+												{
+													// @ts-expect-error - icon is a valid key
+													t(`appIcon.names.${icon}`)
+												}
+											</Text>
+										</View>
+									</View>
+									{currentIcon === icon && (
+										<PlatformIcon
+											ios={{ name: 'checkmark', size: 20 }}
+											android={{ name: 'check', size: 24 }}
+											web={{ name: 'Check', size: 20 }}
+										/>
+									)}
+								</Pressable>
+								{index !== categories.neuland.length - 1 && (
+									<Divider paddingLeft={110} />
+								)}
+							</React.Fragment>
+						))
+					) : (
+						<Pressable
+							style={{ alignItems: 'center', paddingVertical: 12 }}
+							onPress={() => {
+								router.navigate('/member')
+							}}
+						>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'center',
+									gap: 16,
+									marginVertical: 8
+								}}
+							>
+								{['rainbowGlow', 'luxury', 'hacker'].map((icon) => (
+									<Image
+										key={icon}
+										source={iconImages[icon]}
+										style={[
+											styles.imageContainer,
+											{ marginHorizontal: 4, opacity: 0.6 }
+										]}
+									/>
+								))}
+							</View>
+							<Text style={styles.statusText}>
+								{t('appIcon.exclusivePreviewSubtitle')}
+							</Text>
+						</Pressable>
+					)}
+				</View>
+			</SectionView>
+
+			{/* Default and rainbow sections */}
+			{(['default', 'rainbow'] as const).map((key) => (
+				<SectionView title={t(`appIcon.categories.${key}`)} key={key}>
+					<View style={styles.sectionContainer}>
+						{categories[key].map((icon, index) => (
+							<React.Fragment key={icon}>
+								<Pressable
+									style={styles.rowContainer}
+									onPress={async () => {
+										try {
+											if (icon === 'default') {
+												await resetAppIcon()
+												setCurrentIcon('default')
+											} else {
+												await setAlternateAppIcon(capitalizeFirstLetter(icon))
+												setCurrentIcon(icon)
+											}
+										} catch (e) {
+											console.error(e)
+										}
+									}}
+									disabled={false}
+								>
+									<View style={styles.rowInnerContainer}>
+										<Image
+											source={iconImages[icon]}
+											style={styles.imageContainer}
+										/>
+										<View style={styles.textContainer}>
+											<Text style={styles.iconText}>
+												{
+													// @ts-expect-error - icon is a valid key
+													t(`appIcon.names.${icon}`)
+												}
+											</Text>
+										</View>
+									</View>
+									{currentIcon === icon && (
+										<PlatformIcon
+											ios={{ name: 'checkmark', size: 20 }}
+											android={{ name: 'check', size: 24 }}
+											web={{ name: 'Check', size: 20 }}
+										/>
+									)}
+								</Pressable>
+								{index !== categories[key].length - 1 && (
+									<Divider paddingLeft={110} />
+								)}
+							</React.Fragment>
+						))}
 					</View>
 				</SectionView>
-
-				{/* Default and rainbow sections */}
-				{(['default', 'rainbow'] as const).map((key) => (
-					<SectionView title={t(`appIcon.categories.${key}`)} key={key}>
-						<View style={styles.sectionContainer}>
-							{categories[key].map((icon, index) => (
-								<React.Fragment key={icon}>
-									<Pressable
-										style={styles.rowContainer}
-										onPress={async () => {
-											try {
-												if (icon === 'default') {
-													await resetAppIcon()
-													setCurrentIcon('default')
-												} else {
-													await setAlternateAppIcon(capitalizeFirstLetter(icon))
-													setCurrentIcon(icon)
-												}
-											} catch (e) {
-												console.error(e)
-											}
-										}}
-										disabled={false}
-									>
-										<View style={styles.rowInnerContainer}>
-											<Image
-												source={iconImages[icon]}
-												style={styles.imageContainer}
-											/>
-											<View style={styles.textContainer}>
-												<Text style={styles.iconText}>
-													{
-														// @ts-expect-error - icon is a valid key
-														t(`appIcon.names.${icon}`)
-													}
-												</Text>
-											</View>
-										</View>
-										{currentIcon === icon && (
-											<PlatformIcon
-												ios={{ name: 'checkmark', size: 20 }}
-												android={{ name: 'check', size: 24 }}
-												web={{ name: 'Check', size: 20 }}
-											/>
-										)}
-									</Pressable>
-									{index !== categories[key].length - 1 && (
-										<Divider paddingLeft={110} />
-									)}
-								</React.Fragment>
-							))}
-						</View>
-					</SectionView>
-				))}
-			</View>
+			))}
 		</ScrollView>
 	)
 }

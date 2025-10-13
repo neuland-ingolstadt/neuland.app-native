@@ -12,6 +12,7 @@ import {
 	Text,
 	View
 } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
@@ -113,7 +114,7 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}
 	return (
-		<View>
+		<SafeAreaProvider>
 			{userKind === USER_GUEST ? (
 				<ErrorView title={guestError} />
 			) : userKind === USER_EMPLOYEE ? (
@@ -135,7 +136,7 @@ export default function LibraryCode(): React.JSX.Element {
 					refreshing={isRefetchingByUser}
 				/>
 			) : isSuccess && isBibNumberPresent ? (
-				<View style={styles.container}>
+				<SafeAreaView style={styles.container}>
 					<View>
 						<FormList sections={sections} />
 					</View>
@@ -161,7 +162,7 @@ export default function LibraryCode(): React.JSX.Element {
 							{t('pages.library.code.footer')}
 						</Text>
 					</View>
-				</View>
+				</SafeAreaView>
 			) : isSuccess ? null : (
 				<ErrorView
 					title={
@@ -215,7 +216,7 @@ export default function LibraryCode(): React.JSX.Element {
 					/>
 				</View>
 			)}
-		</View>
+		</SafeAreaProvider>
 	)
 }
 
@@ -250,7 +251,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	notesContainer: {
 		alignSelf: 'center',
-		marginBottom: 40,
+		marginBottom: 10,
 		marginTop: 14,
 		width: '100%'
 	},

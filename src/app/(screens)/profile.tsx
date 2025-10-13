@@ -236,6 +236,8 @@ export default function Profile(): React.JSX.Element {
 	return (
 		<ScrollView
 			contentContainerStyle={styles.contentContainer}
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
 			refreshControl={
 				isSuccess ? (
 					<RefreshControl
