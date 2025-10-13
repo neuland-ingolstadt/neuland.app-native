@@ -263,13 +263,15 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/app-icon"
 					options={{
-						title: 'App Icon'
+						title: 'App Icon',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/profile"
 					options={{
-						title: t('navigation.profile')
+						title: t('navigation.profile'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -320,7 +322,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/grades"
 					options={{
-						title: t('navigation.grades.title')
+						title: t('navigation.grades.title'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -453,7 +456,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/library"
 					options={{
-						title: t('navigation.libraryCode')
+						title: t('navigation.libraryCode'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
