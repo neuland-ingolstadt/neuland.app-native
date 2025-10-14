@@ -6,7 +6,6 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import licenses from '@/data/licenses.json'
 import licensesStatic from '@/data/licenses-static.json'
-import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 
 export interface LicenseEntry {
@@ -20,7 +19,6 @@ export default function Licenses(): React.JSX.Element {
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
 	const { styles, theme } = useStyles(stylesheet)
-	const headerPadding = useTransparentHeaderPadding()
 	const numberRegex = /\d+(\.\d+)*/
 	const atRegex = /(?:@)/gi
 	const navigation = useNavigation()
@@ -101,7 +99,7 @@ export default function Licenses(): React.JSX.Element {
 	]
 	return (
 		<ScrollView
-			contentContainerStyle={[styles.container, { paddingTop: headerPadding }]}
+			contentContainerStyle={styles.container}
 			contentInsetAdjustmentBehavior="automatic"
 		>
 			<View style={styles.formlistContainer}>

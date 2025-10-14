@@ -171,7 +171,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/changelog"
 					options={{
-						title: 'Changelog'
+						title: 'Changelog',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -284,7 +285,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/version"
 					options={{
-						title: 'Version Details'
+						title: 'Version Details',
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen
@@ -343,7 +345,8 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/member"
 					options={{
-						title: t('navigation.neulandMember')
+						title: t('navigation.neulandMember'),
+						...transparentHeaderStyle
 					}}
 				/>
 				<Stack.Screen

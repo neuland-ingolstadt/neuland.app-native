@@ -233,7 +233,10 @@ export default function Version(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView contentContainerStyle={styles.contentContainer}>
+		<ScrollView
+			contentContainerStyle={styles.contentContainer}
+			contentInsetAdjustmentBehavior="automatic"
+		>
 			<FormList sections={sections} />
 			<Pressable style={styles.copyButton} onPress={handleCopyAll}>
 				<PlatformIcon
