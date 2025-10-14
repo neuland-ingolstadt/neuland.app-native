@@ -24,6 +24,7 @@ export function LoggedOutView({
 			style={styles.loggedOutPage}
 			contentContainerStyle={styles.loggedOutContainer}
 			showsVerticalScrollIndicator={false}
+			contentInsetAdjustmentBehavior="automatic"
 		>
 			<View style={styles.welcomeCard}>
 				<View style={styles.welcomeGradient}>

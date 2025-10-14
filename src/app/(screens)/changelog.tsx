@@ -39,7 +39,10 @@ export default function Theme(): React.JSX.Element {
 		}))
 	]
 	return (
-		<ScrollView contentContainerStyle={styles.scrollView}>
+		<ScrollView
+			contentContainerStyle={styles.scrollView}
+			contentInsetAdjustmentBehavior="automatic"
+		>
 			<FormList sections={sections} />
 			<View style={styles.notesContainer}>
 				<Text style={styles.notesText}>
@@ -75,7 +78,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	text: {
 		color: theme.colors.primary
 	},
-
 	scrollView: {
 		flex: 1,
 		marginTop: 12,
