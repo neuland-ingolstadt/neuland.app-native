@@ -75,9 +75,11 @@ function StudentCounsellingEventRow({
 }
 
 export default function StudentCounsellingEventsPage({
-	events
+	events,
+	hasBeenViewed = false
 }: {
 	events: StudentCounsellingEventFieldsFragment[]
+	hasBeenViewed?: boolean
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
@@ -109,12 +111,12 @@ export default function StudentCounsellingEventsPage({
 						</Text>
 					}
 				/>
-			) : (
+			) : hasBeenViewed ? (
 				<EmptyEventsAnimation
 					title={t('pages.studentCounselling.noEvents.title')}
 					subtitle={t('pages.studentCounselling.noEvents.subtitle')}
 				/>
-			)}
+			) : null}
 		</View>
 	)
 }

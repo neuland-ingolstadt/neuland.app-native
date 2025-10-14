@@ -36,9 +36,11 @@ function CareerServiceEventRow({
 }
 
 export default function CareerServiceEventsPage({
-	events
+	events,
+	hasBeenViewed = false
 }: {
 	events: CareerServiceEventFieldsFragment[]
+	hasBeenViewed?: boolean
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
@@ -66,12 +68,12 @@ export default function CareerServiceEventsPage({
 						</Text>
 					}
 				/>
-			) : (
+			) : hasBeenViewed ? (
 				<EmptyEventsAnimation
 					title={t('pages.careerService.noEvents.title')}
 					subtitle={t('pages.careerService.noEvents.subtitle')}
 				/>
-			)}
+			) : null}
 		</View>
 	)
 }

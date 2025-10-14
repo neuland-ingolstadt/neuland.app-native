@@ -135,7 +135,12 @@ export default function Events(): React.JSX.Element {
 					: []
 			).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-			return <CareerServiceEventsPage events={events} />
+			return (
+				<CareerServiceEventsPage
+					events={events}
+					hasBeenViewed={viewedPages.has(0)}
+				/>
+			)
 		}
 
 		const rawStudentCounsellingEventsArray = studentCounsellingResult.data
@@ -146,7 +151,12 @@ export default function Events(): React.JSX.Element {
 					)
 				: []
 		).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-		return <StudentCounsellingEventsPage events={events} />
+		return (
+			<StudentCounsellingEventsPage
+				events={events}
+				hasBeenViewed={viewedPages.has(1)}
+			/>
+		)
 	}
 
 	useFocusEffect(
