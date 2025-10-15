@@ -28,6 +28,9 @@ export function CardContextMenu({
 
 	return (
 		<ContextMenu
+			previewBackgroundColor="transparent"
+			borderRadius={28}
+			disableShadow={true}
 			actions={[
 				{
 					title: t('contextMenu.settings'),
