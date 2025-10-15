@@ -46,6 +46,7 @@ const EventComponent = ({
 	}
 	const isExam = event.eventType === 'exam'
 	const isCalendar = event.eventType === 'calendar'
+	const isCampusLife = event.eventType === 'campus-life'
 	const begin = new Date(event.start.dateTime)
 	const end = new Date(event.end.dateTime)
 	const duration = end.getTime() - begin.getTime()
@@ -55,13 +56,17 @@ const EventComponent = ({
 		? eventBackgroundColor(theme.colors.notification, isDark)
 		: isCalendar
 			? eventBackgroundColor(theme.colors.calendarItem, isDark)
-			: eventBackgroundColor(theme.colors.primary, isDark)
+			: isCampusLife
+				? eventBackgroundColor(theme.colors.campusLife, isDark)
+				: eventBackgroundColor(theme.colors.primary, isDark)
 
 	const fontColor = isExam
 		? textColor(theme.colors.notification, background, isDark)
 		: isCalendar
 			? textColor(theme.colors.calendarItem, background, isDark)
-			: textColor(theme.colors.primary, background, isDark)
+			: isCampusLife
+				? textColor(theme.colors.campusLife, background, isDark)
+				: textColor(theme.colors.primary, background, isDark)
 	const eventName = event?.name as string
 	if (!eventName) {
 		return null
@@ -82,7 +87,9 @@ const EventComponent = ({
 		? theme.colors.notification
 		: isCalendar
 			? theme.colors.calendarItem
-			: theme.colors.primary
+			: isCampusLife
+				? theme.colors.campusLife
+				: theme.colors.primary
 
 	return (
 		<View

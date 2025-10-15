@@ -63,7 +63,8 @@ interface CalendarEvent {
 
 export default function TimetableWeek({
 	timetable,
-	exams
+	exams,
+	campusLifeEvents
 }: ITimetableViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { i18n, t } = useTranslation()
@@ -82,6 +83,9 @@ export default function TimetableWeek({
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
+	)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
 	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const hasPendingUpdate = useTimetableStore(
@@ -153,6 +157,11 @@ export default function TimetableWeek({
 				pathname: '/calendar',
 				params: { event: entry.id }
 			})
+		} else if (entry.eventType === 'campus-life') {
+			router.navigate({
+				pathname: '/events/cl/[id]',
+				params: { id: entry.id }
+			})
 		}
 	}
 
@@ -223,12 +232,51 @@ export default function TimetableWeek({
 				})
 		}
 
+                let campusEvents: PackedEvent[] = []
+                if (showCampusLifeEvents && campusLifeEvents.length > 0) {
+                        campusEvents = campusLifeEvents.flatMap((event) => {
+                                if (!event.startDateTime) return []
+                                const startDate = new Date(event.startDateTime)
+                                if (Number.isNaN(startDate.getTime())) return []
+                                const endDate = event.endDateTime
+                                        ? new Date(event.endDateTime)
+                                        : moment(startDate).add(2, 'hours').toDate()
+                                const locale: 'de' | 'en' = i18n.language.startsWith('de')
+                                        ? 'de'
+                                        : 'en'
+                                const title =
+                                        event.titles[locale] ?? event.titles.en ?? event.titles.de ?? ''
+
+                                return [
+                                        {
+                                                title,
+                                                name: title,
+                                                eventType: 'campus-life',
+                                                id: event.id,
+                                                shortName: event.host.name,
+                                                start: { dateTime: startDate },
+                                                end: { dateTime: endDate },
+                                                rooms: event.location ? [event.location] : []
+                                        } as unknown as PackedEvent
+                                ]
+                        })
+                }
+
 		return [
 			...friendlyTimetable,
 			...friendlyExams,
-			...calendarEvents
+			...calendarEvents,
+			...campusEvents
 		] as unknown as PackedEvent[]
-	}, [timetable, exams, showCalendarEvents, showExams, i18n.language])
+	}, [
+		timetable,
+		exams,
+		showCalendarEvents,
+		showCampusLifeEvents,
+		showExams,
+		i18n.language,
+		campusLifeEvents
+	])
 
 	useEffect(() => {
 		startTransition(() => {
@@ -272,15 +320,12 @@ export default function TimetableWeek({
 		(event: PackedEvent) => {
 			return <EventComponent event={event} theme={theme} isDark={isDark} />
 		},
-		[theme.colors.primary, events]
+		[theme, isDark]
 	)
 
-	const renderHeaderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <WeekHeaderEvent event={event} theme={theme} />
-		},
-		[theme.colors.primary, events]
-	)
+	const renderHeaderEvent = useCallback((event: PackedEvent) => {
+		return <WeekHeaderEvent event={event} />
+	}, [])
 
 	const onPressPrevious = (): void => {
 		calendarRef.current?.goToPrevPage()

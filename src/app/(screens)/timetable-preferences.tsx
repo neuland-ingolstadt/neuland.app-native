@@ -24,6 +24,12 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const setShowCalendarEvents = useTimetableStore(
 		(state) => state.setShowCalendarEvents
 	)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
+	)
+	const setShowCampusLifeEvents = useTimetableStore(
+		(state) => state.setShowCampusLifeEvents
+	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const setShowExams = useTimetableStore((state) => state.setShowExams)
 
@@ -64,6 +70,10 @@ export default function TimetablePreferences(): React.JSX.Element {
 			title: t('preferences.showCalendarEvents', { ns: 'timetable' })
 		},
 		{
+			key: 'showCampusLifeEvents',
+			title: t('preferences.showCampusLifeEvents', { ns: 'timetable' })
+		},
+		{
 			key: 'showExams',
 			title: t('preferences.showExams', { ns: 'timetable' })
 		}
@@ -71,12 +81,16 @@ export default function TimetablePreferences(): React.JSX.Element {
 
 	const selectedAdditionalContent = []
 	if (showCalendarEvents) selectedAdditionalContent.push('showCalendarEvents')
+	if (showCampusLifeEvents)
+		selectedAdditionalContent.push('showCampusLifeEvents')
 	if (showExams) selectedAdditionalContent.push('showExams')
 
 	// Handle toggling additional content options
 	const toggleAdditionalContent = (key: string) => {
 		if (key === 'showCalendarEvents') {
 			setShowCalendarEvents(!showCalendarEvents)
+		} else if (key === 'showCampusLifeEvents') {
+			setShowCampusLifeEvents(!showCampusLifeEvents)
 		} else if (key === 'showExams') {
 			setShowExams(!showExams)
 		}
@@ -114,6 +128,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 						<TimetablePreview
 							mode={timetableMode}
 							showCalendarEvents={showCalendarEvents}
+							showCampusLifeEvents={showCampusLifeEvents}
 							showExams={showExams}
 						/>
 					</View>

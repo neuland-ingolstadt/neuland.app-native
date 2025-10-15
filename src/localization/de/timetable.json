@@ -58,8 +58,12 @@
 		"title": "Ansicht",
 		"preview": "Vorschau",
 		"showCalendarEvents": "THI Events anzeigen",
+		"showCampusLifeEvents": "Campus Life Events anzeigen",
 		"additionalContent": "Zusätzliche Inhalte",
 		"showExams": "Prüfungen anzeigen"
+	},
+	"labels": {
+		"campusLife": "Campus Life"
 	},
 	"calendar": {
 		"thiCalendar": "THI Kalender",

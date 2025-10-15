@@ -15,6 +15,7 @@ import { TimetableMode } from '@/hooks/useTimetableStore'
 interface TimetablePreviewProps {
 	mode: TimetableMode
 	showCalendarEvents?: boolean
+	showCampusLifeEvents?: boolean
 	showExams?: boolean
 }
 
@@ -28,6 +29,7 @@ interface TimetablePreviewProps {
 const TimetablePreview = ({
 	mode,
 	showCalendarEvents = false,
+	showCampusLifeEvents = false,
 	showExams = false
 }: TimetablePreviewProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(previewStylesheet)
@@ -72,9 +74,12 @@ const TimetablePreview = ({
 				return (
 					<Animated.View style={[styles.listPreview, animatedContainerStyle]}>
 						{[
-							{ time: '10:00', type: 'primary' },
-							...(showExams ? [{ time: '12:30', type: 'exam' }] : []),
-							{ time: '15:15', type: 'primary' }
+							{ time: '09:45', type: 'primary' as const },
+							...(showCampusLifeEvents
+								? [{ time: '11:15', type: 'campusLife' as const }]
+								: []),
+							...(showExams ? [{ time: '13:00', type: 'exam' as const }] : []),
+							{ time: '15:15', type: 'primary' as const }
 						].map((event, i) => (
 							<View key={i} style={styles.listItem}>
 								<View style={styles.listItemTimeContainer}>
@@ -87,7 +92,9 @@ const TimetablePreview = ({
 											backgroundColor:
 												event.type === 'exam'
 													? theme.colors.notification
-													: theme.colors.primary
+													: event.type === 'campusLife'
+														? theme.colors.campusLife
+														: theme.colors.primary
 										}
 									]}
 								/>
@@ -122,6 +129,18 @@ const TimetablePreview = ({
 											top: 130,
 											height: 35,
 											backgroundColor: theme.colors.calendarItem
+										}
+									]}
+								/>
+							)}
+							{showCampusLifeEvents && (
+								<View
+									style={[
+										styles.timelineEvent,
+										{
+											top: 175,
+											height: 35,
+											backgroundColor: theme.colors.campusLife
 										}
 									]}
 								/>
@@ -180,6 +199,17 @@ const TimetablePreview = ({
 											]}
 										/>
 									)}
+									{idx === 2 && showCampusLifeEvents && (
+										<View
+											style={[
+												styles.miniEvent,
+												{
+													top: '35%',
+													backgroundColor: theme.colors.campusLife
+												}
+											]}
+										/>
+									)}
 
 									{idx === 2 && showExams && (
 										<View
@@ -224,6 +254,17 @@ const TimetablePreview = ({
 												{
 													top: '40%',
 													backgroundColor: theme.colors.calendarItem
+												}
+											]}
+										/>
+									)}
+									{idx === 3 && showCampusLifeEvents && (
+										<View
+											style={[
+												styles.miniEvent,
+												{
+													top: '25%',
+													backgroundColor: theme.colors.campusLife
 												}
 											]}
 										/>
@@ -287,6 +328,17 @@ const TimetablePreview = ({
 												{
 													top: '65%',
 													backgroundColor: theme.colors.calendarItem
+												}
+											]}
+										/>
+									)}
+									{idx === 2 && showCampusLifeEvents && (
+										<View
+											style={[
+												styles.miniEvent,
+												{
+													top: '45%',
+													backgroundColor: theme.colors.campusLife
 												}
 											]}
 										/>
