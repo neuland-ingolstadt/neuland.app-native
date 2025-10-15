@@ -15,6 +15,7 @@ import { TimetableMode } from '@/hooks/useTimetableStore'
 interface TimetablePreviewProps {
 	mode: TimetableMode
 	showCalendarEvents?: boolean
+	showCampusLifeEvents?: boolean
 	showExams?: boolean
 }
 
@@ -22,12 +23,14 @@ interface TimetablePreviewProps {
  * Renders a fancy and unnecessary preview of the timetable based on the selected mode.
  * @param mode - The current timetable mode.
  * @param showCalendarEvents - Whether to show calendar events in the preview.
+ * @param showCampusLifeEvents - Whether to show campus life events in the preview.
  * @param showExams - Whether to show exams in the preview.
  * @returns A JSX element representing the timetable preview.
  */
 const TimetablePreview = ({
 	mode,
 	showCalendarEvents = false,
+	showCampusLifeEvents = false,
 	showExams = false
 }: TimetablePreviewProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(previewStylesheet)
@@ -122,6 +125,18 @@ const TimetablePreview = ({
 											top: 130,
 											height: 35,
 											backgroundColor: theme.colors.calendarItem
+										}
+									]}
+								/>
+							)}
+							{showCampusLifeEvents && (
+								<View
+									style={[
+										styles.timelineEvent,
+										{
+											top: 180,
+											height: 35,
+											backgroundColor: theme.colors.labelTertiaryColor
 										}
 									]}
 								/>

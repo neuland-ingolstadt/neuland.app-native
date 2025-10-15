@@ -7,6 +7,7 @@ import {
 	type OnEventResponse,
 	type PackedEvent
 } from '@howljs/calendar-kit'
+import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment-timezone'
 import React, {
@@ -33,6 +34,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
@@ -83,6 +85,9 @@ export default function TimetableWeek({
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
 	)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
+	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const hasPendingUpdate = useTimetableStore(
 		(state) => state.hasPendingTimetableUpdate
@@ -90,6 +95,15 @@ export default function TimetableWeek({
 	const setHasPendingUpdate = useTimetableStore(
 		(state) => state.setHasPendingTimetableUpdate
 	)
+
+	// Fetch campus life events
+	const { data: campusLifeEvents = [] } = useQuery({
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
+		queryFn: () => loadCampusLifeEvents(),
+		staleTime: 1000 * 60 * 60, // 1 hour
+		gcTime: 1000 * 60 * 60 * 24, // 24 hours
+		enabled: showCampusLifeEvents
+	})
 
 	// Defer the updates of timetableMode when there's a pending update
 	const deferredTimetableMode = useDeferredValue(timetableMode)
@@ -152,6 +166,11 @@ export default function TimetableWeek({
 			router.navigate({
 				pathname: '/calendar',
 				params: { event: entry.id }
+			})
+		} else if (entry.eventType === 'campuslife') {
+			router.navigate({
+				pathname: '/events/cl/[id]',
+				params: { id: entry.id }
 			})
 		}
 	}
@@ -223,12 +242,42 @@ export default function TimetableWeek({
 				})
 		}
 
+		// Process campus life events if enabled
+		let campusLifeEventsFormatted: CalendarEvent[] = []
+		if (showCampusLifeEvents && campusLifeEvents?.length > 0) {
+			campusLifeEventsFormatted = campusLifeEvents.map((event) => {
+				const startDate = moment(event.startDateTime).toDate()
+				const endDate = moment(event.endDateTime).toDate()
+				const eventName =
+					i18n.language === 'de' ? event.titles.de : event.titles.en
+
+				return {
+					title: eventName,
+					name: eventName,
+					eventType: 'campuslife',
+					id: event.id,
+					allDay: false,
+					start: { dateTime: startDate },
+					end: { dateTime: endDate }
+				}
+			})
+		}
+
 		return [
 			...friendlyTimetable,
 			...friendlyExams,
-			...calendarEvents
+			...calendarEvents,
+			...campusLifeEventsFormatted
 		] as unknown as PackedEvent[]
-	}, [timetable, exams, showCalendarEvents, showExams, i18n.language])
+	}, [
+		timetable,
+		exams,
+		showCalendarEvents,
+		showCampusLifeEvents,
+		campusLifeEvents,
+		showExams,
+		i18n.language
+	])
 
 	useEffect(() => {
 		startTransition(() => {
