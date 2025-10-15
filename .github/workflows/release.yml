@@ -44,7 +44,7 @@ jobs:
         id: git-cliff
         uses: orhun/git-cliff-action@v4
         with:
-          config: cliff.toml
+          config: config/cliff.toml
           args: ${{ env.PRERELEASE == 'true' && '--latest --strip all' || format('{0}..HEAD --strip all', env.LATEST_TAG) }}
         env:
           OUTPUT: CHANGES.md
@@ -142,6 +142,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: config/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: |

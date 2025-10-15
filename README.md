@@ -8,13 +8,13 @@
 
 <p align="left" style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
-    <img src="assets/github/Apple_Badge_EN.svg" alt="Download on the App Store" style="height: 50px; margin-top: 3px;" />
+    <img src="config/github/Apple_Badge_EN.svg" alt="Download on the App Store" style="height: 50px; margin-top: 3px;" />
   </a>
   <a href="https://play.google.com/store/apps/details?id=app.neuland">
-    <img src="assets/github/Google_Badge_EN.svg" alt="Get it on Google Play" style="height: 50px;" />
+    <img src="config/github/Google_Badge_EN.svg" alt="Get it on Google Play" style="height: 50px;" />
   </a>
   <a href="https://github.com/neuland-ingolstadt/neuland.app-native/releases/latest">
-    <img src="assets/github/get-it-on-github.png" alt="Get it on GitHub" style="height: 50px;" />
+    <img src="config/github/get-it-on-github.png" alt="Get it on GitHub" style="height: 50px;" />
   </a>
 </p>
 
@@ -25,9 +25,9 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 ## ✨ Features
 
 <p align="center">
-  <img src="assets/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
-  <img src="assets/github/2.jpg" alt="Neuland Next Timetable" width="200"/>
-  <img src="assets/github/3.jpg" alt="Neuland Next Map" width="200"/>
+  <img src="config/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
+  <img src="config/github/2.jpg" alt="Neuland Next Timetable" width="200"/>
+  <img src="config/github/3.jpg" alt="Neuland Next Map" width="200"/>
 </p>
 
 - **Timetable & Exams**: View your personal timetable from PRIMUSS and your exams at a glance
@@ -59,7 +59,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ### 🏗️ Architecture
 
-<img src="assets/github/architecture.svg" alt="Architecture" width="800px" />
+<img src="config/github/architecture.svg" alt="Architecture" width="800px" />
 
 ## 📊 System Status
 

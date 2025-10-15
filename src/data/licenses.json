@@ -77,7 +77,7 @@
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/native-stack@7.3.27": {
+	"@react-navigation/native-stack@7.3.28": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
@@ -89,7 +89,7 @@
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@react-navigation/stack@7.4.9": {
+	"@react-navigation/stack@7.4.10": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-navigation/react-navigation",
 		"licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
