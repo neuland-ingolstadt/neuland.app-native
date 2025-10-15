@@ -33,6 +33,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { normalizeCampusLifeEvents } from '@/utils/timetable-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
@@ -232,35 +233,28 @@ export default function TimetableWeek({
 				})
 		}
 
-                let campusEvents: PackedEvent[] = []
-                if (showCampusLifeEvents && campusLifeEvents.length > 0) {
-                        campusEvents = campusLifeEvents.flatMap((event) => {
-                                if (!event.startDateTime) return []
-                                const startDate = new Date(event.startDateTime)
-                                if (Number.isNaN(startDate.getTime())) return []
-                                const endDate = event.endDateTime
-                                        ? new Date(event.endDateTime)
-                                        : moment(startDate).add(2, 'hours').toDate()
-                                const locale: 'de' | 'en' = i18n.language.startsWith('de')
-                                        ? 'de'
-                                        : 'en'
-                                const title =
-                                        event.titles[locale] ?? event.titles.en ?? event.titles.de ?? ''
+		let campusEvents: PackedEvent[] = []
+		if (showCampusLifeEvents && campusLifeEvents.length > 0) {
+			const normalizedCampusLifeEvents =
+				normalizeCampusLifeEvents(campusLifeEvents)
+			const locale: 'de' | 'en' = i18n.language.startsWith('de') ? 'de' : 'en'
 
-                                return [
-                                        {
-                                                title,
-                                                name: title,
-                                                eventType: 'campus-life',
-                                                id: event.id,
-                                                shortName: event.host.name,
-                                                start: { dateTime: startDate },
-                                                end: { dateTime: endDate },
-                                                rooms: event.location ? [event.location] : []
-                                        } as unknown as PackedEvent
-                                ]
-                        })
-                }
+			campusEvents = normalizedCampusLifeEvents.map((event) => {
+				const title =
+					event.titles[locale] ?? event.titles.en ?? event.titles.de ?? ''
+
+				return {
+					title,
+					name: title,
+					eventType: 'campus-life',
+					id: event.id,
+					shortName: event.hostName,
+					start: { dateTime: event.startDate },
+					end: { dateTime: event.endDate },
+					rooms: event.location ? [event.location] : []
+				} as unknown as PackedEvent
+			})
+		}
 
 		return [
 			...friendlyTimetable,

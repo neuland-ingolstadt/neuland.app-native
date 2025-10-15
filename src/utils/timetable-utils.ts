@@ -14,6 +14,44 @@ import type {
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
 
+export interface NormalizedCampusLifeEvent {
+	id: string
+	numericId: number
+	startDate: Date
+	endDate: Date
+	titles: CampusLifeEvent['titles']
+	hostName: string
+	location?: string | null
+}
+
+export function normalizeCampusLifeEvents(
+	events: CampusLifeEvent[],
+	defaultDurationMinutes = 120
+): NormalizedCampusLifeEvent[] {
+	return events.flatMap((event) => {
+		if (!event.startDateTime) return []
+
+		const startDate = new Date(event.startDateTime)
+		if (Number.isNaN(startDate.getTime())) return []
+
+		const endDate = event.endDateTime
+			? new Date(event.endDateTime)
+			: moment(startDate).add(defaultDurationMinutes, 'minutes').toDate()
+
+		return [
+			{
+				id: event.id,
+				numericId: event.numericId,
+				startDate,
+				endDate,
+				titles: event.titles,
+				hostName: event.host.name,
+				location: event.location ?? null
+			}
+		]
+	})
+}
+
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
  * @param date Date to get the timetable for
@@ -203,32 +241,21 @@ export function getGroupedTimetable(
 	}
 
 	if (includeCampusLife && campusLifeEvents.length > 0) {
-		const processedCampusLifeEvents: TimetableCampusLifeEntry[] =
-			campusLifeEvents.flatMap((event) => {
-				if (!event.startDateTime) return []
-				const startDate = new Date(event.startDateTime)
-				if (Number.isNaN(startDate.getTime())) return []
-				const endDate = event.endDateTime
-					? new Date(event.endDateTime)
-					: moment(startDate).add(2, 'hours').toDate()
+		const normalizedCampusLifeEvents =
+			normalizeCampusLifeEvents(campusLifeEvents)
 
-				return [
-					{
-						eventType: 'campus-life' as const,
-						id: event.id,
-						numericId: event.numericId,
-						date: startDate,
-						startDate,
-						endDate,
-						name: {
-							de: event.titles.de,
-							en: event.titles.en
-						},
-						hostName: event.host.name,
-						location: event.location ?? null
-					}
-				] as TimetableCampusLifeEntry[]
-			})
+		const processedCampusLifeEvents: TimetableCampusLifeEntry[] =
+			normalizedCampusLifeEvents.map((event) => ({
+				eventType: 'campus-life' as const,
+				id: event.id,
+				numericId: event.numericId,
+				date: event.startDate,
+				startDate: event.startDate,
+				endDate: event.endDate,
+				name: event.titles,
+				hostName: event.hostName,
+				location: event.location ?? null
+			}))
 
 		combinedData.push(...processedCampusLifeEvents)
 	}
