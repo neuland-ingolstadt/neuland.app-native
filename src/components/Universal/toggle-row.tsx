@@ -49,7 +49,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: 14,
+		borderRadius: theme.radius.ios,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border,
 		paddingHorizontal: theme.margins.page,
