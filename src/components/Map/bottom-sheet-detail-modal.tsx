@@ -84,7 +84,7 @@ export const BottomSheetDetailModal = ({
 }: BottomSheetDetailModalProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const [copied, setCopied] = useState(false)
-	const IOS_SNAP_POINTS = ['36%', '55%', '80%']
+	const IOS_SNAP_POINTS = ['39%', '57%', '85%']
 	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
 	return (
 		<BottomSheetModalProvider>

@@ -76,7 +76,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 	}, [])
 
 	const width = t('misc.cancel').length * 11
-	const IOS_SNAP_POINTS = ['20%', '35%', '87%']
+	const IOS_SNAP_POINTS = ['20%', '39%', '90%']
 	const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
 	return (
 		<BottomSheet
