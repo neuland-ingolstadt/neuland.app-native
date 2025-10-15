@@ -1,4 +1,5 @@
 import moment from 'moment'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
@@ -108,7 +109,9 @@ export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
 	exams: Exam[],
 	includeCalendar = false,
-	calendarEvents: Calendar[] = []
+	calendarEvents: Calendar[] = [],
+	includeCampusLife = false,
+	campusLifeEvents: CampusLifeEvent[] = []
 ): TimetableSections[] {
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
@@ -180,6 +183,28 @@ export function getGroupedTimetable(
 		const flattenedCalendarEvents = processedCalendarEvents.flat()
 		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		combinedData.push(...(flattenedCalendarEvents as any))
+	}
+
+	if (includeCampusLife && campusLifeEvents.length > 0) {
+		const processedCampusLifeEvents = campusLifeEvents.map((event) => {
+			const startDate = new Date(event.startDateTime)
+			const endDate = new Date(event.endDateTime)
+
+			return {
+				id: event.id,
+				date: startDate,
+				startDate,
+				endDate,
+				name: event.titles,
+				location: event.location,
+				host: event.host,
+				isAllDay: false,
+				eventType: 'campuslife'
+			}
+		})
+
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
+		combinedData.push(...(processedCampusLifeEvents as any))
 	}
 
 	// Sort combinedData by date

@@ -5,7 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface BadgeProps {
 	text: string
-	type: 'exam' | 'calendar' | 'default' | 'allDay'
+	type: 'exam' | 'calendar' | 'campuslife' | 'default' | 'allDay'
 	backgroundColor?: string
 	textColor?: string
 }
@@ -49,6 +49,21 @@ const Badge = ({
 					textStyle: [
 						styles.badgeText,
 						{ color: textColor || theme.colors.labelColor }
+					]
+				}
+			case 'campuslife':
+				return {
+					containerStyle: [
+						styles.badge,
+						{
+							backgroundColor:
+								backgroundColor ||
+								Color(theme.colors.labelTertiaryColor).alpha(0.15).string()
+						}
+					],
+					textStyle: [
+						styles.badgeText,
+						{ color: textColor || theme.colors.labelTertiaryColor }
 					]
 				}
 			case 'allDay':
