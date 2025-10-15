@@ -718,7 +718,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	page: {
-		marginHorizontal: theme.margins.page
+		marginHorizontal: theme.margins.page,
+		paddingBottom: theme.margins.bottomSafeArea
 	},
 	subtitleText: {
 		color: theme.colors.labelColor,
