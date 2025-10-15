@@ -84,7 +84,7 @@ export default function NewsScreen(): React.JSX.Element {
 					]}
 					renderItem={({ item }) => (
 						<View style={styles.sectionContainer} key={item.title}>
-							<Text style={styles.dateText}>
+							<Text style={styles.blockHeader}>
 								{formatFriendlyDate(item.date)}
 							</Text>
 							<Pressable
@@ -142,7 +142,7 @@ export default function NewsScreen(): React.JSX.Element {
 											<PlatformIcon
 												ios={{
 													name: 'chevron.forward',
-													size: 15
+													size: 14
 												}}
 												android={{
 													name: 'chevron_right',
@@ -174,12 +174,22 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: theme.margins.modalBottomMargin,
 		padding: theme.margins.page
 	},
-	dateText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 6,
-		textTransform: 'uppercase'
+	blockHeader: {
+		...(Platform.OS === 'ios'
+			? {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 15,
+					marginLeft: 18,
+					fontWeight: '600',
+					paddingBottom: 6
+				}
+			: {
+					color: theme.colors.labelSecondaryColor,
+					fontSize: 13,
+					paddingBottom: 6,
+					fontWeight: 'normal',
+					textTransform: 'uppercase'
+				})
 	},
 	errorContainer: {
 		height: Platform.OS === 'ios' ? '90%' : '100%',
