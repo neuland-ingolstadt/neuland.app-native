@@ -179,7 +179,10 @@
 					}
 				}
 			],
-			["./plugins/withDrawableAssets.js", "./src/assets/android/check.xml"],
+			[
+				"./config/plugins/withDrawableAssets.js",
+				"./src/assets/android/check.xml"
+			],
 			"expo-font"
 		],
 		"extra": {

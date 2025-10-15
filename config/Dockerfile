@@ -33,7 +33,7 @@ FROM nginx:alpine AS final
 
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
 

@@ -20,8 +20,8 @@
 		"fmt": "biome check --fix",
 		"fmt:unsafe": "biome check --fix --unsafe",
 		"licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
-		"codegen": "graphql-codegen --config codegen.yml",
-		"changelog": "git cliff --output CHANGELOG.md",
+		"codegen": "graphql-codegen --config config/codegen.yml",
+		"changelog": "git cliff --config config/cliff.toml --output CHANGELOG.md",
 		"pkgs": "bunx expo install --check"
 	},
 	"dependencies": {
@@ -34,7 +34,7 @@
 		"@howljs/calendar-kit": "2.5.6",
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
 		"@maplibre/maplibre-react-native": "10.2.1",
-		"@react-native-community/datetimepicker": "8.4.4",
+		"@react-native-community/datetimepicker": "8.4.5",
 		"@react-native-community/netinfo": "11.4.1",
 		"@react-native-menu/menu": "2.0.0",
 		"@react-navigation/elements": "^2.4.4",
@@ -42,9 +42,9 @@
 		"@react-navigation/native-stack": "^7.3.10",
 		"@react-navigation/stack": "^7.3.4",
 		"@shopify/flash-list": "1.8.3",
-		"@tanstack/query-sync-storage-persister": "5.90.2",
-		"@tanstack/react-query": "5.90.2",
-		"@tanstack/react-query-persist-client": "5.90.2",
+		"@tanstack/query-sync-storage-persister": "5.90.5",
+		"@tanstack/react-query": "5.90.3",
+		"@tanstack/react-query-persist-client": "5.90.5",
 		"@th3rdwave/react-navigation-bottom-sheet": "0.3.2",
 		"@vis.gl/react-maplibre": "^8.0.4",
 		"babel-plugin-react-compiler": "^1.0.0",
@@ -78,7 +78,7 @@
 		"i18next": "25.6.0",
 		"idb": "^8.0.3",
 		"lucide-react-native": "^0.545.0",
-		"maplibre-gl": "5.7.3",
+		"maplibre-gl": "5.9.0",
 		"metro": "^0.83.1",
 		"moment": "^2.30.1",
 		"moment-timezone": "^0.6.0",
@@ -113,10 +113,10 @@
 	"devDependencies": {
 		"@0no-co/graphqlsp": "^1.12.16",
 		"@babel/core": "^7.27.4",
-		"@biomejs/biome": "2.2.4",
+		"@biomejs/biome": "2.2.6",
 		"@eggl-js/expo-github-cache": "^0.2.1",
 		"@graphql-codegen/cli": "6.0.0",
-		"@graphql-codegen/client-preset": "5.0.0",
+		"@graphql-codegen/client-preset": "5.1.0",
 		"@graphql-codegen/schema-ast": "5.0.0",
 		"@types/bun": "latest",
 		"@types/color": "^4.2.0",
@@ -130,7 +130,7 @@
 		"expo-atlas": "^0.4.3",
 		"graphql-codegen-typescript-operation-types": "^2.0.2",
 		"prop-types": "^15.8.1",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"patchedDependencies": {
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
