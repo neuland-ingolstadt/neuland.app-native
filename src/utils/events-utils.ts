@@ -322,23 +322,3 @@ export const loadStudentCounsellingEvents = async () => {
 	const res = await NeulandAPI.getStudentCounsellingEvents()
 	return res.studentCounsellingEvents
 }
-
-export function convertCampusLifeToCalendarEvents(
-	events: CampusLifeEvent[],
-	language: string,
-	color: string,
-	textColor: string
-) {
-	return events.map((event) => {
-		const startDate = new Date(event.startDateTime)
-		const endDate = new Date(event.endDateTime)
-
-		return {
-			start: startDate,
-			end: endDate,
-			title: language === 'de' ? event.titles.de : event.titles.en,
-			color,
-			textColor
-		}
-	})
-}
