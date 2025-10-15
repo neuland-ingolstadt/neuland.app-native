@@ -159,6 +159,7 @@ export function LoggedInView(): React.JSX.Element {
 		<ScrollView
 			contentContainerStyle={styles.container}
 			showsVerticalScrollIndicator={false}
+			contentInsetAdjustmentBehavior="automatic"
 		>
 			{info && (
 				<View style={styles.cardWrapper}>
