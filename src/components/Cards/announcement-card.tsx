@@ -172,7 +172,11 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 					{imageUrl && (
 						<Image
 							source={{ uri: imageUrl }}
-							style={[styles.image, isLargeScreen && styles.imageDesktop]}
+							style={[
+								styles.image,
+								isLargeScreen && styles.imageDesktop,
+								!isLargeScreen && styles.imageMobile
+							]}
 						/>
 					)}
 				</View>
@@ -258,6 +262,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		...(Platform.OS === 'web'
 			? { resizeMode: 'cover' }
 			: { objectFit: 'cover' })
+	},
+	imageMobile: {
+		height: undefined,
+		aspectRatio: 16 / 9,
+		...(Platform.OS === 'web'
+			? { resizeMode: 'contain' }
+			: { objectFit: 'contain' })
 	},
 	imageDesktop: {
 		width: 450,
