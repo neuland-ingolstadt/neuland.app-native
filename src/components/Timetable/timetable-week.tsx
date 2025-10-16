@@ -361,8 +361,8 @@ export default function TimetableWeek({
 				}}
 				useAllDayEvent
 				allowPinchToZoom={true}
-				start={420}
-				end={1320}
+				start={0}
+				end={1440}
 				ref={calendarRef}
 				numberOfDays={timetableNumberDays}
 				scrollByDay={
