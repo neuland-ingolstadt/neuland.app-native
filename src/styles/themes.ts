@@ -5,8 +5,12 @@ const deriveCampusLifeColor = (
 	primary: string,
 	mode: 'light' | 'dark'
 ): string => {
-	const base = Color(primary).rotate(-120).saturate(0.25)
-	return (mode === 'dark' ? base.lighten(0.12) : base.lighten(0.3)).hex()
+	const base = Color(primary).rotate(-120)
+	if (mode === 'dark') {
+		return base.desaturate(0.35).lighten(0.45).mix(Color(primary), 0.2).hex()
+	}
+
+	return base.saturate(0.1).lighten(0.25).hex()
 }
 
 const lightPrimary = '#007aff'

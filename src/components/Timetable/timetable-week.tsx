@@ -48,6 +48,8 @@ const timetableNumberDaysMap = {
 	[TimetableMode.Timeline7]: 7
 }
 
+const DEFAULT_DAYTIME_HOUR = 8
+
 interface CalendarEvent {
 	title: string
 	name: string
@@ -339,6 +341,14 @@ export default function TimetableWeek({
 			})
 		}
 	}, [effectiveTimetableMode])
+
+	useEffect(() => {
+		if (!calendarLoaded) {
+			return
+		}
+
+		calendarRef.current?.goToHour(DEFAULT_DAYTIME_HOUR, false)
+	}, [calendarLoaded, effectiveTimetableMode])
 
 	if (hasPendingUpdate) {
 		return (

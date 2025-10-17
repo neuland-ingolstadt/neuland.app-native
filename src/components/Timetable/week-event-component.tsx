@@ -71,13 +71,21 @@ const EventComponent = ({
 	if (!eventName) {
 		return null
 	}
+	const shouldUseShortNameFallback =
+		!isCampusLife && !isCalendar && typeof event.shortName === 'string'
+
+	const fallbackName =
+		shouldUseShortNameFallback && nameParts?.join('_') !== ''
+			? (nameParts?.join('_') ?? eventName)
+			: shouldUseShortNameFallback
+				? (event.shortName as string)
+				: eventName
+
 	const nameToDisplay =
 		timetableMode === 'timeline-1'
 			? eventName
 			: eventName.length > 15
-				? nameParts?.join('_') !== ''
-					? (nameParts?.join('_') ?? eventName)
-					: (event.shortName as string)
+				? fallbackName
 				: eventName
 	// hide ' - ' between time to prevent the date from using 3 lines
 

@@ -376,7 +376,11 @@ export default function TimetableList({
 							<View style={styles.eventInfoRow}>
 								<View style={styles.infoContainer}>
 									{item.location ? (
-										<Text style={styles.eventInfo} numberOfLines={1}>
+										<Text
+											style={styles.eventInfo}
+											numberOfLines={1}
+											ellipsizeMode="tail"
+										>
 											{item.location}
 										</Text>
 									) : null}
@@ -666,7 +670,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600',
 		color: theme.colors.text,
 		flex: 1,
-		marginRight: 8
+		marginRight: 8,
+		minWidth: 0
 	},
 	eventTitleContainer: {
 		flex: 1
@@ -675,11 +680,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 13,
 		color: theme.colors.labelSecondaryColor,
 		flexShrink: 1,
-		marginTop: 4
+		marginTop: 4,
+		minWidth: 0
 	},
 	eventInfo: {
 		fontSize: 14,
-		color: theme.colors.labelColor
+		color: theme.colors.labelColor,
+		flexShrink: 1,
+		minWidth: 0
 	},
 	eventLocation: {
 		flexDirection: 'row',
@@ -698,7 +706,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginTop: 4
+		marginTop: 4,
+		gap: 12
 	},
 
 	// Other styling
@@ -714,6 +723,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	infoContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 10
+		gap: 10,
+		flex: 1,
+		minWidth: 0
 	}
 }))
