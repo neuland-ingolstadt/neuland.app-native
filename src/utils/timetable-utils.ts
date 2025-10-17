@@ -1,14 +1,56 @@
 import moment from 'moment'
+import type { CampusLifeEvent } from '@/types/campus-life'
 import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
 	Exam,
+	ExamEntry,
 	FriendlyTimetableEntry,
+	TimetableCalendarEntry,
+	TimetableCampusLifeEntry,
 	TimetableSections
 } from '@/types/utils'
 
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
+
+export interface NormalizedCampusLifeEvent {
+	id: string
+	numericId: number
+	startDate: Date
+	endDate: Date
+	titles: CampusLifeEvent['titles']
+	hostName: string
+	location?: string | null
+}
+
+export function normalizeCampusLifeEvents(
+	events: CampusLifeEvent[],
+	defaultDurationMinutes = 120
+): NormalizedCampusLifeEvent[] {
+	return events.flatMap((event) => {
+		if (!event.startDateTime) return []
+
+		const startDate = new Date(event.startDateTime)
+		if (Number.isNaN(startDate.getTime())) return []
+
+		const endDate = event.endDateTime
+			? new Date(event.endDateTime)
+			: moment(startDate).add(defaultDurationMinutes, 'minutes').toDate()
+
+		return [
+			{
+				id: event.id,
+				numericId: event.numericId,
+				startDate,
+				endDate,
+				titles: event.titles,
+				hostName: event.host.name,
+				location: event.location ?? null
+			}
+		]
+	})
+}
 
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
@@ -108,16 +150,26 @@ export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
 	exams: Exam[],
 	includeCalendar = false,
-	calendarEvents: Calendar[] = []
+	calendarEvents: Calendar[] = [],
+	includeCampusLife = false,
+	campusLifeEvents: CampusLifeEvent[] = []
 ): TimetableSections[] {
-	const combinedData = [
-		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
+	const combinedData: (
+		| (FriendlyTimetableEntry & { eventType: 'timetable' })
+		| ExamEntry
+		| TimetableCalendarEntry
+		| TimetableCampusLifeEntry
+	)[] = [
+		...timetable.map((lecture) => ({
+			...lecture,
+			eventType: 'timetable' as const
+		})),
 		...exams.map((exam) => {
 			const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90)
 			return {
 				...exam,
 				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
-				eventType: 'exam'
+				eventType: 'exam' as const
 			}
 		})
 	]
@@ -142,7 +194,7 @@ export function getGroupedTimetable(
 			const isAllDay = event.hasHours !== true
 
 			if (isAllDay && originalEndDate) {
-				const eventDays = []
+				const eventDays: TimetableCalendarEntry[] = []
 				const currentDate = new Date(startDate)
 				currentDate.setHours(0, 0, 0, 0)
 
@@ -154,7 +206,10 @@ export function getGroupedTimetable(
 						endDate: null,
 						originalStartDate,
 						originalEndDate,
-						name: event.name,
+						name: {
+							de: event.name.de,
+							en: event.name.en
+						},
 						isAllDay: true,
 						eventType: 'calendar'
 					})
@@ -165,21 +220,44 @@ export function getGroupedTimetable(
 			}
 			return [
 				{
+					id: event.id,
 					date: startDate,
 					startDate,
 					endDate: isAllDay ? null : endDate,
 					originalStartDate,
 					originalEndDate,
-					name: event.name,
+					name: {
+						de: event.name.de,
+						en: event.name.en
+					},
 					isAllDay,
 					eventType: 'calendar'
 				}
-			]
+			] as TimetableCalendarEntry[]
 		})
 
 		const flattenedCalendarEvents = processedCalendarEvents.flat()
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		combinedData.push(...(flattenedCalendarEvents as any))
+		combinedData.push(...flattenedCalendarEvents)
+	}
+
+	if (includeCampusLife && campusLifeEvents.length > 0) {
+		const normalizedCampusLifeEvents =
+			normalizeCampusLifeEvents(campusLifeEvents)
+
+		const processedCampusLifeEvents: TimetableCampusLifeEntry[] =
+			normalizedCampusLifeEvents.map((event) => ({
+				eventType: 'campus-life' as const,
+				id: event.id,
+				numericId: event.numericId,
+				date: event.startDate,
+				startDate: event.startDate,
+				endDate: event.endDate,
+				name: event.titles,
+				hostName: event.hostName,
+				location: event.location ?? null
+			}))
+
+		combinedData.push(...processedCampusLifeEvents)
 	}
 
 	// Sort combinedData by date
