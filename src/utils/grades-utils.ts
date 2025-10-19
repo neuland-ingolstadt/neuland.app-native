@@ -67,7 +67,19 @@ export async function loadGrades(): Promise<{
 		(a, b) => gradeList.indexOf(a) - gradeList.indexOf(b)
 	)
 
-	const finishedGrades = sortedGrades.filter((x) => x.note)
+	const finishedGrades = sortedGrades.filter((x) => {
+		if (!x.note) {
+			return false
+		}
+
+		if (x.note === 'E' || x.note === 'E*') {
+			return true
+		}
+
+		const numeric = Number.parseFloat(x.note.replace(',', '.'))
+		return numeric < 5
+	})
+
 	const missingGrades = sortedGrades.filter(
 		(x) => !finishedGrades.some((y) => x.titel.trim() === y.titel.trim())
 	)
