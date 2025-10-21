@@ -101,19 +101,19 @@
 		"licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
 		"parents": "neuland"
 	},
-	"@tanstack/query-sync-storage-persister@5.90.2": {
+	"@tanstack/query-sync-storage-persister@5.90.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/TanStack/query",
 		"licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@tanstack/react-query-persist-client@5.90.2": {
+	"@tanstack/react-query-persist-client@5.90.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/TanStack/query",
 		"licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"@tanstack/react-query@5.90.2": {
+	"@tanstack/react-query@5.90.3": {
 		"licenses": "MIT",
 		"repository": "https://github.com/TanStack/query",
 		"licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -203,13 +203,19 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
+	"expo-font@14.0.9": {
+		"licenses": "MIT",
+		"repository": "https://github.com/expo/expo",
+		"licenseUrl": "https://github.com/expo/expo",
+		"parents": "neuland"
+	},
 	"expo-haptics@15.0.7": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-image@3.0.9": {
+	"expo-image@3.0.10": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -245,7 +251,7 @@
 		"licenseUrl": "https://github.com/evanbacon/expo-quick-actions/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"expo-router@6.0.12": {
+	"expo-router@6.0.13": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -275,7 +281,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo@54.0.13": {
+	"expo@54.0.16": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -311,7 +317,7 @@
 		"licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"maplibre-gl@5.7.3": {
+	"maplibre-gl@5.9.0": {
 		"licenses": "BSD-3-Clause",
 		"repository": "https://github.com/maplibre/maplibre-gl-js",
 		"licenseUrl": "https://github.com/maplibre/maplibre-gl-js/raw/master/LICENSE.txt",
