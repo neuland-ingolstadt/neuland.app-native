@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.13):
+  - Expo (54.0.16):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -270,10 +270,10 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
-  - ExpoHead (6.0.12):
+  - ExpoHead (6.0.13):
     - ExpoModulesCore
     - RNScreens
-  - ExpoImage (3.0.9):
+  - ExpoImage (3.0.10):
     - ExpoModulesCore
     - libavif/libdav1d
     - SDWebImage (~> 5.21.0)
@@ -288,7 +288,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (17.0.7):
     - ExpoModulesCore
-  - ExpoModulesCore (3.0.21):
+  - ExpoModulesCore (3.0.22):
     - boost
     - DoubleConversion
     - fast_float
@@ -3515,7 +3515,7 @@ SPEC CHECKSUMS:
   EXConstants: a95804601ee4a6aa7800645f9b070d753b1142b3
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: 5115eda02f48edadc62ca3ca95725bb2849ceb68
+  Expo: 3e62179c47d483f19e0bb87988eb51eb7bba036b
   expo-dev-client: 6da1a574fa7caa33a315d818b43c4e560be91915
   expo-dev-launcher: c1e4ca73994c2473c5a20a7d084e2beecb7a8e27
   expo-dev-menu: 733ebc299d7fedef43af5f130cdac867f9c63147
@@ -3529,13 +3529,13 @@ SPEC CHECKSUMS:
   ExpoFileSystem: b79eadbda7b7f285f378f95f959cc9313a1c9c61
   ExpoFont: cf9d90ec1d3b97c4f513211905724c8171f82961
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
-  ExpoHead: e8f1379c6546a4ecb8363dfb86fef62c87dfab22
-  ExpoImage: 6356eb13d3a076a991cf191e4bb22cca91a8f317
+  ExpoHead: 8de5f1108fed8dbaae5178d6649eda5364a62baf
+  ExpoImage: 9c3428921c536ab29e5c6721d001ad5c1f469566
   ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
   ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
   ExpoLocalization: b852a5d8ec14c5349c1593eca87896b5b3ebfcca
-  ExpoModulesCore: 92cbd1a6051ca1464f1747ed8fe46cb9713f6316
+  ExpoModulesCore: 891cb597118e80dd7f600153f2a7e643b9bca6f7
   ExpoQuickActions: 31a70aa6a606128de4416a4830e09cfabfe6667f
   ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
   ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be
