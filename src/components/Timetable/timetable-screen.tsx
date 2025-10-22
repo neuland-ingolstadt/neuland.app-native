@@ -19,6 +19,7 @@ import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
+import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
@@ -41,6 +42,9 @@ function TimetableScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
+	)
 
 	const { userKind } = use(UserKindContext)
 
@@ -77,6 +81,14 @@ function TimetableScreen(): React.JSX.Element {
 		enabled: userKind !== USER_GUEST
 	})
 
+	const { data: campusLifeEvents } = useQuery({
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
+		queryFn: () => loadCampusLifeEvents(),
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 60 * 6,
+		enabled: showCampusLifeEvents
+	})
+
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	const edges =
@@ -90,9 +102,21 @@ function TimetableScreen(): React.JSX.Element {
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (
 					timetableMode === TimetableMode.List ? (
-						<TimetableList timetable={timetable} exams={exams ?? []} />
+						<TimetableList
+							timetable={timetable}
+							exams={exams ?? []}
+							campusLifeEvents={
+								showCampusLifeEvents ? (campusLifeEvents ?? []) : []
+							}
+						/>
 					) : (
-						<TimetableWeek timetable={timetable} exams={exams ?? []} />
+						<TimetableWeek
+							timetable={timetable}
+							exams={exams ?? []}
+							campusLifeEvents={
+								showCampusLifeEvents ? (campusLifeEvents ?? []) : []
+							}
+						/>
 					)
 				) : isPaused && !isSuccess ? (
 					<ErrorView

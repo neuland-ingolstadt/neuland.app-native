@@ -33,6 +33,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { normalizeCampusLifeEvents } from '@/utils/timetable-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
@@ -46,6 +47,8 @@ const timetableNumberDaysMap = {
 	[TimetableMode.Timeline5]: 5,
 	[TimetableMode.Timeline7]: 7
 }
+
+const DEFAULT_DAYTIME_HOUR = 8
 
 interface CalendarEvent {
 	title: string
@@ -63,7 +66,8 @@ interface CalendarEvent {
 
 export default function TimetableWeek({
 	timetable,
-	exams
+	exams,
+	campusLifeEvents
 }: ITimetableViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { i18n, t } = useTranslation()
@@ -82,6 +86,9 @@ export default function TimetableWeek({
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
+	)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
 	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const hasPendingUpdate = useTimetableStore(
@@ -153,6 +160,11 @@ export default function TimetableWeek({
 				pathname: '/calendar',
 				params: { event: entry.id }
 			})
+		} else if (entry.eventType === 'campus-life') {
+			router.navigate({
+				pathname: '/events/cl/[id]',
+				params: { id: entry.id }
+			})
 		}
 	}
 
@@ -223,12 +235,44 @@ export default function TimetableWeek({
 				})
 		}
 
+		let campusEvents: PackedEvent[] = []
+		if (showCampusLifeEvents && campusLifeEvents.length > 0) {
+			const normalizedCampusLifeEvents =
+				normalizeCampusLifeEvents(campusLifeEvents)
+			const locale: 'de' | 'en' = i18n.language.startsWith('de') ? 'de' : 'en'
+
+			campusEvents = normalizedCampusLifeEvents.map((event) => {
+				const title =
+					event.titles[locale] ?? event.titles.en ?? event.titles.de ?? ''
+
+				return {
+					title,
+					name: title,
+					eventType: 'campus-life',
+					id: event.id,
+					shortName: event.hostName,
+					start: { dateTime: event.startDate },
+					end: { dateTime: event.endDate },
+					rooms: event.location ? [event.location] : []
+				} as unknown as PackedEvent
+			})
+		}
+
 		return [
 			...friendlyTimetable,
 			...friendlyExams,
-			...calendarEvents
+			...calendarEvents,
+			...campusEvents
 		] as unknown as PackedEvent[]
-	}, [timetable, exams, showCalendarEvents, showExams, i18n.language])
+	}, [
+		timetable,
+		exams,
+		showCalendarEvents,
+		showCampusLifeEvents,
+		showExams,
+		i18n.language,
+		campusLifeEvents
+	])
 
 	useEffect(() => {
 		startTransition(() => {
@@ -272,15 +316,12 @@ export default function TimetableWeek({
 		(event: PackedEvent) => {
 			return <EventComponent event={event} theme={theme} isDark={isDark} />
 		},
-		[theme.colors.primary, events]
+		[theme, isDark]
 	)
 
-	const renderHeaderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <WeekHeaderEvent event={event} theme={theme} />
-		},
-		[theme.colors.primary, events]
-	)
+	const renderHeaderEvent = useCallback((event: PackedEvent) => {
+		return <WeekHeaderEvent event={event} />
+	}, [])
 
 	const onPressPrevious = (): void => {
 		calendarRef.current?.goToPrevPage()
@@ -300,6 +341,14 @@ export default function TimetableWeek({
 			})
 		}
 	}, [effectiveTimetableMode])
+
+	useEffect(() => {
+		if (!calendarLoaded) {
+			return
+		}
+
+		calendarRef.current?.goToHour(DEFAULT_DAYTIME_HOUR, false)
+	}, [calendarLoaded, effectiveTimetableMode])
 
 	if (hasPendingUpdate) {
 		return (
@@ -322,8 +371,8 @@ export default function TimetableWeek({
 				}}
 				useAllDayEvent
 				allowPinchToZoom={true}
-				start={420}
-				end={1320}
+				start={0}
+				end={1440}
 				ref={calendarRef}
 				numberOfDays={timetableNumberDays}
 				scrollByDay={

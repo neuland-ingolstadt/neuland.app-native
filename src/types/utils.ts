@@ -93,25 +93,50 @@ export interface FriendlyTimetableEntry {
 export interface TimetableEntry extends FriendlyTimetableEntry {
 	eventType: 'timetable'
 }
-export interface CalendarTimetableEntry extends FriendlyTimetableEntry {
-	eventType: string
-	color: string
-	id: number
+export interface TimetableCalendarEntry {
+	eventType: 'calendar'
+	id: string
+	date: Date
 	startDate: Date
-	endDate: Date
+	endDate: Date | null
+	name:
+		| {
+				en?: string
+				de?: string
+				[key: string]: string | undefined
+		  }
+		| string
+	isAllDay: boolean
+	originalStartDate?: Date
+	originalEndDate?: Date | null
 }
 
-export interface ExamTimetableEntry extends Exam {
-	eventType: string
-	color: string
-	id: number
+export interface TimetableCampusLifeEntry {
+	eventType: 'campus-life'
+	id: string
+	numericId: number
+	date: Date
 	startDate: Date
 	endDate: Date
+	name:
+		| {
+				en?: string | null
+				de?: string | null
+				[key: string]: string | null | undefined
+		  }
+		| string
+	hostName: string
+	location?: string | null
 }
 
 export interface TimetableSections {
 	title: Date
-	data: (TimetableEntry | ExamEntry)[]
+	data: (
+		| TimetableEntry
+		| ExamEntry
+		| TimetableCalendarEntry
+		| TimetableCampusLifeEntry
+	)[]
 }
 
 export interface CalendarEvent {
