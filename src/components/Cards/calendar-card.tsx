@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
@@ -118,7 +118,14 @@ const CalendarCard = (): React.JSX.Element => {
 		>
 			<View style={styles.calendarContainer}>
 				{mixedCalendar.map((event, index) => (
-					<React.Fragment key={index}>
+					<Pressable
+						key={index}
+						onPress={
+							'id' in event
+								? () => router.navigate(`/calendar?event=${event.id}`)
+								: undefined
+						}
+					>
 						<EventItem
 							title={
 								typeof event.name === 'object'
@@ -131,7 +138,7 @@ const CalendarCard = (): React.JSX.Element => {
 							showEndTime={true}
 							color={theme.colors.primary}
 						/>
-					</React.Fragment>
+					</Pressable>
 				))}
 			</View>
 		</BaseCard>
