@@ -16,11 +16,13 @@ export enum TimetableMode {
 interface TimetableStore {
 	timetableMode: TimetableMode
 	showCalendarEvents: boolean
+	showCampusLifeEvents: boolean
 	showExams: boolean
 	selectedDate: Date
 	hasPendingTimetableUpdate: boolean
 	setTimetableMode: (timetableMode: TimetableMode) => void
 	setShowCalendarEvents: (show: boolean) => void
+	setShowCampusLifeEvents: (show: boolean) => void
 	setShowExams: (show: boolean) => void
 	setSelectedDate: (date: Date) => void
 	setHasPendingTimetableUpdate: (value: boolean) => void
@@ -30,12 +32,14 @@ const initialState: Omit<
 	TimetableStore,
 	| 'setTimetableMode'
 	| 'setShowCalendarEvents'
+	| 'setShowCampusLifeEvents'
 	| 'setShowExams'
 	| 'setSelectedDate'
 	| 'setHasPendingTimetableUpdate'
 > = {
 	timetableMode: TimetableMode.Timeline3,
 	showCalendarEvents: false,
+	showCampusLifeEvents: false,
 	showExams: true,
 	selectedDate: new Date(),
 	hasPendingTimetableUpdate: false
@@ -50,6 +54,9 @@ export const useTimetableStore = create<TimetableStore>()(
 			},
 			setShowCalendarEvents: (showCalendarEvents: boolean) => {
 				set({ showCalendarEvents })
+			},
+			setShowCampusLifeEvents: (showCampusLifeEvents: boolean) => {
+				set({ showCampusLifeEvents })
 			},
 			setShowExams: (showExams: boolean) => {
 				set({ showExams })

@@ -52,4 +52,4 @@ android/.kotlin
 
 my-release-key.jks
 
-*.geojson
+*.geojsonpackage-lock.json
