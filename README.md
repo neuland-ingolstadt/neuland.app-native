@@ -4,7 +4,7 @@
 
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml)
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
-# Neuland Next - Your unofficial app for THI
+# Neuland Next - Your app for THI
 
 <p align="left" style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Neuland Next is the unofficial go-to app for students of Technische Hochschule Ingolstadt (THI). Built with React Native and powered by open source, it delivers a sleek, modern experience packed with smart features—designed by students, for students.
+Neuland Next is your go-to app for students of Technische Hochschule Ingolstadt (THI). Built with React Native and powered by open source, it delivers a sleek, modern experience packed with smart features—designed by students, for students.
 
 Learn more about the app on the [Neuland Next website](https://neuland.app).
 
@@ -47,6 +47,9 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 The app unites all important information for students in one place. It's available for iOS, Android, and MacOS, with a web version that can be used on all common browsers.
 
 Learn more about the app on the [Neuland Next website](https://neuland.app).
+
+> [!NOTE]
+> Neuland Next is an independent project by students at Technische Hochschule Ingolstadt. The app has no official connection to the university, but is used by many students and staff members.
 
 ### 🔒 Security & Privacy
 
