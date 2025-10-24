@@ -18,11 +18,11 @@
 		},
 		"cards": {
 			"title1": "Everything in one place",
-			"description1": "This app combines everything you need for your studies in one place.",
-			"title2": "Developed by students",
-			"description2": "Neuland Next is an open-source project by Neuland Ingolstadt e.V. and is an alternative to the official THI app.",
-			"title3": "Security comes first",
-			"description3": "Your data is strictly protected by using the official and encrypted services of THI and is never accessible to us or third parties.",
+			"description1": "Neuland Next combines everything you need for your studies at THI in one place.",
+			"title2": "By students for students",
+			"description2": "Neuland Next is an independent project by THI students. The app has no official connection to the university.",
+			"title3": "Widely used and trustworthy",
+			"description3": "The app is used by many students and staff, and uses the official and encrypted THI services for maximum security.",
 			"title4": "Even better in the app",
 			"description4": "Install Neuland Next on your smartphone to use all features. Available for iOS, iPadOS, MacOS, and Android."
 		}

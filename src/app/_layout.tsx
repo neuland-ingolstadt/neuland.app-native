@@ -119,13 +119,10 @@ function RootLayout(): React.JSX.Element {
 		<Splash isReady={isReady}>
 			<Head>
 				<title>Neuland Next</title>
-				<meta
-					name="description"
-					content="An unofficial campus app for TH Ingolstadt"
-				/>
+				<meta name="description" content="Your app for TH Ingolstadt - THI" />
 				<meta
 					property="og:description"
-					content="An unofficial campus app for TH Ingolstadt"
+					content="Your app for TH Ingolstadt - THI"
 				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
