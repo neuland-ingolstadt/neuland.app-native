@@ -8,8 +8,10 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar } from '@/types/data'
+import type { Exam } from '@/types/utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
@@ -21,6 +23,7 @@ const CalendarCard = (): React.JSX.Element => {
 	const { i18n, t } = useTranslation(['navigation', 'common'])
 	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
+	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
 	interface CardExams {
@@ -28,6 +31,7 @@ const CalendarCard = (): React.JSX.Element => {
 		begin: Date
 		end?: Date
 		isExam?: boolean
+		examData?: Exam
 	}
 
 	async function loadExams(): Promise<CardExams[]> {
@@ -36,7 +40,8 @@ const CalendarCard = (): React.JSX.Element => {
 			exams = (await loadExamList()).map((x) => ({
 				name: t('navigation:cards.calendar.exam', { name: x.name }),
 				begin: new Date(x.date),
-				isExam: true
+				isExam: true,
+				examData: x
 			}))
 		} catch (e) {
 			if (e instanceof NoSessionError) {
@@ -121,9 +126,22 @@ const CalendarCard = (): React.JSX.Element => {
 					<Pressable
 						key={index}
 						onPress={
-							'id' in event
-								? () => router.navigate(`/calendar?event=${event.id}`)
-								: undefined
+							'isExam' in event && 'examData' in event
+								? () => {
+										if (event.examData) {
+											setExam(event.examData)
+
+											router.navigate({
+												pathname: '/calendar',
+												params: {
+													openExam: 'true'
+												}
+											})
+										}
+									}
+								: 'id' in event
+									? () => router.navigate(`/calendar?event=${event.id}`)
+									: undefined
 						}
 					>
 						<EventItem
