@@ -105,7 +105,7 @@ function FoodScreen(): React.JSX.Element {
 		initialPageRef.current = initialPage
 		setSelectedDay(initialPage)
 		if (pagerViewRef.current) {
-			pagerViewRef.current.setPageWithoutAnimation(initialPage)
+			pagerViewRef.current.setPage(initialPage)
 		}
 	}, [foodData, getInitialPage])
 
