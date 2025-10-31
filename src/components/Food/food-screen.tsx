@@ -30,11 +30,11 @@ import { AllergensBanner } from '@/components/Food/allergens-banner'
 import PagerView from '@/components/Layout/pager-view'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
