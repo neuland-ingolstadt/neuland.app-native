@@ -46,7 +46,8 @@ function FoodScreen(): React.JSX.Element {
 	const allergenSelection = useFoodFilterStore(
 		(state) => state.allergenSelection
 	)
-	const autoShowNextDayHour = 18
+	const pagerViewRef = useRef<PagerView>(null)
+	const AUTO_SHOW_NEXT_DAY_HOUR = 13
 
 	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
@@ -77,11 +78,15 @@ function FoodScreen(): React.JSX.Element {
 
 		const currentHour = new Date().getHours()
 
-		if (currentHour >= autoShowNextDayHour && foodData && foodData.length > 1) {
+		if (
+			currentHour >= AUTO_SHOW_NEXT_DAY_HOUR &&
+			foodData &&
+			foodData.length > 1
+		) {
 			return 1
 		}
 		return 0
-	}, [autoShowNextDay, foodData])
+	}, [autoShowNextDay, AUTO_SHOW_NEXT_DAY_HOUR, foodData])
 
 	const [selectedDay, setSelectedDay] = useState<number>(getInitialPage())
 	const initialPageRef = useRef<number>(getInitialPage())
@@ -114,8 +119,6 @@ function FoodScreen(): React.JSX.Element {
 			pausedToast()
 		}
 	}, [data, isPaused, t])
-
-	const pagerViewRef = useRef<PagerView>(null)
 
 	/**
 	 * Renders a button for a specific day's food data.
