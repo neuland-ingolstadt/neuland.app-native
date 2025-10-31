@@ -47,7 +47,7 @@ function FoodScreen(): React.JSX.Element {
 		(state) => state.allergenSelection
 	)
 	const pagerViewRef = useRef<PagerView>(null)
-	const AUTO_SHOW_NEXT_DAY_HOUR = 13
+	const AUTO_SHOW_NEXT_DAY_HOUR = 18
 
 	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
