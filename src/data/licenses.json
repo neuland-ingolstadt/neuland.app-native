@@ -23,7 +23,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"@expo/vector-icons@15.0.2": {
+	"@expo/vector-icons@15.0.3": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/vector-icons",
 		"licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
@@ -185,7 +185,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-constants@18.0.9": {
+	"expo-constants@18.0.10": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -197,7 +197,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-dev-client@6.0.15": {
+	"expo-dev-client@6.0.16": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -239,7 +239,7 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-navigation-bar@5.0.8": {
+	"expo-navigation-bar@5.0.9": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -251,7 +251,7 @@
 		"licenseUrl": "https://github.com/evanbacon/expo-quick-actions/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"expo-router@6.0.13": {
+	"expo-router@6.0.14": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -275,13 +275,13 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo-system-ui@6.0.7": {
+	"expo-system-ui@6.0.8": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
-	"expo@54.0.16": {
+	"expo@54.0.21": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
 		"licenseUrl": "https://github.com/expo/expo",
@@ -467,7 +467,7 @@
 		"licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native@0.81.4": {
+	"react-native@0.81.5": {
 		"licenses": "MIT",
 		"repository": "https://github.com/facebook/react-native",
 		"licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",

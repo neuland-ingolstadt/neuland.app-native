@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible bug or regression in this library.
+description: Report a reproducible bug or problem with the app.
 labels: [bug]
 title: "[Bug]: "
 body:
