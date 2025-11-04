@@ -50,7 +50,7 @@
 		"babel-plugin-react-compiler": "^1.0.0",
 		"burnt": "0.13.0",
 		"color": "^5.0.2",
-		"expo": "54.0.21",
+		"expo": "54.0.22",
 		"expo-alternate-app-icons": "3.0.0",
 		"expo-application": "~7.0.7",
 		"expo-auth-session": "~7.0.8",
