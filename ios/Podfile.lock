@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.21):
+  - Expo (54.0.22):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -288,7 +288,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (17.0.7):
     - ExpoModulesCore
-  - ExpoModulesCore (3.0.23):
+  - ExpoModulesCore (3.0.24):
     - boost
     - DoubleConversion
     - fast_float
@@ -335,9 +335,9 @@ PODS:
   - FBLazyVector (0.81.5)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - hermes-engine (0.81.4):
-    - hermes-engine/Pre-built (= 0.81.4)
-  - hermes-engine/Pre-built (0.81.4)
+  - hermes-engine (0.81.5):
+    - hermes-engine/Pre-built (= 0.81.5)
+  - hermes-engine/Pre-built (0.81.5)
   - libavif/core (0.11.1)
   - libavif/libdav1d (0.11.1):
     - libavif/core
@@ -3515,7 +3515,7 @@ SPEC CHECKSUMS:
   EXConstants: fd688cef4e401dcf798a021cfb5d87c890c30ba3
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: a07756d8b898f3c151e98cf57354400edd272bec
+  Expo: 851b74c1018fb382d1d5d0a9067623bab0b445c1
   expo-dev-client: 974463bca58c100a32f099450e9413893bee3de8
   expo-dev-launcher: 31960c9440aea2dc13ba7f6fd616ae345a04b5de
   expo-dev-menu: 4e31300648128fa607adf0df2be580cbee3bb7b4
@@ -3535,7 +3535,7 @@ SPEC CHECKSUMS:
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
   ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
   ExpoLocalization: b852a5d8ec14c5349c1593eca87896b5b3ebfcca
-  ExpoModulesCore: d5748715ae5076c12a1a77a3fc75a69b7fffcdcc
+  ExpoModulesCore: c1ecc2e423802b7d9ca2e411400c2b268e55c731
   ExpoQuickActions: 31a70aa6a606128de4416a4830e09cfabfe6667f
   ExpoSecureStore: 9c6571fe3fcb045a671c4011c451546eaaab98fd
   ExpoSplashScreen: 311698c4861eea16635e4b99ffe747678125f3be
@@ -3547,7 +3547,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 5beb8028d5a2e75dd9634917f23e23d3a061d2aa
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  hermes-engine: 35c763d57c9832d0eef764316ca1c4d043581394
+  hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
