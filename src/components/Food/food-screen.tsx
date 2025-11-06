@@ -36,6 +36,8 @@ import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
+const AUTO_SHOW_NEXT_DAY_HOUR = 18
+
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
@@ -47,7 +49,6 @@ function FoodScreen(): React.JSX.Element {
 		(state) => state.allergenSelection
 	)
 	const pagerViewRef = useRef<PagerView>(null)
-	const AUTO_SHOW_NEXT_DAY_HOUR = 18
 
 	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
@@ -86,7 +87,7 @@ function FoodScreen(): React.JSX.Element {
 			return 1
 		}
 		return 0
-	}, [autoShowNextDay, AUTO_SHOW_NEXT_DAY_HOUR, foodData])
+	}, [autoShowNextDay, foodData])
 
 	const [selectedDay, setSelectedDay] = useState<number>(getInitialPage())
 	const initialPageRef = useRef<number>(getInitialPage())

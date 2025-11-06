@@ -138,7 +138,7 @@ export default function FoodPreferences(): React.JSX.Element {
 				<SectionView title={t('preferences.settings')}>
 					<SingleSectionPicker
 						title={t('preferences.autoShowNextDay')}
-						selectedItem={autoShowNextDay ?? false}
+						selectedItem={autoShowNextDay}
 						action={setAutoShowNextDay}
 					/>
 				</SectionView>
