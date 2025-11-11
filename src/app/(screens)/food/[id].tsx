@@ -74,8 +74,9 @@ export default function FoodDetail(): React.JSX.Element {
 	const dataSources = {
 		IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
 		NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
-		Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
-		Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf'
+		Reimanns: 'https://reimanns.in/mittagsgerichte-wochenkarte/',
+		Canisius:
+			'https://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
 	}
 
 	const navigation = useNavigation()
