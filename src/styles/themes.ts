@@ -1,4 +1,20 @@
+import Color from 'color'
 import { Platform } from 'react-native'
+
+const deriveCampusLifeColor = (
+	primary: string,
+	mode: 'light' | 'dark'
+): string => {
+	const base = Color(primary).rotate(-120)
+	if (mode === 'dark') {
+		return base.desaturate(0.35).lighten(0.45).mix(Color(primary), 0.2).hex()
+	}
+
+	return base.saturate(0.1).lighten(0.25).hex()
+}
+
+const lightPrimary = '#007aff'
+const darkPrimary = '#0e83fd'
 
 export const lightTheme = {
 	colors: {
@@ -22,7 +38,7 @@ export const lightTheme = {
 		cardContrast: '#eeeeee',
 		border: 'rgb(216, 216, 216)',
 		text: 'rgb(28, 28, 30)',
-		primary: '#007aff',
+		primary: lightPrimary,
 		primaryBackground: '#007aff15',
 		secondary: '#0a61be',
 		sheetButton: '#ffffff',
@@ -36,6 +52,7 @@ export const lightTheme = {
 		plateShadow: '#444',
 		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d',
+		campusLife: deriveCampusLifeColor(lightPrimary, 'light'),
 		completedDot: '#157a15',
 		soonDot: '#dfdfdf'
 	},
@@ -78,7 +95,7 @@ export const darkTheme = {
 		cardContrast: '#1c1c1d',
 		border: 'rgb(39, 39, 41)',
 		text: 'rgb(229, 229, 231)',
-		primary: '#0e83fd',
+		primary: darkPrimary,
 		primaryBackground: '#0e83fd25',
 		secondary: '#1578e1',
 		sheetButton: '#262626',
@@ -92,6 +109,7 @@ export const darkTheme = {
 		plateShadow: '#777777',
 		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767',
+		campusLife: deriveCampusLifeColor(darkPrimary, 'dark'),
 		completedDot: '#157a15',
 		soonDot: '#4b4b4b'
 	},
