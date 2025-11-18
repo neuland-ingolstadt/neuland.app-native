@@ -22,7 +22,9 @@
 			"de": "Deutsch",
 			"en": "Englisch",
 			"auto": "Standard"
-		}
+		},
+		"settings": "Einstellungen",
+		"autoShowNextDay": "Automatisch zum nächsten Tag wechseln"
 	},
 	"price": {
 		"guests": "für Gäste",

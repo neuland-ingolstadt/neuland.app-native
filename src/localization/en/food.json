@@ -22,7 +22,9 @@
 			"de": "German",
 			"en": "English",
 			"auto": "Default"
-		}
+		},
+		"settings": "Settings",
+		"autoShowNextDay": "Automatically switch to next day"
 	},
 	"price": {
 		"guests": "for guests",

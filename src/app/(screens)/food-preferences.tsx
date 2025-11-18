@@ -14,6 +14,7 @@ import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { FormListSections } from '@/types/components'
@@ -63,6 +64,10 @@ export default function FoodPreferences(): React.JSX.Element {
 	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 	const toggleFoodLanguage = useFoodFilterStore(
 		(state) => state.toggleFoodLanguage
+	)
+	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
+	const setAutoShowNextDay = usePreferencesStore(
+		(state) => state.setAutoShowNextDay
 	)
 
 	const handleToggleRestaurant = (name: string) => {
@@ -128,6 +133,13 @@ export default function FoodPreferences(): React.JSX.Element {
 						elements={languages}
 						selectedItem={foodLanguage}
 						action={handleToggleLanguage}
+					/>
+				</SectionView>
+				<SectionView title={t('preferences.settings')}>
+					<SingleSectionPicker
+						title={t('preferences.autoShowNextDay')}
+						selectedItem={autoShowNextDay}
+						action={setAutoShowNextDay}
 					/>
 				</SectionView>
 			</View>
