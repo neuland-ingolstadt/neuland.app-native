@@ -30,14 +30,17 @@ import { AllergensBanner } from '@/components/Food/allergens-banner'
 import PagerView from '@/components/Layout/pager-view'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
+const AUTO_SHOW_NEXT_DAY_HOUR = 18
+
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const [selectedDay, setSelectedDay] = useState<number>(0)
+	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
 	)
@@ -45,6 +48,7 @@ function FoodScreen(): React.JSX.Element {
 	const allergenSelection = useFoodFilterStore(
 		(state) => state.allergenSelection
 	)
+	const pagerViewRef = useRef<PagerView>(null)
 
 	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
@@ -70,6 +74,24 @@ function FoodScreen(): React.JSX.Element {
 	})
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
+	const getInitialPage = useCallback((): number => {
+		if (!autoShowNextDay) return 0
+
+		const currentHour = new Date().getHours()
+
+		if (
+			currentHour >= AUTO_SHOW_NEXT_DAY_HOUR &&
+			foodData &&
+			foodData.length > 1
+		) {
+			return 1
+		}
+		return 0
+	}, [autoShowNextDay, foodData])
+
+	const [selectedDay, setSelectedDay] = useState<number>(getInitialPage())
+	const initialPageRef = useRef<number>(getInitialPage())
+
 	useEffect(() => {
 		if (foodData == null) {
 			return
@@ -85,15 +107,19 @@ function FoodScreen(): React.JSX.Element {
 		}
 
 		setData(filteredDays)
-	}, [foodData])
+		const initialPage = getInitialPage()
+		initialPageRef.current = initialPage
+		setSelectedDay(initialPage)
+		if (pagerViewRef.current) {
+			pagerViewRef.current.setPage(initialPage)
+		}
+	}, [foodData, getInitialPage])
 
 	useEffect(() => {
 		if (isPaused && data != null) {
 			pausedToast()
 		}
 	}, [data, isPaused, t])
-
-	const pagerViewRef = useRef<PagerView>(null)
 
 	/**
 	 * Renders a button for a specific day's food data.
@@ -233,7 +259,7 @@ function FoodScreen(): React.JSX.Element {
 								...styles.page,
 								height: screenHeight
 							}}
-							initialPage={0}
+							initialPage={initialPageRef.current}
 							onPageSelected={(e) => {
 								const page = e.nativeEvent.position
 								setSelectedDay(page)
