@@ -1,7 +1,7 @@
 import { trackEvent } from '@aptabase/react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, useWindowDimensions, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -16,14 +16,19 @@ export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const headerPadding = useTransparentHeaderPadding() + 12
-	const { event } = useLocalSearchParams<{
-		event: string
+	const { event, openExam } = useLocalSearchParams<{
+		event?: string
+		openExam?: string
 	}>()
+
+	const shouldOpenExam = openExam === 'true'
+	const [initialPage, _] = useState(shouldOpenExam ? 1 : 0)
+
 	const displayTypes = [
 		t('pages.calendar.events.title'),
 		t('pages.calendar.exams.title')
 	]
-	const [selectedData, setSelectedData] = useState<number>(0)
+	const [selectedData, setSelectedData] = useState<number>(initialPage)
 	const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
 	const handleLinkPress = (): void => {
 		void Linking.openURL(
@@ -34,8 +39,9 @@ export default function CalendarPage(): React.JSX.Element {
 	const screenHeight = useWindowDimensions().height
 	const pagerViewRef = useRef<PagerView>(null)
 
-	// Track which pages have been viewed
-	const [viewedPages, setViewedPages] = useState<Set<number>>(new Set([0]))
+	const [viewedPages, setViewedPages] = useState<Set<number>>(
+		() => new Set([initialPage])
+	)
 
 	function setPage(page: number): void {
 		pagerViewRef.current?.setPage(page)
@@ -73,6 +79,22 @@ export default function CalendarPage(): React.JSX.Element {
 		)
 	}
 
+	useEffect(() => {
+		if (shouldOpenExam) {
+			setSelectedData(1)
+			setViewedPages((prev) => new Set([...prev, 1]))
+			pagerViewRef.current?.setPage(1)
+			// requestIdleCallback to ensure navigation happens after transition is done
+			requestIdleCallback(() => {
+				router.setParams({ openExam: '' })
+
+				router.navigate({
+					pathname: '/exam'
+				})
+			})
+		}
+	}, [shouldOpenExam])
+
 	return (
 		<View
 			style={{
@@ -94,7 +116,7 @@ export default function CalendarPage(): React.JSX.Element {
 					...styles.pagerContainer,
 					height: screenHeight
 				}}
-				initialPage={0}
+				initialPage={initialPage}
 				onPageSelected={(e) => {
 					const page = e.nativeEvent.position
 					setSelectedData(page)
