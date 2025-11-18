@@ -75,7 +75,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	description: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
-		lineHeight: 20,
+		lineHeight: 17,
 		textAlign: 'left'
 	},
 	iconContainer: {
