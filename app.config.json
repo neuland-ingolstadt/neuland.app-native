@@ -193,8 +193,8 @@
 		"web": {
 			"favicon": "./src/assets/web/favicon.png",
 			"shortName": "Neuland Next",
-			"name": "Neuland Next - Deine inoffizielle App für die THI",
-			"description": "Neuland Next ist eine inoffizielle App für die Technische Hochschule Ingolstadt. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
+			"name": "Neuland Next - Deine App für die THI",
+			"description": "Neuland Next ist deine App für die TH Ingolstadt, entwickelt von Studierenden für Studierende. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
 			"lang": "de",
 			"themeColor": "#007aff",
 			"darkThemeColor": "#0e83fd",
