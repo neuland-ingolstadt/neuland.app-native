@@ -59,9 +59,12 @@
 			"contact": {
 				"title": "Kontakt",
 				"feedback": "Feedback",
-				"rateAndroid": "Bewerte im Play Store",
-				"rateiOS": "Bewerte im App Store"
-			}
+				"rateAndroid": "Bewerte uns im Play Store",
+				"rateiOS": "Bewerte uns im App Store"
+			},
+			"systemStatus": "Systemstatus",
+			"memberArea": "Neuland Mitgliederbereich",
+			"appWebsite": "Projekt-Webseite"
 		},
 		"easterEgg": {
 			"title": "Easter Egg",

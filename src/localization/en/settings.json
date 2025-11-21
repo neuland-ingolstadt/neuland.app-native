@@ -82,7 +82,10 @@
 				"feedback": "Feedback",
 				"rateAndroid": "Rate on Play Store",
 				"rateiOS": "Rate on App Store"
-			}
+			},
+			"systemStatus": "System Status",
+			"memberArea": "Neuland Member Area",
+			"appWebsite": "Project Website"
 		},
 		"easterEgg": {
 			"title": "Easter Egg",

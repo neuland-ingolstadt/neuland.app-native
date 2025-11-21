@@ -145,7 +145,7 @@ export default function About(): React.JSX.Element {
 					}
 				},
 				{
-					title: 'System Status',
+					title: t('about.formlist.systemStatus'),
 					icon: {
 						ios: 'bubble.left.and.exclamationmark.bubble.right',
 						android: 'troubleshoot',
@@ -158,7 +158,7 @@ export default function About(): React.JSX.Element {
 				...(Platform.OS !== 'web'
 					? [
 							{
-								title: 'Member Area',
+								title: t('about.formlist.memberArea'),
 								icon: {
 									ios: 'person.crop.circle.badge.checkmark',
 									android: 'verified_user' as MaterialIcon,
@@ -188,7 +188,7 @@ export default function About(): React.JSX.Element {
 						)) as Promise<void>
 				},
 				{
-					title: 'App Website',
+					title: t('about.formlist.appWebsite'),
 					icon: linkIcon,
 					onPress: async () =>
 						(await Linking.openURL('https://neuland.app')) as Promise<void>
