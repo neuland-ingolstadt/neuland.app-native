@@ -77,14 +77,24 @@ function FoodScreen(): React.JSX.Element {
 	const getInitialPage = useCallback((): number => {
 		if (!autoShowNextDay) return 0
 
-		const currentHour = new Date().getHours()
+		const today = new Date()
+		const currentHour = today.getHours()
 
 		if (
 			currentHour >= AUTO_SHOW_NEXT_DAY_HOUR &&
 			foodData &&
 			foodData.length > 1
 		) {
-			return 1
+			const firstDayDate = new Date(foodData[0].timestamp)
+
+			const isToday =
+				firstDayDate.getDate() === today.getDate() &&
+				firstDayDate.getMonth() === today.getMonth() &&
+				firstDayDate.getFullYear() === today.getFullYear()
+
+			if (isToday) {
+				return 1
+			}
 		}
 		return 0
 	}, [autoShowNextDay, foodData])
