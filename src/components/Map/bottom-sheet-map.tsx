@@ -27,8 +27,8 @@ import AttributionLink from './attribution-link'
 import AvailableRoomsSuggestions from './available-rooms-suggestions'
 import BottomSheetBackground from './bottom-sheet-background'
 import NextLectureSuggestion from './next-lecture-suggestion'
-import SearchResults from './search-esuts'
 import SearchHistory from './search-history'
+import SearchResults from './search-results'
 
 interface MapBottomSheetProps {
 	bottomSheetRef: React.RefObject<BottomSheet | null>
