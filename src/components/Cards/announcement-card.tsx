@@ -176,7 +176,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 						/>
 					)}
 				</View>
-				{url && (
+				{url != null && url !== '' && (
 					<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
 				)}
 			</View>
