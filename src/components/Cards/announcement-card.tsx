@@ -119,7 +119,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { id, title, description, url, imageUrl } = filteredAnnouncements[0]
 
 	const cardStyle = [styles.card]
-	
+
 	return (
 		<Pressable
 			onPress={handlePressLink(url, id)}
