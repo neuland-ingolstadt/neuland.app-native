@@ -104,7 +104,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 
 	const handlePressLink = useCallback(
 		(url: string | null | undefined, id: string) => () => {
-			if (url) {
+			if (url != null && url !== '') {
 				trackEvent('Announcement', { link: id })
 				void Linking.openURL(url)
 			}
