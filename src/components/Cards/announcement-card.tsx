@@ -104,7 +104,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 
 	const handlePressLink = useCallback(
 		(url: string | null | undefined, id: string) => () => {
-			if (url != null) {
+			if (url) {
 				trackEvent('Announcement', { link: id })
 				void Linking.openURL(url)
 			}
@@ -119,7 +119,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { id, title, description, url, imageUrl } = filteredAnnouncements[0]
 
 	const cardStyle = [styles.card]
-
+	
 	return (
 		<Pressable
 			onPress={handlePressLink(url, id)}
@@ -176,7 +176,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 						/>
 					)}
 				</View>
-				{url != null && (
+				{url && (
 					<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
 				)}
 			</View>
