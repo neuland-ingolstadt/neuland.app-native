@@ -66,14 +66,14 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ## 📊 System Status
 
-The real-time system status is available at [status.neuland.app](https://status.neuland.app). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
+The real-time system status is available at [status.neuland.ing](https://status.neuland.ing). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
 
 | Service | Status |  Uptime (24h)
 |---------|--------|--------|
-| THI API | ![THI API Status](https://status.neuland.app/api/badge/14/status?upColor=%2331c753) | ![THI API Status](https://status.neuland.app/api/badge/14/uptime?upColor=%2331c753) |
-| Neuland API | ![Neuland API Status](https://status.neuland.app/api/badge/3/status?upColor=%2331c753) | ![Neuland API Status](https://status.neuland.app/api/badge/3/uptime?upColor=%2331c753) |
-| Neuland Next Web | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/uptime?upColor=%2331c753) |
-| Neuland Next Web (dev) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/6/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/6/uptime?upColor=%2331c753) |
+| THI API | ![THI API Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_thi-api/health/badge.svg) | ![THI API Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_thi-api/uptimes/24h/badge.svg) |
+| Neuland API | ![Neuland API Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-api/health/badge.svg) | ![Neuland API Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-api/uptimes/24h/badge.svg) |
+| Neuland Next Web | ![Neuland Next Web Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-next-web/health/badge.svg) | ![Neuland Next Web Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-next-web/uptimes/24h/badge.svg) |
+| Neuland Next Web (dev) | ![Neuland Next Web Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-next-web-(beta)/health/badge.svg) | ![Neuland Next Web Status](https://status.neuland.ing/api/v1/endpoints/neuland-app_neuland-next-web-(beta)/uptimes/24h/badge.svg) |
 
 ## 🤝 Contributing
 

@@ -1,6 +1,6 @@
 export const PRIVACY_URL = 'https://neuland.app/legal/privacy'
 export const IMPRINT_URL = 'https://neuland.app/legal/imprint'
-export const STATUS_URL = 'https://status.neuland.app/status/app'
+export const STATUS_URL = 'https://status.neuland.ing'
 export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'

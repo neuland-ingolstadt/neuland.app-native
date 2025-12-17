@@ -17,7 +17,7 @@ body:
       options:
         - label: I checked for app updates and the bug is present in the latest version.
           required: true
-        - label: I checked the [status page](https://status.neuland.app) and the issue is not listed there.
+        - label: I checked the [status page](https://status.neuland.ing) and the issue is not listed there.
           required: true
         - label: I checked for possible duplicate issues, but couldn't find any.
           required: true
