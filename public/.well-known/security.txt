@@ -1,0 +1,6 @@
+Contact: mailto:security@neuland-ingolstadt.de
+Contact: https://github.com/neuland-ingolstadt/neuland.app-native/security/advisories/new
+Expires: 2026-12-31T23:59:59Z
+Preferred-Languages: en, de
+Canonical: https://web.neuland.app/.well-known/security.txt
+Policy: https://github.com/neuland-ingolstadt/neuland.app-native/security/policy
