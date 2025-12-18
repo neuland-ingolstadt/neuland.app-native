@@ -10,11 +10,16 @@ body:
 
         **Please fill the following carefully before opening a new issue.**
         *(Your issue may be closed if it doesn't provide the required pieces of information)*
+
+        If you believe you found a **security vulnerability** (e.g. clickjacking, XSS, CSRF), please **do not open a public issue**.
+        Report it privately via `SECURITY.md` / GitHub Security Advisories instead.
   - type: checkboxes
     attributes:
       label: Before submitting a new issue
       description: Please perform simple checks first.
       options:
+        - label: I confirm this report does not disclose a security vulnerability (use SECURITY.md for responsible disclosure).
+          required: true
         - label: I checked for app updates and the bug is present in the latest version.
           required: true
         - label: I checked the [status page](https://status.neuland.ing) and the issue is not listed there.
