@@ -14,9 +14,9 @@ const redirectUri = AuthSession.makeRedirectUri({
 })
 
 const discovery = {
-	authorizationEndpoint: 'https://sso.informatik.sexy/application/o/authorize/',
-	tokenEndpoint: 'https://sso.informatik.sexy/application/o/token/',
-	userInfoEndpoint: 'https://sso.informatik.sexy/application/o/userinfo/'
+	authorizationEndpoint: 'https://auth.neuland.ing/application/o/authorize/',
+	tokenEndpoint: 'https://auth.neuland.ing/application/o/token/',
+	userInfoEndpoint: 'https://auth.neuland.ing/application/o/userinfo/'
 }
 
 export default function Member(): React.JSX.Element {

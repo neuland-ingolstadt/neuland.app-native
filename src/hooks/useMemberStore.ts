@@ -86,7 +86,7 @@ export const useMemberStore = create<MemberStore>()(
 
 				try {
 					const response = await fetch(
-						'https://sso.informatik.sexy/application/o/token/',
+						'https://auth.neuland.ing/application/o/token/',
 						{
 							method: 'POST',
 							headers: {
