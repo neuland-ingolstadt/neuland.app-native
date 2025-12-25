@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Star } from 'lucide-react-native'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -52,7 +53,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 20
+		marginBottom: 20,
+		position: 'relative'
 	},
 	logoContainer: {
 		alignItems: 'center',
@@ -72,8 +74,69 @@ const stylesheet = createStyleSheet((theme) => ({
 		flex: 1,
 		justifyContent: 'center'
 	},
+	honoraryBadgeWrapper: {
+		marginLeft: 12,
+		alignSelf: 'flex-start'
+	},
+	honoraryBadgeGlow: {
+		position: 'absolute',
+		top: -6,
+		right: -6,
+		bottom: -6,
+		left: -6,
+		borderRadius: 22,
+		backgroundColor: '#f7d774',
+		opacity: 0.35
+	},
+	honoraryBadge: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+		borderRadius: 18,
+		borderWidth: 1,
+		borderColor: 'rgba(0,0,0,0.2)',
+		elevation: 6,
+		shadowColor: '#000000',
+		shadowOpacity: 0.35,
+		shadowRadius: 8,
+		shadowOffset: { width: 0, height: 4 }
+	},
+	honoraryBadgeSeal: {
+		width: 18,
+		height: 18,
+		borderRadius: 9,
+		backgroundColor: '#1b1303',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderWidth: 1,
+		borderColor: '#f7d774'
+	},
+	honoraryBadgeSubtitle: {
+		color: '#1b1303',
+		fontSize: 9,
+		fontWeight: '600',
+		opacity: 0.8
+	},
+	honoraryBadgeLine: {
+		color: '#1b1303',
+		fontSize: 11,
+		fontWeight: '800',
+		letterSpacing: 1.2,
+		lineHeight: 13
+	},
 	nameSection: {
 		marginBottom: 20
+	},
+	nameRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	nameText: {
+		flexShrink: 1,
+		paddingRight: 12
 	},
 	nameLabel: {
 		color: theme.colors.neulandGreen,
@@ -174,6 +237,10 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 	const [modalVisible, setModalVisible] = useState(false)
 
 	const breathingOpacity = useSharedValue(0.3)
+	const hasHonoraryRole =
+		info.groups?.some((group) =>
+			group.toLowerCase().includes('ehrenmitglied')
+		) ?? false
 
 	useEffect(() => {
 		breathingOpacity.value = withRepeat(
@@ -255,7 +322,35 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 						<View style={styles.cardContent}>
 							<View style={styles.nameSection}>
 								<Text style={styles.nameLabel}>{t('idCard.name')}</Text>
-								<Text style={styles.name}>{info.name}</Text>
+								<View style={styles.nameRow}>
+									<Text style={[styles.name, styles.nameText]}>
+										{info.name}
+									</Text>
+									{hasHonoraryRole && (
+										<View style={styles.honoraryBadgeWrapper}>
+											<Animated.View
+												style={[
+													styles.honoraryBadgeGlow,
+													breathingAnimatedStyle
+												]}
+											/>
+											<LinearGradient
+												colors={['#f7d774', '#c6921b', '#f0c85a']}
+												start={{ x: 0, y: 0 }}
+												end={{ x: 1, y: 1 }}
+												style={styles.honoraryBadge}
+											>
+												<View style={styles.honoraryBadgeSeal}>
+													<Star size={10} color="#f7d774" fill="#f7d774" />
+												</View>
+												<View>
+													<Text style={styles.honoraryBadgeLine}>EHREN</Text>
+													<Text style={styles.honoraryBadgeLine}>MITGLIED</Text>
+												</View>
+											</LinearGradient>
+										</View>
+									)}
+								</View>
 							</View>
 
 							{info.preferred_username && (
@@ -282,7 +377,9 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 									>
 										{info.groups
 											.filter(
-												(group) => !group.toLowerCase().startsWith('authentik')
+												(group) =>
+													!group.toLowerCase().startsWith('authentik') &&
+													!group.toLowerCase().includes('ehrenmitglied')
 											)
 											.slice(0, 5)
 											.map((group) => (
