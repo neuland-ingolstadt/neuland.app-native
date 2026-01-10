@@ -9,12 +9,12 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (7.0.8):
     - ExpoModulesCore
-  - EXConstants (18.0.12):
+  - EXConstants (18.0.13):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.10):
     - ExpoModulesCore
-  - Expo (54.0.30):
+  - Expo (54.0.31):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -355,15 +355,15 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - maplibre-react-native (10.2.1):
-    - maplibre-react-native/DynamicLibrary (= 10.2.1)
+  - maplibre-react-native (10.4.2):
+    - maplibre-react-native/DynamicLibrary (= 10.4.2)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.2.1):
+  - maplibre-react-native/DynamicLibrary (10.4.2):
     - React
     - React-Core
   - MMKVCore (2.2.4)
-  - NitroMmkv (4.0.0-beta.12):
+  - NitroMmkv (4.1.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -394,7 +394,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroModules (0.29.8):
+  - NitroModules (0.32.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2194,7 +2194,7 @@ PODS:
     - SocketRocket
     - SwiftUIIntrospect (~> 1.0)
     - Yoga
-  - react-native-context-menu-view (1.20.0):
+  - react-native-context-menu-view (1.21.0):
     - React
   - react-native-menu (2.0.0):
     - boost
@@ -2254,7 +2254,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context (5.6.1):
+  - react-native-safe-area-context (5.6.2):
     - React-Core
   - react-native-unistyles (2.43.0):
     - boost
@@ -2312,7 +2312,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-wallet-manager (1.1.1):
+  - react-native-wallet-manager (1.1.3):
     - React-Core
   - react-native-webview (13.15.0):
     - boost
@@ -3512,10 +3512,10 @@ SPEC CHECKSUMS:
   Burnt: 0616363a206ed96ba9af3e2eb0e184dc97be1458
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXApplication: 1e98d4b1dccdf30627f92917f4b2c5a53c330e5f
-  EXConstants: 805f35b1b295c542ca6acce836f21a1f9ee104d5
+  EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: a8d97683e5c7a3b026ffbd58559c64dc655b747b
-  Expo: b0cf8449a4cb96fda68a6ebc17319fdc6d4d2bd0
+  Expo: 75df47c4fe5bdf14a42b550c08c64ce119abcfd3
   expo-dev-client: 425ee077d6754a98cfe3a2e2410d29b440b24c9d
   expo-dev-launcher: a6bc4d1df27adf6435981779cd980fe671ff5653
   expo-dev-menu: ebbddfdf40fa902e5c0918f34b965856342b4b03
@@ -3551,10 +3551,10 @@ SPEC CHECKSUMS:
   libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  maplibre-react-native: 1d6165b6573c07116275e69a35c4c0f90a8f6bc1
+  maplibre-react-native: 37d86b5b7b04dedaceebc577644e67acd7b5f437
   MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
-  NitroMmkv: c177469b1c347a74e92f3ce39c2073ddc321340b
-  NitroModules: 99b993b12656b25b965b8c61b7bea04296332a55
+  NitroMmkv: 3e33ebcb4b1f964a0a385361675d97aa2970bed1
+  NitroModules: e5aec42756c6a9487053e3152a3e80489c9467dd
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
   RCTRequired: cebcf9442fc296c9b89ac791dfd463021d9f6f23
@@ -3589,14 +3589,14 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-bottom-tabs: 5d17598926427f7c1748f78afaccfdd0ccd2e523
-  react-native-context-menu-view: 418877dcac6add4abba8fc2ee92c39f05b763f3a
+  react-native-context-menu-view: da39a4612c1294d651907162529cfba8421e9b89
   react-native-menu: ff00cdf67083e8d2c07c2cf17e9818f425d7d5a6
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: d5532793dc1770a3e75fd234f34e7cddd04c1882
-  react-native-safe-area-context: 2243039f43d10cb1ea30ec5ac57fc6d1448413f4
+  react-native-safe-area-context: 6c8805194166a9d6b3e53ba69ca76756c9bfb052
   react-native-unistyles: 86d2e0ea2d89864b995c8deef25f098ad4f64d95
   react-native-view-shot: b5fc41b75f8ce016389105414e7d9225bc6a7cd3
-  react-native-wallet-manager: 1eb1c4d1c9d41cf086705d67212c6d8d4829d9af
+  react-native-wallet-manager: 84609c0b18a7ae13fef3102b057f7faa6e9bdedb
   react-native-webview: 94ae920685a61c5e36438a30ce47fe521011c5bd
   React-NativeModulesApple: ebf2ce72b35870036900d6498b33724386540a71
   React-oscompat: eb0626e8ba1a2c61673c991bf9dc21834898475d
