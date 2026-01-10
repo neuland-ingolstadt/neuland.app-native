@@ -1,6 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { type SFSymbol, SymbolView } from 'expo-symbols'
-import { FileWarning, icons } from 'lucide-react-native'
+import { FileWarning } from 'lucide-react-native'
+import * as icons from 'lucide-react-native/icons'
 import type React from 'react'
 import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'

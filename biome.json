@@ -50,6 +50,9 @@
 				"useNumberNamespace": "error",
 				"noInferrableTypes": "error",
 				"noUselessElse": "error"
+			},
+			"performance": {
+				"noDynamicNamespaceImportAccess": "off"
 			}
 		}
 	},
