@@ -169,8 +169,18 @@ const LoginForm = ({
 		}
 
 		toggleUserKind(undefined)
-		navigateHome()
-		setLoading(false)
+
+		// Defer navigation to allow React to process the state update
+		// This is especially important on web where state updates may not be synchronous
+		if (Platform.OS === 'web') {
+			setTimeout(() => {
+				navigateHome()
+				setLoading(false)
+			}, 0)
+		} else {
+			navigateHome()
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {
