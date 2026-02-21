@@ -355,7 +355,8 @@
 				"subtitle": "Events of the clubs",
 				"noEvents": {
 					"title": "No events found",
-					"subtitle": "Check back later."
+					"subtitle": "Check back later.",
+					"filteredSubtitle": "No events found for {{clubName}}. Check back later."
 				}
 			},
 			"organizer": {

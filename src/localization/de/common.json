@@ -355,7 +355,8 @@
 				"subtitle": "Veranstaltungen der Vereine",
 				"noEvents": {
 					"title": "Keine anstehenden Veranstaltungen",
-					"subtitle": "Bitte versuche es später erneut."
+					"subtitle": "Bitte versuche es später erneut.",
+					"filteredSubtitle": "Keine Veranstaltungen von {{clubName}} gefunden. Bitte versuche es später erneut."
 				}
 			},
 			"organizer": {
