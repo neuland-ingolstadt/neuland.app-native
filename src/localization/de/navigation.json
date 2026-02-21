@@ -44,9 +44,7 @@
 		"legal": "Rechtliches",
 		"sports": "Hochschulsport",
 		"roomReport": "Problem mit einem Raum melden",
-		"thiServices": "THI Services",
 		"clEvents": "Campus Life Veranstaltungen",
-		"counselling": "Studienberatung",
 		"neulandMember": "Neuland Mitgliederbereich"
 	},
 	"cards": {
@@ -65,8 +63,7 @@
 			"food": "Essen",
 			"login": "Anmelden",
 			"links": "Quick Links",
-			"sports": "Hochschulsport",
-			"thiServices": "THI Services"
+			"sports": "Hochschulsport"
 		},
 		"announcements": {
 			"readMore": "Tippe, um mehr zu erfahren."

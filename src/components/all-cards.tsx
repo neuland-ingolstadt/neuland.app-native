@@ -2,7 +2,6 @@ import type { JSX } from 'react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import {
 	CalendarCard,
-	CareerCard,
 	EventsCard,
 	LinkCard,
 	LoginCard,
@@ -38,13 +37,6 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <LinkCard />
-	},
-	{
-		key: 'thiServices',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		card: () => <CareerCard />
 	},
 	{
 		key: 'news',
