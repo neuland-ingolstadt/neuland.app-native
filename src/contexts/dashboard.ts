@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react'
-import { useMMKVObject } from 'react-native-mmkv'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useMMKVBoolean, useMMKVObject } from 'react-native-mmkv'
 import { AllCards, type Card } from '@/components/all-cards'
 import { USER_GUEST } from '@/data/constants'
 
@@ -46,6 +46,9 @@ export function useDashboard(): Dashboard {
 	const [hiddenAnnouncements, setHiddenAnnouncements] = useMMKVObject<string[]>(
 		'hiddenAnnouncements'
 	)
+	const [sportsCardMigrationDone, setSportsCardMigrationDone] = useMMKVBoolean(
+		'shownDashboardEntriesSportsMigrationV1'
+	)
 	const { userKind = USER_GUEST } = useUserKind()
 
 	const defaultEntries = useMemo(
@@ -53,17 +56,52 @@ export function useDashboard(): Dashboard {
 		[userKind]
 	)
 
+	useEffect(() => {
+		if (sportsCardMigrationDone === true) {
+			return
+		}
+
+		if (shownDashboardEntries == null) {
+			setSportsCardMigrationDone(true)
+			return
+		}
+
+		const hasEventsCard = shownDashboardEntries.includes('events')
+		const hasSportsCard = shownDashboardEntries.includes('sports')
+
+		if (hasEventsCard && !hasSportsCard) {
+			const migratedEntries = shownDashboardEntries.filter(
+				(key) => key !== 'sports'
+			)
+			const eventsIndex = migratedEntries.indexOf('events')
+			migratedEntries.splice(eventsIndex + 1, 0, 'sports')
+			setShownDashboardEntries(migratedEntries)
+		}
+
+		setSportsCardMigrationDone(true)
+	}, [
+		sportsCardMigrationDone,
+		shownDashboardEntries,
+		setShownDashboardEntries,
+		setSportsCardMigrationDone
+	])
+
+	const normalizedShownEntries = useMemo(() => {
+		const fallback = defaultEntries.shown
+		const shownEntries = shownDashboardEntries ?? fallback
+		const knownCardKeys = new Set(AllCards.map((card) => card.key))
+
+		return shownEntries.filter((key) => knownCardKeys.has(key))
+	}, [shownDashboardEntries, defaultEntries.shown])
+
 	const entries = useMemo(
 		() =>
-			(shownDashboardEntries ?? defaultEntries.shown).reduce<Card[]>(
-				(acc, key) => {
-					const card = AllCards.find((y) => y.key === key)
-					if (card != null) acc.push(card)
-					return acc
-				},
-				[]
-			),
-		[shownDashboardEntries, defaultEntries.shown]
+			normalizedShownEntries.reduce<Card[]>((acc, key) => {
+				const card = AllCards.find((y) => y.key === key)
+				if (card != null) acc.push(card)
+				return acc
+			}, []),
+		[normalizedShownEntries]
 	)
 
 	const updateDashboardOrder = useCallback(

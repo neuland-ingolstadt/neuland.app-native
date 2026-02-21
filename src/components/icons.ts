@@ -32,6 +32,11 @@ export const cardIcons: CardIcons = {
 		android: 'celebration',
 		web: 'PartyPopper'
 	},
+	sports: {
+		ios: 'figure.run',
+		android: 'sports_handball',
+		web: 'Volleyball'
+	},
 	news: {
 		ios: 'newspaper.fill',
 		android: 'newspaper',
