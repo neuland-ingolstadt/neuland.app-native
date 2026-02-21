@@ -4,46 +4,31 @@ import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import ClEventsPage from '@/components/Events/cl-events-page'
-import LoadingIndicator from '@/components/Universal/loading-indicator'
+import ClSportsPage from '@/components/Events/cl-sports-page'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
-import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
-export default function ClEventsScreen(): React.JSX.Element {
+export default function SportsScreen(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
-	const { tab, openEvent, id } = useLocalSearchParams<{
-		tab?: string
+	const { openEvent, id } = useLocalSearchParams<{
 		openEvent?: string
 		id?: string
 	}>()
 
-	const clEventsResult = useQuery({
-		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
-		queryFn: () => loadCampusLifeEvents(),
+	const sportsResult = useQuery({
+		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryFn: loadUniversitySportsEvents,
 		staleTime: 1000 * 60 * 60, // 60 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 
 	useEffect(() => {
-		if (tab !== 'sports') {
-			return
-		}
-		router.replace({
-			pathname: '/sports',
-			params: {
-				...(openEvent != null ? { openEvent } : {}),
-				...(id != null ? { id } : {})
-			}
-		})
-	}, [tab, openEvent, id])
-
-	useEffect(() => {
-		if (clEventsResult.isPaused && clEventsResult.data != null) {
+		if (sportsResult.isPaused && sportsResult.data != null) {
 			pausedToast()
 		}
-	}, [clEventsResult.isPaused, clEventsResult.data])
+	}, [sportsResult.isPaused, sportsResult.data])
 
 	useFocusEffect(
 		useCallback(() => {
@@ -51,7 +36,7 @@ export default function ClEventsScreen(): React.JSX.Element {
 				InteractionManager.runAfterInteractions(() => {
 					router.setParams({ openEvent: 'false' })
 					router.navigate({
-						pathname: '/events/cl/[id]',
+						pathname: '/events/sports/[id]',
 						params: { id }
 					})
 				})
@@ -63,13 +48,7 @@ export default function ClEventsScreen(): React.JSX.Element {
 		<View
 			style={[styles.page, { paddingTop: headerPadding + theme.margins.page }]}
 		>
-			{tab === 'sports' ? (
-				<View style={styles.loaderWrapper}>
-					<LoadingIndicator />
-				</View>
-			) : (
-				<ClEventsPage clEventsResult={clEventsResult} />
-			)}
+			<ClSportsPage sportsResult={sportsResult} />
 		</View>
 	)
 }
@@ -77,10 +56,5 @@ export default function ClEventsScreen(): React.JSX.Element {
 const stylesheet = createStyleSheet(() => ({
 	page: {
 		flex: 1
-	},
-	loaderWrapper: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
 	}
 }))

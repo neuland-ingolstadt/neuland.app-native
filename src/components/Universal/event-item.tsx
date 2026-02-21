@@ -11,6 +11,7 @@ interface EventItemProps {
 	subtitle?: string
 	startDateTime?: Date
 	endDateTime?: Date
+	timeLabel?: string
 	location?: string
 	showEndTime?: boolean
 	subtitleTranslationKey?: string
@@ -23,6 +24,7 @@ const EventItem = ({
 	subtitle,
 	startDateTime,
 	endDateTime,
+	timeLabel,
 	location,
 	showEndTime = false,
 	subtitleTranslationKey,
@@ -31,6 +33,13 @@ const EventItem = ({
 }: EventItemProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
+	const resolvedTimeLabel =
+		timeLabel ??
+		(showEndTime && endDateTime && startDateTime && startDateTime < new Date()
+			? t('cards.calendar.ends') + formatFriendlyRelativeTime(endDateTime)
+			: startDateTime
+				? formatFriendlyRelativeTime(startDateTime)
+				: '')
 
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
@@ -61,17 +70,7 @@ const EventItem = ({
 							web={{ name: 'Clock', size: 13 }}
 							style={{ marginRight: 4, color: theme.colors.secondary }}
 						/>
-						<Text style={[styles.eventDate]}>
-							{showEndTime &&
-							endDateTime &&
-							startDateTime &&
-							startDateTime < new Date()
-								? t('cards.calendar.ends') +
-									formatFriendlyRelativeTime(endDateTime)
-								: startDateTime
-									? formatFriendlyRelativeTime(startDateTime)
-									: ''}
-						</Text>
+						<Text style={[styles.eventDate]}>{resolvedTimeLabel}</Text>
 					</View>
 					{location && (
 						<View style={styles.eventLocationContainer}>

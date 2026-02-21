@@ -5,6 +5,7 @@ import {
 	EventsCard,
 	LinkCard,
 	LoginCard,
+	SportsCard,
 	UpNextCard
 } from './Cards'
 import NewsCard from './Cards/news-card'
@@ -23,6 +24,13 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <EventsCard />
+	},
+	{
+		key: 'sports',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		card: () => <SportsCard />
 	},
 	{
 		key: 'calendar',

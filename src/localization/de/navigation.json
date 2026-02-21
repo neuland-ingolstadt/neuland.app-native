@@ -44,7 +44,7 @@
 		"legal": "Rechtliches",
 		"sports": "Hochschulsport",
 		"roomReport": "Problem mit einem Raum melden",
-		"clEvents": "Campus Life Veranstaltungen",
+		"clEvents": "Campus Life Events",
 		"neulandMember": "Neuland Mitgliederbereich"
 	},
 	"cards": {
@@ -55,7 +55,7 @@
 			"lecturers": "Dozenten",
 			"news": "THI Neuigkeiten",
 			"library": "Bibliothek",
-			"events": "Events & Sport",
+			"events": "Campus Life Events",
 			"reimanns": "Reimanns",
 			"canisius": "Canisius Konvikt",
 			"mensa": "Mensa Ingolstadt",
