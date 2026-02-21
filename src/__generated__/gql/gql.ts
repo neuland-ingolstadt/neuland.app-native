@@ -24,10 +24,6 @@ type Documents = {
     "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n": typeof types.UniversitySportsDocument,
     "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n": typeof types.UniversitySportsFieldsFragmentDoc,
     "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n": typeof types.CreateRoomReportDocument,
-    "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": typeof types.CareerServiceEventsDocument,
-    "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        description\n        date\n        url\n        publishedDate\n    }\n": typeof types.CareerServiceEventFieldsFragmentDoc,
-    "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n": typeof types.StudentCounsellingEventsDocument,
-    "\n    fragment StudentCounsellingEventFields on StudentCounsellingEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": typeof types.StudentCounsellingEventFieldsFragmentDoc,
 };
 const documents: Documents = {
     "\n    query AppAnnouncements {\n        appAnnouncements(active: true) {\n            ...AnnouncementFields\n        }\n    }\n": types.AppAnnouncementsDocument,
@@ -39,10 +35,6 @@ const documents: Documents = {
     "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n": types.UniversitySportsDocument,
     "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n": types.UniversitySportsFieldsFragmentDoc,
     "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n": types.CreateRoomReportDocument,
-    "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": types.CareerServiceEventsDocument,
-    "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        description\n        date\n        url\n        publishedDate\n    }\n": types.CareerServiceEventFieldsFragmentDoc,
-    "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n": types.StudentCounsellingEventsDocument,
-    "\n    fragment StudentCounsellingEventFields on StudentCounsellingEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": types.StudentCounsellingEventFieldsFragmentDoc,
 };
 
 /**
@@ -81,22 +73,6 @@ export function graphql(source: "\n    fragment UniversitySportsFields on Univer
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n"): typeof import('./graphql').CreateRoomReportDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n"): typeof import('./graphql').CareerServiceEventsDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        description\n        date\n        url\n        publishedDate\n    }\n"): typeof import('./graphql').CareerServiceEventFieldsFragmentDoc;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    query StudentCounsellingEvents {\n        studentCounsellingEvents {\n            ...StudentCounsellingEventFields\n        }\n    }\n"): typeof import('./graphql').StudentCounsellingEventsDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n    fragment StudentCounsellingEventFields on StudentCounsellingEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n"): typeof import('./graphql').StudentCounsellingEventFieldsFragmentDoc;
 
 
 export function graphql(source: string) {

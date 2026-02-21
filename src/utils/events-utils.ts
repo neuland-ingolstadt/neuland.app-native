@@ -305,20 +305,8 @@ export const sportsCategories: Record<string, SportsCategory> = {
 }
 
 export const QUERY_KEYS = {
-	CAREER_SERVICE_EVENTS: 'thi-services-career',
-	STUDENT_ADVISORY_EVENTS: 'thi-services-student-counselling',
 	UNIVERSITY_SPORTS: 'universitySports',
 	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV7',
 	CAMPUS_LIFE_ORGANIZER: 'campusLifeOrganizerV2',
 	CAMPUS_LIFE_ORGANIZERS: 'campusLifeOrganizersV3'
 } as const
-
-export const loadCareerServiceEvents = async () => {
-	const res = await NeulandAPI.getCareerServiceEvents()
-	return res.careerServiceEvents
-}
-
-export const loadStudentCounsellingEvents = async () => {
-	const res = await NeulandAPI.getStudentCounsellingEvents()
-	return res.studentCounsellingEvents
-}

@@ -1,5 +1,4 @@
 export { default as CalendarCard } from './calendar-card'
-export { default as CareerCard } from './career-card'
 export { default as EventsCard } from './events-card'
 export { default as LinkCard } from './link-card'
 export { default as LoginCard } from './login-card'
