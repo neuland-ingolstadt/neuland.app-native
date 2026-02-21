@@ -1,10 +1,12 @@
 import { FlashList } from '@shopify/flash-list'
 import { type UseQueryResult, useQuery } from '@tanstack/react-query'
+import { selectionAsync } from 'expo-haptics'
 import { router } from 'expo-router'
 import type React from 'react'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	Platform,
 	Pressable,
 	RefreshControl,
 	ScrollView,
@@ -32,6 +34,10 @@ export default function ClEventsPage({
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const [selectedOrganizerId, setSelectedOrganizerId] = useState<number | null>(
+		null
+	)
+	const didLongPressRef = useRef(false)
 
 	const organizersQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
@@ -54,10 +60,41 @@ export default function ClEventsPage({
 		return Math.max(0, organizersQuery.data.length - 8)
 	}, [organizersQuery.data])
 
+	const filteredEvents = useMemo(() => {
+		const events = clEventsResult.data ?? []
+		if (selectedOrganizerId == null) {
+			return events
+		}
+		return events.filter((event) => event.host.id === selectedOrganizerId)
+	}, [clEventsResult.data, selectedOrganizerId])
+
+	const selectedOrganizerName = useMemo(() => {
+		if (selectedOrganizerId == null || organizersQuery.data == null) {
+			return null
+		}
+		return (
+			organizersQuery.data.find(
+				(organizer) => organizer.id === selectedOrganizerId
+			)?.name ?? null
+		)
+	}, [organizersQuery.data, selectedOrganizerId])
+
 	const {
 		isRefetchingByUser: isRefetchingByUserClEvents,
 		refetchByUser: refetchByUserClEvents
 	} = useRefreshByUser(clEventsResult.refetch)
+
+	const onFilterPress = (organizerId: number | null): void => {
+		setSelectedOrganizerId((current) => {
+			if (organizerId === current) {
+				return null
+			}
+			return organizerId
+		})
+		if (Platform.OS === 'ios') {
+			void selectionAsync()
+		}
+	}
 
 	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
 		<View style={styles.rowWrapper}>
@@ -82,8 +119,9 @@ export default function ClEventsPage({
 				<View style={styles.contentContainer}>
 					{clEventsResult.data != null && clEventsResult.data.length > 0 ? (
 						<FlashList
-							data={clEventsResult.data}
+							data={filteredEvents}
 							renderItem={renderItem}
+							keyExtractor={(item) => item.id}
 							estimatedItemSize={70}
 							contentContainerStyle={styles.flashListContainer}
 							showsVerticalScrollIndicator={false}
@@ -124,21 +162,64 @@ export default function ClEventsPage({
 												showsHorizontalScrollIndicator={false}
 												contentContainerStyle={styles.clubsScrollContent}
 											>
+												<Pressable
+													style={({ pressed }) => [
+														styles.clubChip,
+														styles.allClubsChip,
+														selectedOrganizerId == null &&
+															styles.selectedClubFilterChip,
+														{ opacity: pressed ? 0.85 : 1 }
+													]}
+													onPress={() => {
+														onFilterPress(null)
+													}}
+												>
+													<Text
+														style={[
+															styles.clubChipText,
+															selectedOrganizerId == null &&
+																styles.selectedClubChipText
+														]}
+													>
+														{t('pages.clEvents.clubs.viewAll')}
+													</Text>
+												</Pressable>
 												{featuredOrganizers.map((organizer) => (
 													<Pressable
 														key={organizer.id}
 														style={({ pressed }) => [
 															styles.clubChip,
+															styles.organizerChip,
+															selectedOrganizerId === organizer.id &&
+																styles.selectedClubFilterChip,
 															{ opacity: pressed ? 0.85 : 1 }
 														]}
-														onPress={() => {
+														onPressIn={() => {
+															didLongPressRef.current = false
+														}}
+														onLongPress={() => {
+															didLongPressRef.current = true
 															router.push({
 																pathname: '/events/club/[id]',
 																params: { id: organizer.id.toString() }
 															})
 														}}
+														delayLongPress={250}
+														onPress={() => {
+															if (didLongPressRef.current) {
+																didLongPressRef.current = false
+																return
+															}
+															onFilterPress(organizer.id)
+														}}
 													>
-														<Text style={styles.clubChipText}>
+														<Text
+															style={[
+																styles.clubChipText,
+																selectedOrganizerId === organizer.id &&
+																	styles.selectedClubChipText
+															]}
+														>
 															{organizer.name}
 														</Text>
 													</Pressable>
@@ -163,10 +244,24 @@ export default function ClEventsPage({
 											</ScrollView>
 										</View>
 									) : null}
-									<Text style={styles.sectionHeaderText}>
-										{t('pages.clEvents.events.subtitle')}
-									</Text>
+									{selectedOrganizerName != null && (
+										<Text style={styles.sectionHeaderText}>
+											{selectedOrganizerName}
+										</Text>
+									)}
 								</View>
+							}
+							ListEmptyComponent={
+								<EmptyEventsAnimation
+									title={t('pages.clEvents.events.noEvents.title')}
+									subtitle={
+										selectedOrganizerName == null
+											? t('pages.clEvents.events.noEvents.subtitle')
+											: t('pages.clEvents.events.noEvents.filteredSubtitle', {
+													clubName: selectedOrganizerName
+												})
+									}
+								/>
 							}
 						/>
 					) : (
@@ -223,24 +318,34 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	clubsScrollContent: {
 		paddingRight: theme.margins.page,
-		paddingVertical: 2
+		paddingVertical: 2,
+		alignItems: 'center'
 	},
 	clubChip: {
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderRadius: 999,
 		borderWidth: StyleSheet.hairlineWidth,
-		marginRight: 8,
 		paddingHorizontal: 16,
 		paddingVertical: 10
 	},
-	lastClubChip: {
-		marginRight: 0
+	allClubsChip: {
+		marginRight: 8
+	},
+	organizerChip: {
+		marginRight: 8
+	},
+	selectedClubFilterChip: {
+		backgroundColor: theme.colors.primary,
+		borderColor: theme.colors.primary
 	},
 	clubChipText: {
 		color: theme.colors.text,
 		fontSize: 14,
 		fontWeight: '600'
+	},
+	selectedClubChipText: {
+		color: theme.colors.background
 	},
 	addClubChip: {
 		backgroundColor: theme.colors.primary,
