@@ -117,7 +117,7 @@ export default function ClEventsPage({
 				<ErrorView title={networkError} />
 			) : (
 				<View style={styles.contentContainer}>
-					{clEventsResult.data != null && clEventsResult.data.length > 0 ? (
+					{clEventsResult.data != null ? (
 						<FlashList
 							data={filteredEvents}
 							renderItem={renderItem}
@@ -244,11 +244,10 @@ export default function ClEventsPage({
 											</ScrollView>
 										</View>
 									) : null}
-									{selectedOrganizerName != null && (
-										<Text style={styles.sectionHeaderText}>
-											{selectedOrganizerName}
-										</Text>
-									)}
+									<Text style={styles.sectionHeaderText}>
+										{selectedOrganizerName ??
+											t('pages.clEvents.events.subtitle')}
+									</Text>
 								</View>
 							}
 							ListEmptyComponent={

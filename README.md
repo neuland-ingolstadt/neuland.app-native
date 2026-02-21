@@ -31,14 +31,14 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 </p>
 
 - **Timetable & Exams**: View your personal timetable from PRIMUSS and your exams at a glance
-- **Calendar & Events**: Access all important semester dates, campus events and university sports in one place
+- **Calendar & Events**: Access all important semester dates and campus events in one place
+- **University Sports**: Check out the university sports events and find your next sport activity
 - **Profile**: View your grades, printer credits and much more information about your studies
 - **Cafeteria**: Check the cafeteria menu, including allergen and nutritional information with support for personal preferences
 - **Campus Map**: Find available rooms and explore the campus with smart suggestions and integrated search
 - **Library**: Use your virtual library ID to check out at terminals to borrow and return books
 - **Quick Links**: Access key university platforms such as moodle, PRIMUSS or your webmail with a single tap
 - **THI News**: Stay up to date with the latest news from THI
-- **Career Service & Student Counselling**: Discover workshops, counseling sessions, job fairs, and other professional development opportunities.
 
 ## ℹ️ About
 
