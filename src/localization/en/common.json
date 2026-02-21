@@ -198,8 +198,6 @@
 			"invitationLink": "Invitation link",
 			"eMail": "E-Mail",
 			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\n{{link}}",
-			"shareCareerMessage": "Check out this career event:\n{{title}} by Career Service on {{date}}\n{{link}}",
-			"shareCounsellingMessage": "Check out this counselling event:\n{{title}} by Student Counselling on {{date}}\n{{link}}",
 			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
@@ -364,39 +362,8 @@
 				"subtitle": "Upcoming events"
 			}
 		},
-		"careerService": {
-			"title": "Career Service",
-			"noEvents": {
-				"title": "No career service events found",
-				"subtitle": "Check back later."
-			}
-		},
-		"studentCounselling": {
-			"title": "Student Counselling",
-			"noEvents": {
-				"title": "No student counselling events found",
-				"subtitle": "Check back later."
-			}
-		},
 		"events": {
-			"title": "Events",
-			"careerService": {
-				"title": "Career Service"
-			},
-			"studentCounselling": {
-				"title": "Student Counselling"
-			},
-			"registration": {
-				"unlimitedSlots": "Unlimited slots",
-				"availableSlots": "{{available}} / {{total}} available",
-				"waitingList": {
-					"row": "Waiting List: {{current}} / {{max}}",
-					"title": "Waiting List",
-					"value": "{{current}} / {{max}}"
-				},
-				"unlimitedShort": "Unlimited",
-				"fullyBooked": "Fully booked"
-			}
+			"title": "Events"
 		}
 	},
 	"submit": "Submit"

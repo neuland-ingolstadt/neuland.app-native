@@ -32,11 +32,6 @@ export const cardIcons: CardIcons = {
 		android: 'celebration',
 		web: 'PartyPopper'
 	},
-	thiServices: {
-		ios: 'briefcase.fill',
-		android: 'work',
-		web: 'Briefcase'
-	},
 	news: {
 		ios: 'newspaper.fill',
 		android: 'newspaper',

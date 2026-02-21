@@ -44,9 +44,7 @@
 		"dashboard": "Neuland Next",
 		"sports": "University Sports",
 		"roomReport": "Report Room Issue",
-		"thiServices": "THI Services",
 		"clEvents": "Campus Life Events",
-		"counselling": "Student Counselling",
 		"neulandMember": "Neuland Member Area"
 	},
 	"cards": {
@@ -65,8 +63,7 @@
 			"food": "Food",
 			"login": "Sign in",
 			"links": "Quick Links",
-			"sports": "University Sports",
-			"thiServices": "THI Services"
+			"sports": "University Sports"
 		},
 		"announcements": {
 			"readMore": "Tap to learn more."

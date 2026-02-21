@@ -173,21 +173,6 @@
 					"android": "person",
 					"web": "CircleUser"
 				}
-			},
-			{
-				"title": {
-					"de": "THI Services",
-					"en": "THI Services"
-				},
-				"description": {
-					"de": "Alle Events und Workshops des THI Karriere Service und Studienberatung sind jetzt verfügbar.",
-					"en": "All events and workshops of the THI Career Service and Student Counselling are now available."
-				},
-				"icon": {
-					"ios": "briefcase",
-					"android": "business",
-					"web": "Building"
-				}
 			}
 		]
 	}

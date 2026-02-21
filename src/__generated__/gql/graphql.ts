@@ -820,26 +820,6 @@ export type CreateRoomReportMutationVariables = Exact<{
 
 export type CreateRoomReportMutation = { __typename?: 'Mutation', createRoomReport?: { __typename?: 'UpsertResponse', id?: string | null } | null };
 
-export type CareerServiceEventsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CareerServiceEventsQuery = { __typename?: 'Query', careerServiceEvents: Array<(
-    { __typename?: 'CareerServiceEvent' }
-    & { ' $fragmentRefs'?: { 'CareerServiceEventFieldsFragment': CareerServiceEventFieldsFragment } }
-  )> };
-
-export type CareerServiceEventFieldsFragment = { __typename?: 'CareerServiceEvent', id: string, title: string, description: string, date: Date, url: string, publishedDate: Date } & { ' $fragmentName'?: 'CareerServiceEventFieldsFragment' };
-
-export type StudentCounsellingEventsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StudentCounsellingEventsQuery = { __typename?: 'Query', studentCounsellingEvents: Array<(
-    { __typename?: 'StudentCounsellingEvent' }
-    & { ' $fragmentRefs'?: { 'StudentCounsellingEventFieldsFragment': StudentCounsellingEventFieldsFragment } }
-  )> };
-
-export type StudentCounsellingEventFieldsFragment = { __typename?: 'StudentCounsellingEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'StudentCounsellingEventFieldsFragment' };
-
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -983,29 +963,6 @@ export const UniversitySportsFieldsFragmentDoc = new TypedDocumentString(`
   sportsCategory
 }
     `, {"fragmentName":"UniversitySportsFields"}) as unknown as TypedDocumentString<UniversitySportsFieldsFragment, unknown>;
-export const CareerServiceEventFieldsFragmentDoc = new TypedDocumentString(`
-    fragment CareerServiceEventFields on CareerServiceEvent {
-  id
-  title
-  description
-  date
-  url
-  publishedDate
-}
-    `, {"fragmentName":"CareerServiceEventFields"}) as unknown as TypedDocumentString<CareerServiceEventFieldsFragment, unknown>;
-export const StudentCounsellingEventFieldsFragmentDoc = new TypedDocumentString(`
-    fragment StudentCounsellingEventFields on StudentCounsellingEvent {
-  id
-  title
-  date
-  unlimitedSlots
-  availableSlots
-  totalSlots
-  waitingList
-  maxWaitingList
-  url
-}
-    `, {"fragmentName":"StudentCounsellingEventFields"}) as unknown as TypedDocumentString<StudentCounsellingEventFieldsFragment, unknown>;
 export const AppAnnouncementsDocument = new TypedDocumentString(`
     query AppAnnouncements {
   appAnnouncements(active: true) {
@@ -1154,34 +1111,3 @@ export const CreateRoomReportDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CreateRoomReportMutation, CreateRoomReportMutationVariables>;
-export const CareerServiceEventsDocument = new TypedDocumentString(`
-    query CareerServiceEvents {
-  careerServiceEvents {
-    ...CareerServiceEventFields
-  }
-}
-    fragment CareerServiceEventFields on CareerServiceEvent {
-  id
-  title
-  description
-  date
-  url
-  publishedDate
-}`) as unknown as TypedDocumentString<CareerServiceEventsQuery, CareerServiceEventsQueryVariables>;
-export const StudentCounsellingEventsDocument = new TypedDocumentString(`
-    query StudentCounsellingEvents {
-  studentCounsellingEvents {
-    ...StudentCounsellingEventFields
-  }
-}
-    fragment StudentCounsellingEventFields on StudentCounsellingEvent {
-  id
-  title
-  date
-  unlimitedSlots
-  availableSlots
-  totalSlots
-  waitingList
-  maxWaitingList
-  url
-}`) as unknown as TypedDocumentString<StudentCounsellingEventsQuery, StudentCounsellingEventsQueryVariables>;

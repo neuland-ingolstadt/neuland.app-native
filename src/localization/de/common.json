@@ -198,8 +198,6 @@
 			"invitationLink": "Einladungslink",
 			"eMail": "E-Mail",
 			"shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} am {{date}}\n{{link}}",
-			"shareCareerMessage": "Schau dir dieses Karriere-Event an:\n{{title}} vom Karriere Service am {{date}}\n{{link}}",
-			"shareCounsellingMessage": "Schau dir dieses Beratungs-Event an:\n{{title}} von der Studierendenberatung am {{date}}\n{{link}}",
 			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
@@ -364,39 +362,8 @@
 				"subtitle": "Anstehende Veranstaltungen"
 			}
 		},
-		"careerService": {
-			"title": "Career Service",
-			"noEvents": {
-				"title": "Keine Career Service Veranstaltungen",
-				"subtitle": "Bitte versuche es später erneut."
-			}
-		},
-		"studentCounselling": {
-			"title": "Studienberatung",
-			"noEvents": {
-				"title": "Keine Studienberatung Veranstaltungen",
-				"subtitle": "Bitte versuche es später erneut."
-			}
-		},
 		"events": {
-			"title": "Events",
-			"careerService": {
-				"title": "Career Service"
-			},
-			"studentCounselling": {
-				"title": "Studienberatung"
-			},
-			"registration": {
-				"unlimitedSlots": "Unbegrenzte Plätze verfügbar",
-				"availableSlots": "{{available}} von {{total}} Plätzen verfügbar",
-				"waitingList": {
-					"row": "Warteliste: {{current}} / {{max}}",
-					"title": "Warteliste",
-					"value": "{{current}} / {{max}}"
-				},
-				"unlimitedShort": "Unbegrenzt",
-				"fullyBooked": "Ausgebucht"
-			}
+			"title": "Events"
 		}
 	},
 	"submit": "Absenden"

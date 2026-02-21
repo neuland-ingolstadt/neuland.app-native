@@ -8,7 +8,7 @@ import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 
 interface EventErrorViewProps {
-	eventType: 'clEvents' | 'sports' | 'career' | 'counselling'
+	eventType: 'clEvents' | 'sports'
 	title?: string
 	message?: string
 }
@@ -35,18 +35,6 @@ export function EventErrorView({
 					android: 'directions_run' satisfies MaterialIcon,
 					web: 'Volleyball' satisfies LucideIcon
 				}
-			case 'career':
-				return {
-					ios: 'briefcase.fill',
-					android: 'work' satisfies MaterialIcon,
-					web: 'Briefcase' satisfies LucideIcon
-				}
-			case 'counselling':
-				return {
-					ios: 'person.fill.questionmark',
-					android: 'person_search' satisfies MaterialIcon,
-					web: 'UserSearch' satisfies LucideIcon
-				}
 			default:
 				return {
 					ios: 'calendar',
@@ -62,10 +50,6 @@ export function EventErrorView({
 				return t('pages.clEvents.events.title')
 			case 'sports':
 				return t('pages.clEvents.sports.title')
-			case 'career':
-				return t('pages.careerService.title')
-			case 'counselling':
-				return t('pages.studentCounselling.title')
 			default:
 				return t('pages.events.title')
 		}
@@ -78,12 +62,6 @@ export function EventErrorView({
 				break
 			case 'sports':
 				router.navigate('/cl-events?tab=sports')
-				break
-			case 'career':
-				router.navigate('/thi-services?tab=career-service')
-				break
-			case 'counselling':
-				router.navigate('/thi-services?tab=student-counselling')
 				break
 		}
 	}

@@ -2,11 +2,9 @@ import type { FeatureCollection } from 'geojson'
 import { Platform } from 'react-native'
 import type {
 	AppAnnouncementsQuery,
-	CareerServiceEventsQuery,
 	CreateRoomReportMutation,
 	FoodPlanQuery,
 	RoomReportInput,
-	StudentCounsellingEventsQuery,
 	TypedDocumentString,
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
@@ -18,10 +16,8 @@ import type {
 import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
-	CAREER_SERVICE_EVENTS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
-	STUDENT_ADVISORY_EVENTS_QUERY,
 	UNIVERSITY_SPORTS_QUERY
 } from './gql-documents'
 
@@ -168,22 +164,6 @@ class NeulandAPIClient {
 	 */
 	async getUniversitySports(): Promise<UniversitySportsQuery> {
 		return await this.executeGql(UNIVERSITY_SPORTS_QUERY)
-	}
-
-	/**
-	 * Gets the career service events
-	 * @returns {Promise<CareerServiceEventsQuery>} A promise that resolves with the career service events data
-	 */
-	async getCareerServiceEvents(): Promise<CareerServiceEventsQuery> {
-		return await this.executeGql(CAREER_SERVICE_EVENTS_QUERY)
-	}
-
-	/**
-	 * Gets the student counselling events
-	 * @returns {Promise<StudentCounsellingEventsQuery>} A promise that resolves with the student counselling events data
-	 */
-	async getStudentCounsellingEvents(): Promise<StudentCounsellingEventsQuery> {
-		return await this.executeGql(STUDENT_ADVISORY_EVENTS_QUERY)
 	}
 
 	/**

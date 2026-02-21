@@ -347,45 +347,6 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/events/counselling/[id]"
-					options={{
-						title: 'Event Details',
-						...Platform.select({
-							ios: {
-								...presentationMode
-							}
-						}),
-						...getPlatformHeaderButtons({
-							onShare: () => {
-								/* do nothing yet */
-							}
-						})
-					}}
-				/>
-				<Stack.Screen
-					name="(screens)/events/career/[id]"
-					options={{
-						title: 'Event Details',
-						...Platform.select({
-							ios: {
-								...presentationMode
-							}
-						}),
-						...getPlatformHeaderButtons({
-							onShare: () => {
-								/* do nothing yet */
-							}
-						})
-					}}
-				/>
-				<Stack.Screen
-					name="(screens)/thi-services"
-					options={{
-						title: t('navigation.thiServices'),
-						...transparentHeaderStyle
-					}}
-				/>
-				<Stack.Screen
 					name="(screens)/calendar"
 					options={{
 						title: t('navigation.calendar'),
