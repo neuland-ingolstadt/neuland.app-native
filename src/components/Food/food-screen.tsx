@@ -36,6 +36,18 @@ import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
+function getRenderableFoodDays(foodData?: Food[]): Food[] {
+	if (foodData == null) {
+		return []
+	}
+
+	const todayStart = new Date().setHours(0, 0, 0, 0)
+	return foodData
+		.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
+		// filter again in case of yesterday's cached data
+		.slice(0, 5)
+}
+
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
@@ -77,16 +89,16 @@ function FoodScreen(): React.JSX.Element {
 
 	const getInitialPage = useCallback((): number => {
 		if (!autoShowNextDay) return 0
+		const renderableDays = getRenderableFoodDays(foodData)
 
 		const today = new Date()
 		const currentTimeMinutes = today.getHours() * 60 + today.getMinutes()
 
 		if (
 			currentTimeMinutes >= autoShowNextDayTimeMinutes &&
-			foodData &&
-			foodData.length > 1
+			renderableDays.length > 1
 		) {
-			const firstDayTimestamp = foodData[0].timestamp
+			const firstDayTimestamp = renderableDays[0].timestamp
 			const firstDayIso =
 				typeof firstDayTimestamp === 'string'
 					? firstDayTimestamp.slice(0, 10)
@@ -107,12 +119,8 @@ function FoodScreen(): React.JSX.Element {
 		if (foodData == null) {
 			return
 		}
-		const filteredDays = foodData
-			.filter(
-				(day) =>
-					new Date(day.timestamp).getTime() >= new Date().setHours(0, 0, 0, 0)
-			) // filter again in case of yesterday's cached data
-			.slice(0, 5)
+
+		const filteredDays = getRenderableFoodDays(foodData)
 		if (filteredDays.length === 0) {
 			throw new Error('noMeals')
 		}

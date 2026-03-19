@@ -96,7 +96,7 @@ export default function AutoShowNextDaySetting({
 								onChange={(event) => {
 									handleWebTimeChange(event.currentTarget.value)
 								}}
-								style={styles.webTimeInput}
+								style={styles.webTimeInput as unknown as React.CSSProperties}
 							/>
 						</View>
 					) : Platform.OS === 'ios' ? (
