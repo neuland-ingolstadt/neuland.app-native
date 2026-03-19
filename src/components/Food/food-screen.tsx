@@ -42,10 +42,12 @@ function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	}
 
 	const todayStart = new Date().setHours(0, 0, 0, 0)
-	return foodData
-		.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
-		// filter again in case of yesterday's cached data
-		.slice(0, 5)
+	return (
+		foodData
+			.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
+			// filter again in case of yesterday's cached data
+			.slice(0, 5)
+	)
 }
 
 function FoodScreen(): React.JSX.Element {
