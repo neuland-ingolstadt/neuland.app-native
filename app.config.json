@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.15.0",
+		"version": "0.15.1",
 		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
@@ -87,7 +87,12 @@
 					"sitemap": true
 				}
 			],
-			["react-native-bottom-tabs", { "theme": "material3" }],
+			[
+				"react-native-bottom-tabs",
+				{
+					"theme": "material3"
+				}
+			],
 			[
 				"expo-alternate-app-icons",
 				[
