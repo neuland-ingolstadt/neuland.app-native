@@ -4,9 +4,12 @@ import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import ClSportsPage from '@/components/Events/cl-sports-page'
+import ClSportsPage from '@/components/Sports/cl-sports-page'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
-import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
+import {
+	loadUniversitySportsEvents,
+	SPORTS_QUERY_KEYS
+} from '@/utils/sports-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
 export default function SportsScreen(): React.JSX.Element {
@@ -18,7 +21,7 @@ export default function SportsScreen(): React.JSX.Element {
 	}>()
 
 	const sportsResult = useQuery({
-		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryKey: [SPORTS_QUERY_KEYS.UNIVERSITY_SPORTS],
 		queryFn: loadUniversitySportsEvents,
 		staleTime: 1000 * 60 * 60, // 60 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
@@ -36,7 +39,7 @@ export default function SportsScreen(): React.JSX.Element {
 				InteractionManager.runAfterInteractions(() => {
 					router.setParams({ openEvent: 'false' })
 					router.navigate({
-						pathname: '/events/sports/[id]',
+						pathname: '/sports/[id]',
 						params: { id }
 					})
 				})

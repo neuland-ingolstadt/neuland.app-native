@@ -49,7 +49,7 @@ export function EventErrorView({
 			case 'clEvents':
 				return t('pages.clEvents.events.title')
 			case 'sports':
-				return t('pages.clEvents.sports.title')
+				return t('pages.sports.title')
 			default:
 				return t('pages.events.title')
 		}

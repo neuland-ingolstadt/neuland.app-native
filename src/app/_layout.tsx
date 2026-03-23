@@ -505,7 +505,7 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/events/sports/[id]"
+					name="(screens)/sports/[id]"
 					options={{
 						title: 'Event Details',
 						...Platform.select({

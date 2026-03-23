@@ -26,8 +26,8 @@ import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/Icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
+import { EmptyEventsAnimation } from '../Events/empty-events-animation'
 import LoadingIndicator from '../Universal/loading-indicator'
-import { EmptyEventsAnimation } from './empty-events-animation'
 
 export default function ClSportsPage({
 	sportsResult
@@ -225,8 +225,8 @@ export default function ClSportsPage({
 							<EventList data={sportsEvents} />
 						) : (
 							<EmptyEventsAnimation
-								title={t('pages.clEvents.sports.noEvents.title')}
-								subtitle={t('pages.clEvents.sports.noEvents.subtitle')}
+								title={t('pages.sports.noEvents.title')}
+								subtitle={t('pages.sports.noEvents.subtitle')}
 							/>
 						)}
 					</View>

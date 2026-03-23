@@ -336,13 +336,6 @@
 			}
 		},
 		"clEvents": {
-			"sports": {
-				"title": "Sports",
-				"noEvents": {
-					"title": "No sports events found",
-					"subtitle": "Check back later."
-				}
-			},
 			"clubs": {
 				"title": "Discover clubs",
 				"viewAll": "All clubs",
@@ -365,6 +358,13 @@
 		},
 		"events": {
 			"title": "Events"
+		},
+		"sports": {
+			"title": "Sports",
+			"noEvents": {
+				"title": "No sports events found",
+				"subtitle": "Check back later."
+			}
 		}
 	},
 	"submit": "Submit"

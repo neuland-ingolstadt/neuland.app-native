@@ -30,9 +30,12 @@ import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { pressLink as pressLinkUtil } from '@/utils/linking'
+import {
+	loadUniversitySportsEvents,
+	SPORTS_QUERY_KEYS
+} from '@/utils/sports-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
@@ -45,7 +48,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 		isLoading,
 		error
 	} = useQuery({
-		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryKey: [SPORTS_QUERY_KEYS.UNIVERSITY_SPORTS],
 		queryFn: loadUniversitySportsEvents,
 		staleTime: 1000 * 60 * 5, // 5 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
@@ -100,7 +103,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 								sportsEvent.startTime,
 								sportsEvent.endTime
 							),
-							link: `https://web.neuland.app/events/sports/${id}`
+							link: `https://web.neuland.app/sports/${id}`
 						})
 						if (Platform.OS === 'web') {
 							await copyToClipboard(message)

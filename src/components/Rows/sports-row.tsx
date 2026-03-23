@@ -5,7 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { sportsCategories } from '@/utils/events-utils'
+import { sportsCategories } from '@/utils/sports-utils'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/row-entry'
@@ -22,7 +22,7 @@ const SportsRow = ({
 	return (
 		<RowEntry
 			title={event.title[i18n.language as LanguageKey] ?? ''}
-			href={`/events/sports/${event.id}` as RelativePathString}
+			href={`/sports/${event.id}` as RelativePathString}
 			leftChildren={
 				<View style={styles.leftContainer}>
 					<Text style={styles.leftText1} numberOfLines={1}>

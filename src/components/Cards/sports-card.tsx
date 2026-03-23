@@ -11,7 +11,10 @@ import type {
 } from '@/__generated__/gql/graphql'
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
+import {
+	loadUniversitySportsEvents,
+	SPORTS_QUERY_KEYS
+} from '@/utils/sports-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
@@ -19,7 +22,7 @@ const SportsCard = (): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 	const { data: sportsByWeekday = [], isSuccess } = useQuery({
-		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryKey: [SPORTS_QUERY_KEYS.UNIVERSITY_SPORTS],
 		queryFn: loadUniversitySportsEvents,
 		staleTime: 1000 * 60 * 60,
 		gcTime: 1000 * 60 * 60 * 24
@@ -33,7 +36,7 @@ const SportsCard = (): React.JSX.Element => {
 	const handleSportsItemPress = (id: string) => {
 		if (Platform.OS !== 'ios') {
 			router.navigate({
-				pathname: '/events/sports/[id]',
+				pathname: '/sports/[id]',
 				params: { id }
 			})
 			return
@@ -49,9 +52,7 @@ const SportsCard = (): React.JSX.Element => {
 	}
 
 	const noData = (
-		<Text style={styles.noDataTitle}>
-			{t('pages.clEvents.sports.noEvents.title')}
-		</Text>
+		<Text style={styles.noDataTitle}>{t('pages.sports.noEvents.title')}</Text>
 	)
 
 	return (
