@@ -4,7 +4,9 @@ import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import AutoShowNextDaySetting from '@/components/Food/auto-show-next-day-setting'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/food-language-section'
@@ -22,6 +24,7 @@ import type { FormListSections } from '@/types/components'
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
 	const headerPadding = useTransparentHeaderPadding()
+	const insets = useSafeAreaInsets()
 	const elemtents = [
 		{
 			key: 'IngolstadtMensa',
@@ -69,6 +72,12 @@ export default function FoodPreferences(): React.JSX.Element {
 	const setAutoShowNextDay = usePreferencesStore(
 		(state) => state.setAutoShowNextDay
 	)
+	const autoShowNextDayTimeMinutes = usePreferencesStore(
+		(state) => state.autoShowNextDayTimeMinutes
+	)
+	const setAutoShowNextDayTimeMinutes = usePreferencesStore(
+		(state) => state.setAutoShowNextDayTimeMinutes
+	)
 
 	const handleToggleRestaurant = (name: string) => {
 		startTransition(() => {
@@ -109,7 +118,12 @@ export default function FoodPreferences(): React.JSX.Element {
 	]
 
 	return (
-		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
+		<ScrollView
+			contentContainerStyle={{
+				paddingTop: headerPadding,
+				paddingBottom: insets.bottom + 16
+			}}
+		>
 			<View style={styles.container}>
 				<SectionView title={'Restaurants'}>
 					<MultiSectionPicker
@@ -136,10 +150,13 @@ export default function FoodPreferences(): React.JSX.Element {
 					/>
 				</SectionView>
 				<SectionView title={t('preferences.settings')}>
-					<SingleSectionPicker
+					<AutoShowNextDaySetting
 						title={t('preferences.autoShowNextDay')}
-						selectedItem={autoShowNextDay}
-						action={setAutoShowNextDay}
+						timeLabel={t('preferences.autoShowNextDayTime')}
+						enabled={autoShowNextDay}
+						onToggle={setAutoShowNextDay}
+						timeMinutes={autoShowNextDayTimeMinutes}
+						onTimeMinutesChange={setAutoShowNextDayTimeMinutes}
 					/>
 				</SectionView>
 			</View>

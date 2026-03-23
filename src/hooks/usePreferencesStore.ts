@@ -14,6 +14,7 @@ interface PreferencesStore {
 	recentQuicklinks: string[]
 	showSplashScreen: boolean
 	autoShowNextDay: boolean
+	autoShowNextDayTimeMinutes: number
 	setTheme: (theme: string) => void
 	setThemeColor: (color: ThemeColor) => void
 	setLanguage: (language: 'en' | 'de') => void
@@ -22,6 +23,7 @@ interface PreferencesStore {
 	addRecentQuicklink: (quicklink: string) => void
 	setShowSplashScreen: (show: boolean) => void
 	setAutoShowNextDay: (show: boolean) => void
+	setAutoShowNextDayTimeMinutes: (minutes: number) => void
 	reset: () => void
 }
 
@@ -36,6 +38,7 @@ const initialState: Omit<
 	| 'setLanguage'
 	| 'setShowSplashScreen'
 	| 'setAutoShowNextDay'
+	| 'setAutoShowNextDayTimeMinutes'
 > = {
 	appIcon: undefined,
 	language: undefined,
@@ -44,7 +47,8 @@ const initialState: Omit<
 	unlockedAppIcons: [],
 	recentQuicklinks: defaultQuicklinks,
 	showSplashScreen: false,
-	autoShowNextDay: false
+	autoShowNextDay: false,
+	autoShowNextDayTimeMinutes: 18 * 60
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -94,6 +98,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 			},
 			setAutoShowNextDay: (autoShowNextDay: boolean) => {
 				set({ autoShowNextDay })
+			},
+			setAutoShowNextDayTimeMinutes: (autoShowNextDayTimeMinutes: number) => {
+				set({ autoShowNextDayTimeMinutes })
 			},
 			reset: () => {
 				set(initialState)

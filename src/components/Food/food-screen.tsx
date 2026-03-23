@@ -13,7 +13,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import {
 	Animated,
-	Dimensions,
 	Platform,
 	Pressable,
 	RefreshControl,
@@ -33,14 +32,30 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
+import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
-const AUTO_SHOW_NEXT_DAY_HOUR = 18
+function getRenderableFoodDays(foodData?: Food[]): Food[] {
+	if (foodData == null) {
+		return []
+	}
+
+	const todayStart = new Date().setHours(0, 0, 0, 0)
+	return (
+		foodData
+			.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
+			// filter again in case of yesterday's cached data
+			.slice(0, 5)
+	)
+}
 
 function FoodScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
+	const autoShowNextDayTimeMinutes = usePreferencesStore(
+		(state) => state.autoShowNextDayTimeMinutes
+	)
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
 	)
@@ -76,28 +91,28 @@ function FoodScreen(): React.JSX.Element {
 
 	const getInitialPage = useCallback((): number => {
 		if (!autoShowNextDay) return 0
+		const renderableDays = getRenderableFoodDays(foodData)
 
 		const today = new Date()
-		const currentHour = today.getHours()
+		const currentTimeMinutes = today.getHours() * 60 + today.getMinutes()
 
 		if (
-			currentHour >= AUTO_SHOW_NEXT_DAY_HOUR &&
-			foodData &&
-			foodData.length > 1
+			currentTimeMinutes >= autoShowNextDayTimeMinutes &&
+			renderableDays.length > 1
 		) {
-			const firstDayDate = new Date(foodData[0].timestamp)
-
-			const isToday =
-				firstDayDate.getDate() === today.getDate() &&
-				firstDayDate.getMonth() === today.getMonth() &&
-				firstDayDate.getFullYear() === today.getFullYear()
+			const firstDayTimestamp = renderableDays[0].timestamp
+			const firstDayIso =
+				typeof firstDayTimestamp === 'string'
+					? firstDayTimestamp.slice(0, 10)
+					: formatISODate(firstDayTimestamp)
+			const isToday = firstDayIso === formatISODate(today)
 
 			if (isToday) {
 				return 1
 			}
 		}
 		return 0
-	}, [autoShowNextDay, foodData])
+	}, [autoShowNextDay, autoShowNextDayTimeMinutes, foodData])
 
 	const [selectedDay, setSelectedDay] = useState<number>(getInitialPage())
 	const initialPageRef = useRef<number>(getInitialPage())
@@ -106,12 +121,8 @@ function FoodScreen(): React.JSX.Element {
 		if (foodData == null) {
 			return
 		}
-		const filteredDays = foodData
-			.filter(
-				(day) =>
-					new Date(day.timestamp).getTime() >= new Date().setHours(0, 0, 0, 0)
-			) // filter again in case of yesterday's cached data
-			.slice(0, 5)
+
+		const filteredDays = getRenderableFoodDays(foodData)
 		if (filteredDays.length === 0) {
 			throw new Error('noMeals')
 		}
@@ -208,7 +219,6 @@ function FoodScreen(): React.JSX.Element {
 		}
 	)
 
-	const screenHeight = Dimensions.get('window').height
 	const scrollY = new Animated.Value(0)
 	const showAllergensBanner =
 		deferredAllergenSelection.length === 1 &&
@@ -265,10 +275,7 @@ function FoodScreen(): React.JSX.Element {
 						{showAllergensBanner && <AllergensBanner scrollY={scrollY} />}
 						<PagerView
 							ref={pagerViewRef}
-							style={{
-								...styles.page,
-								height: screenHeight
-							}}
+							style={styles.page}
 							initialPage={initialPageRef.current}
 							onPageSelected={(e) => {
 								const page = e.nativeEvent.position
