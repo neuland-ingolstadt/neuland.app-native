@@ -24,7 +24,8 @@
 			"auto": "Standard"
 		},
 		"settings": "Einstellungen",
-		"autoShowNextDay": "Automatisch zum nächsten Tag wechseln"
+		"autoShowNextDay": "Automatisch zum nächsten Tag wechseln",
+		"autoShowNextDayTime": "Uhrzeit"
 	},
 	"price": {
 		"guests": "für Gäste",
