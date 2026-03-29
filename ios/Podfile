@@ -65,9 +65,9 @@ target 'NeulandNext' do
 
       # Workaround for Xcode 26: newer Apple Clang breaks consteval in fmt 11.0.2.
       # Patch base.h to disable consteval since the header doesn't check for pre-defined FMT_USE_CONSTEVAL.
-      # TODO: Remove this after the upgrade to Expo 83 (or newer)
+      # TODO: Remove this after the upgrade to Expo 55 (or newer)
 
-      # fix: https://github.com/expo/expo/issues/44229#issuecomment-4134299446
+      # fix from: https://github.com/expo/expo/issues/44229#issuecomment-4134299446
       fmt_base = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', 'base.h')
 
       if File.exist?(fmt_base)
