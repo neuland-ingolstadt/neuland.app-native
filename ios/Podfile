@@ -69,8 +69,10 @@ target 'NeulandNext' do
 
       # fix from: https://github.com/expo/expo/issues/44229#issuecomment-4134299446
       fmt_base = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', 'base.h')
+      xcode_version = `xcodebuild -version`.match(/Xcode ([\d.]+)/)[1] rescue nil
 
-      if File.exist?(fmt_base)
+      # Only apply on Xcode 26.0+ to keep consteval benefits on older versions/CI
+      if File.exist?(fmt_base) && (xcode_version.nil? || xcode_version.to_f >= 26.4)
         content = File.read(fmt_base)
         unless content.include?('Xcode 26 workaround')
           patched = content.gsub(
@@ -80,11 +82,11 @@ target 'NeulandNext' do
           if patched != content
             File.chmod(0644, fmt_base)
             File.write(fmt_base, patched)
+          else
+            Pod::UI.puts "[Podfile] Xcode 26.4 fmt workaround not applied: expected pattern not found in #{fmt_base}. The header may have changed; please update or remove this patch."
           end
         end
       end
       # ------------
-
-    end
   end
 end
