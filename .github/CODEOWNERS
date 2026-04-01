@@ -1,1 +1,21 @@
-*    @Robert27
+# Default reviewers for most of the codebase
+* @Robert27 @alexpietsch
+
+# GitHub metadata, workflows, and templates
+/.github/ @Robert27
+
+# Build, codegen, and Expo/RN tooling config
+/config/ @Robert27
+
+# Root-level project and platform configuration
+/app.config.json @Robert27
+/babel.config.js @Robert27
+/eas.json @Robert27
+/service.json @Robert27
+/tsconfig.json @Robert27
+
+# Repository hygiene and environment templates
+/.dockerignore @Robert27
+/.env.local.example @Robert27
+/.gitattributes @Robert27
+/.gitignore @Robert27
