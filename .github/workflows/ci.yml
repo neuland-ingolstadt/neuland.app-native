@@ -1,4 +1,4 @@
-name: CI - Biome and TypeScript
+name: CI - Run static checks and unit tests
 on:
   push:
     branches: [main]

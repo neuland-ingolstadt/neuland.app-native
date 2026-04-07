@@ -37,10 +37,6 @@ mock.module('@aptabase/react-native', () => ({
 	trackEvent: () => {}
 }))
 
-mock.module(`${SRC_ROOT}utils/ui-utils.ts`, () => ({
-	copyToClipboard: () => Promise.resolve()
-}))
-
 mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
 	getFragmentData: () => ({ foodData: [] })
 }))

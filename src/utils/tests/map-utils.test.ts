@@ -37,10 +37,6 @@ mock.module('@aptabase/react-native', () => ({
 	trackEvent: () => {}
 }))
 
-mock.module(`${UTILS_ROOT}ui-utils.ts`, () => ({
-	copyToClipboard: () => Promise.resolve()
-}))
-
 mock.module(`${UTILS_ROOT}date-utils.ts`, () => ({
 	formatISODate: (date: Date) => {
 		const year = date.getFullYear().toString().padStart(4, '0')
