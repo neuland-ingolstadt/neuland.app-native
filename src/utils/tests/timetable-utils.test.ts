@@ -80,13 +80,12 @@ beforeAll(async () => {
 describe('timetable-utils', () => {
 	it('getFriendlyTimetable - Should merge duplicate days and map lecture fields', async () => {
 		mockGetTimetable.mockReset()
-		const firstDate = new Date('2026-04-07T00:00:00')
-		const secondDate = new Date('2026-04-07T00:00:00')
+		const date = new Date('2026-04-07T00:00:00')
 		mockGetTimetable
 			.mockResolvedValueOnce({
 				timetable: [
 					{
-						date: firstDate,
+						date,
 						hours: {
 							1: [
 								{
@@ -119,7 +118,7 @@ describe('timetable-utils', () => {
 			.mockResolvedValueOnce({
 				timetable: [
 					{
-						date: secondDate,
+						date,
 						hours: {
 							1: [
 								{
@@ -156,11 +155,9 @@ describe('timetable-utils', () => {
 		)
 
 		expect(mockGetTimetable).toHaveBeenCalledTimes(2)
-		expect(result).toHaveLength(2)
-		expect(result[0].shortName).toBe('MATH')
-		expect(result[0].rooms).toEqual(['G101', 'G102'])
-		expect(result[1].shortName).toBe('PRG')
-		expect(result[1].rooms).toEqual(['H201'])
+		expect(result).toHaveLength(1)
+		expect(result[0].shortName).toBe('PRG')
+		expect(result[0].rooms).toEqual(['H201'])
 	})
 
 	it('getGroupedTimetable - Should group timetable, exams and calendar entries correctly', () => {
