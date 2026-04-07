@@ -12,10 +12,18 @@ import {
 } from '@vis.gl/react-maplibre'
 import { toast } from 'burnt'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import type { Feature, FeatureCollection, Position } from 'geojson'
+import type { FeatureCollection, Position } from 'geojson'
 import maplibregl from 'maplibre-gl'
 import type React from 'react'
-import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+	use,
+	useCallback,
+	useEffect,
+	useEffectEvent,
+	useMemo,
+	useRef,
+	useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Appearance,
@@ -47,10 +55,16 @@ import ErrorView from '@/components/Error/error-view'
 import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-modal'
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
+import {
+	getAllRooms,
+	getAvailableFilteredGeoJson,
+	getBuildingGeoJson,
+	getFilteredGeoJson,
+	getUniqueEtages
+} from '@/components/Map/map-screen-geojson'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import {
 	type ClickedMapElement,
 	type RoomData,
@@ -60,20 +74,12 @@ import type { NormalizedLecturer } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import {
-	filterAvailableRooms,
-	filterEtage,
 	getBuildingData,
 	getOngoingOrNextEvent,
 	getRoomData
 } from '@/utils/map-screen-utils'
 import {
-	BUILDINGS,
-	FLOOR_ORDER,
-	FLOOR_SUBSTITUTES,
 	filterRooms,
-	getCenter,
-	getCenterSingle,
-	getIcon,
 	getRoomOpenings,
 	INGOLSTADT_CENTER,
 	NEUBURG_CENTER
@@ -237,106 +243,27 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [timetable, userKind])
 
-	const allRooms: FeatureCollection = useMemo(() => {
-		if (mapOverlay == null) {
-			console.debug('No map overlay data')
-			return { type: 'FeatureCollection', features: [] }
-		}
+	const allRooms: FeatureCollection = useMemo(
+		() => getAllRooms(mapOverlay),
+		[mapOverlay]
+	)
+	const buildingGeoJSON: FeatureCollection = useMemo(
+		() => getBuildingGeoJson(allRooms),
+		[allRooms]
+	)
 
-		const rooms = mapOverlay.features.flatMap((feature) => {
-			const { type, id, geometry, properties } = feature
-
-			if (
-				geometry == null ||
-				properties == null ||
-				geometry.type !== 'Polygon' ||
-				!('coordinates' in geometry) ||
-				geometry.coordinates == null ||
-				geometry.coordinates.length === 0
-			) {
-				return []
-			}
-
-			if (properties.Ebene in FLOOR_SUBSTITUTES) {
-				properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene as string]
-			}
-			if (!FLOOR_ORDER.includes(properties.Ebene as string)) {
-				FLOOR_ORDER.push(properties.Ebene as string)
-			}
-			return {
-				type,
-				id,
-				properties: {
-					...properties,
-					rtype: SEARCH_TYPES.ROOM,
-					center: getCenterSingle(geometry.coordinates),
-					icon: getIcon(SEARCH_TYPES.ROOM, {
-						result: { item: { properties } }
-					})
-				} as unknown as FeatureProperties,
-				geometry
-			}
-		})
-		const buildings = BUILDINGS.map((building) => {
-			const buildingRooms = rooms.filter(
-				(room) => room.properties.Gebaeude === (building as Gebaeude)
-			)
-			if (buildingRooms.length === 0) {
-				return null
-			}
-			const floorCount = Array.from(
-				new Set(buildingRooms.map((room) => room.properties.Ebene))
-			).length
-			const location = buildingRooms[0].properties.Standort
-			const center = getCenter(buildingRooms.map((x) => x.geometry.coordinates))
-			return {
-				type: 'Feature',
-				id: building,
-				properties: {
-					Raum: building,
-					Funktion_en: 'Building',
-					Funktion_de: 'Gebäude',
-					Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
-					Ebene: 'EG', // Dummy value to not break the floor picker
-					Etage: floorCount.toString(),
-					Standort: location,
-					rtype: SEARCH_TYPES.BUILDING,
-					center,
-					icon: getIcon(SEARCH_TYPES.BUILDING)
-				},
-				geometry: {
-					type: 'Point' as const,
-					coordinates: center
-				}
-			} satisfies Feature
-		}).filter(
-			(building): building is NonNullable<typeof building> => building !== null
-		)
-		return {
-			type: 'FeatureCollection',
-			features: [...rooms, ...buildings]
-		}
-	}, [mapOverlay])
-
-	const buildingGeoJSON: FeatureCollection = useMemo(() => {
-		return {
-			type: 'FeatureCollection',
-			features: allRooms.features.filter(
-				(f) => f.properties?.rtype === SEARCH_TYPES.BUILDING
-			)
-		}
-	}, [allRooms])
+	const handleTabPress = useEffectEvent(() => {
+		setDisableFollowUser(true)
+		bottomSheetModalRef.current?.close()
+		setView()
+	})
 
 	useEffect(() => {
 		// @ts-expect-error wrong type
-		const unsubscribe = navigation.addListener('tabPress', () => {
-			setDisableFollowUser(true)
-			bottomSheetModalRef.current?.close()
-			setView()
-		})
+		const unsubscribe = navigation.addListener('tabPress', handleTabPress)
 
 		return unsubscribe
-	}, [navigation, mapCenter])
+	}, [handleTabPress, navigation])
 
 	useEffect(() => {
 		if (
@@ -438,42 +365,15 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [currentFloor])
 
-	const uniqueEtages = Array.from(
-		new Set(
-			(Array.isArray(allRooms.features)
-				? allRooms.features
-				: Object.values(allRooms.features)
-			)
-				.map((room) => {
-					const properties = (room as RoomData).properties
-					return typeof properties?.Ebene === 'string' ? properties.Ebene : ''
-				})
-				.filter((etage) => etage != null)
-		)
-	).sort(
-		(a: string, b: string) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
+	const uniqueEtages = useMemo(() => getUniqueEtages(allRooms), [allRooms])
+	const filteredGeoJSON = useMemo(
+		() => getFilteredGeoJson(mapOverlay, currentFloor?.floor ?? 'EG', allRooms),
+		[allRooms, currentFloor?.floor, mapOverlay]
 	)
-	const filteredGeoJSON = useMemo<FeatureCollection | undefined>(() => {
-		if (mapOverlay == null) {
-			return undefined
-		}
-		return {
-			...mapOverlay,
-			features: filterEtage(currentFloor?.floor ?? 'EG', allRooms)
-		}
-	}, [currentFloor, allRooms, mapOverlay])
-
-	const availableFilteredGeoJSON = useMemo<
-		FeatureCollection | undefined
-	>(() => {
-		if (mapOverlay == null || filteredGeoJSON == null) {
-			return undefined
-		}
-		return {
-			type: 'FeatureCollection',
-			features: filterAvailableRooms(filteredGeoJSON, availableRooms)
-		}
-	}, [availableRooms, filteredGeoJSON, mapOverlay])
+	const availableFilteredGeoJSON = useMemo(
+		() => getAvailableFilteredGeoJson(filteredGeoJSON, availableRooms),
+		[availableRooms, filteredGeoJSON]
+	)
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
