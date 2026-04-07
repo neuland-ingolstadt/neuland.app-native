@@ -173,7 +173,7 @@ describe('map-utils', () => {
 
 		const openings = mapUtils.getRoomOpenings(
 			data as never,
-			new Date('2026-04-07')
+			new Date(2026, 3, 7)
 		)
 		expect(openings['110']).toHaveLength(2)
 		expect(openings['110'][0].from.getHours()).toBe(8)
