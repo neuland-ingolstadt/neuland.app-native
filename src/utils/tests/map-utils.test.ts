@@ -56,13 +56,21 @@ describe('map-utils', () => {
 	it('addMinutes - Should add positive minutes correctly', () => {
 		const date = new Date('2026-04-07T08:00:00')
 		const result = mapUtils.addMinutes(date, 45)
-		expect(result.toISOString()).toContain('2026-04-07T08:45:00')
+		expect(result.getFullYear()).toBe(2026)
+		expect(result.getMonth()).toBe(3)
+		expect(result.getDate()).toBe(7)
+		expect(result.getHours()).toBe(8)
+		expect(result.getMinutes()).toBe(45)
 	})
 
 	it('addMinutes - Should subtract minutes correctly', () => {
 		const date = new Date('2026-04-07T08:00:00')
 		const result = mapUtils.addMinutes(date, -30)
-		expect(result.toISOString()).toContain('2026-04-07T07:30:00')
+		expect(result.getFullYear()).toBe(2026)
+		expect(result.getMonth()).toBe(3)
+		expect(result.getDate()).toBe(7)
+		expect(result.getHours()).toBe(7)
+		expect(result.getMinutes()).toBe(30)
 	})
 
 	it('getRoomOpenings - Should merge overlapping openings within the gap threshold', () => {
@@ -109,12 +117,10 @@ describe('map-utils', () => {
 		)
 		expect(openings['101']).toHaveLength(2)
 		expect(openings['101'][0].type).toBe('Seminarraum')
-		expect(openings['101'][0].from.toISOString()).toContain(
-			'2026-04-07T08:00:00'
-		)
-		expect(openings['101'][0].until.toISOString()).toContain(
-			'2026-04-07T10:00:00'
-		)
+		expect(openings['101'][0].from.getHours()).toBe(8)
+		expect(openings['101'][0].from.getMinutes()).toBe(0)
+		expect(openings['101'][0].until.getHours()).toBe(10)
+		expect(openings['101'][0].until.getMinutes()).toBe(0)
 		expect(openings.Alle).toHaveLength(1)
 		expect(openings.Alle[0].capacity).toBe(999)
 	})
@@ -150,12 +156,8 @@ describe('map-utils', () => {
 			new Date('2026-04-07')
 		)
 		expect(openings['110']).toHaveLength(2)
-		expect(openings['110'][0].from.toISOString()).toContain(
-			'2026-04-07T08:00:00'
-		)
-		expect(openings['110'][1].from.toISOString()).toContain(
-			'2026-04-07T12:00:00'
-		)
+		expect(openings['110'][0].from.getHours()).toBe(8)
+		expect(openings['110'][1].from.getHours()).toBe(12)
 	})
 
 	it('searchRooms - Should return all rooms when no building filter is provided', () => {
