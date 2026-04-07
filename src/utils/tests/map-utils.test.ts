@@ -49,6 +49,14 @@ mock.module('@aptabase/react-native', () => ({
 	trackEvent: () => {}
 }))
 
+mock.module('expo-clipboard', () => ({
+	setStringAsync: async () => {}
+}))
+
+mock.module('burnt', () => ({
+	toast: () => {}
+}))
+
 mock.module(`${UTILS_ROOT}date-utils.ts`, () => ({
 	formatISODate: (date: Date) => {
 		const year = date.getFullYear().toString().padStart(4, '0')

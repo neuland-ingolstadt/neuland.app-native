@@ -49,6 +49,14 @@ mock.module('@aptabase/react-native', () => ({
 	trackEvent: () => {}
 }))
 
+mock.module('expo-clipboard', () => ({
+	setStringAsync: async () => {}
+}))
+
+mock.module('burnt', () => ({
+	toast: () => {}
+}))
+
 mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
 	getFragmentData: () => ({ foodData: [] })
 }))
