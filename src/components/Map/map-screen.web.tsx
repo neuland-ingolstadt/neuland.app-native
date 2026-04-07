@@ -96,7 +96,13 @@ const MapScreen = (): React.JSX.Element => {
 	const isDark = UnistylesRuntime.themeName === 'dark'
 	const params = useLocalSearchParams<{ room: string }>()
 	const { userKind, userFaculty } = use(UserKindContext)
-	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
+	const mapCenter = useMemo(
+		() =>
+			userFaculty === 'Nachhaltige Infrastruktur'
+				? NEUBURG_CENTER
+				: INGOLSTADT_CENTER,
+		[userFaculty]
+	)
 	const { t, i18n } = useTranslation('common')
 	const bottomSheetRef = useRef<BottomSheet>(null)
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -129,7 +135,6 @@ const MapScreen = (): React.JSX.Element => {
 	type LocationsType = Record<string, string>
 	const locations: LocationsType = Locations
 	const [isVisible, setIsVisible] = useState(true)
-	const [tabBarPressed, setTabBarPressed] = useState(false)
 	const opacity = useSharedValue(1)
 
 	const toggleShowAllFloors = (): void => {
@@ -326,18 +331,12 @@ const MapScreen = (): React.JSX.Element => {
 		// @ts-expect-error wrong type
 		const unsubscribe = navigation.addListener('tabPress', () => {
 			setDisableFollowUser(true)
-			setTabBarPressed(true)
+			bottomSheetModalRef.current?.close()
+			setView()
 		})
 
 		return unsubscribe
-	}, [navigation])
-	useEffect(() => {
-		if (tabBarPressed) {
-			bottomSheetModalRef.current?.close()
-			setView()
-			setTabBarPressed(false)
-		}
-	}, [tabBarPressed])
+	}, [navigation, mapCenter])
 
 	useEffect(() => {
 		if (
@@ -383,14 +382,6 @@ const MapScreen = (): React.JSX.Element => {
 
 		router.setParams({ room: '' })
 	}, [params, mapLoadState, allRooms])
-
-	useEffect(() => {
-		setMapCenter(
-			userFaculty === 'Nachhaltige Infrastruktur'
-				? NEUBURG_CENTER
-				: INGOLSTADT_CENTER
-		)
-	}, [userFaculty])
 
 	useEffect(() => {
 		if (localSearch.length === 1 && params.room != null) {
@@ -462,41 +453,27 @@ const MapScreen = (): React.JSX.Element => {
 	).sort(
 		(a: string, b: string) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
 	)
-	const [filteredGeoJSON, setFilteredGeoJSON] = useState<FeatureCollection>()
-	const [availableFilteredGeoJSON, setAvailableFilteredGeoJSON] =
-		useState<FeatureCollection>()
-
-	useEffect(() => {
+	const filteredGeoJSON = useMemo<FeatureCollection | undefined>(() => {
 		if (mapOverlay == null) {
-			return
+			return undefined
 		}
-		// filter the filteredGeoJSON to only show available rooms
-		const filteredFeatures = filterAvailableRooms(
-			filteredGeoJSON,
-			availableRooms
-		)
-
-		const availableFilteredGeoJSON: FeatureCollection = {
-			type: 'FeatureCollection',
-			features: filteredFeatures
-		}
-
-		setAvailableFilteredGeoJSON(availableFilteredGeoJSON)
-	}, [availableRooms, filteredGeoJSON, mapOverlay])
-
-	useEffect(() => {
-		if (mapOverlay == null) {
-			return
-		}
-		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG', allRooms)
-
-		const newGeoJSON: FeatureCollection = {
+		return {
 			...mapOverlay,
-			features: filteredFeatures
+			features: filterEtage(currentFloor?.floor ?? 'EG', allRooms)
 		}
-
-		setFilteredGeoJSON(newGeoJSON)
 	}, [currentFloor, allRooms, mapOverlay])
+
+	const availableFilteredGeoJSON = useMemo<
+		FeatureCollection | undefined
+	>(() => {
+		if (mapOverlay == null || filteredGeoJSON == null) {
+			return undefined
+		}
+		return {
+			type: 'FeatureCollection',
+			features: filterAvailableRooms(filteredGeoJSON, availableRooms)
+		}
+	}, [availableRooms, filteredGeoJSON, mapOverlay])
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
