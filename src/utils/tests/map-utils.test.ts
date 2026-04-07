@@ -379,7 +379,9 @@ describe('map-utils', () => {
 		expect(
 			mapUtils.getIcon(SEARCH_TYPES.ROOM, {
 				result: {
-					item: { properties: { Funktion_en: 'Experimental Laboratory', Raum: 'B102' } }
+					item: {
+						properties: { Funktion_en: 'Experimental Laboratory', Raum: 'B102' }
+					}
 				}
 			})
 		).toEqual({ ios: 'flask', android: 'science' })
