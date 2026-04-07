@@ -20,6 +20,12 @@ mock.module('react-native', () => ({
 	default: {
 		Platform: { OS: 'web' },
 		Share: { share: () => Promise.resolve() },
+		NativeEventEmitter: class {
+			addListener() {
+				return { remove: () => {} }
+			}
+			removeAllListeners() {}
+		},
 		TurboModuleRegistry: {
 			get: () => null,
 			getEnforcing: () => null
@@ -27,6 +33,12 @@ mock.module('react-native', () => ({
 	},
 	Platform: { OS: 'web' },
 	Share: { share: () => Promise.resolve() },
+	NativeEventEmitter: class {
+		addListener() {
+			return { remove: () => {} }
+		}
+		removeAllListeners() {}
+	},
 	TurboModuleRegistry: {
 		get: () => null,
 		getEnforcing: () => null
