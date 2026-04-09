@@ -66,12 +66,7 @@ mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
 
 let timetableUtils: typeof import('../timetable-utils')
 
-const formatLocalDate = (date: Date): string => {
-	const year = date.getFullYear().toString().padStart(4, '0')
-	const month = (date.getMonth() + 1).toString().padStart(2, '0')
-	const day = date.getDate().toString().padStart(2, '0')
-	return `${year}-${month}-${day}`
-}
+const formatUtcDate = (date: Date): string => date.toISOString().slice(0, 10)
 
 beforeAll(async () => {
 	timetableUtils = await import('../timetable-utils')
@@ -212,10 +207,10 @@ describe('timetable-utils', () => {
 		)
 
 		expect(grouped).toHaveLength(3)
-		expect(formatLocalDate(grouped[0].title)).toBe('2026-04-07')
+		expect(formatUtcDate(grouped[0].title)).toBe('2026-04-07')
 		expect(grouped[0].data).toHaveLength(2)
-		expect(formatLocalDate(grouped[1].title)).toBe('2026-04-08')
-		expect(formatLocalDate(grouped[2].title)).toBe('2026-04-09')
+		expect(formatUtcDate(grouped[1].title)).toBe('2026-04-08')
+		expect(formatUtcDate(grouped[2].title)).toBe('2026-04-09')
 	})
 
 	it('convertTimetableToWeekViewEvents - Should map color, title and room', () => {
