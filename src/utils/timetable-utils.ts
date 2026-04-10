@@ -1,6 +1,5 @@
 import moment from 'moment'
 import type { Calendar } from '@/types/data'
-import type { Hours } from '@/types/thi-api'
 import type {
 	CalendarEvent,
 	Exam,
@@ -43,18 +42,14 @@ export async function getFriendlyTimetable(
 		if (curr == null) return acc
 
 		const existingIndex = acc.findIndex(
-			(item) => item != null && item.date.getTime() === curr.date.getTime()
+			(item) => item != null && item.date === curr.date
 		)
 
 		if (existingIndex > -1) {
-			const mergedHours: Hours = { ...acc[existingIndex].hours }
-			for (const keyStr of Object.keys(curr.hours)) {
-				const key = Number(keyStr)
-				const slot = curr.hours[key]
-				const existing = mergedHours[key]
-				mergedHours[key] = existing != null ? [...existing, ...slot] : slot
+			acc[existingIndex].hours = {
+				...acc[existingIndex].hours,
+				...curr.hours
 			}
-			acc[existingIndex].hours = mergedHours
 		} else {
 			acc.push(curr)
 		}

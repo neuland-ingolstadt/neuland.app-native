@@ -66,16 +66,15 @@ mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
 
 let timetableUtils: typeof import('../timetable-utils')
 
-const formatUtcDate = (date: Date): string => date.toISOString().slice(0, 10)
+const formatYmd = (d: Date) =>
+	`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
 beforeAll(async () => {
 	timetableUtils = await import('../timetable-utils')
 })
 
 describe('timetable-utils', () => {
-	// Same calendar day from current + next month: days match by `getTime()`, slot arrays
-	// are concatenated so overlapping days keep all lectures.
-	it('getFriendlyTimetable - Should merge overlapping days across month requests and map lecture fields', async () => {
+	it('getFriendlyTimetable - Should map lectures from both month requests when date references differ', async () => {
 		mockGetTimetable.mockReset()
 		const firstDate = new Date('2026-04-07T00:00:00')
 		const secondDate = new Date('2026-04-07T00:00:00')
@@ -157,8 +156,8 @@ describe('timetable-utils', () => {
 		expect(result.map((entry) => entry.shortName)).toEqual(['MATH', 'PRG'])
 		expect(result[0].rooms).toEqual(['G101', 'G102'])
 		expect(result[1].rooms).toEqual(['H201'])
-		expect(formatUtcDate(result[0].date)).toBe(formatUtcDate(result[1].date))
-		expect(formatUtcDate(result[0].date)).toBe('2026-04-07')
+		expect(formatYmd(result[0].date)).toBe(formatYmd(result[1].date))
+		expect(formatYmd(result[0].date)).toBe('2026-04-07')
 	})
 
 	it('getGroupedTimetable - Should group timetable, exams and calendar entries correctly', () => {
@@ -213,10 +212,10 @@ describe('timetable-utils', () => {
 		)
 
 		expect(grouped).toHaveLength(3)
-		expect(formatUtcDate(grouped[0].title)).toBe('2026-04-07')
+		expect(formatYmd(grouped[0].title as Date)).toBe('2026-04-07')
 		expect(grouped[0].data).toHaveLength(2)
-		expect(formatUtcDate(grouped[1].title)).toBe('2026-04-08')
-		expect(formatUtcDate(grouped[2].title)).toBe('2026-04-09')
+		expect(formatYmd(grouped[1].title as Date)).toBe('2026-04-08')
+		expect(formatYmd(grouped[2].title as Date)).toBe('2026-04-09')
 	})
 
 	it('convertTimetableToWeekViewEvents - Should map color, title and room', () => {
