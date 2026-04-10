@@ -73,14 +73,17 @@ beforeAll(async () => {
 })
 
 describe('timetable-utils', () => {
-	it('getFriendlyTimetable - Should merge duplicate days and map lecture fields', async () => {
+	// Same calendar day from current + next month: days match by `getTime()`, slot arrays
+	// are concatenated so overlapping days keep all lectures.
+	it('getFriendlyTimetable - Should merge overlapping days across month requests and map lecture fields', async () => {
 		mockGetTimetable.mockReset()
-		const date = new Date('2026-04-07T00:00:00')
+		const firstDate = new Date('2026-04-07T00:00:00')
+		const secondDate = new Date('2026-04-07T00:00:00')
 		mockGetTimetable
 			.mockResolvedValueOnce({
 				timetable: [
 					{
-						date,
+						date: firstDate,
 						hours: {
 							1: [
 								{
@@ -113,7 +116,7 @@ describe('timetable-utils', () => {
 			.mockResolvedValueOnce({
 				timetable: [
 					{
-						date,
+						date: secondDate,
 						hours: {
 							1: [
 								{
@@ -150,9 +153,12 @@ describe('timetable-utils', () => {
 		)
 
 		expect(mockGetTimetable).toHaveBeenCalledTimes(2)
-		expect(result).toHaveLength(1)
-		expect(result[0].shortName).toBe('PRG')
-		expect(result[0].rooms).toEqual(['H201'])
+		expect(result).toHaveLength(2)
+		expect(result.map((entry) => entry.shortName)).toEqual(['MATH', 'PRG'])
+		expect(result[0].rooms).toEqual(['G101', 'G102'])
+		expect(result[1].rooms).toEqual(['H201'])
+		expect(formatUtcDate(result[0].date)).toBe(formatUtcDate(result[1].date))
+		expect(formatUtcDate(result[0].date)).toBe('2026-04-07')
 	})
 
 	it('getGroupedTimetable - Should group timetable, exams and calendar entries correctly', () => {
