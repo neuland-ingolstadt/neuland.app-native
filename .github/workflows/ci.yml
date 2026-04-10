@@ -1,4 +1,4 @@
-name: CI - Run static checks and unit tests
+name: CI
 on:
   push:
     branches: [main]
@@ -6,7 +6,7 @@ on:
     branches: [main]
 jobs:
   static-checks:
-    name: Run biome and typescript checks
+    name: Biome and TypeScript checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
       - name: Run Biome check
         run: bun biome ci .
   unit-tests:
-    name: Run unit tests
+    name: Unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
