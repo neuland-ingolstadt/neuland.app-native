@@ -1,6 +1,5 @@
 {
 	"extends": "expo/tsconfig.base",
-
 	"compilerOptions": {
 		"moduleResolution": "bundler",
 		"baseUrl": "./",
@@ -10,6 +9,7 @@
 		},
 		"project": "./tsconfig.json",
 		"strict": true,
+		"types": ["bun-types"],
 		"plugins": [
 			{
 				"name": "@0no-co/graphqlsp",
