@@ -188,6 +188,7 @@
 				"./config/plugins/withDrawableAssets.js",
 				"./src/assets/android/check.xml"
 			],
+			"./config/plugins/withIosCiArtifacts.js",
 			"expo-font"
 		],
 		"extra": {
