@@ -299,7 +299,7 @@ export default function TimetableWeek({
 				setTimetableNumberDays(timetableNumberDaysMap[effectiveTimetableMode])
 			})
 		}
-	}, [effectiveTimetableMode])
+	}, [effectiveTimetableMode, calendarLoaded])
 
 	if (hasPendingUpdate) {
 		return (
