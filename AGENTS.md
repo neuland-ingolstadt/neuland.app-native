@@ -28,7 +28,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | ----------------- | -------------------------------------------------------------------------- |
 | Runtime           | React Native `0.81.5`, React `19.1`, Expo SDK `54`                         |
 | Language          | TypeScript `5.9` (strict mode)                                             |
-| Package manager   | **Bun** (`bun.lock`) — never use `npm` or `yarn`                           |
+| Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
 | Routing           | **expo-router 6** (file-based, typed routes) — *not* React Navigation directly |
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
@@ -49,7 +49,7 @@ THI news, calendar, university sports, campus life events, quick links.
 
 ## Commands
 
-All scripts go through Bun. The most relevant ones:
+Run project scripts through Bun. The most relevant ones:
 
 ```bash
 bun install                  # install dependencies (use --frozen-lockfile in CI)
@@ -89,6 +89,11 @@ CI runs `bun tsc --noEmit`, `bun biome ci .` and `bun test --ci` on every PR.
 Always make sure these pass locally before pushing.
 PR titles are linted by `.github/workflows/pr-title.yml`; use a semantic title such as
 `fix: handle guest login`, with a lowercase subject and no trailing period.
+
+Do not introduce `package-lock.json`, `yarn.lock`, or a second package-manager workflow.
+Some release / tooling scripts may invoke npm-ecosystem CLIs internally (for example
+`npx expo export` or `npm-license-crawler`); keep calling them through `bun <script>`
+unless you are explicitly updating the script itself.
 
 ---
 
@@ -239,9 +244,9 @@ Generated and binary files:
 ### Cross-platform
 
 - Use `Platform.OS` (`'ios' | 'android' | 'web'`) for runtime checks.
-- App is also published in the MacOS Store (powered by the iPad Version)
+- App is also published in the Mac App Store (powered by the iPad Version)
 - File-extension overrides are honored by Metro: `foo.ios.tsx`, `foo.web.tsx`. Use them
-  for substantial divergence (e.g. `app-icon.ios.tsx`, `dashboard.web.tsx`).
+  for substantial divergence (e.g. `app-icon.ios.tsx`, `map-screen.web.tsx`).
 - Icons go through `@/components/Universal/Icon` (`PlatformIcon`), which renders SF
   Symbols on iOS, Material Symbols (custom font) on Android, and Lucide on Web. Always
   pass all three variants when adding a new icon.
@@ -447,7 +452,8 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 
 ## Things to Avoid
 
-- **Don't introduce a new package manager.** This repo is Bun-only.
+- **Don't introduce a new package manager workflow.** Use Bun for installs, lockfile
+  updates, and script execution; do not add npm/yarn lockfiles.
 - **Don't add Axios, Jest, Redux, Tailwind, or styled-components.** The stack is
   fetch + React Query + Zustand + Unistyles + Biome. Match it.
 - **Don't `fetch` from components.** Always go through an API client + React Query.
