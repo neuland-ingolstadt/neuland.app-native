@@ -156,7 +156,7 @@ Generated and binary files:
   title, header style, and presentation. Otherwise the platform default leaks through.
 - Use the typed `router` (`import { router } from 'expo-router'`) — typed routes are enabled.
 - Web builds use `output: 'single'` (SPA). Some screens have a `*.web.tsx` variant
-  (e.g. `dashboard.web.tsx`) for layout differences.
+  (e.g. `map-screen.web.tsx`) for layout differences.
 
 #### Native Tabs
 
