@@ -9,9 +9,11 @@ import type {
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
 import type { SpoWeights } from '@/types/asset-api'
-import type {
-	PublicEventResponse,
-	PublicOrganizerResponse
+import {
+	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	type CampusLifePublicOrganizerKind,
+	type PublicEventResponse,
+	type PublicOrganizerResponse
 } from '@/types/campus-life'
 import packageInfo from '../../package.json'
 import {
@@ -128,10 +130,17 @@ class NeulandAPIClient {
 		upcomingOnly?: boolean
 		limit?: number
 		offset?: number
+		/** Defaults to student associations; omit filter by passing `null`. */
+		organizerKind?: CampusLifePublicOrganizerKind | string | null
 	}): Promise<PublicEventResponse[]> {
+		const organizerKind =
+			options?.organizerKind === undefined
+				? CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+				: options.organizerKind
 		return await this.performCampusLifeRequest<PublicEventResponse[]>(
 			'/api/v1/public/events',
 			{
+				organizer_kind: organizerKind ?? undefined,
 				organizer_id: options?.organizerId,
 				upcoming_only: options?.upcomingOnly,
 				limit: options?.limit,
@@ -146,9 +155,17 @@ class NeulandAPIClient {
 		)
 	}
 
-	async getPublicOrganizers(): Promise<PublicOrganizerResponse[]> {
+	async getPublicOrganizers(options?: {
+		/** Defaults to student associations; omit filter by passing `null`. */
+		organizerKind?: CampusLifePublicOrganizerKind | string | null
+	}): Promise<PublicOrganizerResponse[]> {
+		const organizerKind =
+			options?.organizerKind === undefined
+				? CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+				: options.organizerKind
 		return await this.performCampusLifeRequest<PublicOrganizerResponse[]>(
-			'/api/v1/public/organizers'
+			'/api/v1/public/organizers',
+			organizerKind != null ? { organizer_kind: organizerKind } : undefined
 		)
 	}
 
