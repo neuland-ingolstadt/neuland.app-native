@@ -14,25 +14,11 @@
 		6B49254CAF57EB9B7A1F63A3 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA14181733569B5ADBBBF29 /* ExpoModulesProvider.swift */; };
 		83FE99FF3AF145AC8F81DCC3 /* Default.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3898AA7806D44973872BCB37 /* Default.icon */; };
 		B7A10B2A2E72F85900578355 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = D399C92B36C75ECADC35ABF3 /* MapLibre */; };
-		B7A10B312E72F89700578355 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A10B302E72F89700578355 /* WidgetKit.framework */; };
-		B7A10B332E72F89700578355 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7A10B322E72F89700578355 /* SwiftUI.framework */; };
-		B7A10B3E2E72F89900578355 /* LaunchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B7A10B2F2E72F89700578355 /* LaunchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B7A10C632E73624300578355 /* Default.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3898AA7806D44973872BCB37 /* Default.icon */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BE7393049611E068770F6168 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 62DFF530279243F8180DBB9E /* PrivacyInfo.xcprivacy */; };
 		C2978E8824A44989B225AC44 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EE6C8E67FFE64425B4EFB2AB /* InfoPlist.strings */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		B7A10B3C2E72F89900578355 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B7A10B2E2E72F89700578355;
-			remoteInfo = LaunchWidgetExtension;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		B7A10B3F2E72F89900578355 /* Embed Foundation Extensions */ = {
@@ -41,7 +27,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				B7A10B3E2E72F89900578355 /* LaunchWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,7 +42,6 @@
 		63DC2FCB1B274109A4510AAC /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A270B90E2A498DF0D5B8C56D /* libPods-NeulandNext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NeulandNext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = NeulandNext/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B7A10B2F2E72F89700578355 /* LaunchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LaunchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7A10B302E72F89700578355 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		B7A10B322E72F89700578355 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
@@ -70,39 +54,6 @@
 		F25BF2D2D617998145654026 /* Pods-NeulandNext.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.release.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */;
-		};
-		B7F83D172E739EE800529E70 /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				LaunchWidgetControl.swift,
-			);
-			target = 13B07F861A680F5B00A75B9A /* NeulandNext */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		B7A10B342E72F89700578355 /* LaunchWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B7F83D172E739EE800529E70 /* Exceptions for "LaunchWidget" folder in "NeulandNext" target */,
-				B7A10B422E72F89900578355 /* Exceptions for "LaunchWidget" folder in "LaunchWidgetExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LaunchWidget;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -110,15 +61,6 @@
 			files = (
 				B7A10B2A2E72F85900578355 /* MapLibre in Frameworks */,
 				2E0176F44C8888867AF15D5F /* libPods-NeulandNext.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B7A10B2C2E72F89700578355 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B7A10B332E72F89700578355 /* SwiftUI.framework in Frameworks */,
-				B7A10B312E72F89700578355 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +121,6 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* NeulandNext */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				B7A10B342E72F89700578355 /* LaunchWidget */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				84BF4D3234D56453420DE3BA /* Pods */,
@@ -194,7 +135,6 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* NeulandNext.app */,
-				B7A10B2F2E72F89700578355 /* LaunchWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,7 +199,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				B7A10B3D2E72F89900578355 /* PBXTargetDependency */,
 			);
 			name = NeulandNext;
 			packageProductDependencies = (
@@ -268,26 +207,6 @@
 			productName = NeulandNext;
 			productReference = 13B07F961A680F5B00A75B9A /* NeulandNext.app */;
 			productType = "com.apple.product-type.application";
-		};
-		B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B7A10B432E72F89900578355 /* Build configuration list for PBXNativeTarget "LaunchWidgetExtension" */;
-			buildPhases = (
-				B7A10B2B2E72F89700578355 /* Sources */,
-				B7A10B2C2E72F89700578355 /* Frameworks */,
-				B7A10B2D2E72F89700578355 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				B7A10B342E72F89700578355 /* LaunchWidget */,
-			);
-			name = LaunchWidgetExtension;
-			productName = LaunchWidgetExtension;
-			productReference = B7A10B2F2E72F89700578355 /* LaunchWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -300,9 +219,6 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1250;
-					};
-					B7A10B2E2E72F89700578355 = {
-						CreatedOnToolsVersion = 26.0;
 					};
 				};
 			};
@@ -324,7 +240,6 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* NeulandNext */,
-				B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -341,14 +256,6 @@
 				3A107D7EA6CE4E45B8294DDD /* InfoPlist.strings in Resources */,
 				BE7393049611E068770F6168 /* PrivacyInfo.xcprivacy in Resources */,
 				83FE99FF3AF145AC8F81DCC3 /* Default.icon in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B7A10B2D2E72F89700578355 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B7A10C632E73624300578355 /* Default.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,22 +459,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B7A10B2B2E72F89700578355 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		B7A10B3D2E72F89900578355 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B7A10B2E2E72F89700578355 /* LaunchWidgetExtension */;
-			targetProxy = B7A10B3C2E72F89900578355 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -808,105 +700,6 @@
 			};
 			name = Release;
 		};
-		B7A10B402E72F89900578355 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
-				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = FSXB76X6V2;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LaunchWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LaunchWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 0.15.1;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app.LaunchWidget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		B7A10B412E72F89900578355 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Cat RainbowNeon Luxury RainbowGlow Hacker Retro ModernGreen ModernPink RainbowMoonLight";
-				ASSETCATALOG_COMPILER_APPICON_NAME = Default;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FSXB76X6V2;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LaunchWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LaunchWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 0.15.1;
-				MTL_FAST_MATH = YES;
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app.LaunchWidget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -924,15 +717,6 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B7A10B432E72F89900578355 /* Build configuration list for PBXNativeTarget "LaunchWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B7A10B402E72F89900578355 /* Debug */,
-				B7A10B412E72F89900578355 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
