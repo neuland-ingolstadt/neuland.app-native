@@ -1,0 +1,5 @@
+appId: ${APP_ID}
+---
+- runFlow: ../shared/continue-as-guest.yaml
+- assertVisible:
+    id: "screen.home"

@@ -1,0 +1,11 @@
+appId: ${APP_ID}
+---
+- runFlow: ../../shared/login-as-student.yaml
+- assertVisible:
+    id: "screen.home"
+- tapOn:
+    text: "Profile|Profil"
+- extendedWaitUntil:
+    visible:
+      id: "settings.header.student"
+    timeout: 15000

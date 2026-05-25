@@ -1,0 +1,19 @@
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    arguments:
+      EXDevClientLauncherURL: "http://localhost:8081"
+- runFlow:
+    when:
+      visible: "http://localhost.*"
+    commands:
+      - tapOn:
+          text: "http://localhost.*"
+- runFlow:
+    when:
+      visible: "Close|Schließen"
+    commands:
+      - tapOn:
+          text: "Close|Schließen"

@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+---
+- runFlow: launch-clean.yaml
+- extendedWaitUntil:
+    visible:
+      id: "onboarding.button.continue"
+    timeout: 10000
+- waitForAnimationToEnd
+- tapOn:
+    id: "onboarding.button.continue"
+- extendedWaitUntil:
+    visible:
+      id: "login.button.guest"
+    timeout: 10000
+- tapOn:
+    id: "login.button.guest"
+- extendedWaitUntil:
+    visible:
+      id: "screen.home"
+    timeout: 10000

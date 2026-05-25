@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+---
+- runFlow: ../shared/continue-as-guest.yaml
+- tapOn:
+    text: "Map|Karte"
+- extendedWaitUntil:
+    visible:
+      id: "screen.map"
+    timeout: 10000
+- runFlow:
+    when:
+      visible: "Allow While Using App|Beim Verwenden der App erlauben|Zulassen"
+    commands:
+      - tapOn:
+          text: "Allow While Using App|Beim Verwenden der App erlauben|Zulassen"
+- runFlow:
+    when:
+      visible:
+        id: "map.search.input"
+    commands:
+      - tapOn:
+          id: "map.search.input"
+      - inputText: "A"
+      - eraseText
+      - tapOn:
+          id: "map.search.cancel"
+- runFlow:
+    when:
+      notVisible:
+        id: "map.search.input"
+    commands:
+      - tapOn:
+          point: "50%,67%"
+      - inputText: "A"
+      - eraseText
+- assertVisible:
+    id: "screen.map"

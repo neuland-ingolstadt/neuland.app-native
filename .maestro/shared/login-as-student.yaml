@@ -1,0 +1,32 @@
+appId: ${APP_ID}
+---
+- runFlow: launch-clean.yaml
+- extendedWaitUntil:
+    visible:
+      id: "onboarding.button.continue"
+    timeout: 10000
+- waitForAnimationToEnd
+- tapOn:
+    id: "onboarding.button.continue"
+- extendedWaitUntil:
+    visible:
+      id: "login.input.username"
+    timeout: 10000
+- tapOn:
+    id: "login.input.username"
+- inputText: "${USERNAME}"
+- tapOn:
+    id: "login.input.password"
+- inputText: "${PASSWORD}"
+- tapOn:
+    id: "login.button.sign-in"
+- runFlow:
+    when:
+      visible: "Später|Not Now|Nicht jetzt"
+    commands:
+      - tapOn:
+          text: "Später|Not Now|Nicht jetzt"
+- extendedWaitUntil:
+    visible:
+      id: "screen.home"
+    timeout: 30000

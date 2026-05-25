@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+---
+- runFlow: ../shared/continue-as-guest.yaml
+- tapOn:
+    text: "Calendar|Kalender"
+- assertVisible:
+    id: "screen.timetable"
+- extendedWaitUntil:
+    visible:
+      id: "error.title"
+    timeout: 10000
+- assertVisible:
+    text: "Sign in required|Anmeldung erforderlich"
+- assertVisible:
+    id: "error.button.primary"

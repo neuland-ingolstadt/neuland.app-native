@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+---
+- runFlow: ../shared/continue-as-guest.yaml
+- tapOn:
+    text: "Profile|Profil"
+- assertVisible:
+    id: "screen.settings"
+- tapOn:
+    id: "settings.item.theme"
+- assertVisible:
+    id: "screen.theme"
+- back
+- assertVisible:
+    id: "screen.settings"
+- tapOn:
+    id: "settings.item.about"
+- assertVisible:
+    id: "screen.about"
+- tapOn:
+    id: "about.item.legal"
+- assertVisible:
+    id: "screen.legal"
+- tapOn:
+    id: "legal.item.licenses"
+- assertVisible:
+    id: "screen.licenses"

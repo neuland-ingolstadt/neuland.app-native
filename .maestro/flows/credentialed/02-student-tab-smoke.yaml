@@ -1,0 +1,28 @@
+appId: ${APP_ID}
+---
+- runFlow: ../../shared/login-as-student.yaml
+- tapOn:
+    text: "Calendar|Kalender"
+- assertVisible:
+    id: "screen.timetable"
+- assertNotVisible:
+    text: "Sign in required|Anmeldung erforderlich"
+- tapOn:
+    text: "Map|Karte"
+- assertVisible:
+    id: "screen.map"
+- tapOn:
+    text: "Food|Essen"
+- assertVisible:
+    id: "screen.food"
+- tapOn:
+    text: "Profile|Profil"
+- assertVisible:
+    id: "screen.settings"
+- extendedWaitUntil:
+    visible:
+      id: "settings.header.student"
+    timeout: 15000
+- tapOn: "Home"
+- assertVisible:
+    id: "screen.home"

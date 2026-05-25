@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+---
+- runFlow: ../../shared/login-as-student.yaml
+- tapOn:
+    text: "Calendar|Kalender"
+- assertVisible:
+    id: "screen.timetable"
+- assertNotVisible:
+    text: "Sign in required|Anmeldung erforderlich"

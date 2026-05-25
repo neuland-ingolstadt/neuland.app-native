@@ -1,0 +1,25 @@
+appId: ${APP_ID}
+---
+- runFlow: ../shared/continue-as-guest.yaml
+- tapOn:
+    text: "Food|Essen"
+- extendedWaitUntil:
+    visible:
+      id: "screen.food"
+    timeout: 10000
+- runFlow:
+    when:
+      visible:
+        id: "food.day-picker.0"
+    commands:
+      - tapOn:
+          id: "food.day-picker.0"
+- runFlow:
+    when:
+      visible:
+        id: "food.day-picker.1"
+    commands:
+      - tapOn:
+          id: "food.day-picker.1"
+- assertVisible:
+    id: "screen.food"
