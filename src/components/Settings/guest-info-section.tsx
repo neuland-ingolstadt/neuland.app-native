@@ -10,6 +10,7 @@ export default function GuestInfoSection(): React.JSX.Element {
 
 	return (
 		<Pressable
+			testID="settings.guest.banner"
 			style={styles.guestBanner}
 			onPress={() => {
 				router.navigate('/login')

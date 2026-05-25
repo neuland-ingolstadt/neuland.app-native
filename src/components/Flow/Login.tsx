@@ -68,8 +68,12 @@ export default function Login(): React.JSX.Element {
 		<TouchableWithoutFeedback
 			onPress={Keyboard.dismiss}
 			disabled={Platform.OS === 'web'}
+			accessible={false}
 		>
-			<View style={{ ...styles.container, paddingTop: insets.top }}>
+			<View
+				testID="screen.login"
+				style={{ ...styles.container, paddingTop: insets.top }}
+			>
 				<KeyboardAvoidingView
 					style={styles.keyboardContainer}
 					behavior="padding"

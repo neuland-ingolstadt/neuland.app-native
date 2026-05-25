@@ -15,6 +15,7 @@ export const HomeHeaderRight = (): React.JSX.Element | undefined => {
 	return (
 		<Link asChild href="/dashboard">
 			<Pressable
+				testID="header.dashboard-settings"
 				hitSlop={10}
 				style={styles.headerButton}
 				accessibilityLabel={t('button.settingsDashboard')}

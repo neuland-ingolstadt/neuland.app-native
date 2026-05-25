@@ -217,7 +217,7 @@ const LoginForm = ({
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.loginContainer}>
+			<View testID="login.form" style={styles.loginContainer}>
 				<Text style={styles.welcomeText}>{t('login.getStarted')}</Text>
 				<Text style={styles.subtitleText}>{t('login.title2')}</Text>
 
@@ -239,6 +239,7 @@ const LoginForm = ({
 							style={{ color: theme.colors.labelColor }}
 						/>
 						<TextInput
+							testID="login.input.username"
 							style={styles.textInput}
 							selectionColor={theme.colors.primary}
 							placeholderTextColor={theme.colors.labelColor}
@@ -280,6 +281,7 @@ const LoginForm = ({
 							style={{ color: theme.colors.labelColor }}
 						/>
 						<TextInput
+							testID="login.input.password"
 							style={styles.textInput}
 							selectionColor={theme.colors.primary}
 							placeholderTextColor={theme.colors.labelColor}
@@ -328,6 +330,7 @@ const LoginForm = ({
 				</View>
 
 				<TouchableOpacity
+					testID="login.button.sign-in"
 					disabled={signInDisabled}
 					onPress={() => {
 						login().catch((error: unknown) => {
@@ -355,6 +358,7 @@ const LoginForm = ({
 				</View>
 
 				<TouchableOpacity
+					testID="login.button.guest"
 					style={styles.guestButton}
 					onPress={() => {
 						guestLogin().catch((error: unknown) => {

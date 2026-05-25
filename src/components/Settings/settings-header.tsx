@@ -57,6 +57,7 @@ export default function SettingsHeader({
 		return (
 			<View style={styles.container}>
 				<Pressable
+					testID="settings.header.student"
 					onPress={() => {
 						router.navigate('/profile')
 					}}
@@ -161,6 +162,11 @@ export default function SettingsHeader({
 
 	return (
 		<Pressable
+			testID={
+				userKind === 'employee'
+					? 'settings.header.employee'
+					: 'settings.header.guest'
+			}
 			onPress={() => {
 				if (userKind === 'employee') {
 					onLogout()

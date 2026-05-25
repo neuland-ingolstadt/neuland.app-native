@@ -25,6 +25,7 @@ interface InfoBoxProps {
 	style?: ViewStyle
 	href: RelativePathString
 	isExternalLink?: boolean
+	testID?: string
 }
 
 const InfoBox = ({
@@ -33,13 +34,14 @@ const InfoBox = ({
 	icon,
 	href,
 	style,
-	isExternalLink
+	isExternalLink,
+	testID
 }: InfoBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
 		<Link href={href} asChild style={[styles.container, style as TextStyle]}>
-			<Pressable>
+			<Pressable testID={testID}>
 				<View style={styles.iconContainer}>
 					<PlatformIcon
 						ios={{

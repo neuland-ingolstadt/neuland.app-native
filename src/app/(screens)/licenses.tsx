@@ -99,6 +99,7 @@ export default function Licenses(): React.JSX.Element {
 	]
 	return (
 		<ScrollView
+			testID="screen.licenses"
 			contentContainerStyle={styles.container}
 			contentInsetAdjustmentBehavior="automatic"
 		>

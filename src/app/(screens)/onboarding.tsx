@@ -76,6 +76,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 		const { styles } = useStyles(stylesheet)
 		return (
 			<Pressable
+				testID="onboarding.button.continue"
 				style={styles.button}
 				onPress={() => {
 					if (Platform.OS === 'ios') {

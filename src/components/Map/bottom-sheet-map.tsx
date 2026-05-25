@@ -97,9 +97,19 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 			enableDynamicSizing={false}
 			handleIndicatorStyle={styles.indicator}
 		>
-			<View style={styles.page}>
+			<View
+				testID="map.bottom-sheet.content"
+				accessibilityViewIsModal
+				accessibilityRole="menu"
+				accessibilityLabel="Map search bottom sheet"
+				collapsable={false}
+				style={styles.page}
+			>
 				<View style={styles.inputContainer}>
 					<TextInput
+						testID="map.search.input"
+						accessibilityLabel={t('pages.map.search.hint')}
+						importantForAccessibility="yes"
 						ref={textInputRef}
 						style={styles.textInput}
 						placeholder={t('pages.map.search.hint')}
@@ -134,6 +144,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
 					<Animated.View style={[styles.cancelContainer, animatedCancelStyle]}>
 						<Pressable
+							testID="map.search.cancel"
 							onPress={() => {
 								setLocalSearch('')
 								textInputRef.current?.blur()

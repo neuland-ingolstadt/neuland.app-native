@@ -161,6 +161,7 @@ export default function ErrorView({
 			title === notLoggedInError) &&
 			title !== permissionError ? (
 			<Pressable
+				testID="error.button.primary"
 				style={styles.logoutContainer(inModal)}
 				onPress={buttonProps?.onPress}
 			>
@@ -208,7 +209,7 @@ export default function ErrorView({
 							size: 64
 						}}
 					/>
-					<Text style={styles.errorTitle} selectable>
+					<Text testID="error.title" style={styles.errorTitle} selectable>
 						{getTitle().slice(0, 150)}
 					</Text>
 					<Text style={styles.errorInfo}>{getMessage()}</Text>

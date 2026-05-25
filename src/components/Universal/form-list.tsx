@@ -132,6 +132,7 @@ const RenderSectionItems: React.FC<{
 			{items.map((item, index) => (
 				<React.Fragment key={index}>
 					<Pressable
+						testID={item.testID}
 						onPress={() => {
 							handlePress(item.onPress)
 						}}

@@ -23,6 +23,7 @@ export default function StudentInfoSection({
 		<>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
+					testID="settings.student.grades"
 					title={t('infoBoxes.gradesAndSubjects')}
 					value={ects !== undefined ? `${ects} ECTS` : '-'}
 					icon={{
@@ -34,6 +35,7 @@ export default function StudentInfoSection({
 					style={styles.wideBox}
 				/>
 				<InfoBox
+					testID="settings.student.lecturers"
 					title={t('infoBoxes.lecturers')}
 					value={personalLecturersCount?.toString() ?? '-'}
 					icon={{
@@ -47,6 +49,7 @@ export default function StudentInfoSection({
 			</View>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
+					testID="settings.student.printer"
 					title={t('infoBoxes.printerBalance')}
 					value={printerBalance ?? '-'}
 					icon={{
@@ -60,6 +63,7 @@ export default function StudentInfoSection({
 				/>
 
 				<InfoBox
+					testID="settings.student.library"
 					value={t('infoBoxes.library')}
 					title={t('infoBoxes.view')}
 					icon={{

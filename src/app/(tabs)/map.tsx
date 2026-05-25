@@ -98,11 +98,15 @@ export default function MapRootScreen(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			<View style={styles.page}>
+			<View testID="screen.map" style={styles.page}>
 				{isPageOpen ? (
 					<MapContext.Provider value={contextValue}>
 						<SafeAreaProvider>
-							<SafeAreaView style={styles.page} edges={edges as Edges}>
+							<SafeAreaView
+								testID="screen.map.content"
+								style={styles.page}
+								edges={edges as Edges}
+							>
 								<MapScreen />
 							</SafeAreaView>
 						</SafeAreaProvider>

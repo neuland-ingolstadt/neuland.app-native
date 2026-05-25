@@ -59,6 +59,7 @@ export default function Theme(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="screen.theme"
 			contentContainerStyle={[styles.container, { paddingTop: headerPadding }]}
 		>
 			{Platform.OS !== 'web' && (

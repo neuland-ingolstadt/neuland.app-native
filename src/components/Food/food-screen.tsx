@@ -184,6 +184,7 @@ function FoodScreen(): React.JSX.Element {
 			return (
 				<View style={buttonStyle} key={index}>
 					<Pressable
+						testID={`food.day-picker.${index}`}
 						onPress={() => {
 							handleDayPress(index)
 						}}
@@ -226,7 +227,7 @@ function FoodScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView testID="screen.food" style={styles.page} edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
 					<View style={styles.loadingContainer}>
 						<FoodLoadingIndicator size={140} />

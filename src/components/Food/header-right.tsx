@@ -12,6 +12,7 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 	return (
 		<Link asChild href="/food-preferences">
 			<Pressable
+				testID="header.food-preferences"
 				hitSlop={10}
 				style={styles.headerButton}
 				accessibilityLabel={t('button.foodPreferences')}

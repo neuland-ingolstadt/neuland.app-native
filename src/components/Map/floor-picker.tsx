@@ -31,6 +31,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 		<View style={styles.ButtonArea}>
 			{!showAllFloors && (
 				<Pressable
+					testID="map.floor.current"
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
@@ -61,6 +62,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 			)}
 			{showAllFloors && (
 				<Pressable
+					testID="map.floor.close"
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
@@ -87,6 +89,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 				<View style={styles.buttonAreaSection}>
 					{floors.map((floor, index) => (
 						<Pressable
+							testID={`map.floor.${floor}`}
 							onPress={() => {
 								if (Platform.OS === 'ios') {
 									void Haptics.selectionAsync()
@@ -116,6 +119,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 			)}
 			{Platform.OS !== 'web' && (
 				<Pressable
+					testID="map.location.center"
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
 					}}

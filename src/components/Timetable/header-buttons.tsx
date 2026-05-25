@@ -22,6 +22,7 @@ export function HeaderRight({
 	return (
 		<View style={styles.container}>
 			<Pressable
+				testID="header.timetable.today"
 				onPress={setToday}
 				hitSlop={10}
 				accessibilityLabel={t('button.timetableBack')}
@@ -45,6 +46,7 @@ export function HeaderRight({
 			{Platform.OS === 'web' && onPressPrevious && onPressNext && (
 				<View style={styles.subButtons}>
 					<Pressable
+						testID="header.timetable.previous"
 						onPress={onPressPrevious}
 						hitSlop={10}
 						accessibilityLabel={t('button.previous')}
@@ -57,6 +59,7 @@ export function HeaderRight({
 						/>
 					</Pressable>
 					<Pressable
+						testID="header.timetable.next"
 						onPress={onPressNext}
 						hitSlop={10}
 						accessibilityLabel={t('button.next')}
@@ -71,6 +74,7 @@ export function HeaderRight({
 				</View>
 			)}
 			<Pressable
+				testID="header.timetable.preferences"
 				onPress={onPressPreferences}
 				style={styles.container}
 				hitSlop={10}

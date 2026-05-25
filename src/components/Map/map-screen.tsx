@@ -709,7 +709,7 @@ const MapScreen = (): React.JSX.Element => {
 	}, [])
 
 	return (
-		<View style={styles.map}>
+		<View testID="map.screen" style={styles.map}>
 			{mapLoadState === LoadingState.ERROR && (
 				<View style={styles.errorContainer}>
 					<ErrorView
@@ -725,6 +725,9 @@ const MapScreen = (): React.JSX.Element => {
 			)}
 
 			<View
+				testID="map.view-container"
+				accessibilityElementsHidden
+				importantForAccessibility="no-hide-descendants"
 				style={{
 					...styles.map,
 					marginBottom: 0

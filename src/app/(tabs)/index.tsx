@@ -136,7 +136,7 @@ const HomeScreen = memo(function HomeScreen() {
 
 	return shownDashboardEntries === null ||
 		shownDashboardEntries.length === 0 ? (
-		<View style={styles.errorContainer}>
+		<View testID="screen.home" style={styles.errorContainer}>
 			<ErrorView
 				title={t('dashboard.noShown', { ns: 'settings' })}
 				message={t('dashboard.noShownDescription', { ns: 'settings' })}
@@ -155,6 +155,7 @@ const HomeScreen = memo(function HomeScreen() {
 		</View>
 	) : columns === 1 ? (
 		<FlashList
+			testID="screen.home"
 			estimatedItemSize={130}
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
@@ -168,6 +169,7 @@ const HomeScreen = memo(function HomeScreen() {
 		/>
 	) : (
 		<MasonryFlashList
+			testID="screen.home"
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
 			contentInset={{ top: 0, bottom: theme.margins.bottomSafeArea }}

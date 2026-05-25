@@ -6,6 +6,7 @@ import type { MaterialIcon } from './material-icons'
 export interface SectionGroup {
 	title?: string
 	value?: string
+	testID?: string
 	customComponent?: (textStyle: StyleProp<TextStyle>) => React.ReactNode
 	icon?: {
 		ios: string

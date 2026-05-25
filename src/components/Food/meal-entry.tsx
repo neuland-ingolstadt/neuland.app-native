@@ -104,6 +104,7 @@ export const MealEntry = memo(
 		const cardContent = (
 			<Link asChild href={`/food/${meal.id}`}>
 				<Pressable
+					testID={`food.meal.${meal.id}`}
 					delayLongPress={300}
 					onLongPress={() => {
 						/* nothing */

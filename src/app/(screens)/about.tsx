@@ -122,6 +122,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: 'Version',
+					testID: 'about.item.version',
 					icon: {
 						ios: 'info.circle',
 						android: 'info',
@@ -135,6 +136,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: 'Changelog',
+					testID: 'about.item.changelog',
 					icon: {
 						ios: 'list.bullet.rectangle',
 						android: 'article',
@@ -146,6 +148,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('about.formlist.systemStatus'),
+					testID: 'about.item.system-status',
 					icon: {
 						ios: 'bubble.left.and.exclamationmark.bubble.right',
 						android: 'troubleshoot',
@@ -159,6 +162,7 @@ export default function About(): React.JSX.Element {
 					? [
 							{
 								title: t('about.formlist.memberArea'),
+								testID: 'about.item.member-area',
 								icon: {
 									ios: 'person.crop.circle.badge.checkmark',
 									android: 'verified_user' as MaterialIcon,
@@ -177,6 +181,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: t('about.formlist.contact.feedback'),
+					testID: 'about.item.feedback',
 					icon: {
 						ios: 'envelope',
 						android: 'mail',
@@ -189,6 +194,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('about.formlist.appWebsite'),
+					testID: 'about.item.website',
 					icon: linkIcon,
 					onPress: async () =>
 						(await Linking.openURL('https://neuland.app')) as Promise<void>
@@ -200,6 +206,7 @@ export default function About(): React.JSX.Element {
 									Platform.OS === 'ios'
 										? t('about.formlist.contact.rateiOS')
 										: t('about.formlist.contact.rateAndroid'),
+								testID: 'about.item.rate',
 								icon: {
 									ios: 'star' as const,
 									android: 'star' as const,
@@ -227,6 +234,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: t('about.formlist.legal.button'),
+					testID: 'about.item.legal',
 					icon: {
 						ios: 'hand.raised',
 						android: 'privacy_tip',
@@ -289,6 +297,7 @@ export default function About(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="screen.about"
 			contentContainerStyle={[
 				styles.contentContainer,
 				{ paddingTop: headerPadding }

@@ -129,6 +129,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 			<CardContextMenu
 				card={
 					<Pressable
+						testID={`dashboard.card.${title}`}
 						disabled={onPressRoute == null}
 						onPress={() => {
 							if (onPressRoute != null) {
@@ -156,6 +157,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 			disabled={onPressRoute == null}
 		>
 			<Pressable
+				testID={`dashboard.card.${title}`}
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				style={styles.pressable}

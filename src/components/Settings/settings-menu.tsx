@@ -58,6 +58,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			items: [
 				{
 					title: 'Dashboard',
+					testID: 'settings.item.dashboard',
 					icon: {
 						ios: 'rectangle.stack',
 						android: 'dashboard_customize',
@@ -69,6 +70,7 @@ export default function SettingsMenu(): React.JSX.Element {
 				},
 				{
 					title: t('menu.formlist.preferences.food'),
+					testID: 'settings.item.food',
 					icon: {
 						android: 'restaurant',
 						ios: 'fork.knife',
@@ -82,6 +84,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					? [
 							{
 								title: t('menu.formlist.preferences.timetable'),
+								testID: 'settings.item.timetable',
 								icon: {
 									ios: 'calendar',
 									android: 'event' as MaterialIcon,
@@ -95,6 +98,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					: []),
 				{
 					title: t('menu.formlist.preferences.language'),
+					testID: 'settings.item.language',
 					icon: {
 						ios: 'globe',
 						android: 'language',
@@ -118,6 +122,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			items: [
 				{
 					title: t('menu.formlist.appearance.theme'),
+					testID: 'settings.item.theme',
 					icon: {
 						ios: 'moon.stars',
 						android: 'routine',
@@ -131,6 +136,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					? [
 							{
 								title: 'App Icon',
+								testID: 'settings.item.app-icon',
 								icon: {
 									ios: 'star.square.on.square',
 									android: '' as MaterialIcon,
@@ -149,6 +155,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			items: [
 				{
 					title: t('menu.formlist.legal.about'),
+					testID: 'settings.item.about',
 					icon: {
 						ios: 'info.circle',
 						android: 'info',
@@ -160,6 +167,7 @@ export default function SettingsMenu(): React.JSX.Element {
 				},
 				{
 					title: t('menu.formlist.legal.share'),
+					testID: 'settings.item.share',
 					icon: {
 						ios: 'square.and.arrow.up',
 						android: 'share',
@@ -188,6 +196,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					? [
 							{
 								title: t('menu.formlist.legal.download'),
+								testID: 'settings.item.download',
 								icon: {
 									ios: 'square.and.arrow.up',
 									android: 'share' as MaterialIcon,

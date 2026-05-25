@@ -84,7 +84,9 @@ function LoginAnimatedText(): React.JSX.Element {
 	})
 	return (
 		<View>
-			<Text style={styles.header1}>{t('login.title1')}</Text>
+			<Text testID="login.title" style={styles.header1}>
+				{t('login.title1')}
+			</Text>
 			<TouchableWithoutFeedback
 				onPress={() => {
 					goToNextText()
@@ -92,6 +94,7 @@ function LoginAnimatedText(): React.JSX.Element {
 						void selectionAsync()
 					}
 				}}
+				accessible={false}
 			>
 				<Animated.View style={animatedStyle}>
 					<Text style={styles.header3} numberOfLines={1} adjustsFontSizeToFit>

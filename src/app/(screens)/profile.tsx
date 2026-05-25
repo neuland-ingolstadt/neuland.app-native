@@ -235,6 +235,7 @@ export default function Profile(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="screen.profile"
 			contentContainerStyle={styles.contentContainer}
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
@@ -295,6 +296,7 @@ export default function Profile(): React.JSX.Element {
 				))}
 
 			<Pressable
+				testID="profile.button.logout"
 				onPress={logoutAlert}
 				style={styles.logoutButton}
 				disabled={isLoggingOut}

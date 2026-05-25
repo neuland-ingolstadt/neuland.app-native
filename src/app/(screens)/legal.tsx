@@ -20,6 +20,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: t('legal.formlist.legal.privacy'),
+					testID: 'legal.item.privacy',
 					icon: {
 						ios: 'lock.shield',
 						android: 'shield_lock',
@@ -30,6 +31,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('legal.formlist.legal.imprint'),
+					testID: 'legal.item.imprint',
 					icon: {
 						ios: 'doc.text',
 						android: 'description',
@@ -40,6 +42,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('navigation.licenses.title', { ns: 'navigation' }),
+					testID: 'legal.item.licenses',
 					icon: {
 						ios: 'shield',
 						android: 'shield',
@@ -56,6 +59,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: 'Neuland Ingolstadt e.V.',
+					testID: 'legal.item.neuland',
 					icon: {
 						ios: 'building.2',
 						android: 'apartment',
@@ -68,6 +72,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('legal.formlist.us.source'),
+					testID: 'legal.item.source',
 					icon: {
 						ios: 'chevron.left.slash.chevron.right',
 						android: 'code',
@@ -80,6 +85,7 @@ export default function About(): React.JSX.Element {
 				},
 				{
 					title: t('legal.formlist.us.faq'),
+					testID: 'legal.item.faq',
 					icon: {
 						ios: 'questionmark.circle',
 						android: 'help',
@@ -96,6 +102,7 @@ export default function About(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="screen.legal"
 			contentContainerStyle={[
 				styles.contentContainer,
 				{ paddingTop: headerPadding }
