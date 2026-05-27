@@ -66,6 +66,8 @@ export default function ClEventsPage({
 	const didLongPressRef = useRef(false)
 	const clubsScrollRef = useRef<ScrollView>(null)
 	const skipClubScrollRef = useRef(true)
+	const selectedOrganizerIdRef = useRef(selectedOrganizerId)
+	selectedOrganizerIdRef.current = selectedOrganizerId
 
 	const organizersQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
@@ -136,19 +138,17 @@ export default function ClEventsPage({
 	}, [])
 
 	const onFilterPress = (organizerId: number | null): void => {
-		let didChange = false
-		setSelectedOrganizerId((current) => {
-			const nextId = organizerId === current ? null : organizerId
-			if (nextId === current) {
-				return current
-			}
-			didChange = true
-			if (shouldAnimateClubOrder(current, nextId, baseFeaturedOrganizers)) {
-				LayoutAnimation.configureNext(clubOrderLayoutAnimation)
-			}
-			return nextId
-		})
-		if (didChange && Platform.OS === 'ios') {
+		const current = selectedOrganizerIdRef.current
+		const nextId = organizerId === current ? null : organizerId
+		if (nextId === current) {
+			return
+		}
+		if (shouldAnimateClubOrder(current, nextId, baseFeaturedOrganizers)) {
+			LayoutAnimation.configureNext(clubOrderLayoutAnimation)
+		}
+		selectedOrganizerIdRef.current = nextId
+		setSelectedOrganizerId(nextId)
+		if (Platform.OS === 'ios') {
 			void selectionAsync()
 		}
 	}
