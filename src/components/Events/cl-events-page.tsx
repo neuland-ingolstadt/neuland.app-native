@@ -136,21 +136,19 @@ export default function ClEventsPage({
 	}, [])
 
 	const onFilterPress = (organizerId: number | null): void => {
-		const nextId = organizerId === selectedOrganizerId ? null : organizerId
-		if (nextId === selectedOrganizerId) {
-			return
-		}
-		if (
-			shouldAnimateClubOrder(
-				selectedOrganizerId,
-				nextId,
-				baseFeaturedOrganizers
-			)
-		) {
-			LayoutAnimation.configureNext(clubOrderLayoutAnimation)
-		}
-		setSelectedOrganizerId(nextId)
-		if (Platform.OS === 'ios') {
+		let didChange = false
+		setSelectedOrganizerId((current) => {
+			const nextId = organizerId === current ? null : organizerId
+			if (nextId === current) {
+				return current
+			}
+			didChange = true
+			if (shouldAnimateClubOrder(current, nextId, baseFeaturedOrganizers)) {
+				LayoutAnimation.configureNext(clubOrderLayoutAnimation)
+			}
+			return nextId
+		})
+		if (didChange && Platform.OS === 'ios') {
 			void selectionAsync()
 		}
 	}
