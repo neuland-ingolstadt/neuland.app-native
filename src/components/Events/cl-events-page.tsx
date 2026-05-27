@@ -3,15 +3,17 @@ import { type UseQueryResult, useQuery } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import { router } from 'expo-router'
 import type React from 'react'
-import { memo, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	LayoutAnimation,
 	Platform,
 	Pressable,
 	RefreshControl,
 	ScrollView,
 	StyleSheet,
 	Text,
+	UIManager,
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -27,6 +29,30 @@ import { EmptyEventsAnimation } from './empty-events-animation'
 
 const MemoizedEventRow = memo(CLEventRow)
 
+const clubOrderLayoutAnimation = {
+	duration: 250,
+	update: {
+		type: LayoutAnimation.Types.easeInEaseOut
+	}
+} as const
+
+const shouldAnimateClubOrder = (
+	currentId: number | null,
+	nextId: number | null,
+	organizers: CampusLifeOrganizer[]
+): boolean => {
+	if (currentId === nextId) {
+		return false
+	}
+	if (currentId != null) {
+		return true
+	}
+	if (nextId == null) {
+		return false
+	}
+	return organizers.findIndex((organizer) => organizer.id === nextId) > 0
+}
+
 export default function ClEventsPage({
 	clEventsResult
 }: {
@@ -38,6 +64,8 @@ export default function ClEventsPage({
 		null
 	)
 	const didLongPressRef = useRef(false)
+	const clubsScrollRef = useRef<ScrollView>(null)
+	const skipClubScrollRef = useRef(true)
 
 	const organizersQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
@@ -46,12 +74,28 @@ export default function ClEventsPage({
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const featuredOrganizers = useMemo<CampusLifeOrganizer[]>(() => {
+	const baseFeaturedOrganizers = useMemo<CampusLifeOrganizer[]>(() => {
 		if (organizersQuery.data == null) {
 			return []
 		}
 		return organizersQuery.data.slice(0, 8)
 	}, [organizersQuery.data])
+
+	const featuredOrganizers = useMemo<CampusLifeOrganizer[]>(() => {
+		if (selectedOrganizerId == null) {
+			return baseFeaturedOrganizers
+		}
+		const selectedIndex = baseFeaturedOrganizers.findIndex(
+			(organizer) => organizer.id === selectedOrganizerId
+		)
+		if (selectedIndex <= 0) {
+			return baseFeaturedOrganizers
+		}
+		const reordered = [...baseFeaturedOrganizers]
+		const [selected] = reordered.splice(selectedIndex, 1)
+		reordered.unshift(selected)
+		return reordered
+	}, [baseFeaturedOrganizers, selectedOrganizerId])
 
 	const remainingOrganizersCount = useMemo(() => {
 		if (organizersQuery.data == null) {
@@ -84,17 +128,41 @@ export default function ClEventsPage({
 		refetchByUser: refetchByUserClEvents
 	} = useRefreshByUser(clEventsResult.refetch)
 
+	useEffect(() => {
+		if (Platform.OS !== 'android') {
+			return
+		}
+		UIManager.setLayoutAnimationEnabledExperimental?.(true)
+	}, [])
+
 	const onFilterPress = (organizerId: number | null): void => {
-		setSelectedOrganizerId((current) => {
-			if (organizerId === current) {
-				return null
-			}
-			return organizerId
-		})
+		const nextId =
+			organizerId === selectedOrganizerId ? null : organizerId
+		if (nextId === selectedOrganizerId) {
+			return
+		}
+		if (
+			shouldAnimateClubOrder(
+				selectedOrganizerId,
+				nextId,
+				baseFeaturedOrganizers
+			)
+		) {
+			LayoutAnimation.configureNext(clubOrderLayoutAnimation)
+		}
+		setSelectedOrganizerId(nextId)
 		if (Platform.OS === 'ios') {
 			void selectionAsync()
 		}
 	}
+
+	useEffect(() => {
+		if (skipClubScrollRef.current) {
+			skipClubScrollRef.current = false
+			return
+		}
+		clubsScrollRef.current?.scrollTo({ x: 0, animated: true })
+	}, [selectedOrganizerId])
 
 	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
 		<View style={styles.rowWrapper}>
@@ -158,6 +226,7 @@ export default function ClEventsPage({
 												</Pressable>
 											</View>
 											<ScrollView
+												ref={clubsScrollRef}
 												horizontal
 												showsHorizontalScrollIndicator={false}
 												contentContainerStyle={styles.clubsScrollContent}
@@ -181,7 +250,7 @@ export default function ClEventsPage({
 																styles.selectedClubChipText
 														]}
 													>
-														{t('pages.clEvents.clubs.viewAll')}
+														{t('pages.clEvents.clubs.filterAll')}
 													</Text>
 												</Pressable>
 												{featuredOrganizers.map((organizer) => (
