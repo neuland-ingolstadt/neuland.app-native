@@ -9,9 +9,10 @@ appId: ${APP_ID}
     id: "settings.item.theme"
 - assertVisible:
     id: "screen.theme"
-- back
+- tapOn: "Home"
 - assertVisible:
     id: "screen.settings"
+- scroll
 - tapOn:
     id: "settings.item.about"
 - assertVisible:

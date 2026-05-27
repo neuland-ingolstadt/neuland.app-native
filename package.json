@@ -23,10 +23,10 @@
 		"codegen": "graphql-codegen --config config/codegen.yml",
 		"changelog": "git cliff --config config/cliff.toml --output CHANGELOG.md",
 		"pkgs": "bunx expo install --check",
-		"e2e:ios": "APP_ID=de.neuland-ingolstadt.neuland-app maestro test .maestro/flows/*.yaml",
-		"e2e:android": "APP_ID=app.neuland maestro test .maestro/flows/*.yaml",
-		"e2e:ios:credentialed": "APP_ID=de.neuland-ingolstadt.neuland-app maestro test .maestro/flows/credentialed/*.yaml",
-		"e2e:android:credentialed": "APP_ID=app.neuland maestro test .maestro/flows/credentialed/*.yaml"
+		"e2e:ios": "maestro test -e APP_ID=de.neuland-ingolstadt.neuland-app .maestro/flows/*.yaml",
+		"e2e:android": "maestro test -e APP_ID=app.neuland .maestro/flows/*.yaml",
+		"e2e:ios:credentialed": "maestro test -e APP_ID=de.neuland-ingolstadt.neuland-app .maestro/flows/credentialed/*.yaml",
+		"e2e:android:credentialed": "maestro test -e APP_ID=app.neuland .maestro/flows/credentialed/*.yaml"
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.3.10",
