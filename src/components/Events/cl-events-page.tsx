@@ -136,8 +136,7 @@ export default function ClEventsPage({
 	}, [])
 
 	const onFilterPress = (organizerId: number | null): void => {
-		const nextId =
-			organizerId === selectedOrganizerId ? null : organizerId
+		const nextId = organizerId === selectedOrganizerId ? null : organizerId
 		if (nextId === selectedOrganizerId) {
 			return
 		}
