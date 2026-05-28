@@ -346,6 +346,7 @@
 			"clubs": {
 				"title": "Vereine entdecken",
 				"viewAll": "Alle Vereine",
+				"filterAll": "Alle",
 				"clubs": "Vereine",
 				"missingDescription": "Keine Beschreibung verfügbar.",
 				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
