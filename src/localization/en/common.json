@@ -346,6 +346,7 @@
 			"clubs": {
 				"title": "Discover clubs",
 				"viewAll": "All clubs",
+				"filterAll": "All",
 				"clubs": "clubs",
 				"missingDescription": "No description available.",
 				"footerInfo": "The clubs are ordered by activity and profile completeness."
