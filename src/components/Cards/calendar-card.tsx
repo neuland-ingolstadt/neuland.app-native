@@ -73,6 +73,13 @@ const CalendarCard = (): React.JSX.Element => {
 	})
 
 	useEffect(() => {
+		const nowMs = time.getTime()
+		// Next relevant moment per event: begin if the event has not started yet, end if it's already ongoing
+		const effectiveMs = (item: { begin: Date; end?: Date }) =>
+			item.begin.getTime() > nowMs
+				? item.begin.getTime()
+				: (item.end ?? item.begin).getTime()
+
 		const combined = [
 			...calendar.map((item) => ({ ...item, isExam: false })),
 			...(exams ?? [])
@@ -80,28 +87,23 @@ const CalendarCard = (): React.JSX.Element => {
 			.map((item) => ({ ...item, begin: new Date(item.begin) }))
 			.filter((x) => x.begin > time || (x.end ?? time) > time)
 			.sort((a, b) => {
-				// First, prioritize single-day events and exams over multi-day events
-				const aIsSingleDay = !a.end || a.isExam
-				const bIsSingleDay = !b.end || b.isExam
-
-				// If one is single-day and the other is multi-day, prioritize single-day
-				if (aIsSingleDay && !bIsSingleDay) return -1
-				if (!aIsSingleDay && bIsSingleDay) return 1
-
-				// If both are the same type (both single-day or both multi-day), sort by start time
-				const dateComparison = a.begin.getTime() - b.begin.getTime()
+				// Sort by the next relevant moment
+				// For single-day events, this is the date,
+				// for multi-day events, this is the start or end date, depending on
+				// whether the event is has already started or not.
+				const dateComparison = effectiveMs(a) - effectiveMs(b)
 				if (dateComparison !== 0) {
 					return dateComparison
 				}
 
-				// If start times are the same, prioritize exams over regular events
+				// Same effective time: prioritize exams over calendar events
 				if (a.isExam && !b.isExam) return -1
 				if (!a.isExam && b.isExam) return 1
 
-				// If both are the same type and have the same start time, maintain original order
 				return 0
 			}) as Combined[]
 
+		// Show the two chronologically next events
 		setMixedCalendar(combined.slice(0, 2))
 	}, [calendar, exams])
 
