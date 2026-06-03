@@ -128,3 +128,74 @@ export function getNextReRegistrationEvent(
 		.filter((event) => event.begin > referenceDate)
 		.sort((a, b) => a.begin.getTime() - b.begin.getTime())[0]
 }
+
+export interface CalendarCardExam {
+	name: string
+	begin: Date
+	end?: Date
+	isExam?: boolean
+	examData?: Exam
+}
+
+export type CalendarCardEvent = Calendar | CalendarCardExam
+
+/**
+ * Returns the next relevant moment of an event as a timestamp.
+ *
+ * For events that have not started yet this is the begin date, for events
+ * that are already ongoing it is the end date (the next deadline). Single-day
+ * events without an end always use their begin date.
+ */
+export function getCalendarCardEffectiveTime(
+	item: { begin: Date; end?: Date },
+	now: Date
+): number {
+	return item.begin.getTime() > now.getTime()
+		? item.begin.getTime()
+		: (item.end ?? item.begin).getTime()
+}
+
+/**
+ * Selects the (up to) two events shown on the calendar dashboard card.
+ *
+ * Events are ranked by their next relevant moment (see
+ * {@link getCalendarCardEffectiveTime}). The next upcoming exam is always
+ * pinned to the first row, regardless of chronological order; the remaining
+ * slot is filled with the next event by effective time. When no exam is
+ * available, the two chronologically next events are returned.
+ */
+export function selectCalendarCardEvents(
+	calendarEvents: Calendar[],
+	exams: CalendarCardExam[],
+	now: Date = new Date()
+): CalendarCardEvent[] {
+	const combined = [
+		...calendarEvents.map((item) => ({ ...item, isExam: false })),
+		...exams
+	]
+		.map((item) => ({ ...item, begin: new Date(item.begin) }))
+		.filter((x) => x.begin > now || (x.end ?? now) > now)
+		.sort((a, b) => {
+			const dateComparison =
+				getCalendarCardEffectiveTime(a, now) -
+				getCalendarCardEffectiveTime(b, now)
+			if (dateComparison !== 0) {
+				return dateComparison
+			}
+
+			// Same effective time: prioritize exams over calendar events
+			if (a.isExam && !b.isExam) return -1
+			if (!a.isExam && b.isExam) return 1
+
+			return 0
+		}) as CalendarCardEvent[]
+
+	// Always pin the next upcoming exam to the first row, then fill the
+	// remaining slot with the chronologically next non-pinned event.
+	const nextExam = combined.find((item) => 'isExam' in item && item.isExam)
+	if (nextExam) {
+		const rest = combined.filter((item) => item !== nextExam)
+		return [nextExam, ...rest].slice(0, 2)
+	}
+	return combined.slice(0, 2)
+}

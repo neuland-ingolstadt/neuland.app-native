@@ -10,32 +10,27 @@ import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
-import type { Calendar } from '@/types/data'
-import type { Exam } from '@/types/utils'
-import { calendar, loadExamList } from '@/utils/calendar-utils'
+import {
+	type CalendarCardEvent,
+	type CalendarCardExam,
+	calendar,
+	loadExamList,
+	selectCalendarCardEvents
+} from '@/utils/calendar-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 const CalendarCard = (): React.JSX.Element => {
-	type Combined = Calendar | CardExams
 	const router = useRouter()
 	const time = new Date()
 	const { i18n, t } = useTranslation(['navigation', 'common'])
-	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
+	const [mixedCalendar, setMixedCalendar] = useState<CalendarCardEvent[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
-	interface CardExams {
-		name: string
-		begin: Date
-		end?: Date
-		isExam?: boolean
-		examData?: Exam
-	}
-
-	async function loadExams(): Promise<CardExams[]> {
-		let exams: CardExams[] = []
+	async function loadExams(): Promise<CalendarCardExam[]> {
+		let exams: CalendarCardExam[] = []
 		try {
 			exams = (await loadExamList()).map((x) => ({
 				name: t('navigation:cards.calendar.exam', { name: x.name }),
@@ -73,46 +68,8 @@ const CalendarCard = (): React.JSX.Element => {
 	})
 
 	useEffect(() => {
-		const nowMs = time.getTime()
-		// Next relevant moment per event: begin if the event has not started yet, end if it's already ongoing
-		const effectiveMs = (item: { begin: Date; end?: Date }) =>
-			item.begin.getTime() > nowMs
-				? item.begin.getTime()
-				: (item.end ?? item.begin).getTime()
-
-		const combined = [
-			...calendar.map((item) => ({ ...item, isExam: false })),
-			...(exams ?? [])
-		]
-			.map((item) => ({ ...item, begin: new Date(item.begin) }))
-			.filter((x) => x.begin > time || (x.end ?? time) > time)
-			.sort((a, b) => {
-				// Sort by the next relevant moment
-				// For single-day events, this is the date,
-				// for multi-day events, this is the start or end date, depending on
-				// whether the event is has already started or not.
-				const dateComparison = effectiveMs(a) - effectiveMs(b)
-				if (dateComparison !== 0) {
-					return dateComparison
-				}
-
-				// Same effective time: prioritize exams over calendar events
-				if (a.isExam && !b.isExam) return -1
-				if (!a.isExam && b.isExam) return 1
-
-				return 0
-			}) as Combined[]
-
-		// Always pin the next upcoming exam to the first row, then fill the
-		// remaining slot with the chronologically next non-pinned event.
-		const nextExam = combined.find((item) => 'isExam' in item && item.isExam)
-		if (nextExam) {
-			const rest = combined.filter((item) => item !== nextExam)
-			setMixedCalendar([nextExam, ...rest].slice(0, 2))
-		} else {
-			setMixedCalendar(combined.slice(0, 2))
-		}
-	}, [calendar, exams])
+		setMixedCalendar(selectCalendarCardEvents(calendar, exams ?? [], time))
+	}, [exams])
 
 	const { theme, styles } = useStyles(stylesheet)
 
