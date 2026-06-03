@@ -103,8 +103,15 @@ const CalendarCard = (): React.JSX.Element => {
 				return 0
 			}) as Combined[]
 
-		// Show the two chronologically next events
-		setMixedCalendar(combined.slice(0, 2))
+		// Always pin the next upcoming exam to the first row, then fill the
+		// remaining slot with the chronologically next non-pinned event.
+		const nextExam = combined.find((item) => 'isExam' in item && item.isExam)
+		if (nextExam) {
+			const rest = combined.filter((item) => item !== nextExam)
+			setMixedCalendar([nextExam, ...rest].slice(0, 2))
+		} else {
+			setMixedCalendar(combined.slice(0, 2))
+		}
 	}, [calendar, exams])
 
 	const { theme, styles } = useStyles(stylesheet)
