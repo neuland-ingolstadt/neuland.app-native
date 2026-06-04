@@ -70,7 +70,7 @@ jobs:
           lfs: true
 
       - name: Discord Hook Action
-        uses: Poss111/discord-hook-action@ea11727a86d9c382a05d6de9cfd5d20ffcbfd165 # v1.6.13
+        uses: Poss111/discord-hook-action@63e130b927672bbc762470983e9ef9fa493ae0c7 # v13
         with:
           discord-hook-url: ${{ secrets.WEBHOOK_URL }}
           title: "Neuland Next Release: ${{ github.ref_name }}"
