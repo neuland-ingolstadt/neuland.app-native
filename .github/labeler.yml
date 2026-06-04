@@ -1,0 +1,34 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - 'config/Dockerfile'
+          - 'config/nginx.conf'
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'README.md'
+          - 'AGENTS.md'
+          - 'CHANGELOG.md'
+          - 'LICENSE'
+          - 'docs/**'
+          - '.github/CONTRIBUTING.md'
+          - '.github/CODE_OF_CONDUCT.md'
+          - '.github/SECURITY.md'
+          - '.github/PULL_REQUEST_TEMPLATE.md'
+
+android:
+  - changed-files:
+      - any-glob-to-any-file: 'android/**'
+
+ios:
+  - changed-files:
+      - any-glob-to-any-file: 'ios/**'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'bun.lock'
+          - 'patches/**'
