@@ -9,6 +9,7 @@ import type {
 
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
+import type { CampusLifeEvent } from '@/types/campus-life'
 
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
@@ -106,9 +107,9 @@ export async function getFriendlyTimetable(
 
 export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
-	exams: Exam[],
-	includeCalendar = false,
-	calendarEvents: Calendar[] = []
+	exams: Exam[] = [],
+	calendarEvents: Calendar[] = [],
+	campusLifeEvents: CampusLifeEvent[] = []
 ): TimetableSections[] {
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
@@ -119,14 +120,10 @@ export function getGroupedTimetable(
 				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
 				eventType: 'exam'
 			}
-		})
-	]
-
-	if (includeCalendar && calendarEvents.length > 0) {
-		const processedCalendarEvents = calendarEvents.map((event) => {
+		}),
+		...calendarEvents.flatMap((event) => {
 			const originalStartDate = new Date(event.begin)
 			const originalEndDate = event.end ? new Date(event.end) : null
-
 			const startDate = new Date(event.begin)
 
 			let endDate: Date
@@ -145,7 +142,6 @@ export function getGroupedTimetable(
 				const eventDays = []
 				const currentDate = new Date(startDate)
 				currentDate.setHours(0, 0, 0, 0)
-
 				while (currentDate <= endDate) {
 					eventDays.push({
 						id: event.id,
@@ -158,7 +154,6 @@ export function getGroupedTimetable(
 						isAllDay: true,
 						eventType: 'calendar'
 					})
-
 					currentDate.setDate(currentDate.getDate() + 1)
 				}
 				return eventDays
@@ -175,12 +170,15 @@ export function getGroupedTimetable(
 					eventType: 'calendar'
 				}
 			]
-		})
-
-		const flattenedCalendarEvents = processedCalendarEvents.flat()
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		combinedData.push(...(flattenedCalendarEvents as any))
-	}
+		}),
+		...campusLifeEvents.map((event) => ({
+			...event,
+			date: new Date(event.startDateTime),
+			startDate: new Date(event.startDateTime),
+			endDate: new Date(event.endDateTime),
+			eventType: 'campus-life'
+		}))
+	]
 
 	// Sort combinedData by date
 	combinedData.sort(
