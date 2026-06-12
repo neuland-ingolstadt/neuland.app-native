@@ -16,6 +16,7 @@ interface TimetablePreviewProps {
 	mode: TimetableMode
 	showCalendarEvents?: boolean
 	showExams?: boolean
+	showCampusLifeEvents?: boolean
 }
 
 /**
@@ -74,7 +75,7 @@ const TimetablePreview = ({
 						{[
 							{ time: '10:00', type: 'primary' },
 							...(showExams ? [{ time: '12:30', type: 'exam' }] : []),
-							{ time: '15:15', type: 'primary' }
+							{ time: '15:15', type: 'primary' },
 						].map((event, i) => (
 							<View key={i} style={styles.listItem}>
 								<View style={styles.listItemTimeContainer}>
