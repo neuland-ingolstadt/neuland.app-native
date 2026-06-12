@@ -64,3 +64,13 @@ export interface CampusLifeEvent {
 	host: CampusLifeOrganizer
 	eventUrl?: string | null
 }
+
+export interface FriendlyCampusLifeEvent extends CampusLifeEvent {
+	eventType: 'campus-life'
+}
+
+export interface CampusLifeEventEntry extends FriendlyCampusLifeEvent {
+	date: Date,
+	startDate: Date,
+	endDate: Date,
+}
