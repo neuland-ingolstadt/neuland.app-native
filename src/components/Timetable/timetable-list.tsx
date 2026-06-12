@@ -1,6 +1,6 @@
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 import Color from 'color'
-import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import { RelativePathString, useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import React, {
 	startTransition,
 	useCallback,
@@ -31,7 +31,6 @@ import type {
 	FriendlyTimetableEntry,
 	TimetableEntry
 } from '@/types/utils'
-import { calendar } from '@/utils/calendar-utils'
 import {
 	formatCompactDateRange,
 	formatFriendlyDate,
@@ -41,13 +40,14 @@ import {
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { HeaderRight } from './header-buttons'
+import { CampusLifeEventEntry } from '@/types/campus-life'
 
 type TimetableSection = {
 	title: Date
-	data: (TimetableEntry | ExamEntry | CalendarEntry)[]
+	data: (TimetableEntry | ExamEntry | CalendarEntry | CampusLifeEventEntry)[]
 }
 
-type TimetableItem = TimetableEntry | ExamEntry | CalendarEntry
+type TimetableItem = TimetableEntry | ExamEntry | CalendarEntry | CampusLifeEventEntry
 
 // Define type for the flattened list
 type FlatListItem =
@@ -115,7 +115,9 @@ const SectionHeader = React.memo(
 
 export default function TimetableList({
 	timetable,
-	exams
+	exams,
+	calendarEvents,
+	campusLifeEvents
 }: ITimetableViewProps): React.JSX.Element {
 	/**
 	 * Constants
@@ -137,6 +139,9 @@ export default function TimetableList({
 	const showExams = useTimetableStore((state) => state.showExams)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
+	)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
 	)
 	const hasPendingUpdate = useTimetableStore(
 		(state) => state.hasPendingTimetableUpdate
@@ -160,18 +165,30 @@ export default function TimetableList({
 		}, [hasPendingUpdate])
 	)
 
+	// TODO Hier ein Kommentar ausdenken vielleicht
 	const examsList = showExams ? exams : []
+	const calendarEventsList = showCalendarEvents ? calendarEvents : []
+	const campusLifeEventsList = showCampusLifeEvents ? campusLifeEvents : []
 
 	// Memoize the grouped and filtered timetable data
 	const filteredTimetableSections = useMemo(() => {
 		const grouped = getGroupedTimetable(
 			timetable,
 			examsList,
-			showCalendarEvents,
-			calendar
+			calendarEventsList,
+			campusLifeEventsList
 		)
 		return grouped.filter((section) => section.title >= today)
-	}, [timetable, examsList, showCalendarEvents, calendar, today])
+	}, [
+		timetable,
+		examsList,
+		calendarEvents,
+		campusLifeEventsList,
+		showExams,
+		showCalendarEvents,
+		showCampusLifeEvents,
+		today
+	])
 
 	// Flatten the sections data for FlashList
 	const flatData = useMemo(() => {
@@ -317,7 +334,7 @@ export default function TimetableList({
 	function renderTimetableItem({
 		item
 	}: {
-		item: FriendlyTimetableEntry
+		item: TimetableEntry
 	}): React.JSX.Element {
 		return (
 			<DragDropView
@@ -413,6 +430,63 @@ export default function TimetableList({
 		)
 	}
 
+	function renderCampusLifeEventItem({
+		item
+	}: {
+		item: CampusLifeEventEntry
+	}): React.JSX.Element | null {
+		const eventName = item.titles[(i18n.language as 'de') || 'en'] ?? ''
+
+		// TODO: Muss angepasst werden falls doch multiday events
+		const infoText = formatCompactDateRange(item.startDate)
+
+		const timeElement = (
+			<TimeDisplay
+				startTime={formatFriendlyTime(item.startDate)}
+				endTime={item.endDate ? formatFriendlyTime(item.endDate) : undefined}
+			/>
+		)
+
+		return (
+			<DragDropView
+				mode="drag"
+				scope="system"
+				dragValue={`${eventName} (${infoText})`}
+			>
+				<Pressable
+					onPress={() => {
+						router.push({
+							pathname: `/events/cl/${item.id}` as RelativePathString
+						})
+					}}	
+					style={styles.cardPressable}
+					android_ripple={{
+						color: Color(theme.colors.calendarItem).alpha(0.1).string()
+					}}
+				>
+					<View style={styles.eventCard}>
+						<ColorBand color={theme.colors.calendarItem} />
+						<View style={styles.eventContent}>
+							<View style={styles.eventHeader}>
+								<Text style={styles.eventTitle}>
+									{eventName}
+								</Text>
+							</View>
+							<View style={styles.eventInfoRow}>
+								<View style={styles.infoContainer}>
+									{infoText && <Text style={styles.eventInfo}>{infoText}</Text>}
+									<Badge text="CampusLife" type="campusLife"/>
+								</View>
+								{timeElement}
+							</View>
+						</View>
+					</View>
+
+				</Pressable>
+			</DragDropView>
+		)
+	}
+
 	function renderItem({
 		item
 	}: ListRenderItemInfo<FlatListItem>): React.JSX.Element | null {
@@ -436,7 +510,12 @@ export default function TimetableList({
 				if (data.eventType === 'calendar') {
 					return renderCalendarItem({ item: data })
 				}
-				return renderTimetableItem({ item: data as FriendlyTimetableEntry })
+
+				if (data.eventType === 'campus-life') {
+					return renderCampusLifeEventItem({item: data})
+				}
+
+				return renderTimetableItem({ item: data as TimetableEntry })
 			}
 
 			return <AnimatedTimetableItem item={data} renderContent={renderContent} />

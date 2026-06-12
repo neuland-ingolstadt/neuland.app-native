@@ -5,7 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface BadgeProps {
 	text: string
-	type: 'exam' | 'calendar' | 'default' | 'allDay'
+	type: 'exam' | 'calendar' | 'default' | 'allDay' | 'campusLife'
 	backgroundColor?: string
 	textColor?: string
 }
