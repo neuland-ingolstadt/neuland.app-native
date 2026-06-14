@@ -111,7 +111,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.white,
 		fontSize: 18,
 		fontWeight: 'bold',
-		
+
 		opacity: 0.9
 	},
 	neulandChevron: {

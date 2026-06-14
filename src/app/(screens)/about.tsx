@@ -33,6 +33,7 @@ import { linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useMemberStore } from '@/hooks'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
@@ -43,6 +44,7 @@ export default function About(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
 	const headerPadding = useTransparentHeaderPadding()
+	const { idToken } = useMemberStore()
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -328,7 +330,7 @@ export default function About(): React.JSX.Element {
 
 			<View style={styles.formlistContainer}>
 				<FormList sections={[appSection]} />
-				<MemberAreaButton />
+				{!idToken && <MemberAreaButton />}
 				<FormList sections={remainingSections} />
 			</View>
 			<SectionView
