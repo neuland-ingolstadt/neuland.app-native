@@ -12,8 +12,9 @@ import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import {
 	type CalendarCardEvent,
-	type CalendarCardExam,
+	type CalendarCardExamInput,
 	calendar,
+	isCalendarCardExam,
 	loadExamList,
 	selectCalendarCardEvents
 } from '@/utils/calendar-utils'
@@ -29,13 +30,12 @@ const CalendarCard = (): React.JSX.Element => {
 	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
-	async function loadExams(): Promise<CalendarCardExam[]> {
-		let exams: CalendarCardExam[] = []
+	async function loadExams(): Promise<CalendarCardExamInput[]> {
+		let exams: CalendarCardExamInput[] = []
 		try {
 			exams = (await loadExamList()).map((x) => ({
 				name: t('navigation:cards.calendar.exam', { name: x.name }),
 				begin: new Date(x.date),
-				isExam: true,
 				examData: x
 			}))
 		} catch (e) {
@@ -92,22 +92,18 @@ const CalendarCard = (): React.JSX.Element => {
 					<Pressable
 						key={index}
 						onPress={
-							'isExam' in event && 'examData' in event
+							isCalendarCardExam(event)
 								? () => {
-										if (event.examData) {
-											setExam(event.examData)
+										setExam(event.examData)
 
-											router.navigate({
-												pathname: '/calendar',
-												params: {
-													openExam: 'true'
-												}
-											})
-										}
+										router.navigate({
+											pathname: '/calendar',
+											params: {
+												openExam: 'true'
+											}
+										})
 									}
-								: 'id' in event
-									? () => router.navigate(`/calendar?event=${event.id}`)
-									: undefined
+								: () => router.navigate(`/calendar?event=${event.id}`)
 						}
 					>
 						<EventItem

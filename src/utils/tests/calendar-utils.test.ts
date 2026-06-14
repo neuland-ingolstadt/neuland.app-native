@@ -68,7 +68,6 @@ const makeExam = (name: string, date: string): Exam => ({
 const toCardExam = (exam: Exam) => ({
 	name: exam.name,
 	begin: new Date(exam.date),
-	isExam: true,
 	examData: exam
 })
 
@@ -180,7 +179,7 @@ describe('calendar-utils', () => {
 			const exams = [toCardExam(makeExam('Math', '2026-07-01T10:00:00'))]
 			const result = calendarUtils.selectCalendarCardEvents(events, exams, NOW)
 			expect(result).toHaveLength(2)
-			expect((result[0] as { isExam?: boolean }).isExam).toBe(true)
+			expect(calendarUtils.isCalendarCardExam(result[0])).toBe(true)
 			expect(idOf(result[1])).toBe('soonEvent')
 		})
 
@@ -191,9 +190,9 @@ describe('calendar-utils', () => {
 				toCardExam(makeExam('EarlyExam', '2026-07-01T10:00:00'))
 			]
 			const result = calendarUtils.selectCalendarCardEvents(events, exams, NOW)
-			expect((result[0] as { examData?: Exam }).examData?.name).toBe(
-				'EarlyExam'
-			)
+			expect(
+				calendarUtils.isCalendarCardExam(result[0]) && result[0].examData.name
+			).toBe('EarlyExam')
 			expect(idOf(result[1])).toBe('soonEvent')
 		})
 
