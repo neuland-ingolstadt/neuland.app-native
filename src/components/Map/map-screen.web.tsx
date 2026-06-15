@@ -182,7 +182,7 @@ const MapScreen = (): React.JSX.Element => {
 	}, [overlayError])
 
 	const { data: timetable } = useQuery({
-		queryKey: ['2', userKind],
+		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
 		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
