@@ -20,17 +20,47 @@ documentation:
 
 android:
   - changed-files:
-      - any-glob-to-any-file: 'android/**'
+      - any-glob-to-any-file:
+          - 'android/**'
+          - '**/*.android.tsx'
 
 ios:
   - changed-files:
-      - any-glob-to-any-file: 'ios/**'
+      - any-glob-to-any-file:
+          - 'ios/**'
+          - '**/*.ios.tsx'
 
 web:
   - changed-files:
       - any-glob-to-any-file:
           - '**/*.web.tsx'
           - '**/*.html'
+
+i18n:
+  - changed-files:
+      - any-glob-to-any-file: 'src/localization/**'
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/utils/tests/**'
+          - '**/*.test.ts'
+
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/api/**'
+          - 'src/__generated__/**'
+          - 'config/codegen.yml'
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'app.config.json'
+          - 'eas.json'
+          - 'babel.config.js'
+          - 'tsconfig.json'
+          - 'config/plugins/**'
 
 dependencies:
   - changed-files:
