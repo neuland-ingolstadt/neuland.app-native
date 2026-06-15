@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { beforeAll, describe, expect, it, mock, spyOn } from 'bun:test'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -206,5 +206,216 @@ describe('date-utils', () => {
 				'2026-04-09T00:00:00'
 			)
 		).toBe('07.04 - 09.04')
+	})
+
+	describe('friendly formatters', () => {
+		const FIXED_NOW = Date.parse('2026-04-07T12:00:00')
+
+		const withFrozenNow = (run: () => void): void => {
+			const nowSpy = spyOn(Date, 'now').mockReturnValue(FIXED_NOW)
+			try {
+				run()
+			} finally {
+				nowSpy.mockRestore()
+			}
+		}
+
+		const fixedDate = (isoDate: string, hours = 8, minutes = 0): Date =>
+			new Date(
+				`${isoDate}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`
+			)
+
+		const todayAt = (hours = 8, minutes = 0): Date => {
+			const now = new Date()
+			return new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				now.getDate(),
+				hours,
+				minutes
+			)
+		}
+
+		const tomorrowAt = (hours = 8, minutes = 0): Date => {
+			const date = todayAt(hours, minutes)
+			date.setDate(date.getDate() + 1)
+			return date
+		}
+
+		it('formatFriendlyDate - Should return the today label for the current day', () => {
+			expect(dateUtils.formatFriendlyDate(todayAt())).toBe('dates.today')
+		})
+
+		it('formatFriendlyDate - Should return the tomorrow label for the next day', () => {
+			expect(dateUtils.formatFriendlyDate(tomorrowAt())).toBe('dates.tomorrow')
+		})
+
+		it('formatFriendlyDate - Should format other days with weekday and German date', () => {
+			expect(dateUtils.formatFriendlyDate(fixedDate('2026-04-09'))).toBe(
+				'Do., 09.04.2026'
+			)
+		})
+
+		it('formatFriendlyDate - Should skip relative labels when relative is false', () => {
+			expect(
+				dateUtils.formatFriendlyDate(todayAt(), {
+					relative: false,
+					weekday: 'short'
+				})
+			).toMatch(/, \d{2}\.\d{2}\.\d{4}$/)
+		})
+
+		it('formatFriendlyDate - Should support long weekday names', () => {
+			expect(
+				dateUtils.formatFriendlyDate(fixedDate('2026-04-09'), {
+					relative: false,
+					weekday: 'long'
+				})
+			).toBe('Donnerstag, 09.04.2026')
+		})
+
+		it('formatFriendlyDateRange - Should return only the begin date for same-day ranges', () => {
+			expect(
+				dateUtils.formatFriendlyDateRange(
+					fixedDate('2026-04-09'),
+					fixedDate('2026-04-09', 20)
+				)
+			).toBe('Do., 09.04.2026')
+		})
+
+		it('formatFriendlyDateRange - Should join different days with a range separator', () => {
+			expect(
+				dateUtils.formatFriendlyDateRange(
+					fixedDate('2026-04-09'),
+					fixedDate('2026-04-10')
+				)
+			).toBe('Do., 09.04.2026 – Fr., 10.04.2026')
+		})
+
+		it('formatFriendlyTime - Should format valid datetimes as HH:mm', () => {
+			expect(dateUtils.formatFriendlyTime(fixedDate('2026-04-07', 8, 15))).toBe(
+				'08:15'
+			)
+		})
+
+		it('formatFriendlyTime - Should return an empty string for missing or invalid input', () => {
+			expect(dateUtils.formatFriendlyTime(undefined)).toBe('')
+			expect(dateUtils.formatFriendlyTime('not-a-date')).toBe('')
+		})
+
+		it('formatFriendlyTimeString - Should trim seconds from a time string', () => {
+			expect(dateUtils.formatFriendlyTimeString('08:30:45')).toBe('08:30')
+		})
+
+		it('formatFriendlyTimeRange - Should format a single time or a range', () => {
+			expect(dateUtils.formatFriendlyTimeRange('08:00:00')).toBe('08:00')
+			expect(dateUtils.formatFriendlyTimeRange('08:00:00', '12:30:00')).toBe(
+				'08:00 – 12:30'
+			)
+		})
+
+		it('formatFriendlyDateTimeRange - Should return an empty string without a begin date', () => {
+			expect(dateUtils.formatFriendlyDateTimeRange(null, null)).toBe('')
+		})
+
+		it('formatFriendlyDateTimeRange - Should format same-day ranges with one date label', () => {
+			expect(
+				dateUtils.formatFriendlyDateTimeRange(
+					fixedDate('2026-04-09', 8),
+					fixedDate('2026-04-09', 12, 30)
+				)
+			).toBe('Do., 09.04.2026, 08:00 – 12:30')
+		})
+
+		it('formatFriendlyDateTimeRange - Should repeat the date when the range spans days', () => {
+			expect(
+				dateUtils.formatFriendlyDateTimeRange(
+					fixedDate('2026-04-09', 8),
+					fixedDate('2026-04-10', 12, 30)
+				)
+			).toBe('Do., 09.04.2026, 08:00 – Fr., 10.04.2026, 12:30')
+		})
+
+		it('formatFriendlyDateTime - Should handle missing, sentinel and valid dates', () => {
+			expect(dateUtils.formatFriendlyDateTime(undefined)).toBe(
+				'No date available'
+			)
+			expect(dateUtils.formatFriendlyDateTime('invalid')).toBe(
+				'No date available'
+			)
+			expect(
+				dateUtils.formatFriendlyDateTime(new Date('1970-01-01T00:00:00'))
+			).toBe(null)
+			expect(
+				dateUtils.formatFriendlyDateTime(fixedDate('2026-04-09', 8, 15))
+			).toBe('Do., 09.04.2026, 08:15')
+		})
+
+		it('formatNearDate - Should return today and tomorrow labels or a near date', () => {
+			expect(dateUtils.formatNearDate(todayAt())).toBe('dates.today')
+			expect(dateUtils.formatNearDate(tomorrowAt())).toBe('dates.tomorrow')
+			expect(dateUtils.formatNearDate(fixedDate('2026-04-09'))).toBe(
+				'Donnerstag, 9.4.'
+			)
+		})
+
+		it('formatFriendlyRelativeTime - Should reject sentinel and invalid dates', () => {
+			expect(
+				dateUtils.formatFriendlyRelativeTime(new Date('1970-01-01T00:00:00'))
+			).toBe('')
+			expect(dateUtils.formatFriendlyRelativeTime(new Date(Number.NaN))).toBe(
+				''
+			)
+		})
+
+		it('formatFriendlyRelativeTime - Should return a relative label for future dates', () => {
+			withFrozenNow(() => {
+				const inFiveMinutes = new Date(FIXED_NOW + 5 * 60 * 1000)
+				expect(dateUtils.formatFriendlyRelativeTime(inFiveMinutes)).toBe(
+					'in 5 Minuten'
+				)
+			})
+		})
+
+		it('formatRelativeMinutes - Should count minutes until a future datetime', () => {
+			withFrozenNow(() => {
+				const inTenMinutes = new Date(FIXED_NOW + 10 * 60 * 1000)
+				expect(dateUtils.formatRelativeMinutes(inTenMinutes)).toBe('10 min')
+			})
+		})
+
+		it('formatRelativeMinutes - Should not return negative minute counts', () => {
+			withFrozenNow(() => {
+				const oneHourAgo = new Date(FIXED_NOW - 60 * 60 * 1000)
+				expect(dateUtils.formatRelativeMinutes(oneHourAgo)).toBe('0 min')
+			})
+		})
+
+		it('getFriendlyWeek - Should label the current and next week relatively', () => {
+			const [currentWeekStart, currentWeekEnd] = dateUtils.getWeek(new Date())
+			const inCurrentWeek = new Date(currentWeekStart)
+			inCurrentWeek.setDate(inCurrentWeek.getDate() + 1)
+
+			const inNextWeek = new Date(currentWeekEnd)
+			inNextWeek.setDate(inNextWeek.getDate() + 1)
+
+			expect(dateUtils.getFriendlyWeek(inCurrentWeek, 'de')).toBe(
+				'dates.thisWeek'
+			)
+			expect(dateUtils.getFriendlyWeek(inNextWeek, 'de')).toBe('dates.nextWeek')
+		})
+
+		it('getFriendlyWeek - Should format arbitrary weeks as a numeric range', () => {
+			expect(dateUtils.getFriendlyWeek(fixedDate('2025-01-15'), 'de')).toBe(
+				'13.1. – 19.1.'
+			)
+		})
+
+		it('formatDay - Should format weekday and day using the active locale', () => {
+			const date = fixedDate('2026-04-09')
+			expect(dateUtils.formatDay(date)).toBe(
+				date.toLocaleString('de', { weekday: 'short', day: '2-digit' })
+			)
+		})
 	})
 })
