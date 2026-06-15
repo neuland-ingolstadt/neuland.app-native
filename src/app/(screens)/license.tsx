@@ -1,9 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { useGlobalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ExternalAPI from '@/api/external-api'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/sections-view'
@@ -22,32 +23,16 @@ export default function License(): React.JSX.Element {
 			name: string
 		}>()
 
-	const [licenseText, setLicenseText] = useState('')
+	const canFetchLicense =
+		licenseUrl !== undefined && licenseUrl !== '' && Platform.OS !== 'web'
 
-	useEffect(() => {
-		if (
-			licenseUrl === undefined ||
-			licenseUrl === '' ||
-			Platform.OS === 'web'
-		) {
-			// Fetching from GitHub fails because of CORS issues, so we don't fetch the license text on web
-			// and just show the link to the license
-			return
-		}
-		fetch(licenseUrl)
-			.then(async (res) => await res.text())
-			.then((text) => {
-				// sometimes the license is not a text file, but the whole repo page
-				if (text.includes('<!DOCTYPE html>')) {
-					setLicenseText('')
-				} else {
-					setLicenseText(text)
-				}
-			})
-			.catch((error) => {
-				console.warn('Failed to fetch license text:', error)
-			})
-	}, [licenseUrl])
+	const { data: licenseText = '' } = useQuery({
+		queryKey: ['licenseText', licenseUrl],
+		enabled: canFetchLicense,
+		queryFn: async () => await ExternalAPI.fetchLicenseText(licenseUrl),
+		staleTime: Number.POSITIVE_INFINITY,
+		gcTime: Number.POSITIVE_INFINITY
+	})
 
 	const sections: FormListSections[] = [
 		{
