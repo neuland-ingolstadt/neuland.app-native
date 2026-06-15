@@ -34,8 +34,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 
 	const eventsQuery = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS, 'organizer', organizerId],
-		queryFn: () =>
-			loadCampusLifeEvents({ organizerId, organizerKind: null }),
+		queryFn: () => loadCampusLifeEvents({ organizerId, organizerKind: null }),
 		enabled: isIdValid
 	})
 
