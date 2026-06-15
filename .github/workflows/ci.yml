@@ -45,7 +45,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Run unit tests with coverage
-        run: bun run test:coverage
+        run: bun run test:coverage -- --reporter=junit --reporter-outfile=./junit.xml
 
       - name: Convert coverage to Cobertura
         run: |
@@ -65,5 +65,13 @@ jobs:
         uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
           files: ./coverage/lcov.info
+          fail_ci_if_error: ${{ github.event_name == 'push' }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        with:
+          files: ./junit.xml
           fail_ci_if_error: ${{ github.event_name == 'push' }}
           token: ${{ secrets.CODECOV_TOKEN }}
