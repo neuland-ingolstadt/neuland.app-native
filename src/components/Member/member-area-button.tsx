@@ -28,7 +28,6 @@ export function MemberAreaButton(): React.JSX.Element | null {
 					{ opacity: pressed ? 0.9 : 1 }
 				]}
 			>
-				{/* 015916 */}
 				<LinearGradient
 					colors={['#000', '#015916']}
 					start={{ x: -0.5, y: 0.5 }}
