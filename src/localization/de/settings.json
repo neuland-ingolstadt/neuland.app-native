@@ -23,13 +23,15 @@
 		"formlist": {
 			"preferences": {
 				"title": "Einstellungen",
+				"dashboard": "Dashboard",
 				"food": "Essen",
 				"language": "Sprache",
 				"timetable": "Stundenplan"
 			},
 			"appearance": {
 				"title": "Darstellung",
-				"theme": "Design"
+				"theme": "Design",
+				"appIcon": "App Icon"
 			},
 			"language": {
 				"title": "Sprache wechseln",
@@ -45,13 +47,20 @@
 				"download": "App herunterladen"
 			}
 		},
-		"copyright": "© {{year}} von Neuland Ingolstadt e.V."
+		"copyright": "© {{year}} von Neuland Ingolstadt e.V.",
+		"infrastructureBy": "Infrastruktur von",
+		"loadPersonalDataError": "Persönliche Daten konnten nicht geladen werden"
 	},
 	"about": {
 		"header": {
 			"developed": "Entwickelt von"
 		},
 		"formlist": {
+			"app": {
+				"title": "App",
+				"version": "Version",
+				"changelog": "Changelog"
+			},
 			"legal": {
 				"title": "Rechtliches",
 				"button": "Rechtliche Infos"
@@ -97,7 +106,12 @@
 		"footer": "Um alle Änderungen zu sehen, besuche die Veröffentlichungen auf "
 	},
 	"licenses": {
-		"footer": "Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten."
+		"footer": "Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten.",
+		"fields": {
+			"name": "Name",
+			"version": "Version",
+			"repository": "Repository"
+		}
 	},
 	"profile": {
 		"error": {
@@ -249,6 +263,20 @@
 				"browser": "Browser"
 			}
 		},
-		"copyButton": "Alles kopieren"
+		"copyButton": "Alles kopieren",
+		"copyLabels": {
+			"appHeader": "App-Informationen:",
+			"systemHeader": "System-Informationen:",
+			"version": "Version",
+			"buildNumber": "Build-Nummer",
+			"commitHash": "Commit-Hash",
+			"firstInstall": "Erste Installation",
+			"uiManager": "UI-Manager",
+			"browser": "Browser",
+			"osVersion": "Betriebssystem-Version",
+			"deviceModel": "Gerätemodell",
+			"deviceType": "Gerätetyp",
+			"emulator": "Emulator"
+		}
 	}
 }

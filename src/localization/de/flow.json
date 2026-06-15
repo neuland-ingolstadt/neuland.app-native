@@ -55,8 +55,20 @@
 		},
 		"username": "Benutzername",
 		"password": "Passwort",
+		"usernamePlaceholder": "abc1234",
 		"button": "Anmelden",
 		"guest": "als Gast fortfahren",
-		"or": "oder"
+		"or": "oder",
+		"subtitles": {
+			"grades": "um deine Noten zu sehen",
+			"freeRooms": "um freie Räume zu suchen",
+			"mapSuggestions": "um Karten-Vorschläge zu erhalten",
+			"timetable": "um deinen Stundenplan zu sehen",
+			"exams": "um deinen Prüfungsplan zu sehen",
+			"searchLecturers": "um alle Dozenten zu suchen",
+			"viewLecturers": "um deine Dozenten zu sehen",
+			"thiNews": "um die THI-News anzuzeigen",
+			"printerBalance": "um dein Druckguthaben zu prüfen"
+		}
 	}
 }

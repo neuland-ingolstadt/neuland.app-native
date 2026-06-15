@@ -27,15 +27,16 @@ declare global {
 
 export default function Version(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('settings')
+	const { t } = useTranslation(['settings', 'common'])
+	const notAvailable = t('misc.notAvailable', { ns: 'common' })
 	const [systemInfo, setSystemInfo] = useState({
-		osVersion: 'N/A',
-		deviceModel: 'N/A',
-		deviceType: 'N/A',
+		osVersion: notAvailable,
+		deviceModel: notAvailable,
+		deviceType: notAvailable,
 		isEmulator: false,
-		firstInstallTime: 'N/A',
-		uiManager: 'N/A',
-		browserInfo: 'N/A'
+		firstInstallTime: notAvailable,
+		uiManager: notAvailable,
+		browserInfo: notAvailable
 	})
 
 	useEffect(() => {
@@ -59,18 +60,20 @@ export default function Version(): React.JSX.Element {
 					DeviceInfo.getFirstInstallTime()
 				])
 
-			const uiManager = global.nativeFabricUIManager ? 'Fabric' : 'Paper'
+			const uiManager = global.nativeFabricUIManager
+				? t('uiManager.fabric', { ns: 'common' })
+				: t('uiManager.paper', { ns: 'common' })
 
 			setSystemInfo({
-				osVersion: osVersion ?? 'N/A',
-				deviceModel: deviceModel ?? 'N/A',
-				deviceType: deviceType ?? 'N/A',
+				osVersion: osVersion ?? notAvailable,
+				deviceModel: deviceModel ?? notAvailable,
+				deviceType: deviceType ?? notAvailable,
 				isEmulator,
 				firstInstallTime: firstInstallTime
 					? formatFriendlyDate(new Date(firstInstallTime))
-					: 'N/A',
+					: notAvailable,
 				uiManager,
-				browserInfo: 'N/A'
+				browserInfo: notAvailable
 			})
 		}
 
@@ -80,32 +83,36 @@ export default function Version(): React.JSX.Element {
 	const version =
 		Application.nativeApplicationVersion ??
 		Constants.expoConfig?.version ??
-		'N/A'
-	const buildNumber = Application.nativeBuildVersion ?? 'N/A'
+		notAvailable
+	const buildNumber = Application.nativeBuildVersion ?? notAvailable
 	const commitHash =
 		process.env.EXPO_PUBLIC_GIT_COMMIT_HASH ?? process.env.GIT_COMMIT_HASH
-	const commitHashShort = commitHash?.substring(0, 7) ?? 'N/A'
+	const commitHashShort = commitHash?.substring(0, 7) ?? notAvailable
 	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`
 
 	const handleCopyAll = async () => {
 		const info = [
-			'App Information:',
-			`Version: ${version}`,
-			...(Platform.OS !== 'web' ? [`Build Number: ${buildNumber}`] : []),
-			`Commit Hash: ${commitHashShort}`,
+			t('version.copyLabels.appHeader'),
+			`${t('version.copyLabels.version')}: ${version}`,
 			...(Platform.OS !== 'web'
-				? [`First Install: ${systemInfo.firstInstallTime}`]
+				? [`${t('version.copyLabels.buildNumber')}: ${buildNumber}`]
 				: []),
-			`UI Manager: ${systemInfo.uiManager}`,
+			`${t('version.copyLabels.commitHash')}: ${commitHashShort}`,
+			...(Platform.OS !== 'web'
+				? [
+						`${t('version.copyLabels.firstInstall')}: ${systemInfo.firstInstallTime}`
+					]
+				: []),
+			`${t('version.copyLabels.uiManager')}: ${systemInfo.uiManager}`,
 			'',
-			'System Information:',
+			t('version.copyLabels.systemHeader'),
 			...(Platform.OS === 'web'
-				? [`Browser: ${systemInfo.browserInfo}`]
+				? [`${t('version.copyLabels.browser')}: ${systemInfo.browserInfo}`]
 				: [
-						`OS Version: ${systemInfo.osVersion}`,
-						`Device Model: ${systemInfo.deviceModel}`,
-						`Device Type: ${systemInfo.deviceType}`,
-						`Emulator: ${systemInfo.isEmulator ? 'Yes' : 'No'}`
+						`${t('version.copyLabels.osVersion')}: ${systemInfo.osVersion}`,
+						`${t('version.copyLabels.deviceModel')}: ${systemInfo.deviceModel}`,
+						`${t('version.copyLabels.deviceType')}: ${systemInfo.deviceType}`,
+						`${t('version.copyLabels.emulator')}: ${systemInfo.isEmulator ? t('misc.true', { ns: 'common' }) : t('misc.false', { ns: 'common' })}`
 					])
 		].join('\n')
 
@@ -221,7 +228,9 @@ export default function Version(): React.JSX.Element {
 							},
 							{
 								title: t('version.formlist.system.emulator'),
-								value: systemInfo.isEmulator ? 'Yes' : 'No',
+								value: systemInfo.isEmulator
+									? t('misc.true', { ns: 'common' })
+									: t('misc.false', { ns: 'common' }),
 								icon: {
 									ios: 'cube',
 									android: 'box' as MaterialIcon,
