@@ -238,15 +238,23 @@ Generated and binary files:
   `src/lib/feature-flags.ts`) so evaluations work on iOS, Android, and web. The Flipt client is warmed up in `src/components/provider.tsx`.
 - **Usage in components** — prefer the React Query hook:
 
-  ```tsx
-  import { useFeatureFlag } from '@/hooks'
+  Register flags in `FeatureFlagKeys` before use:
 
-  const { data: enabled = false } = useFeatureFlag('my-flag')
+  ```typescript
+  export const FeatureFlagKeys = {
+    myFlag: 'my-flag',
+  } as const satisfies Record<string, string>
   ```
 
-  For one-off async checks outside React, call `evaluateBooleanFlag` from
-  `@/lib/feature-flags`. Add flag keys to `production/neuland-app/features.yaml`
-  in the flags repo when introducing new toggles.
+  ```tsx
+  import { useFeatureFlag } from '@/hooks'
+  import { FeatureFlagKeys } from '@/lib/feature-flags'
+
+  const { data: enabled = false } = useFeatureFlag(FeatureFlagKeys.myFlag)
+  ```
+
+  Mirror each entry in `production/neuland-app/features.yaml`. For async checks
+  outside React, call `evaluateBooleanFlag` from `@/lib/feature-flags`.
 - **Evaluation context** sent to Flipt on every request:
 
   | Attribute      | Source                          | Example values        |

@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserKind } from '@/contexts'
-import { evaluateBooleanFlag } from '@/lib/feature-flags'
+import { evaluateBooleanFlag, type FeatureFlagKey } from '@/lib/feature-flags'
 import { getEvaluationPlatform } from '@/utils/evaluation-platform'
 
 const FEATURE_FLAG_STALE_TIME_MS = 5 * 60 * 1000
 
-export function useFeatureFlag(flagKey: string, defaultValue = false) {
+export function useFeatureFlag(flagKey: FeatureFlagKey, defaultValue = false) {
 	const { userKind } = useUserKind()
 	const platform = getEvaluationPlatform()
 
