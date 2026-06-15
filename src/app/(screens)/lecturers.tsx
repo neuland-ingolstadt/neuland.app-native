@@ -2,7 +2,7 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import type React from 'react'
-import { use, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { use, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	FlatList,
@@ -42,20 +42,14 @@ import { pausedToast } from '@/utils/ui-utils'
 
 export default function LecturersScreen(): React.JSX.Element {
 	const router = useRouter()
-	const [filteredLecturers, setFilteredLecturers] = useState<
-		NormalizedLecturer[]
-	>([])
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const navigation = useNavigation()
 	const [selectedPage, setSelectedPage] = useState(0)
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const pagerViewRef = useRef<PagerView>(null)
-	const [displayesProfessors, setDisplayedProfessors] = useState(false)
 	const [localSearch, setLocalSearch] = useState('')
 	const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
-	const [faculty, setFaculty] = useState<string | null>(null)
-	const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
 
 	function setPage(page: number): void {
 		pagerViewRef.current?.setPage(page)
@@ -121,14 +115,15 @@ export default function LecturersScreen(): React.JSX.Element {
 		refetchByUser: refetchByUserAll
 	} = useRefreshByUser(allLecturersResult.refetch)
 
-	useEffect(() => {
+	const faculty = useMemo(() => {
 		if (data !== null && data !== undefined) {
-			const faculty = extractFaculty(data)
-			setFaculty(faculty ?? null)
+			return extractFaculty(data) ?? null
 		}
+		return null
 	}, [data])
 
-	useEffect(() => {
+	const filteredLecturers = useMemo(() => {
+		const allData = allLecturersResult?.data ?? []
 		if (localSearch !== '') {
 			const options = {
 				keys: ['name', 'vorname', 'tel_dienst', 'raum'],
@@ -136,36 +131,31 @@ export default function LecturersScreen(): React.JSX.Element {
 				useExtendedSearch: true
 			}
 
-			const fuse = new Fuse(allLecturersResult?.data ?? [], options)
+			const fuse = new Fuse(allData, options)
 			const result = fuse.search(localSearch)
-			const filtered = result.map((item) => item.item)
-
-			setFilteredLecturers(filtered)
+			return result.map((item) => item.item)
 		}
+		return allData
 	}, [allLecturersResult?.data, localSearch])
-	useEffect(() => {
-		let filtered: NormalizedLecturer[] = []
+
+	const { facultyData, displayesProfessors } = useMemo(() => {
+		const allData = allLecturersResult?.data
 		if (faculty !== null) {
-			filtered =
-				allLecturersResult?.data?.filter((lecturer: Lecturers) =>
+			const filtered =
+				allData?.filter((lecturer: Lecturers) =>
 					lecturer.organisation?.includes(faculty)
 				) ?? []
-			setDisplayedProfessors(false)
-			setFacultyData(filtered)
-			return
+			return { facultyData: filtered, displayesProfessors: false }
 		}
 
-		if (faculty === null || filtered.length === 0) {
-			filtered =
-				allLecturersResult?.data?.filter(
-					(lecturer: Lecturers) =>
-						lecturer.funktion !== null &&
-						lecturer.funktion === Funktion.ProfessorIn
-				) ?? []
+		const filtered =
+			allData?.filter(
+				(lecturer: Lecturers) =>
+					lecturer.funktion !== null &&
+					lecturer.funktion === Funktion.ProfessorIn
+			) ?? []
 
-			setDisplayedProfessors(true)
-			setFacultyData(filtered)
-		}
+		return { facultyData: filtered, displayesProfessors: true }
 	}, [faculty, allLecturersResult.data])
 
 	const generateSections = (
@@ -195,13 +185,10 @@ export default function LecturersScreen(): React.JSX.Element {
 		return sections
 	}
 
-	const sections = generateSections(filteredLecturers)
-
-	useEffect(() => {
-		if (localSearch.length === 0 && allLecturersResult.data != null) {
-			setFilteredLecturers(allLecturersResult.data)
-		}
-	}, [allLecturersResult.data, localSearch])
+	const sections = useMemo(
+		() => generateSections(filteredLecturers),
+		[filteredLecturers]
+	)
 
 	useEffect(() => {
 		if (

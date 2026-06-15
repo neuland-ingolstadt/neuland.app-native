@@ -4,7 +4,7 @@ import DateTimePicker, {
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import type React from 'react'
-import { type ChangeEvent, useEffect, useState } from 'react'
+import { type ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -26,7 +26,6 @@ import {
 	filterRooms,
 	getNextValidDate
 } from '@/utils/map-utils'
-import { LoadingState } from '@/utils/ui-utils'
 
 const DURATIONS = [
 	'00:15',
@@ -88,9 +87,6 @@ export default function AdvancedSearch(): React.JSX.Element {
 			}
 		})
 	}
-	const [filterState, setFilterState] = useState<LoadingState>(
-		LoadingState.LOADING
-	)
 	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
 		queryKey: ['freeRooms', date],
 		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
@@ -104,35 +100,25 @@ export default function AdvancedSearch(): React.JSX.Element {
 			return failureCount < 2
 		}
 	})
-	const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
-
-	useEffect(() => {
-		const fetchRooms = (): void => {
-			try {
-				const validateDate = new Date(date)
-				if (Number.isNaN(validateDate.getTime())) {
-					throw new Error('Invalid date')
-				}
-				if (data === undefined) {
-					return
-				}
-				const rooms = filterRooms(data, date, time, building, duration)
-				if (rooms == null) {
-					throw new Error('Error while filtering rooms')
-				}
-				setRooms(rooms)
-				setFilterState(LoadingState.LOADED)
-			} catch (error) {
-				setFilterState(LoadingState.ERROR)
-				console.error(error)
-			}
+	const { rooms, filterError } = useMemo(() => {
+		if (data === undefined) {
+			return { rooms: null as AvailableRoom[] | null, filterError: false }
 		}
-
-		setFilterState(LoadingState.LOADING)
-		setTimeout(() => {
-			fetchRooms()
-		})
-	}, [date, time, building, duration, data])
+		try {
+			const validateDate = new Date(date)
+			if (Number.isNaN(validateDate.getTime())) {
+				throw new Error('Invalid date')
+			}
+			const filteredRooms = filterRooms(data, date, time, building, duration)
+			if (filteredRooms == null) {
+				throw new Error('Error while filtering rooms')
+			}
+			return { rooms: filteredRooms, filterError: false }
+		} catch (filteringError) {
+			console.error(filteringError)
+			return { rooms: null, filterError: true }
+		}
+	}, [data, date, time, building, duration])
 
 	const { refetchByUser } = useRefreshByUser(refetch)
 
@@ -251,7 +237,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
 				<View style={styles.sectionContainer}>
 					<View style={styles.section}>
-						{filterState === LoadingState.LOADING || isLoading ? (
+						{isLoading ? (
 							<LoadingIndicator style={styles.loadingIndicator} />
 						) : isPaused ? (
 							<ErrorView
@@ -261,7 +247,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								}}
 								inModal
 							/>
-						) : isError || filterState === LoadingState.ERROR ? (
+						) : isError || filterError ? (
 							<ErrorView
 								title={error?.message ?? t('error.title')}
 								onButtonPress={() => {
@@ -269,7 +255,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								}}
 								inModal
 							/>
-						) : filterState === LoadingState.LOADED ? (
+						) : rooms != null ? (
 							<FreeRoomsList rooms={rooms} />
 						) : null}
 					</View>
