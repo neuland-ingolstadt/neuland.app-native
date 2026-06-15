@@ -49,6 +49,8 @@ export function useDashboard(): Dashboard {
 	const [sportsCardMigrationDone, setSportsCardMigrationDone] = useMMKVBoolean(
 		'shownDashboardEntriesSportsMigrationV1'
 	)
+	const [thiEventsCardMigrationDone, setThiEventsCardMigrationDone] =
+		useMMKVBoolean('shownDashboardEntriesThiEventsMigrationV1')
 	const { userKind = USER_GUEST } = useUserKind()
 
 	const defaultEntries = useMemo(
@@ -84,6 +86,36 @@ export function useDashboard(): Dashboard {
 		shownDashboardEntries,
 		setShownDashboardEntries,
 		setSportsCardMigrationDone
+	])
+
+	useEffect(() => {
+		if (thiEventsCardMigrationDone === true) {
+			return
+		}
+
+		if (shownDashboardEntries == null) {
+			setThiEventsCardMigrationDone(true)
+			return
+		}
+
+		const hasEventsCard = shownDashboardEntries.includes('events')
+		const hasThiEventsCard = shownDashboardEntries.includes('thiEvents')
+
+		if (hasEventsCard && !hasThiEventsCard) {
+			const migratedEntries = shownDashboardEntries.filter(
+				(key) => key !== 'thiEvents'
+			)
+			const eventsIndex = migratedEntries.indexOf('events')
+			migratedEntries.splice(eventsIndex + 1, 0, 'thiEvents')
+			setShownDashboardEntries(migratedEntries)
+		}
+
+		setThiEventsCardMigrationDone(true)
+	}, [
+		thiEventsCardMigrationDone,
+		shownDashboardEntries,
+		setShownDashboardEntries,
+		setThiEventsCardMigrationDone
 	])
 
 	const normalizedShownEntries = useMemo(() => {

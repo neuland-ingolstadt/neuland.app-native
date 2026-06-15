@@ -8,7 +8,10 @@ import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import RowEntry from '@/components/Universal/row-entry'
 import { useRefreshByUser } from '@/hooks'
-import type { CampusLifeOrganizer } from '@/types/campus-life'
+import {
+	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	type CampusLifeOrganizer
+} from '@/types/campus-life'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 export default function ClClubsScreen(): React.JSX.Element {
@@ -16,8 +19,14 @@ export default function ClClubsScreen(): React.JSX.Element {
 	const { t } = useTranslation('common')
 
 	const organizersQuery = useQuery({
-		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
-		queryFn: loadCampusLifeOrganizers,
+		queryKey: [
+			QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS,
+			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+		],
+		queryFn: () =>
+			loadCampusLifeOrganizers(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+			),
 		staleTime: 1000 * 60 * 60,
 		gcTime: 1000 * 60 * 60 * 24
 	})
@@ -83,7 +92,7 @@ const OrganizerListItem = ({
 				backgroundColor={theme.colors.card}
 				onPress={() => {
 					router.push({
-						pathname: '/events/club/[id]',
+						pathname: '/events/organiser/[id]',
 						params: { id: organizer.id.toString() }
 					})
 				}}

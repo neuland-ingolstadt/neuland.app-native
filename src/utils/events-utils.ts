@@ -9,6 +9,7 @@ import NeulandAPI from '@/api/neuland-api'
 import type {
 	CampusLifeEvent,
 	CampusLifeOrganizer,
+	CampusLifePublicOrganizerKind,
 	PublicEventResponse,
 	PublicOrganizerResponse
 } from '@/types/campus-life'
@@ -64,6 +65,8 @@ export interface LoadCampusLifeEventsOptions {
 	upcomingOnly?: boolean
 	limit?: number
 	offset?: number
+	/** Defaults to student associations; pass `null` to omit the filter. */
+	organizerKind?: CampusLifePublicOrganizerKind | string | null
 }
 
 /**
@@ -72,13 +75,20 @@ export interface LoadCampusLifeEventsOptions {
 export async function loadCampusLifeEvents(
 	options: LoadCampusLifeEventsOptions = {}
 ): Promise<CampusLifeEvent[]> {
-	const { organizerId, upcomingOnly = true, limit, offset } = options
+	const {
+		organizerId,
+		upcomingOnly = true,
+		limit,
+		offset,
+		organizerKind
+	} = options
 
 	const events = await NeulandAPI.getPublicCampusLifeEvents({
 		organizerId,
 		upcomingOnly,
 		limit,
-		offset
+		offset,
+		...(organizerKind !== undefined ? { organizerKind } : {})
 	})
 
 	const now = Date.now()
@@ -101,6 +111,17 @@ export async function loadCampusLifeEvents(
 		.sort((a, b) => Date.parse(a.startDateTime) - Date.parse(b.startDateTime))
 }
 
+export async function loadCampusLifeEvent(
+	id: number
+): Promise<CampusLifeEvent> {
+	const event = await NeulandAPI.getPublicCampusLifeEvent(id)
+	const organizer = mapOrganizerResponse(null, {
+		id: event.organizer_id,
+		name: event.organizer_name ?? undefined
+	})
+	return mapEventResponse(event, organizer)
+}
+
 export async function loadCampusLifeOrganizer(
 	id: number
 ): Promise<CampusLifeOrganizer> {
@@ -108,10 +129,10 @@ export async function loadCampusLifeOrganizer(
 	return mapOrganizerResponse(organizer, { id })
 }
 
-export async function loadCampusLifeOrganizers(): Promise<
-	CampusLifeOrganizer[]
-> {
-	const organizers = await NeulandAPI.getPublicOrganizers()
+export async function loadCampusLifeOrganizers(
+	organizerKind?: CampusLifePublicOrganizerKind | string | null
+): Promise<CampusLifeOrganizer[]> {
+	const organizers = await NeulandAPI.getPublicOrganizers({ organizerKind })
 	return organizers.map((organizer) =>
 		mapOrganizerResponse(organizer, { id: organizer.id })
 	)

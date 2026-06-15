@@ -335,6 +335,22 @@
 				"description": "Use the virtual library card to borrow books and other media."
 			}
 		},
+		"thiEvents": {
+			"departments": {
+				"title": "Discover departments",
+				"viewAll": "All departments",
+				"filterAll": "All",
+				"departments": "departments"
+			},
+			"events": {
+				"subtitle": "Events of THI departments",
+				"noEvents": {
+					"title": "No events found",
+					"subtitle": "Check back later.",
+					"filteredSubtitle": "No events found for {{organizerName}}. Check back later."
+				}
+			}
+		},
 		"clEvents": {
 			"sports": {
 				"title": "Sports",

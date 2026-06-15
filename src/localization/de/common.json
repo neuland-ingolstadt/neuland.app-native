@@ -335,6 +335,22 @@
 				"description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
 			}
 		},
+		"thiEvents": {
+			"departments": {
+				"title": "Fachbereiche entdecken",
+				"viewAll": "Alle Fachbereiche",
+				"filterAll": "Alle",
+				"departments": "Fachbereiche"
+			},
+			"events": {
+				"subtitle": "THI-Veranstaltungen",
+				"noEvents": {
+					"title": "Keine anstehenden Veranstaltungen",
+					"subtitle": "Bitte versuche es später erneut.",
+					"filteredSubtitle": "Keine Veranstaltungen von {{organizerName}} gefunden. Bitte versuche es später erneut."
+				}
+			}
+		},
 		"clEvents": {
 			"sports": {
 				"title": "Sport",

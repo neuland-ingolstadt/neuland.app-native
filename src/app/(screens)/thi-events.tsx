@@ -5,17 +5,15 @@ import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ClEventsPage from '@/components/Events/cl-events-page'
-import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
-import { CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION } from '@/types/campus-life'
+import { CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT } from '@/types/campus-life'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
-export default function ClEventsScreen(): React.JSX.Element {
+export default function ThiEventsScreen(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
-	const { tab, openEvent, id } = useLocalSearchParams<{
-		tab?: string
+	const { openEvent, id } = useLocalSearchParams<{
 		openEvent?: string
 		id?: string
 	}>()
@@ -23,28 +21,15 @@ export default function ClEventsScreen(): React.JSX.Element {
 	const clEventsResult = useQuery({
 		queryKey: [
 			QUERY_KEYS.CAMPUS_LIFE_EVENTS,
-			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 		],
 		queryFn: () =>
 			loadCampusLifeEvents({
-				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 			}),
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 60,
+		gcTime: 1000 * 60 * 60 * 24
 	})
-
-	useEffect(() => {
-		if (tab !== 'sports') {
-			return
-		}
-		router.replace({
-			pathname: '/sports',
-			params: {
-				...(openEvent != null ? { openEvent } : {}),
-				...(id != null ? { id } : {})
-			}
-		})
-	}, [tab, openEvent, id])
 
 	useEffect(() => {
 		if (clEventsResult.isPaused && clEventsResult.data != null) {
@@ -70,17 +55,10 @@ export default function ClEventsScreen(): React.JSX.Element {
 		<View
 			style={[styles.page, { paddingTop: headerPadding + theme.margins.page }]}
 		>
-			{tab === 'sports' ? (
-				<View style={styles.loaderWrapper}>
-					<LoadingIndicator />
-				</View>
-			) : (
-				<ClEventsPage
-					clEventsResult={clEventsResult}
-					organizerKind={CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION}
-					clubsListRoute="/cl-clubs"
-				/>
-			)}
+			<ClEventsPage
+				clEventsResult={clEventsResult}
+				organizerKind={CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT}
+			/>
 		</View>
 	)
 }
@@ -88,10 +66,5 @@ export default function ClEventsScreen(): React.JSX.Element {
 const stylesheet = createStyleSheet(() => ({
 	page: {
 		flex: 1
-	},
-	loaderWrapper: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
 	}
 }))

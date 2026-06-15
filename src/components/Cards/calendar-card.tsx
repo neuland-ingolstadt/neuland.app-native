@@ -69,7 +69,7 @@ const CalendarCard = (): React.JSX.Element => {
 
 	useEffect(() => {
 		setMixedCalendar(selectCalendarCardEvents(calendar, exams ?? [], time))
-	}, [exams])
+	}, [exams, time])
 
 	const { theme, styles } = useStyles(stylesheet)
 

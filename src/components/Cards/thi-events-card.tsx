@@ -6,25 +6,25 @@ import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { LanguageKey } from '@/localization/i18n'
 import {
-	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT,
 	type CampusLifeEvent
 } from '@/types/campus-life'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
-const EventsCard = (): React.JSX.Element => {
+const ThiEventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation('navigation')
 	const { t } = useTranslation('common')
 	const { data: events = [], isSuccess } = useQuery<CampusLifeEvent[]>({
 		queryKey: [
 			QUERY_KEYS.CAMPUS_LIFE_EVENTS,
-			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 		],
 		queryFn: () =>
 			loadCampusLifeEvents({
-				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 			}),
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 60 * 24
@@ -38,7 +38,7 @@ const EventsCard = (): React.JSX.Element => {
 			})
 		} else {
 			router.navigate({
-				pathname: '/cl-events',
+				pathname: '/thi-events',
 				params: {
 					openEvent: 'true',
 					id
@@ -51,8 +51,8 @@ const EventsCard = (): React.JSX.Element => {
 
 	return (
 		<BaseCard
-			title="events"
-			onPressRoute="/cl-events"
+			title="thiEvents"
+			onPressRoute="/thi-events"
 			noDataComponent={noData}
 			noDataPredicate={() => isSuccess && events.length === 0}
 		>
@@ -98,4 +98,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }))
 
-export default EventsCard
+export default ThiEventsCard

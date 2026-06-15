@@ -1,9 +1,12 @@
 /** `organizer_kind` query value for Campus Life public list APIs */
 export const CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION =
 	'STUDENT_ASSOCIATION' as const
+export const CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT =
+	'THI_DEPARTMENT' as const
 
 export type CampusLifePublicOrganizerKind =
-	typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+	| typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+	| typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 
 export interface PublicEventResponse {
 	id: number

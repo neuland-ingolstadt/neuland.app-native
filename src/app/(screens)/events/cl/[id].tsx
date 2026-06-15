@@ -24,14 +24,14 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import type { CampusLifeEvent, CampusLifeOrganizer } from '@/types/campus-life'
+import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
 import {
-	loadCampusLifeEvents,
+	loadCampusLifeEvent,
 	loadCampusLifeOrganizer,
 	QUERY_KEYS
 } from '@/utils/events-utils'
@@ -55,18 +55,21 @@ export default function ClEventDetail(): React.JSX.Element {
 		[i18n.language]
 	)
 
+	const eventId = Number(id)
+	const isIdValid = !Number.isNaN(eventId) && Number.isInteger(eventId)
+
 	const {
-		data: queryData = [],
+		data: eventData = null,
 		isLoading,
 		error
-	} = useQuery<CampusLifeEvent[]>({
-		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
-		queryFn: () => loadCampusLifeEvents(),
-		staleTime: 1000 * 60 * 5, // 5 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+	} = useQuery({
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS, 'event', eventId],
+		queryFn: () => loadCampusLifeEvent(eventId),
+		enabled: isIdValid,
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const eventData = queryData.find((item) => item.id === id) ?? null
 	const organizerId = eventData?.host.id
 	const organizerQuery = useQuery<CampusLifeOrganizer>({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZER, organizerId],
@@ -148,16 +151,16 @@ export default function ClEventDetail(): React.JSX.Element {
 		])
 	)
 
-	if (isLoading || !queryData) {
+	if (!isIdValid || error || (!isLoading && !eventData)) {
+		return <EventErrorView eventType="clEvents" />
+	}
+
+	if (isLoading || !eventData) {
 		return (
 			<View style={styles.loadingContainer}>
 				<LoadingIndicator />
 			</View>
 		)
-	}
-
-	if (error || !eventData) {
-		return <EventErrorView eventType="clEvents" />
 	}
 
 	const pressLink = (url: string | null | undefined) => {
@@ -251,7 +254,7 @@ export default function ClEventDetail(): React.JSX.Element {
 					onPress: () => {
 						if (eventData?.host?.id != null) {
 							router.dismissTo({
-								pathname: '/events/club/[id]',
+								pathname: '/events/organiser/[id]',
 								params: { id: eventData.host.id.toString() }
 							})
 						}
