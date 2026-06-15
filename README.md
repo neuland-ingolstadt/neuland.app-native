@@ -4,6 +4,7 @@
 
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml)
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
+[![Code Coverage](https://codecov.io/gh/neuland-ingolstadt/neuland.app-native/branch/main/graph/badge.svg?token=U7Y7E7G9R1)](https://codecov.io/gh/neuland-ingolstadt/neuland.app-native)
 # Neuland Next - Your app for THI
 
 <p align="left" style="display: flex; align-items: center; gap: 15px;">
