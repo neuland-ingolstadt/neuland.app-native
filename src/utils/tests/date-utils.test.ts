@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { beforeAll, describe, expect, it, mock, spyOn } from 'bun:test'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -209,6 +209,17 @@ describe('date-utils', () => {
 	})
 
 	describe('friendly formatters', () => {
+		const FIXED_NOW = Date.parse('2026-04-07T12:00:00')
+
+		const withFrozenNow = (run: () => void): void => {
+			const nowSpy = spyOn(Date, 'now').mockReturnValue(FIXED_NOW)
+			try {
+				run()
+			} finally {
+				nowSpy.mockRestore()
+			}
+		}
+
 		const fixedDate = (isoDate: string, hours = 8, minutes = 0): Date =>
 			new Date(
 				`${isoDate}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`
@@ -358,20 +369,26 @@ describe('date-utils', () => {
 		})
 
 		it('formatFriendlyRelativeTime - Should return a relative label for future dates', () => {
-			const inFiveMinutes = new Date(Date.now() + 5 * 60 * 1000)
-			expect(dateUtils.formatFriendlyRelativeTime(inFiveMinutes)).toBe(
-				'in 5 Minuten'
-			)
+			withFrozenNow(() => {
+				const inFiveMinutes = new Date(FIXED_NOW + 5 * 60 * 1000)
+				expect(dateUtils.formatFriendlyRelativeTime(inFiveMinutes)).toBe(
+					'in 5 Minuten'
+				)
+			})
 		})
 
 		it('formatRelativeMinutes - Should count minutes until a future datetime', () => {
-			const inTenMinutes = new Date(Date.now() + 10 * 60 * 1000)
-			expect(dateUtils.formatRelativeMinutes(inTenMinutes)).toBe('10 min')
+			withFrozenNow(() => {
+				const inTenMinutes = new Date(FIXED_NOW + 10 * 60 * 1000)
+				expect(dateUtils.formatRelativeMinutes(inTenMinutes)).toBe('10 min')
+			})
 		})
 
 		it('formatRelativeMinutes - Should not return negative minute counts', () => {
-			const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
-			expect(dateUtils.formatRelativeMinutes(oneHourAgo)).toBe('0 min')
+			withFrozenNow(() => {
+				const oneHourAgo = new Date(FIXED_NOW - 60 * 60 * 1000)
+				expect(dateUtils.formatRelativeMinutes(oneHourAgo)).toBe('0 min')
+			})
 		})
 
 		it('getFriendlyWeek - Should label the current and next week relatively', () => {

@@ -355,19 +355,39 @@ describe('calendar-utils', () => {
 	})
 
 	describe('getNextReRegistrationEvent', () => {
-		it('returns the soonest upcoming re-registration event', () => {
-			const event = calendarUtils.getNextReRegistrationEvent(
-				new Date('2026-06-01T00:00:00')
-			)
+		const getReregEvents = () =>
+			calendarUtils.calendar.filter((event) => event.id.startsWith('rereg-'))
 
-			expect(event?.id).toBe('rereg-ws26-ss26')
+		it('returns the soonest upcoming re-registration event', () => {
+			const reregEvents = getReregEvents()
+			expect(reregEvents.length).toBeGreaterThan(0)
+
+			const earliestBegin = reregEvents.reduce(
+				(min, event) => Math.min(min, event.begin.getTime()),
+				Number.POSITIVE_INFINITY
+			)
+			const referenceDate = new Date(earliestBegin - 86_400_000)
+			const expected = [...reregEvents]
+				.filter((event) => event.begin > referenceDate)
+				.sort((a, b) => a.begin.getTime() - b.begin.getTime())[0]
+
+			expect(calendarUtils.getNextReRegistrationEvent(referenceDate)).toEqual(
+				expected
+			)
 		})
 
 		it('returns undefined when no re-registration event lies in the future', () => {
+			const reregEvents = getReregEvents()
+			expect(reregEvents.length).toBeGreaterThan(0)
+
+			const latestBegin = reregEvents.reduce(
+				(max, event) => Math.max(max, event.begin.getTime()),
+				Number.NEGATIVE_INFINITY
+			)
+			const referenceDate = new Date(latestBegin + 86_400_000)
+
 			expect(
-				calendarUtils.getNextReRegistrationEvent(
-					new Date('2028-01-01T00:00:00')
-				)
+				calendarUtils.getNextReRegistrationEvent(referenceDate)
 			).toBeUndefined()
 		})
 	})
