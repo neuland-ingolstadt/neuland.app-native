@@ -1,6 +1,7 @@
 name: Bug report
 description: Report a reproducible bug or problem with the app.
-labels: [bug]
+labels: ["triage"]
+type: bug
 title: "[Bug]: "
 body:
   - type: markdown
