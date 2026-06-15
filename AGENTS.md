@@ -229,6 +229,38 @@ Generated and binary files:
 - Endpoints are configured via `EXPO_PUBLIC_*` env vars (see `.env.local.example`).
   Treat them as read-only at runtime.
 
+### Feature flags (Flipt / OpenFeature)
+
+- Flags are defined in the [`neuland-ingolstadt/flags`](https://github.com/neuland-ingolstadt/flags)
+  repo under `production/neuland-app/features.yaml`. Flipt polls that repo; changes
+  land in the app within ~30s without a release.
+- Client setup lives in `src/lib/openfeature.ts` and `src/lib/feature-flags.ts`.
+  The OpenFeature provider is warmed up in `src/components/provider.tsx`.
+- **Usage in components** — prefer the React Query hook:
+
+  ```tsx
+  import { useFeatureFlag } from '@/hooks'
+  import { FeatureFlagKeys } from '@/lib/feature-flags'
+
+  const { data: prideThemeEnabled = false } = useFeatureFlag(FeatureFlagKeys.prideTheme)
+  ```
+
+  For one-off async checks (e.g. outside React), call `evaluateBooleanFlag` or a named
+  helper like `isPrideThemeEnabled` from `@/lib/feature-flags`.
+- **Evaluation context** sent to Flipt on every request:
+
+  | Attribute      | Source                          | Example values        |
+  |----------------|---------------------------------|-----------------------|
+  | `targetingKey` | fixed                           | `anonymous`           |
+  | `platform`     | `Platform.OS`                   | `ios`, `android`, `web` |
+  | `appVersion`   | `expo-application`              | `1.2.3`               |
+  | `userKind`     | MMKV profile (`useUserKind`)    | `guest`, `student`, `employee` |
+
+  Target rules in Flipt with these keys, e.g. `platform eq web` or
+  `userKind eq student`. There is no install ID — percentage rollouts are not sticky
+  across restarts.
+- Add new flag keys to `FeatureFlagKeys` in `feature-flags.ts` when adding flags in the flags repo.
+
 ### Styling (Unistyles)
 
 - Define styles with `createStyleSheet((theme) => ({ ... }))` and consume them via

@@ -24,6 +24,7 @@ import {
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
+import { ensureOpenFeatureProvider } from '@/lib/openfeature'
 import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
@@ -75,6 +76,10 @@ export default function Provider({
 	const themeColor = usePreferencesStore((state) => state.themeColor)
 
 	usePreferenceTracking()
+
+	useEffect(() => {
+		void ensureOpenFeatureProvider()
+	}, [])
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
