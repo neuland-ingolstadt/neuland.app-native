@@ -1,0 +1,30 @@
+codecov:
+  require_ci_to_pass: true
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: auto
+
+comment:
+  layout: reach,diff,flags,files
+  behavior: default
+  require_changes: false
+
+ignore:
+  - src/__generated__
+  - src/data/licenses.json
+  - src/app
+  - src/components
+  - src/assets
+  - ios
+  - android
+  - "**/*.test.ts"
+  - "**/*.web.tsx"
+  - "**/*.ios.tsx"
+  - "**/*.android.tsx"
