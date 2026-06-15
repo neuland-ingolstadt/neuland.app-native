@@ -8,7 +8,7 @@ const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
 const shareMock = mock(async () => {})
 const copyToClipboardMock = mock(async () => {})
 const trackEventMock = mock(() => {})
-const mockGetFoodPlan = mock(async () => ({ food: [] }))
+const mockGetFoodPlan = mock(async (): Promise<{ food: unknown }> => ({ food: [] }))
 const mockGetFragmentData = mock(() => ({ foodData: [] as unknown[] }))
 
 mock.module(`${SRC_ROOT}localization/i18n.ts`, () => ({

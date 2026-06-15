@@ -1,11 +1,12 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { i18n } from 'i18next'
 import type { Calendar } from '@/types/data'
+import type { Exams } from '@/types/thi-api'
 import type { Exam } from '@/types/utils'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-const mockGetExams = mock(async () => [] as never[])
+const mockGetExams = mock(async (): Promise<Exams[]> => [])
 
 mock.module('react-native', () => ({
 	__esModule: true,
@@ -258,10 +259,13 @@ describe('calendar-utils', () => {
 					anmerkung: '',
 					pruefer_namen: [],
 					exam_ts: new Date('2026-08-01T10:00:00'),
+					exm_date: new Date('2026-08-01T00:00:00'),
+					exam_time: new Date('2026-08-01T10:00:00'),
 					anm_ts: new Date('2026-07-01T00:00:00'),
 					hilfsmittel: ['Notes'],
-					modus: '2'
-				},
+					modus: '2',
+					ancode: 'P'
+				} as Exams,
 				{
 					titel: 'Mathematik',
 					pruefungs_art: 'Klausur',
@@ -270,10 +274,13 @@ describe('calendar-utils', () => {
 					anmerkung: 'Taschenrechner erlaubt',
 					pruefer_namen: ['Prof. X'],
 					exam_ts: new Date('2026-07-01T10:00:00'),
+					exm_date: new Date('2026-07-01T00:00:00'),
+					exam_time: new Date('2026-07-01T10:00:00'),
 					anm_ts: new Date('2026-06-01T00:00:00'),
 					hilfsmittel: ['Calculator', 'Calculator'],
-					modus: '1'
-				}
+					modus: '1',
+					ancode: 'K'
+				} as Exams
 			])
 
 			const result = await calendarUtils.loadExamList()
