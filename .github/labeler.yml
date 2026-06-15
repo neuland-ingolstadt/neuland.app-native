@@ -26,6 +26,12 @@ ios:
   - changed-files:
       - any-glob-to-any-file: 'ios/**'
 
+web:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.web.tsx'
+          - '**/*.html'
+
 dependencies:
   - changed-files:
       - any-glob-to-any-file:

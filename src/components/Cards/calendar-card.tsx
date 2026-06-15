@@ -10,37 +10,32 @@ import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
-import type { Calendar } from '@/types/data'
-import type { Exam } from '@/types/utils'
-import { calendar, loadExamList } from '@/utils/calendar-utils'
+import {
+	type CalendarCardEvent,
+	type CalendarCardExamInput,
+	calendar,
+	isCalendarCardExam,
+	loadExamList,
+	selectCalendarCardEvents
+} from '@/utils/calendar-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 const CalendarCard = (): React.JSX.Element => {
-	type Combined = Calendar | CardExams
 	const router = useRouter()
 	const time = new Date()
 	const { i18n, t } = useTranslation(['navigation', 'common'])
-	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
+	const [mixedCalendar, setMixedCalendar] = useState<CalendarCardEvent[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
-	interface CardExams {
-		name: string
-		begin: Date
-		end?: Date
-		isExam?: boolean
-		examData?: Exam
-	}
-
-	async function loadExams(): Promise<CardExams[]> {
-		let exams: CardExams[] = []
+	async function loadExams(): Promise<CalendarCardExamInput[]> {
+		let exams: CalendarCardExamInput[] = []
 		try {
 			exams = (await loadExamList()).map((x) => ({
 				name: t('navigation:cards.calendar.exam', { name: x.name }),
 				begin: new Date(x.date),
-				isExam: true,
 				examData: x
 			}))
 		} catch (e) {
@@ -73,37 +68,8 @@ const CalendarCard = (): React.JSX.Element => {
 	})
 
 	useEffect(() => {
-		const combined = [
-			...calendar.map((item) => ({ ...item, isExam: false })),
-			...(exams ?? [])
-		]
-			.map((item) => ({ ...item, begin: new Date(item.begin) }))
-			.filter((x) => x.begin > time || (x.end ?? time) > time)
-			.sort((a, b) => {
-				// First, prioritize single-day events and exams over multi-day events
-				const aIsSingleDay = !a.end || a.isExam
-				const bIsSingleDay = !b.end || b.isExam
-
-				// If one is single-day and the other is multi-day, prioritize single-day
-				if (aIsSingleDay && !bIsSingleDay) return -1
-				if (!aIsSingleDay && bIsSingleDay) return 1
-
-				// If both are the same type (both single-day or both multi-day), sort by start time
-				const dateComparison = a.begin.getTime() - b.begin.getTime()
-				if (dateComparison !== 0) {
-					return dateComparison
-				}
-
-				// If start times are the same, prioritize exams over regular events
-				if (a.isExam && !b.isExam) return -1
-				if (!a.isExam && b.isExam) return 1
-
-				// If both are the same type and have the same start time, maintain original order
-				return 0
-			}) as Combined[]
-
-		setMixedCalendar(combined.slice(0, 2))
-	}, [calendar, exams])
+		setMixedCalendar(selectCalendarCardEvents(calendar, exams ?? [], time))
+	}, [exams])
 
 	const { theme, styles } = useStyles(stylesheet)
 
@@ -126,22 +92,18 @@ const CalendarCard = (): React.JSX.Element => {
 					<Pressable
 						key={index}
 						onPress={
-							'isExam' in event && 'examData' in event
+							isCalendarCardExam(event)
 								? () => {
-										if (event.examData) {
-											setExam(event.examData)
+										setExam(event.examData)
 
-											router.navigate({
-												pathname: '/calendar',
-												params: {
-													openExam: 'true'
-												}
-											})
-										}
+										router.navigate({
+											pathname: '/calendar',
+											params: {
+												openExam: 'true'
+											}
+										})
 									}
-								: 'id' in event
-									? () => router.navigate(`/calendar?event=${event.id}`)
-									: undefined
+								: () => router.navigate(`/calendar?event=${event.id}`)
 						}
 					>
 						<EventItem
