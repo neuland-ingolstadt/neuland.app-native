@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import {
+	Redirect,
+	router,
+	useFocusEffect,
+	useLocalSearchParams
+} from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ClEventsPage from '@/components/Events/cl-events-page'
+import { useIsFeatureEnabled } from '@/hooks'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import { CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT } from '@/types/campus-life'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
@@ -13,6 +20,7 @@ import { pausedToast } from '@/utils/ui-utils'
 export default function ThiEventsScreen(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
+	const thiEventsVisible = useIsFeatureEnabled(FeatureFlagKeys.thiEventsVisible)
 	const { openEvent, id } = useLocalSearchParams<{
 		openEvent?: string
 		id?: string
@@ -28,7 +36,8 @@ export default function ThiEventsScreen(): React.JSX.Element {
 				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 			}),
 		staleTime: 1000 * 60 * 60,
-		gcTime: 1000 * 60 * 60 * 24
+		gcTime: 1000 * 60 * 60 * 24,
+		enabled: thiEventsVisible
 	})
 
 	useEffect(() => {
@@ -50,6 +59,10 @@ export default function ThiEventsScreen(): React.JSX.Element {
 			}
 		}, [openEvent, id])
 	)
+
+	if (!thiEventsVisible) {
+		return <Redirect href="/(tabs)" />
+	}
 
 	return (
 		<View

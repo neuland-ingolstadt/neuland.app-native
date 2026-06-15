@@ -17,6 +17,7 @@ import {
 	ResetOrderButton
 } from '@/components/Dashboard'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
+import { useFeatureFlags } from '@/contexts/feature-flags'
 import { USER_GUEST } from '@/data/constants'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { arraysEqual } from '@/utils/app-utils'
@@ -28,6 +29,7 @@ export default function DashboardEdit(): React.JSX.Element {
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		use(DashboardContext)
 	const { userKind = USER_GUEST } = use(UserKindContext)
+	const flags = useFeatureFlags()
 	const { styles } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
@@ -52,7 +54,7 @@ export default function DashboardEdit(): React.JSX.Element {
 	}, [resetOrder, userKind])
 
 	useEffect(() => {
-		const { shown } = getDefaultDashboardOrder(userKind)
+		const { shown } = getDefaultDashboardOrder(userKind, flags)
 		const defaultShown = shown.map((item) => item)
 
 		if (shownDashboardEntries == null) {
@@ -64,7 +66,7 @@ export default function DashboardEdit(): React.JSX.Element {
 				shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
 			)
 		)
-	}, [shownDashboardEntries, userKind])
+	}, [shownDashboardEntries, userKind, flags])
 
 	const renderItem = useCallback(
 		({

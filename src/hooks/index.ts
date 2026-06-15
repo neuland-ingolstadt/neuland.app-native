@@ -1,5 +1,5 @@
 import { useAppState } from './useAppState'
-import { useFeatureFlag } from './useFeatureFlag'
+import { useFeatureFlag, useIsFeatureEnabled } from './useFeatureFlag'
 import { useInterval } from './useInterval'
 import { useMemberStore } from './useMemberStore'
 import { useOnlineManager } from './useOnlineManager'
@@ -8,6 +8,7 @@ import { useRefreshOnFocus } from './useRefreshOnFocus'
 
 export {
 	useFeatureFlag,
+	useIsFeatureEnabled,
 	useAppState,
 	useInterval,
 	useOnlineManager,

@@ -27,12 +27,14 @@ import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
 import { ensureFliptClient } from '@/lib/flipt'
 import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
-import { useDashboard, useUserKind } from '../contexts'
+import { FeatureFlagsProvider, useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
 	children: React.ReactNode
 }
+
+const QUERY_PERSIST_MAX_AGE_MS = 1000 * 60 * 60 * 24
 
 function onAppStateChange(status: AppStateStatus): void {
 	// React Query already supports in web browser refetch on window focus by default
@@ -44,7 +46,8 @@ function onAppStateChange(status: AppStateStatus): void {
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			retry: 2
+			retry: 2,
+			gcTime: QUERY_PERSIST_MAX_AGE_MS
 		}
 	}
 })
@@ -59,27 +62,31 @@ export const themeColorMap: Record<
 }
 
 /**
- * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
- * @param children - The child components to be wrapped by the Provider.
- * @param rest - Additional props to be passed to the Provider.
- * @returns The Provider component.
+ * App contexts that depend on feature flags and the dashboard.
  */
-export default function Provider({
-	children
-}: ProviderProps): React.JSX.Element {
+function AppContexts({ children }: ProviderProps): React.JSX.Element {
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
 
-	useOnlineManager()
-	useAppState(onAppStateChange)
-	const theme = usePreferencesStore((state) => state.theme)
-	const themeColor = usePreferencesStore((state) => state.themeColor)
-
 	usePreferenceTracking()
 
-	useEffect(() => {
-		void ensureFliptClient()
-	}, [])
+	return (
+		<UserKindContext.Provider value={userKind}>
+			<DashboardContext.Provider value={dashboard}>
+				<Toaster />
+				{children}
+			</DashboardContext.Provider>
+		</UserKindContext.Provider>
+	)
+}
+
+/**
+ * Inner provider tree — must render inside PersistQueryClientProvider because
+ * feature flags are evaluated via React Query.
+ */
+function ProviderContent({ children }: ProviderProps): React.JSX.Element {
+	const theme = usePreferencesStore((state) => state.theme)
+	const themeColor = usePreferencesStore((state) => state.themeColor)
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
@@ -124,28 +131,47 @@ export default function Provider({
 	}, [themeColor])
 
 	return (
+		<UnistylesProvider>
+			<ThemeProvider
+				value={UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme}
+			>
+				<BottomSheetModalProvider>
+					<FeatureFlagsProvider>
+						<AppContexts>{children}</AppContexts>
+					</FeatureFlagsProvider>
+				</BottomSheetModalProvider>
+			</ThemeProvider>
+		</UnistylesProvider>
+	)
+}
+
+/**
+ * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
+ * @param children - The child components to be wrapped by the Provider.
+ * @param rest - Additional props to be passed to the Provider.
+ * @returns The Provider component.
+ */
+export default function Provider({
+	children
+}: ProviderProps): React.JSX.Element {
+	useOnlineManager()
+	useAppState(onAppStateChange)
+
+	useEffect(() => {
+		void ensureFliptClient()
+	}, [])
+
+	return (
 		<GestureHandlerRootView style={styles.container}>
 			<SafeAreaProvider>
 				<PersistQueryClientProvider
 					client={queryClient}
-					persistOptions={{ persister: syncStoragePersister }}
+					persistOptions={{
+						persister: syncStoragePersister,
+						maxAge: QUERY_PERSIST_MAX_AGE_MS
+					}}
 				>
-					<UnistylesProvider>
-						<ThemeProvider
-							value={
-								UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
-							}
-						>
-							<BottomSheetModalProvider>
-								<UserKindContext.Provider value={userKind}>
-									<DashboardContext.Provider value={dashboard}>
-										<Toaster />
-										{children}
-									</DashboardContext.Provider>
-								</UserKindContext.Provider>
-							</BottomSheetModalProvider>
-						</ThemeProvider>
-					</UnistylesProvider>
+					<ProviderContent>{children}</ProviderContent>
 				</PersistQueryClientProvider>
 			</SafeAreaProvider>
 		</GestureHandlerRootView>

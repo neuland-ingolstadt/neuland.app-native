@@ -1,5 +1,6 @@
 import type { JSX } from 'react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { type FeatureFlagKey, FeatureFlagKeys } from '@/lib/feature-flags'
 import {
 	CalendarCard,
 	EventsCard,
@@ -31,6 +32,7 @@ export const AllCards: Card[] = [
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		featureFlag: FeatureFlagKeys.thiEventsVisible,
 		card: () => <ThiEventsCard />
 	},
 	{
@@ -77,6 +79,7 @@ export interface Card {
 	stillVisible?: boolean // is the card visible to not allowed users
 	initial: string[] // for which user kind is the card shown by default
 	allowed: string[] // for which user kind is the card allowed
+	featureFlag?: FeatureFlagKey
 	card: () => JSX.Element
 }
 
