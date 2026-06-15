@@ -210,7 +210,9 @@ describe('date-utils', () => {
 
 	describe('friendly formatters', () => {
 		const fixedDate = (isoDate: string, hours = 8, minutes = 0): Date =>
-			new Date(`${isoDate}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`)
+			new Date(
+				`${isoDate}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`
+			)
 
 		const todayAt = (hours = 8, minutes = 0): Date => {
 			const now = new Date()
@@ -296,9 +298,9 @@ describe('date-utils', () => {
 
 		it('formatFriendlyTimeRange - Should format a single time or a range', () => {
 			expect(dateUtils.formatFriendlyTimeRange('08:00:00')).toBe('08:00')
-			expect(
-				dateUtils.formatFriendlyTimeRange('08:00:00', '12:30:00')
-			).toBe('08:00 – 12:30')
+			expect(dateUtils.formatFriendlyTimeRange('08:00:00', '12:30:00')).toBe(
+				'08:00 – 12:30'
+			)
 		})
 
 		it('formatFriendlyDateTimeRange - Should return an empty string without a begin date', () => {
@@ -320,9 +322,7 @@ describe('date-utils', () => {
 					fixedDate('2026-04-09', 8),
 					fixedDate('2026-04-10', 12, 30)
 				)
-			).toBe(
-				'Do., 09.04.2026, 08:00 – Fr., 10.04.2026, 12:30'
-			)
+			).toBe('Do., 09.04.2026, 08:00 – Fr., 10.04.2026, 12:30')
 		})
 
 		it('formatFriendlyDateTime - Should handle missing, sentinel and valid dates', () => {
@@ -335,9 +335,9 @@ describe('date-utils', () => {
 			expect(
 				dateUtils.formatFriendlyDateTime(new Date('1970-01-01T00:00:00'))
 			).toBe(null)
-			expect(dateUtils.formatFriendlyDateTime(fixedDate('2026-04-09', 8, 15))).toBe(
-				'Do., 09.04.2026, 08:15'
-			)
+			expect(
+				dateUtils.formatFriendlyDateTime(fixedDate('2026-04-09', 8, 15))
+			).toBe('Do., 09.04.2026, 08:15')
 		})
 
 		it('formatNearDate - Should return today and tomorrow labels or a near date', () => {
@@ -352,9 +352,9 @@ describe('date-utils', () => {
 			expect(
 				dateUtils.formatFriendlyRelativeTime(new Date('1970-01-01T00:00:00'))
 			).toBe('')
-			expect(
-				dateUtils.formatFriendlyRelativeTime(new Date(Number.NaN))
-			).toBe('')
+			expect(dateUtils.formatFriendlyRelativeTime(new Date(Number.NaN))).toBe(
+				''
+			)
 		})
 
 		it('formatFriendlyRelativeTime - Should return a relative label for future dates', () => {
@@ -385,15 +385,13 @@ describe('date-utils', () => {
 			expect(dateUtils.getFriendlyWeek(inCurrentWeek, 'de')).toBe(
 				'dates.thisWeek'
 			)
-			expect(dateUtils.getFriendlyWeek(inNextWeek, 'de')).toBe(
-				'dates.nextWeek'
-			)
+			expect(dateUtils.getFriendlyWeek(inNextWeek, 'de')).toBe('dates.nextWeek')
 		})
 
 		it('getFriendlyWeek - Should format arbitrary weeks as a numeric range', () => {
-			expect(
-				dateUtils.getFriendlyWeek(fixedDate('2025-01-15'), 'de')
-			).toBe('13.1. – 19.1.')
+			expect(dateUtils.getFriendlyWeek(fixedDate('2025-01-15'), 'de')).toBe(
+				'13.1. – 19.1.'
+			)
 		})
 
 		it('formatDay - Should format weekday and day using the active locale', () => {

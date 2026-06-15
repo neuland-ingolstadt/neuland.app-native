@@ -1,8 +1,11 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import type { i18n } from 'i18next'
 import type { Calendar } from '@/types/data'
 import type { Exam } from '@/types/utils'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
+
+const mockGetExams = mock(async () => [] as never[])
 
 mock.module('react-native', () => ({
 	__esModule: true,
@@ -30,7 +33,7 @@ mock.module('i18next', () => ({
 
 mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
 	default: {
-		getExams: async () => []
+		getExams: mockGetExams
 	}
 }))
 
@@ -212,6 +215,153 @@ describe('calendar-utils', () => {
 			]
 			const result = calendarUtils.selectCalendarCardEvents(events, [], NOW)
 			expect(result).toEqual([])
+		})
+
+		it('prioritizes exams over calendar events when effective times tie', () => {
+			const sameBegin = new Date('2026-06-10T00:00:00')
+			const events = [
+				{
+					...makeCalendarEvent('calendar', '2026-06-10T00:00:00'),
+					begin: sameBegin
+				}
+			]
+			const exams = [
+				{
+					...toCardExam(makeExam('TiedExam', '2026-06-10T00:00:00')),
+					begin: sameBegin
+				}
+			]
+			const result = calendarUtils.selectCalendarCardEvents(events, exams, NOW)
+			expect(calendarUtils.isCalendarCardExam(result[0])).toBe(true)
+			expect(
+				calendarUtils.isCalendarCardExam(result[0]) && result[0].examData.name
+			).toBe('TiedExam')
+		})
+	})
+
+	describe('loadExamList', () => {
+		it('returns an empty array when the API has no exams', async () => {
+			mockGetExams.mockReset()
+			mockGetExams.mockResolvedValue([])
+
+			await expect(calendarUtils.loadExamList()).resolves.toEqual([])
+		})
+
+		it('filters internship-like exams and maps API fields', async () => {
+			mockGetExams.mockReset()
+			mockGetExams.mockResolvedValue([
+				{
+					titel: 'Praktikum',
+					pruefungs_art: 'Praktikum',
+					exam_rooms: '',
+					exam_seat: '',
+					anmerkung: '',
+					pruefer_namen: [],
+					exam_ts: new Date('2026-08-01T10:00:00'),
+					anm_ts: new Date('2026-07-01T00:00:00'),
+					hilfsmittel: ['Notes'],
+					modus: '2'
+				},
+				{
+					titel: 'Mathematik',
+					pruefungs_art: 'Klausur',
+					exam_rooms: 'A101',
+					exam_seat: '12',
+					anmerkung: 'Taschenrechner erlaubt',
+					pruefer_namen: ['Prof. X'],
+					exam_ts: new Date('2026-07-01T10:00:00'),
+					anm_ts: new Date('2026-06-01T00:00:00'),
+					hilfsmittel: ['Calculator', 'Calculator'],
+					modus: '1'
+				}
+			])
+
+			const result = await calendarUtils.loadExamList()
+
+			expect(result).toHaveLength(1)
+			expect(result[0]).toEqual({
+				name: 'Mathematik',
+				type: 'Klausur',
+				rooms: 'A101',
+				seat: '12',
+				notes: 'Taschenrechner erlaubt',
+				examiners: ['Prof. X'],
+				date: new Date('2026-07-01T10:00:00'),
+				enrollment: new Date('2026-06-01T00:00:00'),
+				aids: ['Calculator']
+			})
+		})
+	})
+
+	describe('convertCalendarToWeekViewEvents', () => {
+		const i18nMock = { language: 'de' } as i18n
+
+		it('maps all-day events to midnight boundaries', () => {
+			const entries: Calendar[] = [
+				{
+					id: 'holiday',
+					name: { de: 'Feiertag', en: 'Holiday' },
+					begin: new Date('2026-06-04T00:00:00'),
+					end: new Date('2026-06-05T00:00:00'),
+					hasHours: false
+				}
+			]
+
+			const [event] = calendarUtils.convertCalendarToWeekViewEvents(
+				entries,
+				i18nMock,
+				'#123456',
+				'#ffffff'
+			)
+
+			expect(event.title).toBe('Feiertag')
+			expect(event.color).toBe('#123456')
+			expect(event.textColor).toBe('#ffffff')
+			expect(event.start.getHours()).toBe(0)
+			expect(event.end.getHours()).toBe(0)
+		})
+
+		it('keeps timed events at their original start and end', () => {
+			const begin = new Date('2026-06-04T08:15:00')
+			const end = new Date('2026-06-04T09:45:00')
+			const entries: Calendar[] = [
+				{
+					id: 'lecture',
+					name: { de: 'Vorlesung', en: 'Lecture' },
+					begin,
+					end,
+					hasHours: true
+				}
+			]
+
+			const [event] = calendarUtils.convertCalendarToWeekViewEvents(
+				entries,
+				i18nMock,
+				'#654321',
+				'#000000'
+			)
+
+			expect(event.start).toBe(begin)
+			expect(event.end).toBe(end)
+			expect(event.title).toBe('Vorlesung')
+		})
+	})
+
+	describe('getNextReRegistrationEvent', () => {
+		it('returns the soonest upcoming re-registration event', () => {
+			const event = calendarUtils.getNextReRegistrationEvent(
+				new Date('2026-06-01T00:00:00')
+			)
+
+			expect(event?.id).toBe('rereg-ws26-ss26')
+		})
+
+		it('returns undefined when no re-registration event lies in the future', () => {
+			expect(
+				calendarUtils.getNextReRegistrationEvent(
+					new Date('2028-01-01T00:00:00')
+				)
+			).toBeUndefined()
 		})
 	})
 })
