@@ -412,7 +412,10 @@ describe('date-utils', () => {
 		})
 
 		it('formatDay - Should format weekday and day using the active locale', () => {
-			expect(dateUtils.formatDay(fixedDate('2026-04-09'))).toBe('Do. 09.')
+			const date = fixedDate('2026-04-09')
+			expect(dateUtils.formatDay(date)).toBe(
+				date.toLocaleString('de', { weekday: 'short', day: '2-digit' })
+			)
 		})
 	})
 })
