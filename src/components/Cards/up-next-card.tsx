@@ -57,7 +57,11 @@ const UpNextCard: React.FC = () => {
 		return timetable
 	}, [])
 
-	const { data: timetable, error: timetableError, isLoading } = useQuery({
+	const {
+		data: timetable,
+		error: timetableError,
+		isLoading
+	} = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
 		staleTime: 10 * 60 * 1000,
