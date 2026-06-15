@@ -23,11 +23,11 @@ export interface FoodLanguagePickerProps {
 	action: (item: string) => void
 }
 
-const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
+const MultiSectionRadio = ({
 	elements,
 	selectedItem,
 	action
-}) => {
+}: FoodLanguagePickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<>

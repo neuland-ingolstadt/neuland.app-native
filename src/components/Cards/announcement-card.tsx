@@ -38,7 +38,9 @@ const platform = (
 	isStaging ? 'WEB_DEV' : Platform.OS.toUpperCase()
 ) as AppPlatform
 
-const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
+const AnnouncementCard = ({
+	data
+}: AnnouncementCardProps): React.JSX.Element | null => {
 	const { hiddenAnnouncements, hideAnnouncement } = use(DashboardContext)
 	const { t } = useTranslation('navigation')
 	const { userKind = 'guest' } = use(UserKindContext)

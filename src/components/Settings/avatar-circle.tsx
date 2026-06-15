@@ -1,5 +1,4 @@
 import type React from 'react'
-import type { JSX } from 'react'
 import {
 	type ColorValue,
 	type StyleProp,
@@ -24,7 +23,7 @@ const AvatarCircle = ({
 }: {
 	size?: number
 	background?: ColorValue
-	children: JSX.Element
+	children: React.JSX.Element
 	style?: StyleProp<ViewStyle>
 }): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)

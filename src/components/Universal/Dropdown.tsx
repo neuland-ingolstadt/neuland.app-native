@@ -21,13 +21,13 @@ interface Props {
  * @param selected - The currently selected option.
  * @param width - The width of the dropdown.
  */
-const Dropdown: React.FC<Props> = ({
+const Dropdown = ({
 	data,
 	defaultValue,
 	onSelect,
 	reset = false,
 	width = 100
-}) => {
+}: Props): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const ref = React.createRef<SelectDropdown>()
 
@@ -86,10 +86,13 @@ const Dropdown: React.FC<Props> = ({
 
 export default Dropdown
 
-export const DropdownButton: React.FC<{
+export const DropdownButton = ({
+	children,
+	onPress
+}: {
 	children: React.ReactNode
 	onPress: () => void
-}> = ({ children, onPress }) => {
+}): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<TouchableOpacity onPress={onPress}>

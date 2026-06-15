@@ -21,10 +21,10 @@ interface AvailableRoomsSuggestionsProps {
 	handlePresentModalPress: () => void
 }
 
-const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
+const AvailableRoomsSuggestions = ({
 	allRooms,
 	handlePresentModalPress
-}) => {
+}: AvailableRoomsSuggestionsProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)

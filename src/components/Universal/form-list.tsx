@@ -33,11 +33,11 @@ interface RenderSectionItemProps {
 	sheet: boolean
 }
 
-const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
+const RenderSectionItem = ({
 	sectionIndex,
 	section,
 	sheet
-}) => {
+}: RenderSectionItemProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<View key={sectionIndex} style={styles.block}>
@@ -52,12 +52,12 @@ const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
 	)
 }
 
-const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
+const RenderSectionFrame = ({
 	sectionIndex,
 	children,
 	footer,
 	header
-}) => {
+}: RenderSectionFrameProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
@@ -69,12 +69,19 @@ const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
 	)
 }
 
-const RenderSectionItems: React.FC<{
+interface RenderSectionItemsProps {
 	items: SectionGroup[]
 	privacyHidden: boolean
 	rowStyle?: ViewStyle
 	sheet: boolean
-}> = ({ items, privacyHidden, rowStyle, sheet }) => {
+}
+
+const RenderSectionItems = ({
+	items,
+	privacyHidden,
+	rowStyle,
+	sheet
+}: RenderSectionItemsProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 
 	const handlePress = (onPress?: () => Promise<void> | void): void => {
@@ -279,12 +286,12 @@ const RenderSectionItems: React.FC<{
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
  * @returns {JSX.Element} - A React component that renders the list of forms.
  */
-const FormList: React.FC<FormListProps> = ({
+const FormList = ({
 	sections,
 	rowStyle,
 	privacyHidden,
 	sheet = false
-}) => {
+}: FormListProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (

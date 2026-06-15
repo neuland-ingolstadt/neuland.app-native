@@ -1,9 +1,11 @@
-import type { JSX } from 'react'
+import type React from 'react'
 
 interface CardContextMenuProps {
-	card: JSX.Element
+	card: React.JSX.Element
 }
 
-export function CardContextMenu({ card }: CardContextMenuProps): JSX.Element {
+export function CardContextMenu({
+	card
+}: CardContextMenuProps): React.JSX.Element {
 	return <>{card}</>
 }

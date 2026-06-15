@@ -18,12 +18,12 @@ interface FloorPickerProps {
 	setCameraTriggerKey: React.Dispatch<React.SetStateAction<number>>
 }
 
-const FloorPicker: React.FC<FloorPickerProps> = ({
+const FloorPicker = ({
 	floors,
 	showAllFloors,
 	toggleShowAllFloors,
 	setCameraTriggerKey
-}): React.JSX.Element => {
+}: FloorPickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 
