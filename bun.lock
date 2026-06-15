@@ -15,8 +15,6 @@
         "@howljs/calendar-kit": "2.5.6",
         "@kichiyaki/react-native-barcode-generator": "^0.6.7",
         "@maplibre/maplibre-react-native": "10.4.2",
-        "@openfeature/flipt-provider": "^0.1.4",
-        "@openfeature/server-sdk": "^1.21.0",
         "@react-native-community/datetimepicker": "8.4.4",
         "@react-native-community/netinfo": "11.4.1",
         "@react-native-menu/menu": "2.0.0",
@@ -655,12 +653,6 @@
     "@octokit/webhooks": ["@octokit/webhooks@14.2.0", "", { "dependencies": { "@octokit/openapi-webhooks-types": "12.1.0", "@octokit/request-error": "^7.0.0", "@octokit/webhooks-methods": "^6.0.0" } }, "sha512-da6KbdNCV5sr1/txD896V+6W0iamFWrvVl8cHkBSPT+YlvmT3DwXa4jxZnQc+gnuTEqSWbBeoSZYTayXH9wXcw=="],
 
     "@octokit/webhooks-methods": ["@octokit/webhooks-methods@6.0.0", "", {}, "sha512-MFlzzoDJVw/GcbfzVC1RLR36QqkTLUf79vLVO3D+xn7r0QgxnFoLZgtrzxiQErAjFUOdH6fas2KeQJ1yr/qaXQ=="],
-
-    "@openfeature/core": ["@openfeature/core@1.10.0", "", {}, "sha512-C3ynxtPYhe5qVJgQIqCNxZXeRXo4t1Eo86uiROr8+sD6F2OjEJGIp6VOGxz+r6jkad2s8Br9BnUJOvskhai/3A=="],
-
-    "@openfeature/flipt-provider": ["@openfeature/flipt-provider@0.1.4", "", { "peerDependencies": { "@flipt-io/flipt": "^1.2.0", "@openfeature/server-sdk": "^1.13.0" } }, "sha512-wvGp/2AsA6qL89XNrC1RAAZAJCO0buEygRasf8rYTTRKNESbVNtv1rxQk5dZ3z2YR8RncPFCXTMTGioegG8n1g=="],
-
-    "@openfeature/server-sdk": ["@openfeature/server-sdk@1.21.0", "", { "peerDependencies": { "@openfeature/core": "^1.10.0" } }, "sha512-ZBVAiyMeN+dxurcXGJlvuOpYg9X7V923MVCI5dq/kE/5o8ys7MCOPhW44e4PS+XABHzSRTw44hcgWez93xwifw=="],
 
     "@radix-ui/primitive": ["@radix-ui/primitive@1.1.3", "", {}, "sha512-JTF99U/6XIjCBo0wqkU5sK10glYe27MRRsfwoiq5zzOEZLHU3A3KCMa5X/azekYRCJ0HlwI0crAXS/5dEHTzDg=="],
 

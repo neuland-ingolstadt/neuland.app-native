@@ -24,7 +24,7 @@ import {
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
-import { ensureOpenFeatureProvider } from '@/lib/openfeature'
+import { ensureFliptClient } from '@/lib/flipt'
 import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
@@ -78,7 +78,7 @@ export default function Provider({
 	usePreferenceTracking()
 
 	useEffect(() => {
-		void ensureOpenFeatureProvider()
+		void ensureFliptClient()
 	}, [])
 
 	useEffect(() => {
