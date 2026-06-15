@@ -91,6 +91,7 @@ const FloatingEventIcon = ({
 	useAnimatedReaction(
 		() => tapCount.value,
 		(current, previous) => {
+			if (previous === undefined) return
 			if (current === previous) return
 
 			const randomDelay = index * 80
@@ -120,9 +121,7 @@ const FloatingEventIcon = ({
 	useEffect(() => {
 		const delay = eventIcon.delay
 
-		setTimeout(() => {
-			runOnJS(triggerSuperLightHaptic)()
-		}, delay)
+		const timeoutId = setTimeout(triggerSuperLightHaptic, delay)
 
 		opacity.value = withDelay(
 			delay,
@@ -172,6 +171,8 @@ const FloatingEventIcon = ({
 				true
 			)
 		)
+
+		return () => clearTimeout(timeoutId)
 	}, [eventIcon.delay])
 
 	const animatedStyle = useAnimatedStyle(() => {

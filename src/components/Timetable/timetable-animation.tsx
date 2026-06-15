@@ -85,6 +85,7 @@ const FloatingTimetableIcon = ({
 	useAnimatedReaction(
 		() => tapCount.value,
 		(current, previous) => {
+			if (previous === undefined) return
 			if (current === previous) return
 
 			const randomDelay = index * 80
