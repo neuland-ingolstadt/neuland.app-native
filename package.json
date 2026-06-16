@@ -22,7 +22,9 @@
 		"licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
 		"codegen": "graphql-codegen --config config/codegen.yml",
 		"changelog": "git cliff --config config/cliff.toml --output CHANGELOG.md",
-		"pkgs": "bunx expo install --check"
+		"pkgs": "bunx expo install --check",
+		"test": "bun test --ci",
+		"test:coverage": "bun test --ci --coverage --coverage-reporter=lcov --coverage-reporter=text"
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.3.10",

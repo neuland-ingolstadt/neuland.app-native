@@ -4,6 +4,7 @@ import type React from 'react'
 import { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import ErrorView from '@/components/Error/error-view'
+import { useSessionStore } from '@/hooks/useSessionStore'
 
 export default function Unmatched(): React.JSX.Element {
 	const navigation = useNavigation()
@@ -11,10 +12,14 @@ export default function Unmatched(): React.JSX.Element {
 	const pathname =
 		cleanedPathname.charAt(0).toUpperCase() + cleanedPathname.slice(1)
 	const { t } = useTranslation('navigation')
+	const analyticsInitialized = useSessionStore(
+		(state) => state.analyticsInitialized
+	)
 
 	useEffect(() => {
+		if (!analyticsInitialized) return
 		trackEvent('Unmatched', { pathname })
-	}, [pathname])
+	}, [analyticsInitialized, pathname])
 
 	useLayoutEffect(() => {
 		navigation.setOptions({

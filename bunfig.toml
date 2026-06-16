@@ -2,3 +2,15 @@
 [install]
 # Only install package versions published at least 3 days ago
 minimumReleaseAge = 259200
+
+[test]
+coverageSkipTestFiles = true
+coveragePathIgnorePatterns = [
+	"src/__generated__/**",
+	"src/data/licenses.json",
+	"src/app/**",
+	"src/components/**",
+	"src/assets/**",
+	"ios/**",
+	"android/**"
+]
