@@ -44,7 +44,7 @@ export default function About(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
 	const headerPadding = useTransparentHeaderPadding()
-	const { idToken } = useMemberStore()
+	const memberInfo = useMemberStore((s) => s.info)
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -330,7 +330,7 @@ export default function About(): React.JSX.Element {
 
 			<View style={styles.formlistContainer}>
 				<FormList sections={[appSection]} />
-				{!idToken && <MemberAreaButton />}
+				{!memberInfo && <MemberAreaButton />}
 				<FormList sections={remainingSections} />
 			</View>
 			<SectionView

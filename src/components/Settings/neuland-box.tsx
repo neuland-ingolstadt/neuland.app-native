@@ -26,7 +26,7 @@ const NeulandBox = (): React.JSX.Element | null => {
 	return (
 		<View style={styles.neulandContainer}>
 			<Pressable
-				onPress={() => router.push('/(screens)/member')}
+				onPress={() => router.navigate('/member')}
 				style={({ pressed }) => [
 					styles.container,
 					{ opacity: pressed ? 0.9 : 1 }
