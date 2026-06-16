@@ -14,12 +14,14 @@ mock.module('react-native', () => ({
 }))
 
 let resolveAnnouncementPlatform: typeof import('../web-host').resolveAnnouncementPlatform
+let getAnnouncementPlatform: typeof import('../web-host').getAnnouncementPlatform
 let isDevNeulandHost: typeof import('../web-host').isDevNeulandHost
 let resolveWebPlatform: typeof import('../web-host').resolveWebPlatform
 
 beforeAll(async () => {
 	const webHost = await import(`${SRC_ROOT}utils/web-host.ts`)
 	resolveAnnouncementPlatform = webHost.resolveAnnouncementPlatform
+	getAnnouncementPlatform = webHost.getAnnouncementPlatform
 	isDevNeulandHost = webHost.isDevNeulandHost
 	resolveWebPlatform = webHost.resolveWebPlatform
 })
@@ -71,5 +73,36 @@ describe('web-host', () => {
 		platform.OS = 'android'
 		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Android)
 		platform.OS = 'web'
+	})
+
+	it('resolveAnnouncementPlatform - Should default to WEB when hostname is omitted', () => {
+		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Web)
+	})
+
+	it('resolveAnnouncementPlatform - Should read window.location.hostname when omitted', () => {
+		const originalWindow = globalThis.window
+		Object.defineProperty(globalThis, 'window', {
+			configurable: true,
+			value: { location: { hostname: 'dev.neuland.app' } }
+		})
+
+		try {
+			expect(resolveAnnouncementPlatform()).toBe(
+				AnnouncementPlatformEnum.WebDev
+			)
+		} finally {
+			if (originalWindow === undefined) {
+				Reflect.deleteProperty(globalThis, 'window')
+			} else {
+				Object.defineProperty(globalThis, 'window', {
+					configurable: true,
+					value: originalWindow
+				})
+			}
+		}
+	})
+
+	it('getAnnouncementPlatform - Should delegate to resolveAnnouncementPlatform', () => {
+		expect(getAnnouncementPlatform()).toBe(resolveAnnouncementPlatform())
 	})
 })
