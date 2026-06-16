@@ -242,7 +242,7 @@
 			"registerNow": "Jetzt anmelden",
 			"eventLink": "Veranstaltungslink",
 			"organizerDetails": {
-				"clubWebsite": "Vereins-Website",
+				"clubWebsite": "Veranstalter-Website",
 				"instagram": "Instagram",
 				"linkedin": "LinkedIn",
 				"location": "Ort",
@@ -373,6 +373,27 @@
 				"description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
 			}
 		},
+		"thiEvents": {
+			"departments": {
+				"title": "Abteilungen entdecken",
+				"viewAll": "Alle Abteilungen",
+				"filterAll": "Alle",
+				"departments": "Abteilungen",
+				"missingDescription": "Keine Beschreibung verfügbar.",
+				"footerInfo": "Die Abteilungen sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Abteilungen gefunden"
+				}
+			},
+			"events": {
+				"subtitle": "THI-Veranstaltungen",
+				"noEvents": {
+					"title": "Keine anstehenden Veranstaltungen",
+					"subtitle": "Bitte versuche es später erneut.",
+					"filteredSubtitle": "Keine Veranstaltungen von {{organizerName}} gefunden. Bitte versuche es später erneut."
+				}
+			}
+		},
 		"clEvents": {
 			"sports": {
 				"title": "Sport",
@@ -387,7 +408,10 @@
 				"filterAll": "Alle",
 				"clubs": "Vereine",
 				"missingDescription": "Keine Beschreibung verfügbar.",
-				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
+				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Vereine gefunden"
+				}
 			},
 			"events": {
 				"title": "Veranstaltungen",

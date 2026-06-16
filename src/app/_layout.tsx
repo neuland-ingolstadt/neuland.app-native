@@ -343,6 +343,13 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/thi-events"
+					options={{
+						title: t('navigation.thiEvents'),
+						...transparentHeaderStyle
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/sports"
 					options={{
 						title: t('navigation.sports'),
@@ -496,9 +503,21 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/thi-departments"
+					options={{
+						title: t('common:pages.thiEvents.departments.title')
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/club/[id]"
 					options={{
-						title: t('navigation.club'),
+						headerShown: false
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/organiser/[id]"
+					options={{
+						title: t('navigation.organiser'),
 						...Platform.select({
 							ios: {
 								...presentationMode

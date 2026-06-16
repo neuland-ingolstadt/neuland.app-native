@@ -27,10 +27,15 @@ export const cardIcons: CardIcons = {
 		web: 'GraduationCap'
 	},
 	events: {
-		ios: 'figure.2',
-		iosScale: 1.2,
+		ios: 'party.popper.fill',
+		iosScale: 1.1,
 		android: 'celebration',
 		web: 'PartyPopper'
+	},
+	thiEvents: {
+		ios: 'building.columns.fill',
+		android: 'account_balance',
+		web: 'Building2'
 	},
 	sports: {
 		ios: 'figure.run',

@@ -53,3 +53,4 @@ android/.kotlin
 my-release-key.jks
 
 *.geojson
+coverage/
