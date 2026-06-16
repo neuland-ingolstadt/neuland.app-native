@@ -152,7 +152,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 			icon: {
 				ios: 'instagram',
 				android: 'instagram',
-				web: 'Instagram',
+				web: 'instagram',
 				iosFallback: true
 			},
 			onPress: () => {
