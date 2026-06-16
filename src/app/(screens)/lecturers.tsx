@@ -145,14 +145,14 @@ export default function LecturersScreen(): React.JSX.Element {
 		return allData
 	}, [allLecturersResult?.data, localSearch])
 
-	const { facultyData, displayesProfessors } = useMemo(() => {
+	const { facultyData, displaysProfessors } = useMemo(() => {
 		const allData = allLecturersResult?.data
 		if (faculty !== null) {
 			const filtered =
 				allData?.filter((lecturer: Lecturers) =>
 					lecturer.organisation?.includes(faculty)
 				) ?? []
-			return { facultyData: filtered, displayesProfessors: false }
+			return { facultyData: filtered, displaysProfessors: false }
 		}
 
 		const filtered =
@@ -162,7 +162,7 @@ export default function LecturersScreen(): React.JSX.Element {
 					lecturer.funktion === Funktion.ProfessorIn
 			) ?? []
 
-		return { facultyData: filtered, displayesProfessors: true }
+		return { facultyData: filtered, displaysProfessors: true }
 	}, [faculty, allLecturersResult.data])
 
 	const generateSections = (
