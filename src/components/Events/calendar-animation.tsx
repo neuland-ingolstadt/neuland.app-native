@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/correctness/useHookAtTopLevel: TODO */
-
 import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
 import { Platform, View } from 'react-native'
@@ -7,6 +5,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Easing,
 	runOnJS,
+	type SharedValue,
+	useAnimatedReaction,
 	useAnimatedStyle,
 	useSharedValue,
 	withDelay,
@@ -62,26 +62,25 @@ const EVENT_ICONS: readonly EventIcon[] = [
 	}
 ]
 
-export const CalendarAnimation = ({
-	size = 120
-}: CalendarAnimationProps): React.JSX.Element => {
+interface FloatingEventIconProps {
+	eventIcon: EventIcon
+	size: number
+	index: number
+	tapCount: SharedValue<number>
+}
+
+const FloatingEventIcon = ({
+	eventIcon,
+	size,
+	index,
+	tapCount
+}: FloatingEventIconProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
-	const calendarScale = useSharedValue(0.9)
-	const calendarOpacity = useSharedValue(0)
-	const calendarRotation = useSharedValue(0)
-	const calendarTapScale = useSharedValue(1)
-
-	const iconsArray = EVENT_ICONS.map(() => ({
-		opacity: useSharedValue(0),
-		scale: useSharedValue(0.6),
-		floatY: useSharedValue(0),
-		rotation: useSharedValue(Math.random() * 0.05 - 0.025)
-	}))
-
-	const triggerHaptic = () => {
-		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-	}
+	const opacity = useSharedValue(0)
+	const scale = useSharedValue(0.6)
+	const floatY = useSharedValue(0)
+	const rotation = useSharedValue(Math.random() * 0.05 - 0.025)
 
 	const triggerSuperLightHaptic = () => {
 		if (Platform.OS === 'ios') {
@@ -89,19 +88,14 @@ export const CalendarAnimation = ({
 		}
 	}
 
-	const tapGesture = Gesture.Tap().onBegin(() => {
-		// Add haptic feedback on iOS
-		runOnJS(triggerHaptic)()
+	useAnimatedReaction(
+		() => tapCount.value,
+		(current, previous) => {
+			if (previous === undefined) return
+			if (current === previous) return
 
-		// Animate calendar icon zoom
-		calendarTapScale.value = withSequence(
-			withTiming(0.95, { duration: 100, easing: Easing.out(Easing.quad) }),
-			withTiming(1, { duration: 200, easing: Easing.bounce })
-		)
-
-		iconsArray.forEach((icon, index) => {
 			const randomDelay = index * 80
-			icon.floatY.value = withDelay(
+			floatY.value = withDelay(
 				randomDelay,
 				withSequence(
 					withTiming(-12, {
@@ -111,7 +105,7 @@ export const CalendarAnimation = ({
 					withTiming(0, { duration: 600, easing: Easing.bounce })
 				)
 			)
-			icon.scale.value = withDelay(
+			scale.value = withDelay(
 				randomDelay,
 				withSequence(
 					withTiming(1.2, {
@@ -121,7 +115,126 @@ export const CalendarAnimation = ({
 					withTiming(1, { duration: 400, easing: Easing.bounce })
 				)
 			)
-		})
+		}
+	)
+
+	useEffect(() => {
+		const delay = eventIcon.delay
+
+		const timeoutId = setTimeout(triggerSuperLightHaptic, delay)
+
+		opacity.value = withDelay(
+			delay,
+			withTiming(1, {
+				duration: 800,
+				easing: Easing.out(Easing.cubic)
+			})
+		)
+		scale.value = withDelay(
+			delay,
+			withTiming(1, {
+				duration: 800,
+				easing: Easing.out(Easing.back(1.5))
+			})
+		)
+		floatY.value = withDelay(
+			delay,
+			withRepeat(
+				withSequence(
+					withTiming(4, {
+						duration: 3000 + Math.random() * 1000,
+						easing: Easing.inOut(Easing.sin)
+					}),
+					withTiming(-4, {
+						duration: 3000 + Math.random() * 1000,
+						easing: Easing.inOut(Easing.sin)
+					})
+				),
+				-1,
+				true
+			)
+		)
+		rotation.value = withDelay(
+			delay,
+			withRepeat(
+				withSequence(
+					withTiming(0.025, {
+						duration: 4000 + Math.random() * 1000,
+						easing: Easing.inOut(Easing.sin)
+					}),
+					withTiming(-0.025, {
+						duration: 4000 + Math.random() * 1000,
+						easing: Easing.inOut(Easing.sin)
+					})
+				),
+				-1,
+				true
+			)
+		)
+
+		return () => clearTimeout(timeoutId)
+	}, [eventIcon.delay])
+
+	const animatedStyle = useAnimatedStyle(() => {
+		const { x, y } = eventIcon.position
+		const baseSize = size * 0.75
+		return {
+			opacity: opacity.value,
+			transform: [
+				{ translateX: baseSize * x },
+				{ translateY: baseSize * y + floatY.value },
+				{ scale: scale.value },
+				{ rotate: `${rotation.value}rad` }
+			]
+		}
+	})
+
+	return (
+		<Animated.View
+			style={[
+				styles.iconContainer,
+				{ width: size * 0.35, height: size * 0.35 },
+				animatedStyle
+			]}
+		>
+			<PlatformIcon
+				ios={{ name: eventIcon.ios, size: size * 0.23 }}
+				android={{
+					name: eventIcon.android as MaterialIcon,
+					size: size * 0.3,
+					variant: 'outlined'
+				}}
+				web={{ name: eventIcon.web, size: size * 0.25 }}
+				style={styles.icon}
+			/>
+		</Animated.View>
+	)
+}
+
+export const CalendarAnimation = ({
+	size = 120
+}: CalendarAnimationProps): React.JSX.Element => {
+	const { styles } = useStyles(stylesheet)
+
+	const calendarScale = useSharedValue(0.9)
+	const calendarOpacity = useSharedValue(0)
+	const calendarRotation = useSharedValue(0)
+	const calendarTapScale = useSharedValue(1)
+	const tapCount = useSharedValue(0)
+
+	const triggerHaptic = () => {
+		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	}
+
+	const tapGesture = Gesture.Tap().onBegin(() => {
+		runOnJS(triggerHaptic)()
+
+		calendarTapScale.value = withSequence(
+			withTiming(0.95, { duration: 100, easing: Easing.out(Easing.quad) }),
+			withTiming(1, { duration: 200, easing: Easing.bounce })
+		)
+
+		tapCount.value = tapCount.value + 1
 	})
 
 	useEffect(() => {
@@ -145,64 +258,6 @@ export const CalendarAnimation = ({
 			-1,
 			true
 		)
-
-		iconsArray.forEach((icon, index) => {
-			const delay = EVENT_ICONS[index].delay
-
-			// Trigger haptic feedback right when the icon starts appearing
-			setTimeout(() => {
-				runOnJS(triggerSuperLightHaptic)()
-			}, delay)
-
-			icon.opacity.value = withDelay(
-				delay,
-				withTiming(1, {
-					duration: 800,
-					easing: Easing.out(Easing.cubic)
-				})
-			)
-			icon.scale.value = withDelay(
-				delay,
-				withTiming(1, {
-					duration: 800,
-					easing: Easing.out(Easing.back(1.5))
-				})
-			)
-			icon.floatY.value = withDelay(
-				delay,
-				withRepeat(
-					withSequence(
-						withTiming(4, {
-							duration: 3000 + Math.random() * 1000,
-							easing: Easing.inOut(Easing.sin)
-						}),
-						withTiming(-4, {
-							duration: 3000 + Math.random() * 1000,
-							easing: Easing.inOut(Easing.sin)
-						})
-					),
-					-1,
-					true
-				)
-			)
-			icon.rotation.value = withDelay(
-				delay,
-				withRepeat(
-					withSequence(
-						withTiming(0.025, {
-							duration: 4000 + Math.random() * 1000,
-							easing: Easing.inOut(Easing.sin)
-						}),
-						withTiming(-0.025, {
-							duration: 4000 + Math.random() * 1000,
-							easing: Easing.inOut(Easing.sin)
-						})
-					),
-					-1,
-					true
-				)
-			)
-		})
 	}, [])
 
 	const calendarStyle = useAnimatedStyle(() => {
@@ -215,44 +270,16 @@ export const CalendarAnimation = ({
 		}
 	})
 
-	const iconAnimatedStyles = iconsArray.map((icon, index) =>
-		useAnimatedStyle(() => {
-			const { x, y } = EVENT_ICONS[index].position
-			const baseSize = size * 0.75
-			return {
-				opacity: icon.opacity.value,
-				transform: [
-					{ translateX: baseSize * x },
-					{ translateY: baseSize * y + icon.floatY.value },
-					{ scale: icon.scale.value },
-					{ rotate: `${icon.rotation.value}rad` }
-				]
-			}
-		})
-	)
-
 	return (
 		<View style={[styles.container, { width: size * 2, height: size * 1.8 }]}>
 			{EVENT_ICONS.map((eventIcon, index) => (
-				<Animated.View
-					key={`icon-${index}`}
-					style={[
-						styles.iconContainer,
-						{ width: size * 0.35, height: size * 0.35 },
-						iconAnimatedStyles[index]
-					]}
-				>
-					<PlatformIcon
-						ios={{ name: eventIcon.ios, size: size * 0.23 }}
-						android={{
-							name: eventIcon.android as MaterialIcon,
-							size: size * 0.3,
-							variant: 'outlined'
-						}}
-						web={{ name: eventIcon.web, size: size * 0.25 }}
-						style={styles.icon}
-					/>
-				</Animated.View>
+				<FloatingEventIcon
+					key={eventIcon.ios}
+					eventIcon={eventIcon}
+					size={size}
+					index={index}
+					tapCount={tapCount}
+				/>
 			))}
 
 			<GestureDetector gesture={tapGesture}>
