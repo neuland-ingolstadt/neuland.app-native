@@ -31,9 +31,9 @@ export default function OrderableRowItem({
 	isActive
 }: OrderableRowItemProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-	const { t } = useTranslation('accessibility')
 	const bottomWidth = isLast ? 0 : 1
 	const isWeb = Platform.OS === 'web'
+	const { t } = useTranslation(['accessibility'])
 
 	return (
 		<View>
@@ -82,7 +82,7 @@ export default function OrderableRowItem({
 									opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel={t('button.moveUp')}
+							accessibilityLabel={t('dashboard.moveUp')}
 						>
 							<PlatformIcon
 								ios={{
@@ -111,7 +111,7 @@ export default function OrderableRowItem({
 									opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel={t('button.moveDown')}
+							accessibilityLabel={t('dashboard.moveDown')}
 						>
 							<PlatformIcon
 								ios={{

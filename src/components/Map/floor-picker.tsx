@@ -26,8 +26,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	setCameraTriggerKey
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('accessibility')
 	const { currentFloor, setCurrentFloor } = use(MapContext)
+	const { t } = useTranslation(['accessibility'])
 
 	return (
 		<View style={styles.ButtonArea}>
@@ -121,7 +121,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
 					}}
-					accessibilityLabel={t('button.centerOnLocation')}
+					accessibilityLabel={t('map.centerOnCurrentLocation')}
 				>
 					<View
 						style={{
