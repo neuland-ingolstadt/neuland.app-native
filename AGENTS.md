@@ -496,3 +496,29 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 - Prefer changing Expo config / plugins over editing `ios/` or `android/` directly. Touch
   native projects only when the required change cannot be expressed in config.
 - For larger architectural changes, open a draft PR early and link the related issue.
+
+---
+
+## Cursor Cloud specific instructions
+
+Dependencies (`bun install`) are refreshed automatically by the cloud startup script, so
+you normally don't need to reinstall them. Notes that are not obvious from the commands above:
+
+- **Only the web target runs in the cloud VM.** `bun ios` / `bun android` need a device,
+  simulator, or native build and cannot run here. To run/test the app, use `bun web`
+  (Expo web dev server on `http://localhost:3000`). The first Metro bundle takes ~25s;
+  wait for `Bundled … node_modules/expo-router/entry.js` before opening the page.
+- **A `.env.local` file is required to run the app.** Copy it from `.env.local.example`
+  (`cp .env.local.example .env.local`). The example values are real public endpoints:
+  the Neuland GraphQL endpoint works (so cafeteria/announcements load), but
+  `EXPO_PUBLIC_THI_API_KEY` is a placeholder, so THI-authenticated features
+  (timetable, grades, profile) won't work without real credentials. The file is
+  git-ignored and persists in the VM snapshot, so it usually already exists.
+- **Test public features as a guest.** The onboarding screen has a "continue as guest"
+  link below the sign-in form. Guest mode unlocks public data (dashboard events,
+  cafeteria menu). The Map tab may show a load error and Timetable/Calendar/Grades
+  show "Sign in required" without a real THI login — that is expected, not a regression.
+- Standard checks match CI and all pass locally: `bun lint`, `bun tsc --noEmit`,
+  `bun i18n:check`, `bun test --ci`. Run these before pushing (see the Commands section).
+- Git LFS assets (images/fonts/SVGs) are pulled on checkout; if an asset looks missing or
+  is a tiny text pointer, run `git lfs pull`.
