@@ -12,7 +12,10 @@ import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useFeatureFlagEnabled } from '@/hooks'
 import { FeatureFlagKeys } from '@/lib/feature-flags'
-import type { CampusLifeEvent, CampusLifePublicOrganizerKind } from '@/types/campus-life'
+import type {
+	CampusLifeEvent,
+	CampusLifePublicOrganizerKind
+} from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	isThiDepartmentOrganizerKind,
@@ -241,11 +244,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 				) : organizerEvents.length > 0 ? (
 					organizerEvents.map((event: CampusLifeEvent) => (
 						<View key={event.id} style={styles.eventRow}>
-							<CLEventRow
-								event={event}
-								inSheet
-								organizerKind={organizerKind}
-							/>
+							<CLEventRow event={event} inSheet organizerKind={organizerKind} />
 						</View>
 					))
 				) : (

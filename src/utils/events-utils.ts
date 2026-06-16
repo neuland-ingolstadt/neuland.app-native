@@ -13,8 +13,8 @@ import type {
 	PublicEventResponse,
 	PublicOrganizerResponse
 } from '@/types/campus-life'
-import { parseApiOrganizerKind } from '@/utils/campus-life-utils'
 import type { MaterialIcon } from '@/types/material-icons'
+import { parseApiOrganizerKind } from '@/utils/campus-life-utils'
 
 const FALLBACK_ORGANIZER_NAME = 'Campus Life'
 

@@ -11,11 +11,11 @@ import { useRefreshByUser } from './useRefreshByUser'
 import { useRefreshOnFocus } from './useRefreshOnFocus'
 
 export {
+	useAppState,
 	useFeatureFlag,
 	useFeatureFlagEnabled,
-	useIsFeatureEnabled,
-	useAppState,
 	useInterval,
+	useIsFeatureEnabled,
 	useMemberStore,
 	useOnlineManager,
 	useRefreshByUser,

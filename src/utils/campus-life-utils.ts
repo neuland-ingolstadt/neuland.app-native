@@ -109,6 +109,8 @@ export function campusLifeOrganiserParams(
 ): { id: string; org?: CampusLifePublicOrganizerKind } {
 	return {
 		id: organizerId.toString(),
-		...(isThiDepartmentOrganizerKind(organizerKind) ? { org: organizerKind } : {})
+		...(isThiDepartmentOrganizerKind(organizerKind)
+			? { org: organizerKind }
+			: {})
 	}
 }
