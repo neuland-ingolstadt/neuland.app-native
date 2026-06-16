@@ -7,9 +7,13 @@
 		"settingsDashboard": "Dashboard Settings",
 		"libraryBarcode": "Library Number as Barcode",
 		"previous": "Previous",
-		"next": "Next",
+		"next": "Next"
+	},
+	"map": {
+		"centerOnCurrentLocation": "Center on current location"
+	},
+	"dashboard": {
 		"moveUp": "Move up",
-		"moveDown": "Move down",
-		"centerOnLocation": "Center on current location"
+		"moveDown": "Move down"
 	}
 }
