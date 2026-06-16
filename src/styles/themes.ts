@@ -37,7 +37,8 @@ export const lightTheme = {
 		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d',
 		completedDot: '#157a15',
-		soonDot: '#dfdfdf'
+		soonDot: '#dfdfdf',
+		white: '#f2f0ef'
 	},
 	margins: {
 		page: 12,
@@ -93,7 +94,8 @@ export const darkTheme = {
 		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767',
 		completedDot: '#157a15',
-		soonDot: '#4b4b4b'
+		soonDot: '#4b4b4b',
+		white: '#f2f0ef'
 	},
 	margins: {
 		page: 12,
