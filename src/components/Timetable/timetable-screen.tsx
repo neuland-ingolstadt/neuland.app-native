@@ -19,9 +19,9 @@ import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
+import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
-import { loadCampusLifeEvents } from '@/utils/events-utils'
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {
@@ -79,13 +79,13 @@ function TimetableScreen(): React.JSX.Element {
 	})
 
 	const { data: campusLifeEvents } = useQuery({
-		queryKey: ["campusLifeEvents"],
+		queryKey: ['campusLifeEvents'],
 		queryFn: () => loadCampusLifeEvents(),
 		staleTime: 1000 * 60 * 10,
-		gcTime: 1000 * 60 * 60 * 24,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const calendarEvents = calendar;
+	const calendarEvents = calendar
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
@@ -100,9 +100,19 @@ function TimetableScreen(): React.JSX.Element {
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (
 					timetableMode === TimetableMode.List ? (
-						<TimetableList timetable={timetable} exams={exams ?? []} calendarEvents={calendarEvents ?? []} campusLifeEvents={campusLifeEvents ?? []} />
+						<TimetableList
+							timetable={timetable}
+							exams={exams ?? []}
+							calendarEvents={calendarEvents ?? []}
+							campusLifeEvents={campusLifeEvents ?? []}
+						/>
 					) : (
-						<TimetableWeek timetable={timetable} exams={exams ?? []} calendarEvents={calendarEvents ?? []} campusLifeEvents={campusLifeEvents ?? []} />
+						<TimetableWeek
+							timetable={timetable}
+							exams={exams ?? []}
+							calendarEvents={calendarEvents ?? []}
+							campusLifeEvents={campusLifeEvents ?? []}
+						/>
 					)
 				) : isPaused && !isSuccess ? (
 					<ErrorView

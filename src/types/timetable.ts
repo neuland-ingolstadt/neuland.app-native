@@ -5,7 +5,7 @@ import type { Exam, FriendlyTimetableEntry } from './utils'
 export interface ITimetableViewProps {
 	timetable: FriendlyTimetableEntry[]
 	exams: Exam[]
-	calendarEvents: Calendar[],
+	calendarEvents: Calendar[]
 	campusLifeEvents: CampusLifeEvent[]
 }
 export type CalendarMode = '3days' | 'list'

@@ -26,8 +26,12 @@ export default function TimetablePreferences(): React.JSX.Element {
 	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const setShowExams = useTimetableStore((state) => state.setShowExams)
-	const showCampusLifeEvents = useTimetableStore((state) => state.showCampusLifeEvents)
-	const setShowCampusLifeEvents = useTimetableStore((state) => state.setShowCampusLifeEvents)
+	const showCampusLifeEvents = useTimetableStore(
+		(state) => state.showCampusLifeEvents
+	)
+	const setShowCampusLifeEvents = useTimetableStore(
+		(state) => state.setShowCampusLifeEvents
+	)
 
 	const timelineModeElements: FoodLanguageElement[] = [
 		{
@@ -70,15 +74,16 @@ export default function TimetablePreferences(): React.JSX.Element {
 			title: t('preferences.showExams', { ns: 'timetable' })
 		},
 		{
-			key: "showCampusLifeEvents",
-			title: "Zeige Campus Life Events"
+			key: 'showCampusLifeEvents',
+			title: 'Zeige Campus Life Events'
 		}
 	]
 
 	const selectedAdditionalContent = []
 	if (showCalendarEvents) selectedAdditionalContent.push('showCalendarEvents')
 	if (showExams) selectedAdditionalContent.push('showExams')
-	if (showCampusLifeEvents) selectedAdditionalContent.push('showCampusLifeEvents')
+	if (showCampusLifeEvents)
+		selectedAdditionalContent.push('showCampusLifeEvents')
 
 	// Handle toggling additional content options
 	const toggleAdditionalContent = (key: string) => {

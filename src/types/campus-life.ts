@@ -70,7 +70,7 @@ export interface FriendlyCampusLifeEvent extends CampusLifeEvent {
 }
 
 export interface CampusLifeEventEntry extends FriendlyCampusLifeEvent {
-	date: Date,
-	startDate: Date,
-	endDate: Date,
+	date: Date
+	startDate: Date
+	endDate: Date | null
 }

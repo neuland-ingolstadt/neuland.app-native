@@ -1,6 +1,6 @@
-import { CalendarEntry } from '@/components/Timetable/timetable-list'
+import type { CalendarEntry } from '@/components/Timetable/timetable-list'
+import type { CampusLifeEventEntry } from './campus-life'
 import type { Lecturers } from './thi-api'
-import { CampusLifeEventEntry } from './campus-life'
 
 export interface Exam {
 	name: string
