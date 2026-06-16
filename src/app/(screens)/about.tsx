@@ -119,10 +119,10 @@ export default function About(): React.JSX.Element {
 	})
 
 	const appSection: FormListSections = {
-		header: 'App',
+		header: t('about.formlist.app.title'),
 		items: [
 			{
-				title: 'Version',
+				title: t('about.formlist.app.version'),
 				icon: {
 					ios: 'info.circle',
 					android: 'info',
@@ -135,7 +135,7 @@ export default function About(): React.JSX.Element {
 				}
 			},
 			{
-				title: 'Changelog',
+				title: t('about.formlist.app.changelog'),
 				icon: {
 					ios: 'list.bullet.rectangle',
 					android: 'article',

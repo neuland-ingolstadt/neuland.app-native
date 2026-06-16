@@ -23,13 +23,15 @@
 		"formlist": {
 			"preferences": {
 				"title": "Preferences",
+				"dashboard": "Dashboard",
 				"food": "Food",
 				"language": "Language",
 				"timetable": "Timetable"
 			},
 			"appearance": {
 				"title": "Appearance",
-				"theme": "Design"
+				"theme": "Design",
+				"appIcon": "App Icon"
 			},
 			"language": {
 				"title": "Change language",
@@ -45,7 +47,9 @@
 				"download": "Download the app"
 			}
 		},
-		"copyright": "© {{year}} by Neuland Ingolstadt e.V."
+		"copyright": "© {{year}} by Neuland Ingolstadt e.V.",
+		"infrastructureBy": "Infrastructure by",
+		"loadPersonalDataError": "Failed to load personal data"
 	},
 	"version": {
 		"formlist": {
@@ -66,13 +70,32 @@
 				"browser": "Browser"
 			}
 		},
-		"copyButton": "Copy All"
+		"copyButton": "Copy All",
+		"copyLabels": {
+			"appHeader": "App Information:",
+			"systemHeader": "System Information:",
+			"version": "Version",
+			"buildNumber": "Build Number",
+			"commitHash": "Commit Hash",
+			"firstInstall": "First Install",
+			"uiManager": "UI Manager",
+			"browser": "Browser",
+			"osVersion": "OS Version",
+			"deviceModel": "Device Model",
+			"deviceType": "Device Type",
+			"emulator": "Emulator"
+		}
 	},
 	"about": {
 		"header": {
 			"developed": "Developed by"
 		},
 		"formlist": {
+			"app": {
+				"title": "App",
+				"version": "Version",
+				"changelog": "Changelog"
+			},
 			"legal": {
 				"title": "Legal",
 				"button": "Legal Information"
@@ -119,7 +142,12 @@
 		"footer": "To see the full changelog, check out the releases on "
 	},
 	"licenses": {
-		"footer": "These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build."
+		"footer": "These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build.",
+		"fields": {
+			"name": "Name",
+			"version": "Version",
+			"repository": "Repository"
+		}
 	},
 	"profile": {
 		"error": {

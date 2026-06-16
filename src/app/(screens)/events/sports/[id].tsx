@@ -140,7 +140,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 
 	const sections: FormListSections[] = [
 		{
-			header: 'Details',
+			header: t('labels.details'),
 			items: [
 				{
 					title: t('pages.event.weekday'),
@@ -158,7 +158,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 					)
 				},
 				{
-					title: 'Campus',
+					title: t('labels.campus'),
 					value: sportsEvent?.campus
 				},
 				{

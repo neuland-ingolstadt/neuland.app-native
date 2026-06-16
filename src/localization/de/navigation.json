@@ -1,5 +1,11 @@
 {
 	"navigation": {
+		"home": "Home",
+		"dashboardScreen": "Dashboard",
+		"loginScreen": "Neuland Next Login",
+		"changelog": "Changelog",
+		"appIcon": "App Icon",
+		"eventDetails": "Event Details",
 		"dashboard": "Neuland Next",
 		"timetable": "Kalender",
 		"map": "Karte",
@@ -16,7 +22,7 @@
 		"theme": "Design",
 		"profile": "Profil",
 		"about": "Über",
-		"version": "Versionsdetails",
+		"version": "Version Details",
 		"advancedSearch": "Erweiterte Suche",
 		"calendar": "THI Kalender",
 		"examDetails": "Prüfungsdetails",

@@ -27,6 +27,7 @@
 		"total": "Die Gesamtanzahl der Punkte zeigt, wie viele Vorlesungen du an diesem Tag hast"
 	},
 	"error": {
+		"cannotDisplayLecture": "Vorlesung kann nicht angezeigt werden",
 		"empty": {
 			"title": "Stundenplan nicht konfiguriert",
 			"title2": "Keine Vorlesungen gefunden",

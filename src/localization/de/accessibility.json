@@ -7,6 +7,9 @@
 		"settingsDashboard": "Dashboard Einstellungen",
 		"libraryBarcode": "Bibliotheksnummer als Barcode",
 		"previous": "Zurück",
-		"next": "Weiter"
+		"next": "Weiter",
+		"moveUp": "Nach oben verschieben",
+		"moveDown": "Nach unten verschieben",
+		"centerOnLocation": "Auf aktuellen Standort zentrieren"
 	}
 }
