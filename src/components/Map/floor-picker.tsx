@@ -11,7 +11,6 @@ import {
 import PlatformIcon from '@/components/Universal/Icon'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTranslation } from 'react-i18next'
 
 interface FloorPickerProps {
 	floors: string[]
@@ -27,7 +26,6 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	setCameraTriggerKey
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('accessibility')
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation(['accessibility'])
 
