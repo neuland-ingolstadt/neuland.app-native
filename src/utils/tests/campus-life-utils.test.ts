@@ -4,10 +4,12 @@ import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 } from '@/types/campus-life'
 import {
+	campusLifeEventListScreen,
 	campusLifeEventWebShareUrl,
 	campusLifeOrganiserParams,
 	parseApiOrganizerKind,
 	parseCampusLifeOrganizerKindParam,
+	resolveCampusLifeOrganizerKind,
 	resolveEventOrganizerKind
 } from '@/utils/campus-life-utils'
 
@@ -53,6 +55,52 @@ describe('campus-life-utils', () => {
 				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 			)
 		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION)
+	})
+
+	it('resolveEventOrganizerKind - Should fall back to route param', () => {
+		expect(resolveEventOrganizerKind(null, 'THI_DEPARTMENT')).toBe(
+			CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
+		)
+		expect(
+			resolveEventOrganizerKind({ organizerKind: undefined }, undefined)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION)
+	})
+
+	it('resolveCampusLifeOrganizerKind - Should use fallback when param is missing', () => {
+		expect(
+			resolveCampusLifeOrganizerKind(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT,
+				undefined
+			)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT)
+		expect(
+			resolveCampusLifeOrganizerKind(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+				[]
+			)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION)
+	})
+
+	it('resolveCampusLifeOrganizerKind - Should parse route param when present', () => {
+		expect(
+			resolveCampusLifeOrganizerKind(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+				'THI_DEPARTMENT'
+			)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT)
+	})
+
+	it('campusLifeEventListScreen - Should map organizer kind to screen', () => {
+		expect(
+			campusLifeEventListScreen(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
+			)
+		).toBe('thiEvents')
+		expect(
+			campusLifeEventListScreen(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+			)
+		).toBe('clEvents')
 	})
 
 	it('campusLifeEventWebShareUrl - Should include org for THI events', () => {

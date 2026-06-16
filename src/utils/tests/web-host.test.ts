@@ -3,12 +3,14 @@ import { Platform as AnnouncementPlatformEnum } from '@/__generated__/gql/graphq
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
+const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
+
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: { OS: 'web' }
+		Platform: platform
 	},
-	Platform: { OS: 'web' }
+	Platform: platform
 }))
 
 let resolveAnnouncementPlatform: typeof import('../web-host').resolveAnnouncementPlatform
@@ -57,5 +59,17 @@ describe('web-host', () => {
 		expect(resolveAnnouncementPlatform('localhost')).toBe(
 			AnnouncementPlatformEnum.Web
 		)
+	})
+
+	it('resolveAnnouncementPlatform - Should return IOS on iOS', () => {
+		platform.OS = 'ios'
+		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Ios)
+		platform.OS = 'web'
+	})
+
+	it('resolveAnnouncementPlatform - Should return ANDROID on Android', () => {
+		platform.OS = 'android'
+		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Android)
+		platform.OS = 'web'
 	})
 })
