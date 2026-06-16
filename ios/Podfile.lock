@@ -362,15 +362,15 @@ PODS:
   - maplibre-react-native/DynamicLibrary (10.4.2):
     - React
     - React-Core
-  - MMKVCore (2.2.4)
-  - NitroMmkv (4.1.1):
+  - MMKVCore (2.4.0)
+  - NitroMmkv (4.3.1):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - MMKVCore (= 2.2.4)
+    - MMKVCore (= 2.4.0)
     - NitroModules
     - RCT-Folly
     - RCT-Folly/Fabric
@@ -3552,8 +3552,8 @@ SPEC CHECKSUMS:
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   maplibre-react-native: 37d86b5b7b04dedaceebc577644e67acd7b5f437
-  MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
-  NitroMmkv: 3e33ebcb4b1f964a0a385361675d97aa2970bed1
+  MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
+  NitroMmkv: 3bb02debd40df4604404d18853ee9a836710c3c5
   NitroModules: e5aec42756c6a9487053e3152a3e80489c9467dd
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897

@@ -27,4 +27,4 @@ npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --e
 
 echo "===== Running pod install ====="
 cd ios
-pod install
+pod install --repo-update
