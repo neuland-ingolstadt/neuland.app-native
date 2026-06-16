@@ -1,6 +1,11 @@
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 import Color from 'color'
-import { RelativePathString, useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import {
+	type RelativePathString,
+	useFocusEffect,
+	useNavigation,
+	useRouter
+} from 'expo-router'
 import React, {
 	startTransition,
 	useCallback,
@@ -25,6 +30,7 @@ import TimeDisplay from '@/components/Universal/time-display'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
+import type { CampusLifeEventEntry } from '@/types/campus-life'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
@@ -40,14 +46,17 @@ import {
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { HeaderRight } from './header-buttons'
-import { CampusLifeEventEntry } from '@/types/campus-life'
 
 type TimetableSection = {
 	title: Date
 	data: (TimetableEntry | ExamEntry | CalendarEntry | CampusLifeEventEntry)[]
 }
 
-type TimetableItem = TimetableEntry | ExamEntry | CalendarEntry | CampusLifeEventEntry
+type TimetableItem =
+	| TimetableEntry
+	| ExamEntry
+	| CalendarEntry
+	| CampusLifeEventEntry
 
 // Define type for the flattened list
 type FlatListItem =
@@ -165,7 +174,7 @@ export default function TimetableList({
 		}, [hasPendingUpdate])
 	)
 
-	// TODO Hier ein Kommentar ausdenken vielleicht
+	// TODO: Hier ein Kommentar ausdenken vielleicht
 	const examsList = showExams ? exams : []
 	const calendarEventsList = showCalendarEvents ? calendarEvents : []
 	const campusLifeEventsList = showCampusLifeEvents ? campusLifeEvents : []
@@ -437,9 +446,6 @@ export default function TimetableList({
 	}): React.JSX.Element | null {
 		const eventName = item.titles[(i18n.language as 'de') || 'en'] ?? ''
 
-		// TODO: Muss angepasst werden falls doch multiday events
-		const infoText = formatCompactDateRange(item.startDate)
-
 		const timeElement = (
 			<TimeDisplay
 				startTime={formatFriendlyTime(item.startDate)}
@@ -451,37 +457,33 @@ export default function TimetableList({
 			<DragDropView
 				mode="drag"
 				scope="system"
-				dragValue={`${eventName} (${infoText})`}
+				dragValue={`${eventName}${item.location ? ` at ${item.location}` : ''} (${formatFriendlyDateTime(item.startDate)}${item.endDate ? ` - ${formatFriendlyTime(item.endDate)}` : ''})`}
 			>
 				<Pressable
 					onPress={() => {
 						router.push({
 							pathname: `/events/cl/${item.id}` as RelativePathString
 						})
-					}}	
+					}}
 					style={styles.cardPressable}
 					android_ripple={{
 						color: Color(theme.colors.calendarItem).alpha(0.1).string()
 					}}
 				>
 					<View style={styles.eventCard}>
-						<ColorBand color={theme.colors.calendarItem} />
+						<ColorBand color={theme.colors.campusLifeItem} />
 						<View style={styles.eventContent}>
 							<View style={styles.eventHeader}>
-								<Text style={styles.eventTitle}>
-									{eventName}
-								</Text>
+								<Text style={styles.eventTitle}>{eventName}</Text>
 							</View>
 							<View style={styles.eventInfoRow}>
 								<View style={styles.infoContainer}>
-									{infoText && <Text style={styles.eventInfo}>{infoText}</Text>}
-									<Badge text="CampusLife" type="campusLife"/>
+									<Badge text={item.host.name} type="campusLife" />
 								</View>
 								{timeElement}
 							</View>
 						</View>
 					</View>
-
 				</Pressable>
 			</DragDropView>
 		)
@@ -512,7 +514,7 @@ export default function TimetableList({
 				}
 
 				if (data.eventType === 'campus-life') {
-					return renderCampusLifeEventItem({item: data})
+					return renderCampusLifeEventItem({ item: data })
 				}
 
 				return renderTimetableItem({ item: data as TimetableEntry })
@@ -568,6 +570,10 @@ export default function TimetableList({
 									? JSON.stringify(data.name)
 									: data.name
 							return `calendar-${eventName}-${dateKeyPart(data.startDate)}`
+						}
+
+						if (data.eventType === 'campus-life') {
+							return `campus-life-${data.id}-${dateKeyPart(data.startDate)}`
 						}
 
 						// For timetable entries, use name, start date, and rooms

@@ -36,6 +36,7 @@ export const lightTheme = {
 		plateShadow: '#444',
 		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d',
+		campusLifeItem: '#768fe0',
 		completedDot: '#157a15',
 		soonDot: '#dfdfdf',
 		white: '#f2f0ef'
@@ -93,6 +94,7 @@ export const darkTheme = {
 		plateShadow: '#777777',
 		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767',
+		campusLifeItem: '#768fe0',
 		completedDot: '#157a15',
 		soonDot: '#4b4b4b',
 		white: '#f2f0ef'
