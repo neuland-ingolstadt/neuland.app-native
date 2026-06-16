@@ -66,6 +66,14 @@ describe('campus-life-utils', () => {
 		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION)
 	})
 
+	it('resolveEventOrganizerKind - Should fall back to loaded organizer', () => {
+		expect(
+			resolveEventOrganizerKind(null, undefined, {
+				organizerKind: CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
+			})
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT)
+	})
+
 	it('resolveCampusLifeOrganizerKind - Should use fallback when param is missing', () => {
 		expect(
 			resolveCampusLifeOrganizerKind(

@@ -3,6 +3,7 @@ import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT,
 	type CampusLifeEvent,
+	type CampusLifeOrganizer,
 	type CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
 
@@ -45,10 +46,15 @@ export function parseCampusLifeOrganizerKindParam(
 
 export function resolveEventOrganizerKind(
 	event: Pick<CampusLifeEvent, 'organizerKind'> | null | undefined,
-	orgParam: string | string[] | undefined
+	orgParam: string | string[] | undefined,
+	organizer?: Pick<CampusLifeOrganizer, 'organizerKind'> | null
 ): CampusLifePublicOrganizerKind {
 	if (event?.organizerKind != null) {
 		return event.organizerKind
+	}
+
+	if (organizer?.organizerKind != null) {
+		return organizer.organizerKind
 	}
 
 	return parseCampusLifeOrganizerKindParam(orgParam)

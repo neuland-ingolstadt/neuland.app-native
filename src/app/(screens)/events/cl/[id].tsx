@@ -126,7 +126,11 @@ export default function ClEventDetail(): React.JSX.Element {
 		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
 	const eventTitle = getLocalizedValue(eventData?.titles ?? null)
-	const organizerKind = resolveEventOrganizerKind(eventData, orgParam)
+	const organizerKind = resolveEventOrganizerKind(
+		eventData,
+		orgParam,
+		organizerDetails
+	)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -180,6 +184,18 @@ export default function ClEventDetail(): React.JSX.Element {
 	}
 
 	if (isLoading || !eventData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (
+		eventData.organizerKind == null &&
+		organizerId != null &&
+		organizerQuery.isLoading
+	) {
 		return (
 			<View style={styles.loadingContainer}>
 				<LoadingIndicator />

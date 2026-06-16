@@ -233,8 +233,10 @@ Generated and binary files:
 ### Feature flags (Flipt)
 
 - Flags are defined in the [`neuland-ingolstadt/flags`](https://github.com/neuland-ingolstadt/flags)
-  repo under `production/neuland-app/features.yaml`. Flipt polls that repo; changes
-  land in the app within ~30s without a release.
+  repo under `production/neuland-app/features.yaml`. Flipt polls that repo; server-side
+  changes land within ~30s without a release. The app caches evaluations for **5 minutes**
+  (`FEATURE_FLAG_STALE_TIME_MS` in `src/hooks/useFeatureFlag.ts`), with refetch on
+  reconnect and window focus.
 - Client setup uses `@flipt-io/flipt` directly (`src/lib/flipt.ts`,
   `src/lib/feature-flags.ts`) so evaluations work on iOS, Android, and web. The Flipt client is warmed up in `src/components/provider.tsx`.
 - **Usage in components** — prefer the React Query hook:
