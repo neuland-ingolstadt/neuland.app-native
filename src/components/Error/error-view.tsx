@@ -1,6 +1,7 @@
 import { trackEvent } from '@aptabase/react-native'
 import { router, usePathname } from 'expo-router'
 import type React from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Platform,
@@ -12,6 +13,7 @@ import {
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
 	guestError,
@@ -54,6 +56,9 @@ export default function ErrorView({
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const path = usePathname()
+	const analyticsInitialized = useSessionStore(
+		(state) => state.analyticsInitialized
+	)
 
 	const getIconIos = (): string => {
 		switch (title) {
@@ -89,13 +94,15 @@ export default function ErrorView({
 		) && isCritical
 
 	const showBox = !inModal && shouldTrack
-	if (shouldTrack) {
+
+	useEffect(() => {
+		if (!analyticsInitialized || !shouldTrack) return
 		trackEvent('ErrorView', {
 			title,
 			path,
 			crash: false
 		})
-	}
+	}, [analyticsInitialized, shouldTrack, title, path])
 
 	const getTitle = (): string => {
 		switch (title) {
