@@ -57,7 +57,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			header: t('menu.formlist.preferences.title'),
 			items: [
 				{
-					title: 'Dashboard',
+					title: t('menu.formlist.preferences.dashboard'),
 					icon: {
 						ios: 'rectangle.stack',
 						android: 'dashboard_customize',
@@ -130,7 +130,7 @@ export default function SettingsMenu(): React.JSX.Element {
 				...(Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop'
 					? [
 							{
-								title: 'App Icon',
+								title: t('menu.formlist.appearance.appIcon'),
 								icon: {
 									ios: 'star.square.on.square',
 									android: '' as MaterialIcon,

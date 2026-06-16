@@ -10,10 +10,11 @@
 		"next": "Weiter"
 	},
     "map": {
-        "centerOnCurrentLocation": "Zentrieren auf aktuellen Standort"
+        "centerOnCurrentLocation": "Auf aktuellen Standort zentrieren""
     },
     "dashboard": {
-        "moveUp": "Nach oben bewegen",
-        "moveDown": "Nach unten bewegen"
+        "moveUp": "Nach oben verschieben",
+        "moveDown": "Nach unten verschieben"
     }
+
 }

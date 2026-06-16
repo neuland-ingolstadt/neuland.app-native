@@ -6,7 +6,7 @@ import TimetableScreen from '@/components/Timetable/timetable-screen'
 import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function TimetableRootScreen(): React.JSX.Element {
-	const { t } = useTranslation('navigation')
+	const { t } = useTranslation(['navigation', 'common'])
 
 	if (Platform.OS === 'web') {
 		return <TimetableScreen />
@@ -15,7 +15,10 @@ export default function TimetableRootScreen(): React.JSX.Element {
 		<>
 			<Head>
 				<title>{t('navigation.timetable')}</title>
-				<meta name="Timetable" content="View your timetable" />
+				<meta
+					name="Timetable"
+					content={t('meta.timetableDescription', { ns: 'common' })}
+				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>

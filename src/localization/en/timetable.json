@@ -27,6 +27,7 @@
 		"total": "The total number of dots shows how many lectures you have on this day"
 	},
 	"error": {
+		"cannotDisplayLecture": "Cannot display lecture",
 		"empty": {
 			"title": "Timetable not configured",
 			"title2": "No lectures found",
