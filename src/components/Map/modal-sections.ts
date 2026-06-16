@@ -134,7 +134,7 @@ export const modalSection = (
 										t('misc.unknown', { ns: 'common' })
 								},
 								{
-									title: 'Campus',
+									title: t('labels.campus', { ns: 'common' }),
 									value:
 										locations[roomData.properties?.Standort] ??
 										t('misc.unknown', { ns: 'common' })
@@ -181,7 +181,7 @@ export const modalSection = (
 							t('misc.unknown', { ns: 'common' })
 					},
 					{
-						title: 'Campus',
+						title: t('labels.campus', { ns: 'common' }),
 						value: locations?.[properties.Standort]
 					}
 				]

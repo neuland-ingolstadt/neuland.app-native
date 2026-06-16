@@ -112,7 +112,7 @@ const CalendarCard = (): React.JSX.Element => {
 									? event.name[i18n.language as LanguageKey]
 									: event.name
 							}
-							subtitle="THI Event"
+							subtitle={t('thiEvent', { ns: 'common' })}
 							startDateTime={event.begin}
 							endDateTime={event.end}
 							showEndTime={true}

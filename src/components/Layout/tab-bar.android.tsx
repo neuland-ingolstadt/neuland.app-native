@@ -47,7 +47,7 @@ export default function TabLayout(): React.JSX.Element {
 			<Tabs.Screen
 				name="index"
 				options={{
-					title: 'Home',
+					title: t('navigation.home'),
 					tabBarIcon: ({ focused }: { focused: boolean }) =>
 						focused
 							? require('../../assets/tabbar/home_fill.svg')

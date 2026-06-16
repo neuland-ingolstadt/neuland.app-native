@@ -11,6 +11,11 @@
 		"buttonSettings": "Einstellungen prüfen"
 	},
 	"preferences": {
+		"sections": {
+			"labels": "Kennzeichnungen",
+			"restaurants": "Restaurants",
+			"filter": "Filter"
+		},
 		"formlist": {
 			"allergens": "Allergene",
 			"flags": "Kennzeichnungen",
