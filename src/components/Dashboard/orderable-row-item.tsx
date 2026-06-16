@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { ExtendedCard } from '@/components/all-cards'
@@ -30,6 +31,7 @@ export default function OrderableRowItem({
 	isActive
 }: OrderableRowItemProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('accessibility')
 	const bottomWidth = isLast ? 0 : 1
 	const isWeb = Platform.OS === 'web'
 
@@ -80,7 +82,7 @@ export default function OrderableRowItem({
 									opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel="Move up"
+							accessibilityLabel={t('button.moveUp')}
 						>
 							<PlatformIcon
 								ios={{
@@ -109,7 +111,7 @@ export default function OrderableRowItem({
 									opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel="Move down"
+							accessibilityLabel={t('button.moveDown')}
 						>
 							<PlatformIcon
 								ios={{

@@ -422,7 +422,7 @@ export default function FoodDetail(): React.JSX.Element {
 			header: t('details.formlist.about.title'),
 			items: [
 				{
-					title: 'Restaurant',
+					title: t('labels.restaurant', { ns: 'common' }),
 					value: humanLocation,
 					onPress: handlePress,
 					textColor: locationExists ? theme.colors.primary : undefined,

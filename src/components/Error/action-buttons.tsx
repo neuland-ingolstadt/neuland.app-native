@@ -17,9 +17,18 @@ export const FeedbackButton = ({
 	const { styles } = useStyles(stylesheet)
 	const platform = Platform.OS
 	const appVersion = `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`
-	const subject = crash ? 'App-Crash' : 'App-Error'
+	const subject = crash
+		? t('feedbackMail.subjectCrash')
+		: t('feedbackMail.subjectError')
 	const pathname = usePathname()
-	const mailContent = `mailto:feedback@neuland.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Schritte zur Reproduktion:\nSonstiges:\n\nApp Version: ${appVersion}\nPlatform: ${platform}\nSeite: ${pathname}\nFehler: ${error.message}`)}`
+	const mailContent = `mailto:feedback@neuland.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+		t('feedbackMail.body', {
+			version: appVersion,
+			platform,
+			path: pathname,
+			error: error.message
+		})
+	)}`
 
 	const sendMail = (): void => {
 		Linking.openURL(mailContent).catch((err) => {
