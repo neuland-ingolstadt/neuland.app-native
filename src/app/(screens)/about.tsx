@@ -27,22 +27,24 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { MemberAreaButton } from '@/components/Member/member-area-button'
 import FormList from '@/components/Universal/form-list'
-import { type LucideIcon, linkIcon } from '@/components/Universal/Icon'
+import { linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useMemberStore } from '@/hooks'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
-import type { MaterialIcon } from '@/types/material-icons'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
 	const headerPadding = useTransparentHeaderPadding()
+	const memberInfo = useMemberStore((s) => s.info)
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -116,62 +118,48 @@ export default function About(): React.JSX.Element {
 		}
 	})
 
-	const sections: FormListSections[] = [
-		{
-			header: t('about.formlist.app.title'),
-			items: [
-				{
-					title: t('about.formlist.app.version'),
-					icon: {
-						ios: 'info.circle',
-						android: 'info',
-						web: 'Info'
-					},
-					layout: 'row',
-					value: version,
-					onPress: () => {
-						router.navigate('/version')
-					}
+	const appSection: FormListSections = {
+		header: t('about.formlist.app.title'),
+		items: [
+			{
+				title: t('about.formlist.app.version'),
+				icon: {
+					ios: 'info.circle',
+					android: 'info',
+					web: 'Info'
 				},
-				{
-					title: t('about.formlist.app.changelog'),
-					icon: {
-						ios: 'list.bullet.rectangle',
-						android: 'article',
-						web: 'FileText'
-					},
-					onPress: () => {
-						router.navigate('/changelog')
-					}
+				layout: 'row',
+				value: version,
+				onPress: () => {
+					router.navigate('/version')
+				}
+			},
+			{
+				title: t('about.formlist.app.changelog'),
+				icon: {
+					ios: 'list.bullet.rectangle',
+					android: 'article',
+					web: 'FileText'
 				},
-				{
-					title: t('about.formlist.systemStatus'),
-					icon: {
-						ios: 'bubble.left.and.exclamationmark.bubble.right',
-						android: 'troubleshoot',
-						web: 'HeartPulse'
-					},
-					onPress: () => {
-						void Linking.openURL(STATUS_URL)
-					}
+				onPress: () => {
+					router.navigate('/changelog')
+				}
+			},
+			{
+				title: t('about.formlist.systemStatus'),
+				icon: {
+					ios: 'bubble.left.and.exclamationmark.bubble.right',
+					android: 'troubleshoot',
+					web: 'HeartPulse'
 				},
-				...(Platform.OS !== 'web'
-					? [
-							{
-								title: t('about.formlist.memberArea'),
-								icon: {
-									ios: 'person.crop.circle.badge.checkmark',
-									android: 'verified_user' as MaterialIcon,
-									web: 'UserCheck' as LucideIcon
-								},
-								onPress: () => {
-									router.navigate('/member')
-								}
-							}
-						]
-					: [])
-			]
-		},
+				onPress: () => {
+					void Linking.openURL(STATUS_URL)
+				}
+			}
+		]
+	}
+
+	const remainingSections: FormListSections[] = [
 		{
 			header: t('about.formlist.contact.title'),
 			items: [
@@ -341,7 +329,9 @@ export default function About(): React.JSX.Element {
 			</View>
 
 			<View style={styles.formlistContainer}>
-				<FormList sections={sections} />
+				<FormList sections={[appSection]} />
+				{!memberInfo && <MemberAreaButton />}
+				<FormList sections={remainingSections} />
 			</View>
 			<SectionView
 				title={t('about.analytics.title')}
@@ -376,6 +366,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	formlistContainer: {
 		alignSelf: 'center',
+		gap: 16,
 		marginTop: 10,
 		paddingHorizontal: theme.margins.page,
 		width: '100%'
