@@ -10,6 +10,7 @@ import {
 import PlatformIcon from '@/components/Universal/Icon'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
+import { useTranslation } from 'react-i18next'
 
 interface FloorPickerProps {
 	floors: string[]
@@ -26,6 +27,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { currentFloor, setCurrentFloor } = use(MapContext)
+	const { t } = useTranslation(['accessibility'])
+
 
 	return (
 		<View style={styles.ButtonArea}>
@@ -119,7 +122,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
 					}}
-					accessibilityLabel="Center on current location"
+					accessibilityLabel={t('map.centerOnCurrentLocation')}
 				>
 					<View
 						style={{

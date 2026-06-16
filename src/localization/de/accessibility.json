@@ -8,5 +8,12 @@
 		"libraryBarcode": "Bibliotheksnummer als Barcode",
 		"previous": "Zurück",
 		"next": "Weiter"
-	}
+	},
+    "map": {
+        "centerOnCurrentLocation": "Zentrieren auf aktuellen Standort"
+    },
+    "dashboard": {
+        "moveUp": "Nach oben bewegen",
+        "moveDown": "Nach unten bewegen"
+    }
 }
