@@ -1,6 +1,7 @@
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, use } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import {
 	createStyleSheet,
@@ -25,6 +26,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	setCameraTriggerKey
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('accessibility')
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 
 	return (
@@ -119,7 +121,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
 					}}
-					accessibilityLabel="Center on current location"
+					accessibilityLabel={t('button.centerOnLocation')}
 				>
 					<View
 						style={{

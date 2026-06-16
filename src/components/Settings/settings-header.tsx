@@ -39,7 +39,7 @@ export default function SettingsHeader({
 	const { userKind = USER_GUEST } =
 		React.use<UserKindContextType>(UserKindContext)
 	const router = useRouter()
-	const { t } = useTranslation(['settings'])
+	const { t } = useTranslation(['settings', 'common'])
 	const [username, setUsername] = React.useState<string>('')
 
 	// Load employee username when component mounts
@@ -71,7 +71,7 @@ export default function SettingsHeader({
 								<View style={styles.nameInnerContainer}>
 									<NameBox
 										title={`${personalData?.vname} ${personalData?.name}`}
-										subTitle1={`${personalData?.stgru ?? ''}. Semester`}
+										subTitle1={`${personalData?.stgru ?? ''}${t('semesterSuffix', { ns: 'common' })}`}
 										subTitle2={personalData?.fachrich ?? ''}
 										showChevron={true}
 									>
@@ -128,8 +128,10 @@ export default function SettingsHeader({
 							<View style={styles.nameOuterContainer}>
 								<View style={styles.nameInnerContainer}>
 									<NameBox
-										title="Error"
-										subTitle1={error?.message ?? 'Unknown error'}
+										title={t('labels.error', { ns: 'common' })}
+										subTitle1={
+											error?.message ?? t('misc.unknownError', { ns: 'common' })
+										}
 										subTitle2={t('menu.error.subtitle2')}
 									>
 										<AvatarCircle

@@ -99,7 +99,7 @@ export default function FoodPreferences(): React.JSX.Element {
 
 	const sections: FormListSections[] = [
 		{
-			header: 'Labels',
+			header: t('preferences.sections.labels'),
 			items: [
 				{
 					title: t('preferences.formlist.allergens'),
@@ -125,14 +125,14 @@ export default function FoodPreferences(): React.JSX.Element {
 			}}
 		>
 			<View style={styles.container}>
-				<SectionView title={'Restaurants'}>
+				<SectionView title={t('preferences.sections.restaurants')}>
 					<MultiSectionPicker
 						elements={elemtents}
 						selectedItems={selectedRestaurants}
 						action={handleToggleRestaurant}
 					/>
 				</SectionView>
-				<SectionView title={'Filter'}>
+				<SectionView title={t('preferences.sections.filter')}>
 					<SingleSectionPicker
 						title={t('preferences.formlist.static')}
 						selectedItem={showStatic ?? false}

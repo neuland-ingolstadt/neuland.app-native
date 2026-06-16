@@ -8,8 +8,8 @@ import { useRefreshOnFocus } from './useRefreshOnFocus'
 export {
 	useAppState,
 	useInterval,
+	useMemberStore,
 	useOnlineManager,
 	useRefreshByUser,
-	useRefreshOnFocus,
-	useMemberStore
+	useRefreshOnFocus
 }
