@@ -2,6 +2,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import {
+	Redirect,
 	router,
 	Stack,
 	useFocusEffect,
@@ -24,11 +25,16 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { useFeatureFlagEnabled } from '@/hooks'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	campusLifeEventListScreen,
-	parseCampusLifeOrganizerKindParam
+	campusLifeEventWebShareUrl,
+	campusLifeOrganiserParams,
+	isThiDepartmentOrganizerKind,
+	resolveEventOrganizerKind
 } from '@/utils/campus-life-utils'
 import {
 	formatFriendlyDateTime,
@@ -50,8 +56,8 @@ export default function ClEventDetail(): React.JSX.Element {
 		id: string
 		org?: string | string[]
 	}>()
-	const organizerKind = parseCampusLifeOrganizerKindParam(orgParam)
-	const eventListType = campusLifeEventListScreen(organizerKind)
+	const { enabled: thiEventsVisible, isPending: thiFlagPending } =
+		useFeatureFlagEnabled(FeatureFlagKeys.thiEventsVisible)
 	const { t, i18n } = useTranslation('common')
 	const getLocalizedValue = useCallback(
 		(values?: { de?: string | null; en?: string | null } | null) => {
@@ -120,6 +126,7 @@ export default function ClEventDetail(): React.JSX.Element {
 		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
 	const eventTitle = getLocalizedValue(eventData?.titles ?? null)
+	const organizerKind = resolveEventOrganizerKind(eventData, orgParam)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -135,7 +142,7 @@ export default function ClEventDetail(): React.JSX.Element {
 								title: eventTitle,
 								organizer: organizerName,
 								date: dateRange,
-								link: `https://web.neuland.app/events/cl/${id}`
+								link: campusLifeEventWebShareUrl(id, organizerKind)
 							})
 							if (Platform.OS === 'web') {
 								await copyToClipboard(message)
@@ -163,7 +170,13 @@ export default function ClEventDetail(): React.JSX.Element {
 	)
 
 	if (!isIdValid || error || (!isLoading && !eventData)) {
-		return <EventErrorView eventType={eventListType} />
+		return (
+			<EventErrorView
+				eventType={campusLifeEventListScreen(
+					resolveEventOrganizerKind(eventData, orgParam)
+				)}
+			/>
+		)
 	}
 
 	if (isLoading || !eventData) {
@@ -172,6 +185,20 @@ export default function ClEventDetail(): React.JSX.Element {
 				<LoadingIndicator />
 			</View>
 		)
+	}
+
+	if (isThiDepartmentOrganizerKind(organizerKind)) {
+		if (thiFlagPending) {
+			return (
+				<View style={styles.loadingContainer}>
+					<LoadingIndicator />
+				</View>
+			)
+		}
+
+		if (!thiEventsVisible) {
+			return <Redirect href="/(tabs)" />
+		}
 	}
 
 	const pressLink = (url: string | null | undefined) => {
@@ -266,7 +293,10 @@ export default function ClEventDetail(): React.JSX.Element {
 						if (eventData?.host?.id != null) {
 							router.dismissTo({
 								pathname: '/events/organiser/[id]',
-								params: { id: eventData.host.id.toString() }
+								params: campusLifeOrganiserParams(
+									eventData.host.id,
+									organizerKind
+								)
 							})
 						}
 					},

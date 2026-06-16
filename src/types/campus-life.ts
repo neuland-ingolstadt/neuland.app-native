@@ -11,6 +11,7 @@ export type CampusLifePublicOrganizerKind =
 export interface PublicEventResponse {
 	id: number
 	organizer_id: number
+	organizer_kind?: CampusLifePublicOrganizerKind | string | null
 	organizer_name?: string | null
 	title_de: string
 	title_en: string
@@ -24,6 +25,7 @@ export interface PublicEventResponse {
 
 export interface PublicOrganizerResponse {
 	id: number
+	organizer_kind?: CampusLifePublicOrganizerKind | string | null
 	name: string
 	description_de?: string | null
 	description_en?: string | null
@@ -37,6 +39,7 @@ export interface PublicOrganizerResponse {
 
 export interface CampusLifeOrganizer {
 	id: number
+	organizerKind?: CampusLifePublicOrganizerKind
 	name: string
 	descriptions: {
 		de?: string | null
@@ -53,6 +56,7 @@ export interface CampusLifeOrganizer {
 export interface CampusLifeEvent {
 	id: string
 	numericId: number
+	organizerKind?: CampusLifePublicOrganizerKind
 	titles: {
 		de: string
 		en: string

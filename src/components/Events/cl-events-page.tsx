@@ -27,7 +27,10 @@ import {
 	type CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
 import { networkError } from '@/utils/api-utils'
-import { isThiDepartmentOrganizerKind } from '@/utils/campus-life-utils'
+import {
+	campusLifeOrganiserParams,
+	isThiDepartmentOrganizerKind
+} from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
@@ -290,7 +293,10 @@ export default function ClEventsPage({
 															didLongPressRef.current = true
 															router.push({
 																pathname: '/events/organiser/[id]',
-																params: { id: organizer.id.toString() }
+																params: campusLifeOrganiserParams(
+																	organizer.id,
+																	organizerKind
+																)
 															})
 														}}
 														delayLongPress={250}

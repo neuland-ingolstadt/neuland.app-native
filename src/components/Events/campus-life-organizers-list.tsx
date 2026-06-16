@@ -13,6 +13,7 @@ import type {
 	CampusLifeOrganizer,
 	CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
+import { campusLifeOrganiserParams } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 type OrganizersPage = 'clEvents' | 'thiEvents'
@@ -72,6 +73,7 @@ export default function CampusLifeOrganizersList({
 					renderItem={({ item }) => (
 						<OrganizerListItem
 							organizer={item}
+							organizerKind={organizerKind}
 							missingDescriptionKey={
 								`${sectionPrefix}.missingDescription` as 'pages.clEvents.clubs.missingDescription'
 							}
@@ -103,9 +105,11 @@ export default function CampusLifeOrganizersList({
 
 const OrganizerListItem = ({
 	organizer,
+	organizerKind,
 	missingDescriptionKey
 }: {
 	organizer: CampusLifeOrganizer
+	organizerKind: CampusLifePublicOrganizerKind
 	missingDescriptionKey:
 		| 'pages.clEvents.clubs.missingDescription'
 		| 'pages.thiEvents.departments.missingDescription'
@@ -120,7 +124,7 @@ const OrganizerListItem = ({
 				onPress={() => {
 					router.push({
 						pathname: '/events/organiser/[id]',
-						params: { id: organizer.id.toString() }
+						params: campusLifeOrganiserParams(organizer.id, organizerKind)
 					})
 				}}
 				// biome-ignore lint/complexity/noUselessFragments: no

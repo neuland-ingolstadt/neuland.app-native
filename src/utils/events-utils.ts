@@ -13,6 +13,7 @@ import type {
 	PublicEventResponse,
 	PublicOrganizerResponse
 } from '@/types/campus-life'
+import { parseApiOrganizerKind } from '@/utils/campus-life-utils'
 import type { MaterialIcon } from '@/types/material-icons'
 
 const FALLBACK_ORGANIZER_NAME = 'Campus Life'
@@ -21,8 +22,11 @@ function mapOrganizerResponse(
 	organizer: PublicOrganizerResponse | null | undefined,
 	defaults: { id: number; name?: string }
 ): CampusLifeOrganizer {
+	const organizerKind = parseApiOrganizerKind(organizer?.organizer_kind)
+
 	return {
 		id: organizer?.id ?? defaults.id,
+		...(organizerKind != null ? { organizerKind } : {}),
 		name: organizer?.name ?? defaults.name ?? FALLBACK_ORGANIZER_NAME,
 		descriptions: {
 			de: organizer?.description_de ?? null,
@@ -41,9 +45,13 @@ function mapEventResponse(
 	event: PublicEventResponse,
 	organizer: CampusLifeOrganizer
 ): CampusLifeEvent {
+	const organizerKind =
+		parseApiOrganizerKind(event.organizer_kind) ?? organizer.organizerKind
+
 	return {
 		id: event.id.toString(),
 		numericId: event.id,
+		...(organizerKind != null ? { organizerKind } : {}),
 		titles: {
 			de: event.title_de,
 			en: event.title_en
