@@ -25,6 +25,9 @@ jobs:
 
       - name: Run Biome check
         run: bun biome ci .
+
+      - name: Check i18n completeness
+        run: bun i18n:check
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-latest
@@ -62,7 +65,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5
         with:
           files: ./coverage/lcov.info
           fail_ci_if_error: ${{ github.event_name == 'push' }}
