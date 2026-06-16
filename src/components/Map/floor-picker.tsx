@@ -29,7 +29,6 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation(['accessibility'])
 
-
 	return (
 		<View style={styles.ButtonArea}>
 			{!showAllFloors && (
