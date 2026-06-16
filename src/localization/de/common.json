@@ -204,7 +204,7 @@
 			"registerNow": "Jetzt anmelden",
 			"eventLink": "Veranstaltungslink",
 			"organizerDetails": {
-				"clubWebsite": "Vereins-Website",
+				"clubWebsite": "Veranstalter-Website",
 				"instagram": "Instagram",
 				"linkedin": "LinkedIn",
 				"location": "Ort",
@@ -337,14 +337,14 @@
 		},
 		"thiEvents": {
 			"departments": {
-				"title": "Fachbereiche entdecken",
-				"viewAll": "Alle Fachbereiche",
+				"title": "Abteilungen entdecken",
+				"viewAll": "Alle Abteilungen",
 				"filterAll": "Alle",
-				"departments": "Fachbereiche",
+				"departments": "Abteilungen",
 				"missingDescription": "Keine Beschreibung verfügbar.",
-				"footerInfo": "Die Fachbereiche sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"footerInfo": "Die Abteilungen sind nach Aktivität und Vollständigkeit des Profils sortiert.",
 				"noOrganizers": {
-					"title": "Keine Fachbereiche gefunden"
+					"title": "Keine Abteilungen gefunden"
 				}
 			},
 			"events": {
