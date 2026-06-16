@@ -8,6 +8,7 @@ import { Alert, Platform, SectionList, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import type { SearchResult } from '@/types/map'
 
 import Divider from '../Universal/Divider'
@@ -31,6 +32,9 @@ const SearchResults = ({
 	const addUnlockedAppIcon = usePreferencesStore(
 		(state) => state.addUnlockedAppIcon
 	)
+	const analyticsInitialized = useSessionStore(
+		(state) => state.analyticsInitialized
+	)
 	useEffect(() => {
 		if (
 			localSearch.toLocaleLowerCase() === 'neuland' &&
@@ -51,7 +55,9 @@ const SearchResults = ({
 				],
 				{ cancelable: false }
 			)
-			trackEvent('EasterEgg', { easterEgg: 'mapSearchNeuland' })
+			if (analyticsInitialized) {
+				trackEvent('EasterEgg', { easterEgg: 'mapSearchNeuland' })
+			}
 
 			addUnlockedAppIcon('retro')
 		}
