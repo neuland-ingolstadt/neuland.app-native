@@ -4,6 +4,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { ExtendedCard } from '@/components/all-cards'
 import { cardIcons } from '@/components/icons'
 import PlatformIcon from '@/components/Universal/Icon'
+import { useTranslation } from 'react-i18next'
 
 const { width } = Dimensions.get('window')
 
@@ -32,6 +33,7 @@ export default function OrderableRowItem({
 	const { styles, theme } = useStyles(stylesheet)
 	const bottomWidth = isLast ? 0 : 1
 	const isWeb = Platform.OS === 'web'
+	const { t } = useTranslation(['accessibility'])
 
 	return (
 		<View>
@@ -80,7 +82,7 @@ export default function OrderableRowItem({
 									opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel="Move up"
+							accessibilityLabel={t('dashboard.moveUp')}
 						>
 							<PlatformIcon
 								ios={{
@@ -109,7 +111,7 @@ export default function OrderableRowItem({
 									opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
 								}
 							]}
-							accessibilityLabel="Move down"
+							accessibilityLabel={t('dashboard.moveDown')}
 						>
 							<PlatformIcon
 								ios={{

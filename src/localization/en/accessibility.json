@@ -8,5 +8,12 @@
 		"libraryBarcode": "Library Number as Barcode",
 		"previous": "Previous",
 		"next": "Next"
+	},
+	"map": {
+		"centerOnCurrentLocation": "Center on current location"
+	},
+	"dashboard": {
+		"moveUp": "Move up",
+		"moveDown": "Move down"
 	}
 }
