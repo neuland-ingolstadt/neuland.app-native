@@ -5,9 +5,9 @@ import { SharedPlate } from './shared-plate'
 import { useSharedPlateAnimations } from './use-shared-plate-animations'
 
 export {
-	MealEntry,
-	MealDay,
 	FoodLoadingIndicator,
+	MealDay,
+	MealEntry,
 	SharedPlate,
 	useSharedPlateAnimations
 }

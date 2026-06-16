@@ -86,8 +86,46 @@
 		"disable": "Disable",
 		"more": "more",
 		"unknown": "Unknown",
+		"unknownError": "Unknown error",
+		"ok": "OK",
+		"notAvailable": "N/A",
 		"true": "Yes",
 		"false": "No"
+	},
+	"labels": {
+		"name": "Name",
+		"version": "Version",
+		"email": "Email",
+		"thiEmail": "THI Email",
+		"repository": "Repository",
+		"campus": "Campus",
+		"app": "App",
+		"restaurant": "Restaurant",
+		"details": "Details",
+		"wallet": "Wallet",
+		"error": "Error"
+	},
+	"meta": {
+		"appDescription": "Your app for TH Ingolstadt - THI",
+		"dashboardTitle": "Dashboard",
+		"dashboardDescription": "Customizable Dashboard",
+		"timetableDescription": "View your timetable",
+		"mapDescription": "Interactive Campus Map",
+		"foodDescription": "Meal plan for the canteens",
+		"settingsDescription": "Profile and Settings"
+	},
+	"semesterSuffix": ". Semester",
+	"reportProblem": "Report a problem",
+	"thiEvent": "THI Event",
+	"buildingLabel": "Building",
+	"feedbackMail": {
+		"subjectCrash": "App-Crash",
+		"subjectError": "App-Error",
+		"body": "Steps to reproduce:\nOther:\n\nApp Version: {{version}}\nPlatform: {{platform}}\nPage: {{path}}\nError: {{error}}"
+	},
+	"uiManager": {
+		"fabric": "Fabric",
+		"paper": "Paper"
 	},
 	"quicklinks": {
 		"primuss": "Primuss",

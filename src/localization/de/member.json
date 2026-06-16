@@ -12,7 +12,9 @@
 		"groups": "GRUPPEN",
 		"footer": "Neuland Ingolstadt e.V.",
 		"footerDescription": "Tippe auf den QR-Code, um ihn im Vollbildmodus zu öffnen.",
-		"screenshotError": "Screenshot erkannt. Neuland ID Code temporär ausgeblendet."
+		"screenshotError": "Screenshot erkannt. Neuland ID Code temporär ausgeblendet.",
+		"honoraryLine1": "EHREN",
+		"honoraryLine2": "MITGLIED"
 	},
 	"settings": {
 		"title": "Neuland Mitglied"
@@ -76,6 +78,6 @@
 	"perks": {
 		"header": "Vorteile",
 		"theme": "Akzentfarbe",
-		"appIcon": "App-Icon"
+		"appIcon": "App Icon"
 	}
 }

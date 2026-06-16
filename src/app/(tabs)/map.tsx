@@ -17,7 +17,7 @@ import type { RoomOpenings } from '@/utils/map-utils'
 import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {
-	const { t } = useTranslation(['navigation'])
+	const { t } = useTranslation(['navigation', 'common'])
 	const { styles } = useStyles(stylesheet)
 	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
@@ -94,7 +94,10 @@ export default function MapRootScreen(): React.JSX.Element {
 		<>
 			<Head>
 				<title>{t('navigation.map')}</title>
-				<meta name="Campus Map" content="Interactive Campus Map" />
+				<meta
+					name="Campus Map"
+					content={t('meta.mapDescription', { ns: 'common' })}
+				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>

@@ -63,6 +63,7 @@ bun lint                     # Biome check (read-only)
 bun fmt                      # Biome check --fix (safe auto-fixes)
 bun fmt:unsafe               # Biome check --fix --unsafe (use sparingly)
 bun tsc --noEmit             # TypeScript check (matches CI)
+bun i18n:check               # verify de/en locale files are complete (matches CI)
 
 bun test                     # run all unit tests
 bun test src/utils/tests/timetable-utils.test.ts   # run a single test file
@@ -85,7 +86,7 @@ bun changelog                # regenerate CHANGELOG.md via git-cliff
 bun atlas                    # Expo Atlas bundle analysis
 ```
 
-CI runs `bun tsc --noEmit`, `bun biome ci .` and `bun test --ci` on every PR.
+CI runs `bun tsc --noEmit`, `bun biome ci .`, `bun i18n:check`, and `bun test --ci` on every PR.
 Always make sure these pass locally before pushing.
 PR titles are linted by `.github/workflows/pr-title.yml`; use a semantic title such as
 `fix: handle guest login`, with a lowercase subject and no trailing period.
@@ -316,6 +317,7 @@ Generated and binary files:
   `timetable`, `member`, `accessibility`, `api`, plus `ios.json` for iOS Info.plist
   strings.
 - Add new strings to **both** `de` and `en`, in the namespace that matches the screen.
+  Run `bun i18n:check` to catch missing or mismatched keys (`en` is the source locale).
 - Consume with `const { t } = useTranslation('navigation')` or
   `useTranslation(['navigation', 'common'])`. Reference cross-namespace keys with
   `t('foo.bar', { ns: 'common' })`.
@@ -455,6 +457,7 @@ Biome enforces almost everything. The non-obvious rules:
 1. Add the key to **both** `src/localization/de/<namespace>.json` and `en/<namespace>.json`,
    keeping JSON keys identical and structures in sync.
 2. Use `useTranslation(['<namespace>'])` and call `t('your.key')`.
+3. Run `bun i18n:check` before pushing.
 
 ### Add a new icon
 

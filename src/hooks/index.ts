@@ -16,8 +16,8 @@ export {
 	useIsFeatureEnabled,
 	useAppState,
 	useInterval,
+	useMemberStore,
 	useOnlineManager,
 	useRefreshByUser,
-	useRefreshOnFocus,
-	useMemberStore
+	useRefreshOnFocus
 }
