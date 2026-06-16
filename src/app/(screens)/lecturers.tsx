@@ -432,7 +432,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							<ToggleRow
 								items={[
 									t('pages.lecturers.personal'),
-									displayesProfessors
+									displaysProfessors
 										? t('pages.lecturers.professors')
 										: t('pages.lecturers.faculty')
 								]}

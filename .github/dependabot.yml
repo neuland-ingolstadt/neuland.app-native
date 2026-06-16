@@ -4,3 +4,72 @@ updates:
     directory: /
     schedule:
       interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: build
+      include: scope
+    labels:
+      - dependencies
+      - ci
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+
+  # SDK-aligned Expo / React Native deps are updated with `bun pkgs` (expo install --check).
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 8
+    commit-message:
+      prefix: build
+      prefix-development: build
+      include: scope
+    labels:
+      - dependencies
+    groups:
+      production-minor-patch:
+        dependency-type: production
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
+      development-minor-patch:
+        dependency-type: development
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: expo
+      - dependency-name: expo-*
+      - dependency-name: '@expo/*'
+      - dependency-name: react-native
+      - dependency-name: react-native-*
+      - dependency-name: '@react-native/*'
+      - dependency-name: '@react-native-community/*'
+      # Manually pinned in package.json → expo.install.exclude
+      - dependency-name: '@shopify/flash-list'
+      - dependency-name: react-native-reanimated
+
+  - package-ecosystem: docker
+    directory: /config
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: build
+      include: scope
+    labels:
+      - dependencies
+      - ci
