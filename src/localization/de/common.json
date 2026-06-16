@@ -340,7 +340,9 @@
 				"title": "Fachbereiche entdecken",
 				"viewAll": "Alle Fachbereiche",
 				"filterAll": "Alle",
-				"departments": "Fachbereiche"
+				"departments": "Fachbereiche",
+				"missingDescription": "Keine Beschreibung verfügbar.",
+				"footerInfo": "Die Fachbereiche sind nach Aktivität und Vollständigkeit des Profils sortiert."
 			},
 			"events": {
 				"subtitle": "THI-Veranstaltungen",

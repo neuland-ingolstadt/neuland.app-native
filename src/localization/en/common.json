@@ -340,7 +340,9 @@
 				"title": "Discover departments",
 				"viewAll": "All departments",
 				"filterAll": "All",
-				"departments": "departments"
+				"departments": "departments",
+				"missingDescription": "No description available.",
+				"footerInfo": "Departments are ordered by activity and profile completeness."
 			},
 			"events": {
 				"subtitle": "Events of THI departments",

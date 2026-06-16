@@ -31,13 +31,10 @@ export function getFeatureFlagQueryOptions(
 ) {
 	return {
 		queryKey: featureFlagQueryKey(flagKey, userKind, platform),
-		queryFn: async () => {
-			const enabled = await evaluateBooleanFlag(flagKey, defaultValue, {
+		queryFn: async () =>
+			evaluateBooleanFlag(flagKey, defaultValue, {
 				userKind: userKind ?? 'guest'
-			})
-			console.log('[FeatureFlag]', flagKey, enabled, { userKind, platform })
-			return enabled
-		},
+			}),
 		staleTime: FEATURE_FLAG_STALE_TIME_MS,
 		refetchOnReconnect: true,
 		refetchOnWindowFocus: true,

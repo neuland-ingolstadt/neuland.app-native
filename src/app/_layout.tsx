@@ -500,6 +500,12 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/thi-departments"
+					options={{
+						title: t('common:pages.thiEvents.departments.title')
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/club/[id]"
 					options={{
 						headerShown: false
