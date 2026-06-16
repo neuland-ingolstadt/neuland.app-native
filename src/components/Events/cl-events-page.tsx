@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list'
 import { type UseQueryResult, useQuery } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
-import { router } from 'expo-router'
+import { type Href, router } from 'expo-router'
 import type React from 'react'
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,8 +20,17 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
-import type { CampusLifeEvent, CampusLifeOrganizer } from '@/types/campus-life'
+import {
+	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	type CampusLifeEvent,
+	type CampusLifeOrganizer,
+	type CampusLifePublicOrganizerKind
+} from '@/types/campus-life'
 import { networkError } from '@/utils/api-utils'
+import {
+	campusLifeOrganiserParams,
+	isThiDepartmentOrganizerKind
+} from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
@@ -53,13 +62,22 @@ const shouldAnimateClubOrder = (
 	return organizers.findIndex((organizer) => organizer.id === nextId) > 0
 }
 
-export default function ClEventsPage({
-	clEventsResult
-}: {
+interface ClEventsPageProps {
 	clEventsResult: UseQueryResult<CampusLifeEvent[], Error>
-}): React.JSX.Element {
+	organizerKind?: CampusLifePublicOrganizerKind
+	clubsListRoute?: Href
+}
+
+export default function ClEventsPage({
+	clEventsResult,
+	organizerKind = CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	clubsListRoute
+}: ClEventsPageProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const isThiDepartment = isThiDepartmentOrganizerKind(organizerKind)
+	const i18nPage = isThiDepartment ? 'thiEvents' : 'clEvents'
+	const organizersSection = isThiDepartment ? 'departments' : 'clubs'
 	const [selectedOrganizerId, setSelectedOrganizerId] = useState<number | null>(
 		null
 	)
@@ -70,9 +88,9 @@ export default function ClEventsPage({
 	selectedOrganizerIdRef.current = selectedOrganizerId
 
 	const organizersQuery = useQuery({
-		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS],
-		queryFn: loadCampusLifeOrganizers,
-		staleTime: 1000 * 60 * 30, // 30 minutes
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_ORGANIZERS, organizerKind],
+		queryFn: () => loadCampusLifeOrganizers(organizerKind),
+		staleTime: 1000 * 60 * 30,
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
@@ -163,7 +181,7 @@ export default function ClEventsPage({
 
 	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
 		<View style={styles.rowWrapper}>
-			<MemoizedEventRow event={item} />
+			<MemoizedEventRow event={item} organizerKind={organizerKind} />
 		</View>
 	)
 
@@ -210,17 +228,23 @@ export default function ClEventsPage({
 										<View style={styles.clubsContainer}>
 											<View style={styles.clubsHeaderRow}>
 												<Text style={styles.clubsTitle}>
-													{t('pages.clEvents.clubs.title')}
+													{t(
+														`pages.${i18nPage}.${organizersSection}.title` as 'pages.clEvents.clubs.title'
+													)}
 												</Text>
-												<Pressable
-													onPress={() => {
-														router.push('/cl-clubs')
-													}}
-												>
-													<Text style={styles.viewAllText}>
-														{t('pages.clEvents.clubs.viewAll')}
-													</Text>
-												</Pressable>
+												{clubsListRoute != null && (
+													<Pressable
+														onPress={() => {
+															router.push(clubsListRoute)
+														}}
+													>
+														<Text style={styles.viewAllText}>
+															{t(
+																`pages.${i18nPage}.${organizersSection}.viewAll` as 'pages.clEvents.clubs.viewAll'
+															)}
+														</Text>
+													</Pressable>
+												)}
 											</View>
 											<ScrollView
 												ref={clubsScrollRef}
@@ -247,7 +271,9 @@ export default function ClEventsPage({
 																styles.selectedClubChipText
 														]}
 													>
-														{t('pages.clEvents.clubs.filterAll')}
+														{t(
+															`pages.${i18nPage}.${organizersSection}.filterAll` as 'pages.clEvents.clubs.filterAll'
+														)}
 													</Text>
 												</Pressable>
 												{featuredOrganizers.map((organizer) => (
@@ -266,8 +292,11 @@ export default function ClEventsPage({
 														onLongPress={() => {
 															didLongPressRef.current = true
 															router.push({
-																pathname: '/events/club/[id]',
-																params: { id: organizer.id.toString() }
+																pathname: '/events/organiser/[id]',
+																params: campusLifeOrganiserParams(
+																	organizer.id,
+																	organizerKind
+																)
 															})
 														}}
 														delayLongPress={250}
@@ -290,49 +319,69 @@ export default function ClEventsPage({
 														</Text>
 													</Pressable>
 												))}
-												{remainingOrganizersCount > 0 && (
-													<Pressable
-														style={({ pressed }) => [
-															styles.clubChip,
-															styles.addClubChip,
-															{ opacity: pressed ? 0.85 : 1 }
-														]}
-														onPress={() => {
-															router.push('/cl-clubs')
-														}}
-													>
-														<Text style={styles.addClubChipText}>
-															+{remainingOrganizersCount}{' '}
-															{t('pages.clEvents.clubs.clubs')}
-														</Text>
-													</Pressable>
-												)}
+												{clubsListRoute != null &&
+													remainingOrganizersCount > 0 && (
+														<Pressable
+															style={({ pressed }) => [
+																styles.clubChip,
+																styles.addClubChip,
+																{ opacity: pressed ? 0.85 : 1 }
+															]}
+															onPress={() => {
+																router.push(clubsListRoute)
+															}}
+														>
+															<Text style={styles.addClubChipText}>
+																+{remainingOrganizersCount}{' '}
+																{t(
+																	`pages.${i18nPage}.${organizersSection}.${organizersSection}` as 'pages.clEvents.clubs.clubs'
+																)}
+															</Text>
+														</Pressable>
+													)}
 											</ScrollView>
 										</View>
 									) : null}
 									<Text style={styles.sectionHeaderText}>
 										{selectedOrganizerName ??
-											t('pages.clEvents.events.subtitle')}
+											t(
+												`pages.${i18nPage}.events.subtitle` as 'pages.clEvents.events.subtitle'
+											)}
 									</Text>
 								</View>
 							}
 							ListEmptyComponent={
 								<EmptyEventsAnimation
-									title={t('pages.clEvents.events.noEvents.title')}
+									title={t(
+										`pages.${i18nPage}.events.noEvents.title` as 'pages.clEvents.events.noEvents.title'
+									)}
 									subtitle={
 										selectedOrganizerName == null
-											? t('pages.clEvents.events.noEvents.subtitle')
-											: t('pages.clEvents.events.noEvents.filteredSubtitle', {
-													clubName: selectedOrganizerName
-												})
+											? t(
+													`pages.${i18nPage}.events.noEvents.subtitle` as 'pages.clEvents.events.noEvents.subtitle'
+												)
+											: isThiDepartment
+												? t(
+														'pages.thiEvents.events.noEvents.filteredSubtitle',
+														{
+															organizerName: selectedOrganizerName
+														}
+													)
+												: t('pages.clEvents.events.noEvents.filteredSubtitle', {
+														clubName: selectedOrganizerName
+													})
 									}
 								/>
 							}
 						/>
 					) : (
 						<EmptyEventsAnimation
-							title={t('pages.clEvents.events.noEvents.title')}
-							subtitle={t('pages.clEvents.events.noEvents.subtitle')}
+							title={t(
+								`pages.${i18nPage}.events.noEvents.title` as 'pages.clEvents.events.noEvents.title'
+							)}
+							subtitle={t(
+								`pages.${i18nPage}.events.noEvents.subtitle` as 'pages.clEvents.events.noEvents.subtitle'
+							)}
 						/>
 					)}
 				</View>
