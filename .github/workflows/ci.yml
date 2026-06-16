@@ -26,7 +26,7 @@ jobs:
       - name: Run Biome check
         run: bun biome ci .
 
-      - name: Check i18n completeness
+      - name: Check i18n
         run: bun i18n:check
   unit-tests:
     name: Unit tests
