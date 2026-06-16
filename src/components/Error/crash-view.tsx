@@ -1,9 +1,11 @@
 import { trackEvent } from '@aptabase/react-native'
 import { type ErrorBoundaryProps, usePathname } from 'expo-router'
 import type React from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useSessionStore } from '@/hooks/useSessionStore'
 
 import LogoTextSVG from '../Flow/svgs/logoText'
 import PlatformIcon from '../Universal/Icon'
@@ -32,11 +34,18 @@ export default function CrashView({
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const path = usePathname()
-	trackEvent('ErrorView', {
-		title: error.message,
-		path,
-		crash: true
-	})
+	const analyticsInitialized = useSessionStore(
+		(state) => state.analyticsInitialized
+	)
+
+	useEffect(() => {
+		if (!analyticsInitialized) return
+		trackEvent('ErrorView', {
+			title: error.message,
+			path,
+			crash: true
+		})
+	}, [analyticsInitialized, error.message, path])
 
 	const handlePress = (): void => {
 		retry().catch((error) => {
