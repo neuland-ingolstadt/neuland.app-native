@@ -108,11 +108,11 @@
 	"meta": {
 		"appDescription": "Deine App für die TH Ingolstadt - THI",
 		"dashboardTitle": "Dashboard",
-		"dashboardDescription": "Customizable Dashboard",
-		"timetableDescription": "View your timetable",
-		"mapDescription": "Interactive Campus Map",
-		"foodDescription": "Meal plan for the canteens",
-		"settingsDescription": "Profile and Settings"
+		"dashboardDescription": "Anpassbares Dashboard",
+		"timetableDescription": "Deinen Stundenplan anzeigen",
+		"mapDescription": "Interaktive Campus-Karte",
+		"foodDescription": "Speiseplan der Mensen",
+		"settingsDescription": "Profil und Einstellungen"
 	},
 	"semesterSuffix": ". Semester",
 	"reportProblem": "Problem melden",
@@ -121,7 +121,7 @@
 	"feedbackMail": {
 		"subjectCrash": "App-Absturz",
 		"subjectError": "App-Fehler",
-		"body": "Schritte zur Reproduktion:\nSonstiges:\n\nApp Version: {{version}}\nPlatform: {{platform}}\nSeite: {{path}}\nFehler: {{error}}"
+		"body": "Schritte zur Reproduktion:\nSonstiges:\n\nApp-Version: {{version}}\nPlattform: {{platform}}\nSeite: {{path}}\nFehler: {{error}}"
 	},
 	"uiManager": {
 		"fabric": "Fabric",

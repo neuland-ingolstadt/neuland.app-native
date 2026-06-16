@@ -27,7 +27,7 @@ declare global {
 
 export default function Version(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation(['settings', 'common'])
+	const { t, i18n } = useTranslation(['settings', 'common'])
 	const notAvailable = t('misc.notAvailable', { ns: 'common' })
 	const [systemInfo, setSystemInfo] = useState({
 		osVersion: notAvailable,
@@ -40,6 +40,8 @@ export default function Version(): React.JSX.Element {
 	})
 
 	useEffect(() => {
+		const localizedNotAvailable = t('misc.notAvailable', { ns: 'common' })
+
 		const loadSystemInfo = async () => {
 			if (Platform.OS === 'web') {
 				const userAgent = navigator.userAgent
@@ -65,20 +67,20 @@ export default function Version(): React.JSX.Element {
 				: t('uiManager.paper', { ns: 'common' })
 
 			setSystemInfo({
-				osVersion: osVersion ?? notAvailable,
-				deviceModel: deviceModel ?? notAvailable,
-				deviceType: deviceType ?? notAvailable,
+				osVersion: osVersion ?? localizedNotAvailable,
+				deviceModel: deviceModel ?? localizedNotAvailable,
+				deviceType: deviceType ?? localizedNotAvailable,
 				isEmulator,
 				firstInstallTime: firstInstallTime
 					? formatFriendlyDate(new Date(firstInstallTime))
-					: notAvailable,
+					: localizedNotAvailable,
 				uiManager,
-				browserInfo: notAvailable
+				browserInfo: localizedNotAvailable
 			})
 		}
 
 		void loadSystemInfo()
-	}, [])
+	}, [i18n.language, t])
 
 	const version =
 		Application.nativeApplicationVersion ??

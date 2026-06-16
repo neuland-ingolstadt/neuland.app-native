@@ -23,7 +23,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	text: {
 		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600'
+		fontSize: 21,
+		fontWeight: 'bold'
 	}
 }))
