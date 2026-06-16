@@ -1,5 +1,11 @@
 {
 	"navigation": {
+		"home": "Home",
+		"dashboardScreen": "Dashboard",
+		"loginScreen": "Neuland Next Login",
+		"changelog": "Changelog",
+		"appIcon": "App Icon",
+		"eventDetails": "Event Details",
 		"timetable": "Calendar",
 		"map": "Map",
 		"campusMap": "Campus Map",

@@ -10,7 +10,7 @@ import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
-	const { t } = useTranslation('navigation')
+	const { t } = useTranslation(['navigation', 'common'])
 	const navigation = useNavigation()
 	useEffect(() => {
 		setIsPageOpen(true)
@@ -30,7 +30,10 @@ export default function FoodRootScreen(): React.JSX.Element {
 		<>
 			<Head>
 				<title>{t('navigation.food')}</title>
-				<meta name="Food" content="Meal plan for the canteens" />
+				<meta
+					name="Food"
+					content={t('meta.foodDescription', { ns: 'common' })}
+				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>

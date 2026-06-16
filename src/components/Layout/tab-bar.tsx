@@ -48,7 +48,7 @@ export default function TabLayout(): React.JSX.Element {
 			disableTransparentOnScrollEdge={!isIos26}
 		>
 			<NativeTabs.Trigger name="index">
-				<Label>{'Home'}</Label>
+				<Label>{t('navigation.home')}</Label>
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'house', selected: 'house.fill' }}

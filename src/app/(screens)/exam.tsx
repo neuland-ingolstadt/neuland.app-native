@@ -45,7 +45,7 @@ export default function ExamDetail(): React.JSX.Element {
 
 	const sections: FormListSections[] = [
 		{
-			header: 'Details',
+			header: t('labels.details'),
 			items: [
 				{
 					title: t('pages.exam.details.date'),
