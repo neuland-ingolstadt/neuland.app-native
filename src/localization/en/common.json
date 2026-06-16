@@ -342,7 +342,10 @@
 				"filterAll": "All",
 				"departments": "departments",
 				"missingDescription": "No description available.",
-				"footerInfo": "Departments are ordered by activity and profile completeness."
+				"footerInfo": "Departments are ordered by activity and profile completeness.",
+				"noOrganizers": {
+					"title": "No departments found"
+				}
 			},
 			"events": {
 				"subtitle": "Events of THI departments",
@@ -367,7 +370,10 @@
 				"filterAll": "All",
 				"clubs": "clubs",
 				"missingDescription": "No description available.",
-				"footerInfo": "The clubs are ordered by activity and profile completeness."
+				"footerInfo": "The clubs are ordered by activity and profile completeness.",
+				"noOrganizers": {
+					"title": "No clubs found"
+				}
 			},
 			"events": {
 				"title": "Events",

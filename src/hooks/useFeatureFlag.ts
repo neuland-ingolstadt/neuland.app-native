@@ -58,6 +58,18 @@ export function useIsFeatureEnabled(
 	return useFeatureFlag(flagKey, defaultValue).data ?? defaultValue
 }
 
+export function useFeatureFlagEnabled(
+	flagKey: FeatureFlagKey,
+	defaultValue = false
+): { enabled: boolean; isPending: boolean } {
+	const query = useFeatureFlag(flagKey, defaultValue)
+
+	return {
+		enabled: query.data ?? defaultValue,
+		isPending: query.isPending
+	}
+}
+
 export function useFeatureFlagQueries(
 	userKind: string | undefined,
 	platform: string

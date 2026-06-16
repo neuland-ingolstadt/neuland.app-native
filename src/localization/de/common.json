@@ -342,7 +342,10 @@
 				"filterAll": "Alle",
 				"departments": "Fachbereiche",
 				"missingDescription": "Keine Beschreibung verfügbar.",
-				"footerInfo": "Die Fachbereiche sind nach Aktivität und Vollständigkeit des Profils sortiert."
+				"footerInfo": "Die Fachbereiche sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Fachbereiche gefunden"
+				}
 			},
 			"events": {
 				"subtitle": "THI-Veranstaltungen",
@@ -367,7 +370,10 @@
 				"filterAll": "Alle",
 				"clubs": "Vereine",
 				"missingDescription": "Keine Beschreibung verfügbar.",
-				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
+				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Vereine gefunden"
+				}
 			},
 			"events": {
 				"title": "Veranstaltungen",

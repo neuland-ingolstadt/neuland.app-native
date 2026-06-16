@@ -22,12 +22,12 @@ import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
-	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT,
 	type CampusLifeEvent,
 	type CampusLifeOrganizer,
 	type CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
 import { networkError } from '@/utils/api-utils'
+import { isThiDepartmentOrganizerKind } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
@@ -72,8 +72,7 @@ export default function ClEventsPage({
 }: ClEventsPageProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
-	const isThiDepartment =
-		organizerKind === CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
+	const isThiDepartment = isThiDepartmentOrganizerKind(organizerKind)
 	const i18nPage = isThiDepartment ? 'thiEvents' : 'clEvents'
 	const organizersSection = isThiDepartment ? 'departments' : 'clubs'
 	const [selectedOrganizerId, setSelectedOrganizerId] = useState<number | null>(
@@ -179,7 +178,7 @@ export default function ClEventsPage({
 
 	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
 		<View style={styles.rowWrapper}>
-			<MemoizedEventRow event={item} />
+			<MemoizedEventRow event={item} organizerKind={organizerKind} />
 		</View>
 	)
 

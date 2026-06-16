@@ -9,6 +9,10 @@ import type {
 	CampusLifeEvent,
 	CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
+import {
+	CAMPUS_LIFE_EVENT_DETAIL_PATH,
+	campusLifeEventDetailParams
+} from '@/utils/campus-life-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
@@ -38,10 +42,12 @@ export default function CampusLifeEventsCard({
 	})
 
 	const handleEventItemPress = (id: string) => {
+		const detailParams = campusLifeEventDetailParams(id, organizerKind)
+
 		if (Platform.OS !== 'ios') {
 			router.navigate({
-				pathname: '/events/cl/[id]',
-				params: { id }
+				pathname: CAMPUS_LIFE_EVENT_DETAIL_PATH,
+				params: detailParams
 			})
 			return
 		}
@@ -50,7 +56,7 @@ export default function CampusLifeEventsCard({
 			pathname: listRoute,
 			params: {
 				openEvent: 'true',
-				id
+				...detailParams
 			}
 		})
 	}

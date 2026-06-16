@@ -13,6 +13,11 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { CampusLifePublicOrganizerKind } from '@/types/campus-life'
+import {
+	CAMPUS_LIFE_EVENT_DETAIL_PATH,
+	campusLifeEventDetailParams,
+	resolveCampusLifeOrganizerKind
+} from '@/utils/campus-life-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
@@ -24,6 +29,7 @@ interface CampusLifeEventsScreenProps {
 	queryEnabled?: boolean
 	redirectWhenDisabled?: Href
 	enableSportsTabRedirect?: boolean
+	featureFlagPending?: boolean
 }
 
 export default function CampusLifeEventsScreen({
@@ -31,14 +37,16 @@ export default function CampusLifeEventsScreen({
 	clubsListRoute,
 	queryEnabled = true,
 	redirectWhenDisabled,
-	enableSportsTabRedirect = false
+	enableSportsTabRedirect = false,
+	featureFlagPending = false
 }: CampusLifeEventsScreenProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
-	const { tab, openEvent, id } = useLocalSearchParams<{
+	const { tab, openEvent, id, org } = useLocalSearchParams<{
 		tab?: string
 		openEvent?: string
 		id?: string
+		org?: string
 	}>()
 
 	const eventsResult = useQuery({
@@ -71,16 +79,34 @@ export default function CampusLifeEventsScreen({
 	useFocusEffect(
 		useCallback(() => {
 			if (openEvent === 'true' && id) {
+				const resolvedOrganizerKind = resolveCampusLifeOrganizerKind(
+					organizerKind,
+					org
+				)
 				InteractionManager.runAfterInteractions(() => {
 					router.setParams({ openEvent: 'false' })
 					router.navigate({
-						pathname: '/events/cl/[id]',
-						params: { id }
+						pathname: CAMPUS_LIFE_EVENT_DETAIL_PATH,
+						params: campusLifeEventDetailParams(id, resolvedOrganizerKind)
 					})
 				})
 			}
-		}, [openEvent, id])
+		}, [openEvent, id, org, organizerKind])
 	)
+
+	if (featureFlagPending) {
+		return (
+			<View
+				style={[
+					styles.page,
+					styles.loaderWrapper,
+					{ paddingTop: headerPadding + theme.margins.page }
+				]}
+			>
+				<LoadingIndicator />
+			</View>
+		)
+	}
 
 	if (redirectWhenDisabled != null && !queryEnabled) {
 		return <Redirect href={redirectWhenDisabled} />

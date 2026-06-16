@@ -22,25 +22,16 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type {
 	AnnouncementFieldsFragment,
-	Platform as AppPlatform,
 	UserKind
 } from '@/__generated__/gql/graphql'
 import i18n from '@/localization/i18n'
-import { isDevNeulandHost } from '@/utils/web-host'
+import { getAnnouncementPlatform } from '@/utils/web-host'
 import { DashboardContext, UserKindContext } from '../contexts'
 import PlatformIcon from '../Universal/Icon'
 
 interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]
 }
-
-const platform = (
-	Platform.OS === 'web' &&
-	typeof window !== 'undefined' &&
-	isDevNeulandHost(window.location.hostname)
-		? 'WEB_DEV'
-		: Platform.OS.toUpperCase()
-) as AppPlatform
 
 const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { hiddenAnnouncements, hideAnnouncement } = use(DashboardContext)
@@ -76,6 +67,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 		(
 			announcements: AnnouncementFieldsFragment[]
 		): AnnouncementFieldsFragment[] => {
+			const platform = getAnnouncementPlatform()
 			const now = Date.now()
 			return announcements
 				.filter(

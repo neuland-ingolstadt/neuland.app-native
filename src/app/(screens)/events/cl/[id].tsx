@@ -27,6 +27,10 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
+	campusLifeEventListScreen,
+	parseCampusLifeOrganizerKindParam
+} from '@/utils/campus-life-utils'
+import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
@@ -42,7 +46,12 @@ import { copyToClipboard } from '@/utils/ui-utils'
 
 export default function ClEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-	const { id } = useLocalSearchParams<{ id: string }>()
+	const { id, org: orgParam } = useLocalSearchParams<{
+		id: string
+		org?: string | string[]
+	}>()
+	const organizerKind = parseCampusLifeOrganizerKindParam(orgParam)
+	const eventListType = campusLifeEventListScreen(organizerKind)
 	const { t, i18n } = useTranslation('common')
 	const getLocalizedValue = useCallback(
 		(values?: { de?: string | null; en?: string | null } | null) => {
@@ -119,7 +128,8 @@ export default function ClEventDetail(): React.JSX.Element {
 					...getPlatformHeaderButtons({
 						onShare: async () => {
 							trackEvent('Share', {
-								type: 'clEvent'
+								type: 'clEvent',
+								org: organizerKind
 							})
 							const message = t('pages.event.shareMessage', {
 								title: eventTitle,
@@ -147,12 +157,13 @@ export default function ClEventDetail(): React.JSX.Element {
 			i18n.language,
 			dateRange,
 			eventTitle,
-			organizerName
+			organizerName,
+			organizerKind
 		])
 	)
 
 	if (!isIdValid || error || (!isLoading && !eventData)) {
-		return <EventErrorView eventType="clEvents" />
+		return <EventErrorView eventType={eventListType} />
 	}
 
 	if (isLoading || !eventData) {

@@ -46,8 +46,8 @@ export default function CampusLifeOrganizersList({
 
 	const emptyTitleKey =
 		page === 'thiEvents'
-			? 'pages.thiEvents.events.noEvents.title'
-			: 'pages.clEvents.events.noEvents.title'
+			? 'pages.thiEvents.departments.noOrganizers.title'
+			: 'pages.clEvents.clubs.noOrganizers.title'
 
 	return (
 		<>
