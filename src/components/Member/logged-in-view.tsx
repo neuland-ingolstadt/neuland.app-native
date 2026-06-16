@@ -79,10 +79,10 @@ export function LoggedInView(): React.JSX.Element {
 	}
 
 	const perksSection: FormListSections = {
-		header: t('perks.header', { defaultValue: 'Perks' }),
+		header: t('perks.header'),
 		items: [
 			{
-				title: t('perks.theme', { defaultValue: 'Theme & Accent Color' }),
+				title: t('perks.theme'),
 				icon: {
 					ios: 'paintbrush',
 					android: 'palette',
@@ -93,7 +93,7 @@ export function LoggedInView(): React.JSX.Element {
 			...(Platform.OS === 'ios'
 				? [
 						{
-							title: t('perks.appIcon', { defaultValue: 'App Icon' }),
+							title: t('perks.appIcon'),
 							icon: {
 								ios: 'star.square.on.square',
 								android: 'apps' as MaterialIcon,
@@ -140,7 +140,7 @@ export function LoggedInView(): React.JSX.Element {
 			]
 		},
 		{
-			header: 'Wallet',
+			header: t('labels.wallet', { ns: 'common' }),
 			items: [
 				{
 					title: t('securityWarning.buttons.addToWallet'),

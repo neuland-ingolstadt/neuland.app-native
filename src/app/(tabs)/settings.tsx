@@ -7,7 +7,7 @@ import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
-	const { t } = useTranslation('navigation')
+	const { t } = useTranslation(['navigation', 'common'])
 	useEffect(() => {
 		setIsPageOpen(true)
 	}, [])
@@ -20,7 +20,10 @@ export default function FoodRootScreen(): React.JSX.Element {
 		<>
 			<Head>
 				<title>{t('navigation.profile')}</title>
-				<meta name="Profile" content="Profile and Settings" />
+				<meta
+					name="Profile"
+					content={t('meta.settingsDescription', { ns: 'common' })}
+				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>

@@ -55,8 +55,20 @@
 		},
 		"username": "Username",
 		"password": "Password",
+		"usernamePlaceholder": "abc1234",
 		"button": "Sign in",
 		"guest": "continue as guest",
-		"or": "or"
+		"or": "or",
+		"subtitles": {
+			"grades": "to view your grades",
+			"freeRooms": "to search for free rooms",
+			"mapSuggestions": "to get map suggestions",
+			"timetable": "to view your timetable",
+			"exams": "to see your exam schedule",
+			"searchLecturers": "to search all lecturers",
+			"viewLecturers": "to view your lecturers",
+			"thiNews": "to view the latest THI news",
+			"printerBalance": "to check your printer balance"
+		}
 	}
 }

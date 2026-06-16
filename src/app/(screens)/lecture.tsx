@@ -68,7 +68,7 @@ export default function TimetableDetails(): React.JSX.Element {
 	)
 
 	if (lecture === undefined) {
-		return <ErrorView title="Cannot display lecture" />
+		return <ErrorView title={t('error.cannotDisplayLecture')} />
 	}
 
 	const startDate = new Date(lecture.startDate)

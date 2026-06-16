@@ -1,6 +1,6 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, TouchableWithoutFeedback, View } from 'react-native'
 import Animated, {
@@ -11,55 +11,52 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+const SUBTITLE_KEYS = [
+	'grades',
+	'freeRooms',
+	'mapSuggestions',
+	'timetable',
+	'exams',
+	'searchLecturers',
+	'viewLecturers',
+	'thiNews',
+	'printerBalance'
+] as const
+
 function shuffleArray(array: string[]): string[] {
-	for (let i = array.length - 1; i > 0; i--) {
+	const shuffled = [...array]
+	for (let i = shuffled.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
-		;[array[i], array[j]] = [array[j], array[i]] // Swap elements
+		;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
 	}
-	return array
+	return shuffled
 }
 
-const textsEN = shuffleArray([
-	'to view your grades',
-	'to search for free rooms',
-	'to get map suggestions',
-	'to view your timetable',
-	'to see your exam schedule',
-	'to search all lectureres',
-	'to view your lectureres',
-	'to view the latest THI news',
-	'to check your printer balance'
-])
-
-const textsDE = shuffleArray([
-	'um deine Noten zu sehen',
-	'um freie Räume zu suchen',
-	'um Karten Vorschläge zu erhalten',
-	'um deinen Stundenplan zu sehen',
-	'um deinen Prüfungsplan zu sehen',
-	'um alle Dozenten zu suchen',
-	'um deine Dozenten zu sehen',
-	'um die THI-News anzuzeigen',
-	'um dein Drucker Guthaben zu prüfen'
-])
 const shouldVibrate = Platform.OS === 'ios'
 
 function LoginAnimatedText(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('flow')
+	const texts = useMemo(
+		() => shuffleArray(SUBTITLE_KEYS.map((key) => t(`login.subtitles.${key}`))),
+		[t, i18n.language]
+	)
 	const [currentTextIndex, setCurrentTextIndex] = useState(0)
 	const currentTextIndexRef = useRef(currentTextIndex)
 	const textOpacity = useSharedValue(1)
 	const textTranslateY = useSharedValue(0)
-	const texts3 = i18n.language === 'de' ? textsDE : textsEN
 
 	useEffect(() => {
 		currentTextIndexRef.current = currentTextIndex
 	}, [currentTextIndex])
 
+	useEffect(() => {
+		setCurrentTextIndex(0)
+	}, [texts])
+
 	const goToNextText = (): void => {
 		textOpacity.value = withTiming(0, { duration: 300 }, () => {
-			const nextIndex = (currentTextIndex + 1) % texts3.length
+			const nextIndex = (currentTextIndexRef.current + 1) % texts.length
 			runOnJS(setCurrentTextIndex)(nextIndex)
 
 			textTranslateY.value = 5
@@ -74,7 +71,7 @@ function LoginAnimatedText(): React.JSX.Element {
 		return () => {
 			clearInterval(interval)
 		}
-	}, [currentTextIndex, texts3, textOpacity, textTranslateY])
+	}, [currentTextIndex, texts, textOpacity, textTranslateY])
 
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
@@ -95,7 +92,7 @@ function LoginAnimatedText(): React.JSX.Element {
 			>
 				<Animated.View style={animatedStyle}>
 					<Text style={styles.header3} numberOfLines={1} adjustsFontSizeToFit>
-						{texts3[currentTextIndex]}
+						{texts[currentTextIndex]}
 					</Text>
 				</Animated.View>
 			</TouchableWithoutFeedback>

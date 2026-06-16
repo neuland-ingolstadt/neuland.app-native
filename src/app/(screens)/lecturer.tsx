@@ -56,10 +56,10 @@ export default function LecturerDetail(): React.JSX.Element {
 
 	const sections: FormListSections[] = [
 		{
-			header: 'Details',
+			header: t('labels.details'),
 			items: [
 				{
-					title: 'Name',
+					title: t('labels.name'),
 					value: `${lecturer?.vorname ?? ''} ${lecturer?.name ?? ''}`
 				},
 				{
@@ -115,7 +115,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					}
 				},
 				{
-					title: 'E-Mail',
+					title: t('labels.email'),
 					value: lecturer?.email,
 					disabled: validEmail,
 					layout: validEmail ? 'column' : 'row',
