@@ -496,3 +496,30 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 - Prefer changing Expo config / plugins over editing `ios/` or `android/` directly. Touch
   native projects only when the required change cannot be expressed in config.
 - For larger architectural changes, open a draft PR early and link the related issue.
+
+---
+
+## Cursor Cloud specific instructions
+
+The cloud VM has no iOS Simulator or Android emulator, so the **web target is the only
+runnable build** here. Use it for any manual verification.
+
+- **Run the app**: `bun web` (Expo web on port 3000, see the `web` script). Metro bundles
+  on first request; expect `Web Bundled … (… modules)` in the log, then `http://localhost:3000`
+  serves HTTP 200. The app opens in **guest mode** — no login is required to exercise core
+  public features (dashboard cards, cafeteria/`Food` menu, campus `Map`, theme switching),
+  which pull from public THI/Neuland endpoints.
+- **Git LFS is required before bundling.** Images/fonts/SVGs are stored in Git LFS. If the
+  checkout left them as pointer files, Metro web bundling fails with
+  `TypeError: unsupported file type: undefined (file: …/src/assets/…png)`. Run `git lfs pull`
+  to materialize them (this is in the startup update script, but re-run it if you hit that
+  error). Do not "fix" a supposedly corrupt/missing asset until you've confirmed LFS objects
+  are present.
+- **No `.env.local` is needed** to run the web app — the public API endpoints have code
+  defaults (see `src/api/anonymous-api.ts` / `neuland-api.ts`). Only create `.env.local`
+  (from `.env.local.example`) if you need to override endpoints or enable analytics.
+- **Chrome in the VM is memory-constrained.** It can show transient "Aw, Snap!" (Error
+  code 4) crashes, especially right after a hard page reload. The app itself is fine —
+  prefer in-app tab navigation over reloading the page when testing.
+- Standard checks match CI and are already documented under "Commands":
+  `bun test --ci`, `bun lint` (Biome), `bun tsc --noEmit`, `bun i18n:check`.
