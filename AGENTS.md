@@ -131,17 +131,16 @@ src/
 └── utils/                # Pure functions, separated by domain (date, food, map, ...)
     └── tests/                  # *.test.ts — colocated with the utility being tested
 config/                   # Build tooling (codegen, cliff, expo plugins, fonts, nginx)
-ci_scripts/               # Xcode Cloud post-clone script (symlinked from ios/ci_scripts)
 patches/                  # Bun patch-package patches
 android/                  # Native Android project (managed by Expo prebuild)
 .github/                  # CI workflows, issue/PR templates, CODEOWNERS
 ```
 
 The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`. Xcode Cloud
-needs `ios/ci_scripts/ci_post_clone.sh`; that path is a **symlink** to `ci_scripts/` at the repo
-root (recreated after prebuild by `withCiScriptsSymlink`). Other iOS-only files that must survive
-prebuild (export options, TestFlight notes, …) live under `config/ios-artifacts/` and are copied
-by `withIosCiArtifacts`.
+needs `ios/ci_scripts/ci_post_clone.sh`; that path is a **symlink** to
+`config/ios-artifacts/ci_scripts/` (recreated after prebuild by `withCiScriptsSymlink`). Other
+iOS-only files that must survive prebuild (export options, TestFlight notes, …) also live under
+`config/ios-artifacts/` and are copied by `withIosCiArtifacts`.
 
 Path aliases (defined in `tsconfig.json`):
 
@@ -518,7 +517,8 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   `bun licences` for `src/data/licenses.json`, and `bun changelog` for `CHANGELOG.md`.
 - **Don't commit the `ios/` folder** (only the `ios/ci_scripts` symlink for Xcode Cloud). It is
   gitignored; run `bun prebuild:ios` and change `app.config.json`, config plugins, or
-  `config/ios-artifacts/` instead. Edit `ci_scripts/ci_post_clone.sh` for Xcode Cloud setup.
+  `config/ios-artifacts/` instead. Edit `config/ios-artifacts/ci_scripts/ci_post_clone.sh` for
+  Xcode Cloud setup.
 - **Don't disable Biome rules globally.** Inline `// biome-ignore` with a reason if
   truly necessary.
 - **Don't commit secrets** (`.env.local`, `service.json`, `credentials/`,

@@ -28,7 +28,6 @@ ios:
   - changed-files:
       - any-glob-to-any-file:
           - 'ios/**'
-          - 'ci_scripts/**'
           - 'config/ios-artifacts/**'
           - 'config/plugins/withIosCiArtifacts.js'
           - 'config/plugins/withCiScriptsSymlink.js'

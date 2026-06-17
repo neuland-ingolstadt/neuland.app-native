@@ -4,6 +4,8 @@ set -x
 
 if [[ -n "$CI_PRIMARY_REPOSITORY_PATH" ]]; then
 	REPO_ROOT="$CI_PRIMARY_REPOSITORY_PATH"
+elif [[ -f "$(dirname "$0")/../../../package.json" ]]; then
+	REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 elif [[ -f "$(dirname "$0")/../../package.json" ]]; then
 	REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 else

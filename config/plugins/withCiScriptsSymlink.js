@@ -19,7 +19,7 @@ function withCiScriptsSymlink(expoConfig) {
 				rmSync(link, { recursive: true, force: true })
 			}
 
-			symlinkSync('../ci_scripts', link, 'dir')
+			symlinkSync('../config/ios-artifacts/ci_scripts', link, 'dir')
 			return modConfig
 		}
 	])
