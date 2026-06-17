@@ -15,10 +15,11 @@ cd "$REPO_ROOT"
 
 echo "===== Installing CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
 brew install cocoapods
 echo "===== Installing Node.js ====="
 brew install node
-brew link node
+brew link node 2>/dev/null || true
 node -v
 npm -v
 export NODE_BINARY=$(which node)
@@ -31,11 +32,12 @@ bun -v
 
 echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
-npm install npm-license-crawler -g
-npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/
+bun run licences
 
 echo "===== Pulling Git LFS assets ====="
-brew install git-lfs
+if ! command -v git-lfs >/dev/null 2>&1; then
+	brew install git-lfs || brew link --overwrite git-lfs
+fi
 git lfs install --local 2>/dev/null || git lfs install
 git lfs pull
 
