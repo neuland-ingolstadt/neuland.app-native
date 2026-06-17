@@ -31,8 +31,4 @@ git lfs install --local 2>/dev/null || git lfs install
 git lfs pull
 
 echo "===== Running expo prebuild ====="
-bunx expo prebuild -p ios --no-install
-
-echo "===== Running pod install ====="
-cd ios
-pod install
+bunx expo prebuild -p ios
