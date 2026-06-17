@@ -147,9 +147,7 @@ export function OfficePresenceSection(): React.JSX.Element {
 				>
 					{data?.registered ? t('office.checkOut') : t('office.checkIn')}
 				</Button>
-				<Text style={styles.disclaimer}>
-					{t('office.disclaimer')}
-				</Text>
+				<Text style={styles.disclaimer}>{t('office.disclaimer')}</Text>
 			</View>
 		</View>
 	)
