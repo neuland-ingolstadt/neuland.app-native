@@ -29,12 +29,12 @@ interface SectionPickerProps {
  *    disabled={false}
  * />
  */
-const SingleSectionPicker: React.FC<SectionPickerProps> = ({
+const SingleSectionPicker = ({
 	title,
 	selectedItem,
 	action,
 	disabled = false
-}) => {
+}: SectionPickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<View style={styles.itemContainer}>

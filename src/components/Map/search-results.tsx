@@ -19,10 +19,10 @@ interface SearchResultsProps {
 	allRooms: FeatureCollection
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({
+const SearchResults = ({
 	handlePresentModalPress,
 	allRooms
-}) => {
+}: SearchResultsProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)

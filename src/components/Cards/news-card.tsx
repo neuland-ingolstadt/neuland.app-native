@@ -9,7 +9,7 @@ import { USER_GUEST } from '@/data/constants'
 
 import BaseCard from './base-card'
 
-const NewsCard: React.FC = () => {
+const NewsCard = (): React.JSX.Element => {
 	const ref = useRef(null)
 	const { t } = useTranslation(['navigation', 'common'])
 	const { styles } = useStyles(stylesheet)

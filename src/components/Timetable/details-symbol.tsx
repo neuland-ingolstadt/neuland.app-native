@@ -1,11 +1,10 @@
 import type React from 'react'
-import type { JSX } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function DetailsSymbol({
 	children
 }: {
-	children: JSX.Element
+	children: React.JSX.Element
 }): React.JSX.Element {
 	return <View style={styles.detailsSymbol}>{children}</View>
 }

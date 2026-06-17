@@ -1,11 +1,10 @@
 import type React from 'react'
-import type { JSX } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function DetailsBody({
 	children
 }: {
-	children: React.JSX.Element | JSX.Element[]
+	children: React.JSX.Element | React.JSX.Element[]
 }): React.JSX.Element {
 	return <View style={styles.detailsBody}>{children}</View>
 }

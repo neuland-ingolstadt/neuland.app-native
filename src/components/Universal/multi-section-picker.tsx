@@ -24,11 +24,11 @@ interface SectionPickerProps {
  * @param {(item: string) => void} action - The function to be called when an item is selected.
  * @returns {JSX.Element} - The MultiSectionPicker component.
  */
-const MultiSectionPicker: React.FC<SectionPickerProps> = ({
+const MultiSectionPicker = ({
 	elements,
 	selectedItems,
 	action
-}) => {
+}: SectionPickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
