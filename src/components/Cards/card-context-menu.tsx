@@ -1,10 +1,10 @@
 import { router } from 'expo-router'
-import type { JSX } from 'react'
+import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import ContextMenu from 'react-native-context-menu-view'
 
 interface CardContextMenuProps {
-	card: JSX.Element
+	card: React.JSX.Element
 	resetOrder?: (userKind: string) => void
 	userKind?: string
 }
@@ -13,7 +13,7 @@ export function CardContextMenu({
 	card,
 	resetOrder,
 	userKind
-}: CardContextMenuProps): JSX.Element {
+}: CardContextMenuProps): React.JSX.Element {
 	const { t } = useTranslation('navigation')
 
 	const handleItemPress = (e: { nativeEvent: { index: number } }) => {
