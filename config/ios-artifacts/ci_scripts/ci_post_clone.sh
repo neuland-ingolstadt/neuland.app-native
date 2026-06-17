@@ -49,6 +49,9 @@ cd ios
 pod install
 
 echo "===== Resolving Swift package dependencies ====="
+# Xcode Cloud disables automatic SPM resolution; allow resolve to generate Package.resolved.
+defaults delete com.apple.dt.Xcode IDEPackageOnlyUseVersionsFromResolvedFile 2>/dev/null || true
+defaults delete com.apple.dt.Xcode IDEDisableAutomaticPackageResolution 2>/dev/null || true
 xcodebuild -resolvePackageDependencies \
 	-workspace NeulandNext.xcworkspace \
 	-scheme NeulandNext
