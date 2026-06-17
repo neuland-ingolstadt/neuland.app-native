@@ -1,8 +1,39 @@
 {
 	"color-space-for-untagged-svg-colors": "display-p3",
-	"fill": "automatic",
+	"fill-specializations": [
+		{
+			"value": "automatic"
+		},
+		{
+			"appearance": "dark",
+			"value": "automatic"
+		}
+	],
 	"groups": [
 		{
+			"blend-mode-specializations": [
+				{
+					"value": "plus-darker"
+				},
+				{
+					"appearance": "dark",
+					"value": "lighten"
+				},
+				{
+					"appearance": "tinted",
+					"value": "normal"
+				}
+			],
+			"blur-material-specializations": [
+				{
+					"value": null
+				},
+				{
+					"appearance": "dark",
+					"value": null
+				}
+			],
+			"hidden": false,
 			"layers": [
 				{
 					"blend-mode-specializations": [
@@ -50,14 +81,65 @@
 					}
 				}
 			],
-			"shadow": {
-				"kind": "neutral",
-				"opacity": 0.5
-			},
-			"translucency": {
-				"enabled": true,
-				"value": 0.5
-			}
+			"lighting-specializations": [
+				{
+					"value": "individual"
+				},
+				{
+					"appearance": "dark",
+					"value": "individual"
+				},
+				{
+					"appearance": "tinted",
+					"value": "individual"
+				}
+			],
+			"shadow-specializations": [
+				{
+					"value": {
+						"kind": "neutral",
+						"opacity": 0.5
+					}
+				},
+				{
+					"appearance": "dark",
+					"value": {
+						"kind": "neutral",
+						"opacity": 0.5
+					}
+				}
+			],
+			"specular-specializations": [
+				{
+					"value": true
+				},
+				{
+					"appearance": "dark",
+					"value": true
+				}
+			],
+			"translucency-specializations": [
+				{
+					"value": {
+						"enabled": true,
+						"value": 0.42
+					}
+				},
+				{
+					"appearance": "dark",
+					"value": {
+						"enabled": true,
+						"value": 0.3
+					}
+				},
+				{
+					"appearance": "tinted",
+					"value": {
+						"enabled": true,
+						"value": 0.45
+					}
+				}
+			]
 		}
 	],
 	"supported-platforms": {
