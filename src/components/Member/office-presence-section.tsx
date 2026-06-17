@@ -2,7 +2,6 @@ import { trackEvent } from '@aptabase/react-native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Platform, Text, View } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
@@ -51,7 +50,7 @@ export function OfficePresenceSection(): React.JSX.Element {
 	const info = useMemberStore((s) => s.info)
 	const memberSub = info?.sub as string | undefined
 
-	const { data, isLoading, isError, error } = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: officePresenceQueryKey(memberSub ?? ''),
 		enabled: !!idToken && !!memberSub,
 		queryFn: async () => {
@@ -61,18 +60,6 @@ export function OfficePresenceSection(): React.JSX.Element {
 		refetchInterval: 60_000,
 		staleTime: 30_000
 	})
-
-	useEffect(() => {
-		if (__DEV__) {
-			console.debug('[OfficePresence] section', {
-				endpoint: process.env.EXPO_PUBLIC_OFFICE_PRESENCE_ENDPOINT,
-				hasToken: !!idToken,
-				isLoading,
-				isError,
-				error: error instanceof Error ? error.message : error
-			})
-		}
-	}, [idToken, isLoading, isError, error])
 
 	const mutation = useMutation({
 		mutationFn: async (action: 'checkIn' | 'checkOut') => {

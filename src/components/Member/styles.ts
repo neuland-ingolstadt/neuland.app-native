@@ -216,11 +216,6 @@ export const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12
 	},
-	pulsingDot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4
-	},
 	smallPulsingDot: {
 		backgroundColor: theme.colors.success,
 		borderRadius: 3,
