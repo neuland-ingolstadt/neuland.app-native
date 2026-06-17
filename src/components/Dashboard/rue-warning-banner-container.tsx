@@ -8,7 +8,7 @@ import { getPersonalData } from '@/utils/api-utils'
 import { getNextReRegistrationEvent } from '@/utils/calendar-utils'
 import RueWarningBanner from './rue-warning-banner'
 
-const RueWarningBannerContainer: React.FC = () => {
+const RueWarningBannerContainer = (): React.JSX.Element | null => {
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const dismissedEventId = useRueWarningStore((state) => state.dismissedEventId)
 	const nextRueEvent = useMemo(() => getNextReRegistrationEvent(), [])

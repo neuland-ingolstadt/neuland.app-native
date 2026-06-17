@@ -15,9 +15,9 @@ interface SearchHistoryProps {
 	handlePresentModalPress: () => void
 }
 
-const SearchHistory: React.FC<SearchHistoryProps> = ({
+const SearchHistory = ({
 	handlePresentModalPress
-}) => {
+}: SearchHistoryProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { searchHistory, updateSearchHistory } = use(MapContext)

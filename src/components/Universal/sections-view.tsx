@@ -1,5 +1,4 @@
 import type React from 'react'
-import type { JSX } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -12,7 +11,7 @@ const SectionView = ({
 }: {
 	title?: string
 	footer?: string
-	children: JSX.Element
+	children: React.JSX.Element
 	link?: { text: string; destination: () => void }
 	hideBackground?: boolean
 }): React.JSX.Element => {

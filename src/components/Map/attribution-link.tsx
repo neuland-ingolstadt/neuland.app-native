@@ -5,7 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
-const AttributionLink: React.FC = () => {
+const AttributionLink = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
