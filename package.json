@@ -25,7 +25,8 @@
 		"pkgs": "bunx expo install --check",
 		"test": "bun test --ci",
 		"test:coverage": "bun test --ci --coverage --coverage-reporter=lcov --coverage-reporter=text",
-		"i18n:check": "i18n-check -l src/localization -s en -f i18next"
+		"i18n:check": "i18n-check -l src/localization -s en -f i18next",
+		"react:doctor": "bunx react-doctor@latest"
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.3.10",
@@ -33,6 +34,7 @@
 		"@bottom-tabs/react-navigation": "^0.11.2",
 		"@expo/metro-runtime": "~6.1.2",
 		"@expo/vector-icons": "^15.0.3",
+		"@flipt-io/flipt": "^1.5.0",
 		"@gorhom/bottom-sheet": "^5.2.8",
 		"@howljs/calendar-kit": "2.5.6",
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
@@ -97,7 +99,7 @@
 		"react-native-draggable-flatlist": "^4.0.3",
 		"react-native-gesture-handler": "~2.28.0",
 		"react-native-mmkv": "^4.1.1",
-		"react-native-nitro-modules": "^0.32.1",
+		"react-native-nitro-modules": "^0.35.0",
 		"react-native-pager-view": "6.9.1",
 		"react-native-reanimated": "3.19.1",
 		"react-native-safe-area-context": "~5.6.2",
