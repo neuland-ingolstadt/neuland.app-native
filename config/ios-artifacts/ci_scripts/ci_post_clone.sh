@@ -32,12 +32,8 @@ bun -v
 
 echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
-bun run licences
 
 echo "===== Pulling Git LFS assets ====="
-if ! command -v git-lfs >/dev/null 2>&1; then
-	brew install git-lfs || brew link --overwrite git-lfs
-fi
 git lfs install --local 2>/dev/null || git lfs install
 git lfs pull
 
