@@ -63,7 +63,7 @@ bun lint                     # Biome check (read-only)
 bun fmt                      # Biome check --fix (safe auto-fixes)
 bun fmt:unsafe               # Biome check --fix --unsafe (use sparingly)
 bun tsc --noEmit             # TypeScript check (matches CI)
-bun i18n:check               # verify de/en locale files are complete (matches CI)
+bun i18n:check               # verify de/en locale files are complete and catch undefined keys (matches CI)
 
 bun test                     # run all unit tests
 bun test src/utils/tests/timetable-utils.test.ts   # run a single test file
@@ -319,7 +319,7 @@ Generated and binary files:
   `timetable`, `member`, `accessibility`, `api`, plus `ios.json` for iOS Info.plist
   strings.
 - Add new strings to **both** `de` and `en`, in the namespace that matches the screen.
-  Run `bun i18n:check` to catch missing or mismatched keys (`en` is the source locale).
+  Run `bun i18n:check` to catch missing, mismatched, or undefined keys (`en` is the source locale).
 - Consume with `const { t } = useTranslation('navigation')` or
   `useTranslation(['navigation', 'common'])`. Reference cross-namespace keys with
   `t('foo.bar', { ns: 'common' })`.
