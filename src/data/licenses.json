@@ -31,6 +31,8 @@
 	},
 	"@flipt-io/flipt@1.5.0": {
 		"licenses": "MIT",
+		"repository": "https://github.com/flipt-io/flipt",
+		"licenseUrl": "https://github.com/flipt-io/flipt/blob/main/LICENSE",
 		"parents": "neuland"
 	},
 	"@gorhom/bottom-sheet@5.2.14": {
