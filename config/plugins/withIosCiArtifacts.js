@@ -6,7 +6,8 @@ const { dirname, join } = require('node:path')
 const ARTIFACTS = [
 	'ci_scripts/ci_post_clone.sh',
 	'TestFlight/WhatToTest.en-US.txt',
-	'TestFlight/WhatToTest.de-DE.txt'
+	'TestFlight/WhatToTest.de-DE.txt',
+	'exportOptions.plist'
 ]
 
 function withIosCiArtifacts(expoConfig) {
