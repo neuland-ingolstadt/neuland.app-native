@@ -230,6 +230,46 @@ Generated and binary files:
 - Endpoints are configured via `EXPO_PUBLIC_*` env vars (see `.env.local.example`).
   Treat them as read-only at runtime.
 
+### Feature flags (Flipt)
+
+- Flags are defined in the [`neuland-ingolstadt/flags`](https://github.com/neuland-ingolstadt/flags)
+  repo under `production/neuland-app/features.yaml`. Flipt polls that repo; server-side
+  changes land within ~30s without a release. The app caches evaluations for **5 minutes**
+  (`FEATURE_FLAG_STALE_TIME_MS` in `src/hooks/useFeatureFlag.ts`), with refetch on
+  reconnect and window focus.
+- Client setup uses `@flipt-io/flipt` directly (`src/lib/flipt.ts`,
+  `src/lib/feature-flags.ts`) so evaluations work on iOS, Android, and web. The Flipt client is warmed up in `src/components/provider.tsx`.
+- **Usage in components** — prefer the React Query hook:
+
+  Register flags in `FeatureFlagKeys` before use:
+
+  ```typescript
+  export const FeatureFlagKeys = {
+    myFlag: 'my-flag',
+  } as const satisfies Record<string, string>
+  ```
+
+  ```tsx
+  import { useFeatureFlag } from '@/hooks'
+  import { FeatureFlagKeys } from '@/lib/feature-flags'
+
+  const { data: enabled = false } = useFeatureFlag(FeatureFlagKeys.myFlag)
+  ```
+
+  Mirror each entry in `production/neuland-app/features.yaml`. For async checks
+  outside React, call `evaluateBooleanFlag` from `@/lib/feature-flags`.
+- **Evaluation context** sent to Flipt on every request:
+
+  | Attribute      | Source                          | Example values        |
+  |----------------|---------------------------------|-----------------------|
+  | `targetingKey` | fixed                           | `anonymous`           |
+  | `platform`     | `getEvaluationPlatform()`       | `ios`, `android`, `web`, `web-dev`, `web-local` |
+  | `appVersion`   | `expo-application`              | `1.2.3`               |
+  | `userKind`     | MMKV profile (`useUserKind`)    | `guest`, `student`, `employee` |
+
+  On web, `platform` is overridden from hostname (`dev.neuland.app` → `web-dev`,
+  `web.neuland.app` → `web`, else `web-local`) — same split as announcement `WEB_DEV`.
+
 ### Styling (Unistyles)
 
 - Define styles with `createStyleSheet((theme) => ({ ... }))` and consume them via
