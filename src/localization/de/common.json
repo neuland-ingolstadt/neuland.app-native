@@ -86,8 +86,46 @@
 		"disable": "Deaktivieren",
 		"more": "mehr",
 		"unknown": "Unbekannt",
+		"unknownError": "Unbekannter Fehler",
+		"ok": "OK",
+		"notAvailable": "k. A.",
 		"true": "Ja",
 		"false": "Nein"
+	},
+	"labels": {
+		"name": "Name",
+		"version": "Version",
+		"email": "E-Mail",
+		"thiEmail": "THI E-Mail",
+		"repository": "Repository",
+		"campus": "Campus",
+		"app": "App",
+		"restaurant": "Restaurant",
+		"details": "Details",
+		"wallet": "Wallet",
+		"error": "Fehler"
+	},
+	"meta": {
+		"appDescription": "Deine App für die TH Ingolstadt - THI",
+		"dashboardTitle": "Dashboard",
+		"dashboardDescription": "Anpassbares Dashboard",
+		"timetableDescription": "Deinen Stundenplan anzeigen",
+		"mapDescription": "Interaktive Campus-Karte",
+		"foodDescription": "Speiseplan der Mensen",
+		"settingsDescription": "Profil und Einstellungen"
+	},
+	"semesterSuffix": ". Semester",
+	"reportProblem": "Problem melden",
+	"thiEvent": "THI Event",
+	"buildingLabel": "Gebäude",
+	"feedbackMail": {
+		"subjectCrash": "App-Absturz",
+		"subjectError": "App-Fehler",
+		"body": "Schritte zur Reproduktion:\nSonstiges:\n\nApp-Version: {{version}}\nPlattform: {{platform}}\nSeite: {{path}}\nFehler: {{error}}"
+	},
+	"uiManager": {
+		"fabric": "Fabric",
+		"paper": "Paper"
 	},
 	"quicklinks": {
 		"primuss": "Primuss",
@@ -204,7 +242,7 @@
 			"registerNow": "Jetzt anmelden",
 			"eventLink": "Veranstaltungslink",
 			"organizerDetails": {
-				"clubWebsite": "Vereins-Website",
+				"clubWebsite": "Veranstalter-Website",
 				"instagram": "Instagram",
 				"linkedin": "LinkedIn",
 				"location": "Ort",
@@ -335,6 +373,27 @@
 				"description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
 			}
 		},
+		"thiEvents": {
+			"departments": {
+				"title": "Abteilungen entdecken",
+				"viewAll": "Alle Abteilungen",
+				"filterAll": "Alle",
+				"departments": "Abteilungen",
+				"missingDescription": "Keine Beschreibung verfügbar.",
+				"footerInfo": "Die Abteilungen sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Abteilungen gefunden"
+				}
+			},
+			"events": {
+				"subtitle": "THI-Veranstaltungen",
+				"noEvents": {
+					"title": "Keine anstehenden Veranstaltungen",
+					"subtitle": "Bitte versuche es später erneut.",
+					"filteredSubtitle": "Keine Veranstaltungen von {{organizerName}} gefunden. Bitte versuche es später erneut."
+				}
+			}
+		},
 		"clEvents": {
 			"sports": {
 				"title": "Sport",
@@ -349,7 +408,10 @@
 				"filterAll": "Alle",
 				"clubs": "Vereine",
 				"missingDescription": "Keine Beschreibung verfügbar.",
-				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert."
+				"footerInfo": "Die Vereine sind nach Aktivität und Vollständigkeit des Profils sortiert.",
+				"noOrganizers": {
+					"title": "Keine Vereine gefunden"
+				}
 			},
 			"events": {
 				"title": "Veranstaltungen",

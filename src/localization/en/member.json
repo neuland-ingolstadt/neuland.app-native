@@ -12,7 +12,9 @@
 		"groups": "GROUPS",
 		"footer": "Neuland Ingolstadt e.V.",
 		"footerDescription": "Tap the QR code to open it in full screen mode.",
-		"screenshotError": "Screenshot detected. Neuland ID code temporarily hidden."
+		"screenshotError": "Screenshot detected. Neuland ID code temporarily hidden.",
+		"honoraryLine1": "HONORARY",
+		"honoraryLine2": "MEMBER"
 	},
 	"loggedOut": {
 		"welcomeTitle": "Welcome to Neuland",

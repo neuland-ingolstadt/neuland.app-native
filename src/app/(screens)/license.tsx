@@ -12,7 +12,7 @@ import type { FormListSections } from '@/types/components'
 
 export default function License(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation(['settings'])
+	const { t } = useTranslation(['settings', 'navigation'])
 
 	const { license, version, licenseUrl, repository, name } =
 		useGlobalSearchParams<{
@@ -39,12 +39,12 @@ export default function License(): React.JSX.Element {
 			header: t('menu.formlist.legal.about'),
 			items: [
 				{
-					title: 'Name',
+					title: t('licenses.fields.name'),
 					value: name,
 					layout: (name?.length ?? 0) > 25 ? 'column' : 'row'
 				},
 				{
-					title: 'Version',
+					title: t('licenses.fields.version'),
 					value: version
 				},
 				{
@@ -58,7 +58,7 @@ export default function License(): React.JSX.Element {
 					disabled: licenseUrl === ''
 				},
 				{
-					title: 'Repository',
+					title: t('licenses.fields.repository'),
 					icon: linkIcon,
 					onPress: async () => {
 						if (repository !== undefined) {

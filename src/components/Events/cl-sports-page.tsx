@@ -210,7 +210,7 @@ export default function ClSportsPage({
 				<ErrorView title={networkError} />
 			) : (
 				<View>
-					<Text style={styles.campusHeader}>{'Campus'}</Text>
+					<Text style={styles.campusHeader}>{t('labels.campus')}</Text>
 					<View style={styles.locationRow}>
 						{locations.map((location, index) => (
 							<LocationButton location={location} key={index} />

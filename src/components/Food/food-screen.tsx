@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/correctness/useHookAtTopLevel: TOOD */
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: TODO */
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'

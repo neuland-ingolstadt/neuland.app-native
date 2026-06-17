@@ -119,10 +119,13 @@ function RootLayout(): React.JSX.Element {
 		<Splash isReady={isReady}>
 			<Head>
 				<title>Neuland Next</title>
-				<meta name="description" content="Your app for TH Ingolstadt - THI" />
+				<meta
+					name="description"
+					content={t('meta.appDescription', { ns: 'common' })}
+				/>
 				<meta
 					property="og:description"
-					content="Your app for TH Ingolstadt - THI"
+					content={t('meta.appDescription', { ns: 'common' })}
 				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
@@ -138,7 +141,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(tabs)"
 					options={{
-						title: 'Home',
+						title: t('navigation.home'),
 						headerShown: false,
 						animation: 'none',
 						gestureEnabled: false
@@ -147,7 +150,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="index"
 					options={{
-						title: 'Home',
+						title: t('navigation.home'),
 						headerShown: false,
 						animation: 'none',
 						gestureEnabled: false
@@ -157,7 +160,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/login"
 					options={{
-						title: 'Neuland Next Login',
+						title: t('navigation.loginScreen'),
 						animation: 'none',
 						gestureEnabled: false,
 						headerShown: false,
@@ -168,7 +171,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/changelog"
 					options={{
-						title: 'Changelog',
+						title: t('navigation.changelog'),
 						...transparentHeaderStyle
 					}}
 				/>
@@ -261,7 +264,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/app-icon"
 					options={{
-						title: 'App Icon',
+						title: t('navigation.appIcon'),
 						...transparentHeaderStyle
 					}}
 				/>
@@ -282,7 +285,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/version"
 					options={{
-						title: 'Version Details',
+						title: t('navigation.version'),
 						...transparentHeaderStyle
 					}}
 				/>
@@ -314,7 +317,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/dashboard"
 					options={{
-						title: 'Dashboard',
+						title: t('navigation.dashboardScreen'),
 						...transparentHeaderStyle
 					}}
 				/>
@@ -336,6 +339,13 @@ function RootLayout(): React.JSX.Element {
 					name="(screens)/cl-events"
 					options={{
 						title: t('navigation.clEvents'),
+						...transparentHeaderStyle
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/thi-events"
+					options={{
+						title: t('navigation.thiEvents'),
 						...transparentHeaderStyle
 					}}
 				/>
@@ -473,7 +483,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/events/cl/[id]"
 					options={{
-						title: 'Event Details',
+						title: t('navigation.eventDetails'),
 						...Platform.select({
 							ios: {
 								...presentationMode
@@ -493,9 +503,21 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/thi-departments"
+					options={{
+						title: t('common:pages.thiEvents.departments.title')
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/club/[id]"
 					options={{
-						title: t('navigation.club'),
+						headerShown: false
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/organiser/[id]"
+					options={{
+						title: t('navigation.organiser'),
 						...Platform.select({
 							ios: {
 								...presentationMode
@@ -507,7 +529,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/events/sports/[id]"
 					options={{
-						title: 'Event Details',
+						title: t('navigation.eventDetails'),
 						...Platform.select({
 							ios: {
 								...presentationMode

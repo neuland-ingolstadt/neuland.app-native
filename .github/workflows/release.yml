@@ -120,6 +120,8 @@ jobs:
             EXPO_PUBLIC_THI_API_KEY=${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
             EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ vars.GRAPHQL_ENDPOINT_PROD }}
             EXPO_PUBLIC_APTABASE_KEY=${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+            EXPO_PUBLIC_FLIPT_URL=https://flipt.neuland.ing
+            EXPO_PUBLIC_FLIPT_NAMESPACE=neuland-app
             EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
 
   build-android:

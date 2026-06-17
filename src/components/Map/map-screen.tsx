@@ -302,8 +302,8 @@ const MapScreen = (): React.JSX.Element => {
 				id: building,
 				properties: {
 					Raum: building,
-					Funktion_en: 'Building',
-					Funktion_de: 'Gebäude',
+					Funktion_en: t('buildingLabel', { lng: 'en', ns: 'common' }),
+					Funktion_de: t('buildingLabel', { lng: 'de', ns: 'common' }),
 					Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
 					Ebene: 'EG', // Dummy value to not break the floor picker
 					Etage: floorCount.toString(),
@@ -680,7 +680,7 @@ const MapScreen = (): React.JSX.Element => {
 
 		if (regionChange) {
 			startFadeOut()
-		} else if (!regionChange && isVisible) {
+		} else if (isVisible) {
 			timer = setTimeout(() => {
 				startFadeOut()
 			}, 5000)

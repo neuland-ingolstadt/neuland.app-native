@@ -320,8 +320,12 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 													<Star size={10} color="#f7d774" fill="#f7d774" />
 												</View>
 												<View>
-													<Text style={styles.honoraryBadgeLine}>EHREN</Text>
-													<Text style={styles.honoraryBadgeLine}>MITGLIED</Text>
+													<Text style={styles.honoraryBadgeLine}>
+														{t('idCard.honoraryLine1')}
+													</Text>
+													<Text style={styles.honoraryBadgeLine}>
+														{t('idCard.honoraryLine2')}
+													</Text>
 												</View>
 											</LinearGradient>
 										</View>

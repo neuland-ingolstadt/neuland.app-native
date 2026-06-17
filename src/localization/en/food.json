@@ -11,6 +11,11 @@
 		"buttonSettings": "Check Settings"
 	},
 	"preferences": {
+		"sections": {
+			"labels": "Labels",
+			"restaurants": "Restaurants",
+			"filter": "Filter"
+		},
 		"formlist": {
 			"allergens": "Allergens",
 			"flags": "Flags",
