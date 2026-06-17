@@ -1,5 +1,11 @@
 {
 	"navigation": {
+		"home": "Home",
+		"dashboardScreen": "Dashboard",
+		"loginScreen": "Neuland Next Login",
+		"changelog": "Changelog",
+		"appIcon": "App Icon",
+		"eventDetails": "Event Details",
 		"timetable": "Calendar",
 		"map": "Map",
 		"campusMap": "Campus Map",
@@ -25,7 +31,7 @@
 			"title": "Lecturers",
 			"search": "Search all lecturers"
 		},
-		"club": "Club Details",
+		"organiser": "Organiser Details",
 		"lecturer": "Lecturer Details",
 		"grades": {
 			"title": "Grades",
@@ -45,6 +51,7 @@
 		"sports": "University Sports",
 		"roomReport": "Report Room Issue",
 		"clEvents": "Campus Life Events",
+		"thiEvents": "THI Events",
 		"neulandMember": "Neuland Member Area"
 	},
 	"cards": {
@@ -56,6 +63,7 @@
 			"news": "THI News",
 			"library": "Library",
 			"events": "Campus Life Events",
+			"thiEvents": "THI Events",
 			"reimanns": "Reimanns",
 			"canisius": "Canisius Konvikt",
 			"mensa": "Mensa Ingolstadt",

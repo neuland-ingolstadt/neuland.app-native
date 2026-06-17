@@ -40,7 +40,7 @@ const TabLayout = (): React.JSX.Element => {
 			<Tabs.Screen
 				name="index"
 				options={{
-					title: 'Home',
+					title: t('navigation.home'),
 					headerShown: false,
 					tabBarIcon: ({ color, size, focused }) => (
 						<PlatformIcon

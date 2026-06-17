@@ -36,7 +36,7 @@ export default function Profile(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { toggleUserKind, userKind } = use(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
-	const { t } = useTranslation('settings')
+	const { t } = useTranslation(['settings', 'common'])
 	const [isLoggingOut, setIsLoggingOut] = React.useState(false)
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const resetFood = useFoodFilterStore((state) => state.reset)
@@ -127,7 +127,7 @@ export default function Profile(): React.JSX.Element {
 			header: t('profile.formlist.user.title'),
 			items: [
 				{
-					title: 'Name',
+					title: t('labels.name', { ns: 'common' }),
 					value: `${data?.vname} ${data?.name}`
 				},
 				{
@@ -193,7 +193,7 @@ export default function Profile(): React.JSX.Element {
 			header: t('profile.formlist.contact.title'),
 			items: [
 				{
-					title: 'THI Email',
+					title: t('labels.thiEmail', { ns: 'common' }),
 					value: data?.fhmail,
 					onPress: async () => {
 						await copyToClipboard(data?.fhmail ?? '')
@@ -203,7 +203,7 @@ export default function Profile(): React.JSX.Element {
 					? []
 					: [
 							{
-								title: 'Email',
+								title: t('labels.email', { ns: 'common' }),
 								value: data?.email,
 								onPress: async () => {
 									await copyToClipboard(data?.email ?? '')

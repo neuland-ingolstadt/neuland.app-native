@@ -8,6 +8,9 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { MaterialIcon } from '@/types/material-icons'
 
 export type LucideIcon = keyof typeof icons
+export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
+export type WebIcon = LucideIcon | CommunityIcon
+
 interface PlatformIconProps {
 	android: {
 		name: MaterialIcon | CommunityIcon
@@ -39,7 +42,7 @@ interface PlatformIconProps {
 		additionalColor?: string
 	}
 	web: {
-		name: LucideIcon
+		name: WebIcon
 		size: number
 		variant?: 'filled' | 'outlined'
 	}
@@ -70,7 +73,18 @@ const PlatformIcon = ({
 
 	if (Platform.OS === 'web') {
 		if (web != null) {
-			const LucideIcon = icons[web.name]
+			if (communityIcons.includes(web.name)) {
+				return (
+					<MaterialCommunityIcons
+						name={web.name as keyof typeof MaterialCommunityIcons.glyphMap}
+						size={web.size}
+						color={style?.color ?? theme.colors.primary}
+						style={style as TextStyle}
+					/>
+				)
+			}
+
+			const LucideIcon = icons[web.name as LucideIcon]
 
 			return (
 				<LucideIcon
@@ -150,8 +164,6 @@ const PlatformIcon = ({
 export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github', 'linkedin']
-
-export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 
 const stylesheet = createStyleSheet(() => ({
 	androidIconFilled: {

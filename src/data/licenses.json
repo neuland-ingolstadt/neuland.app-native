@@ -203,6 +203,12 @@
 		"licenseUrl": "https://github.com/expo/expo",
 		"parents": "neuland"
 	},
+	"expo-font@14.0.11": {
+		"licenses": "MIT",
+		"repository": "https://github.com/expo/expo",
+		"licenseUrl": "https://github.com/expo/expo",
+		"parents": "neuland"
+	},
 	"expo-haptics@15.0.8": {
 		"licenses": "MIT",
 		"repository": "https://github.com/expo/expo",
@@ -293,7 +299,7 @@
 		"licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"i18next@25.6.0": {
+	"i18next@26.3.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/i18next/i18next",
 		"licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -305,7 +311,7 @@
 		"licenseUrl": "https://github.com/jakearchibald/idb/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"lucide-react-native@0.562.0": {
+	"lucide-react-native@1.18.0": {
 		"licenses": "ISC",
 		"repository": "https://github.com/lucide-icons/lucide",
 		"licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
@@ -315,12 +321,6 @@
 		"licenses": "BSD-3-Clause",
 		"repository": "https://github.com/maplibre/maplibre-gl-js",
 		"licenseUrl": "https://github.com/maplibre/maplibre-gl-js/raw/master/LICENSE.txt",
-		"parents": "neuland"
-	},
-	"metro@0.83.3": {
-		"licenses": "MIT",
-		"repository": "https://github.com/facebook/metro",
-		"licenseUrl": "https://github.com/facebook/metro",
 		"parents": "neuland"
 	},
 	"moment-timezone@0.6.0": {
@@ -347,7 +347,7 @@
 		"licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-i18next@16.0.1": {
+	"react-i18next@17.0.8": {
 		"licenses": "MIT",
 		"repository": "https://github.com/i18next/react-i18next",
 		"licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
