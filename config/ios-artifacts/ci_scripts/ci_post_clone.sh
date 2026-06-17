@@ -33,6 +33,10 @@ bun -v
 echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
 
+echo "===== Updating license list ====="
+bun i npm-license-crawler -g
+bun run licences
+
 echo "===== Pulling Git LFS assets ====="
 git lfs install --local 2>/dev/null || git lfs install
 git lfs pull
