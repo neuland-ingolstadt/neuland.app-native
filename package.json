@@ -29,7 +29,7 @@
 		"react:doctor": "bunx react-doctor@latest"
 	},
 	"dependencies": {
-		"@aptabase/react-native": "^0.3.10",
+		"@aptabase/react-native": "^0.4.0",
 		"@babel/runtime": "^7.28.4",
 		"@bottom-tabs/react-navigation": "^0.11.2",
 		"@expo/metro-runtime": "~6.1.2",
