@@ -26,13 +26,13 @@ interface BaseCardProps {
 	noDataPredicate?: () => boolean
 }
 
-const BaseCard: React.FC<BaseCardProps> = ({
+const BaseCard = ({
 	title,
 	onPressRoute,
 	children,
 	noDataComponent,
 	noDataPredicate
-}) => {
+}: BaseCardProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
 

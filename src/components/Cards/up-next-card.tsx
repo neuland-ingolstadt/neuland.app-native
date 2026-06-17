@@ -24,7 +24,7 @@ import { LoadingState } from '@/utils/ui-utils'
 import { UserKindContext } from '../contexts'
 import BaseCard from './base-card'
 
-const UpNextCard: React.FC = () => {
+const UpNextCard = (): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [currentTime, setCurrentTime] = useState(() => new Date())
