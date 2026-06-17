@@ -165,7 +165,7 @@ export default function Settings(): React.JSX.Element {
 					isLoading={isLoading}
 					isSuccess={isSuccess}
 					error={
-						isError ? new Error('Failed to load personal data') : undefined
+						isError ? new Error(t('menu.loadPersonalDataError')) : undefined
 					}
 				/>
 				{Platform.OS !== 'web' && idToken && <NeulandBox />}
@@ -193,7 +193,7 @@ export default function Settings(): React.JSX.Element {
 			</Text>
 			<SettingsLogo scrollY={scrollY} size={size} />
 			<View style={styles.poweredByContainer}>
-				<Text style={styles.poweredByText}>Infrastructure by</Text>
+				<Text style={styles.poweredByText}>{t('menu.infrastructureBy')}</Text>
 				<Link
 					href="https://hetzner.com"
 					target="_blank"

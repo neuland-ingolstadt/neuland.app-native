@@ -136,7 +136,7 @@ const LoginForm = ({
 					title,
 					msg,
 					[
-						{ text: 'OK' },
+						{ text: t('misc.ok', { ns: 'common' }) },
 						...(showStatus
 							? [
 									{
@@ -197,7 +197,7 @@ const LoginForm = ({
 						Alert.alert(
 							t('login.alert.restored.title'),
 							t('login.alert.restored.message'),
-							[{ text: 'OK' }],
+							[{ text: t('misc.ok', { ns: 'common' }) }],
 							{
 								cancelable: false
 							}
@@ -243,7 +243,7 @@ const LoginForm = ({
 							selectionColor={theme.colors.primary}
 							placeholderTextColor={theme.colors.labelColor}
 							defaultValue={username}
-							placeholder="abc1234"
+							placeholder={t('login.usernamePlaceholder')}
 							returnKeyType="next"
 							onChangeText={(text) => {
 								setUsername(text)

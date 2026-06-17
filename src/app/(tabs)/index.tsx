@@ -30,6 +30,7 @@ const HeaderLeft = () => {
 	)
 }
 export default function HomeRootScreen(): React.JSX.Element {
+	const { t } = useTranslation(['navigation', 'common'])
 	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
 		setIsPageOpen(true)
@@ -38,8 +39,11 @@ export default function HomeRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				<title>Dashboard</title>
-				<meta name="Dashboard" content="Customizable Dashboard" />
+				<title>{t('meta.dashboardTitle', { ns: 'common' })}</title>
+				<meta
+					name="Dashboard"
+					content={t('meta.dashboardDescription', { ns: 'common' })}
+				/>
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>

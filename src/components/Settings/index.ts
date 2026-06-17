@@ -4,4 +4,4 @@ import InfoBox from './info-box'
 import NameBox from './name-box'
 import NeulandBox from './neuland-box'
 
-export { AvatarCircle as Avatar, NameBox, GradesButton, InfoBox, NeulandBox }
+export { AvatarCircle as Avatar, GradesButton, InfoBox, NameBox, NeulandBox }

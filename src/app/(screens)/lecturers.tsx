@@ -51,7 +51,7 @@ export default function LecturersScreen(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const pagerViewRef = useRef<PagerView>(null)
-	const [displayesProfessors, setDisplayedProfessors] = useState(false)
+	const [displaysProfessors, setDisplayedProfessors] = useState(false)
 	const [localSearch, setLocalSearch] = useState('')
 	const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
 	const [faculty, setFaculty] = useState<string | null>(null)
@@ -438,7 +438,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							<ToggleRow
 								items={[
 									t('pages.lecturers.personal'),
-									displayesProfessors
+									displaysProfessors
 										? t('pages.lecturers.professors')
 										: t('pages.lecturers.faculty')
 								]}

@@ -131,6 +131,10 @@ describe('map-screen-utils', () => {
 		expect(filterAvailableRooms(featureCollection, [])).toEqual([])
 	})
 
+	it('filterAvailableRooms - Should return an empty list when rooms is undefined', () => {
+		expect(filterAvailableRooms(undefined, [{ room: 'G101' }])).toEqual([])
+	})
+
 	it('filterEtage - Should return only features on the requested floor', () => {
 		expect(
 			filterEtage('EG', featureCollection).map(

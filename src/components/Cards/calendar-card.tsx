@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -11,7 +11,6 @@ import { useFlowStore } from '@/hooks/useFlowStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import {
-	type CalendarCardEvent,
 	type CalendarCardExamInput,
 	calendar,
 	isCalendarCardExam,
@@ -23,9 +22,7 @@ import BaseCard from './base-card'
 
 const CalendarCard = (): React.JSX.Element => {
 	const router = useRouter()
-	const time = new Date()
 	const { i18n, t } = useTranslation(['navigation', 'common'])
-	const [mixedCalendar, setMixedCalendar] = useState<CalendarCardEvent[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
 	const { userKind = USER_GUEST } = React.use(UserKindContext)
@@ -67,9 +64,10 @@ const CalendarCard = (): React.JSX.Element => {
 		enabled: userKind === USER_STUDENT
 	})
 
-	useEffect(() => {
-		setMixedCalendar(selectCalendarCardEvents(calendar, exams ?? [], time))
-	}, [exams])
+	const mixedCalendar = useMemo(
+		() => selectCalendarCardEvents(calendar, exams ?? [], new Date()),
+		[exams]
+	)
 
 	const { theme, styles } = useStyles(stylesheet)
 
@@ -112,7 +110,7 @@ const CalendarCard = (): React.JSX.Element => {
 									? event.name[i18n.language as LanguageKey]
 									: event.name
 							}
-							subtitle="THI Event"
+							subtitle={t('thiEvent', { ns: 'common' })}
 							startDateTime={event.begin}
 							endDateTime={event.end}
 							showEndTime={true}
