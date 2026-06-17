@@ -48,7 +48,7 @@ echo "===== Running pod install ====="
 cd ios
 pod install
 
-echo "===== Installing Swift package lockfile ====="
-mkdir -p NeulandNext.xcworkspace/xcshareddata/swiftpm
-cp "$REPO_ROOT/config/ios-artifacts/NeulandNext.xcworkspace/xcshareddata/swiftpm/Package.resolved" \
-	NeulandNext.xcworkspace/xcshareddata/swiftpm/Package.resolved
+echo "===== Resolving Swift package dependencies ====="
+xcodebuild -resolvePackageDependencies \
+	-workspace NeulandNext.xcworkspace \
+	-scheme NeulandNext
