@@ -137,10 +137,9 @@ android/                  # Native Android project (managed by Expo prebuild)
 ```
 
 The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`, except
-`ios/ci_scripts/` which is committed for Xcode Cloud. iOS-only files that must survive
+`ios/ci_scripts/` which is committed for Xcode Cloud. Other iOS-only files that must survive
 prebuild (export options, TestFlight notes, …) live under `config/ios-artifacts/` and are
-copied by `withIosCiArtifacts`. Keep `config/ios-artifacts/ci_scripts/ci_post_clone.sh` in
-sync with the committed `ios/ci_scripts/ci_post_clone.sh`.
+copied by `withIosCiArtifacts`.
 
 Path aliases (defined in `tsconfig.json`):
 

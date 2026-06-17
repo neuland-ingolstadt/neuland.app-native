@@ -4,7 +4,6 @@ const { dirname, join } = require('node:path')
 
 /** Paths under `config/ios-artifacts/` → same path under `ios/` */
 const ARTIFACTS = [
-	'ci_scripts/ci_post_clone.sh',
 	'TestFlight/WhatToTest.en-US.txt',
 	'TestFlight/WhatToTest.de-DE.txt',
 	'exportOptions.plist'
