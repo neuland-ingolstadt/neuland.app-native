@@ -194,6 +194,7 @@
 				"./src/assets/android/check.xml"
 			],
 			"./config/plugins/withIosCiArtifacts.js",
+			"./config/plugins/withCiScriptsSymlink.js",
 			"./config/plugins/withXcode26FmtWorkaround.js",
 			"expo-font"
 		],

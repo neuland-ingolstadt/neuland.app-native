@@ -131,15 +131,17 @@ src/
 └── utils/                # Pure functions, separated by domain (date, food, map, ...)
     └── tests/                  # *.test.ts — colocated with the utility being tested
 config/                   # Build tooling (codegen, cliff, expo plugins, fonts, nginx)
+ci_scripts/               # Xcode Cloud post-clone script (symlinked from ios/ci_scripts)
 patches/                  # Bun patch-package patches
 android/                  # Native Android project (managed by Expo prebuild)
 .github/                  # CI workflows, issue/PR templates, CODEOWNERS
 ```
 
-The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`, except
-`ios/ci_scripts/` which is committed for Xcode Cloud. Other iOS-only files that must survive
-prebuild (export options, TestFlight notes, …) live under `config/ios-artifacts/` and are
-copied by `withIosCiArtifacts`.
+The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`. Xcode Cloud
+needs `ios/ci_scripts/ci_post_clone.sh`; that path is a **symlink** to `ci_scripts/` at the repo
+root (recreated after prebuild by `withCiScriptsSymlink`). Other iOS-only files that must survive
+prebuild (export options, TestFlight notes, …) live under `config/ios-artifacts/` and are copied
+by `withIosCiArtifacts`.
 
 Path aliases (defined in `tsconfig.json`):
 
@@ -514,9 +516,9 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   compatibility. Run `bun pkgs` (which calls `expo install --check`) when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, and `bun changelog` for `CHANGELOG.md`.
-- **Don't commit the `ios/` folder** (except `ios/ci_scripts/` for Xcode Cloud). It is
+- **Don't commit the `ios/` folder** (only the `ios/ci_scripts` symlink for Xcode Cloud). It is
   gitignored; run `bun prebuild:ios` and change `app.config.json`, config plugins, or
-  `config/ios-artifacts/` instead.
+  `config/ios-artifacts/` instead. Edit `ci_scripts/ci_post_clone.sh` for Xcode Cloud setup.
 - **Don't disable Biome rules globally.** Inline `// biome-ignore` with a reason if
   truly necessary.
 - **Don't commit secrets** (`.env.local`, `service.json`, `credentials/`,

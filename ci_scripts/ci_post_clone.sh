@@ -2,7 +2,13 @@
 set -e
 set -x
 
-REPO_ROOT="${CI_PRIMARY_REPOSITORY_PATH:-$(cd "$(dirname "$0")/../.." && pwd)}"
+if [[ -n "$CI_PRIMARY_REPOSITORY_PATH" ]]; then
+	REPO_ROOT="$CI_PRIMARY_REPOSITORY_PATH"
+elif [[ -f "$(dirname "$0")/../../package.json" ]]; then
+	REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+else
+	REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+fi
 cd "$REPO_ROOT"
 
 echo "===== Installing CocoaPods ====="

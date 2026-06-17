@@ -11,7 +11,7 @@
 		"web": "expo start --web --port 3000",
 		"android": "expo run:android --device",
 		"ios": "expo run:ios --device",
-		"prebuild:ios": "git lfs pull && bunx expo prebuild -p ios && git restore ios/ci_scripts",
+		"prebuild:ios": "git lfs pull && bunx expo prebuild -p ios",
 		"build:android": "bun licences && eas build --platform android --local",
 		"build:ios": "bun run prebuild:ios && xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext -configuration Release -archivePath ios/build/NeulandNext.xcarchive",
 		"export:ios": "xcodebuild -exportArchive -archivePath ios/build/NeulandNext.xcarchive -exportPath ios/build/NeulandNext.ipa -exportOptionsPlist ios/exportOptions.plist && xcrun altool --upload-app -f ios/build/NeulandNext.ipa/NeulandNext.ipa -t ios -u $(security find-generic-password -s 'AppleAppStoreUpload' -g 2>&1 | grep -E 'acct' | awk -F= '{print $2}' | tr -d '\"') -p $(security find-generic-password -w -s 'AppleAppStoreUpload')",
