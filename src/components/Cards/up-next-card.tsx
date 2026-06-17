@@ -364,15 +364,9 @@ const UpNextCard = (): React.JSX.Element => {
 
 		let statsText = ''
 		if (todayStats.remaining > 0) {
-			if (todayStats.remaining === 1) {
-				statsText = t('cards.timetable.lecturesRemaining_one', {
-					count: todayStats.remaining
-				})
-			} else {
-				statsText = t('cards.timetable.lecturesRemaining_plural', {
-					count: todayStats.remaining
-				})
-			}
+			statsText = t('cards.timetable.lecturesRemaining', {
+				count: todayStats.remaining
+			})
 		} else {
 			statsText = t('cards.timetable.noMoreLectures')
 		}
