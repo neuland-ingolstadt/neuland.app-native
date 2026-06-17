@@ -90,7 +90,8 @@ import {
 import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 
-import packageInfo from '../../../package.json'
+import {appVersion} from '@/data/app-version'
+
 import LoadingIndicator from '../Universal/loading-indicator'
 import { modalSection } from './modal-sections'
 
