@@ -15,12 +15,12 @@ interface PulsingDotProps {
 	maxOpacity?: number
 }
 
-const PulsingDot: React.FC<PulsingDotProps> = ({
+const PulsingDot = ({
 	style,
 	duration = 1200,
 	minOpacity = 0.3,
 	maxOpacity = 1
-}) => {
+}: PulsingDotProps): React.JSX.Element => {
 	const pulseOpacity = useSharedValue(minOpacity)
 	const isActive = useSharedValue(true)
 

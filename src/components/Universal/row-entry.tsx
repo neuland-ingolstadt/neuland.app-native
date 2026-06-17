@@ -1,6 +1,5 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
-import type { JSX } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -14,13 +13,13 @@ const RowEntry = ({
 	icon
 }: {
 	title: string
-	leftChildren: JSX.Element
-	rightChildren: JSX.Element
+	leftChildren: React.JSX.Element
+	rightChildren: React.JSX.Element
 	onPress?: () => void
 	href?: RelativePathString
 	isExamCard?: boolean
 	backgroundColor?: string
-	icon?: JSX.Element
+	icon?: React.JSX.Element
 }): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const content = (

@@ -37,12 +37,12 @@ interface MapBottomSheetProps {
 	allRooms: FeatureCollection
 }
 
-const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
+const MapBottomSheet = ({
 	bottomSheetRef,
 	currentPosition,
 	handlePresentModalPress,
 	allRooms
-}) => {
+}: MapBottomSheetProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)

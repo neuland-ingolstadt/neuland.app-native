@@ -12,45 +12,49 @@ interface FreeRoomsListProps {
 	rooms: AvailableRoom[] | null
 }
 
-export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
+export const FreeRoomsList = ({
+	rooms
+}: FreeRoomsListProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
 
 	return rooms !== null && rooms.length > 0 ? (
-		rooms.map((room, index) => (
-			<View key={index}>
-				<View style={styles.rowEntry}>
-					<View>
-						<Pressable
-							onPress={() => {
-								router.dismissTo({
-									pathname: '/(tabs)/map',
-									params: { room: room.room }
-								})
-							}}
-						>
-							<Text style={styles.roomName}>{room.room}</Text>
-						</Pressable>
-						<Text style={styles.roomDetails} numberOfLines={1}>
-							{`${t(`roomTypes.${room.type}`, {
-								defaultValue: room.type,
-								ns: 'api',
-								fallbackLng: 'de'
-							})} (${room.capacity} ${t('pages.rooms.options.seats')})`}
+		<View>
+			{rooms.map((room, index) => (
+				<View key={index}>
+					<View style={styles.rowEntry}>
+						<View>
+							<Pressable
+								onPress={() => {
+									router.dismissTo({
+										pathname: '/(tabs)/map',
+										params: { room: room.room }
+									})
+								}}
+							>
+								<Text style={styles.roomName}>{room.room}</Text>
+							</Pressable>
+							<Text style={styles.roomDetails} numberOfLines={1}>
+								{`${t(`roomTypes.${room.type}`, {
+									defaultValue: room.type,
+									ns: 'api',
+									fallbackLng: 'de'
+								})} (${room.capacity} ${t('pages.rooms.options.seats')})`}
+							</Text>
+						</View>
+
+						<Text style={styles.roomTime} numberOfLines={2}>
+							{formatFriendlyTime(room.from)} - {formatFriendlyTime(room.until)}
 						</Text>
 					</View>
 
-					<Text style={styles.roomTime} numberOfLines={2}>
-						{formatFriendlyTime(room.from)} - {formatFriendlyTime(room.until)}
-					</Text>
+					{index !== rooms.length - 1 ? (
+						<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
+					) : null}
 				</View>
-
-				{index !== rooms.length - 1 ? (
-					<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-				) : null}
-			</View>
-		))
+			))}
+		</View>
 	) : (
 		<View style={styles.noRoomsFound}>
 			<Text style={styles.errorMessage}>{t('pages.rooms.noRooms.title')}</Text>

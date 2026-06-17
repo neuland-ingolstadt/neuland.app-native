@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import type React from 'react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { type FeatureFlagKey, FeatureFlagKeys } from '@/lib/feature-flags'
 import {
@@ -80,7 +80,7 @@ export interface Card {
 	initial: string[] // for which user kind is the card shown by default
 	allowed: string[] // for which user kind is the card allowed
 	featureFlag?: FeatureFlagKey
-	card: () => JSX.Element
+	card: () => React.JSX.Element
 }
 
 export interface ExtendedCard extends Card {

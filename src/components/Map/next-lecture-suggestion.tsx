@@ -18,10 +18,10 @@ interface NextLectureSuggestionsProps {
 	handlePresentModalPress: () => void
 }
 
-const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
+const NextLectureSuggestion = ({
 	allRooms,
 	handlePresentModalPress
-}) => {
+}: NextLectureSuggestionsProps): React.JSX.Element | null => {
 	const { setClickedElement, nextLecture, setCurrentFloor } = use(MapContext)
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')

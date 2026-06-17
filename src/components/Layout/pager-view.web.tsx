@@ -1,6 +1,6 @@
+import type React from 'react'
 import {
 	forwardRef,
-	type JSX,
 	type Ref,
 	useEffect,
 	useImperativeHandle,
@@ -10,7 +10,7 @@ import {
 interface TabLayoutProps {
 	initialPage: number
 	onPageSelected: (e: { nativeEvent: { position: number } }) => void
-	children: JSX.Element[]
+	children: React.JSX.Element[]
 }
 
 const TabLayout = (
