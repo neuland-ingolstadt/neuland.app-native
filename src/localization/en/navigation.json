@@ -31,7 +31,7 @@
 			"title": "Lecturers",
 			"search": "Search all lecturers"
 		},
-		"club": "Club Details",
+		"organiser": "Organiser Details",
 		"lecturer": "Lecturer Details",
 		"grades": {
 			"title": "Grades",
@@ -51,6 +51,7 @@
 		"sports": "University Sports",
 		"roomReport": "Report Room Issue",
 		"clEvents": "Campus Life Events",
+		"thiEvents": "THI Events",
 		"neulandMember": "Neuland Member Area"
 	},
 	"cards": {
@@ -62,6 +63,7 @@
 			"news": "THI News",
 			"library": "Library",
 			"events": "Campus Life Events",
+			"thiEvents": "THI Events",
 			"reimanns": "Reimanns",
 			"canisius": "Canisius Konvikt",
 			"mensa": "Mensa Ingolstadt",
@@ -89,17 +91,15 @@
 			}
 		},
 		"timetable": {
-			"startingSoon": "starts in {{count}} min",
-			"startingSoon_plural": "starts in {{count}} mins",
+			"startingSoon_one": "starts in {{count}} min",
+			"startingSoon_other": "starts in {{count}} mins",
 			"ongoing": "ends at {{time}}",
-			"endingSoon": "ends in {{count}} min",
-			"endingSoon_plural": "ends in {{count}} mins",
-			"lecturesRemaining": "{{count}} lecture left",
+			"endingSoon_one": "ends in {{count}} min",
+			"endingSoon_other": "ends in {{count}} mins",
 			"lecturesRemaining_one": "{{count}} lecture left",
-			"lecturesRemaining_plural": "{{count}} lectures left",
-			"ongoingLectures": "{{count}} ongoing lecture",
+			"lecturesRemaining_other": "{{count}} lectures left",
 			"ongoingLectures_one": "{{count}} ongoing lecture",
-			"ongoingLectures_plural": "{{count}} ongoing lectures",
+			"ongoingLectures_other": "{{count}} ongoing lectures",
 			"noMoreLectures": "No more lectures today",
 			"noEvents": "No upcoming lectures",
 			"enjoyDay": "Enjoy your day!",

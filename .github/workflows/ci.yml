@@ -4,6 +4,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  merge_group:
+    types: [checks_requested]
 jobs:
   static-checks:
     name: Biome and TypeScript checks
@@ -13,6 +15,9 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           lfs: true
+
+      - name: Check for merge conflict markers
+        run: bash config/check-merge-conflicts.sh
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
@@ -26,7 +31,7 @@ jobs:
       - name: Run Biome check
         run: bun biome ci .
 
-      - name: Check i18n completeness
+      - name: Check i18n
         run: bun i18n:check
   unit-tests:
     name: Unit tests
@@ -65,7 +70,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           files: ./coverage/lcov.info
           fail_ci_if_error: ${{ github.event_name == 'push' }}
@@ -73,8 +78,9 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           files: ./junit.xml
+          report_type: test_results
           fail_ci_if_error: ${{ github.event_name == 'push' }}
           token: ${{ secrets.CODECOV_TOKEN }}

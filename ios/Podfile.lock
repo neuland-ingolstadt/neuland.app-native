@@ -317,7 +317,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ExpoQuickActions (6.0.0):
+  - ExpoQuickActions (6.0.2):
     - ExpoModulesCore
   - ExpoSecureStore (15.0.8):
     - ExpoModulesCore
@@ -362,15 +362,15 @@ PODS:
   - maplibre-react-native/DynamicLibrary (10.4.2):
     - React
     - React-Core
-  - MMKVCore (2.2.4)
-  - NitroMmkv (4.1.1):
+  - MMKVCore (2.4.0)
+  - NitroMmkv (4.3.1):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - MMKVCore (= 2.2.4)
+    - MMKVCore (= 2.4.0)
     - NitroModules
     - RCT-Folly
     - RCT-Folly/Fabric
@@ -394,7 +394,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroModules (0.32.1):
+  - NitroModules (0.32.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -3536,7 +3536,7 @@ SPEC CHECKSUMS:
   ExpoLinking: 2ef632ad5013e3f1568fae9408d56ab9af5efc55
   ExpoLocalization: d936ff63557366e2e487264f5b495b1f0637fabd
   ExpoModulesCore: c2d64fb1683b13a077a497666a86c3911242d546
-  ExpoQuickActions: 31a70aa6a606128de4416a4830e09cfabfe6667f
+  ExpoQuickActions: edf2c5bc044f83dc9e9ed4dc4de7fe4a5b1b0422
   ExpoSecureStore: d32f751874a2ceb5aaeebeb3578e165c1ba2b24a
   ExpoSplashScreen: 6795dffbd8e931431c5abdf9d371ab150045c5cc
   ExpoSymbols: 349ee2b4d7d5ff3ea8436467914f8a67635aa354
@@ -3552,9 +3552,9 @@ SPEC CHECKSUMS:
   libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   maplibre-react-native: 37d86b5b7b04dedaceebc577644e67acd7b5f437
-  MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
-  NitroMmkv: 3e33ebcb4b1f964a0a385361675d97aa2970bed1
-  NitroModules: e5aec42756c6a9487053e3152a3e80489c9467dd
+  MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
+  NitroMmkv: 883c284ac35330744af8fee132210e59e6012c33
+  NitroModules: 08ee7da173d4e87b403430966ce1d062a6b36007
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
   RCTRequired: cebcf9442fc296c9b89ac791dfd463021d9f6f23

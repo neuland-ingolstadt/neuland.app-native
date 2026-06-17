@@ -1,13 +1,17 @@
 /** `organizer_kind` query value for Campus Life public list APIs */
 export const CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION =
 	'STUDENT_ASSOCIATION' as const
+export const CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT =
+	'THI_DEPARTMENT' as const
 
 export type CampusLifePublicOrganizerKind =
-	typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+	| typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
+	| typeof CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 
 export interface PublicEventResponse {
 	id: number
 	organizer_id: number
+	organizer_kind?: CampusLifePublicOrganizerKind | string | null
 	organizer_name?: string | null
 	title_de: string
 	title_en: string
@@ -21,6 +25,7 @@ export interface PublicEventResponse {
 
 export interface PublicOrganizerResponse {
 	id: number
+	organizer_kind?: CampusLifePublicOrganizerKind | string | null
 	name: string
 	description_de?: string | null
 	description_en?: string | null
@@ -34,6 +39,7 @@ export interface PublicOrganizerResponse {
 
 export interface CampusLifeOrganizer {
 	id: number
+	organizerKind?: CampusLifePublicOrganizerKind
 	name: string
 	descriptions: {
 		de?: string | null
@@ -50,6 +56,7 @@ export interface CampusLifeOrganizer {
 export interface CampusLifeEvent {
 	id: string
 	numericId: number
+	organizerKind?: CampusLifePublicOrganizerKind
 	titles: {
 		de: string
 		en: string

@@ -8,7 +8,7 @@ import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 
 interface EventErrorViewProps {
-	eventType: 'clEvents' | 'sports'
+	eventType: 'clEvents' | 'thiEvents' | 'sports'
 	title?: string
 	message?: string
 }
@@ -19,7 +19,7 @@ export function EventErrorView({
 	message
 }: EventErrorViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-	const { t } = useTranslation(['common'])
+	const { t } = useTranslation(['common', 'navigation'])
 
 	const getEventTypeIcon = (type: string) => {
 		switch (type) {
@@ -28,6 +28,12 @@ export function EventErrorView({
 					ios: 'calendar',
 					android: 'calendar_month' satisfies MaterialIcon,
 					web: 'Calendar' satisfies LucideIcon
+				}
+			case 'thiEvents':
+				return {
+					ios: 'building.columns.fill',
+					android: 'account_balance' satisfies MaterialIcon,
+					web: 'Building2' satisfies LucideIcon
 				}
 			case 'sports':
 				return {
@@ -48,6 +54,8 @@ export function EventErrorView({
 		switch (type) {
 			case 'clEvents':
 				return t('pages.clEvents.events.title')
+			case 'thiEvents':
+				return t('navigation.thiEvents', { ns: 'navigation' })
 			case 'sports':
 				return t('pages.clEvents.sports.title')
 			default:
@@ -56,13 +64,20 @@ export function EventErrorView({
 	}
 
 	const handleBackToList = (): void => {
-		switch (eventType) {
-			case 'clEvents':
-				router.navigate('/cl-events')
-				break
-			case 'sports':
-				router.navigate('/sports')
-				break
+		if (router.canGoBack()) {
+			router.back()
+		} else {
+			switch (eventType) {
+				case 'clEvents':
+					router.navigate('/cl-events')
+					break
+				case 'thiEvents':
+					router.navigate('/thi-events')
+					break
+				case 'sports':
+					router.navigate('/sports')
+					break
+			}
 		}
 	}
 
