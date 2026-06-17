@@ -136,9 +136,11 @@ android/                  # Native Android project (managed by Expo prebuild)
 .github/                  # CI workflows, issue/PR templates, CODEOWNERS
 ```
 
-The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`. iOS-only
-files that must survive prebuild (Xcode Cloud scripts, export options, …) live under
-`config/ios-artifacts/` and are copied by `withIosCiArtifacts`.
+The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`, except
+`ios/ci_scripts/` which is committed for Xcode Cloud. iOS-only files that must survive
+prebuild (export options, TestFlight notes, …) live under `config/ios-artifacts/` and are
+copied by `withIosCiArtifacts`. Keep `config/ios-artifacts/ci_scripts/ci_post_clone.sh` in
+sync with the committed `ios/ci_scripts/ci_post_clone.sh`.
 
 Path aliases (defined in `tsconfig.json`):
 
@@ -513,8 +515,9 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   compatibility. Run `bun pkgs` (which calls `expo install --check`) when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, and `bun changelog` for `CHANGELOG.md`.
-- **Don't commit the `ios/` folder.** It is gitignored; run `bun prebuild:ios` and change
-  `app.config.json`, config plugins, or `config/ios-artifacts/` instead.
+- **Don't commit the `ios/` folder** (except `ios/ci_scripts/` for Xcode Cloud). It is
+  gitignored; run `bun prebuild:ios` and change `app.config.json`, config plugins, or
+  `config/ios-artifacts/` instead.
 - **Don't disable Biome rules globally.** Inline `// biome-ignore` with a reason if
   truly necessary.
 - **Don't commit secrets** (`.env.local`, `service.json`, `credentials/`,

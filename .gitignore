@@ -13,7 +13,9 @@
 
 # expo 
 .expo/
-/ios/
+/ios/*
+!/ios/ci_scripts/
+!/ios/ci_scripts/**
 
 # builds
 /dist
