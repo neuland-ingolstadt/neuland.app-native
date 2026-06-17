@@ -25,6 +25,14 @@ bun install --frozen-lockfile --ignore-scripts
 npm install npm-license-crawler -g
 npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/
 
+echo "===== Pulling Git LFS assets ====="
+brew install git-lfs
+git lfs install --local 2>/dev/null || git lfs install
+git lfs pull
+
+echo "===== Running expo prebuild ====="
+bunx expo prebuild -p ios --no-install
+
 echo "===== Running pod install ====="
 cd ios
 pod install
