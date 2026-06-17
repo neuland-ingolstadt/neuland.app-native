@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
@@ -7,6 +8,7 @@ import {
 	Linking,
 	Platform,
 	Pressable,
+	RefreshControl,
 	ScrollView,
 	Text,
 	View
@@ -14,10 +16,15 @@ import {
 import { useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import { useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { IDCard } from './id-card'
+import {
+	OfficePresenceSection,
+	officePresenceQueryKey
+} from './office-presence-section'
 import { SecurityWarningModal } from './security-warning-modal'
 import { stylesheet } from './styles'
 
@@ -26,6 +33,18 @@ export function LoggedInView(): React.JSX.Element {
 	const { t } = useTranslation('member')
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
+	const queryClient = useQueryClient()
+
+	const memberSub = info?.sub as string | undefined
+
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
+		if (!memberSub) {
+			return
+		}
+		await queryClient.invalidateQueries({
+			queryKey: officePresenceQueryKey(memberSub)
+		})
+	})
 
 	// only refresh on mount if expired
 	useEffect(() => {
@@ -160,12 +179,22 @@ export function LoggedInView(): React.JSX.Element {
 			contentContainerStyle={styles.container}
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
+			refreshControl={
+				<RefreshControl
+					refreshing={isRefetchingByUser}
+					onRefresh={() => {
+						void refetchByUser()
+					}}
+				/>
+			}
 		>
 			{info && (
 				<View style={styles.cardWrapper}>
 					<IDCard info={info} idToken={idToken} />
 				</View>
 			)}
+
+			<OfficePresenceSection />
 
 			<FormList sections={[perksSection, ...quickLinksSections]} />
 

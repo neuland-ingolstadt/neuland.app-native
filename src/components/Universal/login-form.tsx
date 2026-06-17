@@ -1,10 +1,8 @@
 import { toast } from 'burnt'
-import Color from 'color'
 import * as Haptics from 'expo-haptics'
 import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-	ActivityIndicator,
 	Alert,
 	Animated,
 	Linking,
@@ -15,11 +13,7 @@ import {
 	TouchableOpacity,
 	View
 } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -31,7 +25,7 @@ import {
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
-import { getContrastColor } from '@/utils/ui-utils'
+import Button from './Button'
 import PlatformIcon from './Icon'
 
 const LoginForm = ({
@@ -327,26 +321,18 @@ const LoginForm = ({
 					</Animated.View>
 				</View>
 
-				<TouchableOpacity
+				<Button
 					disabled={signInDisabled}
+					loading={loading}
 					onPress={() => {
 						login().catch((error: unknown) => {
 							console.debug(error)
 						})
 					}}
-					style={styles.loginButton(signInDisabled)}
+					style={styles.loginButton}
 				>
-					{loading ? (
-						<ActivityIndicator
-							color={getContrastColor(theme.colors.primary)}
-							size={15}
-						/>
-					) : (
-						<Text style={styles.buttonText(signInDisabled)}>
-							{t('login.button')}
-						</Text>
-					)}
-				</TouchableOpacity>
+					{t('login.button')}
+				</Button>
 
 				<View style={styles.dividerContainer}>
 					<View style={styles.divider} />
@@ -431,27 +417,9 @@ const stylesheet = createStyleSheet((theme) => ({
 	eyeIcon: {
 		padding: 4
 	},
-	loginButton: (disabled: boolean) => ({
-		height: 48,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: 24,
-		borderRadius: 8,
-		backgroundColor: disabled
-			? UnistylesRuntime.themeName === 'dark'
-				? Color(theme.colors.primary).darken(0.3).hex()
-				: Color(theme.colors.primary).lighten(0.3).hex()
-			: theme.colors.primary
-	}),
-	buttonText: (disabled: boolean) => ({
-		fontWeight: '600',
-		fontSize: 16,
-		color: disabled
-			? UnistylesRuntime.themeName === 'dark'
-				? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
-				: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
-			: getContrastColor(theme.colors.primary)
-	}),
+	loginButton: {
+		marginTop: 24
+	},
 	dividerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',

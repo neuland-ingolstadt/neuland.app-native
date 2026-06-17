@@ -182,5 +182,49 @@ export const stylesheet = createStyleSheet((theme) => ({
 	debugText: {
 		color: theme.colors.text,
 		fontSize: 14
+	},
+
+	officeSection: {
+		marginBottom: 24
+	},
+	officeHeader: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: '600',
+		marginBottom: 8,
+		marginLeft: 4,
+		textTransform: 'uppercase'
+	},
+	officeCard: {
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.lg,
+		gap: 16,
+		padding: 16
+	},
+	officeCountRow: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: 12
+	},
+	officeCountText: {
+		color: theme.colors.text,
+		flex: 1,
+		fontSize: 16,
+		fontWeight: '600'
+	},
+	disclaimer: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 12
+	},
+	pulsingDot: {
+		width: 8,
+		height: 8,
+		borderRadius: 4
+	},
+	smallPulsingDot: {
+		backgroundColor: theme.colors.success,
+		borderRadius: 3,
+		height: 6,
+		width: 6
 	}
 }))

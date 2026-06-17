@@ -78,6 +78,16 @@
 	"perks": {
 		"header": "Vorteile",
 		"theme": "Akzentfarbe",
-		"appIcon": "App Icon"
+		"appIcon": "App-Icon"
+	},
+	"office": {
+		"header": "Büro",
+		"count_zero": "Niemand im Büro",
+		"count_one": "{{count}} Mitglied im Büro",
+		"count_other": "{{count}} Mitglieder im Büro",
+		"checkIn": "Ich bin im Büro",
+		"checkOut": "Büro verlassen",
+		"error": "Bürostatus konnte nicht geladen werden",
+		"disclaimer": "Angaben basieren auf freiwilligen Einträgen und können von der tatsächlichen Belegung abweichen."
 	}
 }

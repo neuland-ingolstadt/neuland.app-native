@@ -79,5 +79,15 @@
 		"header": "Perks",
 		"theme": "Accent Color",
 		"appIcon": "App Icon"
+	},
+	"office": {
+		"header": "Office",
+		"count_zero": "Nobody in the office",
+		"count_one": "{{count}} member in the office",
+		"count_other": "{{count}} members in the office",
+		"checkIn": "I'm in the office",
+		"checkOut": "Leave office",
+		"error": "Could not load office status",
+		"disclaimer": "Information is based on voluntary entries and may differ from the actual occupancy."
 	}
 }
