@@ -47,3 +47,8 @@ bunx expo prebuild -p ios
 echo "===== Running pod install ====="
 cd ios
 pod install
+
+echo "===== Installing Swift package lockfile ====="
+mkdir -p NeulandNext.xcworkspace/xcshareddata/swiftpm
+cp "$REPO_ROOT/config/ios-artifacts/NeulandNext.xcworkspace/xcshareddata/swiftpm/Package.resolved" \
+	NeulandNext.xcworkspace/xcshareddata/swiftpm/Package.resolved

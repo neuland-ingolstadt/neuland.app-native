@@ -4,6 +4,7 @@ const { dirname, join } = require('node:path')
 
 /** Paths under `config/ios-artifacts/` → same path under `ios/` */
 const ARTIFACTS = [
+	'NeulandNext.xcworkspace/xcshareddata/swiftpm/Package.resolved',
 	'TestFlight/WhatToTest.en-US.txt',
 	'TestFlight/WhatToTest.de-DE.txt',
 	'exportOptions.plist'
