@@ -27,18 +27,6 @@ import BaseCard from './base-card'
 const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-	const [currentEvent, setCurrentEvent] =
-		useState<FriendlyTimetableEntry | null>(null)
-	const [nextEvent, setNextEvent] = useState<FriendlyTimetableEntry | null>(
-		null
-	)
-	const [todayStats, setTodayStats] = useState({
-		total: 0,
-		completed: 0,
-		ongoing: 0,
-		remaining: 0
-	})
 	const [currentTime, setCurrentTime] = useState(() => new Date())
 	const { t } = useTranslation(['navigation', 'timetable'])
 	const [appState, setAppState] = useState<AppStateStatus>(
@@ -69,7 +57,11 @@ const UpNextCard: React.FC = () => {
 		return timetable
 	}, [])
 
-	const { data: timetable, error: timetableError } = useQuery({
+	const {
+		data: timetable,
+		error: timetableError,
+		isLoading
+	} = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
 		staleTime: 10 * 60 * 1000,
@@ -83,10 +75,36 @@ const UpNextCard: React.FC = () => {
 		}
 	})
 
-	const updateData = useCallback(() => {
-		if (timetable == null) return
+	const loadingState = useMemo(() => {
+		if (userKind === USER_GUEST) {
+			return LoadingState.ERROR
+		}
+		if (timetableError) {
+			if (timetableError.message === '"Time table does not exist" (-202)') {
+				return LoadingState.LOADED
+			}
+			return LoadingState.ERROR
+		}
+		if (timetable != null) {
+			return LoadingState.LOADED
+		}
+		if (isLoading) {
+			return LoadingState.LOADING
+		}
+		return LoadingState.LOADING
+	}, [userKind, timetable, timetableError, isLoading])
 
-		const now = new Date()
+	const { currentEvent, nextEvent, todayStats } = useMemo(() => {
+		const emptyStats = { total: 0, completed: 0, ongoing: 0, remaining: 0 }
+		if (timetable == null) {
+			return {
+				currentEvent: null as FriendlyTimetableEntry | null,
+				nextEvent: null as FriendlyTimetableEntry | null,
+				todayStats: emptyStats
+			}
+		}
+
+		const now = currentTime
 		const today = new Date(now)
 		today.setHours(0, 0, 0, 0)
 
@@ -106,68 +124,68 @@ const UpNextCard: React.FC = () => {
 			(item) => new Date(item.startDate) > now
 		)
 
-		setTodayStats({
+		const stats = {
 			total: todayEvents.length,
 			completed: completedEvents.length,
 			ongoing: ongoingEvents.length,
 			remaining: upcomingEvents.length
-		})
+		}
 
 		const upNext = getOngoingOrNextEvent(timetable)
-		if (upNext.length > 0) {
-			setCurrentEvent(upNext[0])
+		if (upNext.length === 0) {
+			return {
+				currentEvent: null,
+				nextEvent: null,
+				todayStats: stats
+			}
+		}
 
-			if (new Date(upNext[0].startDate) <= now) {
-				const futureTodayEvents = todayEvents.filter(
-					(entry) => new Date(entry.startDate) > now
-				)
-				futureTodayEvents.sort(
+		const current = upNext[0]
+		let next: FriendlyTimetableEntry | null = null
+
+		if (new Date(current.startDate) <= now) {
+			const futureTodayEvents = todayEvents
+				.filter((entry) => new Date(entry.startDate) > now)
+				.sort(
 					(a, b) =>
 						new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
 				)
-				setNextEvent(futureTodayEvents.length > 0 ? futureTodayEvents[0] : null)
-			} else {
-				const startTimeOfCurrent = new Date(upNext[0].startDate).getTime()
-				const futureTodayEvents = todayEvents.filter(
+			next = futureTodayEvents[0] ?? null
+		} else {
+			const startTimeOfCurrent = new Date(current.startDate).getTime()
+			const futureTodayEvents = todayEvents
+				.filter(
 					(entry) => new Date(entry.startDate).getTime() > startTimeOfCurrent
 				)
-				futureTodayEvents.sort(
+				.sort(
 					(a, b) =>
 						new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
 				)
-				setNextEvent(futureTodayEvents.length > 0 ? futureTodayEvents[0] : null)
-			}
-		} else {
-			setCurrentEvent(null)
-			setNextEvent(null)
+			next = futureTodayEvents[0] ?? null
 		}
 
-		setLoadingState(LoadingState.LOADED)
-	}, [timetable])
+		return {
+			currentEvent: current,
+			nextEvent: next,
+			todayStats: stats
+		}
+	}, [timetable, currentTime])
 
-	const refreshAll = useCallback(() => {
+	const refreshCurrentTime = useCallback(() => {
 		if (isMountedRef.current) {
-			const now = new Date()
-			setCurrentTime(now)
-			updateData()
+			setCurrentTime(new Date())
 		}
-	}, [updateData])
+	}, [])
 
 	useEffect(() => {
 		isMountedRef.current = true
 
-		// Set up AppState listener
 		const subscription = AppState.addEventListener('change', (nextAppState) => {
 			if (isMountedRef.current) {
 				setAppState(nextAppState)
 
-				// Force an immediate refresh when coming back to foreground
 				if (nextAppState === 'active' && routeFocusRef.current) {
-					const now = new Date()
-					setCurrentTime(now)
-					if (timetable != null) {
-						updateData()
-					}
+					refreshCurrentTime()
 				}
 			}
 		})
@@ -176,7 +194,7 @@ const UpNextCard: React.FC = () => {
 			isMountedRef.current = false
 			subscription.remove()
 		}
-	}, [timetable, updateData])
+	}, [refreshCurrentTime])
 
 	// Track screen focus with Expo Router
 	useFocusEffect(
@@ -184,46 +202,21 @@ const UpNextCard: React.FC = () => {
 			setScreenIsFocused(true)
 			routeFocusRef.current = true
 
-			// Ensure we refresh when focused
 			if (userKind !== USER_GUEST) {
-				// Only refresh if we have data to work with
-				if (timetable != null) {
-					const now = new Date()
-					setCurrentTime(now)
-					updateData()
-				}
-			} else if (userKind === USER_GUEST) {
-				setLoadingState(LoadingState.ERROR)
+				refreshCurrentTime()
 			}
 
 			return () => {
 				setScreenIsFocused(false)
 			}
-		}, [userKind, timetable, updateData])
+		}, [userKind, refreshCurrentTime])
 	)
 
 	// Only run the interval when app is active and screen is focused
 	useInterval(
-		refreshAll,
+		refreshCurrentTime,
 		appState === 'active' && screenIsFocused ? refreshInterval : null
 	)
-
-	useEffect(() => {
-		// Only refresh when timetable data first becomes available
-		if (timetable != null) {
-			refreshAll()
-		}
-	}, [timetable])
-
-	useEffect(() => {
-		if (timetableError) {
-			if (timetableError.message === '"Time table does not exist" (-202)') {
-				setLoadingState(LoadingState.LOADED)
-			} else {
-				setLoadingState(LoadingState.ERROR)
-			}
-		}
-	}, [timetableError])
 
 	const eventStatus = useMemo(() => {
 		if (!currentEvent) return null
