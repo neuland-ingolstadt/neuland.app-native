@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 
-import packageInfo from '../../package.json'
+import {appVersion} from '@/data/app-version'
+
 
 const ENDPOINT_HOST =
 	process.env.EXPO_PUBLIC_ENDPOINT_HOST ?? 'https://hiplan.thi.de'

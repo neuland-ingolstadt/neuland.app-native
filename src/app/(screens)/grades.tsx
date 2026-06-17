@@ -1,4 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+declare module '@tanstack/react-query' {
+    export function useQuery(...args: any[]): any
+}
 import { router, useNavigation } from 'expo-router'
 import Fuse from 'fuse.js'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
