@@ -13,6 +13,7 @@
 
 # expo 
 .expo/
+/ios/
 
 # builds
 /dist
