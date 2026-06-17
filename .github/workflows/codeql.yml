@@ -82,13 +82,3 @@ jobs:
         uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           category: "/language:${{matrix.language}}"
-
-  # GHAS does not report the "CodeQL" required check on merge_group commits
-  # (github/codeql-action#1537). Analysis still runs in `analyze` above.
-  codeql-merge-queue:
-    name: CodeQL
-    needs: analyze
-    if: github.event_name == 'merge_group'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "CodeQL analysis completed in analyze job."
