@@ -13,6 +13,8 @@
 
 # expo 
 .expo/
+/ios/*
+!/ios/ci_scripts
 
 # builds
 /dist

@@ -28,6 +28,10 @@ ios:
   - changed-files:
       - any-glob-to-any-file:
           - 'ios/**'
+          - 'config/ios-artifacts/**'
+          - 'config/plugins/withIosCiArtifacts.js'
+          - 'config/plugins/withCiScriptsSymlink.js'
+          - 'config/plugins/withXcode26FmtWorkaround.js'
           - '**/*.ios.tsx'
 
 web:

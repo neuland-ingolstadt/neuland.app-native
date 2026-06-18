@@ -10,8 +10,8 @@ import type { FormListSections } from '@/types/components'
 
 export interface LicenseEntry {
 	licenses: string
-	repository?: string // Make repository optional
-	licenseUrl: string
+	repository?: string
+	licenseUrl?: string
 	parents: string
 }
 
@@ -82,7 +82,7 @@ export default function Licenses(): React.JSX.Element {
 						params: {
 							license: value.licenses,
 							version: version != null ? version[0] : '',
-							licenseUrl: value.licenseUrl,
+							licenseUrl: value.licenseUrl ?? '',
 							repository: value.repository,
 							name: nameWithoutVersion
 						}

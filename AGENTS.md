@@ -54,6 +54,7 @@ Run project scripts through Bun. The most relevant ones:
 ```bash
 bun install                  # install dependencies (use --frozen-lockfile in CI)
 
+bun prebuild:ios             # generate ios/ from Expo config (required on fresh clone)
 bun dev                      # start Expo dev server (with EXPO_USE_FAST_RESOLVER=1)
 bun ios                      # run on a connected iOS device
 bun android                  # run on a connected Android device
@@ -78,7 +79,7 @@ maintainer runs these):
 ```bash
 bun start                    # production-like web preview (no dev tools, port 3000)
 bun build:android            # local EAS build for Android
-bun build:ios                # xcodebuild archive for iOS
+bun build:ios                # prebuild + xcodebuild archive for iOS
 bun ship:ios                 # build + export + altool upload to App Store Connect
 bun build:all                # iOS + Android sequentially
 bun licences                 # regenerate src/data/licenses.json (do not edit by hand)
@@ -131,16 +132,20 @@ src/
     └── tests/                  # *.test.ts — colocated with the utility being tested
 config/                   # Build tooling (codegen, cliff, expo plugins, fonts, nginx)
 patches/                  # Bun patch-package patches
-ios/, android/            # Native projects (managed by Expo prebuild)
+android/                  # Native Android project (managed by Expo prebuild)
 .github/                  # CI workflows, issue/PR templates, CODEOWNERS
 ```
+
+The `ios/` directory is **gitignored** and generated locally via `bun prebuild:ios`. Xcode Cloud
+needs `ios/ci_scripts/ci_post_clone.sh`; that path is a **symlink** to
+`config/ios-artifacts/ci_scripts/` (recreated after prebuild by `withCiScriptsSymlink`). Other
+iOS-only files that must survive prebuild (export options, TestFlight notes, …) also live under
+`config/ios-artifacts/` and are copied by `withIosCiArtifacts`.
 
 Path aliases (defined in `tsconfig.json`):
 
 - `@/*` → `./src/*` — always use this for source imports, never deep relative paths
   like `../../../utils/storage`.
-- `ios/*` → `./ios/NeulandNext/Images.xcassets/*` — used by a few iOS-only screens
-  to reference Xcode asset catalog entries (e.g. alternate app icons).
 
 Generated and binary files:
 
@@ -510,6 +515,10 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   compatibility. Run `bun pkgs` (which calls `expo install --check`) when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, and `bun changelog` for `CHANGELOG.md`.
+- **Don't commit the `ios/` folder** (only the `ios/ci_scripts` symlink for Xcode Cloud). It is
+  gitignored; run `bun prebuild:ios` and change `app.config.json`, config plugins, or
+  `config/ios-artifacts/` instead. Edit `config/ios-artifacts/ci_scripts/ci_post_clone.sh` for
+  Xcode Cloud setup.
 - **Don't disable Biome rules globally.** Inline `// biome-ignore` with a reason if
   truly necessary.
 - **Don't commit secrets** (`.env.local`, `service.json`, `credentials/`,

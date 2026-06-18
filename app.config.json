@@ -25,6 +25,11 @@
 				"applinks:web.neuland.app",
 				"applinks:dev.neuland.app"
 			],
+			"entitlements": {
+				"com.apple.developer.pass-type-identifiers": [
+					"$(TeamIdentifierPrefix)pass.member.neuland.app"
+				]
+			},
 			"config": {
 				"usesNonExemptEncryption": false
 			},
@@ -189,6 +194,8 @@
 				"./src/assets/android/check.xml"
 			],
 			"./config/plugins/withIosCiArtifacts.js",
+			"./config/plugins/withCiScriptsSymlink.js",
+			"./config/plugins/withXcode26FmtWorkaround.js",
 			"expo-font"
 		],
 		"extra": {
