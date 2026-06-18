@@ -1,3 +1,4 @@
+import { useIsRestoring } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useMMKVBoolean, useMMKVObject } from 'react-native-mmkv'
 import { AllCards, type Card } from '@/components/all-cards'
@@ -15,22 +16,27 @@ interface DashboardOrder {
 
 export function isCardEnabled(
 	card: Pick<Card, 'featureFlag'>,
-	flags: FeatureFlagState
+	flags: FeatureFlagState,
+	options?: { skipFeatureFlagCheck?: boolean }
 ): boolean {
-	if (card.featureFlag == null) {
+	if (card.featureFlag == null || options?.skipFeatureFlagCheck === true) {
 		return true
 	}
 
 	return flags[card.featureFlag] === true
 }
 
-function isCardKeyEnabled(cardKey: string, flags: FeatureFlagState): boolean {
+function isCardKeyEnabled(
+	cardKey: string,
+	flags: FeatureFlagState,
+	options?: { skipFeatureFlagCheck?: boolean }
+): boolean {
 	const card = AllCards.find((entry) => entry.key === cardKey)
 	if (card == null) {
 		return false
 	}
 
-	return isCardEnabled(card, flags)
+	return isCardEnabled(card, flags, options)
 }
 
 export function getDefaultDashboardOrder(
@@ -129,6 +135,7 @@ export function useDashboard(): Dashboard {
 	)
 	const { userKind = USER_GUEST } = useUserKind()
 	const flags = useFeatureFlags()
+	const isRestoring = useIsRestoring()
 
 	const defaultEntries = useMemo(
 		() => getDefaultDashboardOrder(userKind, flags),
@@ -166,7 +173,7 @@ export function useDashboard(): Dashboard {
 	])
 
 	useEffect(() => {
-		if (shownDashboardEntries == null) {
+		if (isRestoring || shownDashboardEntries == null) {
 			return
 		}
 
@@ -179,17 +186,24 @@ export function useDashboard(): Dashboard {
 		if (!arraysEqual(merged, shownDashboardEntries)) {
 			setShownDashboardEntries(merged)
 		}
-	}, [shownDashboardEntries, userKind, flags, setShownDashboardEntries])
+	}, [
+		isRestoring,
+		shownDashboardEntries,
+		userKind,
+		flags,
+		setShownDashboardEntries
+	])
 
 	const normalizedShownEntries = useMemo(() => {
 		const fallback = defaultEntries.shown
 		const shownEntries = shownDashboardEntries ?? fallback
 		const knownCardKeys = new Set(AllCards.map((card) => card.key))
+		const flagOptions = isRestoring ? { skipFeatureFlagCheck: true } : undefined
 
 		return shownEntries
 			.filter((key) => knownCardKeys.has(key))
-			.filter((key) => isCardKeyEnabled(key, flags))
-	}, [shownDashboardEntries, defaultEntries.shown, flags])
+			.filter((key) => isCardKeyEnabled(key, flags, flagOptions))
+	}, [shownDashboardEntries, defaultEntries.shown, flags, isRestoring])
 
 	const entries = useMemo(
 		() =>

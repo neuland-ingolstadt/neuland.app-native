@@ -1,6 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
-import { memo, use, useCallback, useMemo } from 'react'
+import { memo, use, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Image,
@@ -13,6 +13,7 @@ import {
 	View
 } from 'react-native'
 import Animated, {
+	cancelAnimation,
 	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
@@ -45,6 +46,13 @@ const AnnouncementCard = ({
 
 	const scale = useSharedValue(1)
 	const rotation = useSharedValue(0)
+
+	useEffect(() => {
+		return () => {
+			cancelAnimation(scale)
+			cancelAnimation(rotation)
+		}
+	}, [rotation, scale])
 
 	const animatedIconStyle = useAnimatedStyle(() => {
 		return {

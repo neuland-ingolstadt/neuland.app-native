@@ -1,6 +1,6 @@
 import * as SplashScreen from 'expo-splash-screen'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Platform, StyleSheet, View, type ViewStyle } from 'react-native'
 import Animated, {
 	Easing,
@@ -57,9 +57,14 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 
 	const intro = useSharedValue(0)
 	const introBackground = useSharedValue(0)
+	const isMountedRef = useRef(true)
 
 	useEffect(() => {
 		setLoaded(true)
+
+		return () => {
+			isMountedRef.current = false
+		}
 	}, [])
 
 	const logoSize = 190
@@ -68,27 +73,45 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const iosXShift = 20
 	const iosMarginStyle: ViewStyle =
 		Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
+	const contrastColor = theme.colors.contrast
 
-	const animatedLogoStyle = useAnimatedStyle(() => ({
-		transform: showSplashScreen
-			? [
-					{
-						scale: interpolate(
-							intro.value,
-							[0, 0.2, 0.4, 1],
-							[1, 1, 0.8, 10],
-							'clamp'
-						)
-					}
-				]
-			: [],
-		opacity: interpolate(intro.value, [0, 0.7, 0.8, 1], [1, 1, 0.4, 0], 'clamp')
-	}))
+	const hideSplashFromWorklet = () => {
+		if (isMountedRef.current) {
+			setHideSplash(true)
+		}
+	}
 
-	const animatedBackgroundStyle = useAnimatedStyle(() => ({
-		backgroundColor: theme.colors.contrast,
-		opacity: interpolate(introBackground.value, [0, 1], [1, 0], 'clamp')
-	}))
+	const animatedLogoStyle = useAnimatedStyle(
+		() => ({
+			transform: showSplashScreen
+				? [
+						{
+							scale: interpolate(
+								intro.value,
+								[0, 0.2, 0.4, 1],
+								[1, 1, 0.8, 10],
+								'clamp'
+							)
+						}
+					]
+				: [],
+			opacity: interpolate(
+				intro.value,
+				[0, 0.7, 0.8, 1],
+				[1, 1, 0.4, 0],
+				'clamp'
+			)
+		}),
+		[showSplashScreen]
+	)
+
+	const animatedBackgroundStyle = useAnimatedStyle(
+		() => ({
+			backgroundColor: contrastColor,
+			opacity: interpolate(introBackground.value, [0, 1], [1, 0], 'clamp')
+		}),
+		[contrastColor]
+	)
 
 	const animateSplashWithTransformation = () => {
 		intro.value = withTiming(0.2, { duration: 100 }, () => {
@@ -98,7 +121,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 					{ duration: 500, easing: Easing.out(Easing.exp) },
 					() => {
 						introBackground.value = withTiming(1, { duration: 200 }, () => {
-							runOnJS(setHideSplash)(true)
+							runOnJS(hideSplashFromWorklet)()
 						})
 					}
 				)

@@ -33,6 +33,8 @@ const AnimatedText = ({
 }): React.JSX.Element => {
 	const colorValue = useSharedValue(0)
 	const { theme } = useStyles()
+	const textColor = theme.colors.text
+	const secondaryLabelColor = theme.colors.labelSecondaryColor
 	useEffect(() => {
 		if (!disabled) {
 			colorValue.value = withRepeat(
@@ -52,12 +54,12 @@ const AnimatedText = ({
 		const interpolatedColor = interpolateColor(
 			colorValue.value,
 			[0, 1],
-			[theme.colors.text, theme.colors.labelSecondaryColor] // Interpolating between text and secondary label colors
+			[textColor, secondaryLabelColor]
 		)
 		return {
 			color: interpolatedColor
 		}
-	})
+	}, [secondaryLabelColor, textColor])
 
 	return (
 		<Animated.Text style={[animatedStyle, textStyles]}>{text}</Animated.Text>

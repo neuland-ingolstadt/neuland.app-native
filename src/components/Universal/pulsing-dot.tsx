@@ -1,6 +1,8 @@
 import type React from 'react'
+import { useEffect } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
 import Animated, {
+	cancelAnimation,
 	useAnimatedReaction,
 	useAnimatedStyle,
 	useSharedValue,
@@ -23,6 +25,12 @@ const PulsingDot = ({
 }: PulsingDotProps): React.JSX.Element => {
 	const pulseOpacity = useSharedValue(minOpacity)
 	const isActive = useSharedValue(true)
+
+	useEffect(() => {
+		return () => {
+			cancelAnimation(pulseOpacity)
+		}
+	}, [pulseOpacity])
 
 	useAnimatedReaction(
 		() => isActive.value,

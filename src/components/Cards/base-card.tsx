@@ -1,10 +1,11 @@
 import { type Href, Link, type RelativePathString, router } from 'expo-router'
 import type React from 'react'
-import { use } from 'react'
+import { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import Animated, {
+	cancelAnimation,
 	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
@@ -38,6 +39,13 @@ const BaseCard = ({
 
 	const scale = useSharedValue(1)
 	const rotation = useSharedValue(0)
+
+	useEffect(() => {
+		return () => {
+			cancelAnimation(scale)
+			cancelAnimation(rotation)
+		}
+	}, [rotation, scale])
 
 	const animatedIconStyle = useAnimatedStyle(() => {
 		return {
