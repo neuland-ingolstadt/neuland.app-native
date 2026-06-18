@@ -1,37 +1,21 @@
 #!/bin/zsh
-set -e
+set -e 
 set -x
 
-# Homebrew auto-update hits formulae.brew.sh and often fails on Xcode Cloud (DNS).
-export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_NO_ENV_HINTS=1
-export HOMEBREW_NO_INSTALL_FROM_API=1
-
 echo "===== Installing CocoaPods ====="
-if ! command -v pod >/dev/null 2>&1; then
-	if ! brew install cocoapods; then
-		echo "brew install cocoapods failed, falling back to gem"
-		sudo gem install cocoapods
-	fi
-fi
-pod --version
-
+export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+brew install cocoapods
 echo "===== Installing Node.js ====="
-if ! command -v node >/dev/null 2>&1; then
-	brew install node
-	brew link node
-fi
+brew install node
+brew link node
 node -v
 npm -v
 export NODE_BINARY=$(which node)
 echo "NODE_BINARY is set to $NODE_BINARY"
 
 echo "===== Installing Bun ====="
-if ! command -v bun >/dev/null 2>&1; then
-	brew tap oven-sh/bun
-	brew install bun
-fi
+brew tap oven-sh/bun
+brew install bun 
 bun -v
 
 # Install dependencies
