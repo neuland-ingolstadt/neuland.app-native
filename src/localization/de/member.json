@@ -88,6 +88,8 @@
 		"checkIn": "Ich bin im Büro",
 		"checkOut": "Büro verlassen",
 		"error": "Bürostatus konnte nicht geladen werden",
+		"checkInError": "Einchecken fehlgeschlagen",
+		"checkOutError": "Auschecken fehlgeschlagen",
 		"disclaimer": "Angaben basieren auf freiwilligen Einträgen und können von der tatsächlichen Belegung abweichen."
 	}
 }

@@ -88,6 +88,8 @@
 		"checkIn": "I'm in the office",
 		"checkOut": "Leave office",
 		"error": "Could not load office status",
+		"checkInError": "Could not check in",
+		"checkOutError": "Could not check out",
 		"disclaimer": "Information is based on voluntary entries and may differ from the actual occupancy."
 	}
 }

@@ -1,5 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,8 +13,8 @@ import {
 } from '@/api/office-presence-api'
 import Button from '@/components/Universal/Button'
 import PlatformIcon from '@/components/Universal/Icon'
+import PulsingDot from '@/components/Universal/pulsing-dot'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import PulsingDot from '../Universal/pulsing-dot'
 import { stylesheet } from './styles'
 
 export function officePresenceQueryKey(sub: string) {
@@ -78,13 +79,16 @@ export function OfficePresenceSection(): React.JSX.Element {
 				})
 			}
 		},
-		onError: (mutationError) => {
-			if (__DEV__) {
-				console.debug(
-					'[OfficePresence] mutation failed',
-					mutationError instanceof Error ? mutationError.message : mutationError
-				)
-			}
+		onError: (_mutationError, action) => {
+			toast({
+				title: t(
+					action === 'checkIn' ? 'office.checkInError' : 'office.checkOutError'
+				),
+				preset: 'error',
+				haptic: 'error',
+				duration: 2.5,
+				from: 'top'
+			})
 		}
 	})
 
