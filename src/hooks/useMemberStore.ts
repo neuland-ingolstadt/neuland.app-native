@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import MemberAPI from '@/api/member-api'
 import {
 	deleteSecure,
 	loadSecureAsync,
@@ -85,25 +86,9 @@ export const useMemberStore = create<MemberStore>()(
 				}
 
 				try {
-					const response = await fetch(
-						'https://auth.neuland.ing/application/o/token/',
-						{
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded'
-							},
-							body: new URLSearchParams({
-								grant_type: 'refresh_token',
-								client_id:
-									process.env.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID ?? '',
-								refresh_token: refreshToken
-							}).toString()
-						}
-					)
+					const result = await MemberAPI.refreshAccessToken(refreshToken)
 
-					const result = await response.json()
-
-					if (response.ok && result.id_token) {
+					if (result.id_token) {
 						await setTokens(
 							result.id_token,
 							result.refresh_token ?? refreshToken

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Animated, Modal, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WalletManager from 'react-native-wallet-manager'
+import MemberAPI from '@/api/member-api'
 // @ts-expect-error no types
 import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
 // @ts-expect-error no types
@@ -13,7 +14,6 @@ import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
 import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
 // @ts-expect-error no types
 import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
-
 import PlatformIcon from '@/components/Universal/Icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 
@@ -74,17 +74,11 @@ export function SecurityWarningModal({
 				throw new Error('No token available for pkpass URL')
 			}
 			if (Platform.OS === 'android') {
-				const jwt = await fetch(
-					`https://id.neuland-ingolstadt.de/api/gpass?token=${encodeURIComponent(currentToken)}`
-				)
-				if (!jwt.ok) {
-					throw new Error('Failed to fetch jwt')
-				}
-				const jwtData = await jwt.text()
+				const jwtData = await MemberAPI.getGoogleWalletPassJwt(currentToken)
 				await WalletManager.addPassToGoogleWallet(jwtData)
 			} else {
 				await WalletManager.addPassFromUrl(
-					`https://id.neuland-ingolstadt.de/api/pkpass?token=${encodeURIComponent(currentToken)}`
+					MemberAPI.getAppleWalletPassUrl(currentToken)
 				)
 			}
 		} catch (error) {
