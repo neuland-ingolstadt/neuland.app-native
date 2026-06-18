@@ -3,6 +3,7 @@ import type React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import MemberAPI, { AUTH_DISCOVERY } from '@/api/member-api'
 import ErrorView from '@/components/Error/error-view'
 import { LoggedInView } from '@/components/Member/logged-in-view'
 import { LoggedOutView } from '@/components/Member/logged-out-view'
@@ -12,12 +13,6 @@ const redirectUri = AuthSession.makeRedirectUri({
 	scheme: 'neuland',
 	path: 'member'
 })
-
-const discovery = {
-	authorizationEndpoint: 'https://auth.neuland.ing/application/o/authorize/',
-	tokenEndpoint: 'https://auth.neuland.ing/application/o/token/',
-	userInfoEndpoint: 'https://auth.neuland.ing/application/o/userinfo/'
-}
 
 export default function Member(): React.JSX.Element {
 	const idToken = useMemberStore((s) => s.idToken)
@@ -32,35 +27,21 @@ export default function Member(): React.JSX.Element {
 			responseType: AuthSession.ResponseType.Code,
 			usePKCE: true
 		},
-		discovery
+		AUTH_DISCOVERY
 	)
 
 	useEffect(() => {
 		async function handleResponse() {
 			if (request && response?.type === 'success' && response.params.code) {
 				try {
-					const tokenResponse = await fetch(discovery.tokenEndpoint, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						},
-						body: new URLSearchParams({
-							grant_type: 'authorization_code',
-							client_id:
-								process.env.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID ?? '',
-							code: response.params.code,
-							redirect_uri: redirectUri,
-							code_verifier: request.codeVerifier ?? ''
-						}).toString()
+					const result = await MemberAPI.exchangeAuthorizationCode({
+						code: response.params.code,
+						codeVerifier: request.codeVerifier ?? '',
+						redirectUri
 					})
 
-					const result = await tokenResponse.json()
-
 					if (result.id_token) {
-						setTokens(
-							result.id_token as string,
-							result.refresh_token as string | undefined
-						)
+						await setTokens(result.id_token, result.refresh_token)
 					}
 				} catch (e) {
 					console.error('Token exchange error:', e)
@@ -69,7 +50,7 @@ export default function Member(): React.JSX.Element {
 		}
 
 		void handleResponse()
-	}, [request, response])
+	}, [request, response, setTokens])
 
 	if (Platform.OS === 'web') {
 		return (
