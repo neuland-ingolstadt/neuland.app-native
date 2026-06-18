@@ -17,7 +17,8 @@
 		"honoraryLine2": "MITGLIED"
 	},
 	"settings": {
-		"title": "Neuland Mitglied"
+		"title": "Mitglied",
+		"honoraryTitle": "Neuland Ehrenmitglied"
 	},
 	"loggedOut": {
 		"welcomeTitle": "Willkommen bei Neuland",
