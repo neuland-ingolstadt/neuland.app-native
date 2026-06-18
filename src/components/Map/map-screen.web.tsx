@@ -368,7 +368,7 @@ const MapScreen = (): React.JSX.Element => {
 
 		if (regionChange) {
 			startFadeOut()
-		} else if (!regionChange && isVisible) {
+		} else if (isVisible) {
 			timer = setTimeout(() => {
 				startFadeOut()
 			}, 5000)

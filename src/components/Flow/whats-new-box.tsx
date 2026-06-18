@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -20,7 +20,11 @@ interface WhatsNewBoxProps {
  * @example
  * <WhatsNewBox title="Title" description="Description" icon="chevron-forward-circle" />
  */
-const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
+const WhatsNewBox = ({
+	title,
+	description,
+	icon
+}: WhatsNewBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<View style={styles.container}>

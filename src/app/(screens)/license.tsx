@@ -1,9 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { useGlobalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ExternalAPI from '@/api/external-api'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/sections-view'
@@ -11,7 +12,7 @@ import type { FormListSections } from '@/types/components'
 
 export default function License(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation(['settings'])
+	const { t } = useTranslation(['settings', 'navigation'])
 
 	const { license, version, licenseUrl, repository, name } =
 		useGlobalSearchParams<{
@@ -22,44 +23,28 @@ export default function License(): React.JSX.Element {
 			name: string
 		}>()
 
-	const [licenseText, setLicenseText] = useState('')
+	const canFetchLicense =
+		licenseUrl !== undefined && licenseUrl !== '' && Platform.OS !== 'web'
 
-	useEffect(() => {
-		if (
-			licenseUrl === undefined ||
-			licenseUrl === '' ||
-			Platform.OS === 'web'
-		) {
-			// Fetching from GitHub fails because of CORS issues, so we don't fetch the license text on web
-			// and just show the link to the license
-			return
-		}
-		fetch(licenseUrl)
-			.then(async (res) => await res.text())
-			.then((text) => {
-				// sometimes the license is not a text file, but the whole repo page
-				if (text.includes('<!DOCTYPE html>')) {
-					setLicenseText('')
-				} else {
-					setLicenseText(text)
-				}
-			})
-			.catch((error) => {
-				console.warn('Failed to fetch license text:', error)
-			})
-	}, [licenseUrl])
+	const { data: licenseText = '' } = useQuery({
+		queryKey: ['licenseText', licenseUrl],
+		enabled: canFetchLicense,
+		queryFn: async () => await ExternalAPI.fetchLicenseText(licenseUrl),
+		staleTime: Number.POSITIVE_INFINITY,
+		gcTime: 1000 * 60 * 60 * 24
+	})
 
 	const sections: FormListSections[] = [
 		{
 			header: t('menu.formlist.legal.about'),
 			items: [
 				{
-					title: 'Name',
+					title: t('licenses.fields.name'),
 					value: name,
 					layout: (name?.length ?? 0) > 25 ? 'column' : 'row'
 				},
 				{
-					title: 'Version',
+					title: t('licenses.fields.version'),
 					value: version
 				},
 				{
@@ -73,7 +58,7 @@ export default function License(): React.JSX.Element {
 					disabled: licenseUrl === ''
 				},
 				{
-					title: 'Repository',
+					title: t('licenses.fields.repository'),
 					icon: linkIcon,
 					onPress: async () => {
 						if (repository !== undefined) {

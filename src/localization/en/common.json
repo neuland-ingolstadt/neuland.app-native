@@ -86,8 +86,46 @@
 		"disable": "Disable",
 		"more": "more",
 		"unknown": "Unknown",
+		"unknownError": "Unknown error",
+		"ok": "OK",
+		"notAvailable": "N/A",
 		"true": "Yes",
 		"false": "No"
+	},
+	"labels": {
+		"name": "Name",
+		"version": "Version",
+		"email": "Email",
+		"thiEmail": "THI Email",
+		"repository": "Repository",
+		"campus": "Campus",
+		"app": "App",
+		"restaurant": "Restaurant",
+		"details": "Details",
+		"wallet": "Wallet",
+		"error": "Error"
+	},
+	"meta": {
+		"appDescription": "Your app for TH Ingolstadt - THI",
+		"dashboardTitle": "Dashboard",
+		"dashboardDescription": "Customizable Dashboard",
+		"timetableDescription": "View your timetable",
+		"mapDescription": "Interactive Campus Map",
+		"foodDescription": "Meal plan for the canteens",
+		"settingsDescription": "Profile and Settings"
+	},
+	"semesterSuffix": ". Semester",
+	"reportProblem": "Report a problem",
+	"thiEvent": "THI Event",
+	"buildingLabel": "Building",
+	"feedbackMail": {
+		"subjectCrash": "App-Crash",
+		"subjectError": "App-Error",
+		"body": "Steps to reproduce:\nOther:\n\nApp Version: {{version}}\nPlatform: {{platform}}\nPage: {{path}}\nError: {{error}}"
+	},
+	"uiManager": {
+		"fabric": "Fabric",
+		"paper": "Paper"
 	},
 	"quicklinks": {
 		"primuss": "Primuss",
@@ -204,7 +242,7 @@
 			"registerNow": "Register now",
 			"eventLink": "Event website",
 			"organizerDetails": {
-				"clubWebsite": "Club website",
+				"clubWebsite": "Organizer website",
 				"instagram": "Instagram",
 				"linkedin": "LinkedIn",
 				"location": "Location",
@@ -335,6 +373,27 @@
 				"description": "Use the virtual library card to borrow books and other media."
 			}
 		},
+		"thiEvents": {
+			"departments": {
+				"title": "Discover departments",
+				"viewAll": "All departments",
+				"filterAll": "All",
+				"departments": "departments",
+				"missingDescription": "No description available.",
+				"footerInfo": "Departments are ordered by activity and profile completeness.",
+				"noOrganizers": {
+					"title": "No departments found"
+				}
+			},
+			"events": {
+				"subtitle": "Events of THI departments",
+				"noEvents": {
+					"title": "No events found",
+					"subtitle": "Check back later.",
+					"filteredSubtitle": "No events found for {{organizerName}}. Check back later."
+				}
+			}
+		},
 		"clEvents": {
 			"sports": {
 				"title": "Sports",
@@ -349,7 +408,10 @@
 				"filterAll": "All",
 				"clubs": "clubs",
 				"missingDescription": "No description available.",
-				"footerInfo": "The clubs are ordered by activity and profile completeness."
+				"footerInfo": "The clubs are ordered by activity and profile completeness.",
+				"noOrganizers": {
+					"title": "No clubs found"
+				}
 			},
 			"events": {
 				"title": "Events",

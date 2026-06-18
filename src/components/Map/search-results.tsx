@@ -8,6 +8,7 @@ import { Alert, Platform, SectionList, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import type { SearchResult } from '@/types/map'
 
 import Divider from '../Universal/Divider'
@@ -18,10 +19,10 @@ interface SearchResultsProps {
 	allRooms: FeatureCollection
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({
+const SearchResults = ({
 	handlePresentModalPress,
 	allRooms
-}) => {
+}: SearchResultsProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
@@ -30,6 +31,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 	)
 	const addUnlockedAppIcon = usePreferencesStore(
 		(state) => state.addUnlockedAppIcon
+	)
+	const analyticsInitialized = useSessionStore(
+		(state) => state.analyticsInitialized
 	)
 	useEffect(() => {
 		if (
@@ -51,7 +55,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 				],
 				{ cancelable: false }
 			)
-			trackEvent('EasterEgg', { easterEgg: 'mapSearchNeuland' })
+			if (analyticsInitialized) {
+				trackEvent('EasterEgg', { easterEgg: 'mapSearchNeuland' })
+			}
 
 			addUnlockedAppIcon('retro')
 		}

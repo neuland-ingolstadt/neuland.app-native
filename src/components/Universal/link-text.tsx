@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -23,14 +24,14 @@ export interface LinkTextProps {
 
 const DEFAULT_COLLAPSED_LINES = 6
 
-const LinkText: React.FC<LinkTextProps> = ({
+const LinkText = ({
 	text,
 	linkColor,
 	collapsedLines = DEFAULT_COLLAPSED_LINES,
 	textStyle,
 	toggleStyle,
 	containerStyle
-}) => {
+}: LinkTextProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const [lineCount, setLineCount] = useState<number | null>(null)
 	const [expanded, setExpanded] = useState(false)
