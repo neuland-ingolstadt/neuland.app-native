@@ -55,19 +55,6 @@ jobs:
       - name: Run unit tests with coverage
         run: bun run test:coverage -- --reporter=junit --reporter-outfile=./junit.xml
 
-      - name: Convert coverage to Cobertura
-        run: |
-          python3 -m pip install lcov_cobertura
-          lcov_cobertura coverage/lcov.info -o coverage/cobertura.xml
-
-      - name: Upload coverage to GitHub Code Quality
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-code-coverage@abb5995db9e0199b0e2bb9dbd136fce4cb1ec4d3 # v1
-        with:
-          file: coverage/cobertura.xml
-          language: JavaScript
-          label: code-coverage/bun
-
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
