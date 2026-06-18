@@ -45,7 +45,17 @@ class MemberAPIClient {
 			body: body.toString()
 		})
 
-		return (await response.json()) as MemberTokenResponse
+		const result = (await response.json()) as MemberTokenResponse
+
+		if (!response.ok) {
+			const message =
+				result.error_description ??
+				result.error ??
+				`Token request failed (${response.status})`
+			throw new Error(message)
+		}
+
+		return result
 	}
 
 	async getProfileQr(idToken: string): Promise<ProfileQrResponse> {
@@ -64,8 +74,13 @@ class MemberAPIClient {
 		}
 
 		const json = (await response.json()) as Partial<ProfileQrResponse>
-		if (json.qr && json.iat && json.exp) {
-			return json as ProfileQrResponse
+		if (
+			typeof json.qr === 'string' &&
+			json.qr !== '' &&
+			typeof json.iat === 'number' &&
+			typeof json.exp === 'number'
+		) {
+			return { qr: json.qr, iat: json.iat, exp: json.exp }
 		}
 
 		throw new Error('Invalid QR code response')

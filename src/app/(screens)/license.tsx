@@ -31,7 +31,7 @@ export default function License(): React.JSX.Element {
 		enabled: canFetchLicense,
 		queryFn: async () => await ExternalAPI.fetchLicenseText(licenseUrl),
 		staleTime: Number.POSITIVE_INFINITY,
-		gcTime: Number.POSITIVE_INFINITY
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	const sections: FormListSections[] = [
