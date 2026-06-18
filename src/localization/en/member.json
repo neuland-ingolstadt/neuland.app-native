@@ -47,7 +47,8 @@
 		"tapToClose": "Tap anywhere to close"
 	},
 	"settings": {
-		"title": "Neuland Member"
+		"title": "Member",
+		"honoraryTitle": "Neuland Honorary Member"
 	},
 	"securityWarning": {
 		"title": "Security Notice",
