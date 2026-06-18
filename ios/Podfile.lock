@@ -394,7 +394,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroModules (0.32.2):
+  - NitroModules (0.35.9):
     - boost
     - DoubleConversion
     - fast_float
@@ -3554,7 +3554,7 @@ SPEC CHECKSUMS:
   maplibre-react-native: 37d86b5b7b04dedaceebc577644e67acd7b5f437
   MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
   NitroMmkv: 883c284ac35330744af8fee132210e59e6012c33
-  NitroModules: 08ee7da173d4e87b403430966ce1d062a6b36007
+  NitroModules: 9e53b2bf7999377cab1627fc05546e209e599589
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
   RCTRequired: cebcf9442fc296c9b89ac791dfd463021d9f6f23
