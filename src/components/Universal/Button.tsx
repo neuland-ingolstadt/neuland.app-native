@@ -66,7 +66,7 @@ const stylesheet = createStyleSheet((theme) => ({
 				height: 48,
 				justifyContent: 'center',
 				alignItems: 'center',
-				borderRadius: theme.radius.sm,
+				borderRadius: theme.radius.base,
 				backgroundColor: theme.colors.card,
 				borderWidth: StyleSheet.hairlineWidth,
 				borderColor: theme.colors.border,
@@ -78,7 +78,7 @@ const stylesheet = createStyleSheet((theme) => ({
 			height: 48,
 			justifyContent: 'center',
 			alignItems: 'center',
-			borderRadius: theme.radius.sm,
+			borderRadius: theme.radius.base,
 			backgroundColor: disabled
 				? UnistylesRuntime.themeName === 'dark'
 					? Color(theme.colors.primary).darken(0.3).hex()

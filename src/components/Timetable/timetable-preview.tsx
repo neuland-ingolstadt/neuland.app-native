@@ -375,7 +375,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 	listItemContent: {
 		flex: 1,
 		opacity: 0.75,
-		borderRadius: theme.radius.sm,
+		borderRadius: theme.radius.xs,
 		paddingVertical: 16,
 		paddingHorizontal: 12,
 		justifyContent: 'center',
@@ -419,7 +419,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 		opacity: 0.75,
 		left: 12,
 		right: 12,
-		borderRadius: theme.radius.sm,
+		borderRadius: theme.radius.xs,
 		padding: 8,
 		justifyContent: 'center'
 	},
@@ -461,7 +461,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 		left: 3,
 		right: 3,
 		height: 25,
-		borderRadius: theme.radius.sm
+		borderRadius: theme.radius.xs
 	}
 }))
 

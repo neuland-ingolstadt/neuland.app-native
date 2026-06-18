@@ -48,7 +48,9 @@ export const lightTheme = {
 		rowPadding: 5
 	},
 	radius: {
-		sm: 4,
+		xs: 4,
+		base: 6,
+		sm: 8,
 		md: 17,
 		mg: 17,
 		lg: 22,
@@ -105,7 +107,9 @@ export const darkTheme = {
 		rowPadding: 5
 	},
 	radius: {
-		sm: 4,
+		xs: 4,
+		base: 6,
+		sm: 8,
 		md: 17,
 		mg: 17,
 		lg: 22,
