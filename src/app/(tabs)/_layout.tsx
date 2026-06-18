@@ -4,7 +4,7 @@ import Constants from 'expo-constants'
 import * as QuickActions from 'expo-quick-actions'
 import { Redirect, useRouter } from 'expo-router'
 import type React from 'react'
-import { use, useEffect } from 'react'
+import { use, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { createMMKV, useMMKVBoolean } from 'react-native-mmkv'
@@ -20,6 +20,8 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
 import { storage } from '@/utils/storage'
 import { appIcons } from '../(screens)/app-icon.ios'
+
+const legacyStorage = createMMKV()
 
 export default function HomeLayout(): React.JSX.Element {
 	const router = useRouter()
@@ -50,30 +52,52 @@ export default function HomeLayout(): React.JSX.Element {
 	const updatedVersion = useFlowStore((state) => state.updatedVersion)
 	const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
 	const [analyticsV1] = useMMKVBoolean('analytics')
-	const legacyStorage = createMMKV()
-	const oldAllergens = storage.getString('selectedUserAllergens')
-	// migration of old settings
-	if (isOnboardedV1 === true) {
-		setOnboarded()
-		legacyStorage.remove('isOnboardedv1')
-	}
-	if (analyticsV1 === true) {
-		setAnalyticsAllowed(true)
-		legacyStorage.remove('analytics')
-	}
+	const legacyMigrationDone = useRef(false)
 
-	if (oldAllergens != null) {
-		const allergens = JSON.parse(oldAllergens) as string[]
-		if (allergens.length === 1 && allergens[0] === 'not-configured') {
-			/* empty */
-		} else {
-			for (const allergen of allergens) {
-				console.debug('Migrating allergen:', allergen)
-				toggleSelectedAllergens(allergen)
-			}
+	useEffect(() => {
+		if (legacyMigrationDone.current) {
+			return
 		}
-		storage.remove('selectedUserAllergens')
-	}
+		legacyMigrationDone.current = true
+
+		if (isOnboardedV1 === true) {
+			setOnboarded()
+			legacyStorage.remove('isOnboardedv1')
+		}
+		if (analyticsV1 === true) {
+			setAnalyticsAllowed(true)
+			legacyStorage.remove('analytics')
+		}
+
+		const oldAllergens = storage.getString('selectedUserAllergens')
+		if (oldAllergens == null) {
+			return
+		}
+
+		try {
+			const allergens = JSON.parse(oldAllergens) as string[]
+			if (
+				!(
+					allergens.length === 1 && allergens[0] === 'not-configured'
+				)
+			) {
+				for (const allergen of allergens) {
+					console.debug('Migrating allergen:', allergen)
+					toggleSelectedAllergens(allergen)
+				}
+			}
+		} catch (error) {
+			console.error('Failed to migrate legacy allergen selection:', error)
+		} finally {
+			storage.remove('selectedUserAllergens')
+		}
+	}, [
+		analyticsV1,
+		isOnboardedV1,
+		setAnalyticsAllowed,
+		setOnboarded,
+		toggleSelectedAllergens
+	])
 
 	const version = Application.nativeApplicationVersion
 	const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')

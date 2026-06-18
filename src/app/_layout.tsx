@@ -74,7 +74,7 @@ function RootLayout(): React.JSX.Element {
 	useEffect(() => {
 		const loadLanguage = async (): Promise<void> => {
 			if (
-				savedLanguage !== null &&
+				savedLanguage != null &&
 				((Platform.OS === 'android' && Platform.Version < 33) ||
 					Platform.OS === 'web')
 			) {
@@ -88,9 +88,14 @@ function RootLayout(): React.JSX.Element {
 	useEffect(() => {
 		const changeLanguage = async (): Promise<void> => {
 			const locale = getLocales()[0]
+			if (locale == null) {
+				return
+			}
+
 			const language = locale.languageCode
-			if (language === 'de' || language === 'en')
+			if (language === 'de' || language === 'en') {
 				await i18n.changeLanguage(language)
+			}
 		}
 
 		const handleAppStateChange = (nextAppState: string): void => {
