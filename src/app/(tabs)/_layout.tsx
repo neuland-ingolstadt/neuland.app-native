@@ -2,6 +2,7 @@ import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
 import Constants from 'expo-constants'
 import * as QuickActions from 'expo-quick-actions'
+import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { Redirect, useRouter } from 'expo-router'
 import type React from 'react'
 import { use, useEffect, useRef } from 'react'
@@ -25,6 +26,8 @@ const legacyStorage = createMMKV()
 
 export default function HomeLayout(): React.JSX.Element {
 	const router = useRouter()
+
+	useQuickActionRouting()
 
 	const { t } = useTranslation('navigation')
 	const selectedRestaurants = useFoodFilterStore(

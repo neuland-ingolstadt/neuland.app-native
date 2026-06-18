@@ -8,14 +8,13 @@ import i18n from '@/localization/i18n'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
-import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { type Href, router, Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Linking, LogBox, Platform } from 'react-native'
+import { AppState, type AppStateStatus, Linking, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -39,8 +38,6 @@ function RootLayout(): React.JSX.Element {
 	const presentationMode = usePresentationMode()
 	const smallSheetPresentationMode = usePresentationMode(true)
 	const transparentHeaderStyle = useTransparentHeaderStyle()
-
-	useQuickActionRouting()
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {
@@ -93,15 +90,24 @@ function RootLayout(): React.JSX.Element {
 			}
 
 			const language = locale.languageCode
-			if (language === 'de' || language === 'en') {
+			if (
+				(language === 'de' || language === 'en') &&
+				i18n.language !== language
+			) {
 				await i18n.changeLanguage(language)
 			}
 		}
 
-		const handleAppStateChange = (nextAppState: string): void => {
-			if (nextAppState === 'active') {
+		let appState: AppStateStatus = AppState.currentState
+
+		const handleAppStateChange = (nextAppState: AppStateStatus): void => {
+			if (
+				appState.match(/inactive|background/) &&
+				nextAppState === 'active'
+			) {
 				void changeLanguage()
 			}
+			appState = nextAppState
 		}
 
 		const subscription = AppState.addEventListener(

@@ -35,6 +35,7 @@ interface ProviderProps {
 }
 
 const QUERY_PERSIST_MAX_AGE_MS = 1000 * 60 * 60 * 24
+const QUERY_PERSIST_BUSTER = 'v2'
 
 function onAppStateChange(status: AppStateStatus): void {
 	// React Query already supports in web browser refetch on window focus by default
@@ -168,7 +169,8 @@ export default function Provider({
 					client={queryClient}
 					persistOptions={{
 						persister: syncStoragePersister,
-						maxAge: QUERY_PERSIST_MAX_AGE_MS
+						maxAge: QUERY_PERSIST_MAX_AGE_MS,
+						buster: QUERY_PERSIST_BUSTER
 					}}
 				>
 					<ProviderContent>{children}</ProviderContent>
