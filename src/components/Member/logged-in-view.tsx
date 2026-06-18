@@ -16,8 +16,9 @@ import {
 import { useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
-import { useRefreshByUser } from '@/hooks'
+import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { IDCard } from './id-card'
@@ -34,11 +35,14 @@ export function LoggedInView(): React.JSX.Element {
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
 	const queryClient = useQueryClient()
+	const officePresenceEnabled = useIsFeatureEnabled(
+		FeatureFlagKeys.memberOfficePresenceEnabled
+	)
 
 	const memberSub = info?.sub as string | undefined
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
-		if (!memberSub) {
+		if (!officePresenceEnabled || !memberSub) {
 			return
 		}
 		await queryClient.invalidateQueries({
@@ -180,12 +184,14 @@ export function LoggedInView(): React.JSX.Element {
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
-				<RefreshControl
-					refreshing={isRefetchingByUser}
-					onRefresh={() => {
-						void refetchByUser()
-					}}
-				/>
+				officePresenceEnabled ? (
+					<RefreshControl
+						refreshing={isRefetchingByUser}
+						onRefresh={() => {
+							void refetchByUser()
+						}}
+					/>
+				) : undefined
 			}
 		>
 			{info && (
@@ -194,7 +200,7 @@ export function LoggedInView(): React.JSX.Element {
 				</View>
 			)}
 
-			<OfficePresenceSection />
+			{officePresenceEnabled ? <OfficePresenceSection /> : null}
 
 			<FormList sections={[perksSection, ...quickLinksSections]} />
 
