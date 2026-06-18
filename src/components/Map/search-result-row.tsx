@@ -13,17 +13,19 @@ import { getContrastColor } from '@/utils/ui-utils'
 
 import PlatformIcon from '../Universal/Icon'
 
-const ResultRow: React.FC<{
+interface ResultRowProps {
 	result: SearchResult
 	index: number
 	handlePresentModalPress: () => void
 	updateSearchHistory: (result: SearchResult) => void
-}> = ({
+}
+
+const ResultRow = ({
 	result,
 	index,
 	handlePresentModalPress,
 	updateSearchHistory
-}): React.JSX.Element => {
+}: ResultRowProps): React.JSX.Element => {
 	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
 	const { styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation()
