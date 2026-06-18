@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, LayoutAnimation, Platform, View } from 'react-native'
+import { Dimensions, Platform, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
@@ -75,10 +75,6 @@ const HomeScreen = memo(function HomeScreen() {
 		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7 // 7 days
 	})
-
-	useEffect(() => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-	}, [shownDashboardEntries])
 
 	useEffect(() => {
 		const handleOrientationChange = (): void => {

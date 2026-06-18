@@ -1,4 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
+import { useIsRestoring } from '@tanstack/react-query'
 import { useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { Platform } from 'react-native'
@@ -29,6 +30,7 @@ export function usePreferenceTracking(): void {
 	const isNeulandMember = useMemberStore((state) => !!state.idToken)
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
+	const isRestoring = useIsRestoring()
 
 	useEffect(() => {
 		if (!analyticsInitialized || !Array.isArray(segments)) return
@@ -82,7 +84,7 @@ export function usePreferenceTracking(): void {
 	}, [selectedRestaurants, analyticsInitialized])
 
 	useEffect(() => {
-		if (!analyticsInitialized) return
+		if (!analyticsInitialized || isRestoring) return
 		const entries: Record<string, string> = {}
 		dashboard.shownDashboardEntries.forEach((entry, index) => {
 			if (entry !== undefined) {
@@ -92,7 +94,7 @@ export function usePreferenceTracking(): void {
 		if (Object.keys(entries).length > 0) {
 			trackEvent('Dashboard', entries)
 		}
-	}, [dashboard.shownDashboardEntries, analyticsInitialized])
+	}, [dashboard.shownDashboardEntries, analyticsInitialized, isRestoring])
 
 	useEffect(() => {
 		if (!analyticsInitialized) return
