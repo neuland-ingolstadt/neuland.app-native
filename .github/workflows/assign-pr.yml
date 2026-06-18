@@ -13,6 +13,6 @@ jobs:
     steps:
       - name: Assign PR opener
         if: github.event.pull_request.user.type != 'Bot'
-        run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.event.pull_request.user.login }}"
+        run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.event.pull_request.user.login }}" --repo ${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
