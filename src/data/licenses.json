@@ -31,11 +31,9 @@
 	},
 	"@flipt-io/flipt@1.5.0": {
 		"licenses": "MIT",
-		"repository": "https://github.com/flipt-io/flipt",
-		"licenseUrl": "https://github.com/flipt-io/flipt/blob/main/LICENSE",
 		"parents": "neuland"
 	},
-	"@gorhom/bottom-sheet@5.2.14": {
+	"@gorhom/bottom-sheet@5.2.13": {
 		"licenses": "MIT",
 		"repository": "https://github.com/gorhom/react-native-bottom-sheet",
 		"licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
