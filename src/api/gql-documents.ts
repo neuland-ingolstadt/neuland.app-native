@@ -102,36 +102,6 @@ const FOOD_FRAGMENT = graphql(/* GraphQL */ `
     }
 `)
 
-export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
-    query CampusLifeEvents {
-        clEvents {
-            ...CampusLifeEventFields
-        }
-    }
-`)
-
-const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
-    fragment CampusLifeEventFields on ClEvent {
-        id
-        host {
-            name
-            website
-            instagram
-        }
-        titles {
-            de
-            en
-        }
-        startDateTime
-        endDateTime
-        location
-        descriptions {
-            de
-            en
-        }
-    }
-`)
-
 export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
     query UniversitySports {
         universitySports {
