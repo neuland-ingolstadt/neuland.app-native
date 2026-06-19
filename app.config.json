@@ -107,27 +107,51 @@
 				[
 					{
 						"name": "Cat",
-						"ios": "./src/assets/appIcons/cat.png"
+						"ios": "./src/assets/appIcons/cat.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/cat.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "RainbowNeon",
-						"ios": "./src/assets/appIcons/rainbowNeon.png"
+						"ios": "./src/assets/appIcons/rainbowNeon.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowNeon.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Luxury",
-						"ios": "./src/assets/appIcons/luxury.png"
+						"ios": "./src/assets/appIcons/luxury.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/luxury.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "RainbowGlow",
-						"ios": "./src/assets/appIcons/rainbowGlow.png"
+						"ios": "./src/assets/appIcons/rainbowGlow.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowGlow.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Hacker",
-						"ios": "./src/assets/appIcons/hacker.png"
+						"ios": "./src/assets/appIcons/hacker.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/hacker.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Retro",
-						"ios": "./src/assets/appIcons/retro.png"
+						"ios": "./src/assets/appIcons/retro.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/retro.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "ModernGreen",
@@ -135,6 +159,10 @@
 							"light": "./src/assets/appIcons/modernGreen.png",
 							"dark": "./src/assets/appIcons/dark/modernGreenDark.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/modernGreen.png",
+							"backgroundColor": "#ffffff"
 						}
 					},
 					{
@@ -143,6 +171,10 @@
 							"light": "./src/assets/appIcons/modernPurple.png",
 							"dark": "./src/assets/appIcons/dark/purpleDark.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/modernPurple.png",
+							"backgroundColor": "#ffffff"
 						}
 					},
 					{
@@ -151,6 +183,10 @@
 							"light": "./src/assets/appIcons/rainbowMoonLight.png",
 							"dark": "./src/assets/appIcons/dark/darkRainbow.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowMoonLight.png",
+							"backgroundColor": "#ffffff"
 						}
 					}
 				]
