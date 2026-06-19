@@ -13,20 +13,18 @@ export default function Theme(): React.JSX.Element {
 	const changelog = changelogData as Changelog
 	const { t, i18n } = useTranslation(['settings'])
 	const sorted: Changelog = {
-		version: Object.keys(changelog.version)
-			.sort((a, b) => {
-				const [aParts, bParts] = [a, b].map((v) => v.split('.').map(Number))
-				for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-					const [aPart, bPart] = [aParts[i] ?? 0, bParts[i] ?? 0]
-					if (aPart !== bPart) return bPart - aPart
-				}
-				return 0
-			})
-			.reduce(
-				// biome-ignore lint/performance/noAccumulatingSpread: TODO
-				(obj, key) => ({ ...obj, [key]: changelog.version[key] }),
-				{}
-			)
+		version: Object.fromEntries(
+			Object.keys(changelog.version)
+				.sort((a, b) => {
+					const [aParts, bParts] = [a, b].map((v) => v.split('.').map(Number))
+					for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+						const [aPart, bPart] = [aParts[i] ?? 0, bParts[i] ?? 0]
+						if (aPart !== bPart) return bPart - aPart
+					}
+					return 0
+				})
+				.map((key) => [key, changelog.version[key]])
+		)
 	}
 
 	const sections: FormListSections[] = [

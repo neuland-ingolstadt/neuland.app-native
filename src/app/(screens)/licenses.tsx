@@ -47,14 +47,13 @@ export default function Licenses(): React.JSX.Element {
 		})
 	}, [navigation])
 
-	const licensesStaticFiltered = Object.entries(licensesStatic)
-		.filter(
+	const licensesStaticFiltered = Object.fromEntries(
+		Object.entries(licensesStatic).filter(
 			([, license]) =>
 				license.platform.includes(Platform.OS) ||
 				license.platform.includes('all')
 		)
-		// biome-ignore lint/performance/noAccumulatingSpread: TODO
-		.reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
+	)
 
 	const licensesCombined = { ...licenses, ...licensesStaticFiltered }
 
