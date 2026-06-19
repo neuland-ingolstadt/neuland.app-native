@@ -32,6 +32,9 @@
 .env.test.local
 .env.production.local
 
+# local dev files
+*.devlocal
+
 # expo
 credentials.json
 credentials/
