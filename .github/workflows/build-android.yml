@@ -34,7 +34,7 @@ jobs:
           bun-version: latest
 
       - name: Install project dependencies
-        run: bun install --frozen-lockfile --ignore-scripts -p
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Update license list
         run: bun run licences
