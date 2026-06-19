@@ -143,6 +143,10 @@ needs `ios/ci_scripts/ci_post_clone.sh`; that path is a **symlink** to
 iOS-only files that must survive prebuild (export options, TestFlight notes, …) also live under
 `config/ios-artifacts/` and are copied by `withIosCiArtifacts`.
 
+The `android/` directory is **gitignored** and generated locally via `bun prebuild:android`.
+Android-specific assets (quick-action icons, drawables) live under `src/assets/android/` and are
+wired in through `app.config.json` plugins.
+
 Path aliases (defined in `tsconfig.json`):
 
 - `@/*` → `./src/*` — always use this for source imports, never deep relative paths

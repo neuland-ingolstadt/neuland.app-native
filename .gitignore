@@ -15,6 +15,7 @@
 .expo/
 /ios/*
 !/ios/ci_scripts
+/android
 
 # builds
 /dist
