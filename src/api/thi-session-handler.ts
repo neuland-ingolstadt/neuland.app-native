@@ -46,7 +46,7 @@ export class UnavailableSessionError extends Error {
 }
 
 /**
- * Logs in the user and persists the session to AsyncStorage
+ * Logs in the user and persists the session (credentials in secure storage, expiry in MMKV)
  */
 export async function createSession(
 	username: string,
