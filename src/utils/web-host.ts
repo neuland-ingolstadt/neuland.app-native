@@ -1,7 +1,5 @@
 import { Platform } from 'react-native'
-import {
-	type Platform as AnnouncementPlatform
-} from '@/__generated__/gql/graphql'
+import type { Platform as AnnouncementPlatform } from '@/__generated__/gql/graphql'
 
 export type WebPlatform = 'web-dev' | 'web' | 'web-local'
 
