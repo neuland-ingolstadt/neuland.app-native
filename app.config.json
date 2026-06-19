@@ -49,6 +49,10 @@
 		"android": {
 			"package": "app.neuland",
 			"userInterfaceStyle": "automatic",
+			"permissions": [
+				"android.permission.ACCESS_COARSE_LOCATION",
+				"android.permission.ACCESS_FINE_LOCATION"
+			],
 			"intentFilters": [
 				{
 					"action": "VIEW",
@@ -152,7 +156,12 @@
 				]
 			],
 			["expo-secure-store"],
-			["expo-localization"],
+			[
+				"expo-localization",
+				{
+					"supportedLocales": ["en", "de"]
+				}
+			],
 			["@maplibre/maplibre-react-native"],
 			[
 				"expo-splash-screen",
@@ -196,7 +205,15 @@
 			"./config/plugins/withIosCiArtifacts.js",
 			"./config/plugins/withCiScriptsSymlink.js",
 			"./config/plugins/withXcode26FmtWorkaround.js",
-			"expo-font"
+			[
+				"expo-font",
+				{
+					"fonts": [
+						"./config/fonts/MaterialSymbolsRoundedFill.ttf",
+						"./config/fonts/MaterialSymbolsRoundedOutline.ttf"
+					]
+				}
+			]
 		],
 		"extra": {
 			"eas": {

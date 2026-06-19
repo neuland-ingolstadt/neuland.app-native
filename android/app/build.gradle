@@ -96,6 +96,7 @@ android {
         versionName "0.16.0"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
+        resourceConfigurations += ["en", "de"]
     }
     signingConfigs {
         debug {
