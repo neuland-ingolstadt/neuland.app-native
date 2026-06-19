@@ -56,3 +56,4 @@ my-release-key.jks
 
 *.geojson
 coverage/
+src/data/licenses.json

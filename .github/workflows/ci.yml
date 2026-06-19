@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Generate license list
+        run: bun run licences
+
       - name: Run TypeScript checks
         run: bun tsc --noEmit
 

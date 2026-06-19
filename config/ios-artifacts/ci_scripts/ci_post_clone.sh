@@ -34,8 +34,7 @@ echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
 
 echo "===== Updating license list ====="
-npm install npm-license-crawler -g
-npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json
+bun run licences
 
 echo "===== Pulling Git LFS assets ====="
 git lfs install --local 2>/dev/null || git lfs install
