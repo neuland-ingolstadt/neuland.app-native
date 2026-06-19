@@ -509,12 +509,6 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/events/club/[id]"
-					options={{
-						headerShown: false
-					}}
-				/>
-				<Stack.Screen
 					name="(screens)/events/organiser/[id]"
 					options={{
 						title: t('navigation.organiser'),
