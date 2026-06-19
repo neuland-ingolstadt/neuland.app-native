@@ -23,7 +23,13 @@ export default function RoomReport(): React.JSX.Element {
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
 	>()
-	const reportCategories = Object.values(RoomReportCategory)
+	const reportCategories: RoomReportCategory[] = [
+		'WRONG_DESCRIPTION',
+		'WRONG_LOCATION',
+		'NOT_EXISTING',
+		'MISSING',
+		'OTHER'
+	]
 	const { room } = useLocalSearchParams<{ room: string }>()
 
 	const [description, setDescription] = useState<string>('')
@@ -95,7 +101,7 @@ export default function RoomReport(): React.JSX.Element {
 					value={reportCategory}
 					onChange={setReportCategory}
 					options={reportCategories.map((category) => ({
-						label: t(`pages.rooms.report.category.type.${category}`),
+						label: t(`pages.rooms.report.category.type.${category}` as const),
 						value: category
 					}))}
 					placeholder={t('pages.rooms.report.category.placeholder')}
