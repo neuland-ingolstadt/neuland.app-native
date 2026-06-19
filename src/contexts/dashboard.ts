@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useMMKVBoolean, useMMKVObject } from 'react-native-mmkv'
+import { useMMKVObject } from 'react-native-mmkv'
 import { AllCards, type Card } from '@/components/all-cards'
 import { USER_GUEST } from '@/data/constants'
 import type { FeatureFlagState } from '@/lib/feature-flags'
@@ -124,9 +124,6 @@ export function useDashboard(): Dashboard {
 	const [hiddenAnnouncements, setHiddenAnnouncements] = useMMKVObject<string[]>(
 		'hiddenAnnouncements'
 	)
-	const [sportsCardMigrationDone, setSportsCardMigrationDone] = useMMKVBoolean(
-		'shownDashboardEntriesSportsMigrationV1'
-	)
 	const { userKind = USER_GUEST } = useUserKind()
 	const flags = useFeatureFlags()
 
@@ -134,36 +131,6 @@ export function useDashboard(): Dashboard {
 		() => getDefaultDashboardOrder(userKind, flags),
 		[userKind, flags]
 	)
-
-	useEffect(() => {
-		if (sportsCardMigrationDone === true) {
-			return
-		}
-
-		if (shownDashboardEntries == null) {
-			setSportsCardMigrationDone(true)
-			return
-		}
-
-		const hasEventsCard = shownDashboardEntries.includes('events')
-		const hasSportsCard = shownDashboardEntries.includes('sports')
-
-		if (hasEventsCard && !hasSportsCard) {
-			const migratedEntries = shownDashboardEntries.filter(
-				(key) => key !== 'sports'
-			)
-			const eventsIndex = migratedEntries.indexOf('events')
-			migratedEntries.splice(eventsIndex + 1, 0, 'sports')
-			setShownDashboardEntries(migratedEntries)
-		}
-
-		setSportsCardMigrationDone(true)
-	}, [
-		sportsCardMigrationDone,
-		shownDashboardEntries,
-		setShownDashboardEntries,
-		setSportsCardMigrationDone
-	])
 
 	useEffect(() => {
 		if (shownDashboardEntries == null) {
