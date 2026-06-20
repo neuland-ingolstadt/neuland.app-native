@@ -3,6 +3,11 @@ import { SEARCH_TYPES } from '@/types/map'
 
 const UTILS_ROOT = new URL('../', import.meta.url).pathname
 
+const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
+const shareMock = mock(async () => {})
+const trackEventMock = mock(() => {})
+const clipboardSetStringAsyncMock = mock(async () => {})
+
 mock.module(`${UTILS_ROOT}../localization/i18n.ts`, () => ({
 	default: { language: 'de' }
 }))
@@ -18,8 +23,8 @@ mock.module('react-i18next', () => ({
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: { OS: 'web' },
-		Share: { share: () => Promise.resolve() },
+		Platform: platform,
+		Share: { share: shareMock },
 		NativeEventEmitter: class {
 			addListener() {
 				return { remove: () => {} }
@@ -31,8 +36,8 @@ mock.module('react-native', () => ({
 			getEnforcing: () => null
 		}
 	},
-	Platform: { OS: 'web' },
-	Share: { share: () => Promise.resolve() },
+	Platform: platform,
+	Share: { share: shareMock },
 	NativeEventEmitter: class {
 		addListener() {
 			return { remove: () => {} }
@@ -46,11 +51,11 @@ mock.module('react-native', () => ({
 }))
 
 mock.module('@aptabase/react-native', () => ({
-	trackEvent: () => {}
+	trackEvent: trackEventMock
 }))
 
 mock.module('expo-clipboard', () => ({
-	setStringAsync: async () => {}
+	setStringAsync: clipboardSetStringAsyncMock
 }))
 
 mock.module('burnt', () => ({
@@ -62,6 +67,30 @@ mock.module('i18next', () => ({
 }))
 
 let mapUtils: typeof import('../map-utils')
+
+const withMockedCurrentDate = (fixedDate: Date, run: () => void): void => {
+	const OriginalDate = globalThis.Date
+	globalThis.Date = class extends OriginalDate {
+		constructor(...args: [] | [Date | number | string]) {
+			if (args.length === 0) {
+				super(fixedDate.getTime())
+				return
+			}
+
+			super(args[0])
+		}
+
+		static now(): number {
+			return fixedDate.getTime()
+		}
+	} as typeof Date
+
+	try {
+		run()
+	} finally {
+		globalThis.Date = OriginalDate
+	}
+}
 
 beforeAll(async () => {
 	mapUtils = await import('../map-utils')
@@ -468,5 +497,63 @@ describe('map-utils', () => {
 			ios: 'mappin',
 			android: 'location_on'
 		})
+	})
+
+	it('getNextValidDate - Should move Saturday evening to Monday morning', () => {
+		withMockedCurrentDate(new Date('2026-06-20T21:00:00'), () => {
+			const result = mapUtils.getNextValidDate()
+
+			expect(result.wasModified).toBe(true)
+			expect(result.startDate.getDay()).toBe(1)
+			expect(result.startDate.getHours()).toBe(8)
+			expect(result.startDate.getMinutes()).toBe(15)
+		})
+	})
+
+	it('getNextValidDate - Should move Sunday dates to Monday morning', () => {
+		withMockedCurrentDate(new Date('2026-06-21T10:00:00'), () => {
+			const result = mapUtils.getNextValidDate()
+
+			expect(result.wasModified).toBe(true)
+			expect(result.startDate.getDay()).toBe(1)
+		})
+	})
+
+	it('getNextValidDate - Should move early weekday mornings to 08:15', () => {
+		withMockedCurrentDate(new Date('2026-06-18T06:30:00'), () => {
+			const result = mapUtils.getNextValidDate()
+
+			expect(result.wasModified).toBe(true)
+			expect(result.startDate.getHours()).toBe(8)
+			expect(result.startDate.getMinutes()).toBe(15)
+		})
+	})
+
+	it('handleShareModal - Should copy the room link on web', () => {
+		platform.OS = 'web'
+		trackEventMock.mockReset()
+		clipboardSetStringAsyncMock.mockReset()
+
+		mapUtils.handleShareModal('G101')
+
+		expect(trackEventMock).toHaveBeenCalledWith('Share', { type: 'room' })
+		expect(clipboardSetStringAsyncMock).toHaveBeenCalledWith(
+			'https://web.neuland.app/map/?room=G101'
+		)
+
+		platform.OS = 'web'
+	})
+
+	it('handleShareModal - Should use the native share sheet off web', () => {
+		platform.OS = 'ios'
+		shareMock.mockReset()
+
+		mapUtils.handleShareModal('H201')
+
+		expect(shareMock).toHaveBeenCalledWith({
+			url: 'https://web.neuland.app/map/?room=H201'
+		})
+
+		platform.OS = 'web'
 	})
 })

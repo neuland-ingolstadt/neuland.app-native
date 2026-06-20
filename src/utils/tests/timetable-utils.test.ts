@@ -325,4 +325,114 @@ describe('timetable-utils', () => {
 		expect(result).toHaveLength(1)
 		expect(result[0].shortName).toBe('MATH')
 	})
+
+	it('getFriendlyTimetable - Should adjust August dates to October', async () => {
+		mockGetTimetable.mockReset()
+		mockGetTimetable.mockResolvedValue({
+			timetable: [],
+			holidays: [],
+			semester: []
+		})
+
+		await timetableUtils.getFriendlyTimetable(new Date('2026-08-15T00:00:00'))
+
+		expect(mockGetTimetable).toHaveBeenCalled()
+		const calls = mockGetTimetable.mock.calls as unknown as [Date, boolean][]
+		expect(calls[0]?.[0].getMonth()).toBe(9)
+	})
+
+	it('getFriendlyTimetable - Should merge hours for duplicate dates across month requests', async () => {
+		mockGetTimetable.mockReset()
+		const sharedDate = new Date('2026-04-07T00:00:00')
+		const hourEntry = {
+			von: new Date('2026-04-07T10:00:00'),
+			bis: new Date('2026-04-07T11:30:00'),
+			lvId: 'B',
+			details: {
+				raum: 'H201',
+				fach: 'Programmieren',
+				veranstaltung: 'PRG - Programmieren',
+				dozent: 'Prof. Y',
+				stg: 'INF',
+				stgru: 'INF1',
+				teilgruppe: '',
+				sws: '2',
+				ectspoints: '5',
+				pruefung: 'Klausur',
+				ziel: null,
+				inhalt: null,
+				literatur: null
+			}
+		}
+
+		mockGetTimetable
+			.mockResolvedValueOnce({
+				timetable: [
+					{
+						date: sharedDate,
+						hours: {
+							1: [
+								{
+									von: new Date('2026-04-07T08:15:00'),
+									bis: new Date('2026-04-07T09:45:00'),
+									lvId: 'A',
+									details: {
+										raum: 'G101',
+										fach: 'Mathematik',
+										veranstaltung: 'MATH - Mathematik 1',
+										dozent: 'Prof. X',
+										stg: 'INF',
+										stgru: 'INF1',
+										teilgruppe: '',
+										sws: '2',
+										ectspoints: '5',
+										pruefung: 'Klausur',
+										ziel: null,
+										inhalt: null,
+										literatur: null
+									}
+								}
+							]
+						}
+					}
+				],
+				holidays: [],
+				semester: []
+			})
+			.mockResolvedValueOnce({
+				timetable: [
+					{
+						date: sharedDate,
+						hours: {
+							2: [hourEntry]
+						}
+					}
+				],
+				holidays: [],
+				semester: []
+			})
+
+		const result = await timetableUtils.getFriendlyTimetable(sharedDate)
+
+		expect(result).toHaveLength(2)
+		expect(result.map((entry) => entry.shortName)).toEqual(['MATH', 'PRG'])
+	})
+
+	it('getGroupedTimetable - Should handle timed calendar events without an end date', () => {
+		const grouped = timetableUtils.getGroupedTimetable([], [], true, [
+			{
+				id: 'timed-1',
+				name: { de: 'Workshop', en: 'Workshop' },
+				begin: new Date('2026-04-07T14:00:00'),
+				hasHours: true
+			}
+		])
+
+		expect(grouped).toHaveLength(1)
+		expect(grouped[0].data[0]).toMatchObject({
+			name: { de: 'Workshop', en: 'Workshop' },
+			eventType: 'calendar',
+			isAllDay: false
+		})
+	})
 })
