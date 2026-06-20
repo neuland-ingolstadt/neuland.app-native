@@ -70,7 +70,7 @@ const BaseCard = ({
 
 	const cardContent = (
 		<View
-			className={`w-full border border-border bg-card ios:rounded-card-ios android:rounded-lg ${onPressRoute == null ? 'opacity-80' : ''}`}
+			className={`w-full overflow-hidden border border-border bg-card rounded-lg ios:rounded-[28px] ${onPressRoute == null ? 'opacity-80' : ''}`}
 			style={hairlineBorder}
 		>
 			<View className="p-card my-[1.5px]">
