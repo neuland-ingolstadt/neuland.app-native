@@ -1,74 +1,45 @@
 import DateTimePicker, {
 	DateTimePickerAndroid
 } from '@react-native-community/datetimepicker'
-import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
 import type React from 'react'
-import { type ChangeEvent, useMemo, useState } from 'react'
+import { type ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import API from '@/api/authenticated-api'
-import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/error-view'
-import { FreeRoomsList } from '@/components/Map/free-rooms-list'
+import { useStyles } from 'react-native-unistyles'
+import { RoomSearchResults } from '@/components/Map/room-search-results'
+import { roomSearchStylesheet } from '@/components/Map/room-search-styles'
 import Divider from '@/components/Universal/Divider'
 import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown'
-import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useRefreshByUser } from '@/hooks'
-import type { AvailableRoom } from '@/types/utils'
-import { networkError } from '@/utils/api-utils'
+import { useRoomSearch } from '@/hooks/useRoomSearch'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
-	BUILDINGS,
+	ALL_BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
-	filterRooms,
-	getNextValidDate
+	ROOM_SEARCH_DURATIONS
 } from '@/utils/map-utils'
 
-const DURATIONS = [
-	'00:15',
-	'00:30',
-	'00:45',
-	'01:00',
-	'01:30',
-	'02:00',
-	'02:30',
-	'03:00',
-	'03:30',
-	'04:00',
-	'04:30',
-	'05:00',
-	'05:30',
-	'06:00'
-]
-
-const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
+const maximumSearchDate = new Date(
+	new Date().setDate(new Date().getDate() + 90)
+)
 
 export default function AdvancedSearch(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
-	const router = useRouter()
+	const { styles, theme } = useStyles(roomSearchStylesheet)
 	const { t } = useTranslation('common')
-
-	const startDate = getNextValidDate()
-	const [building, setBuilding] = useState(BUILDINGS_ALL)
-	const [date, setDate] = useState(formatISODate(startDate.startDate))
-	const [time, setTime] = useState(formatISOTime(startDate.startDate))
-	const [duration, setDuration] = useState(DURATION_PRESET)
+	const roomSearch = useRoomSearch()
 
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
 
 	const openAndroidDatePicker = (): void => {
 		DateTimePickerAndroid.open({
-			value: new Date(`${date}T${time}`),
+			value: roomSearch.searchDateTime,
 			mode: 'date',
 			minimumDate: new Date(),
-			maximumDate: new Date(new Date().setDate(new Date().getDate() + 90)),
+			maximumDate: maximumSearchDate,
 			onChange: (event, selectedDate) => {
 				if (event.type === 'set' && selectedDate != null) {
-					setDate(formatISODate(selectedDate))
+					roomSearch.setDate(formatISODate(selectedDate))
 				}
 			}
 		})
@@ -76,51 +47,17 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 	const openAndroidTimePicker = (): void => {
 		DateTimePickerAndroid.open({
-			value: new Date(`${date}T${time}`),
+			value: roomSearch.searchDateTime,
 			mode: 'time',
 			is24Hour: true,
 			minuteInterval: 5,
 			onChange: (event, selectedDate) => {
 				if (event.type === 'set' && selectedDate != null) {
-					setTime(formatISOTime(selectedDate))
+					roomSearch.setTime(formatISOTime(selectedDate))
 				}
 			}
 		})
 	}
-	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
-		queryKey: ['freeRooms', date],
-		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				router.replace('/login')
-				return false
-			}
-			return failureCount < 2
-		}
-	})
-	const { rooms, filterError } = useMemo(() => {
-		if (data === undefined) {
-			return { rooms: null as AvailableRoom[] | null, filterError: false }
-		}
-		try {
-			const validateDate = new Date(date)
-			if (Number.isNaN(validateDate.getTime())) {
-				throw new Error('Invalid date')
-			}
-			const filteredRooms = filterRooms(data, date, time, building, duration)
-			if (filteredRooms == null) {
-				throw new Error('Error while filtering rooms')
-			}
-			return { rooms: filteredRooms, filterError: false }
-		} catch (filteringError) {
-			console.error(filteringError)
-			return { rooms: null, filterError: true }
-		}
-	}, [data, date, time, building, duration])
-
-	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
 		<ScrollView style={styles.scrollView}>
@@ -136,38 +73,34 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 						{Platform.OS === 'android' && (
 							<DropdownButton onPress={openAndroidDatePicker}>
-								{date.split('-').reverse().join('.')}
+								{roomSearch.date.split('-').reverse().join('.')}
 							</DropdownButton>
 						)}
 
 						{Platform.OS === 'web' ? (
 							<input
 								type="date"
-								value={date}
+								value={roomSearch.date}
 								onChange={(event: ChangeEvent<HTMLInputElement>) => {
-									setDate(event.currentTarget.value)
+									roomSearch.setDate(event.currentTarget.value)
 								}}
 								style={styles.webInput as unknown as React.CSSProperties}
 								min={formatISODate(new Date())}
-								max={formatISODate(
-									new Date(new Date().setDate(new Date().getDate() + 90))
-								)}
+								max={formatISODate(maximumSearchDate)}
 							/>
 						) : (
 							showDate && (
 								<DateTimePicker
-									value={new Date(`${date}T${time}`)}
+									value={roomSearch.searchDateTime}
 									mode="date"
 									accentColor={theme.colors.primary}
 									locale="de-DE"
 									onChange={(_event, selectedDate) => {
 										setShowDate(Platform.OS !== 'android')
-										setDate(formatISODate(selectedDate))
+										roomSearch.setDate(formatISODate(selectedDate))
 									}}
 									minimumDate={new Date()}
-									maximumDate={
-										new Date(new Date().setDate(new Date().getDate() + 90))
-									}
+									maximumDate={maximumSearchDate}
 								/>
 							)
 						)}
@@ -180,16 +113,16 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 						{Platform.OS === 'android' && (
 							<DropdownButton onPress={openAndroidTimePicker}>
-								{time}
+								{roomSearch.time}
 							</DropdownButton>
 						)}
 
 						{Platform.OS === 'web' ? (
 							<input
 								type="time"
-								value={time}
+								value={roomSearch.time}
 								onChange={(event: ChangeEvent<HTMLInputElement>) => {
-									setTime(event.currentTarget.value)
+									roomSearch.setTime(event.currentTarget.value)
 								}}
 								style={styles.webInput as unknown as React.CSSProperties}
 								step={300}
@@ -197,7 +130,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						) : (
 							showTime && (
 								<DateTimePicker
-									value={new Date(`${date}T${time}`)}
+									value={roomSearch.searchDateTime}
 									mode="time"
 									is24Hour={true}
 									accentColor={theme.colors.primary}
@@ -205,7 +138,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 									minuteInterval={5}
 									onChange={(_event, selectedDate) => {
 										setShowTime(Platform.OS !== 'android')
-										setTime(formatISOTime(selectedDate))
+										roomSearch.setTime(formatISOTime(selectedDate))
 									}}
 								/>
 							)
@@ -217,9 +150,9 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.duration')}
 						</Text>
 						<Dropdown
-							data={DURATIONS}
+							data={[...ROOM_SEARCH_DURATIONS]}
 							defaultValue={DURATION_PRESET}
-							onSelect={setDuration}
+							onSelect={roomSearch.setDuration}
 						/>
 					</View>
 					<Divider />
@@ -228,86 +161,22 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.building')}
 						</Text>
 						<Dropdown
-							data={ALL_BUILDINGS}
+							data={[...ALL_BUILDINGS]}
 							defaultValue={BUILDINGS_ALL}
-							onSelect={setBuilding}
+							onSelect={roomSearch.setBuilding}
 						/>
 					</View>
 				</View>
-				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-				<View style={styles.sectionContainer}>
-					<View style={styles.section}>
-						{isLoading ? (
-							<LoadingIndicator style={styles.loadingIndicator} />
-						) : isPaused ? (
-							<ErrorView
-								title={networkError}
-								onButtonPress={() => {
-									void refetchByUser()
-								}}
-								inModal
-							/>
-						) : isError || filterError ? (
-							<ErrorView
-								title={error?.message ?? t('error.title')}
-								onButtonPress={() => {
-									void refetchByUser()
-								}}
-								inModal
-							/>
-						) : rooms != null ? (
-							<FreeRoomsList rooms={rooms} />
-						) : null}
-					</View>
-				</View>
+				<RoomSearchResults
+					rooms={roomSearch.rooms}
+					filterError={roomSearch.filterError}
+					isLoading={roomSearch.isLoading}
+					isError={roomSearch.isError}
+					isPaused={roomSearch.isPaused}
+					error={roomSearch.error}
+					refetchByUser={roomSearch.refetchByUser}
+				/>
 			</View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	loadingIndicator: {
-		paddingVertical: 30
-	},
-	optionTitle: {
-		color: theme.colors.text,
-		fontSize: 15
-	},
-	optionsRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 15,
-		paddingVertical: 8
-	},
-	scrollView: {
-		padding: 12
-	},
-	section: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		marginBottom: 16
-	},
-	sectionContainer: {
-		paddingBottom: 20
-	},
-	sectionHeader: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	webInput: {
-		appearance: 'none',
-		backgroundColor: theme.colors.datePickerBackground,
-		border: 'none',
-		borderRadius: theme.radius.md,
-		color: theme.colors.text,
-		height: 32,
-		outline: 'none',
-		paddingLeft: 10,
-		paddingRight: 10,
-		fontSize: 15
-	}
-}))
