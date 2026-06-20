@@ -42,7 +42,7 @@ function parseTimeString(value: string): number | undefined {
  * @param {(state: boolean) => void} onToggle: Function to toggle the setting
  * @param {number} timeMinutes: The time in minutes after midnight when the next day's menu should be shown
  * @param {(minutes: number) => void} onTimeMinutesChange: Function to change the time in minutes
- * @returns {JSX.Element} - The AutoShowNextDaySetting component.
+ * @returns {React.JSX.Element} - The AutoShowNextDaySetting component.
  */
 export default function AutoShowNextDaySetting({
 	title,
