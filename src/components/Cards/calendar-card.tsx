@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
@@ -22,6 +22,7 @@ import BaseCard from './base-card'
 
 const CalendarCard = (): React.JSX.Element => {
 	const router = useRouter()
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
 	const { i18n, t } = useTranslation(['navigation', 'common'])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
@@ -52,8 +53,8 @@ const CalendarCard = (): React.JSX.Element => {
 	const { data: exams, isSuccess } = useQuery({
 		queryKey: ['cardExams'],
 		queryFn: loadExams,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.navigate('/login')
@@ -69,10 +70,10 @@ const CalendarCard = (): React.JSX.Element => {
 		[exams]
 	)
 
-	const { theme, styles } = useStyles(stylesheet)
-
 	const noData = (
-		<Text style={styles.noDataText}>{t('common:error.noEvents')}</Text>
+		<Text className="text-text text-center mt-2.5">
+			{t('common:error.noEvents')}
+		</Text>
 	)
 
 	return (
@@ -85,7 +86,7 @@ const CalendarCard = (): React.JSX.Element => {
 				mixedCalendar.length === 0
 			}
 		>
-			<View style={styles.calendarContainer}>
+			<View className="gap-3 mt-2.5">
 				{mixedCalendar.map((event, index) => (
 					<Pressable
 						key={index}
@@ -114,7 +115,7 @@ const CalendarCard = (): React.JSX.Element => {
 							startDateTime={event.begin}
 							endDateTime={event.end}
 							showEndTime={true}
-							color={theme.colors.primary}
+							color={primaryColor}
 						/>
 					</Pressable>
 				))}
@@ -122,17 +123,5 @@ const CalendarCard = (): React.JSX.Element => {
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	calendarContainer: {
-		gap: 12,
-		marginTop: 10
-	},
-	noDataText: {
-		color: theme.colors.text,
-		textAlign: 'center',
-		marginTop: 10
-	}
-}))
 
 export default CalendarCard

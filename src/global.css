@@ -47,6 +47,8 @@
 			--color-contrast: #ffffff;
 			--color-sheet-button: #ffffff;
 			--color-veg-green: #18b91e;
+			--color-completed-dot: #157a15;
+			--color-soon-dot: #dfdfdf;
 		}
 
 		@variant dark {
@@ -74,6 +76,8 @@
 			--color-contrast: #000000;
 			--color-sheet-button: #262626;
 			--color-veg-green: #1ccd22;
+			--color-completed-dot: #157a15;
+			--color-soon-dot: #4b4b4b;
 		}
 	}
 }

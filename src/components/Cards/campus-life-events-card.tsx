@@ -3,7 +3,7 @@ import { type RelativePathString, router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { LanguageKey } from '@/localization/i18n'
 import type {
 	CampusLifeEvent,
@@ -30,7 +30,7 @@ export default function CampusLifeEventsCard({
 	listRoute,
 	queryEnabled = true
 }: CampusLifeEventsCardProps): React.JSX.Element {
-	const { theme, styles } = useStyles(stylesheet)
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
 	const { i18n } = useTranslation('navigation')
 	const { t } = useTranslation('common')
 	const { data: events = [], isSuccess } = useQuery<CampusLifeEvent[]>({
@@ -61,7 +61,11 @@ export default function CampusLifeEventsCard({
 		})
 	}
 
-	const noData = <Text style={styles.noDataTitle}>{t('error.noEvents')}</Text>
+	const noData = (
+		<Text className="mt-2.5 text-text text-base font-medium">
+			{t('error.noEvents')}
+		</Text>
+	)
 
 	return (
 		<BaseCard
@@ -71,7 +75,7 @@ export default function CampusLifeEventsCard({
 			noDataPredicate={() => isSuccess && events.length === 0}
 		>
 			{isSuccess && events.length > 0 && (
-				<View style={styles.eventsContainer}>
+				<View className="mt-2.5 gap-3 border-border">
 					{events.slice(0, 2).map((event) => (
 						<Pressable
 							key={event.id}
@@ -88,7 +92,7 @@ export default function CampusLifeEventsCard({
 								location={event.location ?? undefined}
 								subtitleTranslationKey="cards.events.by"
 								subtitleTranslationParams={{ name: event.host.name ?? '' }}
-								color={theme.colors.primary}
+								color={primaryColor}
 							/>
 						</Pressable>
 					))}
@@ -97,17 +101,3 @@ export default function CampusLifeEventsCard({
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	eventsContainer: {
-		marginTop: 10,
-		gap: 12,
-		borderColor: theme.colors.border
-	},
-	noDataTitle: {
-		marginTop: 10,
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500'
-	}
-}))

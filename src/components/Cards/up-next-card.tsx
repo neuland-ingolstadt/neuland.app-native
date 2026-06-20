@@ -7,11 +7,10 @@ import {
 	AppState,
 	type AppStateStatus,
 	Pressable,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import Divider from '@/components/Universal/Divider'
 import PulsingDot from '@/components/Universal/pulsing-dot'
 import { USER_GUEST } from '@/data/constants'
@@ -21,11 +20,13 @@ import { formatFriendlyTime, formatNearDate } from '@/utils/date-utils'
 import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { UserKindContext } from '../contexts'
 import BaseCard from './base-card'
 
 const UpNextCard = (): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const borderColor = useCSSVariable('--color-border')
+	const dotOngoingStyle = useResolveClassNames('w-2 h-2 rounded-xs bg-success')
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [currentTime, setCurrentTime] = useState(() => new Date())
 	const { t } = useTranslation(['navigation', 'timetable'])
@@ -37,11 +38,9 @@ const UpNextCard = (): React.JSX.Element => {
 
 	const isMountedRef = useRef(true)
 
-	// Define refresh intervals with correct values
-	const ACTIVE_REFRESH_INTERVAL = 60 * 1000 // 60 seconds when app is visible and focused
-	const BACKGROUND_REFRESH_INTERVAL = 5 * 60 * 1000 // 5 minutes when app is in background or on another page
+	const ACTIVE_REFRESH_INTERVAL = 60 * 1000
+	const BACKGROUND_REFRESH_INTERVAL = 5 * 60 * 1000
 
-	// Get current refresh interval based on app state and screen focus
 	const refreshInterval = useMemo(() => {
 		const isActive = appState === 'active' && screenIsFocused
 		return isActive ? ACTIVE_REFRESH_INTERVAL : BACKGROUND_REFRESH_INTERVAL
@@ -196,7 +195,6 @@ const UpNextCard = (): React.JSX.Element => {
 		}
 	}, [refreshCurrentTime])
 
-	// Track screen focus with Expo Router
 	useFocusEffect(
 		useCallback(() => {
 			setScreenIsFocused(true)
@@ -212,7 +210,6 @@ const UpNextCard = (): React.JSX.Element => {
 		}, [userKind, refreshCurrentTime])
 	)
 
-	// Only run the interval when app is active and screen is focused
 	useInterval(
 		refreshCurrentTime,
 		appState === 'active' && screenIsFocused ? refreshInterval : null
@@ -256,23 +253,16 @@ const UpNextCard = (): React.JSX.Element => {
 		if (!eventStatus?.isOngoing) return null
 
 		return (
-			<View style={styles.progressBarContainer}>
+			<View className="h-1 bg-border rounded-sm overflow-hidden">
 				<View
-					style={[
-						styles.progressBar,
-						{
-							width: `${eventStatus.progress * 100}%`
-						}
-					]}
+					className="h-full rounded-sm bg-primary"
+					style={{
+						width: `${eventStatus.progress * 100}%`
+					}}
 				/>
 			</View>
 		)
-	}, [
-		eventStatus,
-		styles.progressBar,
-		styles.progressBarContainer,
-		theme.colors.primary
-	])
+	}, [eventStatus])
 
 	const EventStatus = useMemo(() => {
 		if (!currentEvent || !eventStatus) return null
@@ -297,21 +287,24 @@ const UpNextCard = (): React.JSX.Element => {
 			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return <Text style={styles.eventDate}>{statusText}</Text>
-	}, [currentEvent, eventStatus, t, theme.colors.secondary])
+		return (
+			<Text className="text-secondary text-sm font-medium">{statusText}</Text>
+		)
+	}, [currentEvent, eventStatus, t])
 
 	const RoomInfo = useMemo(() => {
 		if (!currentEvent) return null
 
 		return (
-			<View style={styles.roomContainer}>
-				<Text style={styles.roomText}>{currentEvent.rooms.join(', ')}</Text>
+			<View className="flex-row items-center mt-0.5">
+				<Text className="text-label text-[15px]">
+					{currentEvent.rooms.join(', ')}
+				</Text>
 			</View>
 		)
-	}, [currentEvent, styles.roomContainer, styles.roomText])
+	}, [currentEvent])
 
 	const NextEvent = useMemo(() => {
-		// Don't show next event if current event hasn't started yet
 		if (
 			!nextEvent ||
 			(currentEvent && new Date(currentEvent.startDate) > currentTime)
@@ -331,22 +324,25 @@ const UpNextCard = (): React.JSX.Element => {
 		}
 
 		return (
-			<View style={styles.nextEventContainer}>
-				<Text style={styles.nextEventTime}>
+			<View className="flex-row items-center flex-wrap mt-0.5">
+				<Text className="text-label text-sm font-semibold tabular-nums">
 					{formatFriendlyTime(nextEvent.startDate)}
 				</Text>
-				<Text style={styles.nextEventName} numberOfLines={1}>
+				<Text
+					className="text-label-secondary text-sm ml-1 flex-1"
+					numberOfLines={1}
+				>
 					{'· '}
 					{nextEvent.name}{' '}
 					{nextEvent.rooms.length > 0 && (
-						<Text style={styles.nextEventRoom}>
+						<Text className="text-label-secondary text-sm font-normal">
 							· {nextEvent.rooms.join(', ')}
 						</Text>
 					)}
 				</Text>
 			</View>
 		)
-	}, [nextEvent, currentEvent, currentTime, formatFriendlyTime])
+	}, [nextEvent, currentEvent, currentTime])
 
 	const navigateDots = () => {
 		router.navigate('/dots')
@@ -365,52 +361,62 @@ const UpNextCard = (): React.JSX.Element => {
 		}
 
 		return (
-			<View style={styles.statsContainer}>
+			<View className="mt-1 flex-col gap-2">
 				{NextEvent}
-				<Pressable style={styles.statsRow} onPress={navigateDots} hitSlop={10}>
-					<View style={styles.progressDots}>
+				<Pressable
+					className="flex-row items-center gap-2"
+					onPress={navigateDots}
+					hitSlop={10}
+				>
+					<View className="flex-row gap-1.5 items-center flex-wrap">
 						{Array.from({ length: todayStats.total }).map((_, index) =>
 							index < todayStats.completed ? (
-								<View key={index} style={[styles.dot, styles.dotCompleted]} />
-							) : index < todayStats.completed + todayStats.ongoing ? (
-								<PulsingDot
+								<View
 									key={index}
-									style={[styles.dot, styles.dotOngoing]}
+									className="w-2 h-2 rounded-xs bg-completed-dot"
 								/>
+							) : index < todayStats.completed + todayStats.ongoing ? (
+								<PulsingDot key={index} style={dotOngoingStyle} />
 							) : (
-								<View key={index} style={[styles.dot, styles.dotRemaining]} />
+								<View
+									key={index}
+									className="w-2 h-2 rounded-xs bg-soon-dot border border-label"
+									style={hairlineBorder}
+								/>
 							)
 						)}
 					</View>
-					<Text style={styles.statsText} numberOfLines={1}>
+					<Text className="text-label text-[13px]" numberOfLines={1}>
 						{statsText}
 					</Text>
 				</Pressable>
 			</View>
 		)
-	}, [NextEvent, t, todayStats])
+	}, [NextEvent, dotOngoingStyle, t, todayStats])
 
 	const NoEvents = useMemo(
 		() => (
-			<View style={styles.emptyContainer}>
-				<Text style={styles.emptyTitle}>{t('cards.timetable.noEvents')}</Text>
-				<Text style={styles.emptySubtitle}>
+			<View className="pt-2">
+				<Text className="text-text text-base font-medium">
+					{t('cards.timetable.noEvents')}
+				</Text>
+				<Text className="text-label text-sm">
 					{t('cards.timetable.enjoyDay')}
 				</Text>
 			</View>
 		),
-		[t, theme]
+		[t]
 	)
 
 	const NotYetSetUp = useMemo(
 		() => (
-			<View style={styles.emptyContainer}>
-				<Text style={styles.emptyTitle}>
+			<View className="pt-2">
+				<Text className="text-text text-base font-medium">
 					{t('timetable:error.empty.subtitle')}
 				</Text>
 			</View>
 		),
-		[t, theme]
+		[t]
 	)
 
 	const isNotYetSetUp =
@@ -420,9 +426,9 @@ const UpNextCard = (): React.JSX.Element => {
 		<BaseCard title="timetable" onPressRoute="/timetable">
 			{loadingState === LoadingState.LOADED &&
 				(currentEvent ? (
-					<View style={styles.mainContainer}>
-						<View style={styles.eventHeader}>
-							<Text style={styles.timeInfo}>
+					<View className="gap-2 pt-2">
+						<View className="flex-row justify-between items-center">
+							<Text className="text-text text-sm tabular-nums">
 								{formatFriendlyTime(currentEvent.startDate)} -{' '}
 								{formatFriendlyTime(currentEvent.endDate)}
 							</Text>
@@ -431,15 +437,18 @@ const UpNextCard = (): React.JSX.Element => {
 
 						{ProgressBar}
 
-						<View style={styles.eventContent}>
-							<Text style={styles.eventTitle} numberOfLines={2}>
+						<View className="gap-1">
+							<Text
+								className="text-text text-base font-semibold leading-5"
+								numberOfLines={2}
+							>
 								{currentEvent.name}
 							</Text>
 							{RoomInfo}
 						</View>
 
 						{todayStats.total > 0 && (
-							<Divider width="100%" color={theme.colors.border} />
+							<Divider width="100%" color={toColor(borderColor)} />
 						)}
 
 						{Stats}
@@ -452,136 +461,5 @@ const UpNextCard = (): React.JSX.Element => {
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	mainContainer: {
-		gap: 8,
-		paddingTop: 8
-	},
-	eventHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	timeInfo: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontVariant: ['tabular-nums']
-	},
-	statusText: {
-		fontSize: 14,
-		color: theme.colors.labelColor,
-		fontWeight: '500'
-	},
-	eventContent: {
-		gap: 4
-	},
-	eventTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		lineHeight: 20
-	},
-	roomContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 2
-	},
-	roomText: {
-		color: theme.colors.labelColor,
-		fontSize: 15
-	},
-	statsContainer: {
-		marginTop: 4,
-		flexDirection: 'column',
-		gap: 8
-	},
-	statsRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8
-	},
-	statsText: {
-		color: theme.colors.labelColor,
-		fontSize: 13
-	},
-	progressDots: {
-		flexDirection: 'row',
-		gap: 6,
-		alignItems: 'center',
-		flexWrap: 'wrap'
-	},
-	dot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4
-	},
-	dotCompleted: {
-		backgroundColor: theme.colors.completedDot
-	},
-	dotOngoing: {
-		backgroundColor: theme.colors.success
-	},
-	dotRemaining: {
-		backgroundColor: theme.colors.soonDot,
-		borderColor: theme.colors.labelColor,
-		borderWidth: StyleSheet.hairlineWidth
-	},
-	progressBarContainer: {
-		height: 4,
-		backgroundColor: theme.colors.border,
-		borderRadius: 2,
-		overflow: 'hidden'
-	},
-	progressBar: {
-		height: '100%',
-		borderRadius: 2,
-		backgroundColor: theme.colors.primary
-	},
-	emptyContainer: {
-		paddingTop: 8
-	},
-	emptyTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500'
-	},
-	emptySubtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	},
-	nextEventContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		flexWrap: 'wrap',
-		marginTop: 2
-	},
-	nextEventPrefix: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14
-	},
-	nextEventTime: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '600',
-		fontVariant: ['tabular-nums']
-	},
-	nextEventName: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		marginLeft: 4,
-		flex: 1
-	},
-	nextEventRoom: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		fontWeight: '400'
-	},
-	eventDate: {
-		color: theme.colors.secondary,
-		fontSize: 14,
-		fontWeight: '500'
-	}
-}))
 
 export default UpNextCard

@@ -1,17 +1,10 @@
 import React from 'react'
-import {
-	type ColorValue,
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-	type ViewStyle
-} from 'react-native'
+import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
 import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import Divider from '@/components/Universal/Divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './Icon'
 
 interface FormListProps {
@@ -32,18 +25,6 @@ interface RenderSectionItemProps {
 	sectionIndex: number
 	section: FormListSections
 	sheet: boolean
-}
-
-const hairlineBorder = { borderWidth: StyleSheet.hairlineWidth }
-
-const toColor = (
-	value: string | number | undefined
-): ColorValue | undefined => {
-	if (value == null) {
-		return undefined
-	}
-
-	return typeof value === 'number' ? String(value) : value
 }
 
 const cardSurfaceClass = (sheet: boolean): string =>

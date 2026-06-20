@@ -2,14 +2,7 @@ import { type Href, Link, type RelativePathString, router } from 'expo-router'
 import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	type ColorValue,
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	View
-} from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import Animated, {
 	interpolate,
@@ -20,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { USER_GUEST } from '@/data/constants'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
 import PlatformIcon from '../Universal/Icon'
@@ -173,18 +167,6 @@ const BaseCard = ({
 			</Pressable>
 		</Link>
 	)
-}
-
-const hairlineBorder = { borderWidth: StyleSheet.hairlineWidth }
-
-const toColor = (
-	value: string | number | undefined
-): ColorValue | undefined => {
-	if (value == null) {
-		return undefined
-	}
-
-	return typeof value === 'number' ? String(value) : value
 }
 
 export default BaseCard
