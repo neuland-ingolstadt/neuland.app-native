@@ -24,6 +24,7 @@ import {
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
+import { useUniwindThemeSync } from '@/hooks/useUniwindThemeSync'
 import { ensureFliptClient } from '@/lib/flipt'
 import { darkTheme, lightTheme } from '@/styles/themes'
 import { syncStoragePersister } from '@/utils/storage'
@@ -87,6 +88,8 @@ function AppContexts({ children }: ProviderProps): React.JSX.Element {
 function ProviderContent({ children }: ProviderProps): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
 	const themeColor = usePreferencesStore((state) => state.themeColor)
+
+	useUniwindThemeSync()
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {

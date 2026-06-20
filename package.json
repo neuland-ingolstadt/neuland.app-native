@@ -27,6 +27,7 @@
 		"test": "bun test --ci",
 		"test:coverage": "bun test --ci --coverage --coverage-reporter=lcov --coverage-reporter=text",
 		"i18n:check": "i18n-check -l src/localization -s en -f i18next -u src -o missingKeys invalidKeys undefined",
+		"uniwind:types": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts",
 		"react:doctor": "bunx react-doctor@latest"
 	},
 	"dependencies": {
@@ -115,6 +116,8 @@
 		"react-qr-code": "^2.0.18",
 		"sanitize-html": "^2.17.5",
 		"swiftui-react-native": "^6.3.3",
+		"tailwindcss": "^4.3.1",
+		"uniwind": "^1.9.0",
 		"zustand": "5.0.14"
 	},
 	"devDependencies": {
