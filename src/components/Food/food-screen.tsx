@@ -146,7 +146,7 @@ function FoodScreen(): React.JSX.Element {
 	 * Renders a button for a specific day's food data.
 	 * @param {Food} day - The food data for the day.
 	 * @param {number} index - The index of the day in the list of days.
-	 * @returns {JSX.Element} - The rendered button component.
+	 * @returns {React.JSX.Element} - The rendered button component.
 	 */
 	const DayButton = memo(
 		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
