@@ -7,9 +7,11 @@ const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: platform
+		Platform: platform,
+		Linking: { openURL: async () => {} }
 	},
-	Platform: platform
+	Platform: platform,
+	Linking: { openURL: async () => {} }
 }))
 
 let resolveAnnouncementPlatform: typeof import('../web-host').resolveAnnouncementPlatform

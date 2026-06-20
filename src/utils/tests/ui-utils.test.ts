@@ -2,12 +2,14 @@ import { beforeAll, describe, expect, it, mock } from 'bun:test'
 
 const clipboardSetStringAsyncMock = mock(async () => {})
 const toastMock = mock(() => {})
+const trackEventMock = mock(() => {})
 
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
 		Platform: { OS: 'ios' },
 		Share: { share: () => Promise.resolve() },
+		Linking: { openURL: async () => {} },
 		NativeEventEmitter: class {
 			addListener() {
 				return { remove: () => {} }
@@ -21,6 +23,7 @@ mock.module('react-native', () => ({
 	},
 	Platform: { OS: 'ios' },
 	Share: { share: () => Promise.resolve() },
+	Linking: { openURL: async () => {} },
 	NativeEventEmitter: class {
 		addListener() {
 			return { remove: () => {} }
@@ -46,7 +49,7 @@ mock.module('i18next', () => ({
 }))
 
 mock.module('@aptabase/react-native', () => ({
-	trackEvent: () => {}
+	trackEvent: trackEventMock
 }))
 
 let uiUtils: typeof import('../ui-utils')
@@ -116,5 +119,17 @@ describe('ui-utils', () => {
 
 		expect(clipboardSetStringAsyncMock).not.toHaveBeenCalled()
 		expect(toastMock).not.toHaveBeenCalled()
+	})
+
+	it('roomNotFoundToast - Should track analytics and show a custom toast', () => {
+		uiUtils.roomNotFoundToast('G999', '#ff0000')
+
+		expect(toastMock).toHaveBeenCalled()
+	})
+
+	it('pausedToast - Should show the paused network toast', () => {
+		uiUtils.pausedToast()
+
+		expect(toastMock).toHaveBeenCalled()
 	})
 })
