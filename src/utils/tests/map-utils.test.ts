@@ -25,6 +25,7 @@ mock.module('react-native', () => ({
 	default: {
 		Platform: platform,
 		Share: { share: shareMock },
+		Linking: { openURL: async () => {} },
 		NativeEventEmitter: class {
 			addListener() {
 				return { remove: () => {} }
@@ -38,6 +39,7 @@ mock.module('react-native', () => ({
 	},
 	Platform: platform,
 	Share: { share: shareMock },
+	Linking: { openURL: async () => {} },
 	NativeEventEmitter: class {
 		addListener() {
 			return { remove: () => {} }

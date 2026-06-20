@@ -5,7 +5,8 @@ const randomizeColorMock = mock(() => {})
 const onBounceMock = mock(() => {})
 
 mock.module('react-native', () => ({
-	Platform: { OS: 'ios' }
+	Platform: { OS: 'ios' },
+	Linking: { openURL: async () => {} }
 }))
 
 mock.module('expo-haptics', () => ({

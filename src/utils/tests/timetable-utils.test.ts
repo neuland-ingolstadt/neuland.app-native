@@ -9,6 +9,7 @@ mock.module('react-native', () => ({
 	default: {
 		Platform: { OS: 'web' },
 		Share: { share: () => Promise.resolve() },
+		Linking: { openURL: async () => {} },
 		NativeEventEmitter: class {
 			addListener() {
 				return { remove: () => {} }
@@ -22,6 +23,7 @@ mock.module('react-native', () => ({
 	},
 	Platform: { OS: 'web' },
 	Share: { share: () => Promise.resolve() },
+	Linking: { openURL: async () => {} },
 	NativeEventEmitter: class {
 		addListener() {
 			return { remove: () => {} }
