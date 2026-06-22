@@ -3,14 +3,12 @@ import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/Icon'
 import { MapContext } from '@/contexts/map'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface FloorPickerProps {
 	floors: string[]
@@ -25,12 +23,19 @@ const FloorPicker = ({
 	toggleShowAllFloors,
 	setCameraTriggerKey
 }: FloorPickerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const textColor = useCSSVariable('--color-text') as string | undefined
+	const primaryColor = useCSSVariable('--color-primary') as string
+	const borderColor = useCSSVariable('--color-border')
+	const cardColor = useCSSVariable('--color-card')
+	const labelColor = useCSSVariable('--color-label') as string | undefined
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation(['accessibility'])
 
+	const xIconColor = themePreference === 'dark' ? '#b6b6b6ff' : '#4a4a4aff'
+
 	return (
-		<View style={styles.ButtonArea}>
+		<View className="mx-2 mt-[110px] absolute right-0">
 			{!showAllFloors && (
 				<Pressable
 					onPress={() => {
@@ -48,13 +53,20 @@ const FloorPicker = ({
 					}}
 				>
 					<View
+						className="rounded-[10px] mt-[5px] overflow-hidden bg-card"
 						style={{
-							...styles.buttonAreaSection,
-							...styles.borderWith(!showAllFloors)
+							borderWidth: !showAllFloors ? 1 : 0,
+							borderColor: toColor(borderColor),
+							backgroundColor: toColor(cardColor)
 						}}
 					>
-						<View style={styles.button}>
-							<Text style={styles.buttonText(false, false)}>
+						<View className="items-center self-center h-[38px] justify-center w-[38px]">
+							<Text
+								className="font-medium text-[15px]"
+								style={{
+									color: toColor(textColor)
+								}}
+							>
 								{currentFloor?.floor === 'EG' ? '0' : currentFloor?.floor}
 							</Text>
 						</View>
@@ -66,7 +78,7 @@ const FloorPicker = ({
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
-					style={styles.button}
+					className="items-center self-center h-[38px] justify-center w-[38px]"
 				>
 					<PlatformIcon
 						ios={{
@@ -81,12 +93,15 @@ const FloorPicker = ({
 							name: 'X',
 							size: 26
 						}}
-						style={styles.xIcon}
+						style={{ color: xIconColor }}
 					/>
 				</Pressable>
 			)}
 			{showAllFloors && (
-				<View style={styles.buttonAreaSection}>
+				<View
+					className="rounded-[10px] border mt-[5px] overflow-hidden"
+					style={{ borderColor: toColor(borderColor) }}
+				>
 					{floors.map((floor, index) => (
 						<Pressable
 							onPress={() => {
@@ -98,16 +113,24 @@ const FloorPicker = ({
 							key={index}
 						>
 							<View
-								style={[
-									styles.button,
-									styles.buttonDynamically(
-										currentFloor?.floor === floor,
-										index === floors.length - 1
-									)
-								]}
+								className="items-center self-center h-[38px] justify-center w-[38px]"
+								style={{
+									borderBottomColor: toColor(borderColor),
+									backgroundColor:
+										currentFloor?.floor === floor
+											? toColor(primaryColor)
+											: toColor(cardColor),
+									borderBottomWidth: index === floors.length - 1 ? 0 : 1
+								}}
 							>
 								<Text
-									style={styles.buttonText(true, currentFloor?.floor === floor)}
+									className="font-medium text-[15px]"
+									style={{
+										color:
+											showAllFloors && currentFloor?.floor === floor
+												? getContrastColor(primaryColor)
+												: toColor(textColor)
+									}}
 								>
 									{floor === 'EG' ? '0' : floor}
 								</Text>
@@ -124,14 +147,15 @@ const FloorPicker = ({
 					accessibilityLabel={t('map.centerOnCurrentLocation')}
 				>
 					<View
+						className="rounded-[10px] border mt-[5px] overflow-hidden bg-card"
 						style={{
-							...styles.buttonAreaSection,
-							...styles.borderWith(true)
+							borderColor: toColor(borderColor),
+							backgroundColor: toColor(cardColor)
 						}}
 					>
-						<View style={styles.button}>
+						<View className="items-center self-center h-[38px] justify-center w-[38px]">
 							<PlatformIcon
-								style={styles.icon}
+								style={{ color: toColor(labelColor) }}
 								ios={{
 									name: 'location.fill',
 									size: 18
@@ -154,50 +178,4 @@ const FloorPicker = ({
 	)
 }
 
-// Memoize FloorPicker to prevent re-renders when parent re-renders
 export default memo(FloorPicker)
-
-const stylesheet = createStyleSheet((theme) => ({
-	ButtonArea: {
-		marginHorizontal: 8,
-		marginTop: 110,
-		position: 'absolute',
-		right: 0
-	},
-	borderWith: (border: boolean) => ({
-		borderWidth: border ? 1 : 0,
-		backgroundColor: theme.colors.card
-	}),
-	button: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		height: 38,
-		justifyContent: 'center',
-		width: 38
-	},
-	buttonAreaSection: {
-		borderColor: theme.colors.border,
-		borderRadius: 10,
-		borderWidth: 1,
-		marginTop: 5,
-		overflow: 'hidden'
-	},
-	buttonDynamically: (current: boolean, floor: boolean) => ({
-		borderBottomColor: theme.colors.border,
-		backgroundColor: current ? theme.colors.primary : theme.colors.card,
-		borderBottomWidth: floor ? 0 : 1
-	}),
-	buttonText: (open: boolean, current: boolean) => ({
-		fontWeight: '500',
-		fontSize: 15,
-		color:
-			open && current ? getContrastColor(theme.colors.text) : theme.colors.text
-	}),
-	icon: {
-		color: theme.colors.labelColor
-	},
-	xIcon: {
-		color: UnistylesRuntime.colorScheme === 'dark' ? '#b6b6b6ff' : '#4a4a4aff'
-	}
-}))

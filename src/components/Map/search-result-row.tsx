@@ -5,7 +5,7 @@ import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import type { SEARCH_TYPES, SearchResult } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -27,13 +27,13 @@ const ResultRow = ({
 	updateSearchHistory
 }: ResultRowProps): React.JSX.Element => {
 	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = useCSSVariable('--color-primary') as string
 	const { i18n } = useTranslation()
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
 		<TouchableOpacity
 			key={index}
-			style={styles.searchRowContainer}
+			className="items-center flex-row py-2.5"
 			onPress={() => {
 				const center = result.item.properties?.center as Position | undefined
 				updateSearchHistory(result)
@@ -55,7 +55,7 @@ const ResultRow = ({
 				setLocalSearch('')
 			}}
 		>
-			<View style={styles.searchIconContainer}>
+			<View className="items-center bg-primary rounded-infinite h-10 justify-center mr-3.5 w-10">
 				<PlatformIcon
 					ios={{
 						name: result.item.properties?.icon.ios as string,
@@ -70,53 +70,20 @@ const ResultRow = ({
 						name: 'MapPin',
 						size: 21
 					}}
-					style={styles.icon}
+					style={{ color: getContrastColor(primaryColor) }}
 				/>
 			</View>
 
-			<View style={styles.flex}>
-				<Text style={styles.suggestionTitle}>{result.title}</Text>
-				<Text style={styles.suggestionSubtitle}>
+			<View className="flex-1">
+				<Text className="text-text text-base font-semibold">
+					{result.title}
+				</Text>
+				<Text className="text-text text-sm font-normal max-w-[90%]">
 					{result.item.properties?.[roomTypeKey] ?? result.subtitle}
 				</Text>
 			</View>
 		</TouchableOpacity>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	flex: {
-		flex: 1
-	},
-	icon: {
-		color: getContrastColor(theme.colors.primary)
-	},
-
-	searchIconContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: 50,
-		height: 40,
-		justifyContent: 'center',
-		marginRight: 14,
-		width: 40
-	},
-	searchRowContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingVertical: 10
-	},
-	suggestionSubtitle: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '400',
-		maxWidth: '90%'
-	},
-	suggestionTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600'
-	}
-}))
 
 export default memo(ResultRow)

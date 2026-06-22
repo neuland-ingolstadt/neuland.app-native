@@ -5,8 +5,8 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/error-view'
@@ -48,10 +48,10 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
 	const headerPadding = useTransparentHeaderPadding() + 10
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
 
 	const { startDate, wasModified } = getNextValidDate()
 	const building = useBinding(BUILDINGS_ALL)
@@ -59,16 +59,6 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 	const [time, setTime] = useState(formatISOTime(startDate))
 
-	/**
-	 * Checks if the provided date and time are equal to the start date.
-	 *
-	 * This function compares the hours and minutes from a time string in the format "HH:MM",
-	 * and a date string in the format "YYYY-MM-DD" against a global `startDate` object of type Date.
-	 * It returns true if the hours and minutes of `startDate` match the provided time,
-	 * and the date part of `startDate` matches the provided date string.
-	 *
-	 * @returns {boolean} True if the date and time match the start date, false otherwise.
-	 */
 	const isDateAndTimeEqualToStart = (): boolean => {
 		return (
 			startDate.getHours() === Number.parseInt(time.split(':')[0], 10) &&
@@ -85,8 +75,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
 		queryKey: ['freeRooms', date],
 		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
+		staleTime: 1000 * 60 * 60,
+		gcTime: 1000 * 60 * 60 * 24 * 4,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.replace('/login')
@@ -135,21 +125,21 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<ScrollView style={[styles.scrollView, { paddingTop: headerPadding }]}>
+		<ScrollView className="p-3" style={{ paddingTop: headerPadding }}>
 			<View>
-				<Text style={styles.sectionHeader}>
+				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
 					{t('pages.rooms.options.title')}
 				</Text>
-				<View style={styles.section}>
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+				<View className="bg-card rounded-md mb-4">
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.date')}
 						</Text>
 
 						<DateTimePicker
 							value={new Date(`${date}T${time}`)}
 							mode="date"
-							accentColor={theme.colors.primary}
+							accentColor={primaryColor}
 							locale="de-DE"
 							onChange={(_event, selectedDate) => {
 								setDate(formatISODate(selectedDate))
@@ -162,8 +152,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 					</View>
 
 					<Divider paddingLeft={16} />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.time')}
 						</Text>
 
@@ -171,7 +161,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							value={new Date(`${date}T${time}`)}
 							mode="time"
 							is24Hour={true}
-							accentColor={theme.colors.primary}
+							accentColor={primaryColor}
 							locale="de-DE"
 							minuteInterval={5}
 							onChange={(_event, selectedDate) => {
@@ -180,15 +170,15 @@ export default function AdvancedSearch(): React.JSX.Element {
 						/>
 					</View>
 					<Divider paddingLeft={16} />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.duration')}
 						</Text>
 
 						<Picker
 							selection={duration}
 							pickerStyle="menu"
-							tint={theme.colors.primary}
+							tint={primaryColor}
 							offset={{ x: 15, y: 0 }}
 						>
 							{DURATIONS.map((option) => (
@@ -197,15 +187,15 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Picker>
 					</View>
 					<Divider paddingLeft={16} />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.building')}
 						</Text>
 
 						<Picker
 							selection={building}
 							pickerStyle="menu"
-							tint={theme.colors.primary}
+							tint={primaryColor}
 							offset={{ x: 20, y: 0 }}
 						>
 							{ALL_BUILDINGS.map((option) => (
@@ -215,8 +205,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 					</View>
 				</View>
 				{wasModified && isDateAndTimeEqualToStart() && (
-					<View style={styles.section}>
-						<View style={styles.adjustContainer}>
+					<View className="bg-card rounded-md mb-4">
+						<View className="items-center flex-row gap-[5px] px-2.5 pt-2.5">
 							<PlatformIcon
 								ios={{
 									name: 'sparkles',
@@ -231,12 +221,12 @@ export default function AdvancedSearch(): React.JSX.Element {
 									size: 20
 								}}
 							/>
-							<Text style={styles.adjustedTitle}>
+							<Text className="text-primary text-base font-medium ml-[5px]">
 								{t('pages.rooms.modified.title')}
 							</Text>
 						</View>
 
-						<Text style={styles.adjustText}>
+						<Text className="text-text text-[15px] p-2.5">
 							{t('pages.rooms.modified.description', {
 								date,
 								time
@@ -244,11 +234,13 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Text>
 					</View>
 				)}
-				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-				<View style={styles.sectionContainer}>
-					<View style={styles.section}>
+				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
+					{t('pages.rooms.results')}
+				</Text>
+				<View className="pb-5">
+					<View className="bg-card rounded-md mb-4">
 						{filterState === LoadingState.LOADING || isLoading ? (
-							<LoadingIndicator style={styles.loadingIndicator} />
+							<LoadingIndicator style={{ paddingVertical: 30 }} />
 						) : isPaused ? (
 							<ErrorView
 								title={networkError}
@@ -274,58 +266,3 @@ export default function AdvancedSearch(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	adjustContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 5,
-		paddingHorizontal: 10,
-		paddingTop: 10
-	},
-	adjustText: {
-		color: theme.colors.text,
-		fontSize: 15,
-		padding: 10
-	},
-	adjustedTitle: {
-		color: theme.colors.primary,
-		fontSize: 16,
-		fontWeight: '500',
-		marginLeft: 5
-	},
-
-	loadingIndicator: {
-		paddingVertical: 30
-	},
-	optionTitle: {
-		color: theme.colors.text,
-		fontSize: 15
-	},
-	optionsRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 15,
-		paddingVertical: 8
-	},
-	scrollView: {
-		padding: 12
-	},
-	section: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		marginBottom: 16
-	},
-	sectionContainer: {
-		paddingBottom: 20
-	},
-	sectionHeader: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	}
-}))

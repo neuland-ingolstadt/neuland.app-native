@@ -1,45 +1,39 @@
 import { BlurView } from 'expo-blur'
 import type React from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { Platform, StyleSheet, useColorScheme, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { toColor } from '@/utils/uniwind-utils'
 
 const BottomSheetBackground = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-	const dark = UnistylesRuntime.themeName === 'dark'
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const systemScheme = useColorScheme()
+	const backgroundColor = useCSSVariable('--color-background')
+	const isDark =
+		themePreference === 'dark' ||
+		(themePreference !== 'light' && systemScheme === 'dark')
 	const darkIos = 'rgba(0, 0, 0, 0.45)'
 	const lightIos = 'rgba(200, 200, 200, 0.3)'
+
 	return Platform.OS === 'ios' ? (
 		<View
-			style={[
-				styles.bottomSheet,
-				{
-					backgroundColor: dark ? darkIos : lightIos
-				}
-			]}
+			className="absolute inset-0 rounded-t-[30px] overflow-hidden"
+			style={{
+				backgroundColor: isDark ? darkIos : lightIos
+			}}
 		>
 			<BlurView
 				intensity={85}
 				style={StyleSheet.absoluteFillObject}
-				tint={dark ? 'dark' : 'light'}
+				tint={isDark ? 'dark' : 'light'}
 			/>
 		</View>
 	) : (
-		<View style={styles.bottomSheet} />
+		<View
+			className="absolute inset-0 rounded-t-[30px] overflow-hidden bg-background"
+			style={{ backgroundColor: toColor(backgroundColor) }}
+		/>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	bottomSheet: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: theme.colors.background,
-		borderTopLeftRadius: 30,
-		borderTopRightRadius: 30,
-		overflow: 'hidden'
-	}
-}))
 
 export default BottomSheetBackground

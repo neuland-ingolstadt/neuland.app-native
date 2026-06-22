@@ -10,10 +10,11 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { handleShareModal } from '@/utils/map-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import FormList from '../Universal/form-list'
 import PlatformIcon from '../Universal/Icon'
 import BottomSheetBackground from './bottom-sheet-background'
@@ -31,7 +32,7 @@ interface ReportLinkProps {
 }
 
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const labelColor = useCSSVariable('--color-label') as string | undefined
 	const { t } = useTranslation('common')
 
 	const handleReportRoom = useCallback(() => {
@@ -42,13 +43,16 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	}, [roomTitle])
 
 	return (
-		<View style={styles.reportContainer}>
-			<Pressable onPress={() => handleReportRoom()} style={styles.reportLink}>
-				<Text style={styles.reportText}>
+		<View className="py-2.5">
+			<Pressable
+				onPress={() => handleReportRoom()}
+				className="items-center flex-row gap-1"
+			>
+				<Text className="text-label text-[15px] ps-1">
 					{t('pages.map.details.room.report')}
 				</Text>
 				<PlatformIcon
-					style={styles.chevronIcon}
+					style={{ color: toColor(labelColor) }}
 					ios={{
 						name: 'chevron.forward',
 						size: 6
@@ -67,14 +71,6 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	)
 }
 
-/**
- * BottomSheetDetailModal component for displaying room details
- * @param {React.RefObject<BottomSheetModal>} bottomSheetModalRef - Reference to the bottom sheet modal
- * @param {Function} handleSheetChangesModal - Function to handle changes in the bottom sheet modal
- * @param {any} roomData - Data for the room
- * @param {FormListSections[]} modalSection - Sections for the room
- * @returns {React.JSX.Element}
- */
 export const BottomSheetDetailModal = ({
 	bottomSheetModalRef,
 	handleSheetChangesModal,
@@ -82,10 +78,16 @@ export const BottomSheetDetailModal = ({
 	roomData,
 	modalSection
 }: BottomSheetDetailModalProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const textColor = useCSSVariable('--color-text') as string
+	const labelTertiaryColor = useCSSVariable('--color-label-tertiary') as
+		| string
+		| undefined
 	const [copied, setCopied] = useState(false)
 	const IOS_SNAP_POINTS = ['39%', '57%', '85%']
 	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
+
+	const iconColor = Color(textColor).darken(0.1).hex()
+
 	return (
 		<BottomSheetModalProvider>
 			<BottomSheetModal
@@ -97,12 +99,16 @@ export const BottomSheetDetailModal = ({
 				onDismiss={handleSheetChangesModal}
 				backgroundComponent={BottomSheetBackground}
 				animatedPosition={currentPositionModal}
-				handleIndicatorStyle={styles.indicator}
+				handleIndicatorStyle={{
+					backgroundColor: toColor(labelTertiaryColor)
+				}}
 			>
-				<BottomSheetView style={styles.contentContainer}>
-					<View style={styles.modalSectionHeaderContainer}>
-						<Text style={styles.modalSectionHeader}>{roomData.title}</Text>
-						<View style={styles.buttonsContainer}>
+				<BottomSheetView className="flex-1 px-page">
+					<View className="flex-row justify-between pb-0">
+						<Text className="text-text text-[26px] font-semibold text-left">
+							{roomData.title}
+						</Text>
+						<View className="flex-row gap-2.5 mb-[3px]">
 							{roomData.type === SEARCH_TYPES.ROOM && (
 								<Pressable
 									onPress={() => {
@@ -112,7 +118,7 @@ export const BottomSheetDetailModal = ({
 										}
 										handleShareModal(roomData.title)
 									}}
-									style={styles.roomDetailButton}
+									className="items-center bg-card rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
 								>
 									<PlatformIcon
 										ios={{
@@ -128,7 +134,11 @@ export const BottomSheetDetailModal = ({
 											name: copied ? 'Check' : 'Share',
 											size: 16
 										}}
-										style={styles.shareIcon(Platform.OS)}
+										style={{
+											color: iconColor,
+											marginRight: Platform.OS === 'android' ? 2 : 0,
+											marginBottom: Platform.OS === 'ios' ? 3 : 0
+										}}
 									/>
 								</Pressable>
 							)}
@@ -137,7 +147,7 @@ export const BottomSheetDetailModal = ({
 									bottomSheetModalRef.current?.close()
 								}}
 							>
-								<View style={styles.roomDetailButton}>
+								<View className="items-center bg-card rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
 									<PlatformIcon
 										ios={{
 											name: 'xmark',
@@ -152,14 +162,17 @@ export const BottomSheetDetailModal = ({
 											name: 'X',
 											size: 22
 										}}
-										style={styles.xIcon(Platform.OS)}
+										style={{
+											color: iconColor,
+											marginTop: Platform.OS === 'ios' ? 1 : 0
+										}}
 									/>
 								</View>
 							</Pressable>
 						</View>
 					</View>
-					<Text style={styles.roomSubtitle}>{roomData.subtitle}</Text>
-					<View style={styles.formList}>
+					<Text className="text-text text-base">{roomData.subtitle}</Text>
+					<View className="self-center my-4 w-full">
 						<FormList sections={modalSection} />
 					</View>
 					<ReportLink roomTitle={roomData.title} />
@@ -168,66 +181,3 @@ export const BottomSheetDetailModal = ({
 		</BottomSheetModalProvider>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
-	chevronIcon: {
-		color: theme.colors.labelColor
-	},
-	contentContainer: {
-		flex: 1,
-		paddingHorizontal: theme.margins.page
-	},
-	formList: {
-		alignSelf: 'center',
-		marginVertical: 16,
-		width: '100%'
-	},
-	indicator: {
-		backgroundColor: theme.colors.labelTertiaryColor
-	},
-	modalSectionHeader: {
-		color: theme.colors.text,
-		fontSize: 26,
-		fontWeight: '600',
-		textAlign: 'left'
-	},
-	modalSectionHeaderContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 0
-	},
-	reportContainer: { paddingVertical: 10 },
-	reportLink: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 4
-	},
-	reportText: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		paddingStart: 4
-	},
-	roomDetailButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: 25,
-		height: 34,
-		justifyContent: 'center',
-		padding: 7,
-		width: 34
-	},
-	roomSubtitle: {
-		color: theme.colors.text,
-		fontSize: 16
-	},
-	shareIcon: (platform) => ({
-		color: Color(theme.colors.text).darken(0.1).hex(),
-		marginRight: platform === 'android' ? 2 : 0,
-		marginBottom: platform === 'ios' ? 3 : 0
-	}),
-	xIcon: (platform) => ({
-		color: Color(theme.colors.text).darken(0.1).hex(),
-		marginTop: platform === 'ios' ? 1 : 0
-	})
-}))

@@ -44,6 +44,7 @@
 			--color-warning: #f48e00;
 			--color-notification: rgb(255, 59, 48);
 			--color-input-background: #e9e9e9;
+			--color-date-picker-background: #ebebec;
 			--color-contrast: #ffffff;
 			--color-sheet-button: #ffffff;
 			--color-veg-green: #18b91e;
@@ -81,6 +82,7 @@
 			--color-warning: #ff9900;
 			--color-notification: rgb(255, 69, 58);
 			--color-input-background: #383838;
+			--color-date-picker-background: #2a2a2c;
 			--color-contrast: #000000;
 			--color-sheet-button: #262626;
 			--color-veg-green: #1ccd22;

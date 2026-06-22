@@ -7,7 +7,7 @@ import type React from 'react'
 import { type ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/error-view'
@@ -26,6 +26,7 @@ import {
 	filterRooms,
 	getNextValidDate
 } from '@/utils/map-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 const DURATIONS = [
 	'00:15',
@@ -47,9 +48,13 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const { t } = useTranslation('common')
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
+	const textColor = useCSSVariable('--color-text') as string | undefined
+	const datePickerBackground = useCSSVariable(
+		'--color-date-picker-background'
+	) as string | undefined
 
 	const startDate = getNextValidDate()
 	const [building, setBuilding] = useState(BUILDINGS_ALL)
@@ -59,6 +64,19 @@ export default function AdvancedSearch(): React.JSX.Element {
 
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
+
+	const webInputStyle = {
+		appearance: 'none' as const,
+		backgroundColor: toColor(datePickerBackground),
+		border: 'none',
+		borderRadius: 17,
+		color: toColor(textColor),
+		height: 32,
+		outline: 'none',
+		paddingLeft: 10,
+		paddingRight: 10,
+		fontSize: 15
+	}
 
 	const openAndroidDatePicker = (): void => {
 		DateTimePickerAndroid.open({
@@ -90,8 +108,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
 		queryKey: ['freeRooms', date],
 		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
+		staleTime: 1000 * 60 * 60,
+		gcTime: 1000 * 60 * 60 * 24 * 4,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.replace('/login')
@@ -123,14 +141,14 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<ScrollView style={styles.scrollView}>
+		<ScrollView className="p-3">
 			<View>
-				<Text style={styles.sectionHeader}>
+				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
 					{t('pages.rooms.options.title')}
 				</Text>
-				<View style={styles.section}>
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+				<View className="bg-card rounded-md mb-4">
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.date')}
 						</Text>
 
@@ -147,7 +165,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								onChange={(event: ChangeEvent<HTMLInputElement>) => {
 									setDate(event.currentTarget.value)
 								}}
-								style={styles.webInput as unknown as React.CSSProperties}
+								style={webInputStyle as unknown as React.CSSProperties}
 								min={formatISODate(new Date())}
 								max={formatISODate(
 									new Date(new Date().setDate(new Date().getDate() + 90))
@@ -158,7 +176,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								<DateTimePicker
 									value={new Date(`${date}T${time}`)}
 									mode="date"
-									accentColor={theme.colors.primary}
+									accentColor={primaryColor}
 									locale="de-DE"
 									onChange={(_event, selectedDate) => {
 										setShowDate(Platform.OS !== 'android')
@@ -173,8 +191,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 						)}
 					</View>
 					<Divider />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.time')}
 						</Text>
 
@@ -191,7 +209,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								onChange={(event: ChangeEvent<HTMLInputElement>) => {
 									setTime(event.currentTarget.value)
 								}}
-								style={styles.webInput as unknown as React.CSSProperties}
+								style={webInputStyle as unknown as React.CSSProperties}
 								step={300}
 							/>
 						) : (
@@ -200,7 +218,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 									value={new Date(`${date}T${time}`)}
 									mode="time"
 									is24Hour={true}
-									accentColor={theme.colors.primary}
+									accentColor={primaryColor}
 									locale="de-DE"
 									minuteInterval={5}
 									onChange={(_event, selectedDate) => {
@@ -212,8 +230,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 						)}
 					</View>
 					<Divider />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.duration')}
 						</Text>
 						<Dropdown
@@ -223,8 +241,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 						/>
 					</View>
 					<Divider />
-					<View style={styles.optionsRow}>
-						<Text style={styles.optionTitle}>
+					<View className="items-center flex-row justify-between px-[15px] py-2">
+						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.building')}
 						</Text>
 						<Dropdown
@@ -234,11 +252,13 @@ export default function AdvancedSearch(): React.JSX.Element {
 						/>
 					</View>
 				</View>
-				<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-				<View style={styles.sectionContainer}>
-					<View style={styles.section}>
+				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
+					{t('pages.rooms.results')}
+				</Text>
+				<View className="pb-5">
+					<View className="bg-card rounded-md mb-4">
 						{isLoading ? (
-							<LoadingIndicator style={styles.loadingIndicator} />
+							<LoadingIndicator style={{ paddingVertical: 30 }} />
 						) : isPaused ? (
 							<ErrorView
 								title={networkError}
@@ -264,50 +284,3 @@ export default function AdvancedSearch(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	loadingIndicator: {
-		paddingVertical: 30
-	},
-	optionTitle: {
-		color: theme.colors.text,
-		fontSize: 15
-	},
-	optionsRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 15,
-		paddingVertical: 8
-	},
-	scrollView: {
-		padding: 12
-	},
-	section: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		marginBottom: 16
-	},
-	sectionContainer: {
-		paddingBottom: 20
-	},
-	sectionHeader: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	webInput: {
-		appearance: 'none',
-		backgroundColor: theme.colors.datePickerBackground,
-		border: 'none',
-		borderRadius: theme.radius.md,
-		color: theme.colors.text,
-		height: 32,
-		outline: 'none',
-		paddingLeft: 10,
-		paddingRight: 10,
-		fontSize: 15
-	}
-}))

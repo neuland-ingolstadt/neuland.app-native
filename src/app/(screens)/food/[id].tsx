@@ -523,10 +523,7 @@ export default function FoodDetail(): React.JSX.Element {
 							className={`overflow-hidden ${Platform.OS === 'ios' ? '-mb-2.5' : ''} ${Platform.OS === 'ios' ? '' : 'pr-[50px]'}`}
 						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle
-									{...props}
-									tintColor={textColor}
-								>
+								<HeaderTitle {...props} tintColor={textColor}>
 									{title}
 								</HeaderTitle>
 							</Animated.View>

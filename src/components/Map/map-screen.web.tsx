@@ -23,6 +23,7 @@ import {
 	Linking,
 	Pressable,
 	Text,
+	useColorScheme,
 	View
 } from 'react-native'
 import Animated, {
@@ -31,11 +32,7 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import NeulandAPI from '@/api/neuland-api'
 import {
@@ -49,6 +46,7 @@ import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import {
@@ -92,8 +90,19 @@ export function requestPermission(): void {
 const MapScreen = (): React.JSX.Element => {
 	const navigation = useNavigation()
 	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
-	const { styles, theme } = useStyles(stylesheet)
-	const isDark = UnistylesRuntime.themeName === 'dark'
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const systemScheme = useColorScheme()
+	const isDark =
+		themePreference === 'dark' ||
+		(themePreference !== 'light' && systemScheme === 'dark')
+	const primaryColor = useCSSVariable('--color-primary') as string
+	const notificationColor = useCSSVariable('--color-notification') as
+		| string
+		| undefined
+	const labelColor = useCSSVariable('--color-label') as string | undefined
+	const backgroundColor = useCSSVariable('--color-background') as
+		| string
+		| undefined
 	const params = useLocalSearchParams<{ room: string }>()
 	const { userKind, userFaculty } = use(UserKindContext)
 	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
@@ -360,7 +369,7 @@ const MapScreen = (): React.JSX.Element => {
 		)?.properties
 
 		if (room == null) {
-			roomNotFoundToast(params.room, theme.colors.notification)
+			roomNotFoundToast(params.room, notificationColor ?? '')
 			router.setParams({ room: '' })
 			return
 		}
@@ -658,7 +667,7 @@ const MapScreen = (): React.JSX.Element => {
 				? 'rgba(166, 173, 181, 0.70)'
 				: 'rgba(218, 218, 218, 0.70)',
 			paddingHorizontal: 4,
-			borderRadius: theme.radius.xs
+			borderRadius: 4
 		}
 	}
 
@@ -771,14 +780,14 @@ const MapScreen = (): React.JSX.Element => {
 	}
 
 	return (
-		<View style={styles.map}>
+		<View className="flex-1">
 			{mapLoadState === LoadingState.ERROR && (
-				<View style={styles.errorContainer}>
+				<View className="bg-background flex-1 h-full justify-center absolute w-full z-[100]">
 					<ErrorView title={t('error.map.mapLoadError')} />
 				</View>
 			)}
 			{mapLoadState === LoadingState.LOADING && (
-				<View style={styles.errorContainer}>
+				<View className="bg-background flex-1 h-full justify-center absolute w-full z-[100]">
 					<LoadingIndicator />
 				</View>
 			)}
@@ -790,9 +799,7 @@ const MapScreen = (): React.JSX.Element => {
 						latitude: mapCenter[1],
 						zoom: 16.5
 					}}
-					mapStyle={
-						UnistylesRuntime.themeName === 'dark' ? darkStyle : lightStyle
-					}
+					mapStyle={isDark ? darkStyle : lightStyle}
 					ref={mapRef}
 					onLoad={handleMapLoad}
 					onError={handleMapError}
@@ -840,7 +847,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="availableRoomsFill"
 								type="fill"
 								paint={{
-									'fill-color': theme.colors.primary,
+									'fill-color': primaryColor,
 									'fill-opacity': 0.2,
 									'fill-antialias': true
 								}}
@@ -849,7 +856,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="availableRoomsOutline"
 								type="line"
 								paint={{
-									'line-color': theme.colors.primary,
+									'line-color': primaryColor,
 									'line-width': 2.4
 								}}
 							/>
@@ -871,8 +878,8 @@ const MapScreen = (): React.JSX.Element => {
 									'text-allow-overlap': true
 								}}
 								paint={{
-									'text-color': theme.colors.labelColor,
-									'text-halo-color': theme.colors.background,
+									'text-color': labelColor,
+									'text-halo-color': backgroundColor,
 									'text-halo-width': 1
 								}}
 							/>
@@ -883,7 +890,7 @@ const MapScreen = (): React.JSX.Element => {
 						<Marker
 							longitude={clickedElement.center[0]}
 							latitude={clickedElement.center[1]}
-							color={theme.colors.primary}
+							color={primaryColor}
 						/>
 					)}
 				</Map>
@@ -898,7 +905,8 @@ const MapScreen = (): React.JSX.Element => {
 			)}
 			{mapLoadState === LoadingState.LOADED && (
 				<Animated.View
-					style={[styles.osmContainer, animatedStyles, { top: -22 }]}
+					className="items-end h-[30px] mr-1 absolute right-0 z-[99]"
+					style={[animatedStyles, { top: -22 }]}
 				>
 					<Pressable
 						onPress={() => {
@@ -907,7 +915,7 @@ const MapScreen = (): React.JSX.Element => {
 						style={layerStyles.osmBackground}
 					>
 						<Text
-							style={styles.osmAtrribution}
+							className="text-[13px]"
 							numberOfLines={1}
 							ellipsizeMode="tail"
 						>
@@ -934,28 +942,3 @@ const MapScreen = (): React.JSX.Element => {
 }
 
 export default MapScreen
-
-const stylesheet = createStyleSheet((theme) => ({
-	errorContainer: {
-		backgroundColor: theme.colors.background,
-		flex: 1,
-		height: '100%',
-		justifyContent: 'center',
-		position: 'absolute',
-		width: '100%',
-		zIndex: 100
-	},
-	map: {
-		flex: 1
-	},
-	osmAtrribution: { fontSize: 13 },
-	osmContainer: {
-		alignItems: 'flex-end',
-		height: 30,
-		marginRight: 4,
-		position: 'absolute',
-		right: 0,
-		top: -24,
-		zIndex: 99
-	}
-}))
