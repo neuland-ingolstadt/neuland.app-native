@@ -7,7 +7,6 @@ import type React from 'react'
 import { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { createMMKV, useMMKVBoolean } from 'react-native-mmkv'
 import { UserKindContext } from '@/components/contexts'
 import TabLayout from '@/components/Layout/tab-bar'
 import changelog from '@/data/changelog.json'
@@ -18,7 +17,6 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
-import { storage } from '@/utils/storage'
 import { appIcons } from '../(screens)/app-icon.ios'
 
 export default function HomeLayout(): React.JSX.Element {
@@ -39,41 +37,10 @@ export default function HomeLayout(): React.JSX.Element {
 		(state) => state.initializeAnalytics
 	)
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
-	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
-	const setOnboarded = useFlowStore((state) => state.setOnboarded)
-	const toggleSelectedAllergens = useFoodFilterStore(
-		(state) => state.toggleSelectedAllergens
-	)
 	const { userKind: userKindInitial } = use(UserKindContext)
 	const userKind = userKindInitial ?? USER_GUEST
 	const updatedVersion = useFlowStore((state) => state.updatedVersion)
-	const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
-	const [analyticsV1] = useMMKVBoolean('analytics')
-	const legacyStorage = createMMKV()
-	const oldAllergens = storage.getString('selectedUserAllergens')
-	// migration of old settings
-	if (isOnboardedV1 === true) {
-		setOnboarded()
-		legacyStorage.remove('isOnboardedv1')
-	}
-	if (analyticsV1 === true) {
-		setAnalyticsAllowed(true)
-		legacyStorage.remove('analytics')
-	}
-
-	if (oldAllergens != null) {
-		const allergens = JSON.parse(oldAllergens) as string[]
-		if (allergens.length === 1 && allergens[0] === 'not-configured') {
-			/* empty */
-		} else {
-			for (const allergen of allergens) {
-				console.debug('Migrating allergen:', allergen)
-				toggleSelectedAllergens(allergen)
-			}
-		}
-		storage.remove('selectedUserAllergens')
-	}
 
 	const version = Application.nativeApplicationVersion
 	const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
