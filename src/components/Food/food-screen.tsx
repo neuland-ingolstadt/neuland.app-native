@@ -25,6 +25,12 @@ import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
+function getFoodDayKey(day: Food): string {
+	return typeof day.timestamp === 'string'
+		? day.timestamp.slice(0, 10)
+		: formatISODate(day.timestamp)
+}
+
 function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	if (foodData == null) {
 		return []
@@ -187,7 +193,7 @@ function FoodScreen(): React.JSX.Element {
 							>
 								{data.slice(0, 5).map((day: Food, index: number) => (
 									<FoodDayButton
-										key={index}
+										key={getFoodDayKey(day)}
 										day={day}
 										index={index}
 										selectedDay={selectedDay}
@@ -210,7 +216,7 @@ function FoodScreen(): React.JSX.Element {
 							scrollEnabled
 							overdrag
 						>
-							{data.map((_: unknown, index: number) => (
+							{data.map((day: Food, index: number) => (
 								<ScrollView
 									refreshControl={
 										<RefreshControl
@@ -233,11 +239,11 @@ function FoodScreen(): React.JSX.Element {
 										],
 										{ useNativeDriver: false }
 									)}
-									key={index}
+									key={getFoodDayKey(day)}
 									showsVerticalScrollIndicator={false}
 									contentContainerStyle={styles.innerScrollContainer}
 								>
-									<MealDay day={data[index]} index={index} key={index} />
+									<MealDay day={day} index={index} />
 								</ScrollView>
 							))}
 						</PagerView>
