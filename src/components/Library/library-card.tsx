@@ -31,7 +31,7 @@ interface LibraryCardProps {
  * @param iconProps Icon properties
  * @param title Title of the card
  * @param description Description of the card
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 const LibraryCard = ({
 	onPress,

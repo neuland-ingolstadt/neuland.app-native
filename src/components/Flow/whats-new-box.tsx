@@ -16,7 +16,7 @@ interface WhatsNewBoxProps {
  * @param {string} title - The title of the box.
  * @param {string} description - The description of the box.
  * @param {string} icon - The icon of the box.
- * @returns {JSX.Element} - A React component that renders the box.
+ * @returns {React.JSX.Element} - A React component that renders the box.
  * @example
  * <WhatsNewBox title="Title" description="Description" icon="chevron-forward-circle" />
  */

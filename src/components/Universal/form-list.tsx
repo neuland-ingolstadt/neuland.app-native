@@ -284,7 +284,7 @@ const RenderSectionItems = ({
 /**
  * A component that renders a list of forms with headers and footers.
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
- * @returns {JSX.Element} - A React component that renders the list of forms.
+ * @returns {React.JSX.Element} - A React component that renders the list of forms.
  */
 const FormList = ({
 	sections,

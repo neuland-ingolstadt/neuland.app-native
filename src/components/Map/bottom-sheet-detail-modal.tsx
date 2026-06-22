@@ -73,7 +73,7 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
  * @param {Function} handleSheetChangesModal - Function to handle changes in the bottom sheet modal
  * @param {any} roomData - Data for the room
  * @param {FormListSections[]} modalSection - Sections for the room
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 export const BottomSheetDetailModal = ({
 	bottomSheetModalRef,
