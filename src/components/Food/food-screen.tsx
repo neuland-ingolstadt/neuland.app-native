@@ -1,9 +1,6 @@
-/** biome-ignore-all lint/correctness/useHookAtTopLevel: TODO */
 import { useQuery } from '@tanstack/react-query'
-import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import {
-	memo,
 	useCallback,
 	useDeferredValue,
 	useEffect,
@@ -11,21 +8,13 @@ import {
 	useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Animated,
-	Platform,
-	Pressable,
-	RefreshControl,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View
-} from 'react-native'
+import { Animated, RefreshControl, ScrollView, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import { FoodLoadingIndicator, MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/allergens-banner'
+import { FoodDayButton } from '@/components/Food/food-day-button'
 import PagerView from '@/components/Layout/pager-view'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
@@ -35,6 +24,12 @@ import { networkError } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
+
+function getFoodDayKey(day: Food): string {
+	return typeof day.timestamp === 'string'
+		? day.timestamp.slice(0, 10)
+		: formatISODate(day.timestamp)
+}
 
 function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	if (foodData == null) {
@@ -142,83 +137,12 @@ function FoodScreen(): React.JSX.Element {
 		}
 	}, [data, isPaused, t])
 
-	/**
-	 * Renders a button for a specific day's food data.
-	 * @param {Food} day - The food data for the day.
-	 * @param {number} index - The index of the day in the list of days.
-	 * @returns {React.JSX.Element} - The rendered button component.
-	 */
-	const DayButton = memo(
-		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
-			const date = new Date(day.timestamp)
-			const { styles } = useStyles(stylesheet)
+	const handleDayPress = useCallback((index: number) => {
+		setSelectedDay(index)
+		pagerViewRef.current?.setPage(index)
+	}, [])
 
-			const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
-			const isFirstDay = index === 0
-			const isLastDay = index === daysCnt - 1
-
-			const buttonStyle = [
-				{ flex: 1, marginHorizontal: 4 },
-				isFirstDay ? { marginLeft: 0 } : null,
-				isLastDay ? { marginRight: 0 } : null
-			]
-
-			const setPage = useCallback((page: number): void => {
-				pagerViewRef.current?.setPage(page)
-			}, [])
-
-			const handleDayPress = useCallback(
-				(index: number) => {
-					if (Platform.OS === 'ios' && index !== selectedDay) {
-						void Haptics.selectionAsync()
-					}
-					setSelectedDay(index)
-					setPage(index)
-				},
-				[selectedDay, setPage]
-			)
-			const getStyleMemoized = useCallback(
-				(isSelected: boolean) => styles.dayText2(isSelected),
-				[]
-			)
-			return (
-				<View style={buttonStyle} key={index}>
-					<Pressable
-						onPress={() => {
-							handleDayPress(index)
-						}}
-					>
-						<View style={styles.dayButtonContainer}>
-							<Text
-								style={getStyleMemoized(selectedDay === index)}
-								adjustsFontSizeToFit
-								minimumFontScale={0.8}
-								numberOfLines={1}
-							>
-								{date
-									.toLocaleDateString(i18n.language, {
-										weekday: 'short'
-									})
-									.slice(0, 2)}
-							</Text>
-							<Text
-								style={styles.dayText(selectedDay === index)}
-								adjustsFontSizeToFit
-								minimumFontScale={0.8}
-								numberOfLines={1}
-							>
-								{date.toLocaleDateString('de-DE', {
-									day: 'numeric',
-									month: 'numeric'
-								})}
-							</Text>
-						</View>
-					</Pressable>
-				</View>
-			)
-		}
-	)
-
+	const daysCount = data.length < 5 ? data.length : 5
 	const scrollY = new Animated.Value(0)
 	const showAllergensBanner =
 		deferredAllergenSelection.length === 1 &&
@@ -268,7 +192,15 @@ function FoodScreen(): React.JSX.Element {
 								}}
 							>
 								{data.slice(0, 5).map((day: Food, index: number) => (
-									<DayButton day={day} index={index} key={index} />
+									<FoodDayButton
+										key={getFoodDayKey(day)}
+										day={day}
+										index={index}
+										selectedDay={selectedDay}
+										daysCount={daysCount}
+										language={i18n.language}
+										onDayPress={handleDayPress}
+									/>
 								))}
 							</View>
 						</Animated.View>
@@ -284,7 +216,7 @@ function FoodScreen(): React.JSX.Element {
 							scrollEnabled
 							overdrag
 						>
-							{data.map((_: unknown, index: number) => (
+							{data.map((day: Food, index: number) => (
 								<ScrollView
 									refreshControl={
 										<RefreshControl
@@ -307,11 +239,11 @@ function FoodScreen(): React.JSX.Element {
 										],
 										{ useNativeDriver: false }
 									)}
-									key={index}
+									key={getFoodDayKey(day)}
 									showsVerticalScrollIndicator={false}
 									contentContainerStyle={styles.innerScrollContainer}
 								>
-									<MealDay day={data[index]} index={index} key={index} />
+									<MealDay day={day} index={index} />
 								</ScrollView>
 							))}
 						</PagerView>
@@ -329,29 +261,6 @@ export const stylesheet = createStyleSheet((theme) => ({
 		borderBottomColor: theme.colors.border,
 		width: '100%'
 	},
-	dayButtonContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		height: 60,
-		justifyContent: 'space-evenly',
-		paddingVertical: 8,
-		width: '100%'
-	},
-	dayText: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 16,
-		fontWeight: selected ? '500' : 'normal'
-	}),
-	dayText2: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 15,
-		fontWeight: selected ? '500' : 'normal'
-	}),
 	innerScrollContainer: {
 		marginHorizontal: 12,
 		paddingBottom: theme.margins.bottomSafeArea
