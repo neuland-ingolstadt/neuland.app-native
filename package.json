@@ -30,7 +30,7 @@
 		"react:doctor": "bunx react-doctor@latest"
 	},
 	"dependencies": {
-		"@aptabase/react-native": "^0.3.10",
+		"@aptabase/react-native": "^0.5.0",
 		"@babel/runtime": "^7.28.4",
 		"@bottom-tabs/react-navigation": "^0.11.2",
 		"@expo/metro-runtime": "~6.1.2",
@@ -144,8 +144,7 @@
 	"patchedDependencies": {
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
-		"recyclerlistview@4.2.3": "patches/recyclerlistview@4.2.3.patch",
-		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch"
+		"recyclerlistview@4.2.3": "patches/recyclerlistview@4.2.3.patch"
 	},
 	"trustedDependencies": [
 		"@biomejs/biome"
