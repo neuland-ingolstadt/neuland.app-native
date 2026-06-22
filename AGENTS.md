@@ -320,7 +320,7 @@ Setup lives at the project root and in `src/`:
 
 **Already migrated** (use these as references): `src/app/(screens)/version.tsx`,
 `src/app/(screens)/food-preferences.tsx`, `src/app/(screens)/food/[id].tsx`,
-`src/app/(screens)/room-search.tsx`, `src/app/(tabs)/map.tsx`,
+`src/app/(screens)/room-search.tsx`, `src/app/(screens)/room-report.tsx`, `src/app/(tabs)/map.tsx`,
 `src/components/Universal/form-list.tsx`, `src/components/Cards/*` (all dashboard cards),
 `src/components/Food/*` (all food tab components), `src/components/Map/*` (all map components).
 

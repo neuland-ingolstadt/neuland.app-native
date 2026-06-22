@@ -3,22 +3,36 @@ import { toast } from 'burnt'
 import Color from 'color'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Pressable, Text, View } from 'react-native'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+	ActivityIndicator,
+	Pressable,
+	Text,
+	useColorScheme,
+	View
+} from 'react-native'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
+import { useCSSVariable } from 'uniwind'
 import type { RoomReportCategory } from '@/__generated__/gql/graphql'
 import neulandApi from '@/api/neuland-api'
 import { CustomDropdown } from '@/components/Menu/custom-dropdown'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function RoomReport(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const systemScheme = useColorScheme()
+	const isDark =
+		themePreference === 'dark' ||
+		(themePreference !== 'light' && systemScheme === 'dark')
+	const primaryColor = useCSSVariable('--color-primary') as string
+	const textColor = useCSSVariable('--color-text') as string | undefined
+	const inputBackground = useCSSVariable('--color-input-background') as
+		| string
+		| undefined
+	const borderColor = useCSSVariable('--color-border') as string | undefined
 
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
@@ -77,24 +91,58 @@ export default function RoomReport(): React.JSX.Element {
 		room.trim() === '' ||
 		isPending
 
+	const textInputStyle = useMemo(
+		() => ({
+			backgroundColor: toColor(inputBackground),
+			borderRadius: 17,
+			color: toColor(textColor),
+			flex: 1,
+			fontSize: 17,
+			height: 40,
+			marginBottom: 10,
+			paddingHorizontal: 10,
+			borderColor: toColor(borderColor),
+			borderWidth: 1
+		}),
+		[inputBackground, textColor, borderColor]
+	)
+
+	const contrastOnPrimary = getContrastColor(primaryColor)
+	const submitButtonStyle = {
+		backgroundColor: submitDisabled
+			? isDark
+				? Color(primaryColor).darken(0.3).hex()
+				: Color(primaryColor).lighten(0.3).hex()
+			: primaryColor
+	}
+	const buttonTextStyle = {
+		color: submitDisabled
+			? isDark
+				? Color(contrastOnPrimary).lighten(0.1).hex()
+				: Color(contrastOnPrimary).darken(0.1).hex()
+			: contrastOnPrimary
+	}
+
 	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<View style={styles.contentContainer}>
-				<View style={styles.modalSectionHeaderContainer}>
-					<Text style={styles.header}>{t('pages.rooms.report.title')}</Text>
+		<ScrollView contentContainerClassName="bg-background p-page">
+			<View className="justify-center pb-5 pt-2.5">
+				<View className="flex-row justify-between pb-2.5">
+					<Text className="text-text text-[23px] font-semibold mb-3.5">
+						{t('pages.rooms.report.title')}
+					</Text>
 				</View>
 
-				<Text style={styles.inputLabel}>
+				<Text className="text-text text-[15px] pb-[5px]">
 					{t('pages.rooms.report.room.title')}
 				</Text>
 				<TextInput
-					style={styles.textInput}
+					style={textInputStyle}
 					value={roomTitle}
 					placeholder={t('pages.rooms.report.room.placeholder')}
 					onChangeText={(text) => setRoomTitle(text)}
 				/>
 
-				<Text style={styles.inputLabel}>
+				<Text className="text-text text-[15px] pb-[5px]">
 					{t('pages.rooms.report.category.title')}
 				</Text>
 				<CustomDropdown
@@ -105,10 +153,10 @@ export default function RoomReport(): React.JSX.Element {
 						value: category
 					}))}
 					placeholder={t('pages.rooms.report.category.placeholder')}
-					style={styles.textInput}
+					style={textInputStyle}
 				/>
 
-				<Text style={styles.inputLabel}>
+				<Text className="text-text text-[15px] pb-[5px]">
 					{t('pages.rooms.report.description.title')}
 				</Text>
 				<TextInput
@@ -117,8 +165,10 @@ export default function RoomReport(): React.JSX.Element {
 					numberOfLines={4}
 					maxLength={2000}
 					style={{
-						...styles.textInput,
-						...styles.multilineTextInput
+						...textInputStyle,
+						height: 200,
+						paddingTop: 10,
+						textAlignVertical: 'top'
 					}}
 					placeholder={t('pages.rooms.report.description.placeholder')}
 					value={description}
@@ -135,95 +185,23 @@ export default function RoomReport(): React.JSX.Element {
 							room: room
 						})
 					}}
-					style={styles.submitButton(submitDisabled)}
+					className="h-10 justify-center px-page mt-[25px] rounded-md items-center"
+					style={submitButtonStyle}
 				>
 					{isPending ? (
-						<ActivityIndicator
-							color={getContrastColor(theme.colors.primary)}
-							size={15}
-						/>
+						<ActivityIndicator color={contrastOnPrimary} size={15} />
 					) : (
-						<Text style={styles.buttonText(submitDisabled)}>{t('submit')}</Text>
+						<Text className="font-bold text-[15px]" style={buttonTextStyle}>
+							{t('submit')}
+						</Text>
 					)}
 				</Pressable>
 			</View>
 			<View>
-				<Text style={styles.footerText}>
+				<Text className="text-label text-sm text-left">
 					{t('pages.rooms.report.footerText')}
 				</Text>
 			</View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	buttonText: (disabled: boolean) => ({
-		fontWeight: 'bold',
-		fontSize: 15,
-		color: disabled
-			? UnistylesRuntime.themeName === 'dark'
-				? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
-				: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
-			: getContrastColor(theme.colors.primary)
-	}),
-	container: {
-		backgroundColor: theme.colors.background,
-		padding: theme.margins.page
-	},
-	contentContainer: {
-		justifyContent: 'center',
-		paddingBottom: 20,
-		paddingTop: 10
-	},
-	footerText: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		textAlign: 'left'
-	},
-	header: {
-		color: theme.colors.text,
-		fontSize: 23,
-		fontWeight: '600',
-		marginBottom: 14
-	},
-	inputLabel: {
-		color: theme.colors.text,
-		fontSize: 15,
-		paddingBottom: 5
-	},
-	modalSectionHeaderContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 10
-	},
-	multilineTextInput: {
-		height: 200,
-		paddingTop: 10,
-		textAlignVertical: 'top'
-	},
-	submitButton: (disabled: boolean) => ({
-		height: 40,
-		justifyContent: 'center',
-		paddingHorizontal: theme.margins.page,
-		marginTop: 25,
-		borderRadius: theme.radius.md,
-		alignItems: 'center',
-		backgroundColor: disabled
-			? UnistylesRuntime.themeName === 'dark'
-				? Color(theme.colors.primary).darken(0.3).hex()
-				: Color(theme.colors.primary).lighten(0.3).hex()
-			: theme.colors.primary
-	}),
-	textInput: {
-		backgroundColor: theme.colors.inputBackground,
-		borderRadius: theme.radius.mg,
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 17,
-		height: 40,
-		marginBottom: 10,
-		paddingHorizontal: 10,
-		borderColor: theme.colors.border,
-		borderWidth: 1
-	}
-}))
