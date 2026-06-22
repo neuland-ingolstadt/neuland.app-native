@@ -1,8 +1,9 @@
 import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import Divider from '@/components/Universal/Divider'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from '../Universal/Icon'
 
 export interface FoodLanguageElement {
@@ -28,25 +29,25 @@ const MultiSectionRadio = ({
 	selectedItem,
 	action
 }: FoodLanguagePickerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
+
 	return (
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<View style={styles.itemContainer}>
+					<View className="h-[52px]">
 						<Pressable
+							className="bg-card rounded-ios p-4 flex-row items-center justify-between h-full active:opacity-80"
 							onPress={() => {
 								if (Platform.OS === 'ios') {
 									void selectionAsync()
 								}
 								action(item.key)
 							}}
-							style={({ pressed }) => [
-								styles.itemContent,
-								pressed && { opacity: 0.8 }
-							]}
 						>
-							<Text style={styles.itemText}>{item.title}</Text>
+							<Text className="text-text text-base flex-1 mr-2">
+								{item.title}
+							</Text>
 							{selectedItem === item.key && (
 								<PlatformIcon
 									ios={{
@@ -61,7 +62,9 @@ const MultiSectionRadio = ({
 										name: 'Check',
 										size: 18
 									}}
-									style={styles.checkIcon}
+									style={{
+										color: toColor(primaryColor)
+									}}
 								/>
 							)}
 						</Pressable>
@@ -74,29 +77,5 @@ const MultiSectionRadio = ({
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	itemContainer: {
-		height: 52
-	},
-	itemContent: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: '100%'
-	},
-	itemText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		flex: 1,
-		marginRight: 8
-	},
-	checkIcon: {
-		color: theme.colors.primary
-	}
-}))
 
 export default MultiSectionRadio

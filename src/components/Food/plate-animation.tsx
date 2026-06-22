@@ -3,8 +3,9 @@ import type React from 'react'
 import { View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/Icon'
+import { toColor } from '@/utils/uniwind-utils'
 import { SharedPlate } from './shared-plate'
 import { useSharedPlateAnimations } from './use-shared-plate-animations'
 
@@ -39,9 +40,9 @@ const FOOD_ICONS = [
 export const PlateAnimation = ({
 	size = 120
 }: PlateAnimationProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const plateInnerColor = useCSSVariable('--color-plate-inner') as string
+	const primaryColor = useCSSVariable('--color-primary') as string
 
-	// Use shared animations hook with tap animations enabled
 	const {
 		plateAnimatedStyle,
 		plateInnerAnimatedStyle,
@@ -52,19 +53,23 @@ export const PlateAnimation = ({
 	} = useSharedPlateAnimations({
 		size,
 		enableTapAnimations: true,
-		baseInnerColor: theme.colors.plateInner,
-		tapTintColor: theme.colors.primary
+		baseInnerColor: plateInnerColor,
+		tapTintColor: primaryColor
 	})
 
-	// Create a tap gesture using the modern Gesture API
 	const tapGesture = Gesture.Tap().onBegin(() => {
 		triggerTapAnimation()
 	})
 
 	return (
-		<View style={[styles.container, { width: size * 2, height: size * 1.6 }]}>
-			{/* Floating icons */}
-			<Animated.View style={[styles.iconContainer, icon0Style]}>
+		<View
+			className="items-center justify-center relative"
+			style={{ width: size * 2, height: size * 1.6 }}
+		>
+			<Animated.View
+				className="absolute w-10 h-10 items-center justify-center z-[2]"
+				style={icon0Style}
+			>
 				<PlatformIcon
 					ios={{
 						name: FOOD_ICONS[0].ios,
@@ -80,11 +85,14 @@ export const PlateAnimation = ({
 						name: FOOD_ICONS[0].web,
 						size: size * 0.25
 					}}
-					style={styles.icon}
+					style={{ color: toColor(primaryColor) }}
 				/>
 			</Animated.View>
 
-			<Animated.View style={[styles.iconContainer, icon1Style]}>
+			<Animated.View
+				className="absolute w-10 h-10 items-center justify-center z-[2]"
+				style={icon1Style}
+			>
 				<PlatformIcon
 					ios={{
 						name: FOOD_ICONS[1].ios,
@@ -100,11 +108,14 @@ export const PlateAnimation = ({
 						name: FOOD_ICONS[1].web,
 						size: size * 0.25
 					}}
-					style={styles.icon}
+					style={{ color: toColor(primaryColor) }}
 				/>
 			</Animated.View>
 
-			<Animated.View style={[styles.iconContainer, icon2Style]}>
+			<Animated.View
+				className="absolute w-10 h-10 items-center justify-center z-[2]"
+				style={icon2Style}
+			>
 				<PlatformIcon
 					ios={{
 						name: FOOD_ICONS[2].ios,
@@ -120,11 +131,10 @@ export const PlateAnimation = ({
 						name: FOOD_ICONS[2].web,
 						size: size * 0.25
 					}}
-					style={styles.icon}
+					style={{ color: toColor(primaryColor) }}
 				/>
 			</Animated.View>
 
-			{/* Plate with modern gesture detector */}
 			<GestureDetector gesture={tapGesture}>
 				<SharedPlate
 					size={size}
@@ -136,23 +146,3 @@ export const PlateAnimation = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: 'relative',
-		paddingVertical: 0
-	},
-	iconContainer: {
-		position: 'absolute',
-		width: 40,
-		height: 40,
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 2
-	},
-	icon: {
-		color: theme.colors.primary
-	}
-}))

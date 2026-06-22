@@ -49,6 +49,14 @@
 			--color-veg-green: #18b91e;
 			--color-completed-dot: #157a15;
 			--color-soon-dot: #dfdfdf;
+			--color-plate-outer: #edebeb;
+			--color-plate-outer-border: #d0d0d0;
+			--color-plate-rim: #f5f5f5;
+			--color-plate-rim-border: #d1d1d1;
+			--color-plate-inner: #eaeaea;
+			--color-plate-inner-border: #cccccc;
+			--color-plate-shadow: #444444;
+			--color-plate-inner-shadow: #777777;
 		}
 
 		@variant dark {
@@ -78,6 +86,14 @@
 			--color-veg-green: #1ccd22;
 			--color-completed-dot: #157a15;
 			--color-soon-dot: #4b4b4b;
+			--color-plate-outer: #2a2a2b;
+			--color-plate-outer-border: #303032;
+			--color-plate-rim: #373739;
+			--color-plate-rim-border: #444448;
+			--color-plate-inner: #262626;
+			--color-plate-inner-border: #474749;
+			--color-plate-shadow: #777777;
+			--color-plate-inner-shadow: #3d3d3d;
 		}
 	}
 }

@@ -17,12 +17,11 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import { FoodLoadingIndicator, MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/allergens-banner'
@@ -35,6 +34,7 @@ import { networkError } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	if (foodData == null) {
@@ -42,16 +42,12 @@ function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	}
 
 	const todayStart = new Date().setHours(0, 0, 0, 0)
-	return (
-		foodData
-			.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
-			// filter again in case of yesterday's cached data
-			.slice(0, 5)
-	)
+	return foodData
+		.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
+		.slice(0, 5)
 }
 
 function FoodScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
 	const autoShowNextDayTimeMinutes = usePreferencesStore(
 		(state) => state.autoShowNextDayTimeMinutes
@@ -64,8 +60,8 @@ function FoodScreen(): React.JSX.Element {
 		(state) => state.allergenSelection
 	)
 	const pagerViewRef = useRef<PagerView>(null)
+	const borderColor = useCSSVariable('--color-border')
 
-	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
 	const deferredShowStatic = useDeferredValue(showStatic)
 	const deferredAllergenSelection = useDeferredValue(allergenSelection)
@@ -84,8 +80,8 @@ function FoodScreen(): React.JSX.Element {
 		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
 		queryFn: async () =>
 			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
@@ -142,16 +138,9 @@ function FoodScreen(): React.JSX.Element {
 		}
 	}, [data, isPaused, t])
 
-	/**
-	 * Renders a button for a specific day's food data.
-	 * @param {Food} day - The food data for the day.
-	 * @param {number} index - The index of the day in the list of days.
-	 * @returns {React.JSX.Element} - The rendered button component.
-	 */
 	const DayButton = memo(
 		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
 			const date = new Date(day.timestamp)
-			const { styles } = useStyles(stylesheet)
 
 			const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
 			const isFirstDay = index === 0
@@ -177,10 +166,9 @@ function FoodScreen(): React.JSX.Element {
 				},
 				[selectedDay, setPage]
 			)
-			const getStyleMemoized = useCallback(
-				(isSelected: boolean) => styles.dayText2(isSelected),
-				[]
-			)
+
+			const isSelected = selectedDay === index
+
 			return (
 				<View style={buttonStyle} key={index}>
 					<Pressable
@@ -188,9 +176,12 @@ function FoodScreen(): React.JSX.Element {
 							handleDayPress(index)
 						}}
 					>
-						<View style={styles.dayButtonContainer}>
+						<View
+							className="items-center self-center bg-card rounded-md border border-border h-[60px] justify-evenly py-2 w-full"
+							style={hairlineBorder}
+						>
 							<Text
-								style={getStyleMemoized(selectedDay === index)}
+								className={`text-[15px] ${isSelected ? 'text-primary font-medium' : 'text-text font-normal'}`}
 								adjustsFontSizeToFit
 								minimumFontScale={0.8}
 								numberOfLines={1}
@@ -202,7 +193,7 @@ function FoodScreen(): React.JSX.Element {
 									.slice(0, 2)}
 							</Text>
 							<Text
-								style={styles.dayText(selectedDay === index)}
+								className={`text-base ${isSelected ? 'text-primary font-medium' : 'text-text font-normal'}`}
 								adjustsFontSizeToFit
 								minimumFontScale={0.8}
 								numberOfLines={1}
@@ -226,9 +217,9 @@ function FoodScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView className="flex-1" edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
-					<View style={styles.loadingContainer}>
+					<View className="items-center justify-center pt-20 pb-10">
 						<FoodLoadingIndicator size={140} />
 					</View>
 				) : isError ? (
@@ -250,9 +241,9 @@ function FoodScreen(): React.JSX.Element {
 				) : isSuccess && data.length > 0 ? (
 					<>
 						<Animated.View
+							className="w-full"
 							style={{
-								...styles.animtedContainer,
-
+								borderBottomColor: toColor(borderColor),
 								borderBottomWidth: showAllergensBanner
 									? 0
 									: scrollY.interpolate({
@@ -262,11 +253,7 @@ function FoodScreen(): React.JSX.Element {
 										})
 							}}
 						>
-							<View
-								style={{
-									...styles.loadedContainer
-								}}
-							>
+							<View className="flex-row justify-between mx-3 my-2.5">
 								{data.slice(0, 5).map((day: Food, index: number) => (
 									<DayButton day={day} index={index} key={index} />
 								))}
@@ -275,7 +262,7 @@ function FoodScreen(): React.JSX.Element {
 						{showAllergensBanner && <AllergensBanner scrollY={scrollY} />}
 						<PagerView
 							ref={pagerViewRef}
-							style={styles.page}
+							className="flex-1"
 							initialPage={initialPageRef.current}
 							onPageSelected={(e) => {
 								const page = e.nativeEvent.position
@@ -309,7 +296,7 @@ function FoodScreen(): React.JSX.Element {
 									)}
 									key={index}
 									showsVerticalScrollIndicator={false}
-									contentContainerStyle={styles.innerScrollContainer}
+									contentContainerClassName="mx-3 pb-bottom-safe"
 								>
 									<MealDay day={data[index]} index={index} key={index} />
 								</ScrollView>
@@ -323,53 +310,3 @@ function FoodScreen(): React.JSX.Element {
 }
 
 export default FoodScreen
-
-export const stylesheet = createStyleSheet((theme) => ({
-	animtedContainer: {
-		borderBottomColor: theme.colors.border,
-		width: '100%'
-	},
-	dayButtonContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		height: 60,
-		justifyContent: 'space-evenly',
-		paddingVertical: 8,
-		width: '100%'
-	},
-	dayText: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 16,
-		fontWeight: selected ? '500' : 'normal'
-	}),
-	dayText2: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 15,
-		fontWeight: selected ? '500' : 'normal'
-	}),
-	innerScrollContainer: {
-		marginHorizontal: 12,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	loadedContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginHorizontal: 12,
-		marginVertical: 10
-	},
-
-	loadingContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingTop: 80,
-		paddingBottom: 40
-	},
-	page: {
-		flex: 1
-	}
-}))

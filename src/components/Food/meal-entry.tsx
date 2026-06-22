@@ -3,9 +3,9 @@ import { Link, router } from 'expo-router'
 import type React from 'react'
 import { memo, use, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/drag-view'
@@ -26,6 +26,7 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 /**
  * Renders a single meal entry in the food menu.
@@ -43,13 +44,18 @@ export const MealEntry = memo(
 		)
 		const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 
-		// Use deferredValue for filter properties to prevent UI blocking
 		const deferredPreferences = useDeferredValue(preferencesSelection)
 		const deferredAllergens = useDeferredValue(allergenSelection)
 		const deferredFoodLanguage = useDeferredValue(foodLanguage)
 
 		const { t, i18n } = useTranslation('food')
-		const { styles } = useStyles(stylesheet)
+		const notificationColor = useCSSVariable('--color-notification') as
+			| string
+			| undefined
+		const vegGreenColor = useCSSVariable('--color-veg-green') as
+			| string
+			| undefined
+
 		const userAllergens = useMemo(
 			() =>
 				convertRelevantAllergens(
@@ -105,14 +111,19 @@ export const MealEntry = memo(
 			<Link asChild href={`/food/${meal.id}`}>
 				<Pressable
 					delayLongPress={300}
-					onLongPress={() => {
-						/* nothing */
-					}}
-					style={styles.pressable}
+					onLongPress={() => {}}
+					className="mt-2.5"
 				>
-					<View key={index} style={styles.container}>
-						<View style={styles.innerContainer}>
-							<Text style={styles.title} numberOfLines={2}>
+					<View
+						key={index}
+						className="self-center bg-card rounded-mg border border-border p-card w-full"
+						style={hairlineBorder}
+					>
+						<View className="items-start flex-row justify-between w-full">
+							<Text
+								className="text-text text-base font-medium max-w-[88%]"
+								numberOfLines={2}
+							>
 								{mealName(
 									meal.name,
 									deferredFoodLanguage,
@@ -120,19 +131,26 @@ export const MealEntry = memo(
 								)}
 							</Text>
 							{meal.variants?.length > 0 && (
-								<View style={styles.variantContainer}>
-									<Text style={styles.variantText}>
+								<View
+									className="rounded-mg border border-border bg-label-background max-w-[10%] px-1.5 py-0.5"
+									style={hairlineBorder}
+								>
+									<Text className="text-text text-[11px] font-medium text-center">
 										{`+ ${meal.variants.length}`}
 									</Text>
 								</View>
 							)}
 						</View>
-						<View style={styles.detailsContainer}>
-							<View style={styles.detailsColumns}>
-								<View style={styles.flags}>
+						<View className="items-start flex-row justify-center pt-[3px]">
+							<View className="flex-col flex-1 pt-0.5">
+								<View className="flex-row flex-wrap">
 									{userFlags.map(
 										(flag: { name: string; isVeg: boolean }, index: number) => (
-											<View key={index} style={styles.flagsBox}>
+											<View
+												key={index}
+												className="border border-border rounded-mg bg-label-background flex-row mb-0.5 mr-1"
+												style={hairlineBorder}
+											>
 												{flag.isVeg && (
 													<PlatformIcon
 														ios={{
@@ -149,17 +167,24 @@ export const MealEntry = memo(
 															size: 13,
 															variant: 'filled'
 														}}
-														style={styles.vegIcon}
+														style={{
+															color: toColor(vegGreenColor),
+															alignSelf: 'center',
+															marginLeft: 7,
+															marginRight: -2
+														}}
 													/>
 												)}
 
-												<Text style={styles.flagsText}>{flag.name}</Text>
+												<Text className="text-text text-xs px-1.5 py-0.5">
+													{flag.name}
+												</Text>
 											</View>
 										)
 									)}
 								</View>
 								{shouldShowAllergens && (
-									<View style={styles.allergensContainer}>
+									<View className="flex-row items-center gap-0.5 mt-1.5 w-[80%]">
 										<PlatformIcon
 											ios={{
 												name: iconName,
@@ -174,19 +199,28 @@ export const MealEntry = memo(
 												name: webName,
 												size: 16
 											}}
-											style={styles.icon}
+											style={{
+												color: toColor(notificationColor),
+												alignSelf: 'center',
+												marginRight: 4
+											}}
 										/>
-										<Text style={styles.allergene} numberOfLines={3}>
+										<Text
+											className="text-notification text-xs"
+											numberOfLines={3}
+										>
 											{textContent}
 										</Text>
 									</View>
 								)}
 							</View>
-							<View style={styles.priceContainer}>
-								<Text style={styles.price}>
+							<View className="items-end self-end flex-col justify-end">
+								<Text className="text-text text-sm font-medium self-end">
 									{getUserSpecificPrice(meal, userKind ?? 'guest')}
 								</Text>
-								{label !== '' && <Text style={styles.priceLabel}>{label}</Text>}
+								{label !== '' && (
+									<Text className="text-label text-xs self-end">{label}</Text>
+								)}
 							</View>
 						</View>
 					</View>
@@ -212,7 +246,7 @@ export const MealEntry = memo(
 							humanLocations[meal.restaurant as keyof typeof humanLocations]
 						}
 						key={key}
-						style={styles.contextMenu}
+						style={{ zIndex: 3 }}
 						actions={[
 							{
 								title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
@@ -266,120 +300,3 @@ export const MealEntry = memo(
 		)
 	}
 )
-
-const stylesheet = createStyleSheet((theme) => ({
-	allergene: {
-		color: theme.colors.notification,
-		fontSize: 12
-	},
-	allergensContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 2,
-		marginTop: 6,
-		width: '80%'
-	},
-	container: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		padding: theme.margins.card,
-		width: '100%'
-	},
-	contextMenu: { zIndex: 3 },
-	detailsColumns: {
-		flexDirection: 'column',
-		flex: 1,
-		paddingTop: 2
-	},
-	detailsContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		paddingTop: 3
-	},
-	flags: {
-		alignContent: 'center',
-		flexDirection: 'row',
-		flexWrap: 'wrap'
-	},
-	flagsBox: {
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		alignContent: 'center',
-		alignItems: 'center',
-		borderRadius: theme.radius.mg,
-		backgroundColor: theme.colors.labelBackground,
-		flexDirection: 'row',
-		marginBottom: 2,
-		marginRight: 4
-	},
-	flagsText: {
-		color: theme.colors.text,
-		fontSize: 12,
-		paddingHorizontal: 6,
-		paddingVertical: 2
-	},
-	icon: {
-		alignSelf: 'center',
-		color: theme.colors.notification,
-		marginRight: 4
-	},
-	vegIcon: {
-		alignSelf: 'center',
-		color: theme.colors.vegGreen,
-		marginLeft: 7,
-		marginRight: -2
-	},
-	innerContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: '100%'
-	},
-	pressable: {
-		marginTop: 10
-	},
-	price: {
-		alignSelf: 'flex-end',
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	priceContainer: {
-		alignItems: 'flex-end',
-		alignSelf: 'flex-end',
-		flexDirection: 'column',
-		justifyContent: 'flex-end'
-	},
-	priceLabel: {
-		alignSelf: 'flex-end',
-		color: theme.colors.labelColor,
-		fontSize: 12
-	},
-	title: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500',
-		maxWidth: '88%'
-	},
-	variantContainer: {
-		borderRadius: theme.radius.mg,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		backgroundColor: theme.colors.labelBackground,
-		maxWidth: '10%',
-		paddingHorizontal: 6,
-		paddingVertical: 2
-	},
-	variantText: {
-		color: theme.colors.text,
-		fontSize: 11,
-		fontWeight: '500',
-		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
-}))

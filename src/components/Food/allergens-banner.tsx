@@ -2,8 +2,9 @@ import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Text, TouchableOpacity, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { toColor } from '@/utils/uniwind-utils'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -16,11 +17,14 @@ export const AllergensBanner = ({
 	const initAllergenSelection = useFoodFilterStore(
 		(state) => state.initAllergenSelection
 	)
-	const { styles } = useStyles(stylesheet)
+	const borderColor = useCSSVariable('--color-border')
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
+
 	return (
 		<Animated.View
+			className="px-3"
 			style={{
-				...styles.paddingContainer,
+				borderBottomColor: toColor(borderColor),
 				borderBottomWidth: scrollY.interpolate({
 					inputRange: [0, 0, 0],
 					outputRange: [0, 0, 0.5],
@@ -28,13 +32,21 @@ export const AllergensBanner = ({
 				})
 			}}
 		>
-			<View style={styles.bannerContainer}>
+			<View
+				className="bg-primary-background border border-primary/20 rounded-md mb-2.5 mt-0.5 p-2.5"
+				style={{
+					shadowColor: toColor(primaryColor),
+					shadowOffset: { width: 0, height: 1 },
+					shadowOpacity: 0.1,
+					shadowRadius: 2
+				}}
+			>
 				<TouchableOpacity
 					onPress={() => {
 						initAllergenSelection()
 					}}
 					hitSlop={6}
-					style={styles.dismissButton}
+					className="absolute right-[5px] top-[5px] z-[1] rounded-md p-[5px]"
 				>
 					<PlatformIcon
 						ios={{
@@ -49,7 +61,7 @@ export const AllergensBanner = ({
 							name: 'X',
 							size: 20
 						}}
-						style={styles.contrastColor}
+						style={{ color: toColor(primaryColor) }}
 					/>
 				</TouchableOpacity>
 				<View>
@@ -58,13 +70,13 @@ export const AllergensBanner = ({
 							router.navigate('/food-allergens')
 						}}
 					>
-						<Text style={styles.bannerTitle}>
+						<Text className="text-primary text-base font-bold">
 							{t('navigation.allergens', {
 								ns: 'navigation'
 							})}
 						</Text>
 
-						<Text style={styles.bannerText}>
+						<Text className="text-text text-sm mt-[3px] opacity-90">
 							{t('empty.config', { ns: 'food' })}
 						</Text>
 					</TouchableOpacity>
@@ -73,49 +85,3 @@ export const AllergensBanner = ({
 		</Animated.View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	bannerContainer: {
-		backgroundColor: `${theme.colors.primary}33`,
-		borderRadius: theme.radius.md,
-		marginBottom: 10,
-		marginTop: 2,
-		padding: 10,
-		borderWidth: 1,
-		borderColor: `${theme.colors.primary}20`,
-		shadowColor: theme.colors.primary,
-		shadowOffset: {
-			width: 0,
-			height: 1
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 2
-	},
-	bannerText: {
-		color: theme.colors.text,
-		fontSize: 14,
-		marginTop: 3,
-		opacity: 0.9
-	},
-	bannerTitle: {
-		color: theme.colors.primary,
-		fontSize: 16,
-		fontWeight: 'bold'
-	},
-	contrastColor: {
-		color: theme.colors.primary
-	},
-	dismissButton: {
-		borderRadius: theme.radius.md,
-		padding: 5,
-		position: 'absolute',
-		right: 5,
-		top: 5,
-		zIndex: 1
-	},
-	paddingContainer: {
-		borderBottomColor: theme.colors.border,
-		borderBottomWidth: 0.5,
-		paddingHorizontal: 12
-	}
-}))

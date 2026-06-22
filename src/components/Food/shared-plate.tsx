@@ -1,8 +1,9 @@
 import type React from 'react'
 import { View } from 'react-native'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/Icon'
+import { toColor } from '@/utils/uniwind-utils'
 import CurvedText from './curved-text'
 
 interface SharedPlateProps {
@@ -22,15 +23,39 @@ export const SharedPlate = ({
 	plateInnerAnimatedStyle,
 	showCurvedText = true
 }: SharedPlateProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const plateShadow = useCSSVariable('--color-plate-shadow')
+	const plateInnerShadow = useCSSVariable('--color-plate-inner-shadow')
+	const plateOuterBorder = useCSSVariable('--color-plate-outer-border')
+	const plateRimBorder = useCSSVariable('--color-plate-rim-border')
+	const plateInnerBorder = useCSSVariable('--color-plate-inner-border')
+	const labelColor = useCSSVariable('--color-label')
 
 	return (
-		<Animated.View style={[styles.plateContainer, plateAnimatedStyle]}>
-			{/* Main plate */}
+		<Animated.View
+			className="items-center justify-center absolute z-[1]"
+			style={[
+				{
+					shadowColor: toColor(plateShadow),
+					shadowOffset: { width: 0, height: 6 },
+					shadowOpacity: 0.25,
+					shadowRadius: 15
+				},
+				plateAnimatedStyle
+			]}
+		>
 			<View
-				style={[styles.plateOuter, { width: size * 1.3, height: size * 1.3 }]}
+				className="items-center justify-center rounded-infinite bg-plate-outer"
+				style={{
+					width: size * 1.3,
+					height: size * 1.3,
+					shadowColor: toColor(plateInnerShadow),
+					shadowOffset: { width: 0, height: 4 },
+					shadowOpacity: 0.2,
+					shadowRadius: 10,
+					borderWidth: 0.5,
+					borderColor: toColor(plateOuterBorder)
+				}}
 			>
-				{/* Engraved text */}
 				{showCurvedText && (
 					<CurvedText
 						text="NEULAND NEXT"
@@ -40,20 +65,32 @@ export const SharedPlate = ({
 					/>
 				)}
 
-				{/* Plate rim */}
 				<View
-					style={[styles.plateRim, { width: size * 1.17, height: size * 1.17 }]}
+					className="items-center justify-center rounded-infinite bg-plate-rim"
+					style={{
+						width: size * 1.17,
+						height: size * 1.17,
+						borderWidth: 0.5,
+						borderColor: toColor(plateRimBorder)
+					}}
 				>
-					{/* Plate inner circle */}
 					<Animated.View
+						className="bg-plate-inner rounded-infinite items-center justify-center overflow-hidden"
 						style={[
-							styles.plateInner,
-							{ width: size * 0.8, height: size * 0.8 },
+							{
+								width: size * 0.8,
+								height: size * 0.8,
+								shadowColor: toColor(plateShadow),
+								shadowOffset: { width: 0, height: 2 },
+								shadowOpacity: 0.15,
+								shadowRadius: 5,
+								borderWidth: 0.5,
+								borderColor: toColor(plateInnerBorder)
+							},
 							plateInnerAnimatedStyle
 						]}
 					>
-						{/* Empty plate icon */}
-						<View style={styles.emptyContainer}>
+						<View className="w-[60%] h-[60%] items-center justify-center">
 							<PlatformIcon
 								ios={{
 									name: 'fork.knife',
@@ -69,7 +106,10 @@ export const SharedPlate = ({
 									name: 'Utensils',
 									size: size * 0.35
 								}}
-								style={styles.emptyIcon}
+								style={{
+									color: toColor(labelColor),
+									opacity: 0.8
+								}}
 							/>
 						</View>
 					</Animated.View>
@@ -78,61 +118,5 @@ export const SharedPlate = ({
 		</Animated.View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	plateContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: 'absolute',
-		zIndex: 1,
-		shadowColor: theme.colors.plateShadow,
-		shadowOffset: { width: 0, height: 6 },
-		shadowOpacity: 0.25,
-		shadowRadius: 15
-	},
-	plateOuter: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 999,
-		backgroundColor: theme.colors.plateOuter,
-		shadowColor: theme.colors.plateInnerShadow,
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.2,
-		shadowRadius: 10,
-		borderWidth: 0.5,
-		borderColor: theme.colors.plateOuterBorder
-	},
-	plateRim: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 999,
-		backgroundColor: theme.colors.plateRim,
-		borderWidth: 0.5,
-		borderColor: theme.colors.plateRimBorder
-	},
-	plateInner: {
-		backgroundColor: theme.colors.plateInner,
-		borderRadius: 999,
-		alignItems: 'center',
-		justifyContent: 'center',
-		shadowColor: theme.colors.plateShadow,
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.15,
-		shadowRadius: 5,
-		overflow: 'hidden',
-		borderWidth: 0.5,
-		borderColor: theme.colors.plateInnerBorder
-	},
-	emptyContainer: {
-		width: '60%',
-		height: '60%',
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	emptyIcon: {
-		color: theme.colors.labelColor,
-		opacity: 0.8
-	}
-}))
 
 export default SharedPlate

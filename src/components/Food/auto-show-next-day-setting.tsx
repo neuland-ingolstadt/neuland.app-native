@@ -4,8 +4,9 @@ import DateTimePicker, {
 import type React from 'react'
 import { useState } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface AutoShowNextDaySettingProps {
 	title: string
@@ -36,13 +37,6 @@ function parseTimeString(value: string): number | undefined {
 
 /**
  * A component that allows users to enable or disable the automatic display of the next day's menu
- * @param {string} title: The title
- * @param {string} timeLabel: The label for the time picker
- * @param {boolean} enabled: Whether the setting is enabled or not
- * @param {(state: boolean) => void} onToggle: Function to toggle the setting
- * @param {number} timeMinutes: The time in minutes after midnight when the next day's menu should be shown
- * @param {(minutes: number) => void} onTimeMinutesChange: Function to change the time in minutes
- * @returns {React.JSX.Element} - The AutoShowNextDaySetting component.
  */
 export default function AutoShowNextDaySetting({
 	title,
@@ -52,8 +46,11 @@ export default function AutoShowNextDaySetting({
 	timeMinutes,
 	onTimeMinutesChange
 }: AutoShowNextDaySettingProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const [showAndroidTimePicker, setShowAndroidTimePicker] = useState(false)
+	const textColor = useCSSVariable('--color-text') as string | undefined
+	const primaryColor = useCSSVariable('--color-primary') as string | undefined
+	const cardColor = useCSSVariable('--color-card') as string | undefined
+	const borderColor = useCSSVariable('--color-border') as string | undefined
 
 	const time = new Date()
 	time.setHours(Math.floor(timeMinutes / 60), timeMinutes % 60, 0, 0)
@@ -78,6 +75,19 @@ export default function AutoShowNextDaySetting({
 		}
 	}
 
+	const webTimeInputStyle = {
+		backgroundColor: toColor(cardColor),
+		borderColor: toColor(borderColor),
+		borderRadius: 999,
+		borderWidth: 1,
+		color: toColor(textColor),
+		fontSize: 16,
+		height: 36,
+		minWidth: 88,
+		paddingHorizontal: 14,
+		textAlign: 'center' as const
+	}
+
 	return (
 		<View>
 			<SingleSectionPicker
@@ -86,22 +96,22 @@ export default function AutoShowNextDaySetting({
 				action={onToggle}
 			/>
 			{enabled && (
-				<View style={styles.timePickerContainer}>
+				<View className="border-t border-border px-4 py-2">
 					{Platform.OS === 'web' ? (
-						<View style={styles.timePickerButton}>
-							<Text style={styles.timePickerLabel}>{timeLabel}</Text>
+						<View className="items-center flex-row justify-between py-1">
+							<Text className="text-text text-base">{timeLabel}</Text>
 							<input
 								type={'time'}
 								value={minutesToTimeString(timeMinutes)}
 								onChange={(event) => {
 									handleWebTimeChange(event.currentTarget.value)
 								}}
-								style={styles.webTimeInput as unknown as React.CSSProperties}
+								style={webTimeInputStyle as unknown as React.CSSProperties}
 							/>
 						</View>
 					) : Platform.OS === 'ios' ? (
-						<View style={styles.timePickerButton}>
-							<Text style={styles.timePickerLabel}>{timeLabel}</Text>
+						<View className="items-center flex-row justify-between py-1">
+							<Text className="text-text text-base">{timeLabel}</Text>
 							<DateTimePicker
 								mode={'time'}
 								display={'compact'}
@@ -112,13 +122,16 @@ export default function AutoShowNextDaySetting({
 					) : (
 						<>
 							<Pressable
+								className="items-center flex-row justify-between py-1"
 								onPress={() => {
 									setShowAndroidTimePicker(true)
 								}}
-								style={styles.timePickerButton}
 							>
-								<Text style={styles.timePickerLabel}>{timeLabel}</Text>
-								<Text style={styles.timePickerValue}>
+								<Text className="text-text text-base">{timeLabel}</Text>
+								<Text
+									className="text-primary text-base font-semibold"
+									style={{ color: toColor(primaryColor) }}
+								>
 									{time.toLocaleTimeString(undefined, {
 										hour: '2-digit',
 										minute: '2-digit'
@@ -139,39 +152,3 @@ export default function AutoShowNextDaySetting({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	timePickerButton: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingVertical: 4
-	},
-	timePickerContainer: {
-		borderTopColor: theme.colors.border,
-		borderTopWidth: 1,
-		paddingHorizontal: 16,
-		paddingVertical: 8
-	},
-	timePickerLabel: {
-		color: theme.colors.text,
-		fontSize: 16
-	},
-	timePickerValue: {
-		color: theme.colors.primary,
-		fontSize: 16,
-		fontWeight: '600'
-	},
-	webTimeInput: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderRadius: 999,
-		borderWidth: 1,
-		color: theme.colors.text,
-		fontSize: 16,
-		height: 36,
-		minWidth: 88,
-		paddingHorizontal: 14,
-		textAlign: 'center'
-	}
-}))
