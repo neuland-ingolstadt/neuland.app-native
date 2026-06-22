@@ -18,7 +18,7 @@ import { useStyles } from 'react-native-unistyles'
  * @param {string} text - The text to display.
  * @param {TextStyle} textStyles - The styles to apply to the text.
  * @param {boolean} disabled - Whether the animation is disabled.
- * @returns {JSX.Element} - A React component that renders the animated text.
+ * @returns {React.JSX.Element} - A React component that renders the animated text.
  */
 const AnimatedText = ({
 	speed,

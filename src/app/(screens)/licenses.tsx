@@ -4,16 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
-import licenses from '@/data/licenses.json'
+import licenses from '@/data/licenses'
 import licensesStatic from '@/data/licenses-static.json'
 import type { FormListSections } from '@/types/components'
-
-export interface LicenseEntry {
-	licenses: string
-	repository?: string
-	licenseUrl?: string
-	parents: string
-}
+import type { LicenseEntry } from '@/types/licenses'
 
 export default function Licenses(): React.JSX.Element {
 	const router = useRouter()
@@ -55,7 +49,10 @@ export default function Licenses(): React.JSX.Element {
 		)
 	)
 
-	const licensesCombined = { ...licenses, ...licensesStaticFiltered }
+	const licensesCombined: Record<string, LicenseEntry> = {
+		...licenses,
+		...licensesStaticFiltered
+	}
 
 	const licensesList = Object.entries(licensesCombined)
 		.sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
