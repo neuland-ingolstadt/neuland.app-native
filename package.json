@@ -119,7 +119,7 @@
 	},
 	"devDependencies": {
 		"@0no-co/graphqlsp": "^1.17.1",
-		"@babel/core": "^7.29.7",
+		"@babel/core": "^8.0.1",
 		"@biomejs/biome": "2.5.0",
 		"@eggl-js/expo-github-cache": "^0.3.0",
 		"@graphql-codegen/cli": "7.1.2",
