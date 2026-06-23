@@ -18,7 +18,7 @@ updates:
         patterns:
           - '*'
 
-  # SDK-aligned Expo / React Native deps are updated with `bun pkgs` (expo install --check).
+  # Production deps are updated with `bun pkgs` (expo install --check); Dependabot covers devDependencies only.
   - package-ecosystem: bun
     directory: /
     schedule:
@@ -33,14 +33,9 @@ updates:
       include: scope
     labels:
       - dependencies
+    allow:
+      - dependency-type: development
     groups:
-      production-minor-patch:
-        dependency-type: production
-        patterns:
-          - '*'
-        update-types:
-          - minor
-          - patch
       development-minor-patch:
         dependency-type: development
         patterns:
