@@ -42,6 +42,9 @@ jobs:
       - name: Generate native Android project
         run: bun run prebuild:android
 
+      - name: Generate native Android project
+        run: bun run prebuild:android
+
       - name: Set up JDK 17
         uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5.3.0
         with:
