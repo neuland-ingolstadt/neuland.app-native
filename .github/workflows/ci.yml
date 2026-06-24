@@ -165,20 +165,16 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
+      - uses: ./.github/actions/setup
+        with:
+          no-bun-cache: 'true'
+
       - name: Download main bundle size from CI
         id: download-base
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash config/ci/download-main-bundle-size.sh base-bundle-size.json
-
-      - name: Checkout main for base export (fallback)
-        if: steps.download-base.outcome == 'failure'
-        run: |
-          git fetch origin main
-          git checkout origin/main
-
-      - uses: ./.github/actions/setup
 
       - name: Export base bundle (fallback)
         if: steps.download-base.outcome == 'failure'
@@ -187,6 +183,9 @@ jobs:
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
+          git fetch origin main
+          git checkout origin/main
+          bun install --frozen-lockfile
           source config/ci/web-export-env.sh
           bash config/ci/measure-web-bundle.sh base-bundle-size.json
 
