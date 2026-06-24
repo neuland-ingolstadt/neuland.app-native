@@ -58,7 +58,7 @@ jobs:
           name: ${{ github.ref_name }}
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
-          draft: false
+          draft: true
 
   build-docker-image:
     name: Build and publish Docker image
@@ -271,5 +271,12 @@ jobs:
                 'Content-Type': 'application/vnd.android.package-archive'
               }
             });
+
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              draft: false
+            });
             
-            console.log(`Successfully uploaded ${assetName} to release ${release.id}`);
+            console.log(`Successfully uploaded ${assetName} and published release ${release.id}`);
