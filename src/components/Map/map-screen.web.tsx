@@ -57,6 +57,11 @@ import LoadingIndicator from '../Universal/loading-indicator'
 import { modalSection } from './modal-sections'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
+const mapContainerStyle = {
+	height: '100%',
+	width: '100%'
+}
+
 export function requestPermission(): void {
 	// Web doesn't need explicit permission for location
 }
@@ -439,11 +444,6 @@ const MapScreen = (): React.JSX.Element => {
 		},
 		[filteredGeoJSON, selectRoom]
 	)
-
-	const mapContainerStyle = {
-		height: '100%',
-		width: '100%'
-	}
 
 	return (
 		<View style={styles.map}>

@@ -205,8 +205,8 @@ export function useMapQueries(): {
 				id: building,
 				properties: {
 					Raum: building,
-					Funktion_en: 'Building',
-					Funktion_de: 'Gebäude',
+					Funktion_en: t('buildingLabel', { lng: 'en' }),
+					Funktion_de: t('buildingLabel', { lng: 'de' }),
 					Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
 					Ebene: 'EG', // Dummy value to not break the floor picker
 					Etage: floorCount.toString(),
