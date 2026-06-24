@@ -159,10 +159,11 @@ jobs:
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
-          source config/ci/web-export-env.sh
+          cp -r config/ci /tmp/neuland-ci
           git checkout origin/main
           bun install --frozen-lockfile
-          bash config/ci/measure-web-bundle.sh base-bundle-size.json
+          source /tmp/neuland-ci/web-export-env.sh
+          bash /tmp/neuland-ci/measure-web-bundle.sh base-bundle-size.json
 
       - name: Measure PR bundle
         env:
@@ -171,9 +172,9 @@ jobs:
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
         run: |
-          source config/ci/web-export-env.sh
           git checkout ${{ github.event.pull_request.head.sha }}
           bun install --frozen-lockfile
+          source config/ci/web-export-env.sh
           bash config/ci/measure-web-bundle.sh pr-bundle-size.json
 
       - name: Write bundle size comment
