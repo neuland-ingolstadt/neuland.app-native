@@ -42,6 +42,11 @@ jobs:
     name: Biome and TypeScript checks
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
       - uses: ./.github/actions/setup
 
       - name: Check for merge conflict markers
@@ -60,6 +65,11 @@ jobs:
     name: Expo Doctor
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
       - uses: ./.github/actions/setup
 
       - name: Run Expo Doctor
@@ -72,9 +82,13 @@ jobs:
       contents: read
       code-quality: write
     steps:
-      - uses: ./.github/actions/setup
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          lfs: true
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: ./.github/actions/setup
 
       - name: Run unit tests with coverage
         run: bun run test:coverage -- --reporter=junit --reporter-outfile=./junit.xml
@@ -102,6 +116,11 @@ jobs:
     if: needs.changes.outputs.web == 'true' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
       - uses: ./.github/actions/setup
 
       - name: Export web bundle
