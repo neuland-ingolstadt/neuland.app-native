@@ -6,7 +6,38 @@ on:
     branches: [main]
   merge_group:
     types: [checks_requested]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Filter paths
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'src/**'
+              - '**/*.web.tsx'
+              - 'app.config.json'
+              - 'config/Dockerfile'
+              - 'config/nginx.conf'
+              - 'babel.config.js'
+              - 'tsconfig.json'
+              - 'package.json'
+              - 'bun.lock'
+              - 'patches/**'
+
   static-checks:
     name: Biome and TypeScript checks
     runs-on: ubuntu-latest
@@ -16,14 +47,10 @@ jobs:
         with:
           lfs: true
 
+      - uses: ./.github/actions/setup
+
       - name: Check for merge conflict markers
         run: bash config/check-merge-conflicts.sh
-
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
 
       - name: Run TypeScript checks
         run: bun tsc --noEmit
@@ -33,6 +60,7 @@ jobs:
 
       - name: Check i18n
         run: bun i18n:check
+
   expo-doctor:
     name: Expo Doctor
     runs-on: ubuntu-latest
@@ -42,14 +70,11 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup
 
       - name: Run Expo Doctor
         run: bun doctor
+
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-latest
@@ -63,11 +88,7 @@ jobs:
           lfs: true
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup
 
       - name: Run unit tests with coverage
         run: bun run test:coverage -- --reporter=junit --reporter-outfile=./junit.xml
@@ -88,3 +109,102 @@ jobs:
           report_type: test_results
           fail_ci_if_error: ${{ github.event_name == 'push' }}
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  web-export:
+    name: Web export smoke test
+    needs: changes
+    if: needs.changes.outputs.web == 'true' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
+      - uses: ./.github/actions/setup
+
+      - name: Export web bundle
+        env:
+          EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+          EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+        run: |
+          source config/ci/web-export-env.sh
+          bash config/ci/measure-web-bundle.sh /dev/null
+
+  web-bundle-size:
+    name: Web bundle size
+    needs: changes
+    if: needs.changes.outputs.web == 'true' && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          cache: true
+
+      - name: Measure base bundle (main)
+        env:
+          EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+          EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+        run: |
+          cp -r config/ci /tmp/neuland-ci
+          git checkout origin/main
+          bun install --frozen-lockfile
+          source /tmp/neuland-ci/web-export-env.sh
+          bash /tmp/neuland-ci/measure-web-bundle.sh base-bundle-size.json
+
+      - name: Measure PR bundle
+        env:
+          EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+          EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+          EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git checkout ${{ github.event.pull_request.head.sha }}
+          bun install --frozen-lockfile
+          source config/ci/web-export-env.sh
+          bash config/ci/measure-web-bundle.sh pr-bundle-size.json
+
+      - name: Write bundle size comment
+        run: bash config/ci/compare-web-bundle-size.sh
+
+      - name: Comment on pull request
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const fs = require('fs')
+            const body = fs.readFileSync('bundle-size-comment.md', 'utf8')
+            const marker = '<!-- web-bundle-size -->'
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            })
+            const existing = comments.find((comment) => comment.body?.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              })
+              return
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            })
