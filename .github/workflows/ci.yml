@@ -163,6 +163,7 @@ jobs:
         with:
           lfs: true
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Download main bundle size from CI
         id: download-base
@@ -193,8 +194,9 @@ jobs:
         if: steps.download-base.outcome == 'failure'
         run: git checkout ${{ github.event.pull_request.head.sha }}
 
-      - uses: ./.github/actions/setup
+      - name: Sync PR dependencies
         if: steps.download-base.outcome == 'failure'
+        run: bun install --frozen-lockfile
 
       - name: Export PR bundle
         env:
