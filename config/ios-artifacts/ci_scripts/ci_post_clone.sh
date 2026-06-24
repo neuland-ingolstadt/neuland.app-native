@@ -34,7 +34,7 @@ echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
 
 echo "===== Updating license list ====="
-bun run licences
+bun run licences:bundle
 
 echo "===== Pulling Git LFS assets ====="
 git lfs install --local 2>/dev/null || git lfs install

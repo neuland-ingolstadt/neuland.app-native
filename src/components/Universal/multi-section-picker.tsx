@@ -22,7 +22,7 @@ interface SectionPickerProps {
  * @param {Element[]} elements - The list of selectable items.
  * @param {string[]} selectedItems - The list of selected items.
  * @param {(item: string) => void} action - The function to be called when an item is selected.
- * @returns {JSX.Element} - The MultiSectionPicker component.
+ * @returns {React.JSX.Element} - The MultiSectionPicker component.
  */
 const MultiSectionPicker = ({
 	elements,

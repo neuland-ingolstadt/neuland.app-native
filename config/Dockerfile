@@ -30,7 +30,7 @@ ENV EXPO_PUBLIC_FLIPT_NAMESPACE=${EXPO_PUBLIC_FLIPT_NAMESPACE}
 ENV EXPO_PUBLIC_GIT_COMMIT_HASH=${EXPO_PUBLIC_GIT_COMMIT_HASH}
 ENV NODE_ENV=production
 
-RUN npm run licences && npx expo export -p web -c
+RUN npm run licences:bundle && npx expo export -p web -c
 
 # Final stage: Serve static files using NGINX
 FROM nginx:alpine AS final

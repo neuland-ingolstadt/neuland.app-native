@@ -1,5 +1,6 @@
 import * as Application from 'expo-application'
 import Constants from 'expo-constants'
+import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

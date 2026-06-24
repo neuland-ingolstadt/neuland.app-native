@@ -17,19 +17,20 @@ import neulandApi from '@/api/neuland-api'
 import { CustomDropdown } from '@/components/Menu/custom-dropdown'
 import { getContrastColor } from '@/utils/ui-utils'
 
+const reportCategories: RoomReportCategory[] = [
+	'WRONG_DESCRIPTION',
+	'WRONG_LOCATION',
+	'NOT_EXISTING',
+	'MISSING',
+	'OTHER'
+]
+
 export default function RoomReport(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
 	>()
-	const reportCategories: RoomReportCategory[] = [
-		'WRONG_DESCRIPTION',
-		'WRONG_LOCATION',
-		'NOT_EXISTING',
-		'MISSING',
-		'OTHER'
-	]
 	const { room } = useLocalSearchParams<{ room: string }>()
 
 	const [description, setDescription] = useState<string>('')

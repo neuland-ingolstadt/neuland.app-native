@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics'
+import type React from 'react'
 import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
