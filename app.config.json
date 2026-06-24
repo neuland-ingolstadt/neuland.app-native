@@ -43,11 +43,12 @@
 			"icon": "./src/assets/appIcons/Default.icon"
 		},
 		"locales": {
-			"en": "./src/localization/en/ios.json",
-			"de": "./src/localization/de/ios.json"
+			"en": "./src/localization/en/metadata.json",
+			"de": "./src/localization/de/metadata.json"
 		},
 		"android": {
 			"package": "app.neuland",
+			"playStoreUrl": "https://play.google.com/store/apps/details?id=app.neuland",
 			"userInterfaceStyle": "automatic",
 			"icon": "./src/assets/android/ic_launcher.png",
 			"adaptiveIcon": {
@@ -81,8 +82,8 @@
 		},
 		"sdkVersion": "54.0.0",
 		"experiments": {
+			"autolinkingModuleResolution": true,
 			"reactCompiler": true,
-			"reactCanary": true,
 			"tsconfigPaths": true,
 			"typedRoutes": true
 		},
