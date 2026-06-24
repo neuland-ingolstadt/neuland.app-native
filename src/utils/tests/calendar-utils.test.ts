@@ -11,9 +11,11 @@ const mockGetExams = mock(async (): Promise<Exams[]> => [])
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: { OS: 'web' }
+		Platform: { OS: 'web' },
+		Linking: { openURL: async () => {} }
 	},
-	Platform: { OS: 'web' }
+	Platform: { OS: 'web' },
+	Linking: { openURL: async () => {} }
 }))
 
 mock.module('expo-localization', () => ({

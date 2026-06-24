@@ -21,7 +21,7 @@ interface NameBoxProps {
  * @param {string} props.subTitle1 - The first subtitle of the box.
  * @param {string} [props.subTitle2] - The second subtitle of the box (optional).
  * @param {boolean} [props.showChevron] - Whether to show the chevron icon (optional).
- * @returns {JSX.Element} - The JSX element representing the component.
+ * @returns {React.JSX.Element} - The JSX element representing the component.
  */
 const NameBox = ({
 	children,

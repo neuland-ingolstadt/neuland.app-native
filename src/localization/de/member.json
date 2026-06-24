@@ -17,7 +17,8 @@
 		"honoraryLine2": "MITGLIED"
 	},
 	"settings": {
-		"title": "Neuland Mitglied"
+		"title": "Mitglied",
+		"honoraryTitle": "Neuland Ehrenmitglied"
 	},
 	"loggedOut": {
 		"welcomeTitle": "Willkommen bei Neuland",
@@ -78,6 +79,18 @@
 	"perks": {
 		"header": "Vorteile",
 		"theme": "Akzentfarbe",
-		"appIcon": "App Icon"
+		"appIcon": "App-Icon"
+	},
+	"office": {
+		"header": "Büro",
+		"count_zero": "Niemand im Büro",
+		"count_one": "{{count}} Mitglied im Büro",
+		"count_other": "{{count}} Mitglieder im Büro",
+		"checkIn": "Ich bin im Büro",
+		"checkOut": "Büro verlassen",
+		"error": "Bürostatus konnte nicht geladen werden",
+		"checkInError": "Einchecken fehlgeschlagen",
+		"checkOutError": "Auschecken fehlgeschlagen",
+		"disclaimer": "Angaben basieren auf freiwilligen Einträgen und können von der tatsächlichen Belegung abweichen."
 	}
 }

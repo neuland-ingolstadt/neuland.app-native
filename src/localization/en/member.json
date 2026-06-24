@@ -47,7 +47,8 @@
 		"tapToClose": "Tap anywhere to close"
 	},
 	"settings": {
-		"title": "Neuland Member"
+		"title": "Member",
+		"honoraryTitle": "Neuland Honorary Member"
 	},
 	"securityWarning": {
 		"title": "Security Notice",
@@ -79,5 +80,17 @@
 		"header": "Perks",
 		"theme": "Accent Color",
 		"appIcon": "App Icon"
+	},
+	"office": {
+		"header": "Office",
+		"count_zero": "Nobody in the office",
+		"count_one": "{{count}} member in the office",
+		"count_other": "{{count}} members in the office",
+		"checkIn": "I'm in the office",
+		"checkOut": "Leave office",
+		"error": "Could not load office status",
+		"checkInError": "Could not check in",
+		"checkOutError": "Could not check out",
+		"disclaimer": "Information is based on voluntary entries and may differ from the actual occupancy."
 	}
 }

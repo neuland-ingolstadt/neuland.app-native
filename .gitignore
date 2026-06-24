@@ -13,6 +13,9 @@
 
 # expo 
 .expo/
+/ios/*
+!/ios/ci_scripts
+/android
 
 # builds
 /dist
@@ -28,6 +31,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
+# local dev files
+*.devlocal
 
 # expo
 credentials.json
@@ -54,3 +60,4 @@ my-release-key.jks
 
 *.geojson
 coverage/
+src/data/licenses.json

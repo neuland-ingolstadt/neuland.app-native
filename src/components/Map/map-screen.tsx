@@ -355,7 +355,7 @@ const MapScreen = (): React.JSX.Element => {
 				? 'rgba(104, 106, 108, 0.7)'
 				: 'rgba(218, 218, 218, 0.70)',
 			paddingHorizontal: 4,
-			borderRadius: theme.radius.sm
+			borderRadius: theme.radius.xs
 		}
 	}
 
