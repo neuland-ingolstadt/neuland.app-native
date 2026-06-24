@@ -57,6 +57,9 @@ jobs:
       - name: Check i18n
         run: bun i18n:check
 
+      - name: Check changelog for app version
+        run: bun changelog:check
+
   expo-doctor:
     name: Expo Doctor
     needs: changes

@@ -174,6 +174,23 @@
 					"web": "CircleUser"
 				}
 			}
+		],
+		"0.16": [
+			{
+				"title": {
+					"de": "Verbesserungen",
+					"en": "Improvements"
+				},
+				"description": {
+					"de": "Diverse Verbesserungen und Fehlerbehebungen in dieser Version.",
+					"en": "Various improvements and bug fixes in this release."
+				},
+				"icon": {
+					"ios": "sparkles",
+					"android": "auto_awesome",
+					"web": "Sparkles"
+				}
+			}
 		]
 	}
 }
