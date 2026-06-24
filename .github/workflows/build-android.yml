@@ -17,42 +17,22 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Node JS environment
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: ./.github/actions/setup
         with:
-          node-version: "22"
+          ignore-scripts: 'true'
 
-      - name: Setup Expo and EAS
-        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
+      - uses: ./.github/actions/setup-eas
         with:
-          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: latest
-
-      - name: Install project dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-
-      - name: Update license list
-        run: bun run licences:bundle
-
-      - name: Generate native Android project
-        run: bun run prebuild:android
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5.3.0
-        with:
-          distribution: "zulu"
-          java-version: "17"
+      - uses: ./.github/actions/android-prepare
 
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
         run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+
       - name: Determine submission profile
         run: |
           if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
