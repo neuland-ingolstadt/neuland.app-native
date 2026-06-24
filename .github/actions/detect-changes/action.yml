@@ -1,0 +1,35 @@
+name: Detect changed paths
+description: Run dorny/paths-filter against .github/path-filters.yml (run actions/checkout first)
+outputs:
+  web:
+    description: Web-related files changed
+    value: ${{ steps.filter.outputs.web }}
+  android:
+    description: Android-related files changed
+    value: ${{ steps.filter.outputs.android }}
+  src:
+    description: Source files changed
+    value: ${{ steps.filter.outputs.src }}
+  docker:
+    description: Docker/web build inputs changed
+    value: ${{ steps.filter.outputs.docker }}
+  code:
+    description: Application or tooling code changed
+    value: ${{ steps.filter.outputs.code }}
+  dependencies:
+    description: Dependencies or Expo config changed
+    value: ${{ steps.filter.outputs.dependencies }}
+  workflows:
+    description: CI workflow definitions changed
+    value: ${{ steps.filter.outputs.workflows }}
+  changes:
+    description: JSON array of matching filter names
+    value: ${{ steps.filter.outputs.changes }}
+runs:
+  using: composite
+  steps:
+    - name: Filter paths
+      uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+      id: filter
+      with:
+        filters: .github/path-filters.yml
