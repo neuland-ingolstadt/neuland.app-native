@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect } from 'expo-router'
-import { use, useCallback, useMemo, useState } from 'react'
+import { use, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from '@/components/Cards/base-card'
 import { UserKindContext } from '@/components/contexts'
-import { loadTimetable } from '@/components/Timetable/timetable-screen'
 import Divider from '@/components/Universal/Divider'
 import { USER_GUEST } from '@/data/constants'
 import { useNow } from '@/hooks/useNow'
 import { formatFriendlyTime } from '@/utils/date-utils'
+import { loadTimetable } from '@/utils/timetable-utils'
 import {
 	getEventStatus,
 	getUpNextCardData,
@@ -27,10 +26,8 @@ export default function UpNextCard(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { t } = useTranslation(['navigation', 'timetable'])
-	const [screenIsFocused, setScreenIsFocused] = useState(false)
-
-	const isActive = userKind !== USER_GUEST && screenIsFocused
-	const now = useNow(isActive)
+	const isLoggedIn = userKind !== USER_GUEST
+	const now = useNow(isLoggedIn)
 
 	const {
 		data: timetable,
@@ -50,15 +47,6 @@ export default function UpNextCard(): React.JSX.Element {
 			)
 		}
 	})
-
-	useFocusEffect(
-		useCallback(() => {
-			setScreenIsFocused(true)
-			return () => {
-				setScreenIsFocused(false)
-			}
-		}, [])
-	)
 
 	const cardData = useMemo(() => {
 		if (timetable == null) {

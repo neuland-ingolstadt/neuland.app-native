@@ -23,12 +23,7 @@ export default function TodayStatsRow({
 
 	const statsText =
 		stats.remaining > 0
-			? t(
-					stats.remaining === 1
-						? 'cards.timetable.lecturesRemaining_one'
-						: 'cards.timetable.lecturesRemaining_plural',
-					{ count: stats.remaining }
-				)
+			? t('cards.timetable.lecturesRemaining', { count: stats.remaining })
 			: t('cards.timetable.noMoreLectures')
 
 	return (
