@@ -23,7 +23,7 @@
 		"fmt": "biome check --fix",
 		"fmt:unsafe": "biome check --fix --unsafe",
 		"licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
-		"licences:bundle": "bun run licences && cp src/data/licenses.json src/data/package-licenses.json",
+		"licences:bundle": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json && cp src/data/licenses.json src/data/package-licenses.json",
 		"codegen": "graphql-codegen --config config/codegen.yml",
 		"changelog": "git cliff --config config/cliff.toml --output CHANGELOG.md",
 		"pkgs": "bunx expo install --check",
