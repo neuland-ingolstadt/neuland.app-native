@@ -54,22 +54,25 @@ export default function Licenses(): React.JSX.Element {
 		...licensesStaticFiltered
 	}
 
+	const searchLower = localSearch.toLowerCase()
 	const licensesList = Object.entries(licensesCombined)
 		.sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-		// also sort by search
-		.filter(([key]) => {
-			if (localSearch === '') {
-				return true
+		.reduce<
+			{
+				title: string
+				onPress: () => void
+			}[]
+		>((items, [key, value]: [string, LicenseEntry]) => {
+			if (localSearch !== '' && !key.toLowerCase().includes(searchLower)) {
+				return items
 			}
-			return key.toLowerCase().includes(localSearch.toLowerCase())
-		})
-		.map(([key, value]: [string, LicenseEntry]) => {
+
 			const version = numberRegex.exec(key)
 			const nameWithoutVersion = key
 				.replace(atRegex, '')
 				.replace(version != null ? version[0] : '', '')
 
-			return {
+			items.push({
 				title: nameWithoutVersion,
 				onPress: () => {
 					router.navigate({
@@ -84,8 +87,10 @@ export default function Licenses(): React.JSX.Element {
 						}
 					})
 				}
-			}
-		})
+			})
+
+			return items
+		}, [])
 
 	const sections: FormListSections[] = [
 		{
