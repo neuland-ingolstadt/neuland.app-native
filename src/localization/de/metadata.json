@@ -3,5 +3,8 @@
 		"CFBundleDisplayName": "Neuland Next",
 		"NSFaceIDUsageDescription": "Erlaube Neuland Next die Verwendung von Face ID.",
 		"NSLocationWhenInUseUsageDescription": "Erlaube Neuland Next den Zugriff auf deinen Standort, um deine Position auf der Karte anzuzeigen."
+	},
+	"android": {
+		"app_name": "Neuland Next"
 	}
 }
