@@ -28,11 +28,15 @@ function diffLine(label, baseBytes, prBytes) {
 	return \`| \${label} | \${formatBytes(baseBytes)} | \${formatBytes(prBytes)} | \${deltaSign}\${formatBytes(Math.abs(delta))} (\${pct}) |\`
 }
 
+const baseRef = base.commit
+	? \`main @ \\\`\${base.commit.slice(0, 7)}\\\` (from CI artifact)\`
+	: 'main'
+
 const body = [
 	'<!-- web-bundle-size -->',
 	'### Web bundle size',
 	'',
-	'Comparison against \`main\` after \`expo export -p web\` (Atlas enabled).',
+	\`Comparison against \${baseRef} after \\\`expo export -p web\\\` (Atlas enabled).\`,
 	'',
 	'| Asset | main | PR | Diff |',
 	'| --- | --- | --- | --- |',

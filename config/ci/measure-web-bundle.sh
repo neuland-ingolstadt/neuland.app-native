@@ -20,4 +20,15 @@ fi
 total_bytes=$((js_bytes + css_bytes))
 
 printf '{"js_bytes":%s,"css_bytes":%s,"total_bytes":%s}\n' "$js_bytes" "$css_bytes" "$total_bytes" >"$output_file"
+
+if [ -n "${GITHUB_SHA:-}" ]; then
+	bun -e "
+		const file = process.argv[1]
+		const data = JSON.parse(await Bun.file(file).text())
+		data.commit = process.env.GITHUB_SHA
+		data.measured_at = new Date().toISOString()
+		await Bun.write(file, \`\${JSON.stringify(data)}\n\`)
+	" "$output_file"
+fi
+
 echo "Web bundle sizes — JS: ${js_bytes} bytes, CSS: ${css_bytes} bytes, total: ${total_bytes} bytes"

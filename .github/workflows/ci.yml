@@ -139,7 +139,14 @@ jobs:
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
           source config/ci/web-export-env.sh
-          bash config/ci/measure-web-bundle.sh /dev/null
+          bash config/ci/measure-web-bundle.sh bundle-size.json
+
+      - name: Upload bundle size for PR comparisons
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: web-bundle-size
+          path: bundle-size.json
+          retention-days: 30
 
   web-bundle-size:
     name: Web bundle size
@@ -147,6 +154,7 @@ jobs:
     if: needs.changes.outputs.web == 'true' && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: read
       pull-requests: write
     steps:
@@ -155,28 +163,38 @@ jobs:
         with:
           lfs: true
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
 
-      - name: Checkout base branch
+      - name: Download main bundle size from CI
+        id: download-base
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash config/ci/download-main-bundle-size.sh base-bundle-size.json
+
+      - name: Checkout main for base export (fallback)
+        if: steps.download-base.outcome == 'failure'
         run: |
-          cp -r config/ci /tmp/neuland-ci
+          git fetch origin main
           git checkout origin/main
 
       - uses: ./.github/actions/setup
 
-      - name: Export base bundle
+      - name: Export base bundle (fallback)
+        if: steps.download-base.outcome == 'failure'
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
-          source /tmp/neuland-ci/web-export-env.sh
-          bash /tmp/neuland-ci/measure-web-bundle.sh base-bundle-size.json
+          source config/ci/web-export-env.sh
+          bash config/ci/measure-web-bundle.sh base-bundle-size.json
 
       - name: Checkout PR branch
+        if: steps.download-base.outcome == 'failure'
         run: git checkout ${{ github.event.pull_request.head.sha }}
 
       - uses: ./.github/actions/setup
+        if: steps.download-base.outcome == 'failure'
 
       - name: Export PR bundle
         env:
