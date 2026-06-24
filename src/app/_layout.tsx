@@ -7,8 +7,6 @@ import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
 import i18n from '@/localization/i18n'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
-
-// CI: touch src to exercise path-filtered web and Android checks
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { type Href, router, Stack } from 'expo-router'
