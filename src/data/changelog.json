@@ -143,6 +143,100 @@
 				}
 			}
 		],
+		"0.11": [
+			{
+				"title": {
+					"de": "Web App",
+					"en": "Web App"
+				},
+				"description": {
+					"de": "Neuland ist jetzt auch im Browser verfügbar. Nutze die App auf dem Desktop oder Tablet.",
+					"en": "Neuland is now also available in your browser. Use the app on desktop or tablet."
+				},
+				"icon": {
+					"ios": "globe",
+					"android": "public",
+					"web": "Globe"
+				}
+			},
+			{
+				"title": {
+					"de": "Native Tab Bar",
+					"en": "Native Tab Bar"
+				},
+				"description": {
+					"de": "Die Navigation wurde mit einer nativen Tab Bar überarbeitet für ein noch flüssigeres Erlebnis.",
+					"en": "Navigation has been redesigned with a native tab bar for an even smoother experience."
+				},
+				"icon": {
+					"ios": "square.grid.2x2",
+					"android": "bottom_navigation",
+					"web": "LayoutGrid"
+				}
+			},
+			{
+				"title": {
+					"de": "Stundenplan Optionen",
+					"en": "Timetable Options"
+				},
+				"description": {
+					"de": "Wähle zwischen Ein- und Fünf-Tages-Ansicht und sieh Prüfungen direkt im Stundenplan.",
+					"en": "Choose between one and five day views and see exams directly in your timetable."
+				},
+				"icon": {
+					"ios": "calendar",
+					"android": "calendar_view_week",
+					"web": "CalendarDays"
+				}
+			}
+		],
+		"0.12": [
+			{
+				"title": {
+					"de": "Performance Verbesserungen",
+					"en": "Performance Improvements"
+				},
+				"description": {
+					"de": "Die App ist nun schneller und flüssiger. Viele Bereiche wie Mensa und Dashboard wurden optimiert.",
+					"en": "The app is now faster and smoother. Many areas such as the cafeteria and dashboard have been optimized."
+				},
+				"icon": {
+					"ios": "bolt",
+					"android": "bolt",
+					"web": "CircleGauge"
+				}
+			},
+			{
+				"title": {
+					"de": "Stundenplan Verbesserungen",
+					"en": "Timetable Improvements"
+				},
+				"description": {
+					"de": "In der Ein-Tages-Ansicht werden jetzt vollständige Veranstaltungstitel angezeigt.",
+					"en": "The single-day view now shows complete lecture titles."
+				},
+				"icon": {
+					"ios": "text.alignleft",
+					"android": "format_align_left",
+					"web": "AlignLeft"
+				}
+			},
+			{
+				"title": {
+					"de": "Verbesserte Menüs",
+					"en": "Improved Menus"
+				},
+				"description": {
+					"de": "Kontextmenüs wurden überarbeitet und bieten ein konsistenteres Erlebnis auf allen Plattformen.",
+					"en": "Context menus have been redesigned for a more consistent experience across all platforms."
+				},
+				"icon": {
+					"ios": "ellipsis.circle",
+					"android": "more_horiz",
+					"web": "Ellipsis"
+				}
+			}
+		],
 		"0.13": [
 			{
 				"title": {
@@ -172,6 +266,147 @@
 					"ios": "person",
 					"android": "person",
 					"web": "CircleUser"
+				}
+			}
+		],
+		"0.14": [
+			{
+				"title": {
+					"de": "Liquid Glass Design",
+					"en": "Liquid Glass Design"
+				},
+				"description": {
+					"de": "Neuland nutzt auf iOS das neue Liquid Glass Design für ein moderneres Erscheinungsbild.",
+					"en": "Neuland adopts the new Liquid Glass design on iOS for a more modern look."
+				},
+				"icon": {
+					"ios": "sparkles",
+					"android": "auto_awesome",
+					"web": "Sparkles"
+				}
+			},
+			{
+				"title": {
+					"de": "Campus Life Clubs",
+					"en": "Campus Life Clubs"
+				},
+				"description": {
+					"de": "Entdecke Hochschulgruppen und erfahre mehr über deren Events in der neuen Clubs-Ansicht.",
+					"en": "Discover university groups and learn more about their events in the new clubs view."
+				},
+				"icon": {
+					"ios": "person.3.fill",
+					"android": "groups",
+					"web": "Users"
+				}
+			},
+			{
+				"title": {
+					"de": "Karten Update",
+					"en": "Map Update"
+				},
+				"description": {
+					"de": "Die Campus-Karte wurde um die Gebäude W und K erweitert.",
+					"en": "The campus map has been expanded to include buildings W and K."
+				},
+				"icon": {
+					"ios": "map",
+					"android": "map",
+					"web": "Map"
+				}
+			}
+		],
+		"0.15": [
+			{
+				"title": {
+					"de": "Hochschulsport",
+					"en": "University Sports"
+				},
+				"description": {
+					"de": "Hochschulsport-Events haben jetzt eine eigene Übersicht mit verbesserter Darstellung.",
+					"en": "University sports events now have their own dedicated view with improved presentation."
+				},
+				"icon": {
+					"ios": "figure.run",
+					"android": "sports_handball",
+					"web": "Volleyball"
+				}
+			},
+			{
+				"title": {
+					"de": "Event Filter",
+					"en": "Event Filter"
+				},
+				"description": {
+					"de": "Filtere Events nach Veranstalter, um schneller das Richtige zu finden.",
+					"en": "Filter events by organizer to find what you're looking for faster."
+				},
+				"icon": {
+					"ios": "line.3.horizontal.decrease.circle",
+					"android": "filter_list",
+					"web": "Filter"
+				}
+			},
+			{
+				"title": {
+					"de": "Ehrenamts-Badge",
+					"en": "Honorary Badge"
+				},
+				"description": {
+					"de": "Ehrenamtliche Mitglieder werden auf dem Studierendenausweis mit einem Badge gekennzeichnet.",
+					"en": "Honorary members are now marked with a badge on the student ID card."
+				},
+				"icon": {
+					"ios": "person.text.rectangle",
+					"android": "badge",
+					"web": "IdCard"
+				}
+			}
+		],
+		"0.16": [
+			{
+				"title": {
+					"de": "Kalender Karte",
+					"en": "Calendar Card"
+				},
+				"description": {
+					"de": "Die Kalender-Karte auf dem Dashboard zeigt kommende Events jetzt übersichtlicher an.",
+					"en": "The calendar card on the dashboard now displays upcoming events more clearly."
+				},
+				"icon": {
+					"ios": "calendar.badge.clock",
+					"android": "calendar_clock",
+					"web": "CalendarDays"
+				}
+			},
+			{
+				"title": {
+					"de": "Club Filter",
+					"en": "Club Filter"
+				},
+				"description": {
+					"de": "Events können nach Clubs gefiltert und in beliebiger Reihenfolge sortiert werden.",
+					"en": "Events can be filtered by club and sorted in your preferred order."
+				},
+				"icon": {
+					"ios": "person.3.fill",
+					"android": "groups",
+					"web": "Users"
+				}
+			},
+			{
+				"title": {
+					"de": "Mensa Einstellungen",
+					"en": "Cafeteria Settings"
+				},
+				"description": {
+					"de": "Lege fest, wann die Mensa-Ansicht automatisch zum nächsten Tag wechselt.",
+					"en": "Configure when the cafeteria view automatically switches to the next day."
+				},
+				"icon": {
+					"ios": "fork.knife",
+					"android": "restaurant",
+					"web": "UtensilsCrossed"
 				}
 			}
 		]
