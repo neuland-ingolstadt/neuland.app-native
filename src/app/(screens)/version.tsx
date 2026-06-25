@@ -3,16 +3,8 @@ import Constants from 'expo-constants'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Linking,
-	Platform,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text
-} from 'react-native'
+import { Linking, Platform, Pressable, ScrollView, Text } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/Icon'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -27,7 +19,6 @@ declare global {
 }
 
 export default function Version(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation(['settings', 'common'])
 	const notAvailable = t('misc.notAvailable', { ns: 'common' })
 	const [systemInfo, setSystemInfo] = useState({
@@ -246,11 +237,14 @@ export default function Version(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={styles.contentContainer}
+			contentContainerClassName="p-page pb-bottom-safe"
 			contentInsetAdjustmentBehavior="automatic"
 		>
 			<FormList sections={sections} />
-			<Pressable style={styles.copyButton} onPress={handleCopyAll}>
+			<Pressable
+				className="items-center self-center bg-card rounded-mg border border-border flex-row gap-2.5 justify-center my-section min-w-copy-button-min px-10 py-3"
+				onPress={handleCopyAll}
+			>
 				<PlatformIcon
 					ios={{
 						name: 'doc.on.doc',
@@ -266,35 +260,10 @@ export default function Version(): React.JSX.Element {
 						size: 22
 					}}
 				/>
-				<Text style={styles.copyButtonText}>{t('version.copyButton')}</Text>
+				<Text className="text-primary text-base">
+					{t('version.copyButton')}
+				</Text>
 			</Pressable>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	contentContainer: {
-		padding: theme.margins.page,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	copyButton: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		flexDirection: 'row',
-		gap: 10,
-		justifyContent: 'center',
-		marginBottom: 30,
-		marginTop: 30,
-		minWidth: 165,
-		paddingHorizontal: 40,
-		paddingVertical: 12
-	},
-	copyButtonText: {
-		color: theme.colors.primary,
-		fontSize: 16
-	}
-}))
