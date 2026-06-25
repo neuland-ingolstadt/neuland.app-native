@@ -357,10 +357,16 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/member"
+					name="(screens)/member/index"
 					options={{
 						title: t('navigation.neulandMember'),
 						...transparentHeaderStyle
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/member/office-toggle"
+					options={{
+						headerShown: false
 					}}
 				/>
 				<Stack.Screen
