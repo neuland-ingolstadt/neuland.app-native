@@ -1,0 +1,62 @@
+# Central path filters for dorny/paths-filter (referenced across CI workflows)
+
+web:
+  - 'src/**'
+  - '**/*.web.tsx'
+  - 'app.config.json'
+  - 'config/Dockerfile'
+  - 'config/nginx.conf'
+  - 'babel.config.js'
+  - 'tsconfig.json'
+  - 'package.json'
+  - 'bun.lock'
+  - 'patches/**'
+
+android:
+  - 'app.config.json'
+  - 'config/plugins/**'
+  - 'src/assets/android/**'
+  - '**/*.android.tsx'
+  - 'package.json'
+  - 'bun.lock'
+  - 'patches/**'
+
+src:
+  - 'src/**'
+
+docker:
+  - 'src/**'
+  - '**/*.web.tsx'
+  - 'app.config.json'
+  - 'config/Dockerfile'
+  - 'config/nginx.conf'
+  - 'babel.config.js'
+  - 'tsconfig.json'
+  - 'package.json'
+  - 'bun.lock'
+  - 'patches/**'
+
+code:
+  - 'src/**'
+  - 'app.config.json'
+  - 'babel.config.js'
+  - 'tsconfig.json'
+  - 'biome.json'
+  - 'package.json'
+  - 'bun.lock'
+  - 'patches/**'
+  - 'config/codegen.yml'
+
+dependencies:
+  - 'package.json'
+  - 'bun.lock'
+  - 'patches/**'
+  - 'app.config.json'
+  - 'config/plugins/**'
+  - '.bun-version'
+
+workflows:
+  - '.github/workflows/**'
+  - '.github/actions/**'
+  - '.github/path-filters.yml'
+  - '.bun-version'

@@ -12,10 +12,18 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import { RoomReportCategory } from '@/__generated__/gql/graphql'
+import type { RoomReportCategory } from '@/__generated__/gql/graphql'
 import neulandApi from '@/api/neuland-api'
 import { CustomDropdown } from '@/components/Menu/custom-dropdown'
 import { getContrastColor } from '@/utils/ui-utils'
+
+const reportCategories: RoomReportCategory[] = [
+	'WRONG_DESCRIPTION',
+	'WRONG_LOCATION',
+	'NOT_EXISTING',
+	'MISSING',
+	'OTHER'
+]
 
 export default function RoomReport(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -23,7 +31,6 @@ export default function RoomReport(): React.JSX.Element {
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
 	>()
-	const reportCategories = Object.values(RoomReportCategory)
 	const { room } = useLocalSearchParams<{ room: string }>()
 
 	const [description, setDescription] = useState<string>('')
@@ -95,7 +102,7 @@ export default function RoomReport(): React.JSX.Element {
 					value={reportCategory}
 					onChange={setReportCategory}
 					options={reportCategories.map((category) => ({
-						label: t(`pages.rooms.report.category.type.${category}`),
+						label: t(`pages.rooms.report.category.type.${category}` as const),
 						value: category
 					}))}
 					placeholder={t('pages.rooms.report.category.placeholder')}

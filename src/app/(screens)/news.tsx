@@ -68,14 +68,12 @@ export default function NewsScreen(): React.JSX.Element {
 				<FlatList
 					data={data}
 					refreshControl={
-						isSuccess ? (
-							<RefreshControl
-								refreshing={isRefetchingByUser}
-								onRefresh={() => {
-									void refetchByUser()
-								}}
-							/>
-						) : undefined
+						<RefreshControl
+							refreshing={isRefetchingByUser}
+							onRefresh={() => {
+								void refetchByUser()
+							}}
+						/>
 					}
 					keyExtractor={(item) => item.href}
 					contentContainerStyle={[

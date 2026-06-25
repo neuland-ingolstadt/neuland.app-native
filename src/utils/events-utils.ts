@@ -9,10 +9,12 @@ import NeulandAPI from '@/api/neuland-api'
 import type {
 	CampusLifeEvent,
 	CampusLifeOrganizer,
+	CampusLifePublicOrganizerKind,
 	PublicEventResponse,
 	PublicOrganizerResponse
 } from '@/types/campus-life'
 import type { MaterialIcon } from '@/types/material-icons'
+import { parseApiOrganizerKind } from '@/utils/campus-life-utils'
 
 const FALLBACK_ORGANIZER_NAME = 'Campus Life'
 
@@ -20,8 +22,11 @@ function mapOrganizerResponse(
 	organizer: PublicOrganizerResponse | null | undefined,
 	defaults: { id: number; name?: string }
 ): CampusLifeOrganizer {
+	const organizerKind = parseApiOrganizerKind(organizer?.organizer_kind)
+
 	return {
 		id: organizer?.id ?? defaults.id,
+		...(organizerKind != null ? { organizerKind } : {}),
 		name: organizer?.name ?? defaults.name ?? FALLBACK_ORGANIZER_NAME,
 		descriptions: {
 			de: organizer?.description_de ?? null,
@@ -40,9 +45,13 @@ function mapEventResponse(
 	event: PublicEventResponse,
 	organizer: CampusLifeOrganizer
 ): CampusLifeEvent {
+	const organizerKind =
+		parseApiOrganizerKind(event.organizer_kind) ?? organizer.organizerKind
+
 	return {
 		id: event.id.toString(),
 		numericId: event.id,
+		...(organizerKind != null ? { organizerKind } : {}),
 		titles: {
 			de: event.title_de,
 			en: event.title_en
@@ -64,6 +73,8 @@ export interface LoadCampusLifeEventsOptions {
 	upcomingOnly?: boolean
 	limit?: number
 	offset?: number
+	/** Defaults to student associations; pass `null` to omit the filter. */
+	organizerKind?: CampusLifePublicOrganizerKind | string | null
 }
 
 /**
@@ -72,13 +83,20 @@ export interface LoadCampusLifeEventsOptions {
 export async function loadCampusLifeEvents(
 	options: LoadCampusLifeEventsOptions = {}
 ): Promise<CampusLifeEvent[]> {
-	const { organizerId, upcomingOnly = true, limit, offset } = options
+	const {
+		organizerId,
+		upcomingOnly = true,
+		limit,
+		offset,
+		organizerKind
+	} = options
 
 	const events = await NeulandAPI.getPublicCampusLifeEvents({
 		organizerId,
 		upcomingOnly,
 		limit,
-		offset
+		offset,
+		...(organizerKind !== undefined ? { organizerKind } : {})
 	})
 
 	const now = Date.now()
@@ -101,6 +119,17 @@ export async function loadCampusLifeEvents(
 		.sort((a, b) => Date.parse(a.startDateTime) - Date.parse(b.startDateTime))
 }
 
+export async function loadCampusLifeEvent(
+	id: number
+): Promise<CampusLifeEvent> {
+	const event = await NeulandAPI.getPublicCampusLifeEvent(id)
+	const organizer = mapOrganizerResponse(null, {
+		id: event.organizer_id,
+		name: event.organizer_name ?? undefined
+	})
+	return mapEventResponse(event, organizer)
+}
+
 export async function loadCampusLifeOrganizer(
 	id: number
 ): Promise<CampusLifeOrganizer> {
@@ -108,18 +137,17 @@ export async function loadCampusLifeOrganizer(
 	return mapOrganizerResponse(organizer, { id })
 }
 
-export async function loadCampusLifeOrganizers(): Promise<
-	CampusLifeOrganizer[]
-> {
-	const organizers = await NeulandAPI.getPublicOrganizers()
+export async function loadCampusLifeOrganizers(
+	organizerKind?: CampusLifePublicOrganizerKind | string | null
+): Promise<CampusLifeOrganizer[]> {
+	const organizers = await NeulandAPI.getPublicOrganizers({ organizerKind })
 	return organizers.map((organizer) =>
 		mapOrganizerResponse(organizer, { id: organizer.id })
 	)
 }
 
 /**
- * Fetches and parses the campus life events
- * @returns {Promise<CampusLifeEventFieldsFragment[]>} A promise that resolves with the campus life events
+ * Groups university sports events by weekday.
  */
 type GroupedSportsEvents = {
 	title: WeekdayType

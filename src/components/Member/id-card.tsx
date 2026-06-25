@@ -19,6 +19,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import MemberAPI, { type ProfileQrResponse } from '@/api/member-api'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import type { MemberInfo } from '@/hooks/useMemberStore'
@@ -201,30 +202,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }))
 
-function fetchProfileQr(token: string) {
-	return fetch('https://id.neuland-ingolstadt.de/api/qr', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
-		}
-	}).then(async (res) => {
-		if (!res.ok) {
-			throw new Error('Failed to fetch QR code')
-		}
-		const json = await res.json()
-		if (json.qr && json.iat && json.exp) {
-			return json
-		}
-		throw new Error('Invalid QR code response')
-	})
-}
-
-interface ProfileQrResponse {
-	qr: string
-	iat: number
-	exp: number
-}
-
 interface IDCardProps {
 	info: MemberInfo
 	idToken: string | null
@@ -278,8 +255,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 			if (!idToken) {
 				throw new Error('No idToken available')
 			}
-			const result = await fetchProfileQr(idToken)
-			return result
+			return await MemberAPI.getProfileQr(idToken)
 		},
 		staleTime: 70 * 60 * 60 * 1000,
 		gcTime: 72 * 60 * 60 * 1000

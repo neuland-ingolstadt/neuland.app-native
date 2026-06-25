@@ -96,7 +96,7 @@ Help us test the latest features before they're released to the public:
 
 - Report issues and bugs on [GitHub](https://github.com/neuland-ingolstadt/neuland.app-native/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml&title=%5BBug%5D%3A+)
 - Send feedback via email to [feedback@neuland.app](mailto:feedback@neuland.app)
-- Check the [status page](https://status.neuland.app) for any ongoing issues
+- Check the [status page](https://status.neuland.ing) for any ongoing issues
 
 ## 👥 About Us
 

@@ -23,6 +23,11 @@ const NeulandBox = (): React.JSX.Element | null => {
 		return null
 	}
 
+	const hasHonoraryRole =
+		memberInfo.groups?.some((group) =>
+			group.toLowerCase().includes('ehrenmitglied')
+		) ?? false
+
 	return (
 		<View style={styles.neulandContainer}>
 			<Pressable
@@ -53,7 +58,11 @@ const NeulandBox = (): React.JSX.Element | null => {
 						<View style={styles.textContainer}>
 							<Text style={styles.neulandName}>{memberInfo.name}</Text>
 							<Text style={styles.neulandTitle}>
-								{t('member:settings.title')}
+								{t(
+									hasHonoraryRole
+										? 'member:settings.honoraryTitle'
+										: 'member:settings.title'
+								)}
 							</Text>
 						</View>
 

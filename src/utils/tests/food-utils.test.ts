@@ -6,7 +6,7 @@ const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
 const shareMock = mock(async () => {})
-const copyToClipboardMock = mock(async () => {})
+const clipboardSetStringAsyncMock = mock(async () => {})
 const trackEventMock = mock(() => {})
 const mockGetFoodPlan = mock(
 	async (): Promise<{ food: unknown }> => ({ food: [] })
@@ -30,6 +30,7 @@ mock.module('react-native', () => ({
 	default: {
 		Platform: platform,
 		Share: { share: shareMock },
+		Linking: { openURL: async () => {} },
 		NativeEventEmitter: class {
 			addListener() {
 				return { remove: () => {} }
@@ -43,6 +44,7 @@ mock.module('react-native', () => ({
 	},
 	Platform: platform,
 	Share: { share: shareMock },
+	Linking: { openURL: async () => {} },
 	NativeEventEmitter: class {
 		addListener() {
 			return { remove: () => {} }
@@ -60,30 +62,29 @@ mock.module('@aptabase/react-native', () => ({
 }))
 
 mock.module('expo-clipboard', () => ({
-	setStringAsync: async () => {}
+	setStringAsync: clipboardSetStringAsyncMock
 }))
 
 mock.module('burnt', () => ({
 	toast: () => {}
 }))
 
-mock.module(`${SRC_ROOT}utils/ui-utils.ts`, () => ({
-	copyToClipboard: copyToClipboardMock
-}))
-
-mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
-	getFragmentData: mockGetFragmentData
-}))
-
 mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {}
+	FoodFieldsFragmentDoc: {},
+	UniversitySportsFieldsFragmentDoc: {}
 }))
 
-mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-	default: {
-		getFoodPlan: mockGetFoodPlan
-	}
-}))
+const registerFoodApiMocks = () => {
+	mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
+		getFragmentData: mockGetFragmentData
+	}))
+
+	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
+		default: {
+			getFoodPlan: mockGetFoodPlan
+		}
+	}))
+}
 
 let foodUtils: typeof import('../food-utils')
 
@@ -115,6 +116,7 @@ const makeMeal = (id: string, isStatic: boolean): Meal =>
 	}) as Meal
 
 beforeAll(async () => {
+	registerFoodApiMocks()
 	foodUtils = await import('../food-utils')
 })
 
@@ -337,7 +339,7 @@ describe('food-utils', () => {
 	it('shareMeal - Should track analytics and copy the message on web', () => {
 		platform.OS = 'web'
 		trackEventMock.mockReset()
-		copyToClipboardMock.mockReset()
+		clipboardSetStringAsyncMock.mockReset()
 		shareMock.mockReset()
 
 		const meal = makeMeal('share-meal', false)
@@ -361,7 +363,7 @@ describe('food-utils', () => {
 		foodUtils.shareMeal(meal, i18nMock, 'student')
 
 		expect(trackEventMock).toHaveBeenCalledWith('Share', { type: 'meal' })
-		expect(copyToClipboardMock).toHaveBeenCalledWith(
+		expect(clipboardSetStringAsyncMock).toHaveBeenCalledWith(
 			'share:Gericht share-meal:2.50 €:Mensa Ingolstadt:share-meal'
 		)
 		expect(shareMock).not.toHaveBeenCalled()
@@ -370,7 +372,7 @@ describe('food-utils', () => {
 	it('shareMeal - Should open the native share sheet off web', () => {
 		platform.OS = 'ios'
 		trackEventMock.mockReset()
-		copyToClipboardMock.mockReset()
+		clipboardSetStringAsyncMock.mockReset()
 		shareMock.mockReset()
 
 		const meal = makeMeal('native-meal', false)
@@ -396,7 +398,7 @@ describe('food-utils', () => {
 		expect(shareMock).toHaveBeenCalledWith({
 			message: 'native:Gericht native-meal:native-meal'
 		})
-		expect(copyToClipboardMock).not.toHaveBeenCalled()
+		expect(clipboardSetStringAsyncMock).not.toHaveBeenCalled()
 
 		platform.OS = 'web'
 	})

@@ -19,7 +19,7 @@ interface SectionPickerProps {
  * @param {() => void} action - The function to be called when the item is selected.
  * @param {boolean} state - The state of the item.
  * @param {boolean} disabled - Whether the item is disabled.
- * @returns {JSX.Element} - The SingleSectionPicker component.
+ * @returns {React.JSX.Element} - The SingleSectionPicker component.
  * @example
  * <SingleSectionPicker
  *      title={'Title'}
@@ -30,12 +30,12 @@ interface SectionPickerProps {
  *    disabled={false}
  * />
  */
-const SingleSectionPicker: React.FC<SectionPickerProps> = ({
+const SingleSectionPicker = ({
 	title,
 	selectedItem,
 	action,
 	disabled = false
-}) => {
+}: SectionPickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	const isOn = useBinding(selectedItem)
 

@@ -25,6 +25,11 @@
 				"applinks:web.neuland.app",
 				"applinks:dev.neuland.app"
 			],
+			"entitlements": {
+				"com.apple.developer.pass-type-identifiers": [
+					"$(TeamIdentifierPrefix)pass.member.neuland.app"
+				]
+			},
 			"config": {
 				"usesNonExemptEncryption": false
 			},
@@ -38,12 +43,22 @@
 			"icon": "./src/assets/appIcons/Default.icon"
 		},
 		"locales": {
-			"en": "./src/localization/en/ios.json",
-			"de": "./src/localization/de/ios.json"
+			"en": "./src/localization/en/metadata.json",
+			"de": "./src/localization/de/metadata.json"
 		},
 		"android": {
 			"package": "app.neuland",
+			"playStoreUrl": "https://play.google.com/store/apps/details?id=app.neuland",
 			"userInterfaceStyle": "automatic",
+			"icon": "./src/assets/android/ic_launcher.png",
+			"adaptiveIcon": {
+				"foregroundImage": "./src/assets/android/ic_launcher_foreground.png",
+				"backgroundColor": "#ffffff"
+			},
+			"permissions": [
+				"android.permission.ACCESS_COARSE_LOCATION",
+				"android.permission.ACCESS_FINE_LOCATION"
+			],
 			"intentFilters": [
 				{
 					"action": "VIEW",
@@ -67,8 +82,8 @@
 		},
 		"sdkVersion": "54.0.0",
 		"experiments": {
+			"autolinkingModuleResolution": true,
 			"reactCompiler": true,
-			"reactCanary": true,
 			"tsconfigPaths": true,
 			"typedRoutes": true
 		},
@@ -98,27 +113,51 @@
 				[
 					{
 						"name": "Cat",
-						"ios": "./src/assets/appIcons/cat.png"
+						"ios": "./src/assets/appIcons/cat.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/cat.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "RainbowNeon",
-						"ios": "./src/assets/appIcons/rainbowNeon.png"
+						"ios": "./src/assets/appIcons/rainbowNeon.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowNeon.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Luxury",
-						"ios": "./src/assets/appIcons/luxury.png"
+						"ios": "./src/assets/appIcons/luxury.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/luxury.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "RainbowGlow",
-						"ios": "./src/assets/appIcons/rainbowGlow.png"
+						"ios": "./src/assets/appIcons/rainbowGlow.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowGlow.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Hacker",
-						"ios": "./src/assets/appIcons/hacker.png"
+						"ios": "./src/assets/appIcons/hacker.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/hacker.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "Retro",
-						"ios": "./src/assets/appIcons/retro.png"
+						"ios": "./src/assets/appIcons/retro.png",
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/retro.png",
+							"backgroundColor": "#ffffff"
+						}
 					},
 					{
 						"name": "ModernGreen",
@@ -126,6 +165,10 @@
 							"light": "./src/assets/appIcons/modernGreen.png",
 							"dark": "./src/assets/appIcons/dark/modernGreenDark.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/modernGreen.png",
+							"backgroundColor": "#ffffff"
 						}
 					},
 					{
@@ -134,6 +177,10 @@
 							"light": "./src/assets/appIcons/modernPurple.png",
 							"dark": "./src/assets/appIcons/dark/purpleDark.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/modernPurple.png",
+							"backgroundColor": "#ffffff"
 						}
 					},
 					{
@@ -142,12 +189,21 @@
 							"light": "./src/assets/appIcons/rainbowMoonLight.png",
 							"dark": "./src/assets/appIcons/dark/darkRainbow.png",
 							"tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+						},
+						"android": {
+							"foregroundImage": "./src/assets/appIcons/rainbowMoonLight.png",
+							"backgroundColor": "#ffffff"
 						}
 					}
 				]
 			],
 			["expo-secure-store"],
-			["expo-localization"],
+			[
+				"expo-localization",
+				{
+					"supportedLocales": ["en", "de"]
+				}
+			],
 			["@maplibre/maplibre-react-native"],
 			[
 				"expo-splash-screen",
@@ -189,7 +245,17 @@
 				"./src/assets/android/check.xml"
 			],
 			"./config/plugins/withIosCiArtifacts.js",
-			"expo-font"
+			"./config/plugins/withCiScriptsSymlink.js",
+			"./config/plugins/withXcode26FmtWorkaround.js",
+			[
+				"expo-font",
+				{
+					"fonts": [
+						"./config/fonts/MaterialSymbolsRoundedFill.ttf",
+						"./config/fonts/MaterialSymbolsRoundedOutline.ttf"
+					]
+				}
+			]
 		],
 		"extra": {
 			"eas": {

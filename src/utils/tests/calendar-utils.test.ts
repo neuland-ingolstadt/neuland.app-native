@@ -11,9 +11,11 @@ const mockGetExams = mock(async (): Promise<Exams[]> => [])
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: { OS: 'web' }
+		Platform: { OS: 'web' },
+		Linking: { openURL: async () => {} }
 	},
-	Platform: { OS: 'web' }
+	Platform: { OS: 'web' },
+	Linking: { openURL: async () => {} }
 }))
 
 mock.module('expo-localization', () => ({
@@ -237,6 +239,29 @@ describe('calendar-utils', () => {
 			expect(
 				calendarUtils.isCalendarCardExam(result[0]) && result[0].examData.name
 			).toBe('TiedExam')
+		})
+
+		it('tie-breaks calendar-vs-exam comparisons in both sort directions', () => {
+			const sameBegin = new Date('2026-06-10T00:00:00')
+			const events = [
+				{
+					...makeCalendarEvent('calendarA', '2026-06-10T00:00:00'),
+					begin: sameBegin
+				},
+				{
+					...makeCalendarEvent('calendarB', '2026-06-10T00:00:00'),
+					begin: sameBegin
+				}
+			]
+			const exams = [
+				{
+					...toCardExam(makeExam('TiedExam', '2026-06-10T00:00:00')),
+					begin: sameBegin
+				}
+			]
+			const result = calendarUtils.selectCalendarCardEvents(events, exams, NOW)
+			expect(calendarUtils.isCalendarCardExam(result[0])).toBe(true)
+			expect(result).toHaveLength(2)
 		})
 	})
 

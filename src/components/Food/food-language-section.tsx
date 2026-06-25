@@ -15,7 +15,7 @@ export interface FoodLanguageElement {
  * @param {FoodLanguageElement[]} elements - The list of selectable items.
  * @param {string[]} selectedItems - The list of selected items.
  * @param {(item: FoodLanguage) => void} action - The function to be called when an item is selected.
- * @returns {JSX.Element} - The MultiSectionPicker component.
+ * @returns {React.JSX.Element} - The MultiSectionPicker component.
  */
 export interface FoodLanguagePickerProps {
 	elements: FoodLanguageElement[]
@@ -23,11 +23,11 @@ export interface FoodLanguagePickerProps {
 	action: (item: string) => void
 }
 
-const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
+const MultiSectionRadio = ({
 	elements,
 	selectedItem,
 	action
-}) => {
+}: FoodLanguagePickerProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
 		<>

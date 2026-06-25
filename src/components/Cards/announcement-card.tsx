@@ -22,10 +22,10 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type {
 	AnnouncementFieldsFragment,
-	Platform as AppPlatform,
 	UserKind
 } from '@/__generated__/gql/graphql'
 import i18n from '@/localization/i18n'
+import { getAnnouncementPlatform } from '@/utils/web-host'
 import { DashboardContext, UserKindContext } from '../contexts'
 import PlatformIcon from '../Universal/Icon'
 
@@ -33,12 +33,9 @@ interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]
 }
 
-const isStaging = process.env.EXPO_PUBLIC_ENV === 'staging'
-const platform = (
-	isStaging ? 'WEB_DEV' : Platform.OS.toUpperCase()
-) as AppPlatform
-
-const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
+const AnnouncementCard = ({
+	data
+}: AnnouncementCardProps): React.JSX.Element | null => {
 	const { hiddenAnnouncements, hideAnnouncement } = use(DashboardContext)
 	const { t } = useTranslation('navigation')
 	const { userKind = 'guest' } = use(UserKindContext)
@@ -72,6 +69,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 		(
 			announcements: AnnouncementFieldsFragment[]
 		): AnnouncementFieldsFragment[] => {
+			const platform = getAnnouncementPlatform()
 			const now = Date.now()
 			return announcements
 				.filter(

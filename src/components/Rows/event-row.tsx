@@ -1,10 +1,14 @@
-import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { LanguageKey } from '@/localization/i18n'
-import type { CampusLifeEvent } from '@/types/campus-life'
+import {
+	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+	type CampusLifeEvent,
+	type CampusLifePublicOrganizerKind
+} from '@/types/campus-life'
+import { campusLifeEventDetailHref } from '@/utils/campus-life-utils'
 import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
@@ -13,10 +17,12 @@ import RowEntry from '../Universal/row-entry'
 
 const CLEventRow = ({
 	event,
-	inSheet = false
+	inSheet = false,
+	organizerKind = CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION
 }: {
 	event: CampusLifeEvent
 	inSheet?: boolean
+	organizerKind?: CampusLifePublicOrganizerKind
 }): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 
@@ -31,10 +37,12 @@ const CLEventRow = ({
 	const isActive =
 		begin != null && begin < new Date() && end != null && end > new Date()
 
+	const eventHref = campusLifeEventDetailHref(event.id, organizerKind)
+
 	return (
 		<RowEntry
 			backgroundColor={inSheet ? theme.colors.cardSheet : theme.colors.card}
-			href={`/events/cl/${event.id}` as RelativePathString}
+			href={eventHref}
 			title={event.titles[i18n.language as LanguageKey] ?? ''}
 			leftChildren={
 				<View style={styles.leftContainer}>
