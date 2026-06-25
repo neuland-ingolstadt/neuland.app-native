@@ -21,6 +21,14 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
+const reportCategories: RoomReportCategory[] = [
+	'WRONG_DESCRIPTION',
+	'WRONG_LOCATION',
+	'NOT_EXISTING',
+	'MISSING',
+	'OTHER'
+]
+
 export default function RoomReport(): React.JSX.Element {
 	const themePreference = usePreferencesStore((state) => state.theme)
 	const systemScheme = useColorScheme()
@@ -37,13 +45,6 @@ export default function RoomReport(): React.JSX.Element {
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
 	>()
-	const reportCategories: RoomReportCategory[] = [
-		'WRONG_DESCRIPTION',
-		'WRONG_LOCATION',
-		'NOT_EXISTING',
-		'MISSING',
-		'OTHER'
-	]
 	const { room } = useLocalSearchParams<{ room: string }>()
 
 	const [description, setDescription] = useState<string>('')

@@ -21,6 +21,11 @@ export const unstable_settings = {
 	initialRouteName: '/'
 }
 
+const DASHBOARD_MASONRY_BREAKPOINT = 800
+
+const getDashboardColumnCount = (width: number): number =>
+	Math.floor(width < DASHBOARD_MASONRY_BREAKPOINT ? 1 : 2)
+
 const HeaderLeft = () => {
 	const { styles } = useStyles(stylesheet)
 	return (
@@ -66,7 +71,7 @@ const HomeScreen = memo(function HomeScreen() {
 	const { shownDashboardEntries } = React.use(DashboardContext)
 	const [orientation, setOrientation] = useState(Dimensions.get('window').width)
 	const [columns, setColumns] = useState(
-		Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
+		getDashboardColumnCount(Dimensions.get('window').width)
 	)
 	const { t } = useTranslation(['navigation', 'settings'])
 	const { data } = useQuery({
@@ -82,8 +87,9 @@ const HomeScreen = memo(function HomeScreen() {
 
 	useEffect(() => {
 		const handleOrientationChange = (): void => {
-			setOrientation(Dimensions.get('window').width)
-			setColumns(Math.floor(Dimensions.get('window').width < 700 ? 1 : 2))
+			const width = Dimensions.get('window').width
+			setOrientation(width)
+			setColumns(getDashboardColumnCount(width))
 		}
 
 		const subscription = Dimensions.addEventListener(

@@ -21,7 +21,9 @@ documentation:
 android:
   - changed-files:
       - any-glob-to-any-file:
-          - 'android/**'
+          - 'app.config.json'
+          - 'config/plugins/withDrawableAssets.js'
+          - 'src/assets/android/**'
           - '**/*.android.tsx'
 
 ios:

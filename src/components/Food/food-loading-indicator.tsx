@@ -9,9 +9,9 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { useCSSVariable } from 'uniwind'
-import PlatformIcon from '@/components/Universal/Icon'
-import { toColor } from '@/utils/uniwind-utils'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { FloatingFoodIcon } from './floating-food-icon'
+import { FOOD_ICONS } from './food-icons'
 import { SharedPlate } from './shared-plate'
 import { useSharedPlateAnimations } from './use-shared-plate-animations'
 
@@ -20,30 +20,6 @@ interface FoodLoadingIndicatorProps {
 	size?: number
 }
 
-const FOOD_ICONS = [
-	{
-		ios: 'carrot' as const,
-		android: 'ramen_dining' as const,
-		web: 'Ham' as const,
-		delay: 0,
-		position: { x: 0.8, y: -0.6 }
-	},
-	{
-		ios: 'takeoutbag.and.cup.and.straw' as const,
-		android: 'lunch_dining' as const,
-		web: 'Pizza' as const,
-		delay: 400,
-		position: { x: -0.85, y: -0.45 }
-	},
-	{
-		ios: 'cup.and.saucer' as const,
-		android: 'coffee' as const,
-		web: 'Coffee' as const,
-		delay: 800,
-		position: { x: 0.45, y: 0.9 }
-	}
-]
-
 /**
  * A loading indicator that uses the exact same plate design as the plate-animation component,
  * but simplified for loading purposes with animated dots below.
@@ -51,21 +27,14 @@ const FOOD_ICONS = [
 export const FoodLoadingIndicator = ({
 	size = 120
 }: FoodLoadingIndicatorProps): React.JSX.Element => {
-	const plateInnerColor = useCSSVariable('--color-plate-inner') as string
-	const primaryColor = useCSSVariable('--color-primary') as string
+	const { styles, theme } = useStyles(stylesheet)
 
-	const {
-		plateAnimatedStyle,
-		plateInnerAnimatedStyle,
-		icon0Style,
-		icon1Style,
-		icon2Style
-	} = useSharedPlateAnimations({
-		size,
-		enableTapAnimations: false,
-		baseInnerColor: plateInnerColor,
-		tapTintColor: primaryColor
-	})
+	const { plateAnimatedStyle, plateInnerAnimatedStyle } =
+		useSharedPlateAnimations({
+			enableTapAnimations: false,
+			baseInnerColor: theme.colors.plateInner,
+			tapTintColor: theme.colors.primary
+		})
 
 	const dot1Opacity = useSharedValue(0.6)
 	const dot2Opacity = useSharedValue(0.6)
@@ -107,78 +76,10 @@ export const FoodLoadingIndicator = ({
 	}, [])
 
 	return (
-		<View
-			className="items-center justify-center relative"
-			style={{ width: size * 2, height: size * 1.6 }}
-		>
-			<Animated.View
-				className="absolute w-10 h-10 items-center justify-center z-[2]"
-				style={icon0Style}
-			>
-				<PlatformIcon
-					ios={{
-						name: FOOD_ICONS[0].ios,
-						size: size * 0.25,
-						weight: 'semibold'
-					}}
-					android={{
-						name: FOOD_ICONS[0].android,
-						size: size * 0.25,
-						variant: 'outlined'
-					}}
-					web={{
-						name: FOOD_ICONS[0].web,
-						size: size * 0.25
-					}}
-					style={{ color: toColor(primaryColor) }}
-				/>
-			</Animated.View>
-
-			<Animated.View
-				className="absolute w-10 h-10 items-center justify-center z-[2]"
-				style={icon1Style}
-			>
-				<PlatformIcon
-					ios={{
-						name: FOOD_ICONS[1].ios,
-						size: size * 0.25,
-						weight: 'semibold'
-					}}
-					android={{
-						name: FOOD_ICONS[1].android,
-						size: size * 0.25,
-						variant: 'outlined'
-					}}
-					web={{
-						name: FOOD_ICONS[1].web,
-						size: size * 0.25
-					}}
-					style={{ color: toColor(primaryColor) }}
-				/>
-			</Animated.View>
-
-			<Animated.View
-				className="absolute w-10 h-10 items-center justify-center z-[2]"
-				style={icon2Style}
-			>
-				<PlatformIcon
-					ios={{
-						name: FOOD_ICONS[2].ios,
-						size: size * 0.25,
-						weight: 'semibold'
-					}}
-					android={{
-						name: FOOD_ICONS[2].android,
-						size: size * 0.25,
-						variant: 'outlined'
-					}}
-					web={{
-						name: FOOD_ICONS[2].web,
-						size: size * 0.25
-					}}
-					style={{ color: toColor(primaryColor) }}
-				/>
-			</Animated.View>
+		<View style={[styles.container, { width: size * 2, height: size * 1.6 }]}>
+			{FOOD_ICONS.map((foodIcon) => (
+				<FloatingFoodIcon key={foodIcon.ios} foodIcon={foodIcon} size={size} />
+			))}
 
 			<SharedPlate
 				size={size}
@@ -187,21 +88,46 @@ export const FoodLoadingIndicator = ({
 				showCurvedText={true}
 			/>
 
-			<View className="absolute -bottom-[60px] items-center justify-center">
-				<View className="flex-row gap-2">
+			<View style={styles.loadingDotsContainer}>
+				<View style={styles.loadingDots}>
 					<Animated.View style={{ opacity: dot1Opacity }}>
-						<View className="w-2 h-2 rounded-sm bg-primary" />
+						<View style={styles.dot} />
 					</Animated.View>
 					<Animated.View style={{ opacity: dot2Opacity }}>
-						<View className="w-2 h-2 rounded-sm bg-primary" />
+						<View style={styles.dot} />
 					</Animated.View>
 					<Animated.View style={{ opacity: dot3Opacity }}>
-						<View className="w-2 h-2 rounded-sm bg-primary" />
+						<View style={styles.dot} />
 					</Animated.View>
 				</View>
 			</View>
 		</View>
 	)
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+	container: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		position: 'relative',
+		paddingVertical: 0
+	},
+	loadingDotsContainer: {
+		position: 'absolute',
+		bottom: -60,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	loadingDots: {
+		flexDirection: 'row',
+		gap: 8
+	},
+	dot: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		backgroundColor: theme.colors.primary
+	}
+}))
 
 export default FoodLoadingIndicator

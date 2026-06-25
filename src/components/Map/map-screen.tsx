@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import type { BottomSheetModal } from '@gorhom/bottom-sheet'
 import type {
@@ -18,10 +17,8 @@ import {
 	UserLocation,
 	UserTrackingMode
 } from '@maplibre/maplibre-react-native'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'burnt'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import type { Feature, FeatureCollection, Position } from 'geojson'
+import { router, useNavigation } from 'expo-router'
+import type { Position } from 'geojson'
 import type React from 'react'
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +29,6 @@ import {
 	Platform,
 	Pressable,
 	Text,
-	useColorScheme,
 	View
 } from 'react-native'
 import Animated, {
@@ -41,13 +37,11 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import { useCSSVariable } from 'uniwind'
-import API from '@/api/authenticated-api'
-import NeulandAPI from '@/api/neuland-api'
 import {
-	NoSessionError,
-	UnavailableSessionError
-} from '@/api/thi-session-handler'
+	createStyleSheet,
+	UnistylesRuntime,
+	useStyles
+} from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-modal'
@@ -55,40 +49,19 @@ import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useMapGeoJsonFilters } from '@/hooks/useMapGeoJsonFilters'
+import { useMapQueries } from '@/hooks/useMapQueries'
+import { useMapRoomSelection } from '@/hooks/useMapRoomSelection'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import {
 	type ClickedMapElement,
 	type RoomData,
 	SEARCH_TYPES
 } from '@/types/map'
 import type { NormalizedLecturer } from '@/types/utils'
-import { formatISODate, formatISOTime } from '@/utils/date-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
-import {
-	filterAvailableRooms,
-	filterEtage,
-	getBuildingData,
-	getOngoingOrNextEvent,
-	getRoomData
-} from '@/utils/map-screen-utils'
-import {
-	BUILDINGS,
-	FLOOR_ORDER,
-	FLOOR_SUBSTITUTES,
-	filterRooms,
-	getCenter,
-	getCenterSingle,
-	getIcon,
-	getRoomOpenings,
-	INGOLSTADT_CENTER,
-	NEUBURG_CENTER
-} from '@/utils/map-utils'
-import { loadTimetable } from '@/utils/timetable-utils'
-import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
-
-import packageInfo from '../../../package.json'
+import { getBuildingData, getRoomData } from '@/utils/map-screen-utils'
+import { INGOLSTADT_CENTER, NEUBURG_CENTER } from '@/utils/map-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { modalSection } from './modal-sections'
 
@@ -102,20 +75,8 @@ const MapScreen = (): React.JSX.Element => {
 	const navigation = useNavigation()
 	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
 	const [mapKey, setMapKey] = useState(0)
-	const themePreference = usePreferencesStore((state) => state.theme)
-	const systemScheme = useColorScheme()
-	const isDark =
-		themePreference === 'dark' ||
-		(themePreference !== 'light' && systemScheme === 'dark')
-	const primaryColor = useCSSVariable('--color-primary') as string
-	const notificationColor = useCSSVariable('--color-notification') as
-		| string
-		| undefined
-	const labelColor = useCSSVariable('--color-label') as string | undefined
-	const backgroundColor = useCSSVariable('--color-background') as
-		| string
-		| undefined
-	const params = useLocalSearchParams<{ room: string }>()
+	const { styles, theme } = useStyles(stylesheet)
+	const isDark = UnistylesRuntime.themeName === 'dark'
 	const { userKind, userFaculty } = use(UserKindContext)
 	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
 	const { t, i18n } = useTranslation('common')
@@ -124,23 +85,18 @@ const MapScreen = (): React.JSX.Element => {
 	const currentPosition = useSharedValue(0)
 	const currentPositionModal = useSharedValue(0)
 	const {
-		localSearch,
 		clickedElement,
 		setClickedElement,
 		availableRooms,
-		setAvailableRooms,
 		roomOpenings,
-		setRoomOpenings,
 		currentFloor,
-		setCurrentFloor,
-		setNextLecture
+		setCurrentFloor
 	} = use(MapContext)
 	const [disableFollowUser, setDisableFollowUser] = useState(false)
 	const [showAllFloors, setShowAllFloors] = useState(false)
 	const mapRef = useRef<MapViewRef>(null)
 	const cameraRef = useRef<CameraRef>(null)
 	const locationRef = useRef<UserLocationRef>(null)
-	const currentDate = new Date()
 
 	enum Locations {
 		IN = 'Ingolstadt',
@@ -182,55 +138,28 @@ const MapScreen = (): React.JSX.Element => {
 		bottomSheetModalRef.current?.present()
 	}, [])
 
-	const { data: mapOverlay, error: overlayError } = useQuery<FeatureCollection>(
-		{
-			queryKey: ['mapOverlay', packageInfo.version],
-			queryFn: async () => await NeulandAPI.getMapOverlay(),
-			staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-			gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
-			networkMode: 'always'
-		}
-	)
+	const { mapOverlay, overlayError, lecturers, allRooms, buildingGeoJSON } =
+		useMapQueries()
 
-	useEffect(() => {
-		if (overlayError != null) {
-			toast({
-				title: t('toast.mapOverlay', { ns: 'common' }),
-				preset: 'error',
-				duration: 3,
-				from: 'top'
-			})
-		}
-	}, [overlayError])
-
-	const { data: timetable } = useQuery({
-		queryKey: ['timetableV2', userKind],
-		queryFn: loadTimetable,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-		retry(failureCount, error) {
-			const ignoreErrors = [
-				'"Time table does not exist" (-202)',
-				'Timetable is empty'
-			]
-			if (ignoreErrors.includes(error.message)) {
-				return false
-			}
-			return failureCount < 2
-		},
-		enabled: userKind !== USER_GUEST
+	const { selectRoom } = useMapRoomSelection({
+		allRooms,
+		mapLoadState,
+		handlePresentModalPress,
+		bottomSheetRef,
+		notificationColor: theme.colors.notification
 	})
 
-	const { data: lecturers } = useQuery({
-		queryKey: ['allLecturers'],
-		queryFn: async () => {
-			const rawData = await API.getLecturers('0', 'z')
-			const data = normalizeLecturers(rawData)
-			return data
-		},
-		staleTime: 1000 * 60 * 30, // 30 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-		enabled: userKind !== USER_GUEST
+	const {
+		uniqueEtages,
+		filteredGeoJSON,
+		availableFilteredGeoJSON,
+		hasFilteredRooms,
+		hasAvailableFilteredRooms
+	} = useMapGeoJsonFilters({
+		mapOverlay,
+		allRooms,
+		currentFloor,
+		availableRooms
 	})
 
 	useEffect(() => {
@@ -242,107 +171,6 @@ const MapScreen = (): React.JSX.Element => {
 			subscription.remove()
 		}
 	})
-
-	useEffect(() => {
-		if (timetable == null) {
-			setNextLecture([])
-			return
-		}
-		const ongoingOrNextEvent = getOngoingOrNextEvent(timetable)
-		if (ongoingOrNextEvent.length > 0) {
-			setNextLecture(ongoingOrNextEvent)
-		}
-	}, [timetable, userKind])
-
-	const allRooms: FeatureCollection = useMemo(() => {
-		if (mapOverlay == null) {
-			console.debug('No map overlay data')
-			return { type: 'FeatureCollection', features: [] }
-		}
-
-		const rooms = mapOverlay.features.flatMap((feature) => {
-			const { type, id, geometry, properties } = feature
-
-			if (
-				geometry == null ||
-				properties == null ||
-				geometry.type !== 'Polygon' ||
-				!('coordinates' in geometry) ||
-				geometry.coordinates == null ||
-				geometry.coordinates.length === 0
-			) {
-				return []
-			}
-
-			if (properties.Ebene in FLOOR_SUBSTITUTES) {
-				properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene as string]
-			}
-			if (!FLOOR_ORDER.includes(properties.Ebene as string)) {
-				FLOOR_ORDER.push(properties.Ebene as string)
-			}
-			return {
-				type,
-				id,
-				properties: {
-					...properties,
-					rtype: SEARCH_TYPES.ROOM,
-					center: getCenterSingle(geometry.coordinates),
-					icon: getIcon(SEARCH_TYPES.ROOM, {
-						result: { item: { properties } }
-					})
-				} as unknown as FeatureProperties,
-				geometry
-			}
-		})
-		const buildings = BUILDINGS.map((building) => {
-			const buildingRooms = rooms.filter(
-				(room) => room.properties.Gebaeude === (building as Gebaeude)
-			)
-			if (buildingRooms.length === 0) {
-				return null
-			}
-			const floorCount = Array.from(
-				new Set(buildingRooms.map((room) => room.properties.Ebene))
-			).length
-			const location = buildingRooms[0].properties.Standort
-			const center = getCenter(buildingRooms.map((x) => x.geometry.coordinates))
-			return {
-				type: 'Feature',
-				id: building,
-				properties: {
-					Raum: building,
-					Funktion_en: t('buildingLabel', { lng: 'en', ns: 'common' }),
-					Funktion_de: t('buildingLabel', { lng: 'de', ns: 'common' }),
-					Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
-					Ebene: 'EG', // Dummy value to not break the floor picker
-					Etage: floorCount.toString(),
-					Standort: location,
-					rtype: SEARCH_TYPES.BUILDING,
-					center,
-					icon: getIcon(SEARCH_TYPES.BUILDING)
-				},
-				geometry: {
-					type: 'Point' as const,
-					coordinates: center
-				}
-			} satisfies Feature
-		}).filter(
-			(building): building is NonNullable<typeof building> => building !== null
-		)
-		return {
-			type: 'FeatureCollection',
-			features: [...rooms, ...buildings]
-		}
-	}, [mapOverlay])
-
-	const buildingGeoJSON: FeatureCollection = useMemo(() => {
-		return {
-			type: 'FeatureCollection',
-			features: allRooms.features.filter(
-				(f) => f.properties?.rtype === SEARCH_TYPES.BUILDING
-			)
-		}
-	}, [allRooms])
 
 	useEffect(() => {
 		// @ts-expect-error wrong type
@@ -363,51 +191,6 @@ const MapScreen = (): React.JSX.Element => {
 	}, [tabBarPressed])
 
 	useEffect(() => {
-		if (
-			params.room == null ||
-			params.room === '' ||
-			params.room === undefined
-		) {
-			return
-		}
-		if (
-			allRooms == null ||
-			allRooms.features.length === 0 ||
-			mapLoadState !== LoadingState.LOADED
-		) {
-			return
-		}
-
-		const room = allRooms.features.find(
-			(x) => x.properties?.Raum === params.room
-		)?.properties
-
-		if (room == null) {
-			roomNotFoundToast(params.room, notificationColor ?? '')
-			router.setParams({ room: '' })
-			return
-		}
-		bottomSheetRef.current?.close()
-		setClickedElement({
-			data: params.room,
-			type: SEARCH_TYPES.ROOM,
-			center: room.center as Position | undefined,
-			manual: false
-		})
-		trackEvent('Room', {
-			room: params.room,
-			origin: 'InAppLink'
-		})
-		setCurrentFloor({
-			floor: (room.Ebene as string) ?? 'EG',
-			manual: false
-		})
-		handlePresentModalPress()
-
-		router.setParams({ room: '' })
-	}, [params, mapLoadState, allRooms])
-
-	useEffect(() => {
 		setMapCenter(
 			userFaculty === 'Nachhaltige Infrastruktur'
 				? NEUBURG_CENTER
@@ -416,110 +199,10 @@ const MapScreen = (): React.JSX.Element => {
 	}, [userFaculty])
 
 	useEffect(() => {
-		if (localSearch.length === 1 && params.room != null) {
-			router.setParams(undefined)
-		}
-	}, [localSearch])
-
-	const { data: roomStatusData } = useQuery({
-		queryKey: ['freeRooms', formatISODate(currentDate)],
-		queryFn: async () => await API.getFreeRooms(currentDate),
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				return false
-			}
-			return failureCount < 2
-		}
-	})
-
-	useEffect(() => {
-		function load(): void {
-			if (roomStatusData == null) {
-				console.debug('No room status data')
-				return
-			}
-			try {
-				const dateObj = new Date()
-				const date = formatISODate(dateObj)
-				const time = formatISOTime(dateObj)
-				const rooms = filterRooms(roomStatusData, date, time)
-				setAvailableRooms(rooms)
-				const openings = getRoomOpenings(roomStatusData, dateObj)
-				setRoomOpenings(openings)
-			} catch (e) {
-				if (
-					e instanceof NoSessionError ||
-					e instanceof UnavailableSessionError
-				) {
-					setAvailableRooms([])
-				} else {
-					console.error(e)
-				}
-			}
-		}
-		setAvailableRooms(null)
-		setRoomOpenings(null)
-		load()
-	}, [userKind, roomStatusData])
-
-	useEffect(() => {
 		if (clickedElement != null && currentFloor?.manual === true) {
 			bottomSheetModalRef.current?.close()
 		}
 	}, [currentFloor])
-
-	const uniqueEtages = Array.from(
-		new Set(
-			(Array.isArray(allRooms.features)
-				? allRooms.features
-				: Object.values(allRooms.features)
-			)
-				.map((room) => {
-					const properties = (room as RoomData).properties
-					return typeof properties?.Ebene === 'string' ? properties.Ebene : ''
-				})
-				.filter((etage) => etage != null)
-		)
-	).sort(
-		(a: string, b: string) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
-	)
-	const [filteredGeoJSON, setFilteredGeoJSON] = useState<FeatureCollection>()
-	const [availableFilteredGeoJSON, setAvailableFilteredGeoJSON] =
-		useState<FeatureCollection>()
-
-	useEffect(() => {
-		if (mapOverlay == null) {
-			return
-		}
-		// filter the filteredGeoJSON to only show available rooms
-		const filteredFeatures = filterAvailableRooms(
-			filteredGeoJSON,
-			availableRooms
-		)
-
-		const availableFilteredGeoJSON: FeatureCollection = {
-			type: 'FeatureCollection',
-			features: filteredFeatures
-		}
-
-		setAvailableFilteredGeoJSON(availableFilteredGeoJSON)
-	}, [availableRooms, filteredGeoJSON, mapOverlay])
-
-	useEffect(() => {
-		if (mapOverlay == null) {
-			return
-		}
-		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG', allRooms)
-
-		const newGeoJSON: FeatureCollection = {
-			...mapOverlay,
-			features: filteredFeatures
-		}
-
-		setFilteredGeoJSON(newGeoJSON)
-	}, [currentFloor, allRooms, mapOverlay]) // Ensure dependencies are correctly listed
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
@@ -672,7 +355,7 @@ const MapScreen = (): React.JSX.Element => {
 				? 'rgba(104, 106, 108, 0.7)'
 				: 'rgba(218, 218, 218, 0.70)',
 			paddingHorizontal: 4,
-			borderRadius: 4
+			borderRadius: theme.radius.xs
 		}
 	}
 
@@ -700,17 +383,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [regionChange, isVisible, opacity])
 
-	const showFiltered = useCallback(() => {
-		return filteredGeoJSON != null && filteredGeoJSON.features.length > 0
-	}, [filteredGeoJSON])
-
-	const showAvailableFiltered = useCallback(() => {
-		return (
-			availableFilteredGeoJSON != null &&
-			availableFilteredGeoJSON.features.length > 0
-		)
-	}, [availableFilteredGeoJSON])
-
 	const handleRefresh = useCallback(() => {
 		setMapLoadState(LoadingState.LOADING)
 		// Force a reload by incrementing the key
@@ -718,9 +390,9 @@ const MapScreen = (): React.JSX.Element => {
 	}, [])
 
 	return (
-		<View className="flex-1">
+		<View style={styles.map}>
 			{mapLoadState === LoadingState.ERROR && (
-				<View className="bg-background flex-1 h-full justify-center absolute w-full z-[100]">
+				<View style={styles.errorContainer}>
 					<ErrorView
 						title={t('error.map.mapLoadError')}
 						onButtonPress={handleRefresh}
@@ -728,18 +400,25 @@ const MapScreen = (): React.JSX.Element => {
 				</View>
 			)}
 			{mapLoadState === LoadingState.LOADING && (
-				<View className="bg-background flex-1 h-full justify-center absolute w-full z-[100]">
+				<View style={styles.errorContainer}>
 					<LoadingIndicator />
 				</View>
 			)}
 
-			<View className="flex-1" style={{ marginBottom: 0 }}>
+			<View
+				style={{
+					...styles.map,
+					marginBottom: 0
+				}}
+			>
 				<MapView
 					key={mapKey}
-					style={{ flex: 1 }}
-					tintColor={Platform.OS === 'ios' ? primaryColor : undefined}
+					style={styles.map}
+					tintColor={Platform.OS === 'ios' ? theme.colors.primary : undefined}
 					logoEnabled={false}
-					mapStyle={isDark ? darkStyle : lightStyle}
+					mapStyle={
+						UnistylesRuntime.themeName === 'dark' ? darkStyle : lightStyle
+					}
 					attributionEnabled={false}
 					onDidFailLoadingMap={() => {
 						setMapLoadState(LoadingState.ERROR)
@@ -804,7 +483,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="clickedElementMarker"
 								style={{
 									iconImage: 'map-marker',
-									iconColor: primaryColor,
+									iconColor: theme.colors.primary,
 									iconSize: 0.17,
 									iconAnchor: 'bottom',
 									iconAllowOverlap: true
@@ -813,24 +492,19 @@ const MapScreen = (): React.JSX.Element => {
 							/>
 						</ShapeSource>
 					)}
-					{showFiltered() && (
+					{hasFilteredRooms && (
 						<ShapeSource
 							id="allRoomsSource"
 							shape={filteredGeoJSON}
 							onPress={(e) => {
-								setClickedElement({
-									data: e.features[0].properties?.Raum as string,
-									type: SEARCH_TYPES.ROOM,
+								selectRoom({
+									room: e.features[0].properties?.Raum as string,
 									center: e.features[0].properties?.center as
 										| Position
 										| undefined,
+									origin: 'MapClick',
 									manual: true
 								})
-								trackEvent('Room', {
-									room: e.features[0].properties?.Raum as string,
-									origin: 'MapClick'
-								})
-								handlePresentModalPress()
 							}}
 							hitbox={{ width: 0, height: 0 }}
 						>
@@ -846,7 +520,7 @@ const MapScreen = (): React.JSX.Element => {
 							/>
 						</ShapeSource>
 					)}
-					{showAvailableFiltered() && (
+					{hasAvailableFilteredRooms && (
 						<ShapeSource
 							id="availableRoomsSource"
 							shape={availableFilteredGeoJSON}
@@ -855,7 +529,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="availableRoomsFill"
 								style={{
 									...layerStyles.availableRooms,
-									fillColor: primaryColor
+									fillColor: theme.colors.primary
 								}}
 								layerIndex={102}
 							/>
@@ -863,7 +537,7 @@ const MapScreen = (): React.JSX.Element => {
 								id="availableRoomsOutline"
 								style={{
 									...layerStyles.availableRoomsOutline,
-									lineColor: primaryColor
+									lineColor: theme.colors.primary
 								}}
 								layerIndex={103}
 							/>
@@ -875,8 +549,8 @@ const MapScreen = (): React.JSX.Element => {
 								id="buildingLettersLayer"
 								style={{
 									textField: ['get', 'Raum'],
-									textColor: labelColor,
-									textHaloColor: backgroundColor,
+									textColor: theme.colors.labelColor,
+									textHaloColor: theme.colors.background,
 									textHaloWidth: 1,
 									textAllowOverlap: true,
 									textSize: 14
@@ -898,8 +572,11 @@ const MapScreen = (): React.JSX.Element => {
 
 			{mapLoadState === LoadingState.LOADED && (
 				<Animated.View
-					className="items-end h-[30px] mr-1 absolute right-0 z-[99]"
-					style={[animatedStyles, { top: Platform.OS === 'ios' ? -19 : -22 }]}
+					style={[
+						styles.osmContainer,
+						animatedStyles,
+						{ top: Platform.OS === 'ios' ? -19 : -22 }
+					]}
 				>
 					<Pressable
 						onPress={() => {
@@ -908,7 +585,7 @@ const MapScreen = (): React.JSX.Element => {
 						style={layerStyles.osmBackground}
 					>
 						<Text
-							className="text-[13px]"
+							style={styles.osmAtrribution}
 							numberOfLines={1}
 							ellipsizeMode="tail"
 						>
@@ -936,3 +613,28 @@ const MapScreen = (): React.JSX.Element => {
 }
 
 export default MapScreen
+
+const stylesheet = createStyleSheet((theme) => ({
+	errorContainer: {
+		backgroundColor: theme.colors.background,
+		flex: 1,
+		height: '100%',
+		justifyContent: 'center',
+		position: 'absolute',
+		width: '100%',
+		zIndex: 100
+	},
+	map: {
+		flex: 1
+	},
+	osmAtrribution: { fontSize: 13 },
+	osmContainer: {
+		alignItems: 'flex-end',
+		height: 30,
+		marginRight: 4,
+		position: 'absolute',
+		right: 0,
+		top: -24,
+		zIndex: 99
+	}
+}))

@@ -20,7 +20,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           lfs: true
@@ -52,13 +52,13 @@ jobs:
 
       - name: Create release
         id: create_release
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
-          draft: false
+          draft: true
 
   build-docker-image:
     name: Build and publish Docker image
@@ -70,7 +70,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           lfs: true
 
@@ -97,6 +97,9 @@ jobs:
         id: tag_name
         run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
@@ -112,10 +115,13 @@ jobs:
           context: .
           file: config/Dockerfile
           push: true
+          sbom: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
             type=${{ env.TAG_TYPE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
             EXPO_PUBLIC_THI_API_KEY=${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
             EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ vars.GRAPHQL_ENDPOINT_PROD }}
@@ -129,37 +135,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           lfs: true
 
-      - name: Setup Node JS environment
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: ./.github/actions/setup
         with:
-          node-version: "22"
+          ignore-scripts: 'true'
 
-      - name: Setup Expo and EAS
-        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
+      - uses: ./.github/actions/setup-eas
         with:
-          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        with:
-          bun-version: latest
-
-      - name: Install project dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-
-      - name: Update license list
-        run: bun run licences
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          distribution: "zulu"
-          java-version: "17"
+      - uses: ./.github/actions/android-prepare
 
       - name: Build with EAS
         env:
@@ -180,28 +168,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-android
     steps:
-      - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           lfs: true
 
-      - name: Setup Node JS environment
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: ./.github/actions/setup
         with:
-          node-version: "22"
+          ignore-scripts: 'true'
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - uses: ./.github/actions/setup-eas
         with:
-          bun-version: latest
-
-      - name: Install project dependencies
-        run: bun install
-
-      - name: Setup Expo and EAS
-        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
-        with:
-          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Download AAB from previous job
@@ -273,5 +250,12 @@ jobs:
                 'Content-Type': 'application/vnd.android.package-archive'
               }
             });
+
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              draft: false
+            });
             
-            console.log(`Successfully uploaded ${assetName} to release ${release.id}`);
+            console.log(`Successfully uploaded ${assetName} and published release ${release.id}`);

@@ -35,6 +35,23 @@ export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
+export const ROOM_SEARCH_DURATIONS = [
+	'00:15',
+	'00:30',
+	'00:45',
+	'01:00',
+	'01:30',
+	'02:00',
+	'02:30',
+	'03:00',
+	'03:30',
+	'04:00',
+	'04:30',
+	'05:00',
+	'05:30',
+	'06:00'
+] as const
+export const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 export const SUGGESTION_DURATION_PRESET = 90
 export const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
 export const FLOOR_SUBSTITUTES: Record<string, string> = {

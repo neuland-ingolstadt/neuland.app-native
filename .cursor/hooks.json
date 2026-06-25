@@ -1,0 +1,25 @@
+{
+	"version": 1,
+	"hooks": {
+		"afterFileEdit": [
+			{
+				"command": "bun run .cursor/hooks/format-file.ts"
+			},
+			{
+				"command": "bun run .cursor/hooks/typecheck-on-edit.ts",
+				"timeout": 120
+			}
+		],
+		"afterTabFileEdit": [
+			{
+				"command": "bun run .cursor/hooks/format-file.ts"
+			}
+		],
+		"stop": [
+			{
+				"command": "bun run .cursor/hooks/typecheck-stop.ts",
+				"loop_limit": 3
+			}
+		]
+	}
+}
