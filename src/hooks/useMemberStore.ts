@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import MemberAPI from '@/api/member-api'
+import { setOfficeTogglePending } from '@/utils/office-toggle-pending'
 import {
 	deleteSecure,
 	loadSecureAsync,
@@ -71,6 +72,7 @@ export const useMemberStore = create<MemberStore>()(
 			},
 			logout: async () => {
 				set({ idToken: null, refreshToken: null, info: null })
+				setOfficeTogglePending(false)
 				// Only reset accent color to blue on logout
 				usePreferencesStore.getState().setThemeColor('blue')
 				await Promise.all([

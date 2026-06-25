@@ -4,25 +4,13 @@ import {
 	getOfficePresence
 } from '@/api/office-presence-api'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import { appStorage, loadSecureAsync } from '@/utils/storage'
+import { loadSecureAsync } from '@/utils/storage'
 
-const OFFICE_TOGGLE_PENDING_KEY = 'office-toggle-pending'
-
-export function setOfficeTogglePending(pending: boolean): void {
-	if (pending) {
-		appStorage.set(OFFICE_TOGGLE_PENDING_KEY, true)
-	} else {
-		appStorage.remove(OFFICE_TOGGLE_PENDING_KEY)
-	}
-}
-
-export function consumeOfficeTogglePending(): boolean {
-	const pending = appStorage.getBoolean(OFFICE_TOGGLE_PENDING_KEY)
-	if (pending) {
-		appStorage.remove(OFFICE_TOGGLE_PENDING_KEY)
-	}
-	return pending ?? false
-}
+export {
+	consumeOfficeTogglePending,
+	isOfficeTogglePending,
+	setOfficeTogglePending
+} from '@/utils/office-toggle-pending'
 
 export async function ensureMemberTokensLoaded(): Promise<void> {
 	const { idToken, setTokens } = useMemberStore.getState()

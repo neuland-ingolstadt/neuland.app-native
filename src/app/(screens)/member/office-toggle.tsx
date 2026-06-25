@@ -10,6 +10,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { officePresenceQueryKey } from '@/components/Member/office-presence-section'
 import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import { evaluateBooleanFlag, FeatureFlagKeys } from '@/lib/feature-flags'
 import {
 	ensureMemberTokensLoaded,
@@ -25,6 +26,7 @@ export default function OfficeToggle(): React.JSX.Element {
 	const queryClient = useQueryClient()
 	const [authReady, setAuthReady] = useState(false)
 	const handledRef = useRef(false)
+	const analyticsInitialized = useSessionStore((s) => s.analyticsInitialized)
 
 	useEffect(() => {
 		void ensureMemberTokensLoaded().finally(() => {
@@ -67,7 +69,9 @@ export default function OfficeToggle(): React.JSX.Element {
 
 			try {
 				const action = await toggleOfficePresence()
-				trackEvent('OfficePresence', { action, origin: 'DeepLink' })
+				if (analyticsInitialized) {
+					trackEvent('OfficePresence', { action, origin: 'DeepLink' })
+				}
 				if (memberSub) {
 					void queryClient.invalidateQueries({
 						queryKey: officePresenceQueryKey(memberSub)
@@ -96,7 +100,7 @@ export default function OfficeToggle(): React.JSX.Element {
 
 			router.replace('/member')
 		})()
-	}, [authReady, memberSub, queryClient, t, userKind])
+	}, [analyticsInitialized, authReady, memberSub, queryClient, t, userKind])
 
 	return (
 		<View style={styles.container}>

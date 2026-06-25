@@ -6,9 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { officePresenceQueryKey } from '@/components/Member/office-presence-section'
 import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import { evaluateBooleanFlag, FeatureFlagKeys } from '@/lib/feature-flags'
 import {
 	consumeOfficeTogglePending,
+	isOfficeTogglePending,
 	toggleOfficePresence
 } from '@/utils/office-presence-utils'
 
@@ -18,6 +20,7 @@ export function useOfficeToggleAfterLogin(): void {
 	const { userKind } = useUserKind()
 	const queryClient = useQueryClient()
 	const { t } = useTranslation('member')
+	const analyticsInitialized = useSessionStore((s) => s.analyticsInitialized)
 
 	useEffect(() => {
 		if (!idToken) {
@@ -25,7 +28,7 @@ export function useOfficeToggleAfterLogin(): void {
 		}
 
 		void (async () => {
-			if (!consumeOfficeTogglePending()) {
+			if (!isOfficeTogglePending()) {
 				return
 			}
 
@@ -46,9 +49,13 @@ export function useOfficeToggleAfterLogin(): void {
 				return
 			}
 
+			consumeOfficeTogglePending()
+
 			try {
 				const action = await toggleOfficePresence()
-				trackEvent('OfficePresence', { action, origin: 'DeepLink' })
+				if (analyticsInitialized) {
+					trackEvent('OfficePresence', { action, origin: 'DeepLink' })
+				}
 				if (memberSub) {
 					void queryClient.invalidateQueries({
 						queryKey: officePresenceQueryKey(memberSub)
@@ -75,5 +82,5 @@ export function useOfficeToggleAfterLogin(): void {
 				})
 			}
 		})()
-	}, [idToken, memberSub, queryClient, t, userKind])
+	}, [analyticsInitialized, idToken, memberSub, queryClient, t, userKind])
 }
