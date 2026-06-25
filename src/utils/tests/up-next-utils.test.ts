@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import {
 	getEventStatus,
+	getTodayEvents,
 	getTodayStats,
 	getUpNextCardData,
 	shouldShowNextEvent
@@ -92,6 +93,61 @@ describe('up-next-utils', () => {
 		expect(status.isOngoing).toBe(true)
 		expect(status.isEndingSoon).toBe(true)
 		expect(status.timeRemaining).toBe(20)
+	})
+
+	it('getEventStatus - marks an upcoming lecture as starting soon', () => {
+		const now = new Date('2026-06-16T09:45:00')
+		const event = buildEvent(
+			'Upcoming lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T11:30:00')
+		)
+
+		const status = getEventStatus(event, now)
+
+		expect(status.isOngoing).toBe(false)
+		expect(status.isSoon).toBe(true)
+		expect(status.isEndingSoon).toBe(false)
+		expect(status.timeRemaining).toBe(15)
+		expect(status.progress).toBe(0)
+	})
+
+	it('getUpNextCardData - picks the next lecture after an upcoming current event', () => {
+		const now = new Date('2026-06-16T09:00:00')
+		const upcoming = buildEvent(
+			'Upcoming lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T11:30:00')
+		)
+		const later = buildEvent(
+			'Later lecture',
+			new Date('2026-06-16T12:00:00'),
+			new Date('2026-06-16T13:30:00')
+		)
+
+		const result = getUpNextCardData([upcoming, later], now)
+
+		expect(result.currentEvent?.name).toBe('Upcoming lecture')
+		expect(result.nextEvent?.name).toBe('Later lecture')
+		expect(getTodayEvents([upcoming, later], now)).toHaveLength(2)
+	})
+
+	it('shouldShowNextEvent - returns false for missing or cross-day events', () => {
+		const now = new Date('2026-06-16T10:30:00')
+		const current = buildEvent(
+			'Current lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T11:30:00')
+		)
+		const tomorrow = buildEvent(
+			'Tomorrow lecture',
+			new Date('2026-06-17T12:00:00'),
+			new Date('2026-06-17T13:30:00')
+		)
+
+		expect(shouldShowNextEvent(null, current, now)).toBe(false)
+		expect(shouldShowNextEvent(current, null, now)).toBe(false)
+		expect(shouldShowNextEvent(current, tomorrow, now)).toBe(false)
 	})
 
 	it('shouldShowNextEvent - hides preview before the current lecture starts', () => {
