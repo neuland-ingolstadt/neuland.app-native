@@ -8,6 +8,7 @@ import ErrorView from '@/components/Error/error-view'
 import { LoggedInView } from '@/components/Member/logged-in-view'
 import { LoggedOutView } from '@/components/Member/logged-out-view'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { useOfficeToggleAfterLogin } from '@/hooks/useOfficeToggleAfterLogin'
 
 const redirectUri = AuthSession.makeRedirectUri({
 	scheme: 'neuland',
@@ -29,6 +30,8 @@ export default function Member(): React.JSX.Element {
 		},
 		AUTH_DISCOVERY
 	)
+
+	useOfficeToggleAfterLogin()
 
 	useEffect(() => {
 		async function handleResponse() {
