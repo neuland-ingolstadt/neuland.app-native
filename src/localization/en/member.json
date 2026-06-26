@@ -91,6 +91,10 @@
 		"error": "Could not load office status",
 		"checkInError": "Could not check in",
 		"checkOutError": "Could not check out",
+		"checkInSuccess": "Checked in to the office",
+		"checkOutSuccess": "Checked out of the office",
+		"toggleDisabled": "Office check-in is not available",
+		"toggleError": "Could not update office status",
 		"disclaimer": "Information is based on voluntary entries and may differ from the actual occupancy."
 	}
 }
