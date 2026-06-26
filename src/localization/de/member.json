@@ -91,6 +91,10 @@
 		"error": "Bürostatus konnte nicht geladen werden",
 		"checkInError": "Einchecken fehlgeschlagen",
 		"checkOutError": "Auschecken fehlgeschlagen",
+		"checkInSuccess": "Im Büro eingecheckt",
+		"checkOutSuccess": "Büro verlassen",
+		"toggleDisabled": "Büro-Check-in ist nicht verfügbar",
+		"toggleError": "Bürostatus konnte nicht aktualisiert werden",
 		"disclaimer": "Angaben basieren auf freiwilligen Einträgen und können von der tatsächlichen Belegung abweichen."
 	}
 }
