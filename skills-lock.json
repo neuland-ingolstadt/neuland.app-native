@@ -55,6 +55,12 @@
       "skillPath": "plugins/expo/skills/native-data-fetching/SKILL.md",
       "computedHash": "21253dd72e2afa0cc0a6693295f043af3b149fa250c7aedef4d33144e69258ff"
     },
+    "react-native-best-practices": {
+      "source": "callstackincubator/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-native-best-practices/SKILL.md",
+      "computedHash": "80aaa9f8d282a879cc9595a5b7ee81f10d18ab57a9eee180ac902a051be30aef"
+    },
     "uniwind": {
       "source": "uni-stack/uniwind",
       "sourceType": "github",
