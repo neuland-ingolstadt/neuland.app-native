@@ -18,6 +18,7 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
+import { FeatureFlagsProvider, useDashboard, useUserKind } from '@/contexts'
 import { useAppState, useOnlineManager } from '@/hooks'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
@@ -25,7 +26,6 @@ import { useUniwindThemeSync } from '@/hooks/useUniwindThemeSync'
 import { ensureFliptClient } from '@/lib/flipt'
 import { themeColorMap } from '@/styles/theme-colors'
 import { syncStoragePersister } from '@/utils/storage'
-import { FeatureFlagsProvider, useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
