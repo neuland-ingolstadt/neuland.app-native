@@ -1,4 +1,5 @@
 import CrashView from '@/components/Error/crash-view'
+import { UniversalLinkHandler } from '@/components/Layout/universal-link-handler'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -9,13 +10,13 @@ import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
-import { type Href, router, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Linking, LogBox, Platform } from 'react-native'
+import { AppState, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -41,35 +42,6 @@ function RootLayout(): React.JSX.Element {
 	const transparentHeaderStyle = useTransparentHeaderStyle()
 
 	useQuickActionRouting()
-
-	useEffect(() => {
-		const handleOpenURL = (event: { url: string }) => {
-			const bases = ['https://dev.neuland.app', 'https://web.neuland.app/']
-
-			const matchingBase = bases.find((base) => event.url.startsWith(base))
-			if (matchingBase) {
-				// Remove the base URL and any trailing slashes, but keep the rest of the path and query params
-				const fullPath = event.url.replace(matchingBase, '').replace(/^\/+/, '')
-
-				if (fullPath) {
-					router.navigate(fullPath as Href)
-				}
-			}
-		}
-
-		Linking.getInitialURL().then((url) => {
-			if (url) {
-				handleOpenURL({ url })
-			}
-		})
-
-		// Handle subsequent URLs when app is in foreground
-		const linkingSubscription = Linking.addEventListener('url', handleOpenURL)
-
-		return () => {
-			linkingSubscription.remove()
-		}
-	}, [])
 
 	useEffect(() => {
 		const loadLanguage = async (): Promise<void> => {
@@ -549,6 +521,7 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 			</Stack>
+			<UniversalLinkHandler isAppReady={isReady} />
 		</Splash>
 	)
 }
