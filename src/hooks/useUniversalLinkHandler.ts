@@ -22,14 +22,15 @@ function navigateToUniversalLinkPath(path: string, currentPath: string): void {
 	router.navigate(`/${targetPath}` as Href)
 }
 
-export function useUniversalLinkHandler(isAppReady: boolean): void {
+export function useUniversalLinkHandler(): void {
 	const rootNavigationState = useRootNavigationState()
 	const pathname = usePathname()
-	const initialUrlHandledRef = useRef(false)
+	const pathnameRef = useRef(pathname)
+	pathnameRef.current = pathname
 	const navigationReady = rootNavigationState?.key != null
 
 	useEffect(() => {
-		if (!isAppReady || !navigationReady) {
+		if (!navigationReady) {
 			return
 		}
 
@@ -39,24 +40,25 @@ export function useUniversalLinkHandler(isAppReady: boolean): void {
 				return
 			}
 
-			navigateToUniversalLinkPath(path, pathname)
+			navigateToUniversalLinkPath(path, pathnameRef.current)
 		}
 
-		if (!initialUrlHandledRef.current) {
-			initialUrlHandledRef.current = true
-			void Linking.getInitialURL().then((url) => {
-				if (url) {
-					handleOpenURL(url)
-				}
-			})
-		}
+		let cancelled = false
+		void Linking.getInitialURL().then((url) => {
+			if (cancelled || !url) {
+				return
+			}
+
+			handleOpenURL(url)
+		})
 
 		const linkingSubscription = Linking.addEventListener('url', (event) => {
 			handleOpenURL(event.url)
 		})
 
 		return () => {
+			cancelled = true
 			linkingSubscription.remove()
 		}
-	}, [isAppReady, navigationReady, pathname])
+	}, [navigationReady])
 }

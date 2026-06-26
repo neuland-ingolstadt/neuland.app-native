@@ -1,16 +1,13 @@
-const UNIVERSAL_LINK_HOSTS = new Set(['dev.neuland.app', 'web.neuland.app'])
+import { isNeulandAppHost } from '@/utils/web-host'
 
 export function parseUniversalLinkPath(url: string): string | null {
 	try {
 		const parsed = new URL(url)
-		if (!UNIVERSAL_LINK_HOSTS.has(parsed.hostname)) {
+		if (!isNeulandAppHost(parsed.hostname)) {
 			return null
 		}
 
-		const path = `${parsed.pathname}${parsed.search}${parsed.hash}`.replace(
-			/^\/+/,
-			''
-		)
+		const path = `${parsed.pathname}${parsed.search}`.replace(/^\/+/, '')
 
 		return path.length > 0 ? path : null
 	} catch {

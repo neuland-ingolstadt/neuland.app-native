@@ -1,10 +1,10 @@
 import CrashView from '@/components/Error/crash-view'
-import { UniversalLinkHandler } from '@/components/Layout/universal-link-handler'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
+import { useUniversalLinkHandler } from '@/hooks/useUniversalLinkHandler'
 import i18n from '@/localization/i18n'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/styles/unistyles'
@@ -42,6 +42,7 @@ function RootLayout(): React.JSX.Element {
 	const transparentHeaderStyle = useTransparentHeaderStyle()
 
 	useQuickActionRouting()
+	useUniversalLinkHandler()
 
 	useEffect(() => {
 		const loadLanguage = async (): Promise<void> => {
@@ -521,7 +522,6 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 			</Stack>
-			<UniversalLinkHandler isAppReady={isReady} />
 		</Splash>
 	)
 }
