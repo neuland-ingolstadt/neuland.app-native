@@ -5,6 +5,12 @@
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
 		"version": "0.16.0",
+		"runtimeVersion": {
+			"policy": "appVersion"
+		},
+		"updates": {
+			"url": "https://u.expo.dev/b0ef9e3f-3115-44b0-abc7-99dd75821353"
+		},
 		"orientation": "portrait",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",

@@ -1,0 +1,128 @@
+name: EAS PR preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: eas-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
+
+jobs:
+  preview:
+    name: Publish EAS Update preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "EXPO_TOKEN is required for EAS Update previews. Add it in repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Create preview
+        # Publishes to an EAS branch named after the PR — isolated from production.
+        # Requires a dev client build; does not OTA-update App Store / Play Store users.
+        uses: expo/expo-github-action/preview@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
+        with:
+          command: eas update --auto --branch ${{ github.event.pull_request.head.ref }}
+
+  web-preview:
+    name: Deploy web preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "EXPO_TOKEN is required for EAS Hosting previews. Add it in repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Export web
+        run: |
+          source config/ci/web-export-env.sh
+          bun run licences:bundle
+          bunx expo export -p web -c
+
+      - name: Deploy to EAS Hosting
+        id: deploy
+        run: |
+          eas deploy --non-interactive --json --alias "pr-${{ github.event.pull_request.number }}" > deploy.json
+          echo "preview_url=$(jq -r '.aliases[0].url // .url' deploy.json)" >> "$GITHUB_OUTPUT"
+          echo "dashboard_url=$(jq -r '.dashboardUrl' deploy.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment web preview URL
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const marker = '<!-- eas-web-preview -->'
+            const url = '${{ steps.deploy.outputs.preview_url }}'
+            const dashboard = '${{ steps.deploy.outputs.dashboard_url }}'
+            const body = [
+              marker,
+              '## Web preview (EAS Hosting)',
+              '',
+              `Preview this PR in the browser: [${url}](${url})`,
+              '',
+              `[View deployment in Expo dashboard](${dashboard})`,
+            ].join('\n')
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const existing = comments.find((comment) => comment.body?.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              })
+              return
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            })
