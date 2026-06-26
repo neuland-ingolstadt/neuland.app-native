@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { isNeulandAppHost } from '@/utils/neuland-hosts'
 import {
 	normalizeRoutePath,
 	parseUniversalLinkPath
@@ -41,5 +42,13 @@ describe('normalizeRoutePath', () => {
 		expect(normalizeRoutePath('/member/office-toggle/')).toBe(
 			'member/office-toggle'
 		)
+	})
+})
+
+describe('isNeulandAppHost', () => {
+	it('matches dev and web hosts only', () => {
+		expect(isNeulandAppHost('dev.neuland.app')).toBe(true)
+		expect(isNeulandAppHost('web.neuland.app')).toBe(true)
+		expect(isNeulandAppHost('localhost')).toBe(false)
 	})
 })

@@ -1,4 +1,4 @@
-import { isNeulandAppHost } from '@/utils/web-host'
+import { isNeulandAppHost } from '@/utils/neuland-hosts'
 
 export function parseUniversalLinkPath(url: string): string | null {
 	try {
