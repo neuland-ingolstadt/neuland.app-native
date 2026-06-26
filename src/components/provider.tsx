@@ -19,14 +19,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 import { useAppState, useOnlineManager } from '@/hooks'
-import {
-	type ThemeColor,
-	usePreferencesStore
-} from '@/hooks/usePreferencesStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
 import { useUniwindThemeSync } from '@/hooks/useUniwindThemeSync'
 import { ensureFliptClient } from '@/lib/flipt'
-import { darkTheme, lightTheme } from '@/styles/themes'
+import { themeColorMap } from '@/styles/theme-colors'
 import { syncStoragePersister } from '@/utils/storage'
 import { FeatureFlagsProvider, useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
@@ -52,15 +49,6 @@ export const queryClient = new QueryClient({
 		}
 	}
 })
-
-export const themeColorMap: Record<
-	ThemeColor,
-	{ light: string; dark: string }
-> = {
-	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
-	green: { light: '#2bbb4f', dark: '#1beb4f' },
-	purple: { light: '#990eda', dark: '#9e10f0' }
-}
 
 /**
  * App contexts that depend on feature flags and the dashboard.

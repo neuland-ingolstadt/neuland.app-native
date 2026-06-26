@@ -300,6 +300,7 @@ Setup lives at the project root and in `src/`:
 - `src/app/_layout.tsx` — imports `@/global.css` (not the Expo entry `index` file)
 - `src/hooks/useUniwindThemeSync.ts` — mirrors `usePreferencesStore` theme / accent into
   `Uniwind.setTheme` and `Uniwind.updateCSSVariables`
+- `src/styles/theme-colors.ts` — accent color map shared by Unistyles and Uniwind sync
 - `src/utils/uniwind-utils.ts` — `hairlineBorder`, `toColor` helpers for RN edge cases
 - `src/uniwind-types.d.ts` — generated class-name typings (`bun uniwind:types`)
 
@@ -316,7 +317,9 @@ Setup lives at the project root and in `src/`:
   (`hairlineBorder` from `@/utils/uniwind-utils`), per-item dynamic colors, and props that require
   `ColorValue` strings (e.g. `Divider` `color`, `EventItem` `color`).
 - When adding a token used in `className`, add it to **both** `@variant light` and `@variant dark`
-  in `global.css`, mirroring values from `src/styles/themes.ts`. Then run `bun uniwind:types`.
+  in `global.css`, mirroring values from `src/styles/themes.ts`. Use nested `@variant ios` (etc.)
+  when `themes.ts` uses `Platform.OS` — e.g. dark `--color-card-sheet` is `rgb(6, 6, 6)` on iOS.
+  Then run `bun uniwind:types`.
 - `global.css` uses Tailwind v4 syntax — Biome has `css.parser.tailwindDirectives` enabled.
 
 **Migrated example**: `src/app/(screens)/version.tsx` (copy button and scroll container).

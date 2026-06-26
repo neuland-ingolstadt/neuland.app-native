@@ -75,5 +75,11 @@
 			--color-sheet-button: #262626;
 			--color-veg-green: #1ccd22;
 		}
+
+		@variant ios {
+			@variant dark {
+				--color-card-sheet: rgb(6, 6, 6);
+			}
+		}
 	}
 }

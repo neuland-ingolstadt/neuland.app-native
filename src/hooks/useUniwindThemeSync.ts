@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Uniwind } from 'uniwind'
-import { themeColorMap } from '@/components/provider'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { themeColorMap } from '@/styles/theme-colors'
 
 function resolveUniwindTheme(theme: string): 'light' | 'dark' | 'system' {
 	if (theme === 'light' || theme === 'dark') {
