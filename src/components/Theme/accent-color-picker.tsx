@@ -10,8 +10,8 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import { themeColorMap } from '@/components/provider'
 import type { ThemeColor } from '@/hooks/usePreferencesStore'
+import { themeColorMap } from '@/styles/theme-colors'
 
 interface AccentOption {
 	key: ThemeColor
