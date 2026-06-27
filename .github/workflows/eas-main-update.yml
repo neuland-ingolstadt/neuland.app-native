@@ -1,0 +1,67 @@
+name: EAS main update
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: eas-update-main
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_PROD }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
+
+jobs:
+  changes:
+    name: Detect bundle-related changes
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.detect.outputs.code }}
+      dependencies: ${{ steps.detect.outputs.dependencies }}
+      workflows: ${{ steps.detect.outputs.workflows }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Detect changes
+        uses: ./.github/actions/detect-changes
+        id: detect
+
+  update:
+    name: Publish EAS Update
+    needs: changes
+    if: |
+      needs.changes.outputs.code == 'true' ||
+      needs.changes.outputs.dependencies == 'true' ||
+      needs.changes.outputs.workflows == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "EXPO_TOKEN is required for EAS Updates. Add it in repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish update
+        # Publishes to the main EAS branch — link it to your production channel in the Expo dashboard.
+        run: eas update --auto --branch main --non-interactive --message "${{ github.sha }}"
