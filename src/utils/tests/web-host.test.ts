@@ -1,5 +1,4 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
-import { Platform as AnnouncementPlatformEnum } from '@/__generated__/gql/graphql'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -8,9 +7,11 @@ const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
 mock.module('react-native', () => ({
 	__esModule: true,
 	default: {
-		Platform: platform
+		Platform: platform,
+		Linking: { openURL: async () => {} }
 	},
-	Platform: platform
+	Platform: platform,
+	Linking: { openURL: async () => {} }
 }))
 
 let resolveAnnouncementPlatform: typeof import('../web-host').resolveAnnouncementPlatform
@@ -46,37 +47,31 @@ describe('web-host', () => {
 	})
 
 	it('resolveAnnouncementPlatform - Should map dev.neuland.app to WEB_DEV', () => {
-		expect(resolveAnnouncementPlatform('dev.neuland.app')).toBe(
-			AnnouncementPlatformEnum.WebDev
-		)
+		expect(resolveAnnouncementPlatform('dev.neuland.app')).toBe('WEB_DEV')
 	})
 
 	it('resolveAnnouncementPlatform - Should map web.neuland.app to WEB', () => {
-		expect(resolveAnnouncementPlatform('web.neuland.app')).toBe(
-			AnnouncementPlatformEnum.Web
-		)
+		expect(resolveAnnouncementPlatform('web.neuland.app')).toBe('WEB')
 	})
 
 	it('resolveAnnouncementPlatform - Should map localhost to WEB', () => {
-		expect(resolveAnnouncementPlatform('localhost')).toBe(
-			AnnouncementPlatformEnum.Web
-		)
+		expect(resolveAnnouncementPlatform('localhost')).toBe('WEB')
 	})
 
 	it('resolveAnnouncementPlatform - Should return IOS on iOS', () => {
 		platform.OS = 'ios'
-		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Ios)
+		expect(resolveAnnouncementPlatform()).toBe('IOS')
 		platform.OS = 'web'
 	})
 
 	it('resolveAnnouncementPlatform - Should return ANDROID on Android', () => {
 		platform.OS = 'android'
-		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Android)
+		expect(resolveAnnouncementPlatform()).toBe('ANDROID')
 		platform.OS = 'web'
 	})
 
 	it('resolveAnnouncementPlatform - Should default to WEB when hostname is omitted', () => {
-		expect(resolveAnnouncementPlatform()).toBe(AnnouncementPlatformEnum.Web)
+		expect(resolveAnnouncementPlatform()).toBe('WEB')
 	})
 
 	it('resolveAnnouncementPlatform - Should read window.location.hostname when omitted', () => {
@@ -87,9 +82,7 @@ describe('web-host', () => {
 		})
 
 		try {
-			expect(resolveAnnouncementPlatform()).toBe(
-				AnnouncementPlatformEnum.WebDev
-			)
+			expect(resolveAnnouncementPlatform()).toBe('WEB_DEV')
 		} finally {
 			if (originalWindow === undefined) {
 				Reflect.deleteProperty(globalThis, 'window')

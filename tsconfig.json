@@ -3,8 +3,7 @@
 	"compilerOptions": {
 		"moduleResolution": "bundler",
 		"paths": {
-			"@/*": ["./src/*"],
-			"ios/*": ["./ios/NeulandNext/Images.xcassets/*"]
+			"@/*": ["./src/*"]
 		},
 		"project": "./tsconfig.json",
 		"strict": true,

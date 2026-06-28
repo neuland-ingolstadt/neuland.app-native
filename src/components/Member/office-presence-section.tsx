@@ -15,32 +15,11 @@ import Button from '@/components/Universal/Button'
 import PlatformIcon from '@/components/Universal/Icon'
 import PulsingDot from '@/components/Universal/pulsing-dot'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { getValidOfficePresenceToken } from '@/utils/office-presence-utils'
 import { stylesheet } from './styles'
 
 export function officePresenceQueryKey(sub: string) {
 	return ['officePresence', sub] as const
-}
-
-async function getValidOfficePresenceToken(): Promise<string> {
-	const { idToken, info, refreshTokens } = useMemberStore.getState()
-	if (!idToken) {
-		throw new Error('No idToken available')
-	}
-
-	if (info?.exp) {
-		const expirationTime = info.exp * 1000
-		const remaining = expirationTime - Date.now()
-		if (remaining <= 5000) {
-			await refreshTokens()
-			const updatedToken = useMemberStore.getState().idToken
-			if (!updatedToken) {
-				throw new Error('Failed to refresh token')
-			}
-			return updatedToken
-		}
-	}
-
-	return idToken
 }
 
 export function OfficePresenceSection(): React.JSX.Element {

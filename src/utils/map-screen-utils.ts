@@ -9,10 +9,9 @@ import type { RoomOpenings } from '@/utils/map-utils'
  * Get the ongoing event or next upcoming event from a timetable
  */
 export function getOngoingOrNextEvent(
-	timetable: FriendlyTimetableEntry[]
+	timetable: FriendlyTimetableEntry[],
+	now: Date = new Date()
 ): FriendlyTimetableEntry[] {
-	const now = new Date()
-
 	// Filter out past events
 	const futureEvents = timetable.filter(
 		(entry) => new Date(entry.endDate) > now

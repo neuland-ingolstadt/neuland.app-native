@@ -21,7 +21,7 @@ interface DividerProps {
  *
  * @param {DimensionValue} [width='95%'] - The width of the line. Defaults to '95%'.
  * @param {string} [color='grey'] - The color of the line. Defaults to 'grey'.
- * @returns {JSX.Element} - A View component that renders a horizontal line.
+ * @returns {React.JSX.Element} - A View component that renders a horizontal line.
  */
 const Divider = ({
 	width,

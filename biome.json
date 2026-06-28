@@ -10,6 +10,7 @@
 		"includes": [
 			"src/**",
 			"!src/__generated__",
+			"!src/data/licenses.json",
 			"!**/*.svg",
 			"patches/**",
 			"plugins/**",
@@ -63,5 +64,22 @@
 			"trailingCommas": "none",
 			"semicolons": "asNeeded"
 		}
-	}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["src/global.css"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noDuplicateCustomProperties": "off"
+					}
+				}
+			}
+		}
+	]
 }

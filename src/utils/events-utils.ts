@@ -147,8 +147,7 @@ export async function loadCampusLifeOrganizers(
 }
 
 /**
- * Fetches and parses the campus life events
- * @returns {Promise<CampusLifeEventFieldsFragment[]>} A promise that resolves with the campus life events
+ * Groups university sports events by weekday.
  */
 type GroupedSportsEvents = {
 	title: WeekdayType

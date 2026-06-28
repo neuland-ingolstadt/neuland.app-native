@@ -1,30 +1,35 @@
 import { Platform } from 'react-native'
-import {
-	type Platform as AnnouncementPlatform,
-	Platform as AnnouncementPlatformEnum
-} from '@/__generated__/gql/graphql'
+import type { Platform as AnnouncementPlatform } from '@/__generated__/gql/graphql'
+import { NEULAND_DEV_HOST, NEULAND_WEB_HOST } from '@/utils/neuland-hosts'
 
 export type WebPlatform = 'web-dev' | 'web' | 'web-local'
+
+export {
+	isNeulandAppHost,
+	NEULAND_APP_HOSTS,
+	NEULAND_DEV_HOST,
+	NEULAND_WEB_HOST
+} from '@/utils/neuland-hosts'
 
 export function resolveAnnouncementPlatform(
 	hostname?: string
 ): AnnouncementPlatform {
 	if (Platform.OS === 'ios') {
-		return AnnouncementPlatformEnum.Ios
+		return 'IOS'
 	}
 
 	if (Platform.OS === 'android') {
-		return AnnouncementPlatformEnum.Android
+		return 'ANDROID'
 	}
 
 	const host =
 		hostname ?? (typeof window !== 'undefined' ? window.location.hostname : '')
 
 	if (isDevNeulandHost(host)) {
-		return AnnouncementPlatformEnum.WebDev
+		return 'WEB_DEV'
 	}
 
-	return AnnouncementPlatformEnum.Web
+	return 'WEB'
 }
 
 /** Resolves the GraphQL announcement platform at call time (not module load). */
@@ -33,11 +38,11 @@ export function getAnnouncementPlatform(): AnnouncementPlatform {
 }
 
 export function resolveWebPlatform(hostname: string): WebPlatform {
-	if (hostname === 'dev.neuland.app') {
+	if (hostname === NEULAND_DEV_HOST) {
 		return 'web-dev'
 	}
 
-	if (hostname === 'web.neuland.app') {
+	if (hostname === NEULAND_WEB_HOST) {
 		return 'web'
 	}
 
@@ -45,5 +50,5 @@ export function resolveWebPlatform(hostname: string): WebPlatform {
 }
 
 export function isDevNeulandHost(hostname: string): boolean {
-	return hostname === 'dev.neuland.app'
+	return hostname === NEULAND_DEV_HOST
 }

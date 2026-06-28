@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@import "uniwind";
+
+@theme {
+	--spacing-page: 12px;
+	--spacing-card: 16px;
+	--spacing-bottom-safe: 90px;
+	--spacing-modal-bottom: 32px;
+	--spacing-row: 5px;
+	--spacing-section: 30px;
+	--spacing-copy-button-min: 165px;
+
+	--radius-xs: 4px;
+	--radius-base: 6px;
+	--radius-sm: 8px;
+	--radius-md: 17px;
+	--radius-mg: 17px;
+	--radius-lg: 22px;
+	--radius-ios: 26px;
+	--radius-infinite: 9999px;
+}
+
+@layer theme {
+	:root {
+		@variant light {
+			--color-background: rgb(242, 242, 242);
+			--color-text: rgb(28, 28, 30);
+			--color-typography: #000000;
+			--color-card: rgb(255, 255, 255);
+			--color-card-sheet: rgb(255, 255, 255);
+			--color-card-button: #f2f2f2;
+			--color-card-contrast: #eeeeee;
+			--color-border: rgb(216, 216, 216);
+			--color-primary: #007aff;
+			--color-secondary: #0a61be;
+			--color-primary-background: #007aff15;
+			--color-label: #606062;
+			--color-label-secondary: #777778;
+			--color-label-tertiary: #99999a;
+			--color-label-background: #e5dede;
+			--color-tabbar-inactive: #999999;
+			--color-success: #21bc21;
+			--color-neuland-green: #00ff3c;
+			--color-warning: #f48e00;
+			--color-notification: rgb(255, 59, 48);
+			--color-input-background: #e9e9e9;
+			--color-contrast: #ffffff;
+			--color-sheet-button: #ffffff;
+			--color-veg-green: #18b91e;
+		}
+
+		@variant dark {
+			--color-background: rgb(1, 1, 1);
+			--color-text: rgb(229, 229, 231);
+			--color-typography: #ffffff;
+			--color-card: rgb(18, 18, 18);
+			--color-card-sheet: rgb(18, 18, 18);
+			--color-card-button: #262626;
+			--color-card-contrast: #1c1c1d;
+			--color-border: rgb(39, 39, 41);
+			--color-primary: #0e83fd;
+			--color-secondary: #1578e1;
+			--color-primary-background: #0e83fd25;
+			--color-label: #a4a4a5;
+			--color-label-secondary: #8e8e8f;
+			--color-label-tertiary: #4b4b4c;
+			--color-label-background: #444444;
+			--color-tabbar-inactive: #757575;
+			--color-success: #37d837;
+			--color-neuland-green: #00ff3c;
+			--color-warning: #ff9900;
+			--color-notification: rgb(255, 69, 58);
+			--color-input-background: #383838;
+			--color-contrast: #000000;
+			--color-sheet-button: #262626;
+			--color-veg-green: #1ccd22;
+		}
+
+		@variant ios {
+			@variant dark {
+				--color-card-sheet: rgb(6, 6, 6);
+			}
+		}
+	}
+}
