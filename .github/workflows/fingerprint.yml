@@ -1,0 +1,95 @@
+name: Native fingerprint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  fingerprint:
+    name: Check native fingerprint
+    runs-on: ubuntu-latest
+    concurrency: fingerprint-${{ github.event_name != 'pull_request' && 'main' || github.run_id }}
+    permissions:
+      pull-requests: write
+      actions: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Check fingerprint
+        id: fingerprint
+        uses: expo/expo-github-action/fingerprint@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
+
+      - name: Label compatible PR
+        if: ${{ github.event_name == 'pull_request' && steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const labels = {
+              add: ['Fingerprint:compatible'],
+              remove: ['Fingerprint:changed'],
+            }
+
+            for (const name of labels.remove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name,
+                })
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error
+                }
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: labels.add,
+            })
+
+      - name: Label changed PR
+        if: ${{ github.event_name == 'pull_request' && steps.fingerprint.outputs.fingerprint-diff != '[]' }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const labels = {
+              add: ['Fingerprint:changed'],
+              remove: ['Fingerprint:compatible'],
+            }
+
+            for (const name of labels.remove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name,
+                })
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error
+                }
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: labels.add,
+            })
