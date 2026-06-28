@@ -1,7 +1,15 @@
 import { Platform } from 'react-native'
 import type { Platform as AnnouncementPlatform } from '@/__generated__/gql/graphql'
+import { NEULAND_DEV_HOST, NEULAND_WEB_HOST } from '@/utils/neuland-hosts'
 
 export type WebPlatform = 'web-dev' | 'web' | 'web-local'
+
+export {
+	isNeulandAppHost,
+	NEULAND_APP_HOSTS,
+	NEULAND_DEV_HOST,
+	NEULAND_WEB_HOST
+} from '@/utils/neuland-hosts'
 
 export function resolveAnnouncementPlatform(
 	hostname?: string
@@ -30,11 +38,11 @@ export function getAnnouncementPlatform(): AnnouncementPlatform {
 }
 
 export function resolveWebPlatform(hostname: string): WebPlatform {
-	if (hostname === 'dev.neuland.app') {
+	if (hostname === NEULAND_DEV_HOST) {
 		return 'web-dev'
 	}
 
-	if (hostname === 'web.neuland.app') {
+	if (hostname === NEULAND_WEB_HOST) {
 		return 'web'
 	}
 
@@ -42,5 +50,5 @@ export function resolveWebPlatform(hostname: string): WebPlatform {
 }
 
 export function isDevNeulandHost(hostname: string): boolean {
-	return hostname === 'dev.neuland.app'
+	return hostname === NEULAND_DEV_HOST
 }
