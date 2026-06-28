@@ -1,4 +1,5 @@
 import moment from 'moment'
+import type { CampusLifeEvent, CampusLifeEventEntry } from '@/types/campus-life'
 import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
@@ -6,7 +7,6 @@ import type {
 	FriendlyTimetableEntry,
 	TimetableSections
 } from '@/types/utils'
-
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
 
@@ -106,9 +106,9 @@ export async function getFriendlyTimetable(
 
 export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
-	exams: Exam[],
-	includeCalendar = false,
-	calendarEvents: Calendar[] = []
+	exams: Exam[] = [],
+	calendarEvents: Calendar[] = [],
+	campusLifeEvents: CampusLifeEvent[] = []
 ): TimetableSections[] {
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
@@ -119,23 +119,18 @@ export function getGroupedTimetable(
 				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
 				eventType: 'exam'
 			}
-		})
-	]
-
-	if (includeCalendar && calendarEvents.length > 0) {
-		const processedCalendarEvents = calendarEvents.map((event) => {
+		}),
+		...calendarEvents.flatMap((event) => {
 			const originalStartDate = new Date(event.begin)
 			const originalEndDate = event.end ? new Date(event.end) : null
-
-			const startDate = new Date(event.begin)
 
 			let endDate: Date
 			if (event.end) {
 				endDate = new Date(event.end)
 			} else {
-				endDate = new Date(startDate)
+				endDate = new Date(originalStartDate)
 				if (event.hasHours) {
-					endDate.setHours(endDate.getHours() + 2)
+					endDate.setHours(endDate.getHours() + 2) // fallback duration for timed events without an end time
 				}
 			}
 
@@ -143,9 +138,8 @@ export function getGroupedTimetable(
 
 			if (isAllDay && originalEndDate) {
 				const eventDays = []
-				const currentDate = new Date(startDate)
+				const currentDate = new Date(originalStartDate)
 				currentDate.setHours(0, 0, 0, 0)
-
 				while (currentDate <= endDate) {
 					eventDays.push({
 						id: event.id,
@@ -158,15 +152,14 @@ export function getGroupedTimetable(
 						isAllDay: true,
 						eventType: 'calendar'
 					})
-
 					currentDate.setDate(currentDate.getDate() + 1)
 				}
 				return eventDays
 			}
 			return [
 				{
-					date: startDate,
-					startDate,
+					date: originalStartDate,
+					startDate: originalStartDate,
 					endDate: isAllDay ? null : endDate,
 					originalStartDate,
 					originalEndDate,
@@ -175,12 +168,75 @@ export function getGroupedTimetable(
 					eventType: 'calendar'
 				}
 			]
-		})
+		}),
+		...campusLifeEvents.flatMap((event): CampusLifeEventEntry[] => {
+			const originalStartDate = new Date(event.startDateTime)
+			const originalEndDate = new Date(event.endDateTime)
 
-		const flattenedCalendarEvents = processedCalendarEvents.flat()
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		combinedData.push(...(flattenedCalendarEvents as any))
-	}
+			const startDateStr = originalStartDate.toISOString().split('T')[0]
+			const endDateStr = originalEndDate.toISOString().split('T')[0]
+
+			if (startDateStr !== endDateStr) {
+				const eventDays: CampusLifeEventEntry[] = []
+				const current = new Date(startDateStr + 'T00:00:00Z')
+				const endDay = new Date(endDateStr + 'T00:00:00Z')
+
+				while (current <= endDay) {
+					const currentDateStr = current.toISOString().split('T')[0]
+					const isFirstDay = currentDateStr === startDateStr
+					const isLastDay = currentDateStr === endDateStr
+
+					// skip last day if event ends exactly at UTC midnight
+					if (
+						isLastDay &&
+						originalEndDate.getUTCHours() === 0 &&
+						originalEndDate.getUTCMinutes() === 0
+					)
+						break
+
+					let entryStartDate: Date
+					let entryEndDate: Date | null
+
+					if (isFirstDay) {
+						entryStartDate = new Date(originalStartDate)
+						entryEndDate = new Date(originalStartDate)
+						entryEndDate.setHours(23, 59, 59, 0)
+					} else if (isLastDay) {
+						entryStartDate = new Date(current)
+						entryStartDate.setHours(0, 0, 0, 0)
+						entryEndDate = new Date(originalEndDate)
+					} else {
+						entryStartDate = new Date(current)
+						entryStartDate.setHours(0, 0, 0, 0)
+						entryEndDate = new Date(current)
+						entryEndDate.setHours(23, 59, 59, 0)
+					}
+
+					eventDays.push({
+						...event,
+						date: isFirstDay ? new Date(originalStartDate) : new Date(current),
+						startDate: entryStartDate,
+						endDate: entryEndDate,
+						eventType: 'campus-life'
+					})
+
+					current.setUTCDate(current.getUTCDate() + 1)
+				}
+
+				return eventDays
+			}
+
+			return [
+				{
+					...event,
+					date: new Date(originalStartDate),
+					startDate: new Date(originalStartDate),
+					endDate: new Date(originalEndDate),
+					eventType: 'campus-life'
+				}
+			]
+		})
+	]
 
 	// Sort combinedData by date
 	combinedData.sort(

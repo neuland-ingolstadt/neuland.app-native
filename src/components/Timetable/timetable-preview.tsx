@@ -16,6 +16,7 @@ interface TimetablePreviewProps {
 	mode: TimetableMode
 	showCalendarEvents?: boolean
 	showExams?: boolean
+	showCampusLifeEvents?: boolean
 }
 
 /**

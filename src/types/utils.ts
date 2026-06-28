@@ -1,3 +1,5 @@
+import type { CalendarEntry } from '@/components/Timetable/timetable-list'
+import type { CampusLifeEventEntry } from './campus-life'
 import type { Lecturers } from './thi-api'
 
 export interface Exam {
@@ -111,7 +113,7 @@ export interface ExamTimetableEntry extends Exam {
 
 export interface TimetableSections {
 	title: Date
-	data: (TimetableEntry | ExamEntry)[]
+	data: (TimetableEntry | ExamEntry | CalendarEntry | CampusLifeEventEntry)[]
 }
 
 export interface CalendarEvent {

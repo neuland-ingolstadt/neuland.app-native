@@ -17,11 +17,13 @@ interface TimetableStore {
 	timetableMode: TimetableMode
 	showCalendarEvents: boolean
 	showExams: boolean
+	showCampusLifeEvents: boolean
 	selectedDate: Date
 	hasPendingTimetableUpdate: boolean
 	setTimetableMode: (timetableMode: TimetableMode) => void
 	setShowCalendarEvents: (show: boolean) => void
 	setShowExams: (show: boolean) => void
+	setShowCampusLifeEvents: (show: boolean) => void
 	setSelectedDate: (date: Date) => void
 	setHasPendingTimetableUpdate: (value: boolean) => void
 }
@@ -31,12 +33,14 @@ const initialState: Omit<
 	| 'setTimetableMode'
 	| 'setShowCalendarEvents'
 	| 'setShowExams'
+	| 'setShowCampusLifeEvents'
 	| 'setSelectedDate'
 	| 'setHasPendingTimetableUpdate'
 > = {
 	timetableMode: TimetableMode.Timeline3,
 	showCalendarEvents: false,
 	showExams: true,
+	showCampusLifeEvents: true,
 	selectedDate: new Date(),
 	hasPendingTimetableUpdate: false
 }
@@ -53,6 +57,9 @@ export const useTimetableStore = create<TimetableStore>()(
 			},
 			setShowExams: (showExams: boolean) => {
 				set({ showExams })
+			},
+			setShowCampusLifeEvents: (showCampusLifeEvents: boolean) => {
+				set({ showCampusLifeEvents })
 			},
 			setSelectedDate: (selectedDate: Date) => {
 				set({ selectedDate })
