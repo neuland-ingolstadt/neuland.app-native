@@ -148,7 +148,7 @@
 		"graphql-codegen-typescript-operation-types": "^2.0.2",
 		"npm-license-crawler": "^0.2.1",
 		"prop-types": "^15.8.1",
-		"typescript": "~5.9.2"
+		"typescript": "~6.0.3"
 	},
 	"patchedDependencies": {
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
