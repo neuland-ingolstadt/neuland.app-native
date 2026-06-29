@@ -116,34 +116,41 @@ jobs:
       group: android-dev-client-main
       cancel-in-progress: false
     steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "EXPO_TOKEN is required for EAS builds. Add it in repository secrets."
-            exit 1
-          fi
-
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           lfs: true
 
-      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup-eas
         with:
-          ignore-scripts: 'true'
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build and submit dev client on EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile development --auto-submit --non-interactive
+
+  build-ios-dev-client:
+    name: Build and submit iOS dev client
+    needs: fingerprint
+    if: |
+      github.event_name == 'push' &&
+      needs.fingerprint.outputs.fingerprint-diff != '[]'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ios-dev-client-main
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
 
       - uses: ./.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - uses: ./.github/actions/android-prepare
-
-      - name: Build dev client with EAS
+      - name: Build and submit dev client on EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile development --non-interactive --local --output neuland-dev.aab
-
-      - name: Submit to Google Play internal track
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas submit --platform android --profile internal --non-interactive --path neuland-dev.aab
+        run: eas build --platform ios --profile development --auto-submit --non-interactive

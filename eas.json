@@ -34,6 +34,15 @@
 				"track": "internal",
 				"applicationId": "app.neuland"
 			}
+		},
+		"development": {
+			"ios": {
+				"ascAppId": "1617096811"
+			},
+			"android": {
+				"track": "internal",
+				"applicationId": "app.neuland"
+			}
 		}
 	}
 }
