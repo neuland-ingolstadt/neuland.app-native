@@ -60,3 +60,5 @@ workflows:
   - '.github/actions/**'
   - '.github/path-filters.yml'
   - '.bun-version'
+  - 'stryker.conf.mjs'
+  - 'config/check-mutation-score.ts'
