@@ -119,6 +119,45 @@ jobs:
           fail_ci_if_error: ${{ github.event_name == 'push' }}
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  mutation-tests:
+    name: Mutation tests
+    needs: changes
+    if: |
+      github.event_name != 'pull_request' ||
+      needs.changes.outputs.src == 'true' ||
+      needs.changes.outputs.workflows == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Restore Stryker incremental cache
+        uses: actions/cache@5a3ec84ecd4c05027def14fa8c9d4b96d850ca56c # v4.2.3
+        with:
+          path: .stryker-incremental.json
+          key: stryker-incremental-${{ runner.os }}-${{ hashFiles('stryker.conf.mjs', 'src/utils/**/*.ts', 'src/utils/tests/**/*.test.ts') }}
+          restore-keys: |
+            stryker-incremental-${{ runner.os }}-
+
+      - name: Run mutation tests
+        run: bun run test:mutation:ci
+
+      - name: Check mutation score thresholds
+        run: bun run test:mutation:check
+
+      - name: Upload mutation report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mutation-report
+          path: reports/mutation/
+          retention-days: 14
+
   web-export:
     name: Web export smoke test
     needs: changes

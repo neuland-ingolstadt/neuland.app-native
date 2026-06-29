@@ -68,6 +68,8 @@ bun i18n:check               # verify de/en locale files are complete and catch 
 
 bun test                     # run all unit tests
 bun test src/utils/tests/timetable-utils.test.ts   # run a single test file
+bun test:mutation            # run Stryker mutation tests locally
+bun test:mutation:ci         # mutation tests for CI (sequential concurrency)
 
 bun codegen                  # regenerate GraphQL types from src/api/**/*.ts
 bun pkgs                     # `expo install --check` for SDK-compatible deps
@@ -88,7 +90,7 @@ bun changelog                # regenerate CHANGELOG.md via git-cliff
 bun atlas                    # Expo Atlas bundle analysis
 ```
 
-CI runs `bun tsc --noEmit`, `bun biome ci .`, `bun i18n:check`, and `bun test --ci` on every PR.
+CI runs `bun tsc --noEmit`, `bun biome ci .`, `bun i18n:check`, `bun test --ci`, and mutation tests on every PR.
 Always make sure these pass locally before pushing.
 PR titles are linted by `.github/workflows/pr-title.yml`; use a semantic title such as
 `fix: handle guest login`, with a lowercase subject and no trailing period.
