@@ -74,6 +74,19 @@ bun pkgs                     # `expo install --check` for SDK-compatible deps
 bun uniwind:types            # regenerate src/uniwind-types.d.ts after global.css changes
 ```
 
+### Cursor MCP
+
+Project MCP servers live in `.cursor/mcp.json` and load automatically when you open the repo in Cursor.
+
+| Server | Purpose | Auth |
+| --- | --- | --- |
+| `neuland-outline` | Search, read, and edit Neuland's [Outline](https://outline.neuland.ing) workspace (setup guides, architecture docs, …) | OAuth on first connect (Cursor Settings → MCP). Workspace admins can disable MCP under Outline → Settings → AI. |
+| `expo-docs` | Offline search of bundled Expo SDK documentation (`search_expo_docs`, `get_expo_api_reference`, …) | None |
+
+After cloning, open **Cursor Settings → MCP** and confirm both servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately.
+
+**API key auth (optional):** If OAuth is unavailable, generate a token at [outline.neuland.ing/settings/tokens](https://outline.neuland.ing/settings/tokens), add `OUTLINE_API_KEY` to `.env.local`, and extend the `neuland-outline` entry with `"headers": { "Authorization": "Bearer ${env:OUTLINE_API_KEY}" }`.
+
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):
 

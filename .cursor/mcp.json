@@ -1,0 +1,12 @@
+{
+	"mcpServers": {
+		"neuland-outline": {
+			"url": "https://outline.neuland.ing/mcp"
+		},
+		"expo-docs": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "expo-local-docs-mcp"]
+		}
+	}
+}
