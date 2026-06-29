@@ -84,9 +84,7 @@ Project MCP servers live in `.cursor/mcp.json` and load automatically when you o
 | `expo` | Official [Expo MCP](https://docs.expo.dev/mcp/): live SDK docs, `expo install`, EAS builds/workflows, TestFlight crashes | Expo OAuth on first connect (free tier includes monthly usage) |
 | `uniwind` | [Uniwind](https://docs.uniwind.dev/mcp) docs search and API reference (`search_uniwind`, virtual docs filesystem) | None |
 
-After cloning, open **Cursor Settings → MCP** and confirm all servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately.
-
-**Outline API key auth (optional):** If OAuth is unavailable, generate a token at [outline.neuland.ing/settings/tokens](https://outline.neuland.ing/settings/tokens), add `OUTLINE_API_KEY` to `.env.local`, and extend the `neuland-outline` entry with `"headers": { "Authorization": "Bearer ${env:OUTLINE_API_KEY}" }`.
+After cloning, open **Cursor Settings → MCP** and confirm all servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately. Connect `neuland-outline` and `expo` via OAuth when prompted.
 
 **Expo local capabilities (optional):** For simulator screenshots, UI automation, DevTools, and `expo-router` sitemap introspection, install `expo-mcp` as a dev dependency and start Metro with `EXPO_UNSTABLE_MCP_SERVER=1 bun dev`. Reconnect the `expo` MCP server after starting or stopping the dev server. See the [Expo MCP docs](https://docs.expo.dev/mcp/) for details.
 
