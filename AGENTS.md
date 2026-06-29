@@ -74,6 +74,20 @@ bun pkgs                     # `expo install --check` for SDK-compatible deps
 bun uniwind:types            # regenerate src/uniwind-types.d.ts after global.css changes
 ```
 
+### Cursor MCP
+
+Project MCP servers live in `.cursor/mcp.json` and load automatically when you open the repo in Cursor.
+
+| Server | Purpose | Auth |
+| --- | --- | --- |
+| `neuland-outline` | Search, read, and edit Neuland's [Outline](https://outline.neuland.ing) workspace (setup guides, architecture docs, …) | OAuth on first connect (Cursor Settings → MCP). Workspace admins can disable MCP under Outline → Settings → AI. |
+| `expo` | Official [Expo MCP](https://docs.expo.dev/mcp/): live SDK docs, `expo install`, EAS builds/workflows, TestFlight crashes | Expo OAuth on first connect (free tier includes monthly usage) |
+| `uniwind` | [Uniwind](https://docs.uniwind.dev/mcp) docs search and API reference (`search_uniwind`, virtual docs filesystem) | None |
+
+After cloning, open **Cursor Settings → MCP** and confirm all servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately. Connect `neuland-outline` and `expo` via OAuth when prompted.
+
+**Expo local capabilities (optional):** For simulator screenshots, UI automation, DevTools, and `expo-router` sitemap introspection, install `expo-mcp` as a dev dependency and start Metro with `EXPO_UNSTABLE_MCP_SERVER=1 bun dev`. Reconnect the `expo` MCP server after starting or stopping the dev server. See the [Expo MCP docs](https://docs.expo.dev/mcp/) for details.
+
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):
 
