@@ -137,7 +137,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Restore Stryker incremental cache
-        uses: actions/cache@5a3ec84ecd4c05027def14fa8c9d4b96d850ca56c # v4.2.3
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: .stryker-incremental.json
           key: stryker-incremental-${{ runner.os }}-${{ hashFiles('stryker.conf.mjs', 'src/utils/**/*.ts', 'src/utils/tests/**/*.test.ts') }}
