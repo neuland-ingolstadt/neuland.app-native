@@ -7,10 +7,21 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_PROD }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
+
 jobs:
   fingerprint:
     name: Check native fingerprint
     runs-on: ubuntu-latest
+    outputs:
+      fingerprint-diff: ${{ steps.fingerprint.outputs.fingerprint-diff }}
     concurrency: fingerprint-${{ github.event_name != 'pull_request' && 'main' || github.run_id }}
     permissions:
       pull-requests: write
@@ -36,8 +47,8 @@ jobs:
         with:
           script: |
             const labels = {
-              add: ['Fingerprint:compatible'],
-              remove: ['Fingerprint:changed'],
+              add: ['fp:compatible'],
+              remove: ['fp:changed'],
             }
 
             for (const name of labels.remove) {
@@ -68,8 +79,8 @@ jobs:
         with:
           script: |
             const labels = {
-              add: ['Fingerprint:changed'],
-              remove: ['Fingerprint:compatible'],
+              add: ['fp:changed'],
+              remove: ['fp:compatible'],
             }
 
             for (const name of labels.remove) {
@@ -93,3 +104,46 @@ jobs:
               repo: context.repo.repo,
               labels: labels.add,
             })
+
+  build-android-dev-client:
+    name: Build and submit Android dev client
+    needs: fingerprint
+    if: |
+      github.event_name == 'push' &&
+      needs.fingerprint.outputs.fingerprint-diff != '[]'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: android-dev-client-main
+      cancel-in-progress: false
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "EXPO_TOKEN is required for EAS builds. Add it in repository secrets."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          lfs: true
+
+      - uses: ./.github/actions/setup
+        with:
+          ignore-scripts: 'true'
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - uses: ./.github/actions/android-prepare
+
+      - name: Build dev client with EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile development --non-interactive --local --output neuland-dev.aab
+
+      - name: Submit to Google Play internal track
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas submit --platform android --profile internal --non-interactive --path neuland-dev.aab
