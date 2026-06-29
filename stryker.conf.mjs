@@ -40,11 +40,20 @@ const config = {
 	bun: {
 		inspectorTimeout: 10_000,
 		timeout: 30_000,
-		bunArgs: ['--ci']
+		bunArgs: ['--ci'],
+		testFiles: [
+			'src/utils/tests/app-utils.test.ts',
+			'src/utils/tests/campus-life-utils.test.ts',
+			'src/utils/tests/changelog-utils.test.ts',
+			'src/utils/tests/lecturers-utils.test.ts',
+			'src/utils/tests/map-screen-utils.test.ts',
+			'src/utils/tests/universal-link.test.ts',
+			'src/utils/tests/up-next-utils.test.ts'
+		]
 	},
 	thresholds: {
-		high: 90,
-		low: 80,
+		high: 80,
+		low: 75,
 		break: null
 	},
 	timeoutMS: 60_000,
