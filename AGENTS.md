@@ -81,11 +81,14 @@ Project MCP servers live in `.cursor/mcp.json` and load automatically when you o
 | Server | Purpose | Auth |
 | --- | --- | --- |
 | `neuland-outline` | Search, read, and edit Neuland's [Outline](https://outline.neuland.ing) workspace (setup guides, architecture docs, …) | OAuth on first connect (Cursor Settings → MCP). Workspace admins can disable MCP under Outline → Settings → AI. |
-| `expo-docs` | Offline search of bundled Expo SDK documentation (`search_expo_docs`, `get_expo_api_reference`, …) | None |
+| `expo` | Official [Expo MCP](https://docs.expo.dev/mcp/): live SDK docs, `expo install`, EAS builds/workflows, TestFlight crashes | Expo OAuth on first connect (free tier includes monthly usage) |
+| `uniwind` | [Uniwind](https://docs.uniwind.dev/mcp) docs search and API reference (`search_uniwind`, virtual docs filesystem) | None |
 
-After cloning, open **Cursor Settings → MCP** and confirm both servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately.
+After cloning, open **Cursor Settings → MCP** and confirm all servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately.
 
-**API key auth (optional):** If OAuth is unavailable, generate a token at [outline.neuland.ing/settings/tokens](https://outline.neuland.ing/settings/tokens), add `OUTLINE_API_KEY` to `.env.local`, and extend the `neuland-outline` entry with `"headers": { "Authorization": "Bearer ${env:OUTLINE_API_KEY}" }`.
+**Outline API key auth (optional):** If OAuth is unavailable, generate a token at [outline.neuland.ing/settings/tokens](https://outline.neuland.ing/settings/tokens), add `OUTLINE_API_KEY` to `.env.local`, and extend the `neuland-outline` entry with `"headers": { "Authorization": "Bearer ${env:OUTLINE_API_KEY}" }`.
+
+**Expo local capabilities (optional):** For simulator screenshots, UI automation, DevTools, and `expo-router` sitemap introspection, install `expo-mcp` as a dev dependency and start Metro with `EXPO_UNSTABLE_MCP_SERVER=1 bun dev`. Reconnect the `expo` MCP server after starting or stopping the dev server. See the [Expo MCP docs](https://docs.expo.dev/mcp/) for details.
 
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):

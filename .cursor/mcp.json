@@ -3,10 +3,11 @@
 		"neuland-outline": {
 			"url": "https://outline.neuland.ing/mcp"
 		},
-		"expo-docs": {
-			"type": "stdio",
-			"command": "npx",
-			"args": ["-y", "expo-local-docs-mcp"]
+		"expo": {
+			"url": "https://mcp.expo.dev/mcp"
+		},
+		"uniwind": {
+			"url": "https://docs.uniwind.dev/mcp"
 		}
 	}
 }
