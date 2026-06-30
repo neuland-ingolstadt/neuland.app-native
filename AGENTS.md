@@ -55,7 +55,7 @@ Run project scripts through Bun. The most relevant ones:
 bun install                  # install dependencies (use --frozen-lockfile in CI)
 
 bun prebuild:ios             # generate ios/ from Expo config (required on fresh clone)
-bun dev                      # start Expo dev server (with EXPO_USE_FAST_RESOLVER=1)
+bun dev                      # start Expo dev server (MCP bridge + fast resolver enabled)
 bun ios                      # run on a connected iOS device
 bun android                  # run on a connected Android device
 bun web                      # run web build on port 3000
@@ -68,6 +68,8 @@ bun i18n:check               # verify de/en locale files are complete and catch 
 
 bun test                     # run all unit tests
 bun test src/utils/tests/timetable-utils.test.ts   # run a single test file
+bun test:mutation            # run Stryker mutation tests locally
+bun test:mutation:ci         # mutation tests for CI (sequential concurrency)
 
 bun codegen                  # regenerate GraphQL types from src/api/**/*.ts
 bun pkgs                     # `expo install --check` for SDK-compatible deps
@@ -81,12 +83,44 @@ Project MCP servers live in `.cursor/mcp.json` and load automatically when you o
 | Server | Purpose | Auth |
 | --- | --- | --- |
 | `neuland-outline` | Search, read, and edit Neuland's [Outline](https://outline.neuland.ing) workspace (setup guides, architecture docs, …) | OAuth on first connect (Cursor Settings → MCP). Workspace admins can disable MCP under Outline → Settings → AI. |
-| `expo` | Official [Expo MCP](https://docs.expo.dev/mcp/): live SDK docs, `expo install`, EAS builds/workflows, TestFlight crashes | Expo OAuth on first connect (free tier includes monthly usage) |
+| `expo` | Official [Expo MCP](https://docs.expo.dev/mcp/) — see below | Expo OAuth on first connect (free tier includes monthly usage) |
 | `uniwind` | [Uniwind](https://docs.uniwind.dev/mcp) docs search and API reference (`search_uniwind`, virtual docs filesystem) | None |
 
 After cloning, open **Cursor Settings → MCP** and confirm all servers show as connected. Toggle them off and on, or reload the window, if they do not appear immediately. Connect `neuland-outline` and `expo` via OAuth when prompted.
 
-**Expo local capabilities (optional):** For simulator screenshots, UI automation, DevTools, and `expo-router` sitemap introspection, install `expo-mcp` as a dev dependency and start Metro with `EXPO_UNSTABLE_MCP_SERVER=1 bun dev`. Reconnect the `expo` MCP server after starting or stopping the dev server. See the [Expo MCP docs](https://docs.expo.dev/mcp/) for details.
+#### Expo MCP (prefer over guessing)
+
+**Use the `expo` MCP server proactively** when working on Expo/RN tasks in this repo — especially for SDK docs, dependency installs, EAS builds, and local simulator verification. Do not rely on training data for Expo SDK APIs; call `read_documentation` or `search_documentation` instead.
+
+This project already ships `expo-mcp` as a dev dependency and enables the local MCP bridge in `bun dev`, `bun web`, and `bun start` via `EXPO_UNSTABLE_MCP_SERVER=1`. After starting or stopping Metro, **reconnect the `expo` MCP server** in Cursor so local tools appear.
+
+**Server capabilities** (remote — work without a running dev server):
+
+| Tool | When to use |
+| --- | --- |
+| `read_documentation` / `search_documentation` | Look up current Expo SDK docs before implementing or debugging |
+| `add_library` | Add a dependency with `expo install` and get usage hints |
+| `learn` | Teach the agent Expo patterns (e.g. `expo-router`) for the session |
+
+**Local capabilities** (require `bun dev` + a running app in the simulator/emulator):
+
+| Tool | When to use |
+| --- | --- |
+| `expo_router_sitemap` | List all routes and catch collisions before adding screens |
+| `open_devtools` | Open React Native DevTools (`projectRoot` + `platform`) |
+| `collect_app_logs` | Pull native or JS console logs from the connected device |
+| `automation_take_screenshot` | Visually verify UI changes (full screen or by `testID`) |
+| `automation_tap` | Exercise interactions by coordinates or `testID` |
+| `automation_find_view` | Inspect view properties to confirm layout/state |
+
+Example agent workflows:
+
+- Adding a screen → `expo_router_sitemap` to check route collisions, then `read_documentation` for `expo-router` APIs.
+- UI change → implement, then `automation_take_screenshot` / `automation_tap` to verify on the iOS simulator.
+- Build failure → `build_list` → `build_info` → `build_logs` instead of asking the user for logs.
+- Dependency question → `add_library` or `read_documentation`, not `bun add` with a guessed version.
+
+**Local limitations:** one dev-server connection at a time; iOS automation is simulator-only on macOS (no physical devices). See the [Expo MCP docs](https://docs.expo.dev/mcp/) for the full tool list.
 
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):
@@ -102,7 +136,7 @@ bun changelog                # regenerate CHANGELOG.md via git-cliff
 bun atlas                    # Expo Atlas bundle analysis
 ```
 
-CI runs `bun tsc --noEmit`, `bun biome ci .`, `bun i18n:check`, and `bun test --ci` on every PR.
+CI runs `bun tsc --noEmit`, `bun biome ci .`, `bun i18n:check`, `bun test --ci`, and mutation tests on every PR.
 Always make sure these pass locally before pushing.
 PR titles are linted by `.github/workflows/pr-title.yml`; use a semantic title such as
 `fix: handle guest login`, with a lowercase subject and no trailing period.
