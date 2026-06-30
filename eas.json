@@ -6,13 +6,7 @@
 	"build": {
 		"development": {
 			"developmentClient": true,
-			"distribution": "internal",
-			"ios": {
-				"distribution": "store"
-			},
-			"android": {
-				"buildType": "app-bundle"
-			}
+			"distribution": "internal"
 		},
 		"preview": {
 			"distribution": "internal"

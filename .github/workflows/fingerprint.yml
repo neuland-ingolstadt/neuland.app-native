@@ -106,7 +106,7 @@ jobs:
             })
 
   build-android-dev-client:
-    name: Build and submit Android dev client
+    name: Build Android dev client
     needs: fingerprint
     if: |
       github.event_name == 'push' &&
@@ -127,13 +127,13 @@ jobs:
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build and submit dev client on EAS
+      - name: Build dev client on EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile development --auto-submit --non-interactive
+        run: eas build --platform android --profile development --non-interactive
 
   build-ios-dev-client:
-    name: Build and submit iOS dev client
+    name: Build iOS dev client
     needs: fingerprint
     if: |
       github.event_name == 'push' &&
@@ -154,7 +154,7 @@ jobs:
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build and submit dev client on EAS
+      - name: Build dev client on EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform ios --profile development --auto-submit --non-interactive
+        run: eas build --platform ios --profile development --non-interactive
