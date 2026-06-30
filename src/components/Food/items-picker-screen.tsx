@@ -11,7 +11,7 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'

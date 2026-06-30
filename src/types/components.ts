@@ -1,5 +1,5 @@
 import type { ColorValue, StyleProp, TextStyle } from 'react-native'
-import type { CommunityIcon, WebIcon } from '@/components/Universal/Icon'
+import type { CommunityIcon, WebIcon } from '@/components/Universal/icon'
 
 import type { MaterialIcon } from './material-icons'
 

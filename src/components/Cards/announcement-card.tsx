@@ -27,7 +27,7 @@ import type {
 import i18n from '@/localization/i18n'
 import { getAnnouncementPlatform } from '@/utils/web-host'
 import { DashboardContext, UserKindContext } from '../contexts'
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]

@@ -10,7 +10,7 @@ import { UserKindContext } from '@/components/contexts'
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/drag-view'
 import ContextMenu from '@/components/Flow/context-menu'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'

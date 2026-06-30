@@ -22,7 +22,7 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
-import { linkIcon } from '@/components/Universal/Icon'
+import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useFeatureFlagEnabled } from '@/hooks'

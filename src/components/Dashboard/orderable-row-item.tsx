@@ -4,7 +4,7 @@ import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { ExtendedCard } from '@/components/all-cards'
 import { cardIcons } from '@/components/icons'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 
 const { width } = Dimensions.get('window')
 

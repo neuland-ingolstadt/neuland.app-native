@@ -2,8 +2,8 @@ import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import Divider from '@/components/Universal/Divider'
-import PlatformIcon from './Icon'
+import Divider from '@/components/Universal/divider'
+import PlatformIcon from './icon'
 
 interface Element {
 	title: string

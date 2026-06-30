@@ -25,8 +25,8 @@ import {
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
-import Button from './Button'
-import PlatformIcon from './Icon'
+import Button from './button'
+import PlatformIcon from './icon'
 
 const LoginForm = ({
 	navigateHome

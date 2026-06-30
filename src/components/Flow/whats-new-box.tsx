@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { MaterialIcon } from '@/types/material-icons'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 
 interface WhatsNewBoxProps {
 	title: string

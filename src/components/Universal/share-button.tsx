@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon'
+import PlatformIcon from './icon'
 
 interface ShareButtonProps {
 	onPress?: () => void

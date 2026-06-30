@@ -16,8 +16,8 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import type { LucideIcon } from '@/components/Universal/Icon'
-import PlatformIcon from '@/components/Universal/Icon'
+import type { LucideIcon } from '@/components/Universal/icon'
+import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 
 interface TimetableAnimationProps {

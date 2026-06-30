@@ -8,10 +8,10 @@ import {
 	type ViewStyle
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import Divider from '@/components/Universal/Divider'
+import Divider from '@/components/Universal/divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { copyToClipboard } from '@/utils/ui-utils'
-import PlatformIcon from './Icon'
+import PlatformIcon from './icon'
 
 interface FormListProps {
 	sections: FormListSections[]

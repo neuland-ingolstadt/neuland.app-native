@@ -1,6 +1,6 @@
 import type { MaterialIcon } from '@/types/material-icons'
 import type { AllCards } from './all-cards'
-import type { LucideIcon } from './Universal/Icon'
+import type { LucideIcon } from './Universal/icon'
 
 // Define the type for individual platform icons
 interface PlatformIcon {

@@ -2,7 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 interface HeaderRightProps {
 	setToday: () => void

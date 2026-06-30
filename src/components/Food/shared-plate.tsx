@@ -2,7 +2,7 @@ import type React from 'react'
 import { View } from 'react-native'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import CurvedText from './curved-text'
 
 interface SharedPlateProps {

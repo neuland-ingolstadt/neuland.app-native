@@ -12,7 +12,7 @@ import {
 	OrderableRowItem,
 	ResetOrderButton
 } from '@/components/Dashboard'
-import Divider from '@/components/Universal/Divider'
+import Divider from '@/components/Universal/divider'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { useFeatureFlags } from '@/contexts/feature-flags'
 import { USER_GUEST } from '@/data/constants'

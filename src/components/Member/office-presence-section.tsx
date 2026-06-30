@@ -11,8 +11,8 @@ import {
 	checkOutOfOffice,
 	getOfficePresence
 } from '@/api/office-presence-api'
-import Button from '@/components/Universal/Button'
-import PlatformIcon from '@/components/Universal/Icon'
+import Button from '@/components/Universal/button'
+import PlatformIcon from '@/components/Universal/icon'
 import PulsingDot from '@/components/Universal/pulsing-dot'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { getValidOfficePresenceToken } from '@/utils/office-presence-utils'
