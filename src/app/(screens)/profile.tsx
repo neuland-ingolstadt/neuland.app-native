@@ -11,11 +11,10 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
@@ -30,10 +29,11 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 export default function Profile(): React.JSX.Element {
 	const router = useRouter()
-	const { styles } = useStyles(stylesheet)
+	const notificationColor = toColor(useCSSVariable('--color-notification'))
 	const { toggleUserKind, userKind } = use(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
 	const { t } = useTranslation(['settings', 'common'])
@@ -235,7 +235,7 @@ export default function Profile(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={styles.contentContainer}
+			contentContainerClassName="pb-8"
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
 			refreshControl={
@@ -250,7 +250,7 @@ export default function Profile(): React.JSX.Element {
 			}
 		>
 			{isLoading && (
-				<View style={styles.loadingContainer}>
+				<View className="items-center justify-center py-10">
 					<LoadingIndicator />
 				</View>
 			)}
@@ -270,7 +270,7 @@ export default function Profile(): React.JSX.Element {
 			)}
 			{isSuccess &&
 				(data.mtknr !== undefined ? (
-					<View style={styles.container}>
+					<View className="self-center px-page py-4 w-full">
 						<FormList sections={sections} privacyHidden={isBackground} />
 					</View>
 				) : (
@@ -296,7 +296,8 @@ export default function Profile(): React.JSX.Element {
 
 			<Pressable
 				onPress={logoutAlert}
-				style={styles.logoutButton}
+				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center mb-[30px] mt-2.5 min-w-copy-button-min px-10 py-3"
+				style={hairlineBorder}
 				disabled={isLoggingOut}
 			>
 				{isLoggingOut ? (
@@ -316,50 +317,14 @@ export default function Profile(): React.JSX.Element {
 								name: 'LogOut',
 								size: 22
 							}}
-							style={styles.notification}
+							style={{ color: notificationColor }}
 						/>
-						<Text style={styles.logoutText}>{t('profile.logout.button')}</Text>
+						<Text className="text-notification text-base">
+							{t('profile.logout.button')}
+						</Text>
 					</>
 				)}
 			</Pressable>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignSelf: 'center',
-		paddingHorizontal: theme.margins.page,
-		paddingVertical: 16,
-		width: '100%'
-	},
-	contentContainer: { paddingBottom: 32 },
-	loadingContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingVertical: 40
-	},
-	logoutButton: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		flexDirection: 'row',
-		gap: 10,
-		justifyContent: 'center',
-		marginBottom: 30,
-		marginTop: 10,
-		minWidth: 165,
-		paddingHorizontal: 40,
-		paddingVertical: 12
-	},
-	logoutText: {
-		color: theme.colors.notification,
-		fontSize: 16
-	},
-	notification: {
-		color: theme.colors.notification
-	}
-}))

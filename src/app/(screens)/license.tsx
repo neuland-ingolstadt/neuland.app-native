@@ -3,7 +3,6 @@ import { useGlobalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ExternalAPI from '@/api/external-api'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
@@ -11,7 +10,6 @@ import SectionView from '@/components/Universal/sections-view'
 import type { FormListSections } from '@/types/components'
 
 export default function License(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings', 'navigation'])
 
 	const { license, version, licenseUrl, repository, name } =
@@ -71,34 +69,16 @@ export default function License(): React.JSX.Element {
 		}
 	]
 	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<View style={styles.formlistContainer}>
+		<ScrollView contentContainerClassName="pb-modal-bottom">
+			<View className="self-center mb-4 mt-2.5 px-page w-full">
 				<FormList sections={sections} />
 			</View>
 
 			{licenseText !== '' && (
 				<SectionView title={t('navigation.license', { ns: 'navigation' })}>
-					<Text style={styles.text}>{licenseText}</Text>
+					<Text className="text-text text-[13px] p-4">{licenseText}</Text>
 				</SectionView>
 			)}
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		paddingBottom: theme.margins.modalBottomMargin
-	},
-	formlistContainer: {
-		alignSelf: 'center',
-		marginBottom: 16,
-		marginTop: 10,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	text: {
-		color: theme.colors.text,
-		fontSize: 13,
-		padding: 16
-	}
-}))
