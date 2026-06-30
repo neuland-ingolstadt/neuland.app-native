@@ -4,8 +4,9 @@ import { FileWarning } from 'lucide-react-native'
 import * as icons from 'lucide-react-native/icons'
 import type React from 'react'
 import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { MaterialIcon } from '@/types/material-icons'
+import { toColor } from '@/utils/uniwind-utils'
 
 export type LucideIcon = keyof typeof icons
 export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
@@ -61,13 +62,18 @@ export const linkIcon = {
 	web: 'Link' as LucideIcon
 }
 
+const androidIconFilled = { fontFamily: 'MaterialSymbolsRoundedFill' }
+const androidIconOutlined = { fontFamily: 'MaterialSymbolsRoundedOutline' }
+
 const PlatformIcon = ({
 	android,
 	ios,
 	web,
 	style
 }: PlatformIconProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
 
 	const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />
 
@@ -78,7 +84,7 @@ const PlatformIcon = ({
 					<MaterialCommunityIcons
 						name={web.name as keyof typeof MaterialCommunityIcons.glyphMap}
 						size={web.size}
-						color={style?.color ?? theme.colors.primary}
+						color={style?.color ?? primaryColor}
 						style={style as TextStyle}
 					/>
 				)
@@ -89,7 +95,7 @@ const PlatformIcon = ({
 			return (
 				<LucideIcon
 					size={web.size}
-					color={style?.color ?? theme.colors.primary}
+					color={style?.color ?? primaryColor}
 					style={style as ViewStyle}
 					fill={web.variant === 'filled' ? 'currentColor' : 'none'}
 					fillRule="evenodd"
@@ -103,11 +109,11 @@ const PlatformIcon = ({
 			<MaterialCommunityIcons
 				name={ios.name as keyof typeof MaterialCommunityIcons.glyphMap}
 				size={ios.size}
-				color={style?.color ?? theme.colors.primary}
+				color={style?.color ?? primaryColor}
 				style={{
 					width: ios.size,
 					height: ios.size,
-					...styles.iosFallbackOffset,
+					marginRight: -2,
 					...style
 				}}
 			/>
@@ -123,12 +129,12 @@ const PlatformIcon = ({
 				colors={
 					ios.renderMode === 'palette' || ios.renderMode === 'hierarchical'
 						? [
-								style?.color ?? theme.colors.primary,
+								style?.color ?? primaryColor,
 								...(ios.additionalColor != null ? [ios.additionalColor] : [])
 							]
 						: undefined
 				}
-				tintColor={style?.color ?? theme.colors.primary}
+				tintColor={style?.color ?? primaryColor}
 				type={ios.renderMode as never}
 				resizeMode="scaleAspectFit"
 				style={style as ViewStyle}
@@ -139,11 +145,11 @@ const PlatformIcon = ({
 		<Text
 			style={{
 				...(android.variant === 'outlined'
-					? styles.androidIconOutlined
-					: styles.androidIconFilled),
+					? androidIconOutlined
+					: androidIconFilled),
 				fontSize: android.size,
 				lineHeight: android.size,
-				color: style?.color ?? theme.colors.primary,
+				color: style?.color ?? primaryColor,
 				...style
 			}}
 		>
@@ -151,8 +157,8 @@ const PlatformIcon = ({
 				<MaterialCommunityIcons
 					name={android.name as keyof typeof MaterialCommunityIcons.glyphMap}
 					size={android.size}
-					color={style?.color ?? theme.colors.primary}
-					style={{ ...styles.communityIcon, ...style }}
+					color={style?.color ?? primaryColor}
+					style={{ paddingTop: 50, ...style }}
 				/>
 			) : (
 				android.name
@@ -164,18 +170,3 @@ const PlatformIcon = ({
 export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github', 'linkedin']
-
-const stylesheet = createStyleSheet(() => ({
-	androidIconFilled: {
-		fontFamily: 'MaterialSymbolsRoundedFill'
-	},
-	androidIconOutlined: {
-		fontFamily: 'MaterialSymbolsRoundedOutline'
-	},
-	communityIcon: {
-		paddingTop: 50
-	},
-	iosFallbackOffset: {
-		marginRight: -2
-	}
-}))
