@@ -1,5 +1,4 @@
 import { View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface EventProgressBarProps {
 	progress: number
@@ -8,32 +7,14 @@ interface EventProgressBarProps {
 export default function EventProgressBar({
 	progress
 }: EventProgressBarProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
-
 	return (
-		<View style={styles.progressBarContainer}>
+		<View className="h-1 bg-border rounded-sm overflow-hidden">
 			<View
-				style={[
-					styles.progressBar,
-					{
-						width: `${progress * 100}%`
-					}
-				]}
+				className="h-full rounded-sm bg-primary"
+				style={{
+					width: `${progress * 100}%`
+				}}
 			/>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	progressBarContainer: {
-		height: 4,
-		backgroundColor: theme.colors.border,
-		borderRadius: 2,
-		overflow: 'hidden'
-	},
-	progressBar: {
-		height: '100%',
-		borderRadius: 2,
-		backgroundColor: theme.colors.primary
-	}
-}))
