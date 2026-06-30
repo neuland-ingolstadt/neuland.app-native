@@ -22,7 +22,7 @@ import {
 	permissionError
 } from '@/utils/api-utils'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
 export default function ErrorView({

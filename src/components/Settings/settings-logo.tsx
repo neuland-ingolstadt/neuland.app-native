@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import AnimatedLogoText from '@/components/Flow/svgs/animated-logo-text'
-import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import {
 	animatedHapticFeedback,
 	useRandomColor,

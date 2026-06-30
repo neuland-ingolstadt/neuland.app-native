@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 export const FoodHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['accessibility'])

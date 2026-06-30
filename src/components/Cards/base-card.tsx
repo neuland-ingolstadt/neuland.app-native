@@ -15,7 +15,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { USER_GUEST } from '@/data/constants'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 import { CardContextMenu } from './card-context-menu'
 
 interface BaseCardProps {

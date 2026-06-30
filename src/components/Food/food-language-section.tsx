@@ -2,8 +2,8 @@ import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import Divider from '@/components/Universal/Divider'
-import PlatformIcon from '../Universal/Icon'
+import Divider from '@/components/Universal/divider'
+import PlatformIcon from '../Universal/icon'
 
 export interface FoodLanguageElement {
 	title: string

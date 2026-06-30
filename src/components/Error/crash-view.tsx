@@ -7,8 +7,8 @@ import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { useSessionStore } from '@/hooks/useSessionStore'
 
-import LogoTextSVG from '../Flow/svgs/logoText'
-import PlatformIcon from '../Universal/Icon'
+import LogoTextSVG from '../Flow/svgs/logo-text'
+import PlatformIcon from '../Universal/icon'
 import StatusBox from './action-box'
 
 export const ErrorButton = ({

@@ -10,8 +10,8 @@ import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 
-import Divider from '../Universal/Divider'
-import PlatformIcon from '../Universal/Icon'
+import Divider from '../Universal/divider'
+import PlatformIcon from '../Universal/icon'
 
 interface NextLectureSuggestionsProps {
 	allRooms: FeatureCollection

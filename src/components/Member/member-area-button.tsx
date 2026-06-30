@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 
 export function MemberAreaButton(): React.JSX.Element | null {
 	const router = useRouter()

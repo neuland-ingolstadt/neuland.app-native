@@ -29,7 +29,7 @@ import Animated, {
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MemberAreaButton } from '@/components/Member/member-area-button'
 import FormList from '@/components/Universal/form-list'
-import { linkIcon } from '@/components/Universal/Icon'
+import { linkIcon } from '@/components/Universal/icon'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'

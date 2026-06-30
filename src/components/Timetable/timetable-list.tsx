@@ -18,7 +18,7 @@ import {
 import ErrorView from '@/components/Error/error-view'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/drag-view'
-import Badge from '@/components/Universal/Badge'
+import Badge from '@/components/Universal/badge'
 import ColorBand from '@/components/Universal/color-band'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import TimeDisplay from '@/components/Universal/time-display'

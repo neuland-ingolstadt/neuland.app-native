@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoSVG from '@/components/Flow/svgs/logo'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 
 import DetailsBody from './details-body'
 import DetailsRow from './details-row'
 import DetailsSymbol from './details-symbol'
-import Separator from './Separator'
+import Separator from './separator'
 
 interface ShareCardProps {
 	event: FriendlyTimetableEntry

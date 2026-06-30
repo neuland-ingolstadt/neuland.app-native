@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { FeatureFlagKeys } from '@/lib/feature-flags'

@@ -10,7 +10,7 @@ import {
 	type ViewStyle
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 
 interface InfoBoxProps {

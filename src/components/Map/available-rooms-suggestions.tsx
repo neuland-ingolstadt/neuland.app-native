@@ -12,8 +12,8 @@ import { formatFriendlyTime } from '@/utils/date-utils'
 import { ROOMS_ALL } from '@/utils/map-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { UserKindContext } from '../contexts'
-import Divider from '../Universal/Divider'
-import PlatformIcon from '../Universal/Icon'
+import Divider from '../Universal/divider'
+import PlatformIcon from '../Universal/icon'
 import LoadingIndicator from '../Universal/loading-indicator'
 
 interface AvailableRoomsSuggestionsProps {

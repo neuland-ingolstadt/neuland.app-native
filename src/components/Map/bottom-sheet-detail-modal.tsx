@@ -15,7 +15,7 @@ import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { handleShareModal } from '@/utils/map-utils'
 import FormList from '../Universal/form-list'
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 import BottomSheetBackground from './bottom-sheet-background'
 
 interface BottomSheetDetailModalProps {

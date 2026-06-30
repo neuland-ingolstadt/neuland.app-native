@@ -1,7 +1,7 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { stylesheet } from './styles'
 

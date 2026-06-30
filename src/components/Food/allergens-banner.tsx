@@ -5,7 +5,7 @@ import { Animated, Text, TouchableOpacity, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 export const AllergensBanner = ({
 	scrollY

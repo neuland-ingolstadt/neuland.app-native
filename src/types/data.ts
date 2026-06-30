@@ -1,4 +1,4 @@
-import type { LucideIcon } from '@/components/Universal/Icon'
+import type { LucideIcon } from '@/components/Universal/icon'
 
 import type { MaterialIcon } from './material-icons'
 
