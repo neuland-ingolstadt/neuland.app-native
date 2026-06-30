@@ -170,10 +170,7 @@ export function useMapQueries(): {
 			const openings = getRoomOpenings(roomStatusData, dateObj)
 			setRoomOpenings(openings)
 		} catch (e) {
-			if (
-				e instanceof NoSessionError ||
-				e instanceof UnavailableSessionError
-			) {
+			if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
 				setAvailableRooms([])
 				setRoomOpenings(null)
 				return
