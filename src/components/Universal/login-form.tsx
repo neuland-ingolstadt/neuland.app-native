@@ -7,13 +7,12 @@ import {
 	Animated,
 	Linking,
 	Platform,
-	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -25,6 +24,7 @@ import {
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import Button from './button'
 import PlatformIcon from './icon'
 
@@ -39,7 +39,11 @@ const LoginForm = ({
 	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const { styles, theme } = useStyles(stylesheet)
+	const labelColor = String(toColor(useCSSVariable('--color-label')) ?? '#606062')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const borderColor = String(toColor(useCSSVariable('--color-border')) ?? '#d8d8d8')
 	const { userKind, toggleUserKind } = React.use(UserKindContext)
 	const [loading, setLoading] = useState(false)
 	const { t } = useTranslation('flow')
@@ -120,11 +124,7 @@ const LoginForm = ({
 				msg = t('login.alert.error.backend')
 			}
 			if (Platform.OS === 'web') {
-				toast({
-					title: msg,
-					preset: 'error',
-					duration: 2.5
-				})
+				toast({ title: msg, preset: 'error', duration: 2.5 })
 			} else {
 				Alert.alert(
 					title,
@@ -134,18 +134,14 @@ const LoginForm = ({
 						...(showStatus
 							? [
 									{
-										text: t('error.crash.status', {
-											ns: 'common'
-										}),
+										text: t('error.crash.status', { ns: 'common' }),
 										onPress: async () =>
 											(await Linking.openURL(STATUS_URL)) as Promise<void>
 									}
 								]
 							: [])
 					],
-					{
-						cancelable: false
-					}
+					{ cancelable: false }
 				)
 			}
 		}
@@ -164,8 +160,6 @@ const LoginForm = ({
 
 		toggleUserKind(undefined)
 
-		// Defer navigation to allow React to process the state update
-		// This is especially important on web where state updates may not be synchronous
 		if (Platform.OS === 'web') {
 			setTimeout(() => {
 				navigateHome()
@@ -178,7 +172,6 @@ const LoginForm = ({
 	}
 
 	useEffect(() => {
-		// on iOS secure store is synced with iCloud, so we can prefill the login form
 		if (Platform.OS === 'ios') {
 			const loadSavedData = async (): Promise<void> => {
 				try {
@@ -187,21 +180,17 @@ const LoginForm = ({
 					if (savedUsername !== null && savedPassword !== null) {
 						setUsername(savedUsername)
 						setPassword(savedPassword)
-
 						Alert.alert(
 							t('login.alert.restored.title'),
 							t('login.alert.restored.message'),
 							[{ text: t('misc.ok', { ns: 'common' }) }],
-							{
-								cancelable: false
-							}
+							{ cancelable: false }
 						)
 					}
 				} catch (error) {
 					console.error('Error loading saved credentials:', error)
 				}
 			}
-
 			void loadSavedData()
 		}
 	}, [])
@@ -210,38 +199,37 @@ const LoginForm = ({
 		username.trim() === '' || password.trim() === '' || loading
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.loginContainer}>
-				<Text style={styles.welcomeText}>{t('login.getStarted')}</Text>
-				<Text style={styles.subtitleText}>{t('login.title2')}</Text>
+		<View className="items-center justify-center w-full">
+			<View
+				className="items-center justify-center max-w-[400px] pb-[30px] px-[25px] pt-[30px] w-full bg-card rounded-3xl border-border"
+				style={[hairlineBorder, { elevation: 5 }]}
+			>
+				<Text className="text-text text-[28px] font-bold text-center mb-2">
+					{t('login.getStarted')}
+				</Text>
+				<Text className="text-label text-base text-center mb-[30px]">
+					{t('login.title2')}
+				</Text>
 
-				<View style={styles.inputContainer}>
-					<View style={styles.inputWrapper}>
+				<View className="gap-4">
+					<View
+						className="flex-row items-center bg-input-background rounded-sm border-border px-3"
+						style={hairlineBorder}
+					>
 						<PlatformIcon
-							ios={{
-								name: 'person',
-								size: 20
-							}}
-							android={{
-								name: 'person',
-								size: 24
-							}}
-							web={{
-								name: 'User',
-								size: 20
-							}}
-							style={{ color: theme.colors.labelColor }}
+							ios={{ name: 'person', size: 20 }}
+							android={{ name: 'person', size: 24 }}
+							web={{ name: 'User', size: 20 }}
+							style={{ color: labelColor }}
 						/>
 						<TextInput
-							style={styles.textInput}
-							selectionColor={theme.colors.primary}
-							placeholderTextColor={theme.colors.labelColor}
+							className="flex-1 text-text text-base py-3 ml-2"
+							selectionColor={primaryColor}
+							placeholderTextColor={labelColor}
 							defaultValue={username}
 							placeholder={t('login.usernamePlaceholder')}
 							returnKeyType="next"
-							onChangeText={(text) => {
-								setUsername(text)
-							}}
+							onChangeText={setUsername}
 							autoCapitalize="none"
 							clearButtonMode="while-editing"
 							autoComplete="email"
@@ -251,43 +239,26 @@ const LoginForm = ({
 					</View>
 
 					<Animated.View
-						style={[
-							styles.inputWrapper,
-							{
-								transform: [{ translateX: shakeAnimation }]
-							}
-						]}
+						className="flex-row items-center bg-input-background rounded-sm border-border px-3"
+						style={[hairlineBorder, { transform: [{ translateX: shakeAnimation }] }]}
 					>
 						<PlatformIcon
-							ios={{
-								name: 'lock',
-								size: 20
-							}}
-							android={{
-								name: 'lock',
-								size: 24
-							}}
-							web={{
-								name: 'Lock',
-								size: 20
-							}}
-							style={{ color: theme.colors.labelColor }}
+							ios={{ name: 'lock', size: 20 }}
+							android={{ name: 'lock', size: 24 }}
+							web={{ name: 'Lock', size: 20 }}
+							style={{ color: labelColor }}
 						/>
 						<TextInput
-							style={styles.textInput}
-							selectionColor={theme.colors.primary}
-							placeholderTextColor={theme.colors.labelColor}
+							className="flex-1 text-text text-base py-3 ml-2"
+							selectionColor={primaryColor}
+							placeholderTextColor={labelColor}
 							placeholder={t('login.password')}
 							defaultValue={password}
 							returnKeyType="done"
-							onChangeText={(text) => {
-								setPassword(text)
-							}}
+							onChangeText={setPassword}
 							onSubmitEditing={() => {
 								if (username !== '') {
-									login().catch((error: unknown) => {
-										console.debug(error)
-									})
+									login().catch((error: unknown) => console.debug(error))
 								}
 							}}
 							selectTextOnFocus={true}
@@ -299,23 +270,17 @@ const LoginForm = ({
 							autoCorrect={false}
 						/>
 						<TouchableOpacity
-							style={styles.eyeIcon}
+							className="p-1"
 							onPress={() => setShowPassword(!showPassword)}
 						>
 							<PlatformIcon
-								ios={{
-									name: showPassword ? 'eye.slash' : 'eye',
-									size: 16
-								}}
+								ios={{ name: showPassword ? 'eye.slash' : 'eye', size: 16 }}
 								android={{
 									name: showPassword ? 'visibility_off' : 'visibility',
 									size: 20
 								}}
-								web={{
-									name: showPassword ? 'EyeOff' : 'Eye',
-									size: 18
-								}}
-								style={{ color: theme.colors.labelColor }}
+								web={{ name: showPassword ? 'EyeOff' : 'Eye', size: 18 }}
+								style={{ color: labelColor }}
 							/>
 						</TouchableOpacity>
 					</Animated.View>
@@ -324,127 +289,39 @@ const LoginForm = ({
 				<Button
 					disabled={signInDisabled}
 					loading={loading}
-					onPress={() => {
-						login().catch((error: unknown) => {
-							console.debug(error)
-						})
-					}}
-					style={styles.loginButton}
+					onPress={() => login().catch((error: unknown) => console.debug(error))}
+					style={{ marginTop: 24 }}
 				>
 					{t('login.button')}
 				</Button>
 
-				<View style={styles.dividerContainer}>
-					<View style={styles.divider} />
-					<Text style={styles.dividerText}>{t('login.or')}</Text>
-					<View style={styles.divider} />
+				<View className="flex-row items-center mt-[26px]">
+					<View
+						className="flex-1"
+						style={{
+							height: hairlineBorder.borderWidth,
+							backgroundColor: borderColor
+						}}
+					/>
+					<Text className="text-label mx-2.5 text-[13px]">{t('login.or')}</Text>
+					<View
+						className="flex-1"
+						style={{
+							height: hairlineBorder.borderWidth,
+							backgroundColor: borderColor
+						}}
+					/>
 				</View>
 
 				<TouchableOpacity
-					style={styles.guestButton}
-					onPress={() => {
-						guestLogin().catch((error: unknown) => {
-							console.debug(error)
-						})
-					}}
+					className="items-center pt-1.5 mt-3.5"
+					onPress={() => guestLogin().catch((error: unknown) => console.debug(error))}
 				>
-					<Text style={styles.guestText}>{t('login.guest')}</Text>
+					<Text className="text-label text-sm font-normal">{t('login.guest')}</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: '100%'
-	},
-	loginContainer: {
-		backgroundColor: theme.colors.card,
-		borderRadius: 24,
-		justifyContent: 'center',
-		maxWidth: 400,
-		paddingBottom: 30,
-		paddingHorizontal: 25,
-		paddingTop: 30,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		width: '100%',
-		elevation: 5
-	},
-	logoContainer: {
-		alignItems: 'center',
-		marginBottom: 20
-	},
-	logo: {
-		width: 80,
-		height: 80
-	},
-	welcomeText: {
-		color: theme.colors.text,
-		fontSize: 28,
-		fontWeight: '700',
-		textAlign: 'center',
-		marginBottom: 8
-	},
-	subtitleText: {
-		color: theme.colors.labelColor,
-		fontSize: 16,
-		textAlign: 'center',
-		marginBottom: 30
-	},
-	inputContainer: {
-		gap: 16
-	},
-	inputWrapper: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: theme.colors.inputBackground,
-		borderRadius: 8,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		paddingHorizontal: 12
-	},
-	textInput: {
-		flex: 1,
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingVertical: 12,
-		marginLeft: 8
-	},
-	eyeIcon: {
-		padding: 4
-	},
-	loginButton: {
-		marginTop: 24
-	},
-	dividerContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 26
-	},
-	divider: {
-		flex: 1,
-		height: StyleSheet.hairlineWidth,
-		backgroundColor: theme.colors.border
-	},
-	dividerText: {
-		color: theme.colors.labelColor,
-		marginHorizontal: 10,
-		fontSize: 13
-	},
-	guestButton: {
-		alignItems: 'center',
-		paddingTop: 6,
-		marginTop: 14
-	},
-	guestText: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '400'
-	}
-}))
 
 export default LoginForm
