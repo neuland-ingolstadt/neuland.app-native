@@ -4,10 +4,10 @@ import {
 	type DimensionValue,
 	type FlexAlignType,
 	Platform,
-	StyleSheet,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 interface DividerProps {
 	width?: DimensionValue
@@ -29,32 +29,27 @@ const Divider = ({
 	position,
 	paddingLeft
 }: DividerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const defaultColor = useCSSVariable('--color-label-tertiary')
 
 	return (
-		<View style={styles.container({ position, paddingLeft })}>
-			<View style={styles.line({ width, color })} />
+		<View
+			className="w-full"
+			style={{
+				alignSelf:
+					position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
+				paddingLeft: paddingLeft ?? 0
+			}}
+		>
+			<View
+				style={{
+					width: width ?? '100%',
+					borderBottomColor: color ?? toColor(defaultColor),
+					borderBottomWidth:
+						Platform.OS !== 'web' ? hairlineBorder.borderWidth : 0.1
+				}}
+			/>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: ({
-		position,
-		paddingLeft
-	}: {
-		position?: FlexAlignType
-		paddingLeft?: number
-	}) => ({
-		width: '100%',
-		alignSelf: position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
-		paddingLeft: paddingLeft ?? 0
-	}),
-	line: ({ width, color }: { width?: DimensionValue; color?: ColorValue }) => ({
-		width: width ?? '100%',
-		borderBottomColor: color ?? theme.colors.labelTertiaryColor,
-		borderBottomWidth: Platform.OS !== 'web' ? StyleSheet.hairlineWidth : 0.1
-	})
-}))
 
 export default Divider
