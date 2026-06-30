@@ -7,6 +7,7 @@
 		},
 		"roomNotFound": "Room not found",
 		"mapOverlay": "Error while loading overlay",
+		"freeRooms": "Error loading free rooms",
 		"dashboard": "Drag & drop to reorder",
 		"tryAgain": "Please try again"
 	},

@@ -105,13 +105,21 @@ export function useMapQueries(): {
 		}
 	}, [timetable, userKind, setNextLecture])
 
-	const { data: roomStatusData } = useQuery({
+	const {
+		data: roomStatusData,
+		error: freeRoomsError,
+		isPending: freeRoomsPending
+	} = useQuery({
 		queryKey: ['freeRooms', formatISODate(currentDate)],
 		queryFn: async () => await API.getFreeRooms(currentDate),
 		staleTime: 1000 * 60 * 60, // 60 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
+		enabled: userKind !== USER_GUEST,
 		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
+			if (
+				error instanceof NoSessionError ||
+				error instanceof UnavailableSessionError
+			) {
 				return false
 			}
 			return failureCount < 2
@@ -119,34 +127,76 @@ export function useMapQueries(): {
 	})
 
 	useEffect(() => {
-		function load(): void {
-			if (roomStatusData == null) {
-				console.debug('No room status data')
+		if (userKind === USER_GUEST) {
+			setAvailableRooms([])
+			setRoomOpenings(null)
+			return
+		}
+
+		if (freeRoomsError != null) {
+			if (
+				freeRoomsError instanceof NoSessionError ||
+				freeRoomsError instanceof UnavailableSessionError
+			) {
+				setAvailableRooms([])
+				setRoomOpenings(null)
 				return
 			}
-			try {
-				const dateObj = new Date()
-				const date = formatISODate(dateObj)
-				const time = formatISOTime(dateObj)
-				const rooms = filterRooms(roomStatusData, date, time)
-				setAvailableRooms(rooms)
-				const openings = getRoomOpenings(roomStatusData, dateObj)
-				setRoomOpenings(openings)
-			} catch (e) {
-				if (
-					e instanceof NoSessionError ||
-					e instanceof UnavailableSessionError
-				) {
-					setAvailableRooms([])
-				} else {
-					console.error(e)
-				}
-			}
+			toast({
+				title: t('toast.freeRooms', { ns: 'common' }),
+				preset: 'error',
+				duration: 3,
+				from: 'top'
+			})
+			setAvailableRooms([])
+			setRoomOpenings(null)
+			return
 		}
-		setAvailableRooms(null)
-		setRoomOpenings(null)
-		load()
-	}, [userKind, roomStatusData, setAvailableRooms, setRoomOpenings])
+
+		if (roomStatusData == null) {
+			if (freeRoomsPending) {
+				setAvailableRooms(null)
+				setRoomOpenings(null)
+			}
+			return
+		}
+
+		try {
+			const dateObj = new Date()
+			const date = formatISODate(dateObj)
+			const time = formatISOTime(dateObj)
+			const rooms = filterRooms(roomStatusData, date, time)
+			setAvailableRooms(rooms)
+			const openings = getRoomOpenings(roomStatusData, dateObj)
+			setRoomOpenings(openings)
+		} catch (e) {
+			if (
+				e instanceof NoSessionError ||
+				e instanceof UnavailableSessionError
+			) {
+				setAvailableRooms([])
+				setRoomOpenings(null)
+				return
+			}
+			console.error(e)
+			toast({
+				title: t('toast.freeRooms', { ns: 'common' }),
+				preset: 'error',
+				duration: 3,
+				from: 'top'
+			})
+			setAvailableRooms([])
+			setRoomOpenings(null)
+		}
+	}, [
+		userKind,
+		roomStatusData,
+		freeRoomsError,
+		freeRoomsPending,
+		setAvailableRooms,
+		setRoomOpenings,
+		t
+	])
 
 	const allRooms: FeatureCollection = useMemo(() => {
 		if (mapOverlay == null) {
