@@ -5,11 +5,10 @@ import {
 	ActivityIndicator,
 	Platform,
 	Pressable,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import PlatformIcon from '@/components/Universal/icon'
 import type { UserKindContextType } from '@/contexts/userKind'
@@ -17,6 +16,7 @@ import { USER_EMPLOYEE, USER_GUEST } from '@/data/constants'
 import type { PersDataDetails } from '@/types/thi-api'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import AvatarCircle from './avatar-circle'
 import NameBox from './name-box'
 
@@ -35,14 +35,17 @@ export default function SettingsHeader({
 	isSuccess,
 	error
 }: SettingsHeaderProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
 		React.use<UserKindContextType>(UserKindContext)
 	const router = useRouter()
 	const { t } = useTranslation(['settings', 'common'])
 	const [username, setUsername] = React.useState<string>('')
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const primaryBackground = toColor(
+		useCSSVariable('--color-primary-background')
+	)
+	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 
-	// Load employee username when component mounts
 	React.useEffect(() => {
 		const loadUsername = async (): Promise<void> => {
 			if (userKind === USER_EMPLOYEE) {
@@ -55,31 +58,30 @@ export default function SettingsHeader({
 
 	if (userKind === 'student') {
 		return (
-			<View style={styles.container}>
+			<View
+				className="self-center bg-card ios:rounded-ios android:rounded-md w-full mt-3"
+				style={hairlineBorder}
+			>
 				<Pressable
 					onPress={() => {
 						router.navigate('/profile')
 					}}
-					style={{
-						borderRadius: theme.radius.ios,
-						overflow: 'hidden'
-					}}
+					className="ios:rounded-ios android:rounded-md overflow-hidden active:opacity-90"
 				>
-					<View style={styles.nameBox}>
+					<View className="items-center flex-row justify-between">
 						{isSuccess && personalData?.mtknr !== undefined ? (
-							<View style={styles.nameOuterContainer}>
-								<View style={styles.nameInnerContainer}>
+							<View className="flex-col flex-1">
+								<View className="flex-row py-[15px] w-full">
 									<NameBox
 										title={`${personalData?.vname} ${personalData?.name}`}
 										subTitle1={`${personalData?.stgru ?? ''}${t('semesterSuffix', { ns: 'common' })}`}
 										subTitle2={personalData?.fachrich ?? ''}
 										showChevron={true}
 									>
-										<AvatarCircle background={`${theme.colors.primary}25`}>
+										<AvatarCircle background={primaryBackground}>
 											<Text
-												style={StyleSheet.compose(styles.avatarText, {
-													color: theme.colors.primary
-												})}
+												className="text-[22px] font-bold"
+												style={{ color: primaryColor }}
 											>
 												{getInitials(
 													`${personalData?.vname} ${personalData?.name}`
@@ -90,8 +92,8 @@ export default function SettingsHeader({
 								</View>
 							</View>
 						) : isSuccess ? (
-							<View style={styles.nameOuterContainer}>
-								<View style={styles.nameInnerContainer}>
+							<View className="flex-col flex-1">
+								<View className="flex-row py-[15px] w-full">
 									<NameBox
 										title={t('menu.error.noData.title')}
 										subTitle1={t('menu.error.noData.subtitle1')}
@@ -99,7 +101,7 @@ export default function SettingsHeader({
 										showChevron={true}
 									>
 										<AvatarCircle
-											background={`${theme.colors.labelTertiaryColor}25`}
+											background={`${String(labelTertiaryColor)}25`}
 										>
 											<PlatformIcon
 												ios={{
@@ -110,8 +112,8 @@ export default function SettingsHeader({
 												android={{ name: 'warning', size: 28 }}
 												web={{ name: 'TriangleAlert', size: 28 }}
 												style={{
-													...styles.iconGuest,
-													color: theme.colors.labelTertiaryColor
+													color: labelTertiaryColor,
+													marginTop: Platform.OS === 'android' ? 2 : 0
 												}}
 											/>
 										</AvatarCircle>
@@ -119,14 +121,14 @@ export default function SettingsHeader({
 								</View>
 							</View>
 						) : isLoading ? (
-							<View style={styles.nameOuterContainer}>
-								<View style={styles.nameInnerContainer}>
-									<ActivityIndicator style={styles.loading} />
+							<View className="flex-col flex-1">
+								<View className="items-center flex-row flex-1 justify-center my-[25px] py-[15px] w-full">
+									<ActivityIndicator />
 								</View>
 							</View>
 						) : (
-							<View style={styles.nameOuterContainer}>
-								<View style={styles.nameInnerContainer}>
+							<View className="flex-col flex-1">
+								<View className="flex-row py-[15px] w-full">
 									<NameBox
 										title={t('labels.error', { ns: 'common' })}
 										subTitle1={
@@ -135,7 +137,7 @@ export default function SettingsHeader({
 										subTitle2={t('menu.error.subtitle2')}
 									>
 										<AvatarCircle
-											background={`${theme.colors.labelTertiaryColor}25`}
+											background={`${String(labelTertiaryColor)}25`}
 										>
 											<PlatformIcon
 												ios={{
@@ -146,8 +148,8 @@ export default function SettingsHeader({
 												android={{ name: 'warning', size: 28 }}
 												web={{ name: 'TriangleAlert', size: 28 }}
 												style={{
-													...styles.iconGuest,
-													color: theme.colors.labelTertiaryColor
+													color: labelTertiaryColor,
+													marginTop: Platform.OS === 'android' ? 2 : 0
 												}}
 											/>
 										</AvatarCircle>
@@ -170,21 +172,21 @@ export default function SettingsHeader({
 					router.navigate('/login')
 				}
 			}}
-			style={styles.container}
+			className="self-center bg-card ios:rounded-ios android:rounded-md w-full mt-3 active:opacity-90"
+			style={hairlineBorder}
 		>
-			<View style={styles.nameBox}>
+			<View className="items-center flex-row justify-between">
 				{userKind === 'employee' ? (
-					<View style={styles.nameInnerContainer}>
+					<View className="flex-row py-[15px] w-full">
 						<NameBox
 							title={username as string}
 							subTitle1={t('menu.employee.subtitle1')}
 							subTitle2={t('menu.employee.subtitle2')}
 						>
-							<AvatarCircle background={`${theme.colors.primary}25`}>
+							<AvatarCircle background={primaryBackground}>
 								<Text
-									style={StyleSheet.compose(styles.avatarText, {
-										color: theme.colors.primary
-									})}
+									className="text-[22px] font-bold"
+									style={{ color: primaryColor }}
 								>
 									{getInitials((username as string) ?? '')}
 								</Text>
@@ -192,21 +194,21 @@ export default function SettingsHeader({
 						</NameBox>
 					</View>
 				) : (
-					<View style={styles.nameInnerContainer}>
+					<View className="flex-row py-[15px] w-full">
 						<NameBox
 							title={t('menu.guest.title')}
 							subTitle1={t('menu.guest.subtitle')}
 							subTitle2={''}
 							showChevron={true}
 						>
-							<AvatarCircle background={`${theme.colors.primary}25`}>
+							<AvatarCircle background={primaryBackground}>
 								<PlatformIcon
 									ios={{ name: 'person', variant: 'fill', size: 26 }}
 									android={{ name: 'account_circle', size: 32 }}
 									web={{ name: 'User', size: 32 }}
 									style={{
-										...styles.iconGuest,
-										color: theme.colors.primary
+										color: primaryColor,
+										marginTop: Platform.OS === 'android' ? 2 : 0
 									}}
 								/>
 							</AvatarCircle>
@@ -217,41 +219,3 @@ export default function SettingsHeader({
 		</Pressable>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	avatarText: {
-		fontSize: 22,
-		fontWeight: 'bold'
-	},
-	container: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		width: '100%',
-		marginTop: 12
-	},
-	iconGuest: {
-		color: 'white',
-		marginTop: Platform.OS === 'android' ? 2 : 0
-	},
-	loading: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		flex: 1,
-		justifyContent: 'center',
-		marginVertical: 25
-	},
-	nameBox: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	nameInnerContainer: {
-		flexDirection: 'row',
-		paddingVertical: 15,
-		width: '100%'
-	},
-	nameOuterContainer: { flexDirection: 'column', flex: 1 }
-}))
