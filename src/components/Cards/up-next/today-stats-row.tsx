@@ -1,8 +1,9 @@
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import PulsingDot from '@/components/Universal/pulsing-dot'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import type { TodayStats } from '@/utils/up-next-utils'
 
 interface TodayStatsRowProps {
@@ -14,7 +15,7 @@ export default function TodayStatsRow({
 	stats,
 	nextEvent
 }: TodayStatsRowProps): React.JSX.Element | null {
-	const { styles } = useStyles(stylesheet)
+	const successColor = toColor(useCSSVariable('--color-success'))
 	const { t } = useTranslation('navigation')
 
 	if (stats.total === 0) {
@@ -27,67 +28,43 @@ export default function TodayStatsRow({
 			: t('cards.timetable.noMoreLectures')
 
 	return (
-		<View style={styles.statsContainer}>
+		<View className="mt-1 flex-col gap-2">
 			{nextEvent}
 			<Pressable
-				style={styles.statsRow}
+				className="flex-row items-center gap-2"
 				onPress={() => router.navigate('/dots')}
 				hitSlop={10}
 			>
-				<View style={styles.progressDots}>
+				<View className="flex-row gap-1.5 items-center flex-wrap">
 					{Array.from({ length: stats.total }).map((_, index) =>
 						index < stats.completed ? (
-							<View key={index} style={[styles.dot, styles.dotCompleted]} />
+							<View
+								key={index}
+								className="w-2 h-2 rounded-sm bg-completed-dot"
+							/>
 						) : index < stats.completed + stats.ongoing ? (
-							<PulsingDot key={index} style={[styles.dot, styles.dotOngoing]} />
+							<PulsingDot
+								key={index}
+								style={{
+									width: 8,
+									height: 8,
+									borderRadius: 4,
+									backgroundColor: successColor
+								}}
+							/>
 						) : (
-							<View key={index} style={[styles.dot, styles.dotRemaining]} />
+							<View
+								key={index}
+								className="w-2 h-2 rounded-sm bg-soon-dot border-label"
+								style={hairlineBorder}
+							/>
 						)
 					)}
 				</View>
-				<Text style={styles.statsText} numberOfLines={1}>
+				<Text className="text-label text-[13px]" numberOfLines={1}>
 					{statsText}
 				</Text>
 			</Pressable>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	statsContainer: {
-		marginTop: 4,
-		flexDirection: 'column',
-		gap: 8
-	},
-	statsRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8
-	},
-	statsText: {
-		color: theme.colors.labelColor,
-		fontSize: 13
-	},
-	progressDots: {
-		flexDirection: 'row',
-		gap: 6,
-		alignItems: 'center',
-		flexWrap: 'wrap'
-	},
-	dot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4
-	},
-	dotCompleted: {
-		backgroundColor: theme.colors.completedDot
-	},
-	dotOngoing: {
-		backgroundColor: theme.colors.success
-	},
-	dotRemaining: {
-		backgroundColor: theme.colors.soonDot,
-		borderColor: theme.colors.labelColor,
-		borderWidth: StyleSheet.hairlineWidth
-	}
-}))

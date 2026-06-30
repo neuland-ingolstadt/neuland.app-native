@@ -12,7 +12,7 @@ import {
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/error-view'
@@ -28,12 +28,13 @@ import {
 } from '@/utils/api-utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { LoadingState } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 import packageInfo from '../../../package.json'
 
 export default function GradesSCreen(): React.JSX.Element {
 	const { t } = useTranslation('settings')
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
 	const navigation = useNavigation()
 	const [localSearch, setLocalSearch] = React.useState('')
@@ -47,9 +48,9 @@ export default function GradesSCreen(): React.JSX.Element {
 
 				...Platform.select({
 					android: {
-						headerIconColor: theme.colors.text,
-						hintTextColor: theme.colors.text,
-						textColor: theme.colors.text
+						headerIconColor: textColor,
+						hintTextColor: textColor,
+						textColor: textColor
 					}
 				}),
 
@@ -59,16 +60,12 @@ export default function GradesSCreen(): React.JSX.Element {
 				}
 			}
 		})
-	}, [navigation])
+	}, [navigation, t, textColor])
 
 	const [averageLoadingState, setAverageLoadingState] = useState<LoadingState>(
 		LoadingState.LOADING
 	)
 
-	/**
-	 * Loads the average grade from the API and sets the state accordingly.
-	 * @returns {Promise<void>} A promise that resolves when the average grade has been loaded.
-	 */
 	async function loadAverageGrade(spoName: string | undefined): Promise<void> {
 		if (isSpoLoading) {
 			return
@@ -86,12 +83,11 @@ export default function GradesSCreen(): React.JSX.Element {
 		}
 	}
 
-	// TODO: Just cache the spoWeights for the relevant study program
 	const { data: spoWeights, isLoading: isSpoLoading } = useQuery({
 		queryKey: ['spoWeights', packageInfo.version],
 		queryFn: async () => await NeulandAPI.getSpoWeights(),
-		staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-		gcTime: 1000 * 60 * 60 * 24 * 14 // 2 weeks
+		staleTime: 1000 * 60 * 60 * 24 * 7,
+		gcTime: 1000 * 60 * 60 * 24 * 14
 	})
 
 	const {
@@ -105,8 +101,8 @@ export default function GradesSCreen(): React.JSX.Element {
 	} = useQuery({
 		queryKey: ['grades'],
 		queryFn: loadGrades,
-		staleTime: 1000 * 60 * 30, // 30 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+		staleTime: 1000 * 60 * 30,
+		gcTime: 1000 * 60 * 60 * 24 * 7,
 		retry(_failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.replace('/login')
@@ -127,8 +123,8 @@ export default function GradesSCreen(): React.JSX.Element {
 	const { data: personalData } = useQuery({
 		queryKey: ['personalData'],
 		queryFn: getPersonalData,
-		staleTime: 1000 * 60 * 60 * 12, // 12 hours
-		gcTime: 1000 * 60 * 60 * 24 * 60 // 60 days
+		staleTime: 1000 * 60 * 60 * 12,
+		gcTime: 1000 * 60 * 60 * 24 * 60
 	})
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
@@ -178,7 +174,7 @@ export default function GradesSCreen(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={styles.contentContainer}
+			contentContainerClassName="pb-8"
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
 				isSuccess ? (
@@ -192,12 +188,12 @@ export default function GradesSCreen(): React.JSX.Element {
 			}
 		>
 			{isLoading && (
-				<View style={styles.loadingContainer}>
+				<View className="items-center justify-center pt-10">
 					<LoadingIndicator />
 				</View>
 			)}
 			{isError && (
-				<View style={styles.loadingContainer}>
+				<View className="items-center justify-center pt-10">
 					<ErrorView
 						title={
 							isUnavailableError
@@ -222,26 +218,26 @@ export default function GradesSCreen(): React.JSX.Element {
 					{filteredGrades?.finished.length !== 0 && (
 						<>
 							<SectionView title={t('grades.average')}>
-								<View style={styles.loadedContainer}>
+								<View className="self-center rounded-md justify-center mx-page my-4 min-h-[70px] w-full">
 									{averageLoadingState === LoadingState.LOADING && (
 										<LoadingIndicator />
 									)}
 									{averageLoadingState === LoadingState.ERROR && (
-										<Text style={styles.averageErrorText}>
+										<Text className="text-text text-[15px] text-center">
 											{t('grades.averageError')}
 										</Text>
 									)}
 									{averageLoadingState === LoadingState.LOADED &&
 										gradeAverage !== undefined &&
 										gradeAverage !== null && (
-											<View style={styles.averageContainer}>
-												<Text style={styles.averageText}>
+											<View className="items-start justify-center mx-page">
+												<Text className="text-text text-[25px] font-bold mb-1.5 text-center">
 													{gradeAverage.resultMin !== gradeAverage.resultMax &&
 														'~ '}
 													{gradeAverage.result}
 												</Text>
 
-												<Text style={styles.averageNote}>
+												<Text className="text-label text-sm text-left">
 													{gradeAverage.resultMin === gradeAverage.resultMax
 														? t('grades.exactAverage', {
 																number: gradeAverage.entries.length
@@ -259,7 +255,7 @@ export default function GradesSCreen(): React.JSX.Element {
 								{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
 								<>
 									{filteredGrades?.finished.map((grade, index) => (
-										<View key={index} style={styles.rowContainer}>
+										<View key={index} className="mb-2">
 											<GradesRow item={grade} />
 										</View>
 									))}
@@ -272,76 +268,20 @@ export default function GradesSCreen(): React.JSX.Element {
 							{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
 							<>
 								{filteredGrades?.missing.map((grade, index) => (
-									<View key={index} style={styles.rowContainer}>
+									<View key={index} className="mb-2">
 										<GradesRow item={grade} />
 									</View>
 								))}
 							</>
 						</SectionView>
 					)}
-					<View style={styles.notesBox}>
-						<Text style={styles.notesText}>{t('grades.footer')}</Text>
+					<View className="self-start pb-8 px-page pt-4">
+						<Text className="text-label text-xs font-normal pt-2 text-left">
+							{t('grades.footer')}
+						</Text>
 					</View>
 				</>
 			)}
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	averageContainer: {
-		alignItems: 'flex-start',
-		justifyContent: 'center',
-		marginHorizontal: theme.margins.page
-	},
-	averageErrorText: {
-		color: theme.colors.text,
-		fontSize: 15,
-		textAlign: 'center'
-	},
-	averageNote: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		textAlign: 'left'
-	},
-	averageText: {
-		color: theme.colors.text,
-		fontSize: 25,
-		fontWeight: '700',
-		marginBottom: 5,
-		textAlign: 'center'
-	},
-	contentContainer: {
-		paddingBottom: 32
-	},
-	loadedContainer: {
-		alignSelf: 'center',
-		borderRadius: theme.radius.md,
-		justifyContent: 'center',
-		marginHorizontal: theme.margins.page,
-		marginVertical: 16,
-		minHeight: 70,
-		width: '100%'
-	},
-	loadingContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingTop: 40
-	},
-	notesBox: {
-		alignSelf: 'flex-start',
-		paddingBottom: 32,
-		paddingHorizontal: theme.margins.page,
-		paddingTop: 16
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		fontWeight: 'normal',
-		paddingTop: 8,
-		textAlign: 'left'
-	},
-	rowContainer: {
-		marginBottom: 8
-	}
-}))

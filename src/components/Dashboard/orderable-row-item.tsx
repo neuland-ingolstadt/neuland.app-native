@@ -1,10 +1,11 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { ExtendedCard } from '@/components/all-cards'
 import { cardIcons } from '@/components/icons'
 import PlatformIcon from '@/components/Universal/icon'
+import { toColor } from '@/utils/uniwind-utils'
 
 const { width } = Dimensions.get('window')
 
@@ -30,7 +31,8 @@ export default function OrderableRowItem({
 	drag,
 	isActive
 }: OrderableRowItemProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelSecondaryColor = toColor(useCSSVariable('--color-label-secondary'))
 	const bottomWidth = isLast ? 0 : 1
 	const isWeb = Platform.OS === 'web'
 	const { t } = useTranslation(['accessibility'])
@@ -39,17 +41,14 @@ export default function OrderableRowItem({
 		<View>
 			<Pressable
 				onLongPress={drag}
-				style={[
-					styles.row,
-					styles.outerRow,
-					{
-						width: width - theme.margins.page * 2,
-						borderBottomWidth: bottomWidth,
-						opacity: isActive ? 0.8 : 1
-					}
-				]}
+				className="items-center bg-card flex-row gap-3.5 justify-center min-h-[50px] px-4 border-border"
+				style={{
+					width: width - 24,
+					borderBottomWidth: bottomWidth,
+					opacity: isActive ? 0.8 : 1
+				}}
 			>
-				<View style={styles.iconContainer}>
+				<View className="w-6 items-center justify-center">
 					<PlatformIcon
 						ios={{
 							name: cardIcons[item.key as keyof typeof cardIcons].ios,
@@ -64,88 +63,50 @@ export default function OrderableRowItem({
 							name: cardIcons[item.key as keyof typeof cardIcons].web,
 							size: 21
 						}}
-						style={styles.icon}
+						style={{ color: textColor }}
 					/>
 				</View>
 
-				<Text style={styles.text}>{item.text}</Text>
+				<Text className="text-text grow shrink text-base">{item.text}</Text>
 
 				{isWeb ? (
-					<View style={styles.actionButtons}>
-						{/* Move Up Button */}
+					<View className="flex-row items-center">
 						<Pressable
 							onPress={onMoveUp}
 							disabled={isFirstItem}
-							style={({ pressed }) => [
-								styles.arrowButton,
-								{
-									opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
-								}
-							]}
+							className="p-2 mx-0.5 justify-center items-center"
+							style={{ opacity: isFirstItem ? 0.3 : 1 }}
 							accessibilityLabel={t('dashboard.moveUp')}
 						>
 							<PlatformIcon
-								ios={{
-									name: 'chevron.up',
-									size: 16
-								}}
-								android={{
-									name: 'keyboard_arrow_up',
-									size: 20
-								}}
-								web={{
-									name: 'ChevronUp',
-									size: 18
-								}}
-								style={styles.arrowIcon}
+								ios={{ name: 'chevron.up', size: 16 }}
+								android={{ name: 'keyboard_arrow_up', size: 20 }}
+								web={{ name: 'ChevronUp', size: 18 }}
+								style={{ color: textColor }}
 							/>
 						</Pressable>
-
-						{/* Move Down Button */}
 						<Pressable
 							onPress={onMoveDown}
 							disabled={isLastItem}
-							style={({ pressed }) => [
-								styles.arrowButton,
-								{
-									opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
-								}
-							]}
+							className="p-2 mx-0.5 justify-center items-center"
+							style={{ opacity: isLastItem ? 0.3 : 1 }}
 							accessibilityLabel={t('dashboard.moveDown')}
 						>
 							<PlatformIcon
-								ios={{
-									name: 'chevron.down',
-									size: 16
-								}}
-								android={{
-									name: 'keyboard_arrow_down',
-									size: 20
-								}}
-								web={{
-									name: 'ChevronDown',
-									size: 18
-								}}
-								style={styles.arrowIcon}
+								ios={{ name: 'chevron.down', size: 16 }}
+								android={{ name: 'keyboard_arrow_down', size: 20 }}
+								web={{ name: 'ChevronDown', size: 18 }}
+								style={{ color: textColor }}
 							/>
 						</Pressable>
 					</View>
 				) : (
-					<View style={styles.gripContainer}>
+					<View className="ml-1">
 						<PlatformIcon
-							ios={{
-								name: 'line.3.horizontal',
-								size: 18
-							}}
-							android={{
-								name: 'drag_handle',
-								size: 22
-							}}
-							web={{
-								name: 'GripVertical',
-								size: 18
-							}}
-							style={styles.gripIcon}
+							ios={{ name: 'line.3.horizontal', size: 18 }}
+							android={{ name: 'drag_handle', size: 22 }}
+							web={{ name: 'GripVertical', size: 18 }}
+							style={{ color: labelSecondaryColor }}
 						/>
 					</View>
 				)}
@@ -153,54 +114,3 @@ export default function OrderableRowItem({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	row: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.card,
-		flexDirection: 'row',
-		gap: 14,
-		justifyContent: 'center',
-		minHeight: 50,
-		paddingHorizontal: 16
-	},
-	outerRow: {
-		borderColor: theme.colors.border
-	},
-	text: {
-		color: theme.colors.text,
-		flexGrow: 1,
-		flexShrink: 1,
-		fontSize: 16
-	},
-	minusIcon: {
-		color: theme.colors.labelSecondaryColor
-	},
-	actionButtons: {
-		flexDirection: 'row',
-		alignItems: 'center'
-	},
-	arrowButton: {
-		padding: 8,
-		marginHorizontal: 2,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	arrowIcon: {
-		color: theme.colors.text
-	},
-	iconContainer: {
-		width: 24,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	icon: {
-		color: theme.colors.text
-	},
-	gripContainer: {
-		marginLeft: 4
-	},
-	gripIcon: {
-		color: theme.colors.labelSecondaryColor
-	}
-}))

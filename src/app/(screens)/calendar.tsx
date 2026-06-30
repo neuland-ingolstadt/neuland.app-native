@@ -4,7 +4,6 @@ import type React from 'react'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, useWindowDimensions, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import CalendarEventsPage from '@/components/Calendar/calendar-events-page'
 import ExamsPage from '@/components/Calendar/exams-page'
 import PagerView from '@/components/Layout/pager-view'
@@ -13,7 +12,6 @@ import ToggleRow from '@/components/Universal/toggle-row'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function CalendarPage(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const headerPadding = useTransparentHeaderPadding() + 12
 	const { event, openExam } = useLocalSearchParams<{
@@ -48,17 +46,16 @@ export default function CalendarPage(): React.JSX.Element {
 	}
 	const pages = ['events', 'exams']
 
-	// Render page function for lazy loading
 	const renderPage = (index: number) => {
 		if (!viewedPages.has(index)) {
 			return <LoadingIndicator />
 		}
 
 		return (
-			<View style={styles.pageContainer}>
+			<View className="flex-1">
 				<Suspense
 					fallback={
-						<View style={styles.centerContainer}>
+						<View className="flex-1 justify-center items-center">
 							<LoadingIndicator />
 						</View>
 					}
@@ -84,7 +81,6 @@ export default function CalendarPage(): React.JSX.Element {
 			setSelectedData(1)
 			setViewedPages((prev) => new Set([...prev, 1]))
 			pagerViewRef.current?.setPage(1)
-			// requestIdleCallback to ensure navigation happens after transition is done
 			requestIdleCallback(() => {
 				router.setParams({ openExam: '' })
 
@@ -96,13 +92,8 @@ export default function CalendarPage(): React.JSX.Element {
 	}, [shouldOpenExam])
 
 	return (
-		<View
-			style={{
-				...styles.pagerContainer,
-				paddingTop: headerPadding
-			}}
-		>
-			<View style={styles.toggleContainer}>
+		<View className="flex-1" style={{ paddingTop: headerPadding }}>
+			<View className="border-border pb-3.5 px-page">
 				<ToggleRow
 					items={displayTypes}
 					selectedElement={selectedData}
@@ -113,7 +104,7 @@ export default function CalendarPage(): React.JSX.Element {
 			<PagerView
 				ref={pagerViewRef}
 				style={{
-					...styles.pagerContainer,
+					flex: 1,
 					height: screenHeight
 				}}
 				initialPage={initialPage}
@@ -121,7 +112,6 @@ export default function CalendarPage(): React.JSX.Element {
 					const page = e.nativeEvent.position
 					setSelectedData(page)
 
-					// Only update state if the page is not already viewed
 					setViewedPages((prev) => {
 						if (prev.has(page)) return prev
 						const newSet = new Set(prev)
@@ -142,22 +132,3 @@ export default function CalendarPage(): React.JSX.Element {
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	pagerContainer: {
-		flex: 1
-	},
-	toggleContainer: {
-		borderColor: theme.colors.border,
-		paddingBottom: 14,
-		paddingHorizontal: theme.margins.page
-	},
-	pageContainer: {
-		flex: 1
-	},
-	centerContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-}))

@@ -4,7 +4,7 @@ import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type {
 	UniversitySportsFieldsFragment,
 	WeekdayType
@@ -12,11 +12,12 @@ import type {
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 const SportsCard = (): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = String(toColor(useCSSVariable('--color-primary')) ?? '')
 	const { t, i18n } = useTranslation('common')
 	const { data: sportsByWeekday = [], isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
@@ -49,7 +50,7 @@ const SportsCard = (): React.JSX.Element => {
 	}
 
 	const noData = (
-		<Text style={styles.noDataTitle}>
+		<Text className="mt-2.5 text-text text-base font-medium">
 			{t('pages.clEvents.sports.noEvents.title')}
 		</Text>
 	)
@@ -62,7 +63,7 @@ const SportsCard = (): React.JSX.Element => {
 			noDataPredicate={() => isSuccess && sportsEvents.length === 0}
 		>
 			{isSuccess && sportsEvents.length > 0 && (
-				<View style={styles.eventsContainer}>
+				<View className="mt-2.5 gap-3 border-border">
 					{sportsEvents.map((event) => (
 						<Pressable
 							key={event.id}
@@ -80,7 +81,7 @@ const SportsCard = (): React.JSX.Element => {
 									event.endTime
 								)}
 								location={event.location}
-								color={theme.colors.primary}
+								color={primaryColor}
 							/>
 						</Pressable>
 					))}
@@ -89,19 +90,5 @@ const SportsCard = (): React.JSX.Element => {
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	eventsContainer: {
-		marginTop: 10,
-		gap: 12,
-		borderColor: theme.colors.border
-	},
-	noDataTitle: {
-		marginTop: 10,
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500'
-	}
-}))
 
 export default SportsCard
