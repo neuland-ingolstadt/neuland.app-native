@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 type PresentationMode = {
 	presentation?: 'formSheet' | 'modal'
@@ -18,7 +19,11 @@ type PresentationMode = {
 }
 
 export const usePresentationMode = (smallSheet = false): PresentationMode => {
-	const styles = useStyles()
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+
 	if (Platform.OS !== 'ios') {
 		return {}
 	}
@@ -37,12 +42,10 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
 		headerStyle: {
-			backgroundColor: isIos26Plus ? 'transparent' : styles.theme.colors.card
+			backgroundColor: isIos26Plus ? 'transparent' : cardColor
 		},
 		contentStyle: {
-			backgroundColor: isIos26Plus
-				? 'transparent'
-				: styles.theme.colors.background
+			backgroundColor: isIos26Plus ? 'transparent' : backgroundColor
 		}
 	}
 }
