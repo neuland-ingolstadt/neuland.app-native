@@ -1,24 +1,18 @@
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Linking,
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	View
-} from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { MaterialIcon } from '@/types/material-icons'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import BaseCard from './base-card'
 
 const LinkCard = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const { t } = useTranslation('common')
 
 	const recentQuicklinks = usePreferencesStore(
@@ -38,7 +32,7 @@ const LinkCard = (): React.JSX.Element => {
 
 	return (
 		<BaseCard title="links" onPressRoute="/links">
-			<View style={styles.cardsFilled}>
+			<View className="flex-row flex-wrap gap-2.5 pt-2.5">
 				{userQuicklinks.map((link, index) => {
 					if (link === undefined) {
 						return null
@@ -49,7 +43,8 @@ const LinkCard = (): React.JSX.Element => {
 							onPress={() => {
 								void linkPress(link.key, link.url)
 							}}
-							style={styles.linkBox}
+							className="items-center bg-card-button border-border rounded-md flex-1 justify-center pb-2 px-3 pt-3 min-h-[65px] android:gap-0.5 ios:gap-[7px]"
+							style={hairlineBorder}
 						>
 							<PlatformIcon
 								ios={{
@@ -66,10 +61,10 @@ const LinkCard = (): React.JSX.Element => {
 									name: link.icon.web as LucideIcon,
 									size: 21
 								}}
-								style={styles.cardIcon}
+								style={{ color: textColor }}
 							/>
 							<Text
-								style={styles.eventTitle}
+								className="text-text shrink text-[14.5px] font-medium"
 								numberOfLines={1}
 								adjustsFontSizeToFit={Platform.OS === 'ios'}
 								minimumFontScale={0.8}
@@ -87,37 +82,5 @@ const LinkCard = (): React.JSX.Element => {
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	cardsFilled: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		gap: 10,
-		paddingTop: 10
-	},
-	eventTitle: {
-		color: theme.colors.text,
-		flexShrink: 1,
-		fontSize: 14.5,
-		fontWeight: '500'
-	},
-	linkBox: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.cardButton,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		borderRadius: theme.radius.md,
-		flex: 1,
-		gap: Platform.OS === 'android' ? 2 : 7,
-		justifyContent: 'center',
-		paddingBottom: 8,
-		paddingHorizontal: 12,
-		paddingTop: 12,
-		minHeight: 65
-	},
-	cardIcon: {
-		color: theme.colors.text
-	}
-}))
 
 export default LinkCard
