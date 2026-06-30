@@ -9,16 +9,11 @@ import Animated, {
 	withRepeat,
 	withTiming
 } from 'react-native-reanimated'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 /**
  * Animated text component that changes color between two colors.
- * @param {Colors} colors - The colors to interpolate between.
- * @param {number} speed - The speed of the animation.
- * @param {string} text - The text to display.
- * @param {TextStyle} textStyles - The styles to apply to the text.
- * @param {boolean} disabled - Whether the animation is disabled.
- * @returns {React.JSX.Element} - A React component that renders the animated text.
  */
 const AnimatedText = ({
 	speed,
@@ -32,7 +27,11 @@ const AnimatedText = ({
 	disabled?: boolean
 }): React.JSX.Element => {
 	const colorValue = useSharedValue(0)
-	const { theme } = useStyles()
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+	const labelSecondaryColor = String(
+		toColor(useCSSVariable('--color-label-secondary')) ?? '#777778'
+	)
+
 	useEffect(() => {
 		if (!disabled) {
 			colorValue.value = withRepeat(
@@ -44,7 +43,7 @@ const AnimatedText = ({
 				true
 			)
 		} else {
-			colorValue.value = 0 // Reset to initial value if disabled
+			colorValue.value = 0
 		}
 	}, [colorValue, speed, disabled])
 
@@ -52,7 +51,7 @@ const AnimatedText = ({
 		const interpolatedColor = interpolateColor(
 			colorValue.value,
 			[0, 1],
-			[theme.colors.text, theme.colors.labelSecondaryColor] // Interpolating between text and secondary label colors
+			[textColor, labelSecondaryColor]
 		)
 		return {
 			color: interpolatedColor

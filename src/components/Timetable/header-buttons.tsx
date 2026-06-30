@@ -1,7 +1,8 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from '../Universal/icon'
 
 interface HeaderRightProps {
@@ -17,10 +18,13 @@ export function HeaderRight({
 	onPressPrevious,
 	onPressNext
 }: HeaderRightProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['accessibility'])
+	const textColor = toColor(useCSSVariable('--color-text'))
+
 	return (
-		<View style={styles.container}>
+		<View
+			className={`flex-row ${Platform.OS !== 'ios' ? 'gap-2.5 mx-1.5' : 'gap-5 mx-[3px]'}`}
+		>
 			<Pressable
 				onPress={setToday}
 				hitSlop={10}
@@ -39,11 +43,11 @@ export function HeaderRight({
 						name: 'Undo2',
 						size: 24
 					}}
-					style={styles.icon}
+					style={{ color: textColor }}
 				/>
 			</Pressable>
 			{Platform.OS === 'web' && onPressPrevious && onPressNext && (
-				<View style={styles.subButtons}>
+				<View className="ml-2 gap-2 flex-row">
 					<Pressable
 						onPress={onPressPrevious}
 						hitSlop={10}
@@ -53,7 +57,7 @@ export function HeaderRight({
 							ios={{ name: 'chevron-left', size: 20 }}
 							android={{ name: 'chevron_right', size: 24 }}
 							web={{ name: 'ChevronLeft', size: 24 }}
-							style={styles.icon}
+							style={{ color: textColor }}
 						/>
 					</Pressable>
 					<Pressable
@@ -65,39 +69,19 @@ export function HeaderRight({
 							ios={{ name: 'chevron-right', size: 20 }}
 							android={{ name: 'chevron_right', size: 24 }}
 							web={{ name: 'ChevronRight', size: 24 }}
-							style={styles.icon}
+							style={{ color: textColor }}
 						/>
 					</Pressable>
 				</View>
 			)}
-			<Pressable
-				onPress={onPressPreferences}
-				style={styles.container}
-				hitSlop={10}
-			>
+			<Pressable onPress={onPressPreferences} className="flex-row" hitSlop={10}>
 				<PlatformIcon
 					ios={{ name: 'gear', size: 20 }}
 					android={{ name: 'settings', size: 24, variant: 'filled' }}
 					web={{ name: 'Settings', size: 24 }}
-					style={styles.icon}
+					style={{ color: textColor }}
 				/>
 			</Pressable>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	icon: {
-		color: theme.colors.text
-	},
-	container: {
-		flexDirection: 'row',
-		gap: Platform.OS !== 'ios' ? 10 : 20,
-		marginHorizontal: Platform.OS !== 'ios' ? 6 : 3
-	},
-	subButtons: {
-		marginLeft: 8,
-		gap: 8,
-		flexDirection: 'row'
-	}
-}))

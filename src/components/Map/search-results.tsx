@@ -5,7 +5,6 @@ import type React from 'react'
 import { memo, use, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, SectionList, Text } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
@@ -23,7 +22,6 @@ const SearchResults = ({
 	handlePresentModalPress,
 	allRooms
 }: SearchResultsProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
 	const unlockedAppIcons = usePreferencesStore(
@@ -63,7 +61,6 @@ const SearchResults = ({
 		}
 	}, [localSearch])
 
-	// Memoize fuse instance to avoid recreation on each render
 	const fuse = useMemo(
 		() =>
 			new Fuse(allRooms.features, {
@@ -127,14 +124,15 @@ const SearchResults = ({
 
 	const renderSectionHeader = useCallback(
 		({ section }: { section: { title: string; data: SearchResult[] } }) => (
-			<Text style={styles.header}>{section.title}</Text>
+			<Text className="text-text text-xl font-medium mb-0.5 pt-2 text-left">
+				{section.title}
+			</Text>
 		),
-		[styles.header]
+		[]
 	)
 
 	const itemSeparator = useCallback(() => <Divider paddingLeft={50} />, [])
 
-	// Performance optimization props for SectionList
 	const sectionListProps = useMemo(
 		() => ({
 			windowSize: 5,
@@ -148,7 +146,7 @@ const SearchResults = ({
 
 	return searchResultsExact.length > 0 || searchResultsFuzzy.length > 0 ? (
 		<SectionList
-			contentContainerStyle={styles.contentContainer}
+			contentContainerClassName="pb-bottom-safe"
 			keyboardShouldPersistTaps="always"
 			sections={[
 				...(searchResultsExact.length > 0
@@ -176,29 +174,10 @@ const SearchResults = ({
 			{...sectionListProps}
 		/>
 	) : (
-		<Text style={styles.noResults}>{t('pages.map.search.noResults')}</Text>
+		<Text className="text-text text-base py-[30px] text-center">
+			{t('pages.map.search.noResults')}
+		</Text>
 	)
 }
 
-// Memoize the component to prevent unnecessary re-renders from parent
 export default memo(SearchResults)
-
-const stylesheet = createStyleSheet((theme) => ({
-	contentContainer: {
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	header: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '500',
-		marginBottom: 2,
-		paddingTop: 8,
-		textAlign: 'left'
-	},
-	noResults: {
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingVertical: 30,
-		textAlign: 'center'
-	}
-}))

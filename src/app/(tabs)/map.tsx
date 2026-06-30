@@ -8,7 +8,6 @@ import {
 	SafeAreaProvider,
 	SafeAreaView
 } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MapScreen, { requestPermission } from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
@@ -18,7 +17,6 @@ import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'common'])
-	const { styles } = useStyles(stylesheet)
 	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
 		setIsPageOpen(true)
@@ -59,7 +57,6 @@ export default function MapRootScreen(): React.JSX.Element {
 			setSearchHistory([])
 		}
 	}
-	// Load search history on component mount
 	useEffect(() => {
 		void loadSearchHistory()
 	}, [])
@@ -101,11 +98,11 @@ export default function MapRootScreen(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			<View style={styles.page}>
+			<View className="bg-background flex-1">
 				{isPageOpen ? (
 					<MapContext.Provider value={contextValue}>
 						<SafeAreaProvider>
-							<SafeAreaView style={styles.page} edges={edges as Edges}>
+							<SafeAreaView className="flex-1" edges={edges as Edges}>
 								<MapScreen />
 							</SafeAreaView>
 						</SafeAreaProvider>
@@ -115,10 +112,3 @@ export default function MapRootScreen(): React.JSX.Element {
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	page: {
-		backgroundColor: theme.colors.background,
-		flex: 1
-	}
-}))

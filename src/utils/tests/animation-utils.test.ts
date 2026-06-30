@@ -5,8 +5,52 @@ const randomizeColorMock = mock(() => {})
 const onBounceMock = mock(() => {})
 
 mock.module('react-native', () => ({
+	__esModule: true,
+	default: {
+		Platform: { OS: 'ios' },
+		Share: { share: () => Promise.resolve() },
+		Linking: { openURL: async () => {} },
+		NativeEventEmitter: class {
+			addListener() {
+				return { remove: () => {} }
+			}
+			removeAllListeners() {}
+		},
+		TurboModuleRegistry: {
+			get: () => null,
+			getEnforcing: () => null
+		}
+	},
 	Platform: { OS: 'ios' },
-	Linking: { openURL: async () => {} }
+	Share: { share: () => Promise.resolve() },
+	Linking: { openURL: async () => {} },
+	NativeModules: {},
+	NativeEventEmitter: class {
+		addListener() {
+			return { remove: () => {} }
+		}
+		removeAllListeners() {}
+	},
+	TurboModuleRegistry: {
+		get: () => null,
+		getEnforcing: () => null
+	}
+}))
+
+mock.module('expo-clipboard', () => ({
+	setStringAsync: async () => {}
+}))
+
+mock.module('burnt', () => ({
+	toast: () => {}
+}))
+
+mock.module('i18next', () => ({
+	t: (key: string) => key
+}))
+
+mock.module('@aptabase/react-native', () => ({
+	trackEvent: () => {}
 }))
 
 mock.module('expo-haptics', () => ({

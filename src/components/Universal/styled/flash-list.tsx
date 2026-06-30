@@ -9,6 +9,11 @@ const UniwindFlashList = withUniwind(
 	ShopifyFlashList
 ) as unknown as typeof ShopifyFlashList
 
-export function FlashList<T>(props: FlashListProps<T>): JSX.Element {
-	return <UniwindFlashList {...props} />
+export function FlashList<T>({
+	ref,
+	...props
+}: FlashListProps<T> & {
+	ref?: React.Ref<ShopifyFlashList<T>>
+}): JSX.Element {
+	return <UniwindFlashList ref={ref} {...props} />
 }

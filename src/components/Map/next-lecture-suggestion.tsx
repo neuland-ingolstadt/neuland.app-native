@@ -2,13 +2,14 @@ import { trackEvent } from '@aptabase/react-native'
 import type { FeatureCollection, Position } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 import Divider from '../Universal/divider'
 import PlatformIcon from '../Universal/icon'
@@ -23,35 +24,49 @@ const NextLectureSuggestion = ({
 	handlePresentModalPress
 }: NextLectureSuggestionsProps): React.JSX.Element | null => {
 	const { setClickedElement, nextLecture, setCurrentFloor } = use(MapContext)
-	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const contrastOnPrimary = getContrastColor(primaryColor)
+
 	if (nextLecture == null || nextLecture.length === 0) {
 		return null
 	}
 	return (
-		<View style={styles.suggestionContainer}>
-			<View style={styles.suggestionSectionHeaderContainer}>
-				<Text style={styles.suggestionSectionHeader}>
+		<View className="mb-2.5">
+			<View className="items-end flex-row justify-between mb-1">
+				<Text className="text-text text-xl font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.nextLecture')}
 				</Text>
-				<Text style={styles.suggestionMoreDateText}>
+				<Text
+					className="text-[15px] font-medium pe-2.5 text-right"
+					style={{ color: labelColor }}
+				>
 					{formatFriendlyDate(nextLecture[0].date)}
 				</Text>
 			</View>
-			<View style={styles.radiusBg}>
+			<View
+				className="bg-card rounded-[18px] overflow-hidden"
+				style={hairlineBorder}
+			>
 				{nextLecture.map((lecture, key) => (
 					<React.Fragment key={key}>
 						<Pressable
 							disabled={
 								lecture.rooms.length === 0 || !isValidRoom(lecture.rooms[0])
 							}
-							style={styles.suggestionRow}
+							className="flex-row px-3 py-[18px]"
 							onPress={() => {
 								const details = allRooms.features.find(
 									(x) => x.properties?.Raum === lecture.rooms[0]
 								)
 								if (details == null) {
-									roomNotFoundToast(lecture.rooms[0], theme.colors.notification)
+									roomNotFoundToast(lecture.rooms[0], notificationColor)
 									return
 								}
 								const etage = (details?.properties?.Ebene as string) ?? 'EG'
@@ -73,8 +88,11 @@ const NextLectureSuggestion = ({
 								handlePresentModalPress()
 							}}
 						>
-							<View style={styles.suggestionInnerRow}>
-								<View style={styles.suggestionIconContainer}>
+							<View className="items-center flex-row flex-1 justify-between">
+								<View
+									className="items-center rounded-full h-10 justify-center me-3.5 w-10"
+									style={{ backgroundColor: primaryColor }}
+								>
 									<PlatformIcon
 										ios={{
 											name: 'clock.fill',
@@ -88,24 +106,33 @@ const NextLectureSuggestion = ({
 											name: 'Clock',
 											size: 20
 										}}
-										style={styles.primaryContrast}
+										style={{ color: contrastOnPrimary }}
 									/>
 								</View>
 
-								<View style={styles.suggestionContent}>
-									<Text style={styles.suggestionTitle} numberOfLines={2}>
+								<View className="flex-1 pe-3.5">
+									<Text
+										className="text-text text-base font-semibold mb-px"
+										numberOfLines={2}
+									>
 										{lecture.name}
 									</Text>
-									<Text style={styles.suggestionSubtitle}>
+									<Text className="text-text text-sm font-normal">
 										{lecture.rooms.join(', ')}
 									</Text>
 								</View>
 							</View>
-							<View style={styles.suggestionRightContainer}>
-								<Text style={styles.timeLabel}>
+							<View className="flex-col justify-center">
+								<Text
+									className="text-label"
+									style={{ fontVariant: ['tabular-nums'] }}
+								>
 									{formatFriendlyTime(lecture.startDate)}
 								</Text>
-								<Text style={styles.time}>
+								<Text
+									className="text-text"
+									style={{ fontVariant: ['tabular-nums'] }}
+								>
 									{formatFriendlyTime(lecture.endDate)}
 								</Text>
 							</View>
@@ -119,88 +146,3 @@ const NextLectureSuggestion = ({
 }
 
 export default NextLectureSuggestion
-
-const stylesheet = createStyleSheet((theme) => ({
-	primaryContrast: {
-		color: getContrastColor(theme.colors.primary)
-	},
-
-	radiusBg: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 18,
-		overflow: 'hidden'
-	},
-	suggestionContainer: {
-		marginBottom: 10
-	},
-	suggestionContent: {
-		flex: 1,
-		paddingRight: 14
-	},
-	suggestionIconContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: 50,
-		height: 40,
-		justifyContent: 'center',
-		marginRight: 14,
-		width: 40
-	},
-	suggestionInnerRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		flex: 1,
-		justifyContent: 'space-between'
-	},
-	suggestionMoreDateText: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		fontWeight: '500',
-		paddingRight: 10,
-		textAlign: 'right'
-	},
-	suggestionRightContainer: {
-		flexDirection: 'column',
-		justifyContent: 'center'
-	},
-	suggestionRow: {
-		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 18
-	},
-	suggestionSectionHeader: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '600',
-		marginBottom: 2,
-		paddingTop: 8,
-		textAlign: 'left'
-	},
-	suggestionSectionHeaderContainer: {
-		alignItems: 'flex-end',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: 4
-	},
-	suggestionSubtitle: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '400'
-	},
-	suggestionTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		marginBottom: 1
-	},
-	time: {
-		color: theme.colors.text,
-		fontVariant: ['tabular-nums']
-	},
-	timeLabel: {
-		color: theme.colors.labelColor,
-		fontVariant: ['tabular-nums']
-	}
-}))

@@ -33,7 +33,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
 | Storage           | `react-native-mmkv` (settings/cache), `expo-secure-store` (mobile creds), `idb` + WebCrypto (web creds) |
-| Styling           | **Uniwind** (Tailwind CSS v4) + legacy **`react-native-unistyles` 2.43** — migrating |
+| Styling           | **Uniwind** (Tailwind CSS v4 for React Native) |
 | Lint / format     | **Biome 2.2.6** (tabs, single quotes, no semis, no trailing commas)        |
 | Testing           | **Bun's built-in test runner** (`bun:test`) — no Jest                      |
 | API               | Native `fetch` + GraphQL via `graphql-codegen` — *not* Axios               |
@@ -175,7 +175,7 @@ src/
 ├── data/                 # Static JSON (allergens, calendar, changelog, constants)
 ├── hooks/                # Reusable hooks AND Zustand stores (use*Store)
 ├── localization/         # i18next setup + de/ + en/ JSON namespaces
-├── styles/               # Unistyles registry, themes, breakpoints
+├── styles/               # Theme tokens, breakpoints, theme-colors
 ├── types/                # Shared TS types (THI API, GraphQL, components, ...)
 └── utils/                # Pure functions, separated by domain (date, food, map, ...)
     └── tests/                  # *.test.ts — colocated with the utility being tested
@@ -334,13 +334,9 @@ Generated and binary files:
 
 ### Styling
 
-The app is **migrating from Unistyles to Uniwind** (Tailwind CSS v4 for React Native). Both
-systems run in parallel today. Match the styling approach of the file you are editing — do not
-mix `createStyleSheet` and `className` in the same component unless you are actively migrating it.
+The app uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on React Native primitives; reserve inline `style` for Reanimated, dynamic dimensions, hairline borders, and per-item dynamic colors.
 
-#### Uniwind (preferred for new UI and migrated screens)
-
-Setup lives at the project root and in `src/`:
+#### Setup
 
 - `metro.config.js` — `withUniwindConfig` must remain the **outermost** Metro wrapper
 - `src/global.css` — `@import 'tailwindcss'` + `@import 'uniwind'`, design tokens in `@theme`,
@@ -348,11 +344,13 @@ Setup lives at the project root and in `src/`:
 - `src/app/_layout.tsx` — imports `@/global.css` (not the Expo entry `index` file)
 - `src/hooks/useUniwindThemeSync.ts` — mirrors `usePreferencesStore` theme / accent into
   `Uniwind.setTheme` and `Uniwind.updateCSSVariables`
-- `src/styles/theme-colors.ts` — accent color map shared by Unistyles and Uniwind sync
+- `src/styles/themes.ts` — canonical palette reference when adding tokens to `global.css`
+- `src/styles/theme-colors.ts` — accent color map for theme sync
 - `src/utils/uniwind-utils.ts` — `hairlineBorder`, `toColor` helpers for RN edge cases
 - `src/uniwind-types.d.ts` — generated class-name typings (`bun uniwind:types`)
+- `@/components/Universal/styled` — `withUniwind` wrappers for FlashList, BottomSheet, expo-image
 
-**Conventions**
+#### Conventions
 
 - Use `className` on React Native primitives (`View`, `Text`, `Pressable`, `ScrollView`, …).
 - List props: `contentContainerClassName` on `ScrollView` / `FlatList`, etc.
@@ -370,31 +368,11 @@ Setup lives at the project root and in `src/`:
   Then run `bun uniwind:types`.
 - `global.css` uses Tailwind v4 syntax — Biome has `css.parser.tailwindDirectives` enabled.
 
-**Migrated example**: `src/app/(screens)/version.tsx` (copy button and scroll container).
+**Example**: `src/app/(screens)/version.tsx`
 
 After changing `global.css` or `metro.config.js`, restart Metro with `bun dev -- --clear`.
 
 Docs: https://docs.uniwind.dev
-
-#### Unistyles (legacy — remaining screens)
-
-- Define styles with `createStyleSheet((theme) => ({ ... }))` and consume via
-  `const { styles, theme } = useStyles(stylesheet)`.
-- Themes are defined in `src/styles/themes.ts` with `colors`, `margins`, and `radius`
-  keys. This file remains the **canonical palette** until a token is mirrored in `global.css`.
-- The active theme follows the system unless the user pinned `light` / `dark`. The
-  `themeColor` (blue / green / purple) is patched into the theme at runtime in
-  `provider.tsx` (Unistyles) and synced to Uniwind via `useUniwindThemeSync`.
-- Plain `StyleSheet.create` is fine for static, non-themed wrappers (e.g. flex containers);
-  anything color-, size-, or radius-related should go through Unistyles **or** Uniwind
-  depending on whether the component is migrated.
-
-#### Migrating a screen to Uniwind
-
-1. Replace `createStyleSheet` / `useStyles` with `className` utilities.
-2. Port any new colors/spacing/radii into `src/global.css` (keep light/dark in sync).
-3. Run `bun uniwind:types`, `bun fmt`, `bun tsc --noEmit`.
-4. Verify light/dark mode and accent color (blue / green / purple) in settings.
 
 ### Cross-platform
 
@@ -612,11 +590,11 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 - **Don't introduce a new package manager workflow.** Use Bun for installs, lockfile
   updates, and script execution; do not add npm/yarn lockfiles.
 - **Don't add Axios, Jest, Redux, or styled-components.** The stack is
-  fetch + React Query + Zustand + Unistyles/Uniwind + Biome. Match it.
+  fetch + React Query + Zustand + Uniwind + Biome. Match it.
 - **Don't `fetch` from components.** Always go through an API client + React Query.
 - **Don't read or write `localStorage` / `SecureStore` directly.** Use the helpers in
   `@/utils/storage`.
-- **Don't hard-code colors or pixel values.** Pull them from the Unistyles theme or Uniwind tokens.
+- **Don't hard-code colors or pixel values.** Pull them from `global.css` tokens or `useCSSVariable`.
 - **Don't add new top-level folders** under `src/` without a strong reason — match the
   existing layout.
 - **Don't bump dependencies casually.** Native modules (`react-native-mmkv`, MapLibre,

@@ -7,7 +7,6 @@ import {
 	SafeAreaProvider,
 	SafeAreaView
 } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import TimetableList from '@/components/Timetable/timetable-list'
@@ -21,6 +20,7 @@ import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
+
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {
@@ -29,17 +29,13 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	return timetable
 }
 
-const LoadingView = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-	return (
-		<View style={styles.loadingView}>
-			<LoadingIndicator />
-		</View>
-	)
-}
-function TimetableScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+const LoadingView = (): React.JSX.Element => (
+	<View className="items-center bg-background flex-1 h-full justify-center absolute w-full">
+		<LoadingIndicator />
+	</View>
+)
 
+function TimetableScreen(): React.JSX.Element {
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 
 	const { userKind } = use(UserKindContext)
@@ -85,7 +81,7 @@ function TimetableScreen(): React.JSX.Element {
 			: (['bottom', 'top'] as Edges)
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={edges}>
+			<SafeAreaView className="flex-1" edges={edges}>
 				{isLoading ? (
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (
@@ -127,18 +123,3 @@ function TimetableScreen(): React.JSX.Element {
 }
 
 export default TimetableScreen
-
-const stylesheet = createStyleSheet((theme) => ({
-	loadingView: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.background,
-		flex: 1,
-		height: '100%',
-		justifyContent: 'center',
-		position: 'absolute',
-		width: '100%'
-	},
-	page: {
-		flex: 1
-	}
-}))

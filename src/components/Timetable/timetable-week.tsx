@@ -19,11 +19,7 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
@@ -33,6 +29,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
@@ -65,7 +62,22 @@ export default function TimetableWeek({
 	timetable,
 	exams
 }: ITimetableViewProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const contrastColor = String(
+		toColor(useCSSVariable('--color-contrast')) ?? '#ffffff'
+	)
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+	const borderColor = String(
+		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
+	)
+	const labelBackgroundColor = String(
+		toColor(useCSSVariable('--color-label-background')) ?? '#e5dede'
+	)
 	const { i18n, t } = useTranslation()
 	const today = moment().startOf('day').toDate()
 	const calendarRef = useRef<CalendarKitHandle>(null)
@@ -76,7 +88,6 @@ export default function TimetableWeek({
 	const [events, setEvents] = React.useState<PackedEvent[]>([])
 	const [calendarLoaded, setCalendarLoaded] = React.useState(false)
 	const [currentDate, setCurrentDate] = React.useState(today)
-	const isDark = UnistylesRuntime.themeName === 'dark'
 	const router = useRouter()
 	const navigation = useNavigation()
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
@@ -112,13 +123,13 @@ export default function TimetableWeek({
 
 	const calendarTheme = {
 		colors: {
-			primary: theme.colors.notification,
-			onPrimary: theme.colors.contrast,
-			background: theme.colors.background,
-			onBackground: theme.colors.text,
-			border: theme.colors.border,
-			text: theme.colors.text,
-			surface: theme.colors.labelBackground
+			primary: notificationColor,
+			onPrimary: contrastColor,
+			background: backgroundColor,
+			onBackground: textColor,
+			border: borderColor,
+			text: textColor,
+			surface: labelBackgroundColor
 		}
 	}
 
@@ -270,16 +281,16 @@ export default function TimetableWeek({
 
 	const renderEvent = useCallback(
 		(event: PackedEvent) => {
-			return <EventComponent event={event} theme={theme} isDark={isDark} />
+			return <EventComponent event={event} />
 		},
-		[theme.colors.primary, events]
+		[events]
 	)
 
 	const renderHeaderEvent = useCallback(
 		(event: PackedEvent) => {
-			return <WeekHeaderEvent event={event} theme={theme} />
+			return <WeekHeaderEvent event={event} />
 		},
-		[theme.colors.primary, events]
+		[events]
 	)
 
 	const onPressPrevious = (): void => {
@@ -303,16 +314,16 @@ export default function TimetableWeek({
 
 	if (hasPendingUpdate) {
 		return (
-			<View style={styles.pendingContainer}>
+			<View className="flex-1 justify-center items-center">
 				<LoadingIndicator />
 			</View>
 		)
 	}
 
 	return (
-		<View style={styles.page}>
+		<View className="flex-1">
 			{!calendarLoaded && (
-				<View style={styles.loadingContainer}>
+				<View className="items-center flex-1 h-full justify-center absolute w-full z-[1]">
 					<LoadingIndicator />
 				</View>
 			)}
@@ -362,31 +373,3 @@ export default function TimetableWeek({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	buttons: {
-		flexDirection: 'row',
-		gap: 4
-	},
-	loadingContainer: {
-		alignItems: 'center',
-		flex: 1,
-		height: '100%',
-		justifyContent: 'center',
-		position: 'absolute',
-		width: '100%',
-		zIndex: 1
-	},
-	page: {
-		flex: 1
-	},
-	pendingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	pendingText: {
-		color: theme.colors.text,
-		fontSize: 16
-	}
-}))

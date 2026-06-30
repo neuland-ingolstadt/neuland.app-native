@@ -2,7 +2,8 @@ import type React from 'react'
 import ContentLoader from 'react-content-loader/native'
 import { Platform } from 'react-native'
 import { G, Path, Rect, Svg } from 'react-native-svg'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 const LogoContent = () => (
 	<G className="cls-1">
@@ -30,7 +31,10 @@ const AnimatedLogoText = ({
 	dimensions: { logoWidth: number; logoHeight: number }
 	speed: number
 }): React.JSX.Element => {
-	const { theme } = useStyles()
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label')) ?? '#606062'
+	)
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
 
 	if (Platform.OS === 'web') {
 		return (
@@ -38,7 +42,7 @@ const AnimatedLogoText = ({
 				width={dimensions.logoWidth}
 				height={dimensions.logoHeight}
 				viewBox="0 0 151.5 15"
-				fill={theme.colors.labelColor}
+				fill={labelColor}
 				transform={'scale(1.05)'}
 			>
 				<LogoContent />
@@ -50,8 +54,8 @@ const AnimatedLogoText = ({
 		<ContentLoader
 			width={dimensions.logoWidth}
 			height={dimensions.logoHeight}
-			backgroundColor={theme.colors.labelColor}
-			foregroundColor={theme.colors.text}
+			backgroundColor={labelColor}
+			foregroundColor={textColor}
 			speed={speed}
 			viewBox="0 0 151.5 15"
 			transform={'scale(1.05)'}
