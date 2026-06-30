@@ -2,7 +2,7 @@ import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from './Icon'
+import PlatformIcon from './icon'
 
 interface SectionPickerProps {
 	title: string

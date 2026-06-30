@@ -6,7 +6,7 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import AvatarCircle from './avatar-circle'
 

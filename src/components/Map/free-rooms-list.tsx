@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 
-import Divider from '../Universal/Divider'
+import Divider from '../Universal/divider'
 
 interface FreeRoomsListProps {
 	rooms: AvailableRoom[] | null

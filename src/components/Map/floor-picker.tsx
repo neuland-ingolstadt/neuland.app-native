@@ -8,7 +8,7 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
 

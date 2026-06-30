@@ -7,7 +7,7 @@ import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 import RowEntry from '../Universal/row-entry'
 
 const SportsRow = ({

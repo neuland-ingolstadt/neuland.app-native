@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 
 interface EventErrorViewProps {

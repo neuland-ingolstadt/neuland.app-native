@@ -11,7 +11,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { SearchResult } from '@/types/map'
 
-import Divider from '../Universal/Divider'
+import Divider from '../Universal/divider'
 import ResultRow from './search-result-row'
 
 interface SearchResultsProps {

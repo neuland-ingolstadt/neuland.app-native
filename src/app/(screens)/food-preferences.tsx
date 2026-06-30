@@ -11,7 +11,7 @@ import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/food-language-section'
 import FormList from '@/components/Universal/form-list'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'

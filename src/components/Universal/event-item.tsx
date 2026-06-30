@@ -2,7 +2,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import VerticalLine from '@/components/Universal/vertical-line'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 

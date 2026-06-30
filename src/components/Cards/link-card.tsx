@@ -14,7 +14,7 @@ import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { MaterialIcon } from '@/types/material-icons'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import BaseCard from './base-card'
 
 const LinkCard = (): React.JSX.Element => {

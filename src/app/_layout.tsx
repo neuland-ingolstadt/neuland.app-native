@@ -1,6 +1,6 @@
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
-import { Splash } from '@/components/Splash'
+import { Splash } from '@/components/splash'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import { TimetableAnimation } from './timetable-animation'
 
 /**

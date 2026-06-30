@@ -6,7 +6,7 @@ import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ExternalAPI from '@/api/external-api'
 import FormList from '@/components/Universal/form-list'
-import { linkIcon } from '@/components/Universal/Icon'
+import { linkIcon } from '@/components/Universal/icon'
 import SectionView from '@/components/Universal/sections-view'
 import type { FormListSections } from '@/types/components'
 

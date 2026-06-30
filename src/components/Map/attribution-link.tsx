@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 const AttributionLink = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)

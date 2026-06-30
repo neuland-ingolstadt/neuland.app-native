@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST } from '@/data/constants'
 import type { PersDataDetails } from '@/types/thi-api'

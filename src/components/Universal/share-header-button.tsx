@@ -3,7 +3,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from './Icon'
+import PlatformIcon from './icon'
 
 interface ShareButtonProps {
 	onPress: () => void | Promise<void>

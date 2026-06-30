@@ -14,7 +14,7 @@ import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
 import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
 // @ts-expect-error no types
 import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 
 interface SecurityWarningModalProps {

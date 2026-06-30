@@ -11,7 +11,7 @@ import type { SEARCH_TYPES, SearchResult } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { getContrastColor } from '@/utils/ui-utils'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon from '../Universal/icon'
 
 interface ResultRowProps {
 	result: SearchResult

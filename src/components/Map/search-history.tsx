@@ -7,8 +7,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
 import type { SearchResult } from '@/types/map'
 
-import Divider from '../Universal/Divider'
-import PlatformIcon from '../Universal/Icon'
+import Divider from '../Universal/divider'
+import PlatformIcon from '../Universal/icon'
 import ResultRow from './search-result-row'
 
 interface SearchHistoryProps {

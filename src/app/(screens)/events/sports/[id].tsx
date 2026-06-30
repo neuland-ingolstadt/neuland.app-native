@@ -24,7 +24,7 @@ import type {
 } from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
-import type { LucideIcon } from '@/components/Universal/Icon'
+import type { LucideIcon } from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
