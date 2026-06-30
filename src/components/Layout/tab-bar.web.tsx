@@ -2,12 +2,22 @@ import { Tabs } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import { toColor } from '@/utils/uniwind-utils'
 import { SettingsTabButton } from '../Settings/tab-button'
 
 const TabLayout = (): React.JSX.Element => {
-	const { theme: styleTheme } = useStyles()
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const primaryBackgroundColor = String(
+		toColor(useCSSVariable('--color-primary-background')) ?? '#007aff15'
+	)
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label')) ?? '#606062'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
 	const { t } = useTranslation('navigation')
 	const isMobile = Dimensions.get('window').width < 900
 	const isPad = Dimensions.get('window').width < 1300
@@ -16,11 +26,11 @@ const TabLayout = (): React.JSX.Element => {
 		<Tabs
 			screenOptions={{
 				tabBarPosition: isMobile ? 'bottom' : 'left',
-				tabBarActiveTintColor: styleTheme.colors.primary,
-				tabBarActiveBackgroundColor: styleTheme.colors.primaryBackground,
-				tabBarInactiveTintColor: styleTheme.colors.labelColor,
+				tabBarActiveTintColor: primaryColor,
+				tabBarActiveBackgroundColor: primaryBackgroundColor,
+				tabBarInactiveTintColor: labelColor,
 				tabBarStyle: {
-					backgroundColor: styleTheme.colors.card
+					backgroundColor: cardColor
 				},
 				tabBarIconStyle: {
 					marginTop: isMobile ? 4 : 0
