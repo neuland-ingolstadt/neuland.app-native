@@ -12,7 +12,6 @@ import {
 	View
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
@@ -53,7 +52,6 @@ export default function ErrorView({
 	inModal?: boolean
 	isCritical?: boolean
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const path = usePathname()
 	const analyticsInitialized = useSessionStore(
@@ -168,11 +166,13 @@ export default function ErrorView({
 			title === notLoggedInError) &&
 			title !== permissionError ? (
 			<Pressable
-				style={styles.logoutContainer(inModal)}
+				className={`mt-[30px] mb-5 self-center items-center rounded-mg ${inModal ? 'bg-background' : 'bg-card'}`}
 				onPress={buttonProps?.onPress}
 			>
-				<View style={styles.refreshButton}>
-					<Text style={styles.refreshButtonText}>{buttonProps?.text}</Text>
+				<View className="flex-row items-center px-10 py-2.5">
+					<Text className="text-base font-semibold text-primary">
+						{buttonProps?.text}
+					</Text>
 				</View>
 			</Pressable>
 		) : (
@@ -180,6 +180,10 @@ export default function ErrorView({
 			<></>
 		)
 	}
+
+	const scrollContentClassName = inModal
+		? 'flex-1 px-[25px] pb-[25px] bg-card rounded-ios pt-[25px]'
+		: `flex-1 px-[25px] ${Platform.OS === 'ios' ? 'pb-[50px]' : ''}`
 
 	return (
 		<ScrollView
@@ -191,13 +195,13 @@ export default function ErrorView({
 				) : undefined
 			}
 			scrollEnabled={!inModal}
-			contentContainerStyle={styles.container(inModal)}
+			contentContainerClassName={scrollContentClassName}
 		>
 			<Animated.View
 				entering={FadeIn.duration(400)}
-				style={styles.errorContainer}
+				className="flex-1 items-center justify-evenly gap-3 p-5"
 			>
-				<View style={styles.topContainer}>
+				<View className="items-center gap-5">
 					<PlatformIcon
 						ios={{
 							name: getIconIos(),
@@ -215,82 +219,26 @@ export default function ErrorView({
 							size: 64
 						}}
 					/>
-					<Text style={styles.errorTitle} selectable>
+					<Text
+						className="my-2 text-center text-xl font-bold text-text"
+						selectable
+					>
 						{getTitle().slice(0, 150)}
 					</Text>
-					<Text style={styles.errorInfo}>{getMessage()}</Text>
+					<Text className="mt-3 text-center text-base font-medium text-text">
+						{getMessage()}
+					</Text>
 				</View>
 
 				<ErrorButton />
 				{(refreshing != null && title !== guestError) ||
 				showPullLabel === true ? (
-					<Text style={styles.errorFooter}>{t('error.pull')}</Text>
+					<Text className="mt-4 text-center text-base font-semibold text-text">
+						{t('error.pull')}
+					</Text>
 				) : null}
 				{showBox && <StatusBox error={new Error(title)} crash={false} />}
 			</Animated.View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: (inModal: boolean) => ({
-		paddingHorizontal: 25,
-		flex: 1,
-		paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0,
-		backgroundColor: inModal ? theme.colors.card : undefined,
-		borderRadius: inModal ? theme.radius.ios : 0,
-		paddingTop: inModal ? 25 : 0
-	}),
-	errorContainer: {
-		flex: 1,
-		gap: 12,
-		justifyContent: 'space-evenly',
-		alignItems: 'center',
-		padding: 20
-	},
-	errorFooter: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		marginTop: 16,
-		textAlign: 'center'
-	},
-	errorInfo: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500',
-		marginTop: 12,
-		textAlign: 'center'
-	},
-	errorTitle: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: 'bold',
-		marginBottom: 8,
-		marginTop: 8,
-		textAlign: 'center'
-	},
-	logoutContainer: (inModal: boolean) => ({
-		borderRadius: theme.radius.mg,
-		marginBottom: 20,
-		marginTop: 30,
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: inModal ? theme.colors.background : theme.colors.card
-	}),
-	refreshButton: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingHorizontal: 40,
-		paddingVertical: 10
-	},
-	refreshButtonText: {
-		color: theme.colors.primary,
-		fontSize: 16,
-		fontWeight: '600'
-	},
-	topContainer: {
-		alignItems: 'center',
-		gap: 20
-	}
-}))
