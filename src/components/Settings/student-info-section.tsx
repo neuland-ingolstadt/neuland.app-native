@@ -83,9 +83,9 @@ const stylesheet = createStyleSheet(() => ({
 		marginBottom: 10
 	},
 	wideBox: {
-		flex: 2
+		flex: 5
 	},
 	narrowBox: {
-		flex: 1
+		flex: 3
 	}
 }))
