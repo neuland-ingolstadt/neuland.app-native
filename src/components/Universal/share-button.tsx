@@ -1,8 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
 import PlatformIcon from './icon'
 
 interface ShareButtonProps {
@@ -12,50 +10,21 @@ interface ShareButtonProps {
 export default function ShareButton({
 	onPress
 }: ShareButtonProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	return (
-		<Pressable style={styles.shareButton} onPress={onPress}>
-			<View style={styles.shareContent}>
+		<Pressable
+			className="self-center bg-card rounded-md mt-1.5 px-[45px] py-3"
+			onPress={onPress}
+		>
+			<View className="items-center flex-row gap-2.5">
 				<PlatformIcon
-					ios={{
-						name: 'square.and.arrow.up',
-						size: 15
-					}}
-					android={{
-						name: 'share',
-						size: 18
-					}}
-					web={{
-						name: 'Share',
-						size: 18
-					}}
+					ios={{ name: 'square.and.arrow.up', size: 15 }}
+					android={{ name: 'share', size: 18 }}
+					web={{ name: 'Share', size: 18 }}
 				/>
-
-				<Text style={styles.shareText}>{t('misc.share')}</Text>
+				<Text className="text-primary text-[17px]">{t('misc.share')}</Text>
 			</View>
 		</Pressable>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	shareButton: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		marginTop: 5,
-		paddingHorizontal: 45,
-		paddingVertical: 12
-	},
-	shareContent: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 10
-	},
-	shareText: {
-		alignItems: 'flex-end',
-		color: theme.colors.primary,
-		fontSize: 17
-	}
-}))

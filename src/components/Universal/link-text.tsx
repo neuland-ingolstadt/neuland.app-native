@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import {
 	Linking,
 	type StyleProp,
-	StyleSheet,
 	Text,
 	type TextStyle,
 	View,
@@ -43,9 +42,9 @@ const LinkText = ({
 	const shouldShowToggle = lineCount != null && lineCount > collapsedLines
 
 	return (
-		<View style={[styles.container, containerStyle]}>
+		<View className="gap-2" style={containerStyle}>
 			<Text
-				style={[styles.text, textStyle]}
+				style={textStyle}
 				onTextLayout={(event) => {
 					if (lineCount == null) {
 						const totalLines = event.nativeEvent.lines?.length ?? 0
@@ -73,7 +72,8 @@ const LinkText = ({
 			</Text>
 			{shouldShowToggle && (
 				<Text
-					style={[styles.toggle, toggleStyle]}
+					className="text-sm font-semibold"
+					style={toggleStyle}
 					onPress={() => {
 						setExpanded((prev) => !prev)
 					}}
@@ -84,16 +84,5 @@ const LinkText = ({
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		gap: 8
-	},
-	text: {},
-	toggle: {
-		fontSize: 14,
-		fontWeight: '600'
-	}
-})
 
 export default LinkText
