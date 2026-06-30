@@ -44,13 +44,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "EXPO_TOKEN is required for EAS Updates. Add it in repository secrets."
-            exit 1
-          fi
-
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
