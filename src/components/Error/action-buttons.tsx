@@ -3,7 +3,6 @@ import { usePathname } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { STATUS_URL } from '@/data/constants'
 
 export const FeedbackButton = ({
@@ -14,7 +13,6 @@ export const FeedbackButton = ({
 	crash: boolean
 }): React.JSX.Element => {
 	const { t } = useTranslation('common')
-	const { styles } = useStyles(stylesheet)
 	const platform = Platform.OS
 	const appVersion = `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`
 	const subject = crash
@@ -37,13 +35,15 @@ export const FeedbackButton = ({
 	}
 	return (
 		<Pressable
-			style={styles.container}
+			className="self-center items-center rounded-mg bg-background"
 			onPress={() => {
 				sendMail()
 			}}
 		>
-			<View style={styles.refreshButton}>
-				<Text style={styles.actionButtonText}>{t('error.crash.feedback')}</Text>
+			<View className="flex-row items-center px-[30px] py-2.5">
+				<Text className="text-[15px] font-semibold text-text">
+					{t('error.crash.feedback')}
+				</Text>
 			</View>
 		</Pressable>
 	)
@@ -51,39 +51,19 @@ export const FeedbackButton = ({
 
 export const StatusButton = (): React.JSX.Element => {
 	const { t } = useTranslation('common')
-	const { styles } = useStyles(stylesheet)
 
 	return (
 		<Pressable
-			style={styles.container}
+			className="self-center items-center rounded-mg bg-background"
 			onPress={() => {
 				void Linking.openURL(STATUS_URL)
 			}}
 		>
-			<View style={styles.refreshButton}>
-				<Text style={styles.actionButtonText}>{t('error.crash.status')}</Text>
+			<View className="flex-row items-center px-[30px] py-2.5">
+				<Text className="text-[15px] font-semibold text-text">
+					{t('error.crash.status')}
+				</Text>
 			</View>
 		</Pressable>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	actionButtonText: {
-		color: theme.colors.text,
-		fontSize: 15,
-		fontWeight: '600'
-	},
-	container: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.background,
-		borderRadius: theme.radius.mg
-	},
-
-	refreshButton: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingHorizontal: 30,
-		paddingVertical: 10
-	}
-}))
