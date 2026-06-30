@@ -3,7 +3,7 @@ import { Redirect, router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import FormList from '@/components/Universal/form-list'
@@ -27,10 +27,17 @@ import {
 	QUERY_KEYS
 } from '@/utils/events-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function CampusLifeOrganizerScreen(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const descriptionTextStyle = useResolveClassNames(
+		'text-text text-base text-left'
+	)
+	const showMoreButtonStyle = useResolveClassNames(
+		'text-primary text-sm font-semibold'
+	)
 	const { id, org: orgParam } = useLocalSearchParams<{
 		id: string
 		org?: string | string[]
@@ -59,7 +66,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 
 	if (organizerQuery.isLoading) {
 		return (
-			<View style={styles.centered}>
+			<View className="flex-1 items-center justify-center">
 				<LoadingIndicator />
 			</View>
 		)
@@ -78,7 +85,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	if (isThiDepartmentOrganizerKind(organizerKind)) {
 		if (thiFlagPending) {
 			return (
-				<View style={styles.centered}>
+				<View className="flex-1 items-center justify-center">
 					<LoadingIndicator />
 				</View>
 			)
@@ -111,7 +118,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 								}
 							})
 						},
-						textColor: theme.colors.primary
+						textColor: primaryColor
 					}
 				: {})
 		})
@@ -178,13 +185,13 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 			description.trim() !== '' ? (
 				<LinkText
 					text={description}
-					linkColor={theme.colors.primary}
-					textStyle={styles.descriptionText}
-					containerStyle={styles.linkTextContainer}
-					toggleStyle={styles.showMoreButton}
+					linkColor={String(primaryColor)}
+					textStyle={descriptionTextStyle}
+					containerStyle={{ gap: 8 }}
+					toggleStyle={showMoreButtonStyle}
 				/>
 			) : (
-				<Text style={styles.emptyDescriptionText}>
+				<Text className="text-label-secondary text-[15px] text-left">
 					{t('pages.event.organizerDetails.noDescription')}
 				</Text>
 			)
@@ -213,10 +220,20 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const organizerEvents = eventsQuery.data ?? []
 
 	return (
-		<ScrollView style={styles.page} contentContainerStyle={styles.container}>
-			<View style={styles.titleContainer}>
+		<ScrollView
+			className="flex-1 px-page"
+			contentContainerClassName="gap-3 pb-bottom-safe"
+		>
+			<View className="flex-row items-start justify-between">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-[26px] font-semibold pt-4 text-left"
+					style={{
+						marginLeft:
+							Platform.OS === 'ios' &&
+							Number.parseInt(Platform.Version, 10) >= 26
+								? 6
+								: 0
+					}}
 					adjustsFontSizeToFit
 					minimumFontScale={0.8}
 					numberOfLines={3}
@@ -225,30 +242,30 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 				</Text>
 			</View>
 
-			<View style={styles.formList}>
+			<View className="self-center w-full pb-3">
 				<FormList sections={sections} sheet />
 			</View>
 
-			<View style={styles.eventsContainer}>
-				<Text style={styles.sectionTitle}>
+			<View className="gap-1.5">
+				<Text className="text-text text-xl font-semibold">
 					{t('pages.clEvents.organizer.subtitle')}
 				</Text>
 				{eventsQuery.isLoading ? (
-					<View style={styles.centered}>
+					<View className="flex-1 items-center justify-center">
 						<LoadingIndicator />
 					</View>
 				) : eventsQuery.isError ? (
-					<Text style={styles.emptyEventsText}>
+					<Text className="text-label-secondary text-sm pt-2">
 						{eventsQuery.error?.message ?? t('error.title')}
 					</Text>
 				) : organizerEvents.length > 0 ? (
 					organizerEvents.map((event: CampusLifeEvent) => (
-						<View key={event.id} style={styles.eventRow}>
+						<View key={event.id}>
 							<CLEventRow event={event} inSheet organizerKind={organizerKind} />
 						</View>
 					))
 				) : (
-					<Text style={styles.emptyEventsText}>
+					<Text className="text-label-secondary text-sm pt-2">
 						{t('pages.clEvents.events.noEvents.title')}.{' '}
 						{t('pages.clEvents.events.noEvents.subtitle')}
 					</Text>
@@ -256,97 +273,10 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 			</View>
 
 			{statsSections.length > 0 && (
-				<View style={styles.statsFormList}>
+				<View className="self-center w-full pt-3">
 					<FormList sections={statsSections} sheet />
 				</View>
 			)}
 		</ScrollView>
 	)
 }
-
-const isIoS26 =
-	Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
-
-const stylesheet = createStyleSheet((theme) => ({
-	centered: {
-		alignItems: 'center',
-		flex: 1,
-		justifyContent: 'center'
-	},
-	container: {
-		gap: 12,
-		paddingBottom: theme.margins.bottomSafeArea + 20
-	},
-	descriptionText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		textAlign: 'left'
-	},
-	emptyDescriptionText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 15,
-		textAlign: 'left'
-	},
-	emptyEventsText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		paddingTop: 8
-	},
-	eventRow: {},
-	eventsContainer: {
-		gap: 6
-	},
-	headerTitle: {
-		alignItems: 'center',
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	headerSubtitle: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 12,
-		fontWeight: '400',
-		marginTop: -2
-	},
-	page: {
-		flex: 1,
-		paddingHorizontal: theme.margins.page
-	},
-	sectionTitle: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '600'
-	},
-	formList: {
-		alignSelf: 'center',
-		width: '100%',
-		paddingBottom: 12
-	},
-	statsFormList: {
-		alignSelf: 'center',
-		width: '100%',
-		paddingTop: 12
-	},
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 26,
-		fontWeight: '600',
-		paddingTop: 16,
-		marginLeft: isIoS26 ? 6 : 0,
-		textAlign: 'left'
-	},
-	linkTextContainer: {
-		gap: 8
-	},
-	showMoreButton: {
-		color: theme.colors.primary,
-		fontSize: 14,
-		fontWeight: '600'
-	}
-}))

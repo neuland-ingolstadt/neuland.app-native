@@ -9,7 +9,6 @@ import {
 import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { CampusLifePublicOrganizerKind } from '@/types/campus-life'
@@ -40,7 +39,6 @@ export default function CampusLifeEventsScreen({
 	enableSportsTabRedirect = false,
 	featureFlagPending = false
 }: CampusLifeEventsScreenProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
 	const { tab, openEvent, id, org } = useLocalSearchParams<{
 		tab?: string
@@ -97,11 +95,8 @@ export default function CampusLifeEventsScreen({
 	if (featureFlagPending) {
 		return (
 			<View
-				style={[
-					styles.page,
-					styles.loaderWrapper,
-					{ paddingTop: headerPadding + theme.margins.page }
-				]}
+				className="flex-1 justify-center items-center p-page"
+				style={{ paddingTop: headerPadding + 12 }}
 			>
 				<LoadingIndicator />
 			</View>
@@ -113,11 +108,9 @@ export default function CampusLifeEventsScreen({
 	}
 
 	return (
-		<View
-			style={[styles.page, { paddingTop: headerPadding + theme.margins.page }]}
-		>
+		<View className="flex-1" style={{ paddingTop: headerPadding + 12 }}>
 			{enableSportsTabRedirect && tab === 'sports' ? (
-				<View style={styles.loaderWrapper}>
+				<View className="flex-1 justify-center items-center">
 					<LoadingIndicator />
 				</View>
 			) : (
@@ -130,14 +123,3 @@ export default function CampusLifeEventsScreen({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	page: {
-		flex: 1
-	},
-	loaderWrapper: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-}))

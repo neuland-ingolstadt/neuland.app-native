@@ -19,7 +19,7 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
@@ -49,9 +49,17 @@ import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function ClEventDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const columnDetailsStyle = useResolveClassNames(
+		'text-text text-[16.5px] pt-0.5 text-left'
+	)
+	const showMoreButtonStyle = useResolveClassNames(
+		'text-primary text-sm font-semibold'
+	)
 	const { id, org: orgParam } = useLocalSearchParams<{
 		id: string
 		org?: string | string[]
@@ -185,7 +193,7 @@ export default function ClEventDetail(): React.JSX.Element {
 
 	if (isLoading || !eventData) {
 		return (
-			<View style={styles.loadingContainer}>
+			<View className="flex-1 justify-center items-center">
 				<LoadingIndicator />
 			</View>
 		)
@@ -197,7 +205,7 @@ export default function ClEventDetail(): React.JSX.Element {
 		organizerQuery.isLoading
 	) {
 		return (
-			<View style={styles.loadingContainer}>
+			<View className="flex-1 justify-center items-center">
 				<LoadingIndicator />
 			</View>
 		)
@@ -206,7 +214,7 @@ export default function ClEventDetail(): React.JSX.Element {
 	if (isThiDepartmentOrganizerKind(organizerKind)) {
 		if (thiFlagPending) {
 			return (
-				<View style={styles.loadingContainer}>
+				<View className="flex-1 justify-center items-center">
 					<LoadingIndicator />
 				</View>
 			)
@@ -296,7 +304,7 @@ export default function ClEventDetail(): React.JSX.Element {
 													}
 												})
 											},
-											textColor: theme.colors.primary
+											textColor: primaryColor
 										}
 									: {}
 							)
@@ -316,7 +324,7 @@ export default function ClEventDetail(): React.JSX.Element {
 							})
 						}
 					},
-					textColor: theme.colors.primary,
+					textColor: primaryColor,
 					disabled: eventData?.host?.id == null
 				}
 			]
@@ -336,10 +344,10 @@ export default function ClEventDetail(): React.JSX.Element {
 						item: (
 							<LinkText
 								text={descriptionText}
-								linkColor={theme.colors.primary}
-								textStyle={styles.columnDetails}
-								containerStyle={styles.linkTextContainer}
-								toggleStyle={styles.showMoreButton}
+								linkColor={String(primaryColor)}
+								textStyle={columnDetailsStyle}
+								containerStyle={{ gap: 8 }}
+								toggleStyle={showMoreButtonStyle}
 							/>
 						)
 					}
@@ -349,17 +357,23 @@ export default function ClEventDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
-			style={styles.page}
-			contentContainerStyle={styles.container}
+			className="px-page"
+			contentContainerClassName="gap-3 pb-modal-bottom"
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{eventTitle}
 								</HeaderTitle>
 							</Animated.View>
@@ -368,9 +382,16 @@ export default function ClEventDetail(): React.JSX.Element {
 				}}
 			/>
 
-			<View style={styles.titleContainer}>
+			<View className="flex-row items-start justify-between">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-2xl font-semibold pt-4 text-left"
+					style={{
+						marginLeft:
+							Platform.OS === 'ios' &&
+							Number.parseInt(Platform.Version, 10) >= 26
+								? 6
+								: 0
+					}}
 					adjustsFontSizeToFit
 					minimumFontScale={0.8}
 					numberOfLines={3}
@@ -378,64 +399,9 @@ export default function ClEventDetail(): React.JSX.Element {
 					{eventTitle}
 				</Text>
 			</View>
-			<View style={styles.formList}>
+			<View className="self-center w-full pb-[100px]">
 				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)
 }
-
-const isIoS26 =
-	Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		gap: 12,
-		paddingBottom: theme.margins.modalBottomMargin
-	},
-	formList: {
-		alignSelf: 'center',
-		width: '100%',
-		paddingBottom: 100
-	},
-	linkTextContainer: {
-		gap: 8
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	page: {
-		paddingHorizontal: theme.margins.page
-	},
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 24,
-		fontWeight: '600',
-		paddingTop: 16,
-		marginLeft: isIoS26 ? 6 : 0,
-		textAlign: 'left'
-	},
-	columnDetails: {
-		color: theme.colors.text,
-		fontSize: 16.5,
-		paddingTop: 2,
-		textAlign: 'left'
-	},
-	showMoreButton: {
-		color: theme.colors.primary,
-		fontSize: 14,
-		fontWeight: '600'
-	},
-	loadingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-}))

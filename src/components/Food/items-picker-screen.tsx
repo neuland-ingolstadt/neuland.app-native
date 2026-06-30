@@ -1,4 +1,3 @@
-import { FlashList } from '@shopify/flash-list'
 import { selectionAsync } from 'expo-haptics'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
@@ -6,16 +5,14 @@ import { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import { FlashList } from '@/components/Universal/styled'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface PickerItem {
 	key: string
@@ -32,8 +29,10 @@ const ItemsPickerScreen = ({
 	const data = type === 'allergens' ? allergenMap : flapMap
 	const placeholderKey =
 		type === 'allergens' ? 'allergensSearch' : 'flagsSearch'
-	const isDark = UnistylesRuntime.themeName === 'dark'
-	const { styles, theme } = useStyles(stylesheet)
+	const { theme } = useUniwind()
+	const isDark = theme === 'dark'
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const { t, i18n } = useTranslation('food')
 	const [searchQuery, setSearchQuery] = useState<string>('')
 
@@ -73,11 +72,11 @@ const ItemsPickerScreen = ({
 				placeholder: t(`navigation.${placeholderKey}`, {
 					ns: 'navigation'
 				}),
-				textColor: theme.colors.text,
+				textColor,
 				...Platform.select({
 					android: {
-						headerIconColor: theme.colors.text,
-						hintTextColor: theme.colors.text
+						headerIconColor: textColor,
+						hintTextColor: textColor
 					}
 				}),
 				shouldShowHintSearchIcon: false,
@@ -87,7 +86,7 @@ const ItemsPickerScreen = ({
 				}
 			}
 		})
-	}, [navigation, isDark])
+	}, [navigation, isDark, textColor, t, placeholderKey])
 
 	const renderItem = ({ item }: { item: PickerItem }) => {
 		const isSelected =
@@ -107,9 +106,12 @@ const ItemsPickerScreen = ({
 		}
 
 		return (
-			<View style={styles.itemContainer}>
-				<Pressable style={styles.itemContent} onPress={toggleItem}>
-					<Text style={styles.itemText}>{item.title}</Text>
+			<View className="mb-2 h-[52px]">
+				<Pressable
+					className="bg-card rounded-2xl p-4 flex-row items-center justify-between h-full"
+					onPress={toggleItem}
+				>
+					<Text className="text-text text-base flex-1 mr-2">{item.title}</Text>
 					{isSelected && (
 						<PlatformIcon
 							ios={{
@@ -124,7 +126,7 @@ const ItemsPickerScreen = ({
 								name: 'Check',
 								size: 18
 							}}
-							style={styles.checkIcon}
+							style={{ color: primaryColor }}
 						/>
 					)}
 				</Pressable>
@@ -138,7 +140,7 @@ const ItemsPickerScreen = ({
 				data={filteredEntries}
 				renderItem={renderItem}
 				estimatedItemSize={60}
-				contentContainerStyle={styles.listContainer}
+				contentContainerClassName="px-page pb-bottom-safe pt-2.5"
 				showsVerticalScrollIndicator={false}
 				scrollEventThrottle={16}
 				disableAutoLayout
@@ -146,8 +148,8 @@ const ItemsPickerScreen = ({
 		)
 	}
 	return (
-		<View style={styles.emptyContainer}>
-			<Text style={styles.emptyText}>
+		<View className="flex-1 justify-center items-center px-page">
+			<Text className="text-label text-base text-center">
 				{t(type === 'allergens' ? 'empty.allergens' : 'empty.flags')}
 			</Text>
 		</View>
@@ -156,63 +158,14 @@ const ItemsPickerScreen = ({
 
 const Screen = (params: { route: { params: { type: string } } }) => {
 	const type = params.route.params.type
-	const { styles } = useStyles(stylesheet)
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView className="flex-1" edges={['top']}>
 				<ItemsPickerScreen type={type} />
 			</SafeAreaView>
 		</SafeAreaProvider>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	page: {
-		flex: 1
-	},
-	container: {
-		flex: 1,
-		backgroundColor: theme.colors.background
-	},
-	listContainer: {
-		paddingHorizontal: theme.margins.page,
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingTop: 10
-	},
-	itemContainer: {
-		marginBottom: 8,
-		height: 52
-	},
-	itemContent: {
-		backgroundColor: theme.colors.card,
-		borderRadius: 16,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: '100%'
-	},
-	itemText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		flex: 1,
-		marginRight: 8
-	},
-	checkIcon: {
-		color: theme.colors.primary
-	},
-	emptyContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingHorizontal: theme.margins.page
-	},
-	emptyText: {
-		color: theme.colors.labelColor,
-		fontSize: 16,
-		textAlign: 'center'
-	}
-}))
 
 export default Screen

@@ -2,7 +2,6 @@ import type React from 'react'
 import { useState } from 'react'
 import type { ViewStyle } from 'react-native'
 import { Modal, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface CustomDropdownProps<T> {
 	value?: T
@@ -22,7 +21,6 @@ export function CustomDropdown<T>({
 	placeholder,
 	style
 }: CustomDropdownProps<T>): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const [isOpen, setIsOpen] = useState(false)
 
 	const selectedOption = options.find((option) => option.value === value)
@@ -30,10 +28,11 @@ export function CustomDropdown<T>({
 	return (
 		<>
 			<Pressable
-				style={[styles.trigger, style]}
+				className="bg-input-background rounded-md border-border h-10 justify-center px-2.5"
+				style={[{ borderWidth: 1 }, style]}
 				onPress={() => setIsOpen(true)}
 			>
-				<Text style={styles.triggerText}>
+				<Text className="text-text text-[17px]">
 					{selectedOption ? selectedOption.label : placeholder}
 				</Text>
 			</Pressable>
@@ -44,25 +43,28 @@ export function CustomDropdown<T>({
 				animationType="fade"
 				onRequestClose={() => setIsOpen(false)}
 			>
-				<Pressable style={styles.modalOverlay} onPress={() => setIsOpen(false)}>
-					<View style={styles.modalContent}>
+				<Pressable
+					className="flex-1 bg-black/50 justify-center items-center"
+					onPress={() => setIsOpen(false)}
+				>
+					<View className="bg-card rounded-lg p-2.5 w-[80%] max-h-[80%]">
 						{options.map((option) => (
 							<Pressable
 								key={String(option.value)}
-								style={[
-									styles.option,
-									option.value === value && styles.selectedOption
-								]}
+								className={`py-3 px-4 rounded-md ${
+									option.value === value ? 'bg-primary' : ''
+								}`}
 								onPress={() => {
 									onChange(option.value)
 									setIsOpen(false)
 								}}
 							>
 								<Text
-									style={[
-										styles.optionText,
-										option.value === value && styles.selectedOptionText
-									]}
+									className={`text-base ${
+										option.value === value
+											? 'text-contrast font-medium'
+											: 'text-text'
+									}`}
 								>
 									{option.label}
 								</Text>
@@ -74,47 +76,3 @@ export function CustomDropdown<T>({
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	trigger: {
-		backgroundColor: theme.colors.inputBackground,
-		borderRadius: theme.radius.md,
-		borderColor: theme.colors.border,
-		borderWidth: 1,
-		height: 40,
-		justifyContent: 'center',
-		paddingHorizontal: 10
-	},
-	triggerText: {
-		color: theme.colors.text,
-		fontSize: 17
-	},
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	modalContent: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.lg,
-		padding: 10,
-		width: '80%',
-		maxHeight: '80%'
-	},
-	option: {
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-		borderRadius: theme.radius.md
-	},
-	selectedOption: {
-		backgroundColor: theme.colors.primary
-	},
-	optionText: {
-		color: theme.colors.text,
-		fontSize: 16
-	},
-	selectedOptionText: {
-		color: theme.colors.contrast
-	}
-}))
