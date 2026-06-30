@@ -1,7 +1,8 @@
 import Color from 'color'
 import type React from 'react'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface BadgeProps {
 	text: string
@@ -20,90 +21,74 @@ const Badge = ({
 	backgroundColor,
 	textColor
 }: BadgeProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const notificationColor = useCSSVariable('--color-notification')
+	const cardButtonColor = useCSSVariable('--color-card-button')
+	const labelColor = useCSSVariable('--color-label')
+	const textColorToken = useCSSVariable('--color-text')
 
-	// Determine the style based on the type
 	const getBadgeStyle = () => {
 		switch (type) {
 			case 'exam':
 				return {
-					containerStyle: [
-						styles.badge,
-						{
-							backgroundColor:
-								backgroundColor ||
-								Color(theme.colors.notification).alpha(0.15).string()
-						}
-					],
-					textStyle: [
-						styles.badgeText,
-						{ color: textColor || theme.colors.notification }
-					]
+					containerClassName: 'px-1.5 py-0.5 rounded-base',
+					containerStyle: {
+						backgroundColor:
+							backgroundColor ||
+							Color(toColor(notificationColor) ?? '')
+								.alpha(0.15)
+								.string()
+					},
+					textStyle: {
+						color: textColor || toColor(notificationColor)
+					},
+					textClassName: 'text-xs font-medium'
 				}
 			case 'calendar':
 				return {
-					containerStyle: [
-						styles.badge,
-						{ backgroundColor: backgroundColor || theme.colors.cardButton }
-					],
-					textStyle: [
-						styles.badgeText,
-						{ color: textColor || theme.colors.labelColor }
-					]
+					containerClassName: 'px-1.5 py-0.5 rounded-base',
+					containerStyle: {
+						backgroundColor: backgroundColor || toColor(cardButtonColor)
+					},
+					textStyle: {
+						color: textColor || toColor(labelColor)
+					},
+					textClassName: 'text-xs font-medium'
 				}
 			case 'allDay':
 				return {
-					containerStyle: [
-						styles.allDayBadge,
-						{ backgroundColor: backgroundColor || theme.colors.cardButton }
-					],
-					textStyle: [
-						styles.allDayBadgeText,
-						{ color: textColor || theme.colors.text }
-					]
+					containerClassName: 'px-1.5 py-1 rounded-sm',
+					containerStyle: {
+						backgroundColor: backgroundColor || toColor(cardButtonColor)
+					},
+					textStyle: {
+						color: textColor || toColor(textColorToken)
+					},
+					textClassName: 'text-xs font-medium'
 				}
 			default:
 				return {
-					containerStyle: [
-						styles.badge,
-						{ backgroundColor: backgroundColor || theme.colors.cardButton }
-					],
-					textStyle: [
-						styles.badgeText,
-						{ color: textColor || theme.colors.labelColor }
-					]
+					containerClassName: 'px-1.5 py-0.5 rounded-base',
+					containerStyle: {
+						backgroundColor: backgroundColor || toColor(cardButtonColor)
+					},
+					textStyle: {
+						color: textColor || toColor(labelColor)
+					},
+					textClassName: 'text-xs font-medium'
 				}
 		}
 	}
 
-	const { containerStyle, textStyle } = getBadgeStyle()
+	const { containerClassName, containerStyle, textClassName, textStyle } =
+		getBadgeStyle()
 
 	return (
-		<View style={containerStyle}>
-			<Text style={textStyle}>{text}</Text>
+		<View className={containerClassName} style={containerStyle}>
+			<Text className={textClassName} style={textStyle}>
+				{text}
+			</Text>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	badge: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
-		borderRadius: 6
-	},
-	badgeText: {
-		fontSize: 12,
-		fontWeight: '500'
-	},
-	allDayBadge: {
-		paddingHorizontal: 6,
-		paddingVertical: 4,
-		borderRadius: 8
-	},
-	allDayBadgeText: {
-		fontSize: 12,
-		fontWeight: '500'
-	}
-}))
 
 export default Badge

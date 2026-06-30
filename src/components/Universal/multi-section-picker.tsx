@@ -1,8 +1,9 @@
 import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import Divider from '@/components/Universal/divider'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
 interface Element {
@@ -17,61 +18,49 @@ interface SectionPickerProps {
 	action: (item: string) => void
 }
 
-/**
- * A component that renders a list of selectable items with a title and a checkmark icon.
- * @param {Element[]} elements - The list of selectable items.
- * @param {string[]} selectedItems - The list of selected items.
- * @param {(item: string) => void} action - The function to be called when an item is selected.
- * @returns {React.JSX.Element} - The MultiSectionPicker component.
- */
 const MultiSectionPicker = ({
 	elements,
 	selectedItems,
 	action
 }: SectionPickerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label')) ?? '#606062'
+	)
 
 	return (
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<View style={styles.itemContainer}>
+					<View className="h-[52px]">
 						<Pressable
 							onPress={() => {
 								if (!item.disabled) {
-									if (Platform.OS === 'ios') {
-										void selectionAsync()
-									}
+									if (Platform.OS === 'ios') void selectionAsync()
 									action(item.key)
 								}
 							}}
+							className="bg-card ios:rounded-ios android:rounded-md p-4 flex-row items-center justify-between h-full"
 							style={({ pressed }) => [
-								styles.itemContent,
-								item.disabled && styles.disabled,
+								item.disabled && { opacity: 0.5 },
 								pressed && !item.disabled && { opacity: 0.8 }
 							]}
 							disabled={item.disabled}
 						>
 							<Text
-								style={[styles.itemText, item.disabled && styles.textDisabled]}
+								className="text-text text-base flex-1 mr-2"
+								style={item.disabled ? { color: labelColor } : undefined}
 							>
 								{item.title}
 							</Text>
 							{selectedItems.includes(item.key) && (
 								<PlatformIcon
-									ios={{
-										name: 'checkmark.circle.fill',
-										size: 18
-									}}
-									android={{
-										name: 'check_circle',
-										size: 21
-									}}
-									web={{
-										name: 'Check',
-										size: 18
-									}}
-									style={item.disabled ? styles.iconDisabled : styles.checkIcon}
+									ios={{ name: 'checkmark.circle.fill', size: 18 }}
+									android={{ name: 'check_circle', size: 21 }}
+									web={{ name: 'Check', size: 18 }}
+									style={{ color: item.disabled ? labelColor : primaryColor }}
 								/>
 							)}
 						</Pressable>
@@ -86,40 +75,3 @@ const MultiSectionPicker = ({
 }
 
 export default MultiSectionPicker
-
-const stylesheet = createStyleSheet((theme) => ({
-	itemContainer: {
-		height: 52
-	},
-	itemContent: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: '100%'
-	},
-	itemContentSelected: {
-		backgroundColor: theme.colors.card,
-		opacity: 0.8
-	},
-	itemText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		flex: 1,
-		marginRight: 8
-	},
-	checkIcon: {
-		color: theme.colors.primary
-	},
-	disabled: {
-		opacity: 0.5
-	},
-	textDisabled: {
-		color: theme.colors.labelColor
-	},
-	iconDisabled: {
-		color: theme.colors.labelColor
-	}
-}))
