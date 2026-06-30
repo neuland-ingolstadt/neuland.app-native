@@ -1,6 +1,6 @@
 import type React from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Text, View } from 'react-native'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const SectionView = ({
 	title,
@@ -15,24 +15,30 @@ const SectionView = ({
 	link?: { text: string; destination: () => void }
 	hideBackground?: boolean
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	return (
 		<>
-			<View style={styles.sectionContainer}>
+			<View className="self-center mt-4 px-page w-full">
 				{title !== '' && title !== undefined && (
-					<Text style={styles.blockHeader}>{title}</Text>
+					<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold ios:pb-1 android:text-[13px] android:font-normal android:uppercase">
+						{title}
+					</Text>
 				)}
 				<View
-					style={[styles.sectionBox, hideBackground && styles.noBackground]}
+					className={
+						hideBackground
+							? 'self-center justify-center mt-0.5 w-full bg-transparent border-transparent'
+							: 'self-center bg-card ios:rounded-ios border-border justify-center mt-0.5 w-full'
+					}
+					style={hideBackground ? undefined : hairlineBorder}
 				>
 					{children}
 				</View>
 			</View>
 			{footer != null && (
-				<Text style={styles.footerText(false)}>
+				<Text className="mt-1.5 text-xs px-page ios:mx-4 android:mx-0 text-label-secondary">
 					{footer}
 					{link != null && (
-						<Text onPress={link.destination} style={styles.footerText(true)}>
+						<Text onPress={link.destination} className="text-primary text-xs">
 							{' '}
 							{link.text}
 						</Text>
@@ -42,64 +48,5 @@ const SectionView = ({
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	footerText: (isLink: boolean) => ({
-		marginTop: 6,
-		fontSize: 12.5,
-		paddingHorizontal: theme.margins.page,
-		color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor,
-		...(Platform.OS === 'ios'
-			? {
-					marginHorizontal: 16
-				}
-			: {
-					marginHorizontal: 0
-				})
-	}),
-	labelText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	sectionBox: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		justifyContent: 'center',
-		marginTop: 2,
-		width: '100%'
-	},
-	noBackground: {
-		backgroundColor: 'transparent',
-		borderColor: 'transparent'
-	},
-	sectionContainer: {
-		alignSelf: 'center',
-		marginTop: 16,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	blockHeader: {
-		...(Platform.OS === 'ios'
-			? {
-					color: theme.colors.labelSecondaryColor,
-					fontSize: 16,
-					marginLeft: 18,
-					fontWeight: '600',
-					paddingBottom: 4
-				}
-			: {
-					color: theme.colors.labelSecondaryColor,
-					fontSize: 13,
-					fontWeight: 'normal',
-					textTransform: 'uppercase'
-				})
-	}
-}))
 
 export default SectionView

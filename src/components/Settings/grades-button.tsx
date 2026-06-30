@@ -2,26 +2,24 @@ import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import PlatformIcon from '../Universal/icon'
+import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
+import { toColor } from '@/utils/uniwind-utils'
 
 const GradesButton = (): React.JSX.Element => {
 	const { t } = useTranslation('settings')
-	const { styles } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
+
 	return (
 		<Pressable
 			onPress={() => {
 				router.navigate('/grades')
 			}}
-			style={({ pressed }) => [
-				{
-					opacity: pressed ? 0.9 : 1
-				},
-				styles.pressableContainer
-			]}
+			className="w-full active:opacity-90"
 		>
-			<View style={styles.cardRow}>
-				<View style={styles.leftIconContainer}>
+			<View className="flex-row items-center py-[15px]">
+				<View className="w-7 items-center justify-center ml-4">
 					<PlatformIcon
 						ios={{
 							name: 'book',
@@ -35,19 +33,19 @@ const GradesButton = (): React.JSX.Element => {
 							name: 'ChartColumnBig',
 							size: 20
 						}}
-						style={styles.leftIcon}
+						style={{ color: textColor }}
 					/>
 				</View>
 
-				<View style={styles.contentContainer}>
-					<Text style={styles.rowTitle}>
+				<View className="flex-1 flex-row justify-between pl-4 pr-2">
+					<Text className="text-text text-base shrink pr-2">
 						{t('profile.formlist.grades.button')}
 					</Text>
 				</View>
 
-				<View style={styles.chevronContainer}>
+				<View className="mr-4 items-center justify-center w-4">
 					<PlatformIcon
-						style={styles.chevronIcon}
+						style={{ color: labelTertiaryColor }}
 						ios={{
 							name: 'chevron.right',
 							size: 14,
@@ -67,47 +65,5 @@ const GradesButton = (): React.JSX.Element => {
 		</Pressable>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	pressableContainer: {
-		width: '100%'
-	},
-	cardRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 15
-	},
-	leftIconContainer: {
-		width: 28,
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginLeft: 16
-	},
-	leftIcon: {
-		color: theme.colors.text
-	},
-	contentContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingLeft: 16,
-		paddingRight: 8
-	},
-	rowTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		flexShrink: 1,
-		paddingRight: 8
-	},
-	chevronContainer: {
-		marginRight: 16,
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 16
-	},
-	chevronIcon: {
-		color: theme.colors.labelTertiaryColor
-	}
-}))
 
 export default GradesButton

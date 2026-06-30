@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import { Avatar } from '@/components/Settings'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
@@ -12,6 +12,7 @@ import type { MaterialIcon } from '@/types/material-icons'
 import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface IndexHeaderRightProps {
 	color?: string
@@ -25,14 +26,17 @@ export const SettingsTabButton = ({
 	focused = false
 }: IndexHeaderRightProps): React.JSX.Element => {
 	const { t } = useTranslation(['navigation', 'settings'])
-	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const tabbarInactiveColor = toColor(useCSSVariable('--color-tabbar-inactive'))
+	const contrastColor = toColor(useCSSVariable('--color-contrast'))
 
 	const [username, setUsername] = useState<string>('')
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
 	const [initials, setInitials] = useState('')
 
-	const iconColor = color || theme.colors.text
+	const iconColor = color || textColor
 
 	useEffect(() => {
 		const loadUsername = async (): Promise<void> => {
@@ -90,10 +94,7 @@ export const SettingsTabButton = ({
 			: {
 					backgroundColor: 'transparent',
 					borderWidth: 1.5,
-					borderColor:
-						Platform.OS === 'web'
-							? theme.colors.labelColor
-							: theme.colors.tabbarInactive
+					borderColor: Platform.OS === 'web' ? labelColor : tabbarInactiveColor
 				}
 
 		const defaultIconProps = {
@@ -112,16 +113,20 @@ export const SettingsTabButton = ({
 			}
 		}
 		const defaultUserIcon = (
-			<PlatformIcon
-				{...defaultIconProps}
-				style={{ ...styles.icon, color: iconColor }}
-			/>
+			<PlatformIcon {...defaultIconProps} style={{ color: iconColor }} />
 		)
+
+		const avatarTextColor = focused
+			? contrastColor
+			: Platform.OS === 'web'
+				? labelColor
+				: tabbarInactiveColor
 
 		return userKind === USER_EMPLOYEE ? (
 			<Avatar size={size} style={avatarStyle}>
 				<Text
-					style={styles.iconText(focused)}
+					className="text-xs font-bold"
+					style={{ color: avatarTextColor }}
 					numberOfLines={1}
 					adjustsFontSizeToFit={true}
 				>
@@ -148,12 +153,13 @@ export const SettingsTabButton = ({
 					name: 'UserX',
 					size: size
 				}}
-				style={{ ...styles.icon, color: iconColor }}
+				style={{ color: iconColor }}
 			/>
 		) : initials !== '' ? (
 			<Avatar size={size} style={avatarStyle}>
 				<Text
-					style={styles.iconText(focused)}
+					className="text-xs font-bold"
+					style={{ color: avatarTextColor }}
 					numberOfLines={1}
 					adjustsFontSizeToFit={true}
 				>
@@ -171,8 +177,14 @@ export const SettingsTabButton = ({
 			userKind,
 			initials,
 			showLoadingIndicator,
-			theme.colors,
+			isError,
+			isSuccess,
+			persData,
+			username,
 			iconColor,
+			labelColor,
+			tabbarInactiveColor,
+			contrastColor,
 			size,
 			focused
 		]
@@ -180,25 +192,3 @@ export const SettingsTabButton = ({
 
 	return <View accessibilityLabel={t('navigation.settings')}>{MemoIcon}</View>
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	center: {
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	element: {
-		marginEnd: Platform.OS !== 'ios' ? 14 : 0
-	},
-	icon: {
-		color: theme.colors.text
-	},
-	iconText: (isActive: boolean) => ({
-		fontSize: 12,
-		fontWeight: 'bold',
-		color: isActive
-			? theme.colors.contrast
-			: Platform.OS === 'web'
-				? theme.colors.labelColor
-				: theme.colors.tabbarInactive
-	})
-}))

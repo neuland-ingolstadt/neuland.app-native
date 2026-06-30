@@ -15,10 +15,11 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { LucideIcon } from '@/components/Universal/icon'
 import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface CalendarAnimationProps {
 	size?: number
@@ -76,7 +77,7 @@ const FloatingEventIcon = ({
 	index,
 	tapCount
 }: FloatingEventIconProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const opacity = useSharedValue(0)
 	const scale = useSharedValue(0.6)
@@ -192,11 +193,8 @@ const FloatingEventIcon = ({
 
 	return (
 		<Animated.View
-			style={[
-				styles.iconContainer,
-				{ width: size * 0.35, height: size * 0.35 },
-				animatedStyle
-			]}
+			className="absolute items-center justify-center z-[2]"
+			style={[{ width: size * 0.35, height: size * 0.35 }, animatedStyle]}
 		>
 			<PlatformIcon
 				ios={{ name: eventIcon.ios, size: size * 0.23 }}
@@ -206,7 +204,7 @@ const FloatingEventIcon = ({
 					variant: 'outlined'
 				}}
 				web={{ name: eventIcon.web, size: size * 0.25 }}
-				style={styles.icon}
+				style={{ color: primaryColor }}
 			/>
 		</Animated.View>
 	)
@@ -215,7 +213,7 @@ const FloatingEventIcon = ({
 export const CalendarAnimation = ({
 	size = 120
 }: CalendarAnimationProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	const calendarScale = useSharedValue(0.9)
 	const calendarOpacity = useSharedValue(0)
@@ -272,7 +270,10 @@ export const CalendarAnimation = ({
 	})
 
 	return (
-		<View style={[styles.container, { width: size * 2, height: size * 1.8 }]}>
+		<View
+			className="items-center justify-center relative py-0"
+			style={{ width: size * 2, height: size * 1.8 }}
+		>
 			{EVENT_ICONS.map((eventIcon, index) => (
 				<FloatingEventIcon
 					key={eventIcon.ios}
@@ -284,7 +285,10 @@ export const CalendarAnimation = ({
 			))}
 
 			<GestureDetector gesture={tapGesture}>
-				<Animated.View style={[styles.calendarContainer, calendarStyle]}>
+				<Animated.View
+					className="items-center justify-center relative w-full h-full"
+					style={calendarStyle}
+				>
 					<PlatformIcon
 						ios={{ name: 'calendar', size: size * 0.8 }}
 						android={{
@@ -293,39 +297,10 @@ export const CalendarAnimation = ({
 							variant: 'outlined'
 						}}
 						web={{ name: 'Calendar', size: size * 0.8 }}
-						style={styles.calendarIcon}
+						style={{ color: labelColor, zIndex: 1 }}
 					/>
 				</Animated.View>
 			</GestureDetector>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: 'relative',
-		paddingVertical: 0
-	},
-	calendarContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: 'relative',
-		width: '100%',
-		height: '100%'
-	},
-	calendarIcon: {
-		color: theme.colors.labelColor,
-		zIndex: 1
-	},
-	iconContainer: {
-		position: 'absolute',
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 2
-	},
-	icon: {
-		color: theme.colors.primary
-	}
-}))

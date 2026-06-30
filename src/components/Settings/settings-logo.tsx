@@ -11,7 +11,7 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import AnimatedLogoText from '@/components/Flow/svgs/animated-logo-text'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import {
@@ -19,6 +19,7 @@ import {
 	useRandomColor,
 	withBouncing
 } from '@/utils/animation-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface SettingsLogoProps {
 	scrollY: number
@@ -32,8 +33,8 @@ export default function SettingsLogo({
 	scrollY,
 	size
 }: SettingsLogoProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const [tapCount, setTapCount] = React.useState(0)
 	const translateX = useSharedValue(0)
 	const translateY = useSharedValue(0)
@@ -146,8 +147,8 @@ export default function SettingsLogo({
 	return (
 		<>
 			<Animated.View
+				className="absolute z-10"
 				style={[
-					styles.bounceContainer,
 					logoBounceAnimation,
 					{
 						opacity: logoActiveOpacity,
@@ -169,15 +170,15 @@ export default function SettingsLogo({
 				>
 					<LogoTextSVG
 						size={16.5}
-						color={isBouncing ? color : theme.colors.text}
+						color={isBouncing ? color : String(textColor)}
 					/>
 				</Pressable>
 			</Animated.View>
 
 			<Animated.View
+				className="items-center pt-[22px]"
 				style={[
 					wobbleAnimation,
-					styles.whobbleContainer,
 					{
 						opacity: logoInactiveOpacity
 					}
@@ -210,14 +211,3 @@ export default function SettingsLogo({
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	bounceContainer: {
-		position: 'absolute',
-		zIndex: 10
-	},
-	whobbleContainer: {
-		alignItems: 'center',
-		paddingTop: 22
-	}
-}))

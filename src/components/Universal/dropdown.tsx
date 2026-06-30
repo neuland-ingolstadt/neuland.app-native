@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useResolveClassNames } from 'uniwind'
 
 interface Props {
 	data: string[]
@@ -28,8 +28,19 @@ const Dropdown = ({
 	reset = false,
 	width = 100
 }: Props): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const ref = React.createRef<SelectDropdown>()
+	const dropdownStyle = useResolveClassNames('bg-card rounded-md')
+	const dropdownButtonStyle = useResolveClassNames(
+		'items-center bg-date-picker-background rounded-md h-8 justify-center px-2.5'
+	)
+	const itemTextStyle = useResolveClassNames('text-text')
+	const buttonTextStyle = useResolveClassNames(
+		'text-text text-[15px] text-center'
+	)
+	const selectedTextStyle = useResolveClassNames('font-medium')
+	const rowStyle = useResolveClassNames(
+		'bg-card h-[38px] justify-center border-b border-border'
+	)
 
 	useEffect(() => {
 		if (ref.current != null && reset) {
@@ -42,7 +53,13 @@ const Dropdown = ({
 			ref={ref}
 			data={data}
 			defaultValue={defaultValue}
-			dropdownStyle={styles.dropdown}
+			dropdownStyle={[
+				dropdownStyle,
+				{
+					shadowOffset: { width: 0.1, height: 0.1 },
+					shadowOpacity: 0.3
+				}
+			]}
 			onSelect={(selectedItem: string) => {
 				onSelect(selectedItem)
 			}}
@@ -50,7 +67,7 @@ const Dropdown = ({
 				return (
 					<View
 						style={[
-							styles.dropdownButton,
+							dropdownButtonStyle,
 							{
 								width
 							}
@@ -59,7 +76,7 @@ const Dropdown = ({
 						<Text
 							numberOfLines={1}
 							allowFontScaling={false}
-							style={styles.itemText}
+							style={itemTextStyle}
 						>
 							{selectedItem}
 						</Text>
@@ -68,12 +85,13 @@ const Dropdown = ({
 			}}
 			renderItem={(item, _index, isSelected) => {
 				return (
-					<View style={styles.rowHeight}>
+					<View style={rowStyle}>
 						<Text
-							style={{
-								...styles.buttonText,
-								...(isSelected ? styles.selectedText : {})
-							}}
+							style={
+								isSelected
+									? [buttonTextStyle, selectedTextStyle]
+									: buttonTextStyle
+							}
 						>
 							{item}
 						</Text>
@@ -93,52 +111,18 @@ export const DropdownButton = ({
 	children: React.ReactNode
 	onPress: () => void
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const dropdownButtonStyle = useResolveClassNames(
+		'items-center bg-date-picker-background rounded-md h-8 justify-center px-2.5'
+	)
+	const textStyle = useResolveClassNames('text-text')
+
 	return (
 		<TouchableOpacity onPress={onPress}>
-			<View style={styles.dropdownButton}>
-				<Text numberOfLines={1} allowFontScaling={false} style={styles.text}>
+			<View style={dropdownButtonStyle}>
+				<Text numberOfLines={1} allowFontScaling={false} style={textStyle}>
 					{children}
 				</Text>
 			</View>
 		</TouchableOpacity>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	buttonText: {
-		color: theme.colors.text,
-		fontSize: 15,
-		textAlign: 'center'
-	},
-	dropdown: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		shadowOffset: { width: 0.1, height: 0.1 },
-		shadowOpacity: 0.3
-	},
-	dropdownButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.datePickerBackground,
-		borderRadius: theme.radius.md,
-		height: 32,
-		justifyContent: 'center',
-		paddingHorizontal: 10
-	},
-	itemText: {
-		color: theme.colors.text
-	},
-	rowHeight: {
-		backgroundColor: theme.colors.card,
-		borderBottomWidth: 1,
-		borderColor: theme.colors.border,
-		height: 38,
-		justifyContent: 'center'
-	},
-	selectedText: {
-		fontWeight: '500'
-	},
-	text: {
-		color: theme.colors.text
-	}
-}))

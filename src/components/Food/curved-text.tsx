@@ -1,6 +1,7 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface CurvedTextProps {
 	text: string
@@ -21,7 +22,7 @@ export const CurvedText = ({
 	const characters = text.split('')
 	const anglePerChar = 5
 	const startAngleRad = (startAngle * Math.PI) / 180
-	const { theme } = useStyles()
+	const textColor = toColor(useCSSVariable('--color-text'))
 
 	return (
 		<View
@@ -50,7 +51,7 @@ export const CurvedText = ({
 						<Text
 							style={{
 								fontSize: size * 0.7,
-								color: theme.colors.text,
+								color: textColor,
 								fontWeight: '300',
 								opacity: 0.6
 							}}

@@ -1,15 +1,14 @@
-import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, RefreshControl, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { FlashList } from '@/components/Universal/styled'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import type { Exam } from '@/types/utils'
@@ -25,7 +24,6 @@ export default function ExamsPage({
 	handleLinkPress: () => void
 }): React.JSX.Element {
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	const {
@@ -39,8 +37,8 @@ export default function ExamsPage({
 	} = useQuery({
 		queryKey: ['exams'],
 		queryFn: loadExamList,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.navigate('/login')
@@ -55,10 +53,10 @@ export default function ExamsPage({
 
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
-			<View style={styles.footerContainer}>
-				<Text style={styles.footerText1}>
+			<View className="my-1 pb-bottom-safe">
+				<Text className="text-label text-xs font-normal pb-[25px] text-justify">
 					{t('pages.calendar.footer.part1')}
-					<Text style={styles.footerText2} onPress={handleLinkPress}>
+					<Text className="text-text font-semibold" onPress={handleLinkPress}>
 						{t('pages.calendar.footer.part2')}
 					</Text>
 					{t('pages.calendar.footer.part3')}
@@ -68,15 +66,15 @@ export default function ExamsPage({
 	}
 
 	const renderExamItem = ({ item }: { item: Exam }) => (
-		<View style={styles.rowWrapper}>
+		<View className="mb-2">
 			<ExamRow event={item} />
 		</View>
 	)
 
 	return (
-		<View style={styles.container}>
+		<View className="flex-1 w-full">
 			{isLoading ? (
-				<View style={styles.loadingContainer}>
+				<View className="flex-1 justify-center items-center">
 					<LoadingIndicator />
 				</View>
 			) : isError ? (
@@ -92,13 +90,13 @@ export default function ExamsPage({
 			) : userKind === USER_GUEST ? (
 				<ErrorView title={guestError} />
 			) : (
-				<View style={styles.examPageContainer}>
+				<View className="flex-1 w-full">
 					{exams && exams.length > 0 ? (
 						<FlashList
 							data={exams}
 							renderItem={renderExamItem}
 							estimatedItemSize={80}
-							contentContainerStyle={styles.flashListContentContainer}
+							contentContainerClassName="px-page"
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}
 							refreshControl={
@@ -110,14 +108,14 @@ export default function ExamsPage({
 								/>
 							}
 							ListHeaderComponent={
-								<Text style={styles.sectionHeaderText}>
+								<Text className="text-text text-[19px] font-semibold pb-3 pt-2">
 									{t('pages.calendar.exams.subtitle')}
 								</Text>
 							}
 							ListFooterComponent={<CalendarFooter />}
 						/>
 					) : (
-						<ScrollView contentContainerStyle={styles.emptyStateContainer}>
+						<ScrollView contentContainerClassName="px-page">
 							<ErrorView
 								title={t('pages.calendar.exams.noExams.title')}
 								message={t('pages.calendar.exams.noExams.subtitle')}
@@ -141,50 +139,3 @@ export default function ExamsPage({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		width: '100%'
-	},
-	loadingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	footerContainer: {
-		marginVertical: 4,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	footerText1: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		fontWeight: 'normal',
-		paddingBottom: 25,
-		textAlign: 'justify'
-	},
-	footerText2: {
-		color: theme.colors.text,
-		fontWeight: 600
-	},
-	rowWrapper: {
-		marginBottom: 8
-	},
-	examPageContainer: {
-		flex: 1,
-		width: '100%'
-	},
-	flashListContentContainer: {
-		paddingHorizontal: theme.margins.page
-	},
-	emptyStateContainer: {
-		paddingHorizontal: theme.margins.page
-	},
-	sectionHeaderText: {
-		color: theme.colors.text,
-		fontSize: 19,
-		fontWeight: '600',
-		paddingBottom: 12,
-		paddingTop: 8
-	}
-}))

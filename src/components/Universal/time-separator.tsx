@@ -1,6 +1,7 @@
 import type React from 'react'
 import { View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface TimeSeparatorProps {
 	color?: string
@@ -14,27 +15,19 @@ const TimeSeparator = ({
 	color,
 	size = 3
 }: TimeSeparatorProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const labelColor = useCSSVariable('--color-label')
 
 	return (
 		<View
-			style={[
-				styles.timeSeparator,
-				{
-					backgroundColor: color || theme.colors.labelColor,
-					width: size,
-					height: size,
-					borderRadius: size / 2
-				}
-			]}
+			className="mx-1"
+			style={{
+				backgroundColor: color || toColor(labelColor),
+				width: size,
+				height: size,
+				borderRadius: size / 2
+			}}
 		/>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	timeSeparator: {
-		marginHorizontal: 4
-	}
-}))
 
 export default TimeSeparator

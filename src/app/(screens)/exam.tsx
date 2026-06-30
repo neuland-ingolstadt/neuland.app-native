@@ -9,16 +9,18 @@ import Animated, {
 	useAnimatedStyle,
 	useScrollViewOffset
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function ExamDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const exam = useRouteParamsStore((state) => state.selectedExam)
 	const { t } = useTranslation('common')
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const typeSplit =
 		exam?.type !== undefined ? exam?.type.split('-').slice(-1)[0].trim() : ''
 	const type =
@@ -57,20 +59,13 @@ export default function ExamDetail(): React.JSX.Element {
 					title: t('pages.exam.details.room'),
 					customComponent: (textStyle) => {
 						return exam?.rooms?.includes(',') ? (
-							<View
-								style={{
-									flex: 1,
-									flexDirection: 'row',
-									justifyContent: 'flex-end',
-									flexWrap: 'wrap'
-								}}
-							>
+							<View className="flex-1 flex-row justify-end flex-wrap">
 								{exam.rooms.split(',').map((r, index) => {
 									const room = r.trim()
 									return (
 										<View key={index}>
 											<Pressable
-												style={{ flexDirection: 'row', alignItems: 'center' }}
+												className="flex-row items-center"
 												onPress={() => {
 													if (room) {
 														router.dismissTo({
@@ -80,9 +75,7 @@ export default function ExamDetail(): React.JSX.Element {
 													}
 												}}
 											>
-												<Text
-													style={[textStyle, { color: theme.colors.primary }]}
-												>
+												<Text style={[textStyle, { color: primaryColor }]}>
 													{room}
 												</Text>
 												{index < exam.rooms.split(',').length - 1 && (
@@ -105,7 +98,7 @@ export default function ExamDetail(): React.JSX.Element {
 									}
 								}}
 							>
-								<Text style={[textStyle, { color: theme.colors.primary }]}>
+								<Text style={[textStyle, { color: primaryColor }]}>
 									{exam?.rooms?.trim()}
 								</Text>
 							</Pressable>
@@ -155,16 +148,22 @@ export default function ExamDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
-			style={styles.page}
-			contentContainerStyle={styles.container}
+			className="px-page"
+			contentContainerClassName="gap-3 pb-modal-bottom"
 			ref={ref}
 		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{exam?.name}
 								</HeaderTitle>
 							</Animated.View>
@@ -172,9 +171,9 @@ export default function ExamDetail(): React.JSX.Element {
 					)
 				}}
 			/>
-			<View style={styles.titleContainer}>
+			<View className="flex-row items-start justify-between pb-1.5">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-2xl font-semibold pt-4 text-left"
 					adjustsFontSizeToFit={true}
 					numberOfLines={3}
 					minimumFontScale={0.8}
@@ -183,51 +182,14 @@ export default function ExamDetail(): React.JSX.Element {
 					{exam?.name}
 				</Text>
 			</View>
-			<View style={styles.formList}>
+			<View className="self-center w-full">
 				<FormList sections={sections} />
 			</View>
 			<View>
-				<Text style={styles.notesText}>{t('pages.exam.footer')}</Text>
+				<Text className="text-label text-[13px] text-left">
+					{t('pages.exam.footer')}
+				</Text>
 			</View>
 		</Animated.ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		gap: 12,
-		paddingBottom: theme.margins.modalBottomMargin
-	},
-	formList: {
-		alignSelf: 'center',
-		width: '100%'
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		fontSize: 13,
-		textAlign: 'left'
-	},
-	page: {
-		paddingHorizontal: theme.margins.page
-	},
-
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 6
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 24,
-		fontWeight: '600',
-		paddingTop: 16,
-		textAlign: 'left'
-	}
-}))
