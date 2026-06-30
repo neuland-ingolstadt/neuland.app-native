@@ -15,10 +15,11 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { LucideIcon } from '@/components/Universal/icon'
 import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface TimetableAnimationProps {
 	size?: number
@@ -76,7 +77,7 @@ const FloatingTimetableIcon = ({
 	index,
 	tapCount
 }: FloatingTimetableIconProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const opacity = useSharedValue(0)
 	const scale = useSharedValue(0.6)
@@ -176,11 +177,8 @@ const FloatingTimetableIcon = ({
 
 	return (
 		<Animated.View
-			style={[
-				styles.iconContainer,
-				{ width: size * 0.35, height: size * 0.35 },
-				animatedStyle
-			]}
+			className="absolute items-center justify-center z-[2]"
+			style={[{ width: size * 0.35, height: size * 0.35 }, animatedStyle]}
 		>
 			<PlatformIcon
 				ios={{ name: timetableIcon.ios, size: size * 0.23 }}
@@ -190,7 +188,7 @@ const FloatingTimetableIcon = ({
 					variant: 'outlined'
 				}}
 				web={{ name: timetableIcon.web, size: size * 0.25 }}
-				style={styles.icon}
+				style={{ color: primaryColor }}
 			/>
 		</Animated.View>
 	)
@@ -199,7 +197,7 @@ const FloatingTimetableIcon = ({
 export const TimetableAnimation = ({
 	size = 120
 }: TimetableAnimationProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	const calendarScale = useSharedValue(0.9)
 	const calendarOpacity = useSharedValue(0)
@@ -256,7 +254,10 @@ export const TimetableAnimation = ({
 	})
 
 	return (
-		<View style={[styles.container, { width: size * 2, height: size * 1.8 }]}>
+		<View
+			className="items-center justify-center relative overflow-visible"
+			style={{ width: size * 2, height: size * 1.8 }}
+		>
 			{TIMETABLE_ICONS.map((timetableIcon, index) => (
 				<FloatingTimetableIcon
 					key={timetableIcon.ios}
@@ -269,11 +270,8 @@ export const TimetableAnimation = ({
 
 			<GestureDetector gesture={tapGesture}>
 				<Animated.View
-					style={[
-						styles.calendarContainer,
-						{ width: size, height: size },
-						calendarStyle
-					]}
+					className="items-center justify-center overflow-visible z-[1]"
+					style={[{ width: size, height: size }, calendarStyle]}
 				>
 					<PlatformIcon
 						ios={{ name: 'calendar', size: size * 0.8 }}
@@ -283,39 +281,10 @@ export const TimetableAnimation = ({
 							variant: 'outlined'
 						}}
 						web={{ name: 'Calendar', size: size * 0.8 }}
-						style={styles.calendarIcon}
+						style={{ color: labelColor }}
 					/>
 				</Animated.View>
 			</GestureDetector>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		position: 'relative',
-		overflow: 'visible'
-	},
-	iconContainer: {
-		position: 'absolute',
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 2
-	},
-	icon: {
-		color: theme.colors.primary
-	},
-	calendarContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 80,
-		height: 80,
-		overflow: 'visible',
-		zIndex: 1
-	},
-	calendarIcon: {
-		color: theme.colors.labelColor
-	}
-}))

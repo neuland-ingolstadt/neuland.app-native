@@ -17,190 +17,15 @@ import Animated, {
 	withRepeat,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import { useCSSVariable } from 'uniwind'
 import MemberAPI, { type ProfileQrResponse } from '@/api/member-api'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import type { MemberInfo } from '@/hooks/useMemberStore'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { AnimatedSecurityLine } from './animated-security-line'
 import { QRCodeModal } from './qr-code-modal'
-
-const stylesheet = createStyleSheet((theme) => ({
-	shadow: {
-		borderColor: theme.colors.datePickerBackground,
-		borderRadius: theme.radius.lg,
-		borderWidth: 1,
-		elevation: 10
-	},
-	cardFooterText: {
-		marginTop: 6,
-		fontSize: 12,
-		paddingHorizontal: 6,
-		color: theme.colors.labelSecondaryColor
-	},
-	idCardContainer: {
-		borderRadius: theme.radius.lg,
-		overflow: 'hidden'
-	},
-	idCard: {
-		borderRadius: theme.radius.lg,
-		padding: 24,
-		minHeight: 200,
-		justifyContent: 'space-between',
-		backgroundColor: '#000000'
-	},
-	cardHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: 20,
-		position: 'relative'
-	},
-	logoContainer: {
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	titleContainer: {
-		alignItems: 'flex-end'
-	},
-	cardTitle: {
-		color: '#00ff33',
-		fontSize: 12,
-		fontWeight: '700',
-		letterSpacing: 1.5,
-		opacity: 0.9
-	},
-	cardContent: {
-		flex: 1,
-		justifyContent: 'center'
-	},
-	honoraryBadgeWrapper: {
-		marginLeft: 12,
-		alignSelf: 'flex-start'
-	},
-	honoraryBadgeGlow: {
-		position: 'absolute',
-		top: -6,
-		right: -6,
-		bottom: -6,
-		left: -6,
-		borderRadius: 22,
-		backgroundColor: '#f7d774',
-		opacity: 0.35
-	},
-	honoraryBadge: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		borderRadius: 18,
-		borderWidth: 1,
-		borderColor: 'rgba(0,0,0,0.2)',
-		elevation: 6,
-		shadowColor: '#000000',
-		shadowOpacity: 0.35,
-		shadowRadius: 8,
-		shadowOffset: { width: 0, height: 4 }
-	},
-	honoraryBadgeSeal: {
-		width: 18,
-		height: 18,
-		borderRadius: 9,
-		backgroundColor: '#1b1303',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderWidth: 1,
-		borderColor: '#f7d774'
-	},
-	honoraryBadgeSubtitle: {
-		color: '#1b1303',
-		fontSize: 9,
-		fontWeight: '600',
-		opacity: 0.8
-	},
-	honoraryBadgeLine: {
-		color: '#1b1303',
-		fontSize: 11,
-		fontWeight: '800',
-		letterSpacing: 1.2,
-		lineHeight: 13
-	},
-	nameSection: {
-		marginBottom: 20
-	},
-	nameRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between'
-	},
-	nameText: {
-		flexShrink: 1,
-		paddingRight: 12
-	},
-	nameLabel: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '600',
-		letterSpacing: 1,
-		opacity: 0.8,
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	name: {
-		color: '#ffffff',
-		fontSize: 32,
-		fontWeight: 'bold',
-		letterSpacing: 0.5
-	},
-	usernameSection: {
-		marginBottom: 20
-	},
-	fieldLabel: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '600',
-		letterSpacing: 1,
-		opacity: 0.8,
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	username: {
-		color: '#ffffff',
-		fontSize: 18,
-		fontWeight: '500',
-		opacity: 0.9
-	},
-	qrCodeContainer: {
-		backgroundColor: '#ffffff',
-		padding: 10,
-		borderRadius: theme.radius.md,
-		marginTop: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 140,
-		height: 140,
-		alignSelf: 'center'
-	},
-	cardFooter: {
-		marginTop: 20,
-		marginBottom: -10
-	},
-	footerLine: {
-		height: 1,
-		backgroundColor: theme.colors.neulandGreen,
-		marginBottom: 12,
-		opacity: 0.8
-	},
-	footerText: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '500',
-		opacity: 0.8,
-		textAlign: 'center'
-	}
-}))
 
 interface IDCardProps {
 	info: MemberInfo
@@ -208,7 +33,10 @@ interface IDCardProps {
 }
 
 export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
+	const labelBackgroundColor = toColor(
+		useCSSVariable('--color-label-background')
+	)
 	const { t } = useTranslation('member')
 
 	const [modalVisible, setModalVisible] = useState(false)
@@ -263,13 +91,13 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 
 	return (
 		<>
-			<View style={styles.idCardContainer}>
-				<View style={styles.shadow}>
+			<View className="rounded-lg overflow-hidden">
+				<View className="rounded-lg" style={hairlineBorder}>
 					<LinearGradient
 						colors={['#0f0f0f', '#001f05']}
 						start={{ x: 0, y: 0 }}
 						end={{ x: 1, y: 1 }}
-						style={styles.idCard}
+						className="rounded-lg p-6 min-h-[200px] justify-between"
 					>
 						<Animated.View
 							style={[
@@ -285,28 +113,44 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 						>
 							<LogoCardSVG />
 						</Animated.View>
-						<View style={styles.cardHeader}>
-							<View style={[styles.logoContainer]}>
+						<View className="flex-row items-center justify-between mb-5 relative">
+							<View className="items-center justify-center">
 								<LogoTextSVG size={16} color="#00ff33" />
 							</View>
-							<View style={styles.titleContainer}>
-								<Text style={styles.cardTitle}>{t('idCard.title')}</Text>
+							<View className="items-end">
+								<Text className="text-[#00ff33] text-xs font-bold tracking-[1.5px] opacity-90">
+									{t('idCard.title')}
+								</Text>
 								<AnimatedSecurityLine />
 							</View>
 						</View>
 
-						<View style={styles.cardContent}>
-							<View style={styles.nameSection}>
-								<Text style={styles.nameLabel}>{t('idCard.name')}</Text>
-								<View style={styles.nameRow}>
-									<Text style={[styles.name, styles.nameText]}>
+						<View className="flex-1 justify-center">
+							<View className="mb-5">
+								<Text
+									className="text-xs font-semibold tracking-wide opacity-80 mb-1 uppercase"
+									style={{ color: neulandGreen }}
+								>
+									{t('idCard.name')}
+								</Text>
+								<View className="flex-row items-center justify-between">
+									<Text className="text-white text-[32px] font-bold tracking-[0.5px] shrink pr-3">
 										{info.name}
 									</Text>
 									{hasHonoraryRole && (
-										<View style={styles.honoraryBadgeWrapper}>
+										<View className="ml-3 self-start">
 											<Animated.View
 												style={[
-													styles.honoraryBadgeGlow,
+													{
+														position: 'absolute',
+														top: -6,
+														right: -6,
+														bottom: -6,
+														left: -6,
+														borderRadius: 22,
+														backgroundColor: '#f7d774',
+														opacity: 0.35
+													},
 													breathingAnimatedStyle
 												]}
 											/>
@@ -314,16 +158,23 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 												colors={['#f7d774', '#c6921b', '#f0c85a']}
 												start={{ x: 0, y: 0 }}
 												end={{ x: 1, y: 1 }}
-												style={styles.honoraryBadge}
+												className="flex-row items-center gap-2 px-3 py-2 rounded-[18px] border border-black/20"
+												style={{
+													elevation: 6,
+													shadowColor: '#000000',
+													shadowOpacity: 0.35,
+													shadowRadius: 8,
+													shadowOffset: { width: 0, height: 4 }
+												}}
 											>
-												<View style={styles.honoraryBadgeSeal}>
+												<View className="w-[18px] h-[18px] rounded-full bg-[#1b1303] items-center justify-center border border-[#f7d774]">
 													<Star size={10} color="#f7d774" fill="#f7d774" />
 												</View>
 												<View>
-													<Text style={styles.honoraryBadgeLine}>
+													<Text className="text-[#1b1303] text-[11px] font-extrabold tracking-[1.2px] leading-[13px]">
 														{t('idCard.honoraryLine1')}
 													</Text>
-													<Text style={styles.honoraryBadgeLine}>
+													<Text className="text-[#1b1303] text-[11px] font-extrabold tracking-[1.2px] leading-[13px]">
 														{t('idCard.honoraryLine2')}
 													</Text>
 												</View>
@@ -334,27 +185,28 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							</View>
 
 							{info.preferred_username && (
-								<View style={styles.usernameSection}>
-									<Text style={styles.fieldLabel}>{t('idCard.username')}</Text>
-									<Text style={styles.username}>
+								<View className="mb-5">
+									<Text
+										className="text-xs font-semibold tracking-wide opacity-80 mb-1 uppercase"
+										style={{ color: neulandGreen }}
+									>
+										{t('idCard.username')}
+									</Text>
+									<Text className="text-white text-lg font-medium opacity-90">
 										@{info.preferred_username}
 									</Text>
 								</View>
 							)}
 
 							{info.groups && info.groups.length > 0 && (
-								<View style={{ marginBottom: 12 }}>
-									<Text style={styles.fieldLabel}>{t('idCard.groups')}</Text>
-									<View
-										style={{
-											flexDirection: 'row',
-											flexWrap: 'wrap',
-											gap: 6,
-											justifyContent: 'flex-start',
-											alignItems: 'center',
-											marginTop: 4
-										}}
+								<View className="mb-3">
+									<Text
+										className="text-xs font-semibold tracking-wide opacity-80 mb-1 uppercase"
+										style={{ color: neulandGreen }}
 									>
+										{t('idCard.groups')}
+									</Text>
+									<View className="flex-row flex-wrap gap-1.5 justify-start items-center mt-1">
 										{info.groups
 											.filter(
 												(group) =>
@@ -365,22 +217,9 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 											.map((group) => (
 												<View
 													key={group}
-													style={{
-														backgroundColor: '#414141',
-														borderRadius: 8,
-														paddingHorizontal: 10,
-														paddingVertical: 4,
-														marginRight: 6,
-														marginBottom: 6
-													}}
+													className="bg-[#414141] rounded-sm px-2.5 py-1 mr-1.5 mb-1.5"
 												>
-													<Text
-														style={{
-															color: '#ffffff',
-															fontSize: 12,
-															fontWeight: '500'
-														}}
-													>
+													<Text className="text-white text-xs font-medium">
 														{group.charAt(0).toUpperCase() + group.slice(1)}
 													</Text>
 												</View>
@@ -390,19 +229,19 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							)}
 
 							<RNPressable
-								style={{ alignSelf: 'center' }}
+								className="self-center"
 								onPress={openModal}
 								disabled={!profileQrData?.qr}
 								hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 							>
-								<View style={[styles.qrCodeContainer]}>
+								<View className="bg-white p-2.5 rounded-md mt-5 items-center justify-center w-[140px] h-[140px] self-center">
 									{isLoading ? (
 										<ActivityIndicator
 											size="small"
-											color={theme.colors.labelBackground}
+											color={labelBackgroundColor}
 										/>
 									) : error ? (
-										<Text style={{ color: 'red', textAlign: 'center' }}>
+										<Text className="text-red-500 text-center">
 											{String(error)}
 										</Text>
 									) : profileQrData?.qr ? (
@@ -418,14 +257,24 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							</RNPressable>
 						</View>
 
-						<View style={styles.cardFooter}>
-							<View style={styles.footerLine} />
-							<Text style={styles.footerText}>{t('idCard.footer')}</Text>
+						<View className="mt-5 -mb-2.5">
+							<View
+								className="h-px mb-3 opacity-80"
+								style={{ backgroundColor: neulandGreen }}
+							/>
+							<Text
+								className="text-xs font-medium opacity-80 text-center"
+								style={{ color: neulandGreen }}
+							>
+								{t('idCard.footer')}
+							</Text>
 						</View>
 					</LinearGradient>
 				</View>
 			</View>
-			<Text style={styles.cardFooterText}>{t('idCard.footerDescription')}</Text>
+			<Text className="mt-1.5 text-xs px-1.5 text-label-secondary">
+				{t('idCard.footerDescription')}
+			</Text>
 
 			<QRCodeModal
 				visible={modalVisible}

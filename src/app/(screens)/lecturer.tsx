@@ -9,15 +9,17 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections } from '@/types/components'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function LecturerDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
 	const { t } = useTranslation('common')
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const scrollOffset = useSharedValue(0)
 	const scrollHandler = useAnimatedScrollHandler({
@@ -92,7 +94,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					title: t('pages.lecturer.contact.room'),
 					value: lecturer?.room_short,
 					disabled: lecturer?.room_short === '',
-					textColor: theme.colors.primary,
+					textColor: primaryColor,
 					onPress: () => {
 						if (lecturer?.room_short) {
 							router.dismiss()
@@ -107,7 +109,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					title: t('pages.lecturer.contact.phone'),
 					value: lecturer?.tel_dienst,
 					disabled: lecturer?.tel_dienst === '',
-					textColor: theme.colors.primary,
+					textColor: primaryColor,
 					onPress: () => {
 						void Linking.openURL(
 							`tel:${lecturer?.tel_dienst?.replace(/\s+/g, '') ?? ''}`
@@ -120,9 +122,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					disabled: validEmail,
 					layout: validEmail ? 'column' : 'row',
 					textColor:
-						(lecturer?.email.includes('@') ?? false)
-							? theme.colors.primary
-							: undefined,
+						(lecturer?.email.includes('@') ?? false) ? primaryColor : undefined,
 					onPress: () => {
 						void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
 					}
@@ -144,17 +144,23 @@ export default function LecturerDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
-			style={styles.page}
-			contentContainerStyle={styles.container}
+			className="px-page"
+			contentContainerClassName="gap-3 pb-modal-bottom"
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{lecturerName}
 								</HeaderTitle>
 							</Animated.View>
@@ -163,9 +169,9 @@ export default function LecturerDetail(): React.JSX.Element {
 				}}
 			/>
 
-			<View style={styles.titleContainer}>
+			<View className="flex-row items-start justify-between">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-2xl font-semibold pt-4 text-left"
 					adjustsFontSizeToFit
 					minimumFontScale={0.8}
 					numberOfLines={3}
@@ -173,42 +179,9 @@ export default function LecturerDetail(): React.JSX.Element {
 					{lecturerName}
 				</Text>
 			</View>
-			<View style={styles.formList}>
+			<View className="self-center w-full pb-[100px]">
 				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		gap: 12,
-		paddingBottom: theme.margins.modalBottomMargin
-	},
-	formList: {
-		alignSelf: 'center',
-		width: '100%',
-		paddingBottom: 100
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	page: {
-		paddingHorizontal: theme.margins.page
-	},
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 24,
-		fontWeight: '600',
-		paddingTop: 16,
-		textAlign: 'left'
-	}
-}))

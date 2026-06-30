@@ -1,20 +1,18 @@
 import type { PackedEvent } from '@howljs/calendar-kit'
 import type React from 'react'
 import { Text, View } from 'react-native'
-import {
-	createStyleSheet,
-	type UnistylesTheme,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 const WeekHeaderEvent = ({
 	event
 }: {
 	event: PackedEvent
-	theme: UnistylesTheme
 }): React.JSX.Element | null => {
-	const { styles } = useStyles(stylesheet)
+	const calendarItemColor = String(
+		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
+	)
 
 	const eventName = event?.name ?? event?.title ?? ''
 	if (!eventName) {
@@ -22,9 +20,13 @@ const WeekHeaderEvent = ({
 	}
 
 	return (
-		<View style={styles.headerEventContainer}>
+		<View
+			className="-mx-0.5 -my-px px-1.5 flex-1 justify-center"
+			style={{ backgroundColor: calendarItemColor }}
+		>
 			<Text
-				style={styles.headerEventTitle}
+				className="text-xs font-semibold"
+				style={{ color: getContrastColor(calendarItemColor) }}
 				numberOfLines={1}
 				ellipsizeMode="tail"
 			>
@@ -33,21 +35,5 @@ const WeekHeaderEvent = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	headerEventContainer: {
-		marginHorizontal: -2,
-		marginVertical: -1,
-		paddingHorizontal: 6,
-		flex: 1,
-		justifyContent: 'center',
-		backgroundColor: theme.colors.calendarItem
-	},
-	headerEventTitle: {
-		fontSize: 12,
-		fontWeight: '600',
-		color: getContrastColor(theme.colors.calendarItem)
-	}
-}))
 
 export default WeekHeaderEvent

@@ -4,16 +4,15 @@ import {
 	setAlternateAppIcon,
 	supportsAlternateIcons
 } from 'expo-alternate-app-icons'
-import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import Divider from '@/components/Universal/divider'
 import PlatformIcon from '@/components/Universal/icon'
 import SectionView from '@/components/Universal/sections-view'
+import { Image } from '@/components/Universal/styled'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
@@ -37,7 +36,6 @@ iconImages = {
 export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
 	)
@@ -64,7 +62,7 @@ export default function AppIconPicker(): React.JSX.Element {
 	}
 	return (
 		<ScrollView
-			contentContainerStyle={styles.container}
+			contentContainerClassName="self-center pb-[50px] w-full"
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
 		>
@@ -73,13 +71,13 @@ export default function AppIconPicker(): React.JSX.Element {
 				title={t('appIcon.categories.exclusive')}
 				footer={t('appIcon.exclusive')}
 			>
-				<View style={styles.sectionContainer}>
+				<View className="content-center bg-card rounded-md justify-center">
 					{categories.exclusive.map((icon, index) => {
 						const unlocked = unlockedAppIcons.includes(icon)
 						return (
 							<React.Fragment key={icon}>
 								<Pressable
-									style={styles.rowContainer}
+									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={
 										unlocked
 											? async () => {
@@ -101,16 +99,13 @@ export default function AppIconPicker(): React.JSX.Element {
 									}
 									disabled={!unlocked}
 								>
-									<View style={styles.rowInnerContainer}>
+									<View className="flex-row gap-8">
 										<Image
 											source={iconImages[icon]}
-											style={[
-												styles.imageContainer,
-												!unlocked && styles.imageDimmed
-											]}
+											className={`border border-border rounded-[18px] h-20 w-20${!unlocked ? ' opacity-30' : ''}`}
 										/>
-										<View style={styles.textContainer}>
-											<Text style={styles.iconText}>
+										<View className="justify-center">
+											<Text className="self-center text-text text-lg font-medium text-center">
 												{t(
 													// @ts-expect-error - icon is a valid key
 													`appIcon.names.${icon}`
@@ -126,7 +121,7 @@ export default function AppIconPicker(): React.JSX.Element {
 										/>
 									)}
 									{!unlocked && (
-										<Text style={styles.statusText}>
+										<Text className="text-label-secondary text-[13px] text-center pt-1 px-3">
 											{t('appIcon.status.locked')}
 										</Text>
 									)}
@@ -142,12 +137,12 @@ export default function AppIconPicker(): React.JSX.Element {
 
 			{/* Neuland section */}
 			<SectionView title={t('appIcon.categories.neuland')}>
-				<View style={styles.sectionContainer}>
+				<View className="content-center bg-card rounded-md justify-center">
 					{memberInfo ? (
 						categories.neuland.map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
-									style={styles.rowContainer}
+									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={async () => {
 										try {
 											await setAlternateAppIcon(capitalizeFirstLetter(icon))
@@ -158,13 +153,13 @@ export default function AppIconPicker(): React.JSX.Element {
 									}}
 									disabled={false}
 								>
-									<View style={styles.rowInnerContainer}>
+									<View className="flex-row gap-8">
 										<Image
 											source={iconImages[icon]}
-											style={styles.imageContainer}
+											className="border border-border rounded-[18px] h-20 w-20"
 										/>
-										<View style={styles.textContainer}>
-											<Text style={styles.iconText}>
+										<View className="justify-center">
+											<Text className="self-center text-text text-lg font-medium text-center">
 												{
 													// @ts-expect-error - icon is a valid key
 													t(`appIcon.names.${icon}`)
@@ -204,14 +199,11 @@ export default function AppIconPicker(): React.JSX.Element {
 									<Image
 										key={icon}
 										source={iconImages[icon]}
-										style={[
-											styles.imageContainer,
-											{ marginHorizontal: 4, opacity: 0.6 }
-										]}
+										className="border border-border rounded-[18px] h-20 w-20 mx-1 opacity-60"
 									/>
 								))}
 							</View>
-							<Text style={styles.statusText}>
+							<Text className="text-label-secondary text-[13px] text-center pt-1 px-3">
 								{t('appIcon.exclusivePreviewSubtitle')}
 							</Text>
 						</Pressable>
@@ -222,11 +214,11 @@ export default function AppIconPicker(): React.JSX.Element {
 			{/* Default and rainbow sections */}
 			{(['default', 'rainbow'] as const).map((key) => (
 				<SectionView title={t(`appIcon.categories.${key}`)} key={key}>
-					<View style={styles.sectionContainer}>
+					<View className="content-center bg-card rounded-md justify-center">
 						{categories[key].map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
-									style={styles.rowContainer}
+									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={async () => {
 										try {
 											if (icon === 'default') {
@@ -242,13 +234,13 @@ export default function AppIconPicker(): React.JSX.Element {
 									}}
 									disabled={false}
 								>
-									<View style={styles.rowInnerContainer}>
+									<View className="flex-row gap-8">
 										<Image
 											source={iconImages[icon]}
-											style={styles.imageContainer}
+											className="border border-border rounded-[18px] h-20 w-20"
 										/>
-										<View style={styles.textContainer}>
-											<Text style={styles.iconText}>
+										<View className="justify-center">
+											<Text className="self-center text-text text-lg font-medium text-center">
 												{
 													// @ts-expect-error - icon is a valid key
 													t(`appIcon.names.${icon}`)
@@ -275,57 +267,3 @@ export default function AppIconPicker(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignSelf: 'center',
-		paddingBottom: 50,
-		width: '100%'
-	},
-	iconText: {
-		alignSelf: 'center',
-		color: theme.colors.text,
-		fontSize: 18,
-		fontWeight: '500',
-		textAlign: 'center'
-	},
-	textContainer: {
-		justifyContent: 'center'
-	},
-	statusText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		textAlign: 'center',
-		paddingTop: 4,
-		paddingHorizontal: 12
-	},
-	imageContainer: {
-		borderColor: theme.colors.border,
-		borderRadius: 18,
-		borderWidth: 1,
-		height: 80,
-		width: 80
-	},
-	imageDimmed: {
-		opacity: 0.3
-	},
-	rowContainer: {
-		alignItems: 'center',
-
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingEnd: 20,
-		paddingStart: 12,
-		paddingVertical: 12
-	},
-	rowInnerContainer: {
-		flexDirection: 'row',
-		gap: 32
-	},
-	sectionContainer: {
-		alignContent: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		justifyContent: 'center'
-	}
-}))

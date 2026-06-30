@@ -1,15 +1,16 @@
 import { trackEvent } from '@aptabase/react-native'
-import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import type { Position } from 'geojson'
 import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { StyledBottomSheetTouchableOpacity } from '@/components/Universal/styled'
 import { MapContext } from '@/contexts/map'
 import type { SEARCH_TYPES, SearchResult } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 import PlatformIcon from '../Universal/icon'
 
@@ -27,13 +28,16 @@ const ResultRow = ({
 	updateSearchHistory
 }: ResultRowProps): React.JSX.Element => {
 	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
-	const { styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation()
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const iconColor = getContrastColor(primaryColor)
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
-		<TouchableOpacity
+		<StyledBottomSheetTouchableOpacity
 			key={index}
-			style={styles.searchRowContainer}
+			className="items-center flex-row py-2.5"
 			onPress={() => {
 				const center = result.item.properties?.center as Position | undefined
 				updateSearchHistory(result)
@@ -55,7 +59,10 @@ const ResultRow = ({
 				setLocalSearch('')
 			}}
 		>
-			<View style={styles.searchIconContainer}>
+			<View
+				className="items-center rounded-full h-10 justify-center me-3.5 w-10"
+				style={{ backgroundColor: primaryColor }}
+			>
 				<PlatformIcon
 					ios={{
 						name: result.item.properties?.icon.ios as string,
@@ -70,53 +77,20 @@ const ResultRow = ({
 						name: 'MapPin',
 						size: 21
 					}}
-					style={styles.icon}
+					style={{ color: iconColor }}
 				/>
 			</View>
 
-			<View style={styles.flex}>
-				<Text style={styles.suggestionTitle}>{result.title}</Text>
-				<Text style={styles.suggestionSubtitle}>
+			<View className="flex-1">
+				<Text className="text-text text-base font-semibold">
+					{result.title}
+				</Text>
+				<Text className="text-text text-sm font-normal max-w-[90%]">
 					{result.item.properties?.[roomTypeKey] ?? result.subtitle}
 				</Text>
 			</View>
-		</TouchableOpacity>
+		</StyledBottomSheetTouchableOpacity>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	flex: {
-		flex: 1
-	},
-	icon: {
-		color: getContrastColor(theme.colors.primary)
-	},
-
-	searchIconContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: 50,
-		height: 40,
-		justifyContent: 'center',
-		marginRight: 14,
-		width: 40
-	},
-	searchRowContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingVertical: 10
-	},
-	suggestionSubtitle: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '400',
-		maxWidth: '90%'
-	},
-	suggestionTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600'
-	}
-}))
 
 export default memo(ResultRow)

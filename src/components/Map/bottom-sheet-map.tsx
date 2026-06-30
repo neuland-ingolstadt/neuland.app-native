@@ -1,28 +1,19 @@
-import BottomSheet from '@gorhom/bottom-sheet'
+import type BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import type { FeatureCollection } from 'geojson'
 import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	TextInput,
-	View
-} from 'react-native'
+import { Platform, Pressable, Text, TextInput, View } from 'react-native'
 import Animated, {
 	type SharedValue,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
+import { StyledBottomSheet } from '@/components/Universal/styled'
 import { MapContext } from '@/contexts/map'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import AttributionLink from './attribution-link'
 import AvailableRoomsSuggestions from './available-rooms-suggestions'
 import BottomSheetBackground from './bottom-sheet-background'
@@ -43,9 +34,24 @@ const MapBottomSheet = ({
 	handlePresentModalPress,
 	allRooms
 }: MapBottomSheetProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const { theme } = useUniwind()
+	const isDark = theme === 'dark'
 	const { t } = useTranslation('common')
 	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const borderColor = String(
+		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
+	)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const inputBackground = isDark
+		? Color(cardColor)
+				.lighten(Platform.OS === 'ios' ? 0.3 : 0.1)
+				.hex()
+		: Color(cardColor)
+				.darken(Platform.OS === 'ios' ? 0.03 : 0.01)
+				.hex()
 
 	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	const textInputRef = useRef<any>(null)
@@ -66,7 +72,6 @@ const MapBottomSheet = ({
 		})
 	}
 
-	// Clear any existing blur timeout when component unmounts
 	React.useEffect(() => {
 		return () => {
 			if (blurTimeoutRef.current) {
@@ -79,7 +84,7 @@ const MapBottomSheet = ({
 	const IOS_SNAP_POINTS = ['20%', '39%', '90%']
 	const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
 	return (
-		<BottomSheet
+		<StyledBottomSheet
 			ref={bottomSheetRef}
 			index={1}
 			snapPoints={Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS}
@@ -95,15 +100,21 @@ const MapBottomSheet = ({
 				}
 			}}
 			enableDynamicSizing={false}
-			handleIndicatorStyle={styles.indicator}
+			handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
 		>
-			<View style={styles.page}>
-				<View style={styles.inputContainer}>
+			<View className="px-page">
+				<View className="flex-row h-10 mb-2.5">
 					<TextInput
 						ref={textInputRef}
-						style={styles.textInput}
+						className="rounded-mg flex-1 text-[17px] h-10 mb-2.5 px-2.5"
+						style={{
+							...hairlineBorder,
+							backgroundColor: inputBackground,
+							borderColor,
+							color: textColor
+						}}
 						placeholder={t('pages.map.search.hint')}
-						placeholderTextColor={theme.colors.labelColor}
+						placeholderTextColor={labelColor}
 						value={localSearch}
 						enablesReturnKeyAutomatically
 						clearButtonMode="always"
@@ -117,7 +128,6 @@ const MapBottomSheet = ({
 							bottomSheetRef.current?.expand()
 						}}
 						onBlur={() => {
-							// Add delay before hiding search history to allow clicks to complete
 							if (blurTimeoutRef.current) {
 								clearTimeout(blurTimeoutRef.current)
 							}
@@ -132,17 +142,17 @@ const MapBottomSheet = ({
 						}}
 					/>
 
-					<Animated.View style={[styles.cancelContainer, animatedCancelStyle]}>
+					<Animated.View className="justify-center" style={animatedCancelStyle}>
 						<Pressable
 							onPress={() => {
 								setLocalSearch('')
 								textInputRef.current?.blur()
 								bottomSheetRef.current?.snapToIndex(1)
 							}}
-							style={styles.cancelButton}
+							className="self-center ps-2.5 pe-0.5"
 						>
 							<Text
-								style={styles.cancelButtonText}
+								className="text-primary text-[15px] font-semibold text-center"
 								numberOfLines={1}
 								allowFontScaling={false}
 								ellipsizeMode="clip"
@@ -158,7 +168,7 @@ const MapBottomSheet = ({
 				)}
 
 				{searchFocused && localSearch === '' && (
-					<Text style={styles.searchHint}>
+					<Text className="text-label text-base pt-[60px] py-[30px] text-center">
 						{t('pages.map.search.placeholder')}
 					</Text>
 				)}
@@ -182,64 +192,8 @@ const MapBottomSheet = ({
 					</>
 				)}
 			</View>
-		</BottomSheet>
+		</StyledBottomSheet>
 	)
 }
 
 export default MapBottomSheet
-
-const stylesheet = createStyleSheet((theme) => ({
-	cancelButton: {
-		alignSelf: 'center',
-		paddingLeft: 10,
-
-		paddingRight: 2
-	},
-	cancelButtonText: {
-		color: theme.colors.primary,
-		fontSize: 15,
-		fontWeight: '600',
-		textAlign: 'center'
-	},
-	cancelContainer: { justifyContent: 'center' },
-	indicator: {
-		backgroundColor: theme.colors.labelTertiaryColor
-	},
-
-	inputContainer: {
-		flexDirection: 'row',
-		height: 40,
-		marginBottom: 10
-	},
-	page: {
-		paddingHorizontal: theme.margins.page
-	},
-
-	searchHint: {
-		color: theme.colors.labelColor,
-		fontSize: 16,
-		paddingTop: 60,
-		paddingVertical: 30,
-		textAlign: 'center'
-	},
-
-	textInput: {
-		backgroundColor:
-			UnistylesRuntime.themeName === 'dark'
-				? Color(theme.colors.card)
-						.lighten(Platform.OS === 'ios' ? 0.3 : 0.1)
-						.hex()
-				: Color(theme.colors.card)
-						.darken(Platform.OS === 'ios' ? 0.03 : 0.01)
-						.hex(),
-		borderRadius: theme.radius.mg,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 17,
-		height: 40,
-		marginBottom: 10,
-		paddingHorizontal: 10
-	}
-}))

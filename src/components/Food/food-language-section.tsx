@@ -1,8 +1,9 @@
 import { selectionAsync } from 'expo-haptics'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import Divider from '@/components/Universal/divider'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from '../Universal/icon'
 
 export interface FoodLanguageElement {
@@ -10,13 +11,6 @@ export interface FoodLanguageElement {
 	key: string
 }
 
-/**
- * A component that renders a list of selectable items with a title and a checkmark icon.
- * @param {FoodLanguageElement[]} elements - The list of selectable items.
- * @param {string[]} selectedItems - The list of selected items.
- * @param {(item: FoodLanguage) => void} action - The function to be called when an item is selected.
- * @returns {React.JSX.Element} - The MultiSectionPicker component.
- */
 export interface FoodLanguagePickerProps {
 	elements: FoodLanguageElement[]
 	selectedItem: string
@@ -28,12 +22,13 @@ const MultiSectionRadio = ({
 	selectedItem,
 	action
 }: FoodLanguagePickerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+
 	return (
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<View style={styles.itemContainer}>
+					<View className="h-[52px]">
 						<Pressable
 							onPress={() => {
 								if (Platform.OS === 'ios') {
@@ -41,12 +36,11 @@ const MultiSectionRadio = ({
 								}
 								action(item.key)
 							}}
-							style={({ pressed }) => [
-								styles.itemContent,
-								pressed && { opacity: 0.8 }
-							]}
+							className="bg-card ios:rounded-ios android:rounded-lg p-4 flex-row items-center justify-between h-full active:opacity-80"
 						>
-							<Text style={styles.itemText}>{item.title}</Text>
+							<Text className="text-text text-base flex-1 mr-2">
+								{item.title}
+							</Text>
 							{selectedItem === item.key && (
 								<PlatformIcon
 									ios={{
@@ -61,7 +55,7 @@ const MultiSectionRadio = ({
 										name: 'Check',
 										size: 18
 									}}
-									style={styles.checkIcon}
+									style={{ color: primaryColor }}
 								/>
 							)}
 						</Pressable>
@@ -74,29 +68,5 @@ const MultiSectionRadio = ({
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	itemContainer: {
-		height: 52
-	},
-	itemContent: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: '100%'
-	},
-	itemText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		flex: 1,
-		marginRight: 8
-	},
-	checkIcon: {
-		color: theme.colors.primary
-	}
-}))
 
 export default MultiSectionRadio

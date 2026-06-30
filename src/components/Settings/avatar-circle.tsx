@@ -5,7 +5,8 @@ import {
 	View,
 	type ViewStyle
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 /**
  * AvatarCircle component that displays a circular image or icon with optional shadow and background color.
@@ -26,27 +27,24 @@ const AvatarCircle = ({
 	children: React.JSX.Element
 	style?: StyleProp<ViewStyle>
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	return (
 		<View
-			style={[styles.avatar(size, background || theme.colors.primary), style]}
+			className="justify-center items-center self-center"
+			style={[
+				{
+					width: size,
+					height: size,
+					borderRadius: size / 2,
+					backgroundColor: background ?? primaryColor
+				},
+				style
+			]}
 		>
 			{children}
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet({
-	avatar: (size: number, background: ColorValue) => ({
-		width: size,
-		height: size,
-		borderRadius: size / 2,
-		backgroundColor: background,
-		justifyContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center'
-	})
-})
 
 export default AvatarCircle

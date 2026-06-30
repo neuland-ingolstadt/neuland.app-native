@@ -24,7 +24,7 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import AnimatedText from '@/components/Flow/svgs/animated-text'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
@@ -34,12 +34,18 @@ import { PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function OnboardingScreen(): React.JSX.Element {
 	const { t } = useTranslation('flow')
 	const setOnboarded = useFlowStore((state) => state.setOnboarded)
 	const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const labelSecondaryColor = toColor(useCSSVariable('--color-label-secondary'))
+	const primaryColor = String(useCSSVariable('--color-primary') ?? '#007aff')
+	const buttonTextColor = getContrastColor(primaryColor)
 
 	const data: OnboardingCardData[] = [
 		{
@@ -73,10 +79,9 @@ export default function OnboardingScreen(): React.JSX.Element {
 	]
 
 	const ContinueButton = (): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet)
 		return (
 			<Pressable
-				style={styles.button}
+				className="self-center bg-primary rounded-md px-6 py-3.5 w-1/2"
 				onPress={() => {
 					if (Platform.OS === 'ios') {
 						void Haptics.selectionAsync()
@@ -91,7 +96,12 @@ export default function OnboardingScreen(): React.JSX.Element {
 				}}
 				disabled={buttonDisabled}
 			>
-				<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>
+				<Text
+					className="text-base font-bold text-center"
+					style={{ color: buttonTextColor }}
+				>
+					{t('whatsnew.continue')}
+				</Text>
 			</Pressable>
 		)
 	}
@@ -111,9 +121,8 @@ export default function OnboardingScreen(): React.JSX.Element {
 	const window = Dimensions.get('window')
 
 	const CardsElement = (): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet)
 		return (
-			<Animated.View style={[styles.boxesContainer, styles.boxes]}>
+			<Animated.View className="justify-center pt-5 gap-3 mx-10">
 				{data.map(({ title, description, icon }, index) => {
 					const rotation = useSharedValue(0)
 
@@ -183,28 +192,25 @@ export default function OnboardingScreen(): React.JSX.Element {
 			opacity: legalOpacity.value,
 			transform: [{ translateY: legalTranslateY.value }]
 		}))
-		const { styles } = useStyles(stylesheet)
 		return (
-			<Animated.View style={{ ...legalAnimatedStyle }}>
+			<Animated.View style={legalAnimatedStyle}>
 				<View
+					className="items-center flex-row justify-center"
 					style={{
-						...styles.privacyRow,
 						marginBottom: window.height * 0.035,
 						marginTop: window.height * 0.008
 					}}
 				>
 					<Text
-						style={{
-							...styles.privacyText,
-
-							maxWidth: window.width
-						}}
+						className="flex-wrap flex-1 shrink text-center text-sm"
+						style={{ color: labelColor, maxWidth: window.width }}
 						numberOfLines={2}
 					>
 						<Text>{t('onboarding.links.agree1')}</Text>
 						<Text
 							disabled={buttonDisabled}
-							style={styles.linkPrivacy}
+							className="font-bold"
+							style={{ color: textColor }}
 							onPress={() => {
 								void Linking.openURL(PRIVACY_URL)
 							}}
@@ -378,17 +384,16 @@ export default function OnboardingScreen(): React.JSX.Element {
 		return size * (window.width / guidelineBaseWidth)
 	}
 	const scaledHeading = scaleFontSize(33)
-	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			<View
+				className="items-center bg-contrast flex-1 mx-1.5"
 				style={{
-					...styles.page,
 					paddingTop: insets.top + 20,
 					paddingBottom: insets.bottom + 60
 				}}
 			>
-				<View style={styles.logoTextGroup}>
+				<View className="flex-1 justify-center items-center">
 					<Animated.View
 						style={{
 							...logoAnimatedStyle,
@@ -402,7 +407,9 @@ export default function OnboardingScreen(): React.JSX.Element {
 						style={[
 							{
 								fontSize: scaledHeading,
-								...styles.heading1
+								color: textColor,
+								fontWeight: 'bold',
+								textAlign: 'center'
 							},
 							textAnimatedStyle
 						]}
@@ -417,23 +424,26 @@ export default function OnboardingScreen(): React.JSX.Element {
 						textStyles={[
 							{
 								fontSize: scaledHeading,
-								...styles.heading2
+								color: textColor,
+								fontWeight: 'bold',
+								textAlign: 'center'
 							},
 							textAnimatedStyle
 						]}
 					/>
 				</View>
-				<Animated.View style={[styles.cardsContainer, cardsViewAnimatedStyle]}>
+				<Animated.View className="grow-[0.5]" style={cardsViewAnimatedStyle}>
 					<CardsElement />
 				</Animated.View>
 
-				<View style={styles.legalContainer}>
+				<View className="flex-1 justify-center w-[95%]">
 					<LegalArea />
 				</View>
 				<Animated.View
-					style={[styles.fullLogoContainer, textLogoAnimatedStyle]}
+					className="items-center bottom-[30px] absolute w-full"
+					style={textLogoAnimatedStyle}
 				>
-					<LogoTextSVG size={15} color={styles.heading1.color} />
+					<LogoTextSVG size={15} color={String(textColor)} />
 				</Animated.View>
 			</View>
 			<Animated.View style={helpAnimatedStyle}>
@@ -441,10 +451,9 @@ export default function OnboardingScreen(): React.JSX.Element {
 					onPress={() => {
 						void Linking.openURL('https://neuland.app/docs/app/faq')
 					}}
-					style={{}}
 				>
 					<PlatformIcon
-						style={styles.icon}
+						style={{ color: labelSecondaryColor }}
 						ios={{
 							name: 'questionmark.circle',
 							size: 20,
@@ -465,80 +474,3 @@ export default function OnboardingScreen(): React.JSX.Element {
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	boxes: {
-		gap: 12,
-		marginHorizontal: 40
-	},
-	boxesContainer: {
-		justifyContent: 'center',
-		paddingTop: 20
-	},
-	button: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.radius.md,
-		paddingHorizontal: 24,
-		paddingVertical: 14,
-		width: '50%'
-	},
-
-	buttonText: {
-		color: getContrastColor(theme.colors.primary),
-		fontSize: 16,
-		fontWeight: '700',
-		textAlign: 'center'
-	},
-	cardsContainer: {
-		flexGrow: 0.5
-	},
-	fullLogoContainer: {
-		alignItems: 'center',
-		bottom: 30,
-		position: 'absolute',
-		width: '100%'
-	},
-
-	heading1: {
-		color: theme.colors.text,
-		fontWeight: 'bold',
-		textAlign: 'center'
-	},
-	heading2: {
-		color: theme.colors.text,
-		fontWeight: 'bold',
-		textAlign: 'center'
-	},
-	icon: {
-		color: theme.colors.labelSecondaryColor
-	},
-	legalContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		width: '95%'
-	},
-	linkPrivacy: {
-		color: theme.colors.text,
-		fontWeight: 'bold'
-	},
-	logoTextGroup: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-	page: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.contrast,
-		flex: 1,
-		marginHorizontal: 6
-	},
-	privacyRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'center'
-	},
-	privacyText: {
-		color: theme.colors.labelColor,
-		flexWrap: 'wrap',
-		flex: 1,
-		flexShrink: 1,
-		textAlign: 'center'
-	}
-}))

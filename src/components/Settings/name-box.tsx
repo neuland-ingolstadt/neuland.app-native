@@ -1,8 +1,9 @@
 import type React from 'react'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface NameBoxProps {
 	children: ReactNode
@@ -30,33 +31,43 @@ const NameBox = ({
 	subTitle2,
 	showChevron
 }: NameBoxProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const labelSecondaryColor = toColor(useCSSVariable('--color-label-secondary'))
 
 	return (
-		<View style={styles.wrapper}>
+		<View className="flex-row items-center px-4 py-[15px] w-full">
 			{children}
-			<View style={styles.container}>
-				<Text style={styles.title} numberOfLines={1}>
+			<View className="items-start flex-1 justify-center ml-4 max-w-[92%]">
+				<Text
+					className="text-text text-lg font-bold overflow-hidden"
+					numberOfLines={1}
+				>
 					{title}
 				</Text>
 
-				<Text style={styles.subtitle} numberOfLines={2} allowFontScaling={true}>
+				<Text
+					className="text-label text-xs leading-[14px] overflow-hidden"
+					numberOfLines={2}
+					allowFontScaling={true}
+				>
 					{subTitle1}
 				</Text>
 
 				{subTitle2 !== '' && (
-					<Text style={styles.subtitle} numberOfLines={2}>
+					<Text
+						className="text-label text-xs leading-[14px] overflow-hidden"
+						numberOfLines={2}
+					>
 						{subTitle2}
 					</Text>
 				)}
 			</View>
 			{showChevron && (
-				<View style={styles.chevronContainer}>
+				<View className="ml-2 items-center justify-center">
 					<PlatformIcon
 						ios={{ name: 'chevron.forward', size: 14 }}
 						android={{ name: 'chevron_right', size: 28 }}
 						web={{ name: 'ChevronRight', size: 28 }}
-						style={styles.chevronIcon}
+						style={{ color: labelSecondaryColor }}
 					/>
 				</View>
 			)}
@@ -65,40 +76,3 @@ const NameBox = ({
 }
 
 export default NameBox
-
-const stylesheet = createStyleSheet((theme) => ({
-	wrapper: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 16,
-		paddingVertical: 15,
-		width: '100%'
-	},
-	container: {
-		alignItems: 'flex-start',
-		flex: 1,
-		justifyContent: 'center',
-		marginLeft: 16,
-		maxWidth: '92%'
-	},
-	subtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		lineHeight: 14,
-		overflow: 'hidden'
-	},
-	title: {
-		color: theme.colors.text,
-		fontSize: 18,
-		fontWeight: 'bold',
-		overflow: 'hidden'
-	},
-	chevronContainer: {
-		marginLeft: 8,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	chevronIcon: {
-		color: theme.colors.labelSecondaryColor
-	}
-}))

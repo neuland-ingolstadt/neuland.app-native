@@ -1,5 +1,5 @@
 ---
-description: Uniwind and Unistyles styling conventions for Neuland Next
+description: Uniwind styling conventions for Neuland Next
 globs:
   - src/**/*.tsx
   - src/**/*.css
@@ -7,27 +7,18 @@ globs:
 alwaysApply: false
 ---
 
-# Styling (Uniwind + Unistyles)
+# Styling (Uniwind)
 
-Neuland Next is migrating from **Unistyles** to **Uniwind** (Tailwind CSS v4). Both run in parallel.
+Neuland Next uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on React Native primitives.
 
-## Which system to use
-
-| Situation | Use |
-| --- | --- |
-| Editing an already-migrated file (`className` present) | **Uniwind** |
-| New UI in migrated areas | **Uniwind** |
-| Everything else (most screens/components today) | **Unistyles** until migrated |
-
-Do not mix `createStyleSheet` and `className` in the same component unless you are actively migrating it.
-
-## Uniwind essentials
+## Essentials
 
 - **Entry**: `src/global.css` imported in `src/app/_layout.tsx` (never in Expo `index`)
 - **Metro**: `metro.config.js` — `withUniwindConfig` must be the outermost wrapper
 - **Tokens**: `@theme` + `@layer theme` / `@variant light|dark` in `global.css`; mirror `src/styles/themes.ts`
 - **Theme sync**: `useUniwindThemeSync` in `provider.tsx` — do not duplicate preference logic
 - **Helpers**: `@/utils/uniwind-utils` (`hairlineBorder`, `toColor`)
+- **Styled wrappers**: `@/components/Universal/styled` for FlashList, BottomSheet, expo-image
 - **Types**: run `bun uniwind:types` after changing `global.css`
 
 ```tsx
@@ -39,25 +30,18 @@ Do not mix `createStyleSheet` and `className` in the same component unless you a
 
 - Platform variants: `ios:`, `android:`, `web:`
 - Runtime colors: `useCSSVariable('--color-primary')` from `uniwind`
+- Dark mode check: `useUniwind()` → `theme === 'dark'`
 - Style props for third-party children: `useResolveClassNames('text-text text-base')`
 - Keep inline `style` for: Reanimated, dynamic dimensions, hairline borders, dynamic per-item colors
 
-## Unistyles (legacy)
-
-```tsx
-const { styles, theme } = useStyles(stylesheet)
-```
-
-Use `createStyleSheet((theme) => ({ … }))` and theme keys from `src/styles/themes.ts`.
-
 ## Avoid
 
-- NativeWind, styled-components, or raw Tailwind config files outside `global.css`
+- `react-native-unistyles`, NativeWind, styled-components, or raw Tailwind config files outside `global.css`
 - Hard-coded colors/sizes — use theme tokens
 - Editing `src/uniwind-types.d.ts` by hand
 - Importing `global.css` in the Expo entry file (breaks HMR)
 
 ## References
 
-- Migrated example: `src/app/(screens)/version.tsx`
+- Example: `src/app/(screens)/version.tsx`
 - Full docs: `AGENTS.md` → Styling section; https://docs.uniwind.dev

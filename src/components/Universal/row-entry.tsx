@@ -1,7 +1,7 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Pressable, Text, View } from 'react-native'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const RowEntry = ({
 	title,
@@ -21,20 +21,19 @@ const RowEntry = ({
 	backgroundColor?: string
 	icon?: React.JSX.Element
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
 	const content = (
 		<View
+			className="rounded-mg bg-card border-border overflow-hidden px-3.5 py-4 w-full"
 			style={[
-				styles.cardContainer,
-				{ backgroundColor: backgroundColor ?? theme.colors.card }
+				hairlineBorder,
+				backgroundColor ? { backgroundColor } : undefined
 			]}
 		>
-			<View style={styles.eventContainer}>
-				{/* Title section */}
-				<View style={styles.titleContainer}>
+			<View className="flex-col rounded-md justify-center">
+				<View className="flex-row gap-1 pb-1.5">
 					{icon}
 					<Text
-						style={styles.titleText}
+						className="text-text text-base font-semibold"
 						numberOfLines={2}
 						textBreakStrategy="highQuality"
 					>
@@ -42,10 +41,11 @@ const RowEntry = ({
 					</Text>
 				</View>
 
-				{/* Children section */}
-				<View style={styles.childrenContainer}>
-					<View style={styles.leftChildrenContainer}>{leftChildren}</View>
-					<View style={styles.rightChildrenContainer}>{rightChildren}</View>
+				<View className="flex-row justify-between w-full">
+					<View className="flex-[2] items-start justify-start">
+						{leftChildren}
+					</View>
+					<View className="flex-1 items-end justify-end">{rightChildren}</View>
 				</View>
 			</View>
 		</View>
@@ -53,10 +53,7 @@ const RowEntry = ({
 
 	if (!href) {
 		return onPress ? (
-			<Pressable
-				onPress={onPress}
-				style={({ pressed }) => pressed && styles.pressed}
-			>
+			<Pressable onPress={onPress} className="active:opacity-90">
 				{content}
 			</Pressable>
 		) : (
@@ -66,60 +63,11 @@ const RowEntry = ({
 
 	return (
 		<Link href={href} asChild>
-			<Pressable
-				onPress={onPress}
-				style={({ pressed }) => pressed && styles.pressed}
-			>
+			<Pressable onPress={onPress} className="active:opacity-90">
 				{content}
 			</Pressable>
 		</Link>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	cardContainer: {
-		borderRadius: theme.radius.mg,
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		overflow: 'hidden',
-		paddingHorizontal: 14,
-		paddingVertical: 16,
-		width: '100%'
-	},
-	eventContainer: {
-		flexDirection: 'column',
-		borderRadius: theme.radius.md,
-		justifyContent: 'center'
-	},
-	pressed: {
-		opacity: 0.9
-	},
-	titleContainer: {
-		flexDirection: 'row',
-		gap: 4,
-		paddingBottom: 6
-	},
-	titleText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600'
-	},
-	childrenContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: '100%'
-	},
-	leftChildrenContainer: {
-		flex: 2,
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start'
-	},
-	rightChildrenContainer: {
-		flex: 1,
-		alignItems: 'flex-end',
-		justifyContent: 'flex-end'
-	}
-}))
 
 export default RowEntry

@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/food-language-section'
@@ -14,7 +13,6 @@ import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
-	const { styles } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
 
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
@@ -74,7 +72,6 @@ export default function TimetablePreferences(): React.JSX.Element {
 	if (showCalendarEvents) selectedAdditionalContent.push('showCalendarEvents')
 	if (showExams) selectedAdditionalContent.push('showExams')
 
-	// Handle toggling additional content options
 	const toggleAdditionalContent = (key: string) => {
 		if (key === 'showCalendarEvents') {
 			setShowCalendarEvents(!showCalendarEvents)
@@ -84,8 +81,8 @@ export default function TimetablePreferences(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView contentContainerStyle={{ paddingTop: headerPadding }}>
-			<View style={styles.container}>
+		<ScrollView style={{ paddingTop: headerPadding }}>
+			<View className="flex-1">
 				<SectionView title={t('timetable:preferences.title')}>
 					<SingleSectionPicker
 						title={t('timetable:viewModes.list')}
@@ -110,8 +107,8 @@ export default function TimetablePreferences(): React.JSX.Element {
 					/>
 				</SectionView>
 
-				<View style={styles.previewContainerWrapper}>
-					<View style={styles.previewContainer}>
+				<View className="px-page mt-10 w-full items-center">
+					<View className="w-full max-w-[600px]">
 						<TimetablePreview
 							mode={timetableMode}
 							showCalendarEvents={showCalendarEvents}
@@ -123,17 +120,3 @@ export default function TimetablePreferences(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: { flex: 1 },
-	previewContainerWrapper: {
-		paddingHorizontal: theme.margins.page,
-		marginTop: 40,
-		width: '100%',
-		alignItems: 'center'
-	},
-	previewContainer: {
-		width: '100%',
-		maxWidth: 600
-	}
-}))

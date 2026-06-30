@@ -3,25 +3,20 @@ import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import type { Food, Meal } from '@/types/neuland-api'
+import { toColor } from '@/utils/uniwind-utils'
 import { EmptyFoodAnimation } from './empty-food-animation'
 
 import { MealEntry } from './meal-entry'
 
-/**
- * Sorts categories by priority with main dishes first, soups lower in the order
- * @param categories - An array of category names
- * @returns A sorted array of category names
- */
 const sortCategoriesByPriority = (categories: string[]): string[] => {
 	const categoryPriority: Record<string, number> = {
 		main: 1,
 		side: 2,
 		dessert: 3,
 		soup: 4
-		// Any other categories will be sorted alphabetically after these
 	}
 
 	return [...categories].sort((a, b) => {
@@ -29,17 +24,12 @@ const sortCategoriesByPriority = (categories: string[]): string[] => {
 		const priorityB = categoryPriority[b] || 10
 
 		if (priorityA === priorityB) {
-			return a.localeCompare(b) // If same priority, sort alphabetically
+			return a.localeCompare(b)
 		}
 		return priorityA - priorityB
 	})
 }
 
-/**
- * Renders a group of meals for a given category.
- * @param group - An object containing meals grouped by category.
- * @returns A JSX element representing the group of meals.
- */
 const MealGroup = ({
 	group
 }: {
@@ -56,12 +46,6 @@ const MealGroup = ({
 	)
 }
 
-/**
- * Renders a category of meals.
- * @param category - The name of the category.
- * @param meals - An array of meals belonging to the category.
- * @returns A JSX element representing the category of meals.
- */
 const MealCategory = ({
 	category,
 	meals
@@ -70,27 +54,24 @@ const MealCategory = ({
 	meals: Meal[]
 }): React.JSX.Element => {
 	const [collapsed, setCollapsed] = useState(false)
+	const { t } = useTranslation('food')
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
-	/**
-	 * Toggles the collapsed state of the category.
-	 */
 	const toggleCollapsed = (): void => {
 		setCollapsed(!collapsed)
 	}
-	const { t } = useTranslation('food')
 
-	const { styles } = useStyles(stylesheet)
 	return (
-		<View key={category} style={styles.categoryContainerCollapsed}>
+		<View key={category} className="pb-2">
 			<Pressable
 				onPress={() => {
 					toggleCollapsed()
 				}}
-				style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+				className="active:opacity-80"
 				hitSlop={{ top: 6, bottom: 6 }}
 			>
-				<View style={styles.categoryContainer}>
-					<Text style={styles.categoryText}>
+				<View className="flex-row items-center justify-between py-[3px]">
+					<Text className="text-label text-[15px] font-medium">
 						{t(`categories.${category}`, category)}
 					</Text>
 					<PlatformIcon
@@ -107,7 +88,7 @@ const MealCategory = ({
 							name: collapsed ? 'ChevronDown' : 'ChevronUp',
 							size: 20
 						}}
-						style={styles.toggleIcon}
+						style={{ color: primaryColor, alignSelf: 'center', marginRight: 4 }}
 					/>
 				</View>
 			</Pressable>
@@ -120,16 +101,10 @@ const MealCategory = ({
 	)
 }
 
-/**
- * Filters an array of meals by restaurant name.
- */
 const filterMealsByRestaurant = (meals: Meal[], restaurant: string): Meal[] => {
 	return meals.filter((meal: Meal) => meal.restaurant === restaurant)
 }
 
-/**
- * Groups an array of meals by category.
- */
 const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	return meals.reduce((r: Record<string, Meal[]>, a: Meal) => {
 		const category = a.category
@@ -142,13 +117,6 @@ const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	}, {})
 }
 
-/**
- * Renders a day's worth of meals.
- * @param day - An object containing meals for a given day.
- * @param index - The index of the day.
- * @param colors - An object containing color values.
- * @returns A JSX element representing the day's meals.
- */
 export const MealDay = ({
 	day,
 	index
@@ -156,8 +124,6 @@ export const MealDay = ({
 	day: Food
 	index: number
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-
 	const mealData = useMemo(() => {
 		const ingolstadtMensa = filterMealsByRestaurant(
 			day.meals,
@@ -190,32 +156,27 @@ export const MealDay = ({
 		groupedMeals: Record<string, Meal[]>
 	}
 
-	/**
-	 * Renders a view for a given restaurant.
-	 * @param restaurantName - The name of the restaurant.
-	 * @param meals - An array of meals belonging to the restaurant.
-	 * @param groupedMeals - An object containing meals grouped by category.
-	 * @returns A JSX element representing the restaurant's meals.
-	 */
 	const renderRestaurantView = useCallback(
 		({ restaurantName, meals, groupedMeals }: RestaurantProps) => {
 			if (meals.length > 0) {
 				return (
 					<View>
-						<Text style={styles.dayRestaurantTitle}>{restaurantName}</Text>
+						<Text className="text-text text-lg font-bold pb-[3px] pt-3">
+							{restaurantName}
+						</Text>
 						<MealGroup group={groupedMeals} />
 					</View>
 				)
 			}
 			return null
 		},
-		[styles.dayRestaurantTitle]
+		[]
 	)
 
 	return mealData.isEmpty ? (
 		<EmptyFoodAnimation />
 	) : (
-		<View key={index} style={styles.foodContainer}>
+		<View key={index} className="pb-bottom-safe">
 			{renderRestaurantView({
 				restaurantName: 'Mensa Ingolstadt',
 				meals: mealData.ingolstadtMensa,
@@ -239,39 +200,3 @@ export const MealDay = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	categoryContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 3,
-		paddingTop: 3
-	},
-	categoryContainerCollapsed: { paddingBottom: 8 },
-	categoryText: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		fontWeight: '500'
-	},
-	dayRestaurantTitle: {
-		color: theme.colors.text,
-		fontSize: 18,
-		fontWeight: 'bold',
-		paddingBottom: 3,
-		paddingTop: 12
-	},
-	emptyContainer: {
-		alignItems: 'center',
-		paddingTop: 40
-	},
-	emptyText: { color: theme.colors.text, fontSize: 16 },
-	toggleIcon: {
-		alignSelf: 'center',
-		color: theme.colors.primary,
-		marginRight: 4
-	},
-	foodContainer: {
-		paddingBottom: theme.margins.bottomSafeArea
-	}
-}))

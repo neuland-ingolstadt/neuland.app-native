@@ -17,7 +17,6 @@ import {
 	Platform,
 	Pressable,
 	Share,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -27,7 +26,7 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import FormList from '@/components/Universal/form-list'
@@ -51,10 +50,18 @@ import {
 } from '@/utils/food-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 export default function FoodDetail(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const successColor = toColor(useCSSVariable('--color-success'))
+	const notificationColor = toColor(useCSSVariable('--color-notification'))
+	const warningColor = toColor(useCSSVariable('--color-warning'))
+	const primaryBackgroundColor = toColor(
+		useCSSVariable('--color-primary-background')
+	)
 
 	const preferencesSelection = useFoodFilterStore(
 		(state) => state.preferencesSelection
@@ -163,7 +170,7 @@ export default function FoodDetail(): React.JSX.Element {
 
 	if (isLoading || !queryData) {
 		return (
-			<View style={styles.loadingContainer}>
+			<View className="flex-1 justify-center items-center">
 				<LoadingIndicator />
 			</View>
 		)
@@ -352,7 +359,7 @@ export default function FoodDetail(): React.JSX.Element {
 							}
 						: undefined,
 					hideChevron: true,
-					iconColor: theme.colors.success,
+					iconColor: successColor,
 					onPress: () => {
 						itemAlert(flag, 'flag')
 					}
@@ -380,7 +387,7 @@ export default function FoodDetail(): React.JSX.Element {
 								}
 							: undefined,
 						hideChevron: true,
-						iconColor: theme.colors.notification,
+						iconColor: notificationColor,
 						onPress: () => {
 							itemAlert(allergen, 'allergen')
 						}
@@ -425,7 +432,7 @@ export default function FoodDetail(): React.JSX.Element {
 					title: t('labels.restaurant', { ns: 'common' }),
 					value: humanLocation,
 					onPress: handlePress,
-					textColor: locationExists ? theme.colors.primary : undefined,
+					textColor: locationExists ? primaryColor : undefined,
 					disabled: !locationExists,
 					icon: {
 						ios: 'mappin.and.ellipse',
@@ -507,16 +514,22 @@ export default function FoodDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
-			contentContainerStyle={styles.page}
+			contentContainerClassName="mx-page pb-bottom-safe"
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{title}
 								</HeaderTitle>
 							</Animated.View>
@@ -524,9 +537,9 @@ export default function FoodDetail(): React.JSX.Element {
 					)
 				}}
 			/>
-			<View style={styles.titleContainer}>
+			<View className="flex-row items-start justify-between pb-1.5">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-[22px] font-bold pt-4 text-left"
 					adjustsFontSizeToFit={true}
 					numberOfLines={3}
 					minimumFontScale={0.8}
@@ -536,9 +549,12 @@ export default function FoodDetail(): React.JSX.Element {
 				</Text>
 			</View>
 
-			<View style={styles.tagsContainer}>
+			<View className="flex-row gap-2 mb-4 items-center">
 				{mealWithDate?.date && (
-					<View style={styles.tagContainer}>
+					<View
+						className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-border"
+						style={hairlineBorder}
+					>
 						<PlatformIcon
 							ios={{
 								name: 'calendar',
@@ -552,15 +568,19 @@ export default function FoodDetail(): React.JSX.Element {
 								name: 'Calendar',
 								size: 15
 							}}
-							style={styles.tagIcon}
+							style={{ color: primaryColor }}
 						/>
-						<Text style={styles.tagText}>
+						<Text className="text-text text-sm font-medium">
 							{formatFriendlyDate(mealWithDate.date)}
 						</Text>
 					</View>
 				)}
 
-				<Pressable style={styles.tagContainer} onPress={handlePress}>
+				<Pressable
+					className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-border"
+					style={hairlineBorder}
+					onPress={handlePress}
+				>
 					<PlatformIcon
 						ios={{
 							name: 'mappin.and.ellipse',
@@ -575,64 +595,79 @@ export default function FoodDetail(): React.JSX.Element {
 							name: 'MapPin',
 							size: 15
 						}}
-						style={styles.tagIcon}
+						style={{ color: primaryColor }}
 					/>
-					<Text style={styles.tagText}>{humanLocation}</Text>
+					<Text className="text-text text-sm font-medium">{humanLocation}</Text>
 				</Pressable>
 			</View>
 
 			{isPriceAvailable && (
-				<View style={styles.pricesContainer}>
+				<View className="flex-row gap-2 mb-4">
 					<View
+						className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
 						style={[
-							styles.priceCard,
-							userKind === USER_STUDENT && styles.priceCardActive
+							hairlineBorder,
+							userKind === USER_STUDENT
+								? {
+										backgroundColor: primaryBackgroundColor,
+										borderColor: primaryColor
+									}
+								: undefined
 						]}
 					>
-						<Text style={styles.priceLabel}>
+						<Text className="text-label text-xs mb-1 text-center">
 							{t('details.formlist.prices.student')}
 						</Text>
 						<Text
-							style={[
-								styles.priceValue,
-								userKind === USER_STUDENT && styles.priceValueActive
-							]}
+							className={`text-base font-semibold text-center ${
+								userKind === USER_STUDENT ? 'text-primary' : 'text-text'
+							}`}
 						>
 							{studentPrice}
 						</Text>
 					</View>
 					<View
+						className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
 						style={[
-							styles.priceCard,
-							userKind === USER_EMPLOYEE && styles.priceCardActive
+							hairlineBorder,
+							userKind === USER_EMPLOYEE
+								? {
+										backgroundColor: primaryBackgroundColor,
+										borderColor: primaryColor
+									}
+								: undefined
 						]}
 					>
-						<Text style={styles.priceLabel}>
+						<Text className="text-label text-xs mb-1 text-center">
 							{t('details.formlist.prices.employee')}
 						</Text>
 						<Text
-							style={[
-								styles.priceValue,
-								userKind === USER_EMPLOYEE && styles.priceValueActive
-							]}
+							className={`text-base font-semibold text-center ${
+								userKind === USER_EMPLOYEE ? 'text-primary' : 'text-text'
+							}`}
 						>
 							{employeePrice}
 						</Text>
 					</View>
 					<View
+						className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
 						style={[
-							styles.priceCard,
-							userKind === USER_GUEST && styles.priceCardActive
+							hairlineBorder,
+							userKind === USER_GUEST
+								? {
+										backgroundColor: primaryBackgroundColor,
+										borderColor: primaryColor
+									}
+								: undefined
 						]}
 					>
-						<Text style={styles.priceLabel}>
+						<Text className="text-label text-xs mb-1 text-center">
 							{t('details.formlist.prices.guest')}
 						</Text>
 						<Text
-							style={[
-								styles.priceValue,
-								userKind === USER_GUEST && styles.priceValueActive
-							]}
+							className={`text-base font-semibold text-center ${
+								userKind === USER_GUEST ? 'text-primary' : 'text-text'
+							}`}
 						>
 							{guestPrice}
 						</Text>
@@ -640,13 +675,16 @@ export default function FoodDetail(): React.JSX.Element {
 				</View>
 			)}
 
-			<View style={styles.formList}>
+			<View className="self-center my-4 w-full">
 				<FormList sections={sections} sheet />
 			</View>
 
 			<Pressable onPress={triggerWiggle}>
-				<View style={styles.notesContainer}>
-					<View style={styles.notesBox}>
+				<View className="self-center mt-5 mb-bottom-safe px-1">
+					<View
+						className="flex-row items-center self-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-border"
+						style={hairlineBorder}
+					>
 						<Animated.View style={wiggleIconAnimatedStyle}>
 							<PlatformIcon
 								ios={{
@@ -662,10 +700,10 @@ export default function FoodDetail(): React.JSX.Element {
 									name: 'TriangleAlert',
 									size: 24
 								}}
-								style={styles.iconWarning}
+								style={{ color: warningColor }}
 							/>
 						</Animated.View>
-						<Text style={styles.notesText}>
+						<Text className="text-label flex-1 shrink text-[11px] text-left">
 							{!isTranslated() ? t('details.translated') : ''}
 							{t('details.footer')}
 						</Text>
@@ -675,133 +713,3 @@ export default function FoodDetail(): React.JSX.Element {
 		</Animated.ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	formList: {
-		alignSelf: 'center',
-		marginVertical: 16,
-		width: '100%'
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	iconWarning: {
-		color: theme.colors.warning
-	},
-	notesBox: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.cardSheet,
-		borderRadius: theme.radius.md,
-		flexDirection: 'row',
-		gap: 16,
-		paddingHorizontal: 14,
-		paddingVertical: 8,
-		width: '100%',
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	notesContainer: {
-		alignSelf: 'center',
-		marginBottom: theme.margins.bottomSafeArea,
-		marginTop: 20,
-		paddingHorizontal: 4
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		flex: 1,
-		flexShrink: 1,
-		fontSize: 11,
-		fontWeight: 'normal',
-		textAlign: 'left'
-	},
-	page: {
-		marginHorizontal: theme.margins.page,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	subtitleText: {
-		color: theme.colors.labelColor,
-		fontSize: 16,
-		fontWeight: '600'
-	},
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 6
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 22,
-		fontWeight: '700',
-		paddingTop: 16,
-		textAlign: 'left'
-	},
-	loadingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	tagsContainer: {
-		flexDirection: 'row',
-		gap: 8,
-		marginBottom: 16,
-		alignItems: 'center'
-	},
-	tagContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 6,
-		backgroundColor: theme.colors.cardSheet,
-		paddingHorizontal: 12,
-		paddingVertical: 6,
-		borderRadius: theme.radius.md,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	tagIcon: {
-		color: theme.colors.primary
-	},
-	tagText: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	pricesContainer: {
-		flexDirection: 'row',
-		gap: 8,
-		marginBottom: 16
-	},
-	priceCard: {
-		flex: 1,
-		backgroundColor: theme.colors.cardSheet,
-		borderRadius: theme.radius.md,
-		padding: 12,
-		alignItems: 'center',
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	priceCardActive: {
-		backgroundColor: `${theme.colors.primary}15`,
-		borderColor: theme.colors.primary
-	},
-	priceLabel: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		marginBottom: 4,
-		textAlign: 'center'
-	},
-	priceValue: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		textAlign: 'center'
-	},
-	priceValueActive: {
-		color: theme.colors.primary
-	}
-}))
