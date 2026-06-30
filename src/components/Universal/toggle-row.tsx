@@ -1,7 +1,7 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const ToggleRow = ({
 	items,
@@ -12,8 +12,6 @@ const ToggleRow = ({
 	selectedElement: number
 	setSelectedElement: (element: number) => void
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-
 	const pressHandler = (index: number) => {
 		setSelectedElement(index)
 		if (Platform.OS === 'ios') {
@@ -22,17 +20,28 @@ const ToggleRow = ({
 	}
 
 	return (
-		<View style={styles.buttonRow}>
+		<View className="self-center flex-row gap-3 justify-between w-full">
 			{items.map((item, index) => {
+				const isSelected = selectedElement === index
+
 				return (
-					<View key={index} style={styles.buttonView}>
+					<View key={index} className="flex-1">
 						<Pressable
 							onPress={() => {
 								pressHandler(index)
 							}}
 						>
-							<View style={styles.buttonContainer}>
-								<Text style={styles.text(selectedElement === index)}>
+							<View
+								className="items-center self-center bg-card ios:rounded-ios android:rounded-md border-border p-page py-2.5 w-full"
+								style={hairlineBorder}
+							>
+								<Text
+									className={
+										isSelected
+											? 'font-medium text-primary text-[15px]'
+											: 'font-normal text-text text-[15px]'
+									}
+								>
 									{item}
 								</Text>
 							</View>
@@ -43,36 +52,5 @@ const ToggleRow = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	buttonContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.ios,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		paddingHorizontal: theme.margins.page,
-		paddingVertical: 10,
-		width: '100%'
-	},
-	buttonRow: {
-		alignSelf: 'center',
-		flexDirection: 'row',
-		gap: 12,
-		justifyContent: 'space-between',
-		width: '100%'
-	},
-	buttonView: {
-		flex: 1
-	},
-	text(selected: boolean) {
-		return {
-			fontWeight: selected ? '500' : 'normal',
-			color: selected ? theme.colors.primary : theme.colors.text,
-			fontSize: 15
-		}
-	}
-}))
 
 export default ToggleRow
