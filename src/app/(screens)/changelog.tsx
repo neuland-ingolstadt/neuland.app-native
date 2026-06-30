@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/form-list'
 import changelogData from '@/data/changelog.json'
 import type { LanguageKey } from '@/localization/i18n'
@@ -9,7 +8,6 @@ import type { FormListSections } from '@/types/components'
 import type { Changelog } from '@/types/data'
 
 export default function Theme(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const changelog = changelogData as Changelog
 	const { t, i18n } = useTranslation(['settings'])
 	const sorted: Changelog = {
@@ -38,15 +36,15 @@ export default function Theme(): React.JSX.Element {
 	]
 	return (
 		<ScrollView
-			contentContainerStyle={styles.scrollView}
+			contentContainerClassName="flex-1 mt-3 mx-page"
 			contentInsetAdjustmentBehavior="automatic"
 		>
 			<FormList sections={sections} />
-			<View style={styles.notesContainer}>
-				<Text style={styles.notesText}>
+			<View className="flex-row mt-2 mb-[60px]">
+				<Text className="text-label text-[13px] text-left">
 					{t('changelog.footer')}
 					<Text
-						style={styles.text}
+						className="text-primary"
 						onPress={() => {
 							void Linking.openURL(
 								'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
@@ -61,24 +59,3 @@ export default function Theme(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	notesContainer: {
-		flexDirection: 'row',
-		marginTop: 8,
-		marginBottom: 60
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		fontSize: 13,
-		textAlign: 'left'
-	},
-	text: {
-		color: theme.colors.primary
-	},
-	scrollView: {
-		flex: 1,
-		marginTop: 12,
-		marginHorizontal: theme.margins.page
-	}
-}))

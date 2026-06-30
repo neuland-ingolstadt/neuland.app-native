@@ -2,17 +2,18 @@ import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import licenses from '@/data/licenses'
 import licensesStatic from '@/data/licenses-static.json'
 import type { FormListSections } from '@/types/components'
 import type { LicenseEntry } from '@/types/licenses'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function Licenses(): React.JSX.Element {
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const numberRegex = /\d+(\.\d+)*/
 	const atRegex = /(?:@)/gi
 	const navigation = useNavigation()
@@ -27,9 +28,9 @@ export default function Licenses(): React.JSX.Element {
 
 				...Platform.select({
 					android: {
-						headerIconColor: theme.colors.text,
-						hintTextColor: theme.colors.text,
-						textColor: theme.colors.text
+						headerIconColor: textColor,
+						hintTextColor: textColor,
+						textColor
 					}
 				}),
 
@@ -39,7 +40,7 @@ export default function Licenses(): React.JSX.Element {
 				}
 			}
 		})
-	}, [navigation])
+	}, [navigation, t, textColor])
 
 	const licensesStaticFiltered = Object.fromEntries(
 		Object.entries(licensesStatic).filter(
@@ -100,39 +101,17 @@ export default function Licenses(): React.JSX.Element {
 	]
 	return (
 		<ScrollView
-			contentContainerStyle={styles.container}
+			contentContainerClassName="pb-modal-bottom"
 			contentInsetAdjustmentBehavior="automatic"
 		>
-			<View style={styles.formlistContainer}>
+			<View className="self-center mb-6 mt-2.5 px-page w-full">
 				<FormList sections={sections} />
-				<View style={styles.notesContainer}>
-					<Text style={styles.notesText}>{t('licenses.footer')}</Text>
+				<View className="self-center mb-10 mt-3.5 w-full">
+					<Text className="text-label text-xs text-left">
+						{t('licenses.footer')}
+					</Text>
 				</View>
 			</View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		paddingBottom: theme.margins.modalBottomMargin
-	},
-	formlistContainer: {
-		alignSelf: 'center',
-		marginBottom: 24,
-		marginTop: 10,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	notesContainer: {
-		alignSelf: 'center',
-		marginBottom: 40,
-		marginTop: 14,
-		width: '100%'
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		textAlign: 'left'
-	}
-}))

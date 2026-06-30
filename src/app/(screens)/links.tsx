@@ -2,8 +2,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Linking, View } from 'react-native'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
 import { quicklinks } from '@/data/constants'
@@ -12,7 +11,6 @@ import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 
 const LinkScreen = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const addRecentQuicklink = usePreferencesStore(
 		(state) => state.addRecentQuicklink
@@ -55,30 +53,10 @@ const LinkScreen = (): React.JSX.Element => {
 	const sections = generateSections(typedQuicklinks)
 
 	return (
-		<View style={styles.page}>
+		<View className="ios:mt-0 android:mt-3.5 px-page">
 			<FormList sections={sections} sheet />
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	headerContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: theme.margins.page
-	},
-	headerText: {
-		color: theme.colors.text,
-		fontSize: 23,
-		fontWeight: '600',
-		paddingBottom: 14,
-		paddingTop: 5
-	},
-	page: {
-		marginTop: Platform.OS === 'ios' ? 0 : 14,
-		paddingHorizontal: theme.margins.page
-	}
-}))
 
 export default LinkScreen

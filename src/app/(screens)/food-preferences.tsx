@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import AutoShowNextDaySetting from '@/components/Food/auto-show-next-day-setting'
 import MultiSectionRadio, {
 	type FoodLanguageElement
@@ -20,11 +20,13 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { FormListSections } from '@/types/components'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
 	const headerPadding = useTransparentHeaderPadding()
 	const insets = useSafeAreaInsets()
+	const warningColor = toColor(useCSSVariable('--color-warning'))
 	const elemtents = [
 		{
 			key: 'IngolstadtMensa',
@@ -52,7 +54,6 @@ export default function FoodPreferences(): React.JSX.Element {
 		{ key: 'de', title: t('preferences.languages.de') },
 		{ key: 'en', title: t('preferences.languages.en') }
 	]
-	const { styles } = useStyles(stylesheet)
 	const { iconAnimatedStyle, triggerWiggle } = useWiggleAnimation()
 	const router = useRouter()
 
@@ -119,12 +120,12 @@ export default function FoodPreferences(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={{
+			style={{
 				paddingTop: headerPadding,
 				paddingBottom: insets.bottom + 16
 			}}
 		>
-			<View style={styles.container}>
+			<View className="flex-1">
 				<SectionView title={t('preferences.sections.restaurants')}>
 					<MultiSectionPicker
 						elements={elemtents}
@@ -139,7 +140,7 @@ export default function FoodPreferences(): React.JSX.Element {
 						action={handleSetShowStatic}
 					/>
 				</SectionView>
-				<View style={styles.sectionContainer}>
+				<View className="self-center mt-4 px-page w-full">
 					<FormList sections={sections} />
 				</View>
 				<SectionView title={t('preferences.formlist.language')}>
@@ -160,9 +161,9 @@ export default function FoodPreferences(): React.JSX.Element {
 					/>
 				</SectionView>
 			</View>
-			<View style={styles.sectionContainer}>
+			<View className="self-center mt-4 px-page w-full">
 				<Pressable onPress={triggerWiggle}>
-					<View style={styles.notesBox}>
+					<View className="items-center self-center bg-card rounded-md flex-row gap-4 px-3.5 py-2 w-full">
 						<Animated.View style={iconAnimatedStyle}>
 							<PlatformIcon
 								ios={{
@@ -178,46 +179,15 @@ export default function FoodPreferences(): React.JSX.Element {
 									name: 'TriangleAlert',
 									size: 24
 								}}
-								style={styles.warningIcon}
+								style={{ color: warningColor }}
 							/>
 						</Animated.View>
-						<Text style={styles.notesText}>{t('preferences.footer')}</Text>
+						<Text className="text-label flex-1 shrink text-[11px] text-left">
+							{t('preferences.footer')}
+						</Text>
 					</View>
 				</Pressable>
 			</View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: { flex: 1 },
-	notesBox: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		flexDirection: 'row',
-		gap: 16,
-		paddingHorizontal: 14,
-		paddingVertical: 8,
-		width: '100%'
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		flex: 1,
-		flexShrink: 1,
-		fontSize: 11,
-		fontWeight: 'normal',
-		textAlign: 'left'
-	},
-	sectionContainer: {
-		alignSelf: 'center',
-		marginTop: 16,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	warningIcon: {
-		color: theme.colors.warning
-	}
-}))
