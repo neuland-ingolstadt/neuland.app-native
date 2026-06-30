@@ -47,6 +47,19 @@
 			--color-contrast: #ffffff;
 			--color-sheet-button: #ffffff;
 			--color-veg-green: #18b91e;
+			--color-date-picker-background: #ebebec;
+			--color-plate-outer: #edebeb;
+			--color-plate-outer-border: #d0d0d0;
+			--color-plate-rim: #f5f5f5;
+			--color-plate-rim-border: #d1d1d1;
+			--color-plate-inner: #eaeaea;
+			--color-plate-inner-border: #cccccc;
+			--color-plate-shadow: #444444;
+			--color-plate-inner-shadow: #777777;
+			--color-calendar-item: #5d5d5d;
+			--color-completed-dot: #157a15;
+			--color-soon-dot: #dfdfdf;
+			--color-white: #f2f0ef;
 		}
 
 		@variant dark {
@@ -74,6 +87,19 @@
 			--color-contrast: #000000;
 			--color-sheet-button: #262626;
 			--color-veg-green: #1ccd22;
+			--color-date-picker-background: #2a2a2c;
+			--color-plate-outer: #2a2a2b;
+			--color-plate-outer-border: #303032;
+			--color-plate-rim: #373739;
+			--color-plate-rim-border: #444448;
+			--color-plate-inner: #262626;
+			--color-plate-inner-border: #474749;
+			--color-plate-shadow: #777777;
+			--color-plate-inner-shadow: #3d3d3d;
+			--color-calendar-item: #676767;
+			--color-completed-dot: #157a15;
+			--color-soon-dot: #4b4b4b;
+			--color-white: #f2f0ef;
 		}
 
 		@variant ios {

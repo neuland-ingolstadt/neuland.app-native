@@ -1,73 +1,39 @@
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 export default function GuestInfoSection(): React.JSX.Element {
 	const { t } = useTranslation('settings')
-	const { styles } = useStyles(stylesheet)
+	const secondaryColor = toColor(useCSSVariable('--color-secondary'))
 
 	return (
 		<Pressable
-			style={styles.guestBanner}
+			className="bg-card border-border ios:rounded-ios android:rounded-md p-5 flex-row items-center justify-between gap-4 active:opacity-90"
+			style={hairlineBorder}
 			onPress={() => {
 				router.navigate('/login')
 			}}
 		>
-			<View style={styles.guestBannerContent}>
-				<Text style={styles.guestBannerTitle}>
+			<View className="flex-1">
+				<Text className="text-text text-base font-semibold mb-1">
 					{t('menu.guest.banner.title')}
 				</Text>
-				<Text style={styles.guestBannerMessage}>
+				<Text className="text-label text-[13px] leading-[18px]">
 					{t('menu.guest.banner.message')}
 				</Text>
 			</View>
-			<View style={styles.iconContainer}>
+			<View className="bg-secondary/20 rounded-infinite p-3">
 				<PlatformIcon
 					ios={{ name: 'sparkles', size: 24 }}
 					android={{ name: 'auto_awesome', size: 28 }}
 					web={{ name: 'Sparkles', size: 28 }}
-					style={styles.guestBannerIcon}
+					style={{ color: secondaryColor }}
 				/>
 			</View>
 		</Pressable>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	guestBanner: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: theme.radius.ios,
-		padding: 20,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		gap: 16
-	},
-	guestBannerContent: {
-		flex: 1
-	},
-	guestBannerTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		marginBottom: 4
-	},
-	guestBannerMessage: {
-		color: theme.colors.labelColor,
-		fontSize: 13,
-		lineHeight: 18
-	},
-	iconContainer: {
-		backgroundColor: `${theme.colors.secondary}20`,
-		borderRadius: theme.radius.infinite,
-		padding: 12
-	},
-	guestBannerIcon: {
-		color: theme.colors.secondary
-	}
-}))

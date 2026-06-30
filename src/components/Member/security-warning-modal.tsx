@@ -3,8 +3,8 @@ import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Modal, Platform, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WalletManager from 'react-native-wallet-manager'
+import { useCSSVariable } from 'uniwind'
 import MemberAPI from '@/api/member-api'
 // @ts-expect-error no types
 import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
@@ -16,6 +16,7 @@ import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
 import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
 import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 interface SecurityWarningModalProps {
 	visible: boolean
@@ -28,13 +29,12 @@ export function SecurityWarningModal({
 	onConfirm,
 	onCancel
 }: SecurityWarningModalProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('member')
 	const { info, idToken } = useMemberStore()
 	const [isAddingToWallet, setIsAddingToWallet] = useState(false)
 	const { i18n } = useTranslation()
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
-	// Get language with fallback
 	const currentLanguage = i18n.language || 'en'
 
 	const handleConfirm = async () => {
@@ -100,11 +100,16 @@ export function SecurityWarningModal({
 			animationType="fade"
 			onRequestClose={handleCancel}
 		>
-			<Pressable style={styles.overlay} onPress={handleCancel}>
-				<Animated.View style={[styles.modalContainer]}>
-					<Pressable onPress={() => {}} style={styles.content}>
-						{/* Warning Icon */}
-						<View style={styles.iconContainer}>
+			<Pressable
+				className="flex-1 bg-black/70 justify-center items-center p-page"
+				onPress={handleCancel}
+			>
+				<Animated.View
+					className="bg-card rounded-lg max-w-[400px] w-full"
+					style={hairlineBorder}
+				>
+					<Pressable onPress={() => {}} className="p-6">
+						<View className="items-center mb-4">
 							<PlatformIcon
 								ios={{ name: 'exclamationmark.triangle.fill', size: 32 }}
 								android={{ name: 'warning', size: 32 }}
@@ -112,59 +117,57 @@ export function SecurityWarningModal({
 							/>
 						</View>
 
-						{/* Title */}
-						<Text style={styles.title}>{t('securityWarning.title')}</Text>
+						<Text className="text-xl font-bold text-text text-center mb-3">
+							{t('securityWarning.title')}
+						</Text>
 
-						{/* Warning Text */}
-						<Text style={styles.warningText}>
+						<Text className="text-base text-text text-center mb-5 leading-[22px]">
 							{t('securityWarning.warningText')}
 						</Text>
 
-						{/* Warning Points */}
-						<View style={styles.pointsContainer}>
-							<View style={styles.point}>
+						<View className="mb-5">
+							<View className="flex-row items-center mb-3 px-2">
 								<PlatformIcon
 									ios={{ name: 'shield.fill', size: 16 }}
 									android={{ name: 'security', size: 16 }}
 									web={{ name: 'Shield', size: 16 }}
-									style={styles.pointIcon}
+									style={{ color: primaryColor, marginRight: 12 }}
 								/>
-								<Text style={styles.pointText}>
+								<Text className="flex-1 text-sm text-text leading-5">
 									{t('securityWarning.points.security')}
 								</Text>
 							</View>
 
-							<View style={styles.point}>
+							<View className="flex-row items-center mb-3 px-2">
 								<PlatformIcon
 									ios={{ name: 'qrcode', size: 16 }}
 									android={{ name: 'qr_code', size: 16 }}
 									web={{ name: 'QrCode', size: 16 }}
-									style={styles.pointIcon}
+									style={{ color: primaryColor, marginRight: 12 }}
 								/>
-								<Text style={styles.pointText}>
+								<Text className="flex-1 text-sm text-text leading-5">
 									{t('securityWarning.points.qrCode')}
 								</Text>
 							</View>
 
-							<View style={styles.point}>
+							<View className="flex-row items-center mb-3 px-2">
 								<PlatformIcon
 									ios={{ name: 'calendar', size: 16 }}
 									android={{ name: 'event', size: 16 }}
 									web={{ name: 'Calendar', size: 16 }}
-									style={styles.pointIcon}
+									style={{ color: primaryColor, marginRight: 12 }}
 								/>
-								<Text style={styles.pointText}>
+								<Text className="flex-1 text-sm text-text leading-5">
 									{t('securityWarning.points.semester')}
 								</Text>
 							</View>
 						</View>
 
-						{/* Wallet Button */}
-						<View style={styles.walletButtonContainer}>
+						<View className="items-center mb-[18px]">
 							<Pressable
 								onPress={handleConfirm}
 								disabled={isAddingToWallet}
-								style={({ pressed }) => [pressed && styles.walletButtonPressed]}
+								className="active:opacity-70"
 							>
 								<Image
 									source={
@@ -176,26 +179,22 @@ export function SecurityWarningModal({
 												? GoogleWalletDE
 												: GoogleWalletEN
 									}
-									style={[
-										styles.walletButton,
-										isAddingToWallet && styles.walletButtonDisabled
-									]}
+									style={{
+										width: 160,
+										height: 52,
+										opacity: isAddingToWallet ? 0.5 : 1
+									}}
 									contentFit="contain"
 								/>
 							</Pressable>
 						</View>
 
-						{/* Buttons */}
-						<View style={styles.buttonContainer}>
+						<View className="items-center">
 							<Pressable
 								onPress={handleCancel}
-								style={({ pressed }) => [
-									styles.button,
-									styles.cancelButton,
-									pressed && styles.buttonPressed
-								]}
+								className="py-3 px-6 rounded-md items-center justify-center bg-card-button active:opacity-70"
 							>
-								<Text style={styles.cancelButtonText}>
+								<Text className="font-semibold text-text">
 									{t('securityWarning.buttons.useAppInstead')}
 								</Text>
 							</Pressable>
@@ -206,96 +205,3 @@ export function SecurityWarningModal({
 		</Modal>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	overlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.70)',
-		justifyContent: 'center',
-		alignItems: 'center',
-		padding: theme.margins.page
-	},
-	modalContainer: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.lg,
-		maxWidth: 400,
-		width: '100%',
-		elevation: 10,
-		borderColor: theme.colors.border,
-		borderWidth: 1
-	},
-	content: {
-		padding: 24
-	},
-	iconContainer: {
-		alignItems: 'center',
-		marginBottom: 16
-	},
-	title: {
-		fontSize: 20,
-		fontWeight: '700',
-		color: theme.colors.text,
-		textAlign: 'center',
-		marginBottom: 12
-	},
-	warningText: {
-		fontSize: 16,
-		color: theme.colors.text,
-		textAlign: 'center',
-		marginBottom: 20,
-		lineHeight: 22
-	},
-	pointsContainer: {
-		marginBottom: 20
-	},
-	point: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 12,
-		paddingHorizontal: 8
-	},
-	pointIcon: {
-		color: theme.colors.primary,
-		marginRight: 12
-	},
-	pointText: {
-		flex: 1,
-		fontSize: 14,
-		color: theme.colors.text,
-		lineHeight: 20
-	},
-	walletButtonContainer: {
-		alignItems: 'center',
-		marginBottom: 18
-	},
-	walletButton: {
-		width: 160,
-		height: 52
-	},
-	walletButtonDisabled: {
-		opacity: 0.5
-	},
-	buttonContainer: {
-		alignItems: 'center'
-	},
-	button: {
-		paddingVertical: 12,
-		paddingHorizontal: 24,
-		borderRadius: theme.radius.md,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	cancelButton: {
-		backgroundColor: theme.colors.cardButton
-	},
-	buttonPressed: {
-		opacity: 0.7
-	},
-	cancelButtonText: {
-		fontWeight: '600',
-		color: theme.colors.text
-	},
-	walletButtonPressed: {
-		opacity: 0.7
-	}
-}))

@@ -3,17 +3,15 @@ import type React from 'react'
 import {
 	ActivityIndicator,
 	type StyleProp,
-	StyleSheet,
 	Text,
 	TouchableOpacity,
+	useColorScheme,
 	type ViewStyle
 } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 interface ButtonProps {
 	variant?: 'primary' | 'secondary'
@@ -24,6 +22,17 @@ interface ButtonProps {
 	style?: StyleProp<ViewStyle>
 }
 
+function resolveActiveTheme(
+	theme: string,
+	colorScheme: 'light' | 'dark' | null | undefined
+): 'light' | 'dark' {
+	if (theme === 'light' || theme === 'dark') {
+		return theme
+	}
+
+	return colorScheme === 'dark' ? 'dark' : 'light'
+}
+
 const Button = ({
 	variant = 'primary',
 	disabled = false,
@@ -32,79 +41,68 @@ const Button = ({
 	children,
 	style
 }: ButtonProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const colorScheme = useColorScheme()
+	const activeTheme = resolveActiveTheme(themePreference, colorScheme)
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
 	const isDisabled = disabled || loading
+
+	const disabledPrimaryBg =
+		activeTheme === 'dark'
+			? Color(primaryColor).darken(0.3).hex()
+			: Color(primaryColor).lighten(0.3).hex()
+
+	const contrastColor = getContrastColor(primaryColor)
+	const disabledContrastColor =
+		activeTheme === 'dark'
+			? Color(contrastColor).lighten(0.1).hex()
+			: Color(contrastColor).darken(0.1).hex()
 
 	const indicatorColor =
 		variant === 'primary'
 			? isDisabled
-				? UnistylesRuntime.themeName === 'dark'
-					? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
-					: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
-				: getContrastColor(theme.colors.primary)
-			: theme.colors.primary
+				? disabledContrastColor
+				: contrastColor
+			: primaryColor
+
+	const buttonClassName =
+		variant === 'secondary'
+			? `h-12 justify-center items-center rounded-base bg-card border-border ${isDisabled ? 'opacity-60' : ''}`
+			: 'h-12 justify-center items-center rounded-base'
 
 	return (
 		<TouchableOpacity
 			disabled={isDisabled}
 			onPress={onPress}
-			style={[styles.button(variant, isDisabled), style]}
+			className={buttonClassName}
+			style={[
+				variant === 'secondary'
+					? hairlineBorder
+					: { backgroundColor: isDisabled ? disabledPrimaryBg : primaryColor },
+				style
+			]}
 		>
 			{loading ? (
 				<ActivityIndicator color={indicatorColor} size={15} />
 			) : (
-				<Text style={styles.buttonText(variant, isDisabled)}>{children}</Text>
+				<Text
+					className="font-semibold text-base"
+					style={{
+						color:
+							variant === 'secondary'
+								? primaryColor
+								: isDisabled
+									? disabledContrastColor
+									: contrastColor
+					}}
+				>
+					{children}
+				</Text>
 			)}
 		</TouchableOpacity>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	button: (variant: 'primary' | 'secondary', disabled: boolean) => {
-		if (variant === 'secondary') {
-			return {
-				height: 48,
-				justifyContent: 'center',
-				alignItems: 'center',
-				borderRadius: theme.radius.base,
-				backgroundColor: theme.colors.card,
-				borderWidth: StyleSheet.hairlineWidth,
-				borderColor: theme.colors.border,
-				opacity: disabled ? 0.6 : 1
-			}
-		}
-
-		return {
-			height: 48,
-			justifyContent: 'center',
-			alignItems: 'center',
-			borderRadius: theme.radius.base,
-			backgroundColor: disabled
-				? UnistylesRuntime.themeName === 'dark'
-					? Color(theme.colors.primary).darken(0.3).hex()
-					: Color(theme.colors.primary).lighten(0.3).hex()
-				: theme.colors.primary
-		}
-	},
-	buttonText: (variant: 'primary' | 'secondary', disabled: boolean) => {
-		if (variant === 'secondary') {
-			return {
-				fontWeight: '600',
-				fontSize: 16,
-				color: theme.colors.primary
-			}
-		}
-
-		return {
-			fontWeight: '600',
-			fontSize: 16,
-			color: disabled
-				? UnistylesRuntime.themeName === 'dark'
-					? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
-					: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
-				: getContrastColor(theme.colors.primary)
-		}
-	}
-}))
 
 export default Button
