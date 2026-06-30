@@ -19,7 +19,6 @@ import {
 	View
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import LoginForm from '@/components/Universal/login-form'
 import { PRIVACY_URL } from '@/data/constants'
 
@@ -44,7 +43,6 @@ const useIsFloatingKeyboard = (): boolean => {
 }
 
 export default function Login(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const floatingKeyboard = useIsFloatingKeyboard()
 	const { t } = useTranslation('flow')
 	const { fromOnboarding } = useLocalSearchParams<{
@@ -69,9 +67,12 @@ export default function Login(): React.JSX.Element {
 			onPress={Keyboard.dismiss}
 			disabled={Platform.OS === 'web'}
 		>
-			<View style={{ ...styles.container, paddingTop: insets.top }}>
+			<View
+				className="self-center flex-1 w-[90%]"
+				style={{ paddingTop: insets.top }}
+			>
 				<KeyboardAvoidingView
-					style={styles.keyboardContainer}
+					className="flex-1 justify-evenly"
 					behavior="padding"
 					enabled={!floatingKeyboard}
 				>
@@ -80,13 +81,13 @@ export default function Login(): React.JSX.Element {
 					<View />
 					<View />
 				</KeyboardAvoidingView>
-				<View style={styles.linkContainer}>
+				<View className="items-center self-center bottom-[70px] gap-1.5 absolute">
 					<Pressable
 						onPress={() => {
 							void Linking.openURL(PRIVACY_URL)
 						}}
 					>
-						<Text style={styles.privacyLink}>
+						<Text className="text-label text-sm text-center">
 							{t('onboarding.links.privacy')}
 						</Text>
 					</Pressable>
@@ -95,28 +96,3 @@ export default function Login(): React.JSX.Element {
 		</TouchableWithoutFeedback>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignSelf: 'center',
-		flex: 1,
-		width: '90%'
-	},
-
-	keyboardContainer: {
-		flex: 1,
-		justifyContent: 'space-evenly'
-	},
-	linkContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		bottom: 70,
-		gap: 6,
-		position: 'absolute'
-	},
-	privacyLink: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		textAlign: 'center'
-	}
-}))
