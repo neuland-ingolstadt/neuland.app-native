@@ -1,10 +1,11 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import VerticalLine from '@/components/Universal/vertical-line'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface EventItemProps {
 	title: string
@@ -31,7 +32,9 @@ const EventItem = ({
 	subtitleTranslationParams,
 	color
 }: EventItemProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const secondaryColor = String(
+		toColor(useCSSVariable('--color-secondary')) ?? '#0a61be'
+	)
 	const { t } = useTranslation('navigation')
 	const resolvedTimeLabel =
 		timeLabel ??
@@ -42,14 +45,14 @@ const EventItem = ({
 				: '')
 
 	return (
-		<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+		<View className="flex-row items-start">
 			<VerticalLine color={color} />
-			<View style={{ flex: 1 }}>
-				<Text style={styles.eventTitle} numberOfLines={1}>
+			<View className="flex-1">
+				<Text className="text-text text-[15px] font-bold" numberOfLines={1}>
 					{title}
 				</Text>
 				{subtitle && (
-					<Text style={styles.eventSubtitle} numberOfLines={1}>
+					<Text className="text-label text-sm mt-0.5 mb-1" numberOfLines={1}>
 						{subtitleTranslationKey && subtitleTranslationParams
 							? (t as (key: string, params?: Record<string, string>) => string)(
 									subtitleTranslationKey,
@@ -58,23 +61,24 @@ const EventItem = ({
 							: subtitle}
 					</Text>
 				)}
-				<View style={styles.eventTimeRow}>
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<View className="flex-row items-center justify-between">
+					<View className="flex-row items-center">
 						<PlatformIcon
 							ios={{ name: 'clock', size: 11 }}
-							android={{
-								name: 'schedule',
-								size: 12,
-								variant: 'outlined'
-							}}
+							android={{ name: 'schedule', size: 12, variant: 'outlined' }}
 							web={{ name: 'Clock', size: 13 }}
-							style={{ marginRight: 4, color: theme.colors.secondary }}
+							style={{ marginRight: 4, color: secondaryColor }}
 						/>
-						<Text style={[styles.eventDate]}>{resolvedTimeLabel}</Text>
+						<Text className="text-label-secondary text-[13px] font-medium ms-0.5">
+							{resolvedTimeLabel}
+						</Text>
 					</View>
 					{location && (
-						<View style={styles.eventLocationContainer}>
-							<Text style={styles.eventLocation} numberOfLines={1}>
+						<View className="flex-row items-center max-w-[60%] shrink ml-2">
+							<Text
+								className="text-label-secondary text-[13px] mt-0.5 me-1"
+								numberOfLines={1}
+							>
 								{location}
 							</Text>
 						</View>
@@ -84,43 +88,5 @@ const EventItem = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	eventTitle: {
-		color: theme.colors.text,
-		fontSize: 15,
-		fontWeight: '700'
-	},
-	eventSubtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		marginTop: 2,
-		marginBottom: 4
-	},
-	eventTimeRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between'
-	},
-	eventDate: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: '500',
-		marginStart: 2
-	},
-	eventLocationContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		maxWidth: '60%',
-		flexShrink: 1,
-		marginLeft: 8
-	},
-	eventLocation: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		marginTop: 2,
-		marginEnd: 4
-	}
-}))
 
 export default EventItem
