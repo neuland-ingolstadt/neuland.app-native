@@ -1,13 +1,11 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { Grade } from '@/types/thi-api'
 
 import RowEntry from '../Universal/row-entry'
 
 const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('settings')
 	if (item.titel === null || item.titel === '') {
 		// biome-ignore lint/complexity/noUselessFragments: we need to return something
@@ -18,19 +16,26 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 		<RowEntry
 			title={item.titel}
 			leftChildren={
-				<View style={styles.leftContainer}>
-					<Text style={styles.leftText1} numberOfLines={2}>
+				<View className="pt-[3px]">
+					<Text
+						className="mb-1 text-[15px] font-medium text-label"
+						numberOfLines={2}
+					>
 						{'ECTS: '}
 						{item.ects ?? t('grades.none')}
 					</Text>
 				</View>
 			}
 			rightChildren={
-				<View style={styles.rightContainer}>
+				<View className="flex-col items-end justify-end">
 					{item.note !== null && item.note !== '' && (
-						<View style={styles.rightInnerContainer}>
-							<Text style={styles.rightText1}>{item.note}</Text>
-							<Text style={styles.rightText2}>{t('grades.grade')}</Text>
+						<View className="flex-col items-end gap-[5px]">
+							<Text className="text-xl font-medium text-label">
+								{item.note}
+							</Text>
+							<Text className="text-sm text-label-secondary">
+								{t('grades.grade')}
+							</Text>
 						</View>
 					)}
 				</View>
@@ -38,37 +43,5 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 		/>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	leftContainer: {
-		paddingTop: 3
-	},
-	leftText1: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		fontWeight: '500',
-		marginBottom: 4
-	},
-	rightContainer: {
-		flexDirection: 'column',
-		justifyContent: 'flex-end',
-		alignItems: 'flex-end'
-	},
-	rightInnerContainer: {
-		alignItems: 'flex-end',
-		flexDirection: 'column',
-		gap: 5
-	},
-	rightText1: {
-		color: theme.colors.labelColor,
-		fontSize: 20,
-		fontWeight: '500'
-	},
-	rightText2: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14,
-		fontWeight: '400'
-	}
-}))
 
 export default GradesRow

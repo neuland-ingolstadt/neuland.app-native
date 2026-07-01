@@ -2,18 +2,20 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import { t } from 'i18next'
 import type React from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import AvatarCircle from './avatar-circle'
 
 const NeulandBox = (): React.JSX.Element | null => {
-	const { styles, theme } = useStyles(stylesheet)
 	const router = useRouter()
 	const memberInfo = useMemberStore((s) => s.info)
+	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
+	const whiteColor = toColor(useCSSVariable('--color-white'))
 
 	if (Platform.OS === 'web') {
 		return null
@@ -29,35 +31,35 @@ const NeulandBox = (): React.JSX.Element | null => {
 		) ?? false
 
 	return (
-		<View style={styles.neulandContainer}>
+		<View className="mt-2.5">
 			<Pressable
 				onPress={() => router.navigate('/member')}
-				style={({ pressed }) => [
-					styles.container,
-					{ opacity: pressed ? 0.9 : 1 }
-				]}
+				className="ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden w-full active:opacity-90"
+				style={hairlineBorder}
 			>
 				<LinearGradient
 					colors={['#000', '#015916']}
 					start={{ x: -0.5, y: 0.5 }}
 					end={{ x: 1, y: 0.5 }}
-					style={styles.gradient}
+					style={{ overflow: 'hidden', position: 'relative', width: '100%' }}
 				>
-					<View style={styles.watermark}>
+					<View className="absolute right-[18px] -top-2.5 pointer-events-none z-0">
 						<LogoCardSVG size={110} opacity={0.35} color="#00ff3c" />
 					</View>
-					<View style={styles.neulandBoxContent}>
+					<View className="flex-row items-center p-4 z-[1]">
 						<AvatarCircle
 							background="rgba(0, 255, 60, 0.12)"
 							size={50}
-							style={styles.neulandAvatar}
+							style={{ paddingRight: 3 }}
 						>
-							<LogoSVG size={35} color={theme.colors.neulandGreen} />
+							<LogoSVG size={35} color={String(neulandGreen)} />
 						</AvatarCircle>
 
-						<View style={styles.textContainer}>
-							<Text style={styles.neulandName}>{memberInfo.name}</Text>
-							<Text style={styles.neulandTitle}>
+						<View className="flex-1 ml-4">
+							<Text className="text-white text-lg font-bold opacity-90">
+								{memberInfo.name}
+							</Text>
+							<Text className="text-white text-xs">
 								{t(
 									hasHonoraryRole
 										? 'member:settings.honoraryTitle'
@@ -70,7 +72,7 @@ const NeulandBox = (): React.JSX.Element | null => {
 							ios={{ name: 'chevron.right', size: 10, weight: 'semibold' }}
 							android={{ name: 'chevron_right', size: 19 }}
 							web={{ name: 'ChevronRight', size: 16 }}
-							style={styles.neulandChevron}
+							style={{ color: whiteColor }}
 						/>
 					</View>
 				</LinearGradient>
@@ -78,57 +80,5 @@ const NeulandBox = (): React.JSX.Element | null => {
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	neulandContainer: {
-		marginTop: 10
-	},
-	container: {
-		borderRadius: theme.radius.ios,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		overflow: 'hidden',
-		width: '100%'
-	},
-	gradient: {
-		overflow: 'hidden',
-		position: 'relative',
-		width: '100%'
-	},
-	watermark: {
-		position: 'absolute',
-		right: 18,
-		top: -10,
-		pointerEvents: 'none',
-		zIndex: 0
-	},
-	neulandBoxContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 16,
-		zIndex: 1
-	},
-	textContainer: {
-		flex: 1,
-		marginLeft: 16
-	},
-	neulandTitle: {
-		color: theme.colors.white,
-		fontSize: 12
-	},
-	neulandName: {
-		color: theme.colors.white,
-		fontSize: 18,
-		fontWeight: 'bold',
-
-		opacity: 0.9
-	},
-	neulandChevron: {
-		color: theme.colors.white
-	},
-	neulandAvatar: {
-		paddingRight: 3
-	}
-}))
 
 export default NeulandBox

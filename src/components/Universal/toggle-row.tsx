@@ -25,14 +25,14 @@ const ToggleRow = ({
 				const isSelected = selectedElement === index
 
 				return (
-					<View key={index} className="flex-1">
+					<View key={item} className="flex-1">
 						<Pressable
 							onPress={() => {
 								pressHandler(index)
 							}}
 						>
 							<View
-								className="items-center self-center bg-card ios:rounded-ios android:rounded-md border-border p-page py-2.5 w-full"
+								className="items-center self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-page py-2.5 w-full"
 								style={hairlineBorder}
 							>
 								<Text

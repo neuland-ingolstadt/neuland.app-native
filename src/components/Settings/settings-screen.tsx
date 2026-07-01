@@ -12,7 +12,7 @@ import {
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
@@ -25,6 +25,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import EmployeeInfoSection from './employee-info-section'
 import GuestInfoSection from './guest-info-section'
 import HetznerLogo from './hetzner-logo'
@@ -35,7 +36,6 @@ import SettingsMenu from './settings-menu'
 import StudentInfoSection from './student-info-section'
 
 export default function Settings(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
 	const router = useRouter()
@@ -44,6 +44,7 @@ export default function Settings(): React.JSX.Element {
 	const [size, setSize] = useState({ width: 0, height: 0 })
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const { idToken } = useMemberStore()
+	const labelSecondaryColor = toColor(useCSSVariable('--color-label-secondary'))
 
 	const logoutAlert = (): void => {
 		Alert.alert(
@@ -156,9 +157,9 @@ export default function Settings(): React.JSX.Element {
 			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
 			contentInsetAdjustmentBehavior="automatic"
-			contentContainerStyle={styles.contentContainer}
+			contentContainerClassName="pb-[60px]"
 		>
-			<View style={styles.wrapper}>
+			<View className="px-3">
 				<SettingsHeader
 					onLogout={logoutAlert}
 					personalData={data}
@@ -169,7 +170,7 @@ export default function Settings(): React.JSX.Element {
 					}
 				/>
 				{Platform.OS !== 'web' && idToken && <NeulandBox />}
-				<View style={styles.infoBoxesSection}>
+				<View className="mt-2.5">
 					{userKind === USER_GUEST ? (
 						<GuestInfoSection />
 					) : userKind === USER_STUDENT ? (
@@ -183,17 +184,19 @@ export default function Settings(): React.JSX.Element {
 					) : undefined}
 				</View>
 
-				<View style={styles.formlistContainer}>
+				<View className="my-4 mt-6">
 					<SettingsMenu />
 				</View>
 			</View>
 
-			<Text style={styles.copyright}>
+			<Text className="text-label-secondary text-xs -mb-2.5 mt-3 text-center">
 				{t('menu.copyright', { year: new Date().getFullYear() })}
 			</Text>
 			<SettingsLogo scrollY={scrollY} size={size} />
-			<View style={styles.poweredByContainer}>
-				<Text style={styles.poweredByText}>{t('menu.infrastructureBy')}</Text>
+			<View className="flex-col items-center justify-center mt-[22px] gap-px">
+				<Text className="text-label-secondary text-xs -mb-1.5">
+					{t('menu.infrastructureBy')}
+				</Text>
 				<Link
 					href="https://hetzner.com"
 					target="_blank"
@@ -201,44 +204,9 @@ export default function Settings(): React.JSX.Element {
 						trackHetznerClick()
 					}}
 				>
-					<HetznerLogo subtitleColor={theme.colors.labelSecondaryColor} />
+					<HetznerLogo subtitleColor={String(labelSecondaryColor)} />
 				</Link>
 			</View>
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	contentContainer: {
-		paddingBottom: 60
-	},
-	copyright: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 12,
-		marginBottom: -10,
-		marginTop: 12,
-		textAlign: 'center'
-	},
-	formlistContainer: { marginVertical: 16, marginTop: 24 },
-	infoBoxesSection: {
-		marginTop: 10
-	},
-	poweredByContainer: {
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginTop: 22,
-		gap: 1
-	},
-	poweredByText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 12,
-		marginBottom: -6
-	},
-	hetznerLogo: {
-		width: 160,
-		height: 70,
-		resizeMode: 'contain'
-	},
-	wrapper: { paddingHorizontal: 12 }
-}))

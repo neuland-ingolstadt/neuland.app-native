@@ -2,7 +2,6 @@ import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { printLink } from '@/data/constants'
 import InfoBox from './info-box'
 
@@ -17,12 +16,11 @@ export default function StudentInfoSection({
 	printerBalance,
 	personalLecturersCount
 }: StudentInfoSectionProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('settings')
 
 	return (
 		<>
-			<View style={styles.infoBoxesContainer}>
+			<View className="flex-row gap-2.5 mb-2.5">
 				<InfoBox
 					title={t('infoBoxes.gradesAndSubjects')}
 					value={ects !== undefined ? `${ects} ECTS` : '-'}
@@ -32,7 +30,7 @@ export default function StudentInfoSection({
 						web: 'ChartColumnIncreasing'
 					}}
 					href={'/grades' as RelativePathString}
-					style={styles.wideBox}
+					style={{ flex: 5 }}
 				/>
 				<InfoBox
 					title={t('infoBoxes.lecturers')}
@@ -43,10 +41,10 @@ export default function StudentInfoSection({
 						web: 'Users'
 					}}
 					href={'/lecturers' as RelativePathString}
-					style={styles.narrowBox}
+					style={{ flex: 3 }}
 				/>
 			</View>
-			<View style={styles.infoBoxesContainer}>
+			<View className="flex-row gap-2.5 mb-2.5">
 				<InfoBox
 					title={t('infoBoxes.printerBalance')}
 					value={printerBalance ?? '-'}
@@ -57,7 +55,7 @@ export default function StudentInfoSection({
 					}}
 					href={printLink as RelativePathString}
 					isExternalLink
-					style={styles.narrowBox}
+					style={{ flex: 3 }}
 				/>
 
 				<InfoBox
@@ -69,23 +67,9 @@ export default function StudentInfoSection({
 						web: 'Library'
 					}}
 					href={'/library' as RelativePathString}
-					style={styles.wideBox}
+					style={{ flex: 5 }}
 				/>
 			</View>
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	infoBoxesContainer: {
-		flexDirection: 'row' as const,
-		gap: 10,
-		marginBottom: 10
-	},
-	wideBox: {
-		flex: 2
-	},
-	narrowBox: {
-		flex: 1
-	}
-}))

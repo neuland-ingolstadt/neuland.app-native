@@ -1,7 +1,6 @@
 import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
@@ -15,8 +14,6 @@ const SportsRow = ({
 }: {
 	event: UniversitySportsFieldsFragment
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-
 	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
 
 	return (
@@ -24,18 +21,21 @@ const SportsRow = ({
 			title={event.title[i18n.language as LanguageKey] ?? ''}
 			href={`/events/sports/${event.id}` as RelativePathString}
 			leftChildren={
-				<View style={styles.leftContainer}>
-					<Text style={styles.leftText1} numberOfLines={1}>
+				<View className="mt-0.5">
+					<Text
+						className="mb-1 text-sm font-medium text-label"
+						numberOfLines={1}
+					>
 						{event.location}
 					</Text>
-					<Text style={styles.leftText2} numberOfLines={1}>
+					<Text className="text-[13px] text-label" numberOfLines={1}>
 						{event.campus}
 					</Text>
 				</View>
 			}
 			rightChildren={
-				<View style={styles.rightContainer}>
-					<Text style={styles.rightText} numberOfLines={2}>
+				<View className="flex-row items-end justify-end gap-1.5 p-row">
+					<Text className="text-sm text-label" numberOfLines={2}>
 						{dateRange}
 					</Text>
 				</View>
@@ -55,44 +55,12 @@ const SportsRow = ({
 							name: 'Dumbbell',
 							size: 22
 						}}
-						style={styles.toggleIcon}
+						style={{ alignSelf: 'center', marginRight: 4 }}
 					/>
 				)
 			}
 		/>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	leftText1: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '500',
-		marginBottom: 4
-	},
-	leftText2: {
-		color: theme.colors.labelColor,
-		fontSize: 13
-	},
-	leftContainer: {
-		marginTop: 2
-	},
-	rightContainer: {
-		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding,
-		alignItems: 'flex-end',
-		flexDirection: 'row',
-		gap: 6
-	},
-	rightText: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '400'
-	},
-	toggleIcon: {
-		alignSelf: 'center',
-		marginRight: 4
-	}
-}))
 
 export default SportsRow

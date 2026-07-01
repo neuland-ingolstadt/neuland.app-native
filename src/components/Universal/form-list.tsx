@@ -29,13 +29,25 @@ interface RenderSectionItemProps {
 
 const blockCardClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md border-border overflow-hidden'
-		: 'bg-card ios:rounded-ios android:rounded-md border-border overflow-hidden'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
 
 const itemSectionClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md border-border overflow-hidden px-4 py-[13px]'
-		: 'bg-card ios:rounded-ios android:rounded-md border-border overflow-hidden px-4 py-[13px]'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
+
+const handlePress = (onPress?: () => Promise<void> | void): void => {
+	if (onPress != null) {
+		Promise.resolve(onPress()).catch((error) => {
+			console.error(error)
+		})
+	}
+}
+
+const handleTextCopy = async (text: string): Promise<void> => {
+	await copyToClipboard(text)
+}
 
 const RenderSectionItem = ({
 	sectionIndex,
@@ -102,18 +114,6 @@ const RenderSectionItems = ({
 	const rowDetailsStyle = useResolveClassNames(
 		'text-base text-right pl-px shrink'
 	)
-
-	const handlePress = (onPress?: () => Promise<void> | void): void => {
-		if (onPress != null) {
-			Promise.resolve(onPress()).catch((error) => {
-				console.error(error)
-			})
-		}
-	}
-
-	const handleTextCopy = async (text: string): Promise<void> => {
-		await copyToClipboard(text)
-	}
 
 	const renderValueText = (item: SectionGroup) => {
 		const textComponent = (
