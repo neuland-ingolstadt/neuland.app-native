@@ -29,13 +29,13 @@ interface RenderSectionItemProps {
 
 const blockCardClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet rounded-md ios:rounded-ios border-border overflow-hidden'
-		: 'bg-card rounded-md ios:rounded-ios border-border overflow-hidden'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
 
 const itemSectionClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
-		: 'bg-card rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
 
 const handlePress = (onPress?: () => Promise<void> | void): void => {
 	if (onPress != null) {

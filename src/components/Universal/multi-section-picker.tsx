@@ -42,7 +42,7 @@ const MultiSectionPicker = ({
 									action(item.key)
 								}
 							}}
-							className="bg-card ios:rounded-ios android:rounded-md p-4 flex-row items-center justify-between h-full"
+							className="bg-card ios:rounded-ios android:rounded-md web:rounded-md p-4 flex-row items-center justify-between h-full"
 							style={({ pressed }) => [
 								item.disabled && { opacity: 0.5 },
 								pressed && !item.disabled && { opacity: 0.8 }

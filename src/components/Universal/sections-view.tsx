@@ -27,7 +27,7 @@ const SectionView = ({
 					className={
 						hideBackground
 							? 'self-center justify-center mt-0.5 w-full bg-transparent border-transparent'
-							: 'self-center bg-card ios:rounded-ios border-border justify-center mt-0.5 w-full'
+							: 'self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border justify-center mt-0.5 w-full'
 					}
 					style={hideBackground ? undefined : hairlineBorder}
 				>

@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useColorScheme, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ThemePreviewCard from './theme-preview-card'
 
 interface ThemePreviewProps {
@@ -13,9 +12,7 @@ const ThemePreview = ({
 	theme,
 	onThemeChange
 }: ThemePreviewProps): React.JSX.Element => {
-	const { styles } = useStyles(previewStylesheet)
 	const { t } = useTranslation('settings')
-
 	const systemTheme = useColorScheme() ?? 'light'
 	const actualTheme = theme === 'auto' ? systemTheme : theme
 
@@ -27,9 +24,9 @@ const ThemePreview = ({
 	}
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.previewContainer}>
-				<View style={styles.previewsRow}>
+		<View className="w-full max-w-[1100px] self-center mx-page p-3 bg-card rounded-lg mb-4">
+			<View className="h-[140px] rounded-md overflow-hidden bg-card-contrast">
+				<View className="flex-1 flex-row gap-3 p-3">
 					<ThemePreviewCard
 						isDark={false}
 						isActive={actualTheme === 'light'}
@@ -47,30 +44,5 @@ const ThemePreview = ({
 		</View>
 	)
 }
-
-const previewStylesheet = createStyleSheet((theme) => ({
-	container: {
-		width: '100%',
-		maxWidth: 1100,
-		alignSelf: 'center',
-		marginHorizontal: theme.margins.page,
-		padding: 12,
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.lg,
-		marginBottom: 16
-	},
-	previewContainer: {
-		height: 140,
-		borderRadius: theme.radius.md,
-		overflow: 'hidden',
-		backgroundColor: theme.colors.cardContrast
-	},
-	previewsRow: {
-		flex: 1,
-		flexDirection: 'row',
-		gap: 12,
-		padding: 12
-	}
-}))
 
 export default ThemePreview

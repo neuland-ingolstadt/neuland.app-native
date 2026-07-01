@@ -7,11 +7,9 @@ import DraggableFlatList, {
 	ScaleDecorator
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useStyles } from 'react-native-unistyles'
 import type { ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import {
-	dashboardStyles,
 	GuestUserNote,
 	OrderableRowItem,
 	ResetOrderButton
@@ -30,11 +28,9 @@ export default function DashboardEdit(): React.JSX.Element {
 		use(DashboardContext)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const flags = useFeatureFlags()
-	const { styles } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
 
-	// add translation to shownDashboardEntries with new key transText
 	const transShownDashboardEntries = shownDashboardEntries.map((item) => {
 		return {
 			...item,
@@ -108,29 +104,32 @@ export default function DashboardEdit(): React.JSX.Element {
 	return (
 		<View>
 			<ScrollView
-				contentContainerStyle={[styles.page, { paddingTop: headerPadding }]}
+				contentContainerClassName="px-page pb-page"
+				contentContainerStyle={{ paddingTop: headerPadding }}
 				bounces={false}
 				contentInsetAdjustmentBehavior={
 					headerPadding > 12 ? 'never' : 'automatic'
 				}
 			>
-				<View style={styles.wrapper}>
+				<View className="gap-3.5">
 					{userKind === USER_GUEST && <GuestUserNote />}
 
-					<View style={styles.block}>
-						<Text style={styles.blockHeader}>{t('dashboard.shown')}</Text>
-						<View style={[styles.card, styles.shownBg]}>
+					<View className="self-center gap-1.5 w-full">
+						<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold ios:pb-1 android:text-[13px] android:font-normal android:uppercase">
+							{t('dashboard.shown')}
+						</Text>
+						<View className="rounded-md overflow-hidden px-0 bg-background">
 							{shownDashboardEntries.length === 0 ? (
 								<View
-									style={{
-										height: childrenHeight * 1.5,
-										...styles.emptyContainer
-									}}
+									className="bg-card rounded-md justify-center"
+									style={{ height: childrenHeight * 1.5 }}
 								>
-									<Text style={styles.textEmpty}>{t('dashboard.noShown')}</Text>
+									<Text className="text-text text-base text-center">
+										{t('dashboard.noShown')}
+									</Text>
 								</View>
 							) : (
-								<View style={styles.outer}>
+								<View className="rounded-md flex-1 overflow-hidden">
 									<DraggableFlatList
 										data={transShownDashboardEntries}
 										onDragBegin={() => {
@@ -150,7 +149,11 @@ export default function DashboardEdit(): React.JSX.Element {
 										}}
 										keyExtractor={(item) => item.key}
 										renderItem={renderItem}
-										containerStyle={styles.outer}
+										containerStyle={{
+											borderRadius: 17,
+											flex: 1,
+											overflow: 'hidden'
+										}}
 										activationDistance={10}
 										autoscrollThreshold={50}
 									/>
@@ -164,7 +167,9 @@ export default function DashboardEdit(): React.JSX.Element {
 						onPress={handleReset}
 					/>
 
-					<Text style={styles.footer}>{t('dashboard.footer')}</Text>
+					<Text className="text-label text-xs font-normal text-left">
+						{t('dashboard.footer')}
+					</Text>
 				</View>
 			</ScrollView>
 		</View>

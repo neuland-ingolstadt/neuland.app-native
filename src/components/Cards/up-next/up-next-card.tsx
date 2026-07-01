@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { use, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import BaseCard from '@/components/Cards/base-card'
 import { UserKindContext } from '@/components/contexts'
 import Divider from '@/components/Universal/divider'
@@ -10,6 +10,7 @@ import { USER_GUEST } from '@/data/constants'
 import { useNow } from '@/hooks/useNow'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { loadTimetable } from '@/utils/timetable-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import {
 	getEventStatus,
 	getUpNextCardData,
@@ -23,7 +24,7 @@ import NextEventPreview from './next-event-preview'
 import TodayStatsRow from './today-stats-row'
 
 export default function UpNextCard(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const borderColor = toColor(useCSSVariable('--color-border'))
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { t } = useTranslation(['navigation', 'timetable'])
 	const isLoggedIn = userKind !== USER_GUEST
@@ -72,9 +73,9 @@ export default function UpNextCard(): React.JSX.Element {
 		<BaseCard title="timetable" onPressRoute="/timetable">
 			{isReady &&
 				(cardData?.currentEvent != null && eventStatus != null ? (
-					<View style={styles.mainContainer}>
-						<View style={styles.eventHeader}>
-							<Text style={styles.timeInfo}>
+					<View className="gap-2 pt-2">
+						<View className="flex-row justify-between items-center">
+							<Text className="text-text text-sm tabular-nums">
 								{formatFriendlyTime(cardData.currentEvent.startDate)} -{' '}
 								{formatFriendlyTime(cardData.currentEvent.endDate)}
 							</Text>
@@ -88,13 +89,16 @@ export default function UpNextCard(): React.JSX.Element {
 							<EventProgressBar progress={eventStatus.progress} />
 						)}
 
-						<View style={styles.eventContent}>
-							<Text style={styles.eventTitle} numberOfLines={2}>
+						<View className="gap-1">
+							<Text
+								className="text-text text-base font-semibold leading-5"
+								numberOfLines={2}
+							>
 								{cardData.currentEvent.name}
 							</Text>
 							{cardData.currentEvent.rooms.length > 0 && (
-								<View style={styles.roomContainer}>
-									<Text style={styles.roomText}>
+								<View className="flex-row items-center mt-0.5">
+									<Text className="text-label text-[15px]">
 										{cardData.currentEvent.rooms.join(', ')}
 									</Text>
 								</View>
@@ -102,7 +106,7 @@ export default function UpNextCard(): React.JSX.Element {
 						</View>
 
 						{cardData.todayStats.total > 0 && (
-							<Divider width="100%" color={theme.colors.border} />
+							<Divider width="100%" color={borderColor} />
 						)}
 
 						<TodayStatsRow
@@ -115,17 +119,17 @@ export default function UpNextCard(): React.JSX.Element {
 						/>
 					</View>
 				) : isNotYetSetUp ? (
-					<View style={styles.emptyContainer}>
-						<Text style={styles.emptyTitle}>
+					<View className="pt-2">
+						<Text className="text-text text-base font-medium">
 							{t('timetable:error.empty.subtitle')}
 						</Text>
 					</View>
 				) : (
-					<View style={styles.emptyContainer}>
-						<Text style={styles.emptyTitle}>
+					<View className="pt-2">
+						<Text className="text-text text-base font-medium">
 							{t('cards.timetable.noEvents')}
 						</Text>
-						<Text style={styles.emptySubtitle}>
+						<Text className="text-label text-sm">
 							{t('cards.timetable.enjoyDay')}
 						</Text>
 					</View>
@@ -133,50 +137,3 @@ export default function UpNextCard(): React.JSX.Element {
 		</BaseCard>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	mainContainer: {
-		gap: 8,
-		paddingTop: 8
-	},
-	eventHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	timeInfo: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontVariant: ['tabular-nums']
-	},
-	eventContent: {
-		gap: 4
-	},
-	eventTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		lineHeight: 20
-	},
-	roomContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 2
-	},
-	roomText: {
-		color: theme.colors.labelColor,
-		fontSize: 15
-	},
-	emptyContainer: {
-		paddingTop: 8
-	},
-	emptyTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500'
-	},
-	emptySubtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	}
-}))
