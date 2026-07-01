@@ -39,11 +39,15 @@ const LoginForm = ({
 	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const labelColor = String(toColor(useCSSVariable('--color-label')) ?? '#606062')
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label')) ?? '#606062'
+	)
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
 	)
-	const borderColor = String(toColor(useCSSVariable('--color-border')) ?? '#d8d8d8')
+	const borderColor = String(
+		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
+	)
 	const { userKind, toggleUserKind } = React.use(UserKindContext)
 	const [loading, setLoading] = useState(false)
 	const { t } = useTranslation('flow')
@@ -240,7 +244,10 @@ const LoginForm = ({
 
 					<Animated.View
 						className="flex-row items-center bg-input-background rounded-sm border-border px-3"
-						style={[hairlineBorder, { transform: [{ translateX: shakeAnimation }] }]}
+						style={[
+							hairlineBorder,
+							{ transform: [{ translateX: shakeAnimation }] }
+						]}
 					>
 						<PlatformIcon
 							ios={{ name: 'lock', size: 20 }}
@@ -289,7 +296,9 @@ const LoginForm = ({
 				<Button
 					disabled={signInDisabled}
 					loading={loading}
-					onPress={() => login().catch((error: unknown) => console.debug(error))}
+					onPress={() =>
+						login().catch((error: unknown) => console.debug(error))
+					}
 					style={{ marginTop: 24 }}
 				>
 					{t('login.button')}
@@ -315,9 +324,13 @@ const LoginForm = ({
 
 				<TouchableOpacity
 					className="items-center pt-1.5 mt-3.5"
-					onPress={() => guestLogin().catch((error: unknown) => console.debug(error))}
+					onPress={() =>
+						guestLogin().catch((error: unknown) => console.debug(error))
+					}
 				>
-					<Text className="text-label text-sm font-normal">{t('login.guest')}</Text>
+					<Text className="text-label text-sm font-normal">
+						{t('login.guest')}
+					</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
