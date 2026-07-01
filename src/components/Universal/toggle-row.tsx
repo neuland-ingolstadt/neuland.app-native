@@ -32,7 +32,7 @@ const ToggleRow = ({
 							}}
 						>
 							<View
-								className="items-center self-center bg-card ios:rounded-ios android:rounded-md border-border p-page py-2.5 w-full"
+								className="items-center self-center bg-card rounded-md ios:rounded-ios border-border overflow-hidden px-page py-2.5 w-full"
 								style={hairlineBorder}
 							>
 								<Text
