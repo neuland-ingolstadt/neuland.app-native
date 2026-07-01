@@ -36,7 +36,7 @@ const MultiSectionRadio = ({
 								}
 								action(item.key)
 							}}
-							className="bg-card ios:rounded-ios android:rounded-lg p-4 flex-row items-center justify-between h-full active:opacity-80"
+							className="bg-card rounded-lg ios:rounded-ios p-4 flex-row items-center justify-between h-full active:opacity-80"
 						>
 							<Text className="text-text text-base flex-1 mr-2">
 								{item.title}

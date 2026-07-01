@@ -34,7 +34,7 @@ const InfoBox = ({
 	return (
 		<Link href={href} asChild>
 			<Pressable
-				className="items-center bg-card border-border ios:rounded-ios android:rounded-md flex-1 justify-center p-4 min-h-20 active:opacity-90"
+				className="items-center bg-card border-border rounded-md ios:rounded-ios flex-1 justify-center p-4 min-h-20 active:opacity-90"
 				style={[hairlineBorder, style]}
 			>
 				<View className="items-center justify-center mb-2">
