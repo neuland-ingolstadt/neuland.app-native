@@ -209,7 +209,7 @@ function FoodScreen(): React.JSX.Element {
 							scrollEnabled
 							overdrag
 						>
-							{data.map((day: Food, index: number) => (
+							{data.map((day: Food) => (
 								<ScrollView
 									refreshControl={
 										<RefreshControl
@@ -236,7 +236,7 @@ function FoodScreen(): React.JSX.Element {
 									showsVerticalScrollIndicator={false}
 									contentContainerClassName="mx-3 pb-bottom-safe"
 								>
-									<MealDay day={day} index={index} />
+									<MealDay day={day} />
 								</ScrollView>
 							))}
 						</PagerView>

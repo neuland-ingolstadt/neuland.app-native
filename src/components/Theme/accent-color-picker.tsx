@@ -5,13 +5,10 @@ import Animated, {
 	useSharedValue,
 	withSpring
 } from 'react-native-reanimated'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import type { ThemeColor } from '@/hooks/usePreferencesStore'
 import { themeColorMap } from '@/styles/theme-colors'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface AccentOption {
 	key: ThemeColor
@@ -29,7 +26,9 @@ const ColorOption = ({
 	selected,
 	onSelect
 }: ColorOptionProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { theme } = useUniwind()
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
 	const colors = themeColorMap[option.key]
 	const isSelected = option.key === selected
 	const scale = useSharedValue(1)
@@ -48,23 +47,27 @@ const ColorOption = ({
 			onPressOut={() => {
 				scale.value = withSpring(1, { damping: 15 })
 			}}
-			style={({ pressed }) => [
-				styles.optionContainer,
-				pressed && { opacity: 0.8 }
-			]}
+			className="items-center flex-1 active:opacity-80"
 		>
 			<Animated.View
+				className={`w-14 h-14 rounded-2xl mb-2 ${isSelected ? 'border-2 border-text' : ''}`}
 				style={[
-					styles.swatch,
 					{
-						backgroundColor:
-							UnistylesRuntime.themeName === 'dark' ? colors.dark : colors.light
+						backgroundColor: theme === 'dark' ? colors.dark : colors.light,
+						shadowColor: textColor,
+						shadowOffset: { width: 0, height: 2 },
+						shadowOpacity: isSelected ? 0.2 : 0.1,
+						shadowRadius: isSelected ? 6 : 4
 					},
-					isSelected && styles.selected,
 					animatedStyle
 				]}
 			/>
-			<Text style={styles.label}>{option.title}</Text>
+			<Text
+				className="text-sm font-medium text-center"
+				style={{ color: labelColor }}
+			>
+				{option.title}
+			</Text>
 		</Pressable>
 	)
 }
@@ -80,9 +83,8 @@ const AccentColorPicker = ({
 	selected,
 	onSelect
 }: AccentColorPickerProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	return (
-		<View style={styles.container}>
+		<View className="flex-row items-center py-[18px] justify-evenly">
 			{options.map((option) => (
 				<ColorOption
 					key={option.key}
@@ -94,43 +96,5 @@ const AccentColorPicker = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 18,
-		justifyContent: 'space-evenly'
-	},
-	optionContainer: {
-		alignItems: 'center',
-		flex: 1
-	},
-	swatch: {
-		width: 56,
-		height: 56,
-		borderRadius: 16,
-		marginBottom: 8,
-		shadowColor: theme.colors.text,
-		shadowOffset: {
-			width: 0,
-			height: 2
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 4
-	},
-	selected: {
-		borderWidth: 2,
-		borderColor: theme.colors.text,
-		shadowOpacity: 0.2,
-		shadowRadius: 6
-	},
-	label: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '500',
-		textAlign: 'center'
-	}
-}))
 
 export default AccentColorPicker

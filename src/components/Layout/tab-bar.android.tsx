@@ -1,28 +1,56 @@
 import Color from 'color'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useColorScheme } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
-import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { toColor } from '@/utils/uniwind-utils'
 import { Tabs } from './native-bottom-tabs'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
 
+function resolveActiveTheme(
+	theme: string,
+	colorScheme: 'light' | 'dark' | null | undefined
+): 'light' | 'dark' {
+	if (theme === 'light' || theme === 'dark') {
+		return theme
+	}
+
+	return colorScheme === 'dark' ? 'dark' : 'light'
+}
+
 export default function TabLayout(): React.JSX.Element {
-	const { theme } = useStyles()
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const colorScheme = useColorScheme()
+	const isDark = resolveActiveTheme(themePreference, colorScheme) === 'dark'
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
 	const { t } = useTranslation('navigation')
+	const tabBarBackgroundColor = isDark
+		? Color(cardColor).mix(Color(primaryColor), 0.04).hex()
+		: Color(cardColor).mix(Color(primaryColor), 0.1).hex()
+	const activeIndicatorColor = isDark
+		? Color(cardColor)
+				.mix(Color(primaryColor), 0.06)
+				.lighten(1.4)
+				.saturate(1)
+				.hex()
+		: Color(cardColor)
+				.mix(Color(primaryColor), 0.3)
+				.darken(0.05)
+				.saturate(0.1)
+				.hex()
+
 	return (
 		<Tabs
 			sidebarAdaptable={false}
-			tabBarActiveTintColor={theme.colors.primary}
+			tabBarActiveTintColor={primaryColor}
 			tabBarStyle={{
-				backgroundColor:
-					UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.04)
-								.hex()
-						: Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.1)
-								.hex()
+				backgroundColor: tabBarBackgroundColor
 			}}
 			translucent
 			tabLabelStyle={{
@@ -30,19 +58,7 @@ export default function TabLayout(): React.JSX.Element {
 			}}
 			labeled
 			disablePageAnimations={true}
-			activeIndicatorColor={
-				UnistylesRuntime.themeName === 'dark'
-					? Color(theme.colors.card)
-							.mix(Color(theme.colors.primary), 0.06)
-							.lighten(1.4)
-							.saturate(1)
-							.hex()
-					: Color(theme.colors.card)
-							.mix(Color(theme.colors.primary), 0.3)
-							.darken(0.05)
-							.saturate(0.1)
-							.hex()
-			}
+			activeIndicatorColor={activeIndicatorColor}
 		>
 			<Tabs.Screen
 				name="index"

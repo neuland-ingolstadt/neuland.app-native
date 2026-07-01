@@ -294,7 +294,7 @@ export default function LecturersScreen(): React.JSX.Element {
 			<FlashList
 				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
-				keyExtractor={(_, index) => index.toString()}
+				keyExtractor={(item) => item.id}
 				estimatedItemSize={72}
 				contentContainerClassName="pb-bottom-safe px-page"
 				showsVerticalScrollIndicator={false}
@@ -312,7 +312,6 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 				renderItem={({ item, index }) => (
 					<View
-						key={index}
 						className="mb-2 overflow-hidden"
 						style={{
 							borderTopStartRadius: index === 0 ? cardRadius : 0,
@@ -395,9 +394,9 @@ export default function LecturersScreen(): React.JSX.Element {
 				</View>
 				<SectionList
 					sections={sections}
-					keyExtractor={(_, index) => index.toString()}
-					renderItem={({ item, index }) => (
-						<View key={index} className="mb-2">
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => (
+						<View className="mb-2">
 							<LecturerRow item={item} />
 						</View>
 					)}

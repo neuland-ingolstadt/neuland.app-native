@@ -81,11 +81,11 @@ export default function ClSportsPage({
 	}): React.JSX.Element => {
 		return (
 			<View>
-				{data.map((section, index) => (
+				{data.map((section) => (
 					<SportsWeekday
 						title={section.title.toLowerCase() as Lowercase<WeekdayType>}
 						data={section.data}
-						key={index}
+						key={section.title}
 					/>
 				))}
 			</View>
@@ -218,8 +218,8 @@ export default function ClSportsPage({
 						{t('labels.campus')}
 					</Text>
 					<View className="flex-row items-center gap-2 pb-1 pt-2">
-						{locations.map((location, index) => (
-							<LocationButton location={location} key={index} />
+						{locations.map((location) => (
+							<LocationButton location={location} key={location} />
 						))}
 					</View>
 					<View className="rounded-md">

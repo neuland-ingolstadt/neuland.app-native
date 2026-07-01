@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
@@ -19,7 +19,7 @@ const sortCategoriesByPriority = (categories: string[]): string[] => {
 		soup: 4
 	}
 
-	return [...categories].sort((a, b) => {
+	return categories.toSorted((a, b) => {
 		const priorityA = categoryPriority[a] || 10
 		const priorityB = categoryPriority[b] || 10
 
@@ -93,8 +93,8 @@ const MealCategory = ({
 				</View>
 			</Pressable>
 			<Collapsible collapsed={collapsed}>
-				{meals.map((meal: Meal, index: number) => (
-					<MealEntry key={index} meal={meal} index={index} />
+				{meals.map((meal: Meal) => (
+					<MealEntry key={meal.id} meal={meal} />
 				))}
 			</Collapsible>
 		</View>
@@ -117,13 +117,32 @@ const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	}, {})
 }
 
-export const MealDay = ({
-	day,
-	index
-}: {
-	day: Food
-	index: number
-}): React.JSX.Element => {
+interface RestaurantViewProps {
+	restaurantName: string
+	meals: Meal[]
+	groupedMeals: Record<string, Meal[]>
+}
+
+const RestaurantView = ({
+	restaurantName,
+	meals,
+	groupedMeals
+}: RestaurantViewProps): React.JSX.Element | null => {
+	if (meals.length === 0) {
+		return null
+	}
+
+	return (
+		<View>
+			<Text className="text-text text-lg font-bold pb-[3px] pt-3">
+				{restaurantName}
+			</Text>
+			<MealGroup group={groupedMeals} />
+		</View>
+	)
+}
+
+export const MealDay = ({ day }: { day: Food }): React.JSX.Element => {
 	const mealData = useMemo(() => {
 		const ingolstadtMensa = filterMealsByRestaurant(
 			day.meals,
@@ -150,53 +169,30 @@ export const MealDay = ({
 		}
 	}, [day.meals])
 
-	interface RestaurantProps {
-		restaurantName: string
-		meals: Meal[]
-		groupedMeals: Record<string, Meal[]>
-	}
-
-	const renderRestaurantView = useCallback(
-		({ restaurantName, meals, groupedMeals }: RestaurantProps) => {
-			if (meals.length > 0) {
-				return (
-					<View>
-						<Text className="text-text text-lg font-bold pb-[3px] pt-3">
-							{restaurantName}
-						</Text>
-						<MealGroup group={groupedMeals} />
-					</View>
-				)
-			}
-			return null
-		},
-		[]
-	)
-
 	return mealData.isEmpty ? (
 		<EmptyFoodAnimation />
 	) : (
-		<View key={index} className="pb-bottom-safe">
-			{renderRestaurantView({
-				restaurantName: 'Mensa Ingolstadt',
-				meals: mealData.ingolstadtMensa,
-				groupedMeals: mealData.ingolstadtMensaGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Theke Neuburg',
-				meals: mealData.neuburgMensa,
-				groupedMeals: mealData.neuburgMensaGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Reimanns',
-				meals: mealData.reimanns,
-				groupedMeals: mealData.reimannsGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Canisius Konvikt',
-				meals: mealData.canisius,
-				groupedMeals: mealData.canisiusGrouped
-			})}
+		<View className="pb-bottom-safe">
+			<RestaurantView
+				restaurantName="Mensa Ingolstadt"
+				meals={mealData.ingolstadtMensa}
+				groupedMeals={mealData.ingolstadtMensaGrouped}
+			/>
+			<RestaurantView
+				restaurantName="Theke Neuburg"
+				meals={mealData.neuburgMensa}
+				groupedMeals={mealData.neuburgMensaGrouped}
+			/>
+			<RestaurantView
+				restaurantName="Reimanns"
+				meals={mealData.reimanns}
+				groupedMeals={mealData.reimannsGrouped}
+			/>
+			<RestaurantView
+				restaurantName="Canisius Konvikt"
+				meals={mealData.canisius}
+				groupedMeals={mealData.canisiusGrouped}
+			/>
 		</View>
 	)
 }

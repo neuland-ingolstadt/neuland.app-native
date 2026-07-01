@@ -30,7 +30,7 @@ export default function StudentInfoSection({
 						web: 'ChartColumnIncreasing'
 					}}
 					href={'/grades' as RelativePathString}
-					style={{ flex: 2 }}
+					style={{ flex: 5 }}
 				/>
 				<InfoBox
 					title={t('infoBoxes.lecturers')}
@@ -41,7 +41,7 @@ export default function StudentInfoSection({
 						web: 'Users'
 					}}
 					href={'/lecturers' as RelativePathString}
-					style={{ flex: 1 }}
+					style={{ flex: 3 }}
 				/>
 			</View>
 			<View className="flex-row gap-2.5 mb-2.5">
@@ -55,7 +55,7 @@ export default function StudentInfoSection({
 					}}
 					href={printLink as RelativePathString}
 					isExternalLink
-					style={{ flex: 1 }}
+					style={{ flex: 3 }}
 				/>
 
 				<InfoBox
@@ -67,7 +67,7 @@ export default function StudentInfoSection({
 						web: 'Library'
 					}}
 					href={'/library' as RelativePathString}
-					style={{ flex: 2 }}
+					style={{ flex: 5 }}
 				/>
 			</View>
 		</>

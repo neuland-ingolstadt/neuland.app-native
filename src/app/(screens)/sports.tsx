@@ -3,14 +3,12 @@ import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect } from 'react'
 import { InteractionManager, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ClSportsPage from '@/components/Events/cl-sports-page'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
 
 export default function SportsScreen(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
 	const headerPadding = useTransparentHeaderPadding()
 	const { openEvent, id } = useLocalSearchParams<{
 		openEvent?: string
@@ -20,8 +18,8 @@ export default function SportsScreen(): React.JSX.Element {
 	const sportsResult = useQuery({
 		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
 		queryFn: loadUniversitySportsEvents,
-		staleTime: 1000 * 60 * 60, // 60 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 60,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	useEffect(() => {
@@ -45,16 +43,8 @@ export default function SportsScreen(): React.JSX.Element {
 	)
 
 	return (
-		<View
-			style={[styles.page, { paddingTop: headerPadding + theme.margins.page }]}
-		>
+		<View className="flex-1" style={{ paddingTop: headerPadding + 12 }}>
 			<ClSportsPage sportsResult={sportsResult} />
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	page: {
-		flex: 1
-	}
-}))

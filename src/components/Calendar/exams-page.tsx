@@ -16,6 +16,12 @@ import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { ExamRow } from '../Rows/calendar-row'
 
+const renderExamItem = ({ item }: { item: Exam }) => (
+	<View className="mb-2">
+		<ExamRow event={item} />
+	</View>
+)
+
 export default function ExamsPage({
 	primussUrl,
 	handleLinkPress
@@ -64,12 +70,6 @@ export default function ExamsPage({
 			</View>
 		)
 	}
-
-	const renderExamItem = ({ item }: { item: Exam }) => (
-		<View className="mb-2">
-			<ExamRow event={item} />
-		</View>
-	)
 
 	return (
 		<View className="flex-1 w-full">

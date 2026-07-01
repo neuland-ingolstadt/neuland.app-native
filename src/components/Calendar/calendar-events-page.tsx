@@ -13,6 +13,31 @@ type Section = {
 
 const ITEM_HEIGHT = 78
 
+const renderCalendarItem = ({ item }: { item: Calendar }) => (
+	<View className="mb-2">
+		<CalendarRow event={item} />
+	</View>
+)
+
+const renderSectionHeader = ({
+	section
+}: {
+	section: SectionListData<Calendar, Section>
+}) => (
+	<View className="bg-background py-2 mb-1">
+		<Text className="text-text text-[19px] font-semibold">{section.title}</Text>
+	</View>
+)
+
+const getItemLayout = (
+	_data: SectionListData<Calendar, Section>[] | null,
+	index: number
+) => ({
+	length: ITEM_HEIGHT,
+	offset: index * ITEM_HEIGHT,
+	index
+})
+
 export default function CalendarEventsPage({
 	handleLinkPress,
 	selectedEventId
@@ -57,24 +82,6 @@ export default function CalendarEventsPage({
 		}
 	}, [selectedEventId, isReady])
 
-	const renderCalendarItem = ({ item }: { item: Calendar }) => (
-		<View className="mb-2">
-			<CalendarRow event={item} />
-		</View>
-	)
-
-	const renderSectionHeader = ({
-		section
-	}: {
-		section: SectionListData<Calendar, Section>
-	}) => (
-		<View className="bg-background py-2 mb-1">
-			<Text className="text-text text-[19px] font-semibold">
-				{section.title}
-			</Text>
-		</View>
-	)
-
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
 			<View className="my-1 pb-bottom-safe">
@@ -87,17 +94,6 @@ export default function CalendarEventsPage({
 				</Text>
 			</View>
 		)
-	}
-
-	const getItemLayout = (
-		_data: SectionListData<Calendar, Section>[] | null,
-		index: number
-	) => {
-		return {
-			length: ITEM_HEIGHT,
-			offset: index * ITEM_HEIGHT,
-			index
-		}
 	}
 
 	return (

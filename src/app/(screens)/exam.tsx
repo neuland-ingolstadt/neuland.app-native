@@ -60,10 +60,10 @@ export default function ExamDetail(): React.JSX.Element {
 					customComponent: (textStyle) => {
 						return exam?.rooms?.includes(',') ? (
 							<View className="flex-1 flex-row justify-end flex-wrap">
-								{exam.rooms.split(',').map((r, index) => {
+								{exam.rooms.split(',').map((r, roomIndex, rooms) => {
 									const room = r.trim()
 									return (
-										<View key={index}>
+										<View key={room}>
 											<Pressable
 												className="flex-row items-center"
 												onPress={() => {
@@ -78,7 +78,7 @@ export default function ExamDetail(): React.JSX.Element {
 												<Text style={[textStyle, { color: primaryColor }]}>
 													{room}
 												</Text>
-												{index < exam.rooms.split(',').length - 1 && (
+												{roomIndex < rooms.length - 1 && (
 													<Text style={textStyle}>, </Text>
 												)}
 											</Pressable>
