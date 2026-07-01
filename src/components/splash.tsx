@@ -1,7 +1,13 @@
 import * as SplashScreen from 'expo-splash-screen'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { Platform, StyleSheet, View, type ViewStyle } from 'react-native'
+import {
+	Platform,
+	StyleSheet,
+	useColorScheme,
+	View,
+	type ViewStyle
+} from 'react-native'
 import Animated, {
 	Easing,
 	interpolate,
@@ -11,8 +17,9 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import Svg, { G, Path } from 'react-native-svg'
-import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { toColor } from '@/utils/uniwind-utils'
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
@@ -46,9 +53,27 @@ const Logo = ({ style, width, height, color, opacity }: LogoProps) => (
 
 type Props = { isReady: boolean }
 
+function resolveActiveTheme(
+	theme: string,
+	colorScheme: 'light' | 'dark' | null | undefined
+): 'light' | 'dark' {
+	if (theme === 'light' || theme === 'dark') {
+		return theme
+	}
+
+	return colorScheme === 'dark' ? 'dark' : 'light'
+}
+
 export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
-	const isDark = UnistylesRuntime.themeName === 'dark'
-	const { theme } = useStyles()
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const colorScheme = useColorScheme()
+	const isDark = resolveActiveTheme(themePreference, colorScheme) === 'dark'
+	const contrastColor = String(
+		toColor(useCSSVariable('--color-contrast')) ?? '#ffffff'
+	)
+	const secondaryColor = String(
+		toColor(useCSSVariable('--color-secondary')) ?? '#1578e1'
+	)
 	const [loaded, setLoaded] = useState(false)
 	const [hideSplash, setHideSplash] = useState(false)
 	const showSplashScreen = usePreferencesStore(
@@ -86,7 +111,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	}))
 
 	const animatedBackgroundStyle = useAnimatedStyle(() => ({
-		backgroundColor: theme.colors.contrast,
+		backgroundColor: contrastColor,
 		opacity: interpolate(introBackground.value, [0, 1], [1, 0], 'clamp')
 	}))
 
@@ -112,7 +137,6 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 			if (showSplashScreen) {
 				animateSplashWithTransformation()
 			} else {
-				// No animation - directly hide splash
 				setHideSplash(true)
 			}
 		}
@@ -135,7 +159,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 						<Logo
 							width={logoWidth}
 							height={logoHeight}
-							color={isDark ? '#1578e1' : '#1a1a1a'}
+							color={isDark ? secondaryColor : '#1a1a1a'}
 							opacity={isDark ? 0.25 : 0.5}
 							style={[animatedLogoStyle, iosMarginStyle]}
 						/>

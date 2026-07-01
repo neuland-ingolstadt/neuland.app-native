@@ -3,48 +3,60 @@ import { Icon, Label } from 'expo-router/build/native-tabs/common/elements'
 import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
-import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { Platform, useColorScheme } from 'react-native'
+import { useCSSVariable } from 'uniwind'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { toColor } from '@/utils/uniwind-utils'
+
+function resolveActiveTheme(
+	theme: string,
+	colorScheme: 'light' | 'dark' | null | undefined
+): 'light' | 'dark' {
+	if (theme === 'light' || theme === 'dark') {
+		return theme
+	}
+
+	return colorScheme === 'dark' ? 'dark' : 'light'
+}
 
 export default function TabLayout(): React.JSX.Element {
-	const { theme } = useStyles()
+	const themePreference = usePreferencesStore((state) => state.theme)
+	const colorScheme = useColorScheme()
+	const isDark = resolveActiveTheme(themePreference, colorScheme) === 'dark'
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const tabbarInactiveColor = String(
+		toColor(useCSSVariable('--color-tabbar-inactive')) ?? '#999999'
+	)
 	const { t } = useTranslation('navigation')
 	const isIos26 =
 		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	const isAndroid = Platform.OS === 'android'
+	const androidIndicatorColor = isDark
+		? Color(cardColor)
+				.mix(Color(primaryColor), 0.06)
+				.lighten(1.4)
+				.saturate(1)
+				.hex()
+		: Color(cardColor)
+				.mix(Color(primaryColor), 0.3)
+				.darken(0.05)
+				.saturate(0.1)
+				.hex()
+	const androidBackgroundColor = isDark
+		? Color(cardColor).mix(Color(primaryColor), 0.04).hex()
+		: Color(cardColor).mix(Color(primaryColor), 0.1).hex()
+
 	return (
 		<NativeTabs
-			// Shared styling
-			badgeBackgroundColor={theme.colors.primary}
-			iconColor={theme.colors.tabbarInactive}
-			tintColor={theme.colors.primary}
-			indicatorColor={
-				isAndroid
-					? UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.06)
-								.lighten(1.4)
-								.saturate(1)
-								.hex()
-						: Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.3)
-								.darken(0.05)
-								.saturate(0.1)
-								.hex()
-					: undefined
-			}
+			badgeBackgroundColor={primaryColor}
+			iconColor={tabbarInactiveColor}
+			tintColor={primaryColor}
+			indicatorColor={isAndroid ? androidIndicatorColor : undefined}
 			labelVisibilityMode="labeled"
-			backgroundColor={
-				isAndroid
-					? UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.04)
-								.hex()
-						: Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.1)
-								.hex()
-					: theme.colors.card
-			}
+			backgroundColor={isAndroid ? androidBackgroundColor : cardColor}
 			disableTransparentOnScrollEdge={!isIos26}
 		>
 			<NativeTabs.Trigger name="index">
@@ -52,7 +64,7 @@ export default function TabLayout(): React.JSX.Element {
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'house', selected: 'house.fill' }}
-						selectedColor={theme.colors.primary}
+						selectedColor={primaryColor}
 					/>
 				) : (
 					<Icon
@@ -68,7 +80,7 @@ export default function TabLayout(): React.JSX.Element {
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'clock', selected: 'clock.fill' }}
-						selectedColor={theme.colors.primary}
+						selectedColor={primaryColor}
 					/>
 				) : (
 					<Icon
@@ -84,7 +96,7 @@ export default function TabLayout(): React.JSX.Element {
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'map', selected: 'map.fill' }}
-						selectedColor={theme.colors.primary}
+						selectedColor={primaryColor}
 					/>
 				) : (
 					<Icon
@@ -100,7 +112,7 @@ export default function TabLayout(): React.JSX.Element {
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'fork.knife', selected: 'fork.knife' }}
-						selectedColor={theme.colors.primary}
+						selectedColor={primaryColor}
 					/>
 				) : (
 					<Icon
@@ -116,7 +128,7 @@ export default function TabLayout(): React.JSX.Element {
 				{Platform.OS === 'ios' ? (
 					<Icon
 						sf={{ default: 'person', selected: 'person.fill' }}
-						selectedColor={theme.colors.primary}
+						selectedColor={primaryColor}
 					/>
 				) : (
 					<Icon
