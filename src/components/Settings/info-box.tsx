@@ -1,17 +1,10 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
-import {
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	type TextStyle,
-	View,
-	type ViewStyle
-} from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 interface InfoBoxProps {
 	title: string
@@ -35,12 +28,16 @@ const InfoBox = ({
 	style,
 	isExternalLink
 }: InfoBoxProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	return (
-		<Link href={href} asChild style={[styles.container, style as TextStyle]}>
-			<Pressable>
-				<View style={styles.iconContainer}>
+		<Link href={href} asChild>
+			<Pressable
+				className="items-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md flex-1 justify-center p-4 min-h-20 active:opacity-90"
+				style={[hairlineBorder, style]}
+			>
+				<View className="items-center justify-center mb-2">
 					<PlatformIcon
 						ios={{
 							name: icon.ios,
@@ -55,11 +52,14 @@ const InfoBox = ({
 							name: icon.web,
 							size: 21
 						}}
-						style={{ ...styles.icon }}
+						style={{
+							color: textColor,
+							marginBottom: Platform.OS === 'android' ? -4 : 2
+						}}
 					/>
 				</View>
-				<Text style={styles.value}>{value}</Text>
-				<Text style={styles.title}>
+				<Text className="text-text text-[17px] font-bold">{value}</Text>
+				<Text className="text-label text-[13px] mt-1">
 					{title}
 					{isExternalLink && Platform.OS !== 'android' && (
 						<>
@@ -68,7 +68,10 @@ const InfoBox = ({
 								ios={{ name: 'arrow.up.right', size: 5 }}
 								android={{ name: 'search', size: 14 }}
 								web={{ name: 'ArrowUpRight', size: 14 }}
-								style={styles.externalLink}
+								style={{
+									color: labelColor,
+									marginBottom: Platform.OS === 'ios' ? -1 : -3
+								}}
 							/>
 						</>
 					)}
@@ -77,42 +80,5 @@ const InfoBox = ({
 		</Link>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderRadius: theme.radius.ios,
-		borderWidth: StyleSheet.hairlineWidth,
-		flex: 1,
-		justifyContent: 'center',
-		padding: 16,
-		minHeight: 80
-	},
-	iconContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginBottom: 8
-	},
-	icon: {
-		color: theme.colors.text,
-		marginBottom: Platform.OS === 'android' ? -4 : 2
-	},
-	value: {
-		color: theme.colors.text,
-		fontSize: 17,
-		fontWeight: 'bold'
-	},
-	title: {
-		color: theme.colors.labelColor,
-		fontSize: 13,
-		marginTop: 4
-	},
-	externalLink: {
-		color: theme.colors.labelColor,
-		marginBottom: Platform.OS === 'ios' ? -1 : -3
-	}
-}))
 
 export default InfoBox
