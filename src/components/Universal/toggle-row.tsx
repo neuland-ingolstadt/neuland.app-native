@@ -25,7 +25,7 @@ const ToggleRow = ({
 				const isSelected = selectedElement === index
 
 				return (
-					<View key={index} className="flex-1">
+					<View key={item} className="flex-1">
 						<Pressable
 							onPress={() => {
 								pressHandler(index)
