@@ -1,6 +1,7 @@
 import type React from 'react'
 import { View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface VerticalLineProps {
 	color?: string
@@ -11,32 +12,17 @@ const VerticalLine = ({
 	color,
 	opacity = 0.4
 }: VerticalLineProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = useCSSVariable('--color-primary')
 
 	return (
 		<View
-			style={[
-				styles.verticalLine,
-				{
-					backgroundColor: color ?? theme.colors.primary,
-					opacity
-				}
-			]}
+			className="w-0.5 max-w-0.5 rounded-xs mr-2.5 mt-px self-stretch grow shrink-0"
+			style={{
+				backgroundColor: color ?? toColor(primaryColor),
+				opacity
+			}}
 		/>
 	)
 }
-
-const stylesheet = createStyleSheet(() => ({
-	verticalLine: {
-		width: 2,
-		maxWidth: 2, // needed for web
-		borderRadius: 2,
-		marginRight: 10,
-		marginTop: 1,
-		alignSelf: 'stretch',
-		flexGrow: 1,
-		flexShrink: 0
-	}
-}))
 
 export default VerticalLine

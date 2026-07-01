@@ -1,16 +1,10 @@
 import React from 'react'
-import {
-	Platform,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-	type ViewStyle
-} from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import Divider from '@/components/Universal/divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
 interface FormListProps {
@@ -33,17 +27,28 @@ interface RenderSectionItemProps {
 	sheet: boolean
 }
 
+const blockCardClassName = (sheet: boolean): string =>
+	sheet
+		? 'bg-card-sheet rounded-md ios:rounded-ios border-border overflow-hidden'
+		: 'bg-card rounded-md ios:rounded-ios border-border overflow-hidden'
+
+const itemSectionClassName = (sheet: boolean): string =>
+	sheet
+		? 'bg-card-sheet rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
+		: 'bg-card rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
+
 const RenderSectionItem = ({
 	sectionIndex,
 	section,
 	sheet
 }: RenderSectionItemProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	return (
-		<View key={sectionIndex} style={styles.block}>
-			<View style={[styles.blockCard(sheet), styles.itemBlock(sheet)]}>
+		<View key={sectionIndex} className="gap-1.5">
+			<View className={itemSectionClassName(sheet)} style={hairlineBorder}>
 				{typeof section.item === 'string' ? (
-					<Text style={styles.columnDetails}>{section.item}</Text>
+					<Text className="text-text text-base pt-0.5 text-left">
+						{section.item}
+					</Text>
 				) : (
 					section.item
 				)}
@@ -58,13 +63,19 @@ const RenderSectionFrame = ({
 	footer,
 	header
 }: RenderSectionFrameProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-
 	return (
-		<View key={sectionIndex} style={styles.block}>
-			{header != null && <Text style={styles.blockHeader}>{header}</Text>}
+		<View key={sectionIndex} className="gap-1.5">
+			{header != null && (
+				<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold android:text-[13px] android:font-normal android:uppercase">
+					{header}
+				</Text>
+			)}
 			{children}
-			{footer != null && <Text style={styles.blockFooter}>{footer}</Text>}
+			{footer != null && (
+				<Text className="text-label-secondary text-xs font-normal ios:mx-4 android:mx-0">
+					{footer}
+				</Text>
+			)}
 		</View>
 	)
 }
@@ -82,7 +93,15 @@ const RenderSectionItems = ({
 	rowStyle,
 	sheet
 }: RenderSectionItemsProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
+	const columnDetailsStyle = useResolveClassNames(
+		'text-text text-base pt-0.5 text-left'
+	)
+	const rowDetailsStyle = useResolveClassNames(
+		'text-base text-right pl-px shrink'
+	)
 
 	const handlePress = (onPress?: () => Promise<void> | void): void => {
 		if (onPress != null) {
@@ -100,9 +119,9 @@ const RenderSectionItems = ({
 		const textComponent = (
 			<Text
 				style={[
-					item.layout === 'column' ? styles.columnDetails : styles.rowDetails,
+					item.layout === 'column' ? columnDetailsStyle : rowDetailsStyle,
 					{
-						color: item.textColor ?? theme.colors.labelColor,
+						color: item.textColor ?? labelColor,
 						fontWeight: item.fontWeight ?? 'normal'
 					}
 				]}
@@ -122,9 +141,7 @@ const RenderSectionItems = ({
 								: (item.value?.toString() ?? '')
 						)
 					}
-					style={({ pressed }) => ({
-						opacity: pressed ? 0.7 : 1
-					})}
+					className="active:opacity-70"
 				>
 					{textComponent}
 				</Pressable>
@@ -135,31 +152,26 @@ const RenderSectionItems = ({
 	}
 
 	return (
-		<View style={styles.blockCard(sheet)}>
+		<View className={blockCardClassName(sheet)} style={hairlineBorder}>
 			{items.map((item, index) => (
 				<React.Fragment key={index}>
 					<Pressable
 						onPress={() => {
 							handlePress(item.onPress)
 						}}
-						style={({ pressed }) => [
-							{
-								opacity: pressed ? 0.9 : 1
-							},
-							styles.pressableContainer
-						]}
+						className="w-full active:opacity-90"
 						disabled={item.disabled ?? item.onPress === undefined}
 					>
 						<View
-							style={{
-								...(item.layout === 'column'
-									? styles.cardColumn
-									: styles.cardRow),
-								...rowStyle
-							}}
+							className={
+								item.layout === 'column'
+									? 'flex-row items-start py-3.5 px-0'
+									: 'flex-row items-center py-[15px]'
+							}
+							style={rowStyle}
 						>
 							{item.icon != null && item.icon.endIcon !== true && (
-								<View style={styles.leftIconContainer}>
+								<View className="w-7 items-center justify-center ml-4">
 									<PlatformIcon
 										ios={{
 											name: item.icon.ios,
@@ -176,21 +188,21 @@ const RenderSectionItems = ({
 											size: 20
 										}}
 										style={{
-											color: item.iconColor ?? theme.colors.text
+											color: item.iconColor ?? textColor
 										}}
 									/>
 								</View>
 							)}
 
 							<View
-								style={[
-									styles.contentContainer,
-									!item.icon && styles.contentWithoutIcon,
-									item.layout === 'column' && styles.columnContentContainer
-								]}
+								className={
+									item.layout === 'column'
+										? 'flex-1 flex-col items-start gap-1 pl-4 pr-2'
+										: 'flex-1 flex-row justify-between items-center pl-4 pr-2'
+								}
 							>
 								{item.title != null && (
-									<Text style={styles.rowTitle}>{item.title}</Text>
+									<Text className="text-text text-base pr-2">{item.title}</Text>
 								)}
 
 								{item.value != null && !privacyHidden && renderValueText(item)}
@@ -199,22 +211,21 @@ const RenderSectionItems = ({
 									!privacyHidden &&
 									item.customComponent([
 										item.layout === 'column'
-											? styles.columnDetails
-											: styles.rowDetails,
+											? columnDetailsStyle
+											: rowDetailsStyle,
 										{
-											color: item.textColor ?? theme.colors.labelColor,
+											color: item.textColor ?? labelColor,
 											fontWeight: item.fontWeight ?? 'normal'
 										}
 									])}
 							</View>
 
-							{/* Add right padding container when there's a value but no chevron */}
 							{(item.value != null || item.customComponent != null) && (
-								<View style={styles.rightPaddingContainer} />
+								<View className="mr-3" />
 							)}
 
 							{item.icon?.endIcon ? (
-								<View style={styles.chevronContainer}>
+								<View className="mr-4 items-center justify-center w-[22px]">
 									<PlatformIcon
 										ios={{
 											name: item.icon.ios,
@@ -231,7 +242,7 @@ const RenderSectionItems = ({
 											size: 20
 										}}
 										style={{
-											color: item.iconColor ?? theme.colors.text
+											color: item.iconColor ?? textColor
 										}}
 									/>
 								</View>
@@ -239,7 +250,7 @@ const RenderSectionItems = ({
 								item.onPress != null &&
 								item.hideChevron !== true &&
 								item.value == null && (
-									<View style={styles.chevronContainer}>
+									<View className="mr-4 items-center justify-center w-[22px]">
 										<PlatformIcon
 											ios={{
 												name: 'chevron.right',
@@ -254,7 +265,9 @@ const RenderSectionItems = ({
 												name: 'ChevronRight',
 												size: 16
 											}}
-											style={styles.chevronIcon}
+											style={{
+												color: labelTertiaryColor
+											}}
 										/>
 									</View>
 								)
@@ -263,7 +276,7 @@ const RenderSectionItems = ({
 					</Pressable>
 
 					{index < items.length - 1 && (
-						<View style={styles.dividerContainer}>
+						<View className="w-full">
 							<Divider
 								paddingLeft={
 									item.icon && (item.icon.endIcon ?? false) !== true
@@ -292,10 +305,8 @@ const FormList = ({
 	privacyHidden,
 	sheet = false
 }: FormListProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-
 	return (
-		<View style={styles.wrapper}>
+		<View className="gap-4 w-full">
 			{sections.map((section, sectionIndex) =>
 				section.items !== undefined && section.items.length > 0 ? (
 					<RenderSectionFrame
@@ -329,125 +340,5 @@ const FormList = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	block: {
-		gap: 6
-	},
-	blockCard: (sheet: boolean) => ({
-		backgroundColor: sheet ? theme.colors.cardSheet : theme.colors.card,
-		borderRadius: theme.radius.ios,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		overflow: 'hidden'
-	}),
-	blockFooter: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 12,
-		fontWeight: '400',
-		...(Platform.OS === 'ios'
-			? {
-					marginHorizontal: 16
-				}
-			: {
-					marginHorizontal: 0
-				})
-	},
-	blockHeader: {
-		...(Platform.OS === 'ios'
-			? {
-					color: theme.colors.labelSecondaryColor,
-					fontSize: 16,
-					marginLeft: 18,
-					fontWeight: '600'
-				}
-			: {
-					color: theme.colors.labelSecondaryColor,
-					fontSize: 13,
-					fontWeight: 'normal',
-					textTransform: 'uppercase'
-				})
-	},
-
-	cardColumn: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		paddingVertical: 14,
-		paddingHorizontal: 0
-	},
-	cardRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 15
-	},
-	columnDetails: {
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingTop: 2,
-		textAlign: 'left'
-	},
-	itemBlock: (sheet: boolean) => ({
-		backgroundColor: sheet ? theme.colors.cardSheet : theme.colors.card,
-		borderRadius: theme.radius.ios,
-		paddingHorizontal: 16,
-		paddingVertical: 13
-	}),
-	rowDetails: {
-		fontSize: 16,
-		textAlign: 'right',
-		paddingLeft: 1,
-		flexShrink: 1
-	},
-	rowTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingRight: 8
-	},
-	wrapper: {
-		gap: 16,
-		width: '100%'
-	},
-	pressableContainer: {
-		width: '100%'
-	},
-	leftIconContainer: {
-		width: 28,
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginLeft: 16
-	},
-	contentContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		paddingLeft: 16,
-		paddingRight: 8
-	},
-	contentWithoutIcon: {
-		paddingLeft: 16
-	},
-	columnContentContainer: {
-		flex: 1,
-		flexDirection: 'column',
-		alignItems: 'flex-start',
-		gap: 4
-	},
-	rightPaddingContainer: {
-		marginRight: 12
-	},
-	chevronContainer: {
-		marginRight: 16,
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 22
-	},
-	chevronIcon: {
-		color: theme.colors.labelTertiaryColor
-	},
-	dividerContainer: {
-		width: '100%'
-	}
-}))
 
 export default FormList
