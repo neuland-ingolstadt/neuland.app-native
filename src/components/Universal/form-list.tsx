@@ -37,6 +37,18 @@ const itemSectionClassName = (sheet: boolean): string =>
 		? 'bg-card-sheet rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
 		: 'bg-card rounded-md ios:rounded-ios border-border overflow-hidden px-4 py-[13px]'
 
+const handlePress = (onPress?: () => Promise<void> | void): void => {
+	if (onPress != null) {
+		Promise.resolve(onPress()).catch((error) => {
+			console.error(error)
+		})
+	}
+}
+
+const handleTextCopy = async (text: string): Promise<void> => {
+	await copyToClipboard(text)
+}
+
 const RenderSectionItem = ({
 	sectionIndex,
 	section,
@@ -102,18 +114,6 @@ const RenderSectionItems = ({
 	const rowDetailsStyle = useResolveClassNames(
 		'text-base text-right pl-px shrink'
 	)
-
-	const handlePress = (onPress?: () => Promise<void> | void): void => {
-		if (onPress != null) {
-			Promise.resolve(onPress()).catch((error) => {
-				console.error(error)
-			})
-		}
-	}
-
-	const handleTextCopy = async (text: string): Promise<void> => {
-		await copyToClipboard(text)
-	}
 
 	const renderValueText = (item: SectionGroup) => {
 		const textComponent = (
