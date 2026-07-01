@@ -20,6 +20,7 @@ import GradesRow from '@/components/Rows/grades-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import SectionView from '@/components/Universal/sections-view'
 import { useRefreshByUser } from '@/hooks'
+import type { Grade } from '@/types/thi-api'
 import type { GradeAverage } from '@/types/utils'
 import {
 	extractSpoName,
@@ -31,6 +32,10 @@ import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 import packageInfo from '../../../package.json'
+
+function getGradeKey(grade: Grade): string {
+	return `${grade.stg}-${grade.kztn}-${grade.pon}`
+}
 
 export default function GradesSCreen(): React.JSX.Element {
 	const { t } = useTranslation('settings')
@@ -254,8 +259,8 @@ export default function GradesSCreen(): React.JSX.Element {
 							<SectionView title={t('grades.finished')} hideBackground>
 								{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
 								<>
-									{filteredGrades?.finished.map((grade, index) => (
-										<View key={index} className="mb-2">
+									{filteredGrades?.finished.map((grade) => (
+										<View key={getGradeKey(grade)} className="mb-2">
 											<GradesRow item={grade} />
 										</View>
 									))}
@@ -267,8 +272,8 @@ export default function GradesSCreen(): React.JSX.Element {
 						<SectionView title={t('grades.open')} hideBackground>
 							{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
 							<>
-								{filteredGrades?.missing.map((grade, index) => (
-									<View key={index} className="mb-2">
+								{filteredGrades?.missing.map((grade) => (
+									<View key={getGradeKey(grade)} className="mb-2">
 										<GradesRow item={grade} />
 									</View>
 								))}

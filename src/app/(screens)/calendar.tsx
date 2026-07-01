@@ -11,6 +11,8 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import ToggleRow from '@/components/Universal/toggle-row'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
+const CALENDAR_PAGES = ['events', 'exams'] as const
+
 export default function CalendarPage(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const headerPadding = useTransparentHeaderPadding() + 12
@@ -44,8 +46,6 @@ export default function CalendarPage(): React.JSX.Element {
 	function setPage(page: number): void {
 		pagerViewRef.current?.setPage(page)
 	}
-	const pages = ['events', 'exams']
-
 	const renderPage = (index: number) => {
 		if (!viewedPages.has(index)) {
 			return <LoadingIndicator />
@@ -120,7 +120,7 @@ export default function CalendarPage(): React.JSX.Element {
 					})
 
 					trackEvent('Route', {
-						path: `calendar/${pages[page]}`
+						path: `calendar/${CALENDAR_PAGES[page]}`
 					})
 				}}
 				scrollEnabled
