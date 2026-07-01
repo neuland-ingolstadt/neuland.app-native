@@ -68,7 +68,7 @@ const BaseCard = ({
 			style={hairlineBorder}
 		>
 			<View className="p-card my-[1.5px]">
-				<View className="items-center text-text flex-row gap-2.5">
+				<View className="items-center flex-row gap-2.5">
 					<View className="w-9 h-9 rounded-full justify-center items-center mr-1 bg-primary-background">
 						<Animated.View style={animatedIconStyle}>
 							<PlatformIcon
