@@ -28,15 +28,16 @@ import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import Button from './button'
 import PlatformIcon from './icon'
 
+const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
+const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
+const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
+
 const LoginForm = ({
 	navigateHome
 }: {
 	navigateHome: () => void
 }): React.JSX.Element => {
-	const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
-	const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
-	const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
-	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const labelColor = String(
