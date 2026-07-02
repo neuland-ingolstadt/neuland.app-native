@@ -11,6 +11,7 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -182,7 +183,7 @@ export function LoggedInView(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerClassName="px-page pt-5 pb-[30px]"
+			contentContainerStyle={styles.container}
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
@@ -197,7 +198,7 @@ export function LoggedInView(): React.JSX.Element {
 			}
 		>
 			{info && (
-				<View className="mb-[50px]">
+				<View style={styles.cardWrapper}>
 					<IDCard info={info} idToken={idToken} />
 				</View>
 			)}
@@ -239,3 +240,14 @@ export function LoggedInView(): React.JSX.Element {
 		</ScrollView>
 	)
 }
+
+const styles = StyleSheet.create({
+	cardWrapper: {
+		marginBottom: 50
+	},
+	container: {
+		paddingBottom: 30,
+		paddingHorizontal: 12,
+		paddingTop: 20
+	}
+})
