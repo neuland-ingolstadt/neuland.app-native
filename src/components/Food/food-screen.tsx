@@ -200,7 +200,7 @@ function FoodScreen(): React.JSX.Element {
 						{showAllergensBanner && <AllergensBanner scrollY={scrollY} />}
 						<PagerView
 							ref={pagerViewRef}
-							className="flex-1"
+							style={{ flex: 1 }}
 							initialPage={initialPageRef.current}
 							onPageSelected={(e) => {
 								const page = e.nativeEvent.position
@@ -211,6 +211,7 @@ function FoodScreen(): React.JSX.Element {
 						>
 							{data.map((day: Food) => (
 								<ScrollView
+									style={{ flex: 1 }}
 									refreshControl={
 										<RefreshControl
 											refreshing={isRefetchingByUser}
