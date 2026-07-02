@@ -12,15 +12,17 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	FlatList,
 	Linking,
 	Platform,
 	RefreshControl,
 	SectionList,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { useCSSVariable, useUniwind } from 'uniwind'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
@@ -28,7 +30,6 @@ import ErrorView from '@/components/Error/error-view'
 import PagerView from '@/components/Layout/pager-view'
 import LecturerRow from '@/components/Rows/lecturer-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { FlashList } from '@/components/Universal/styled'
 import ToggleRow from '@/components/Universal/toggle-row'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -49,7 +50,6 @@ export default function LecturersScreen(): React.JSX.Element {
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const navigation = useNavigation()
 	const [selectedPage, setSelectedPage] = useState(0)
-	const { theme } = useUniwind()
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const { t } = useTranslation('common')
 	const pagerViewRef = useRef<PagerView>(null)
@@ -242,7 +242,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 			}
 		})
-	}, [theme, navigation, t, textColor])
+	}, [navigation, t, textColor])
 
 	const LecturerList = ({
 		lecturers,
@@ -263,7 +263,7 @@ export default function LecturersScreen(): React.JSX.Element {
 	}): React.JSX.Element => {
 		const cardRadius = 17
 		return isPaused && !isSuccess ? (
-			<View className="px-page flex-1">
+			<View style={[styles.viewHorizontal, styles.page]}>
 				<ErrorView
 					title={networkError}
 					refreshing={
@@ -275,11 +275,9 @@ export default function LecturersScreen(): React.JSX.Element {
 				/>
 			</View>
 		) : isLoading ? (
-			<LoadingIndicator
-				style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-			/>
+			<LoadingIndicator style={styles.loadingContainer} />
 		) : isError ? (
-			<View className="px-page flex-1">
+			<View style={[styles.viewHorizontal, styles.page]}>
 				<ErrorView
 					title={error?.message ?? t('error.title')}
 					refreshing={
@@ -291,12 +289,11 @@ export default function LecturersScreen(): React.JSX.Element {
 				/>
 			</View>
 		) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-			<FlashList
+			<FlatList
 				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
 				keyExtractor={(item) => item.id}
-				estimatedItemSize={72}
-				contentContainerClassName="pb-bottom-safe px-page"
+				contentContainerStyle={styles.loadedRows}
 				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl
@@ -312,22 +309,25 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 				renderItem={({ item, index }) => (
 					<View
-						className="mb-2 overflow-hidden"
-						style={{
-							borderTopStartRadius: index === 0 ? cardRadius : 0,
-							borderTopEndRadius: index === 0 ? cardRadius : 0,
-							borderBottomStartRadius:
-								index === lecturers.length - 1 ? cardRadius : 0,
-							borderBottomEndRadius:
-								index === lecturers.length - 1 ? cardRadius : 0
-						}}
+						style={[
+							styles.rowContainer,
+							{
+								overflow: 'hidden',
+								borderTopStartRadius: index === 0 ? cardRadius : 0,
+								borderTopEndRadius: index === 0 ? cardRadius : 0,
+								borderBottomStartRadius:
+									index === lecturers.length - 1 ? cardRadius : 0,
+								borderBottomEndRadius:
+									index === lecturers.length - 1 ? cardRadius : 0
+							}
+						]}
 					>
 						<LecturerRow item={item} />
 					</View>
 				)}
 			/>
 		) : (
-			<View className="px-page">
+			<View style={styles.viewHorizontal}>
 				{isPersonal ? (
 					<ErrorView
 						title={t('pages.lecturers.error.title')}
@@ -364,10 +364,8 @@ export default function LecturersScreen(): React.JSX.Element {
 
 	const FilterSectionList = (): React.JSX.Element => {
 		return allLecturersResult.isLoading ? (
-			<View className="px-page">
-				<LoadingIndicator
-					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-				/>
+			<View style={styles.viewHorizontal}>
+				<LoadingIndicator style={styles.loadingContainer} />
 			</View>
 		) : allLecturersResult.isPaused ? (
 			<ErrorView
@@ -387,7 +385,7 @@ export default function LecturersScreen(): React.JSX.Element {
 			/>
 		) : (
 			<>
-				<View className="relative left-0 right-0 z-[1]">
+				<View style={styles.resultsCountContainer}>
 					<Text className="text-label text-[13px] px-3 text-right">
 						{filteredLecturers.length} {t('pages.lecturers.results')}
 					</Text>
@@ -396,7 +394,7 @@ export default function LecturersScreen(): React.JSX.Element {
 					sections={sections}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item }) => (
-						<View className="mb-2">
+						<View style={styles.rowContainer}>
 							<LecturerRow item={item} />
 						</View>
 					)}
@@ -407,7 +405,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							</Text>
 						</View>
 					)}
-					contentContainerClassName="mx-page pb-bottom-safe"
+					contentContainerStyle={styles.contentContainer}
 				/>
 			</>
 		)
@@ -415,12 +413,12 @@ export default function LecturersScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView className="flex-1" edges={['top']}>
+			<SafeAreaView style={styles.page} edges={['top']}>
 				{userKind === USER_GUEST ? (
 					<ErrorView title={guestError} />
 				) : !isSearchBarFocused ? (
-					<View className="flex-1 gap-2.5 pt-2.5">
-						<View className="px-page">
+					<View style={styles.searchContainer}>
+						<View style={styles.viewHorizontal}>
 							<ToggleRow
 								items={[
 									t('pages.lecturers.personal'),
@@ -433,14 +431,14 @@ export default function LecturersScreen(): React.JSX.Element {
 							/>
 						</View>
 						<PagerView
-							className="flex-1"
+							style={styles.page}
 							initialPage={selectedPage}
 							onPageSelected={(e) => {
 								setSelectedPage(e.nativeEvent.position)
 							}}
 							ref={pagerViewRef}
 						>
-							<View key="personal" className="flex-1">
+							<View key="personal" style={styles.page} collapsable={false}>
 								<LecturerList
 									lecturers={personalLecturersResult.data}
 									isPaused={personalLecturersResult.isPaused}
@@ -451,7 +449,7 @@ export default function LecturersScreen(): React.JSX.Element {
 									isPersonal
 								/>
 							</View>
-							<View key="faculty" className="flex-1">
+							<View key="faculty" style={styles.page} collapsable={false}>
 								<LecturerList
 									lecturers={facultyData}
 									isPaused={allLecturersResult.isPaused}
@@ -470,3 +468,42 @@ export default function LecturersScreen(): React.JSX.Element {
 		</SafeAreaProvider>
 	)
 }
+
+const PAGE_MARGIN = 12
+const BOTTOM_SAFE_AREA = 90
+
+const styles = StyleSheet.create({
+	contentContainer: {
+		marginHorizontal: PAGE_MARGIN,
+		paddingBottom: BOTTOM_SAFE_AREA
+	},
+	loadedRows: {
+		paddingBottom: BOTTOM_SAFE_AREA,
+		paddingHorizontal: PAGE_MARGIN
+	},
+	loadingContainer: {
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center'
+	},
+	page: {
+		flex: 1
+	},
+	resultsCountContainer: {
+		left: 0,
+		position: 'relative',
+		right: 0,
+		zIndex: 1
+	},
+	rowContainer: {
+		marginBottom: 8
+	},
+	searchContainer: {
+		flex: 1,
+		gap: 10,
+		paddingTop: 10
+	},
+	viewHorizontal: {
+		paddingHorizontal: PAGE_MARGIN
+	}
+})
