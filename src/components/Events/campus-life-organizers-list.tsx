@@ -1,3 +1,4 @@
+import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
@@ -7,7 +8,6 @@ import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import RowEntry from '@/components/Universal/row-entry'
-import { FlashList } from '@/components/Universal/styled'
 import { useRefreshByUser } from '@/hooks'
 import type {
 	CampusLifeOrganizer,
