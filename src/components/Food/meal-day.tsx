@@ -19,7 +19,7 @@ const sortCategoriesByPriority = (categories: string[]): string[] => {
 		soup: 4
 	}
 
-	return categories.toSorted((a, b) => {
+	return [...categories].sort((a, b) => {
 		const priorityA = categoryPriority[a] || 10
 		const priorityB = categoryPriority[b] || 10
 
