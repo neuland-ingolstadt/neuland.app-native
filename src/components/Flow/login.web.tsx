@@ -3,24 +3,21 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WhatsNewBox from '@/components/Flow/whats-new-box'
 import LoginForm from '@/components/Universal/login-form'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 import LoginAnimatedText from './login-animated-text'
 import LogoSVG from './svgs/logo'
 
 export default function Login(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('flow')
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
 
 	const navigateHome = (): void => {
-		// on web there is no onboarding screen to enable analytics
-		// if the user has not set any preferences, we can assume they want to enable analytics
 		if (analyticsAllowed === undefined) {
 			setAnalyticsAllowed(true)
 		}
@@ -68,41 +65,51 @@ export default function Login(): React.JSX.Element {
 
 	return (
 		<>
-			<View style={styles.headerContainer}>
-				<View style={styles.logoWrapper}>
+			<View
+				className="items-start w-full absolute top-0 left-0 right-0 z-[1] bg-card px-[4%] py-2.5 border-b border-border"
+				style={{ borderBottomWidth: StyleSheet.hairlineWidth }}
+			>
+				<View className="flex-row items-center gap-3">
 					<LogoSVG size={32} />
-					<View style={styles.brandTextContainer}>
-						<Text style={styles.brandText}>Neuland Next</Text>
-						<Text style={styles.brandTextSub}>{t('login.title1Sub')}</Text>
+					<View className="flex-col">
+						<Text className="text-text text-xl font-semibold tracking-tight">
+							Neuland Next
+						</Text>
+						<Text className="text-label text-sm font-normal tracking-tight">
+							{t('login.title1Sub')}
+						</Text>
 					</View>
 				</View>
 			</View>
-			<ScrollView contentContainerStyle={styles.container}>
+			<ScrollView contentContainerClassName="self-center flex-1 pt-5 w-[92%] mt-[100px]">
 				<LoginAnimatedText />
-				<View style={styles.innerContainer}>
+				<View className="flex-col gap-10 pt-[50px]">
 					<LoginForm navigateHome={navigateHome} />
-					<View style={styles.linkContainer}>
-						<Text style={styles.privacyLink}>
+					<View className="items-center self-center">
+						<Text className="text-label text-sm text-center">
 							{t('onboarding.links.agree1')}
 						</Text>
-						<View style={styles.privacyContainer}>
+						<View className="flex-row">
 							<Text
-								style={styles.privacyLinkButton}
+								className="text-text text-sm text-center font-extrabold"
 								onPress={() => {
 									void Linking.openURL(PRIVACY_URL)
 								}}
 							>
 								{t('onboarding.links.privacy')}
 							</Text>
-							<Text style={styles.privacyLink}>
+							<Text className="text-label text-sm text-center">
 								{t('onboarding.links.agree2')}
 							</Text>
 						</View>
 					</View>
-					<View style={styles.infoContainer}>
-						{data.map((item, index) => (
+					<View
+						className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full"
+						style={hairlineBorder}
+					>
+						{data.map((item) => (
 							<WhatsNewBox
-								key={index}
+								key={item.title}
 								title={item.title}
 								description={item.description}
 								icon={item.icon}
@@ -110,9 +117,9 @@ export default function Login(): React.JSX.Element {
 						))}
 					</View>
 
-					<View style={styles.faqContainer}>
+					<View className="items-center self-center gap-3.5 pb-bottom-safe">
 						<Text
-							style={styles.privacyLink}
+							className="text-label text-sm text-center"
 							onPress={() => {
 								void Linking.openURL(PRIVACY_URL)
 							}}
@@ -120,7 +127,7 @@ export default function Login(): React.JSX.Element {
 							{t('onboarding.links.faq')}
 						</Text>
 						<Text
-							style={styles.privacyLink}
+							className="text-label text-sm text-center"
 							onPress={() => {
 								void Linking.openURL(IMPRINT_URL)
 							}}
@@ -133,91 +140,3 @@ export default function Login(): React.JSX.Element {
 		</>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignSelf: 'center',
-		flex: 1,
-		paddingTop: 20,
-		width: '92%',
-		marginTop: 100
-	},
-	headerContainer: {
-		alignItems: 'flex-start',
-		width: '100%',
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		zIndex: 1,
-		backgroundColor: theme.colors.card,
-		paddingHorizontal: '4%',
-		paddingTop: 10,
-		paddingBottom: 10,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-		borderBottomColor: theme.colors.border
-	},
-	logoWrapper: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 12
-	},
-	brandTextContainer: {
-		flexDirection: 'column'
-	},
-	brandText: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '600',
-		letterSpacing: -0.2
-	},
-	brandTextSub: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '400',
-		letterSpacing: -0.5
-	},
-	faqContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		gap: 14,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-
-	infoContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: 24,
-		gap: 16,
-		maxWidth: 1000,
-		padding: 24,
-		marginTop: 40,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border,
-		width: '100%'
-	},
-	innerContainer: {
-		flexDirection: 'column',
-		gap: 40,
-		paddingTop: 50
-	},
-	linkContainer: {
-		alignItems: 'center',
-		alignSelf: 'center'
-	},
-	privacyContainer: {
-		flexDirection: 'row'
-	},
-	privacyLink: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		textAlign: 'center'
-	},
-	privacyLinkButton: {
-		color: theme.colors.text,
-		fontSize: 14,
-		frontWeight: '800',
-		textAlign: 'center'
-	}
-}))

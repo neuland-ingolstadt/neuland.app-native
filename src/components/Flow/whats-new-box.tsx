@@ -1,7 +1,7 @@
 import type React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Text, View } from 'react-native'
 import type { MaterialIcon } from '@/types/material-icons'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 
@@ -25,10 +25,12 @@ const WhatsNewBox = ({
 	description,
 	icon
 }: WhatsNewBoxProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	return (
-		<View style={styles.container}>
-			<View style={styles.iconContainer}>
+		<View
+			className="items-center bg-card-contrast rounded-2xl flex-row gap-4 px-5 py-4 w-full"
+			style={hairlineBorder}
+		>
+			<View className="bg-primary-background rounded-2xl p-3 shrink-0">
 				<PlatformIcon
 					ios={{
 						name: icon.ios,
@@ -46,12 +48,15 @@ const WhatsNewBox = ({
 				/>
 			</View>
 
-			<View style={styles.textContainer}>
-				<Text style={styles.title} numberOfLines={2}>
+			<View className="flex-col shrink gap-1">
+				<Text
+					className="text-text text-base font-semibold text-left"
+					numberOfLines={2}
+				>
 					{title}
 				</Text>
 				<Text
-					style={styles.description}
+					className="text-label text-sm leading-[17px] text-left"
 					adjustsFontSizeToFit
 					minimumFontScale={0.8}
 					numberOfLines={4}
@@ -62,43 +67,5 @@ const WhatsNewBox = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.cardContrast,
-		borderRadius: 16,
-		flexDirection: 'row',
-		gap: 16,
-		paddingHorizontal: 20,
-		paddingVertical: 16,
-		width: '100%',
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	description: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		lineHeight: 17,
-		textAlign: 'left'
-	},
-	iconContainer: {
-		backgroundColor: theme.colors.primaryBackground,
-		borderRadius: 16,
-		padding: 12,
-		flexShrink: 0
-	},
-	textContainer: {
-		flexDirection: 'column',
-		flexShrink: 1,
-		gap: 4
-	},
-	title: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		textAlign: 'left'
-	}
-}))
 
 export default WhatsNewBox

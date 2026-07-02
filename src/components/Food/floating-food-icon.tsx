@@ -10,9 +10,10 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
+import { toColor } from '@/utils/uniwind-utils'
 import type { FoodIcon } from './food-icons'
 
 interface FloatingFoodIconProps {
@@ -26,7 +27,7 @@ export const FloatingFoodIcon = ({
 	size,
 	tapCount
 }: FloatingFoodIconProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const opacity = useSharedValue(0)
 	const scale = useSharedValue(0.6)
@@ -91,7 +92,10 @@ export const FloatingFoodIcon = ({
 	})
 
 	return (
-		<Animated.View style={[styles.iconContainer, animatedStyle]}>
+		<Animated.View
+			className="absolute w-10 h-10 items-center justify-center z-[2]"
+			style={animatedStyle}
+		>
 			<PlatformIcon
 				ios={{
 					name: foodIcon.ios,
@@ -107,22 +111,8 @@ export const FloatingFoodIcon = ({
 					name: foodIcon.web,
 					size: size * 0.25
 				}}
-				style={styles.icon}
+				style={{ color: primaryColor }}
 			/>
 		</Animated.View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	iconContainer: {
-		position: 'absolute',
-		width: 40,
-		height: 40,
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 2
-	},
-	icon: {
-		color: theme.colors.primary
-	}
-}))

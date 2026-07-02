@@ -8,9 +8,15 @@ import {
 	useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, RefreshControl, ScrollView, View } from 'react-native'
+import {
+	Animated,
+	RefreshControl,
+	ScrollView,
+	StyleSheet,
+	View
+} from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import { FoodLoadingIndicator, MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/allergens-banner'
@@ -24,6 +30,7 @@ import { networkError } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 function getFoodDayKey(day: Food): string {
 	return typeof day.timestamp === 'string'
@@ -37,16 +44,13 @@ function getRenderableFoodDays(foodData?: Food[]): Food[] {
 	}
 
 	const todayStart = new Date().setHours(0, 0, 0, 0)
-	return (
-		foodData
-			.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
-			// filter again in case of yesterday's cached data
-			.slice(0, 5)
-	)
+	return foodData
+		.filter((day) => new Date(day.timestamp).getTime() >= todayStart)
+		.slice(0, 5)
 }
 
 function FoodScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const borderColor = toColor(useCSSVariable('--color-border'))
 	const autoShowNextDay = usePreferencesStore((state) => state.autoShowNextDay)
 	const autoShowNextDayTimeMinutes = usePreferencesStore(
 		(state) => state.autoShowNextDayTimeMinutes
@@ -60,7 +64,6 @@ function FoodScreen(): React.JSX.Element {
 	)
 	const pagerViewRef = useRef<PagerView>(null)
 
-	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
 	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
 	const deferredShowStatic = useDeferredValue(showStatic)
 	const deferredAllergenSelection = useDeferredValue(allergenSelection)
@@ -79,8 +82,8 @@ function FoodScreen(): React.JSX.Element {
 		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
 		queryFn: async () =>
 			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
@@ -175,8 +178,8 @@ function FoodScreen(): React.JSX.Element {
 					<>
 						<Animated.View
 							style={{
-								...styles.animtedContainer,
-
+								width: '100%',
+								borderBottomColor: borderColor,
 								borderBottomWidth: showAllergensBanner
 									? 0
 									: scrollY.interpolate({
@@ -186,11 +189,7 @@ function FoodScreen(): React.JSX.Element {
 										})
 							}}
 						>
-							<View
-								style={{
-									...styles.loadedContainer
-								}}
-							>
+							<View style={styles.loadedContainer}>
 								{data.slice(0, 5).map((day: Food, index: number) => (
 									<FoodDayButton
 										key={getFoodDayKey(day)}
@@ -216,35 +215,40 @@ function FoodScreen(): React.JSX.Element {
 							scrollEnabled
 							overdrag
 						>
-							{data.map((day: Food, index: number) => (
-								<ScrollView
-									refreshControl={
-										<RefreshControl
-											refreshing={isRefetchingByUser}
-											onRefresh={() => {
-												void refetchByUser()
-											}}
-										/>
-									}
-									scrollEventThrottle={16}
-									onScroll={Animated.event(
-										[
-											{
-												nativeEvent: {
-													contentOffset: {
-														y: scrollY
+							{data.map((day: Food) => (
+								<View
+									key={getFoodDayKey(day)}
+									style={styles.page}
+									collapsable={false}
+								>
+									<ScrollView
+										refreshControl={
+											<RefreshControl
+												refreshing={isRefetchingByUser}
+												onRefresh={() => {
+													void refetchByUser()
+												}}
+											/>
+										}
+										scrollEventThrottle={16}
+										onScroll={Animated.event(
+											[
+												{
+													nativeEvent: {
+														contentOffset: {
+															y: scrollY
+														}
 													}
 												}
-											}
-										],
-										{ useNativeDriver: false }
-									)}
-									key={getFoodDayKey(day)}
-									showsVerticalScrollIndicator={false}
-									contentContainerStyle={styles.innerScrollContainer}
-								>
-									<MealDay day={day} index={index} />
-								</ScrollView>
+											],
+											{ useNativeDriver: false }
+										)}
+										showsVerticalScrollIndicator={false}
+										contentContainerStyle={styles.innerScrollContainer}
+									>
+										<MealDay day={day} />
+									</ScrollView>
+								</View>
 							))}
 						</PagerView>
 					</>
@@ -254,16 +258,10 @@ function FoodScreen(): React.JSX.Element {
 	)
 }
 
-export default FoodScreen
-
-export const stylesheet = createStyleSheet((theme) => ({
-	animtedContainer: {
-		borderBottomColor: theme.colors.border,
-		width: '100%'
-	},
+const styles = StyleSheet.create({
 	innerScrollContainer: {
 		marginHorizontal: 12,
-		paddingBottom: theme.margins.bottomSafeArea
+		paddingBottom: 90
 	},
 	loadedContainer: {
 		flexDirection: 'row',
@@ -271,7 +269,6 @@ export const stylesheet = createStyleSheet((theme) => ({
 		marginHorizontal: 12,
 		marginVertical: 10
 	},
-
 	loadingContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -281,4 +278,6 @@ export const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		flex: 1
 	}
-}))
+})
+
+export default FoodScreen

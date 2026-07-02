@@ -1,29 +1,17 @@
-import { BottomSheetView } from '@gorhom/bottom-sheet'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { StyledBottomSheetView } from '@/components/Universal/styled'
 
 export const HomeBottomSheet = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	return (
-		<BottomSheetView style={styles.contentContainer}>
+		<StyledBottomSheetView className="flex-1 px-page">
 			<View>
-				<Text style={styles.text}>{t('reportProblem')}</Text>
+				<Text className="text-text text-[21px] font-bold">
+					{t('reportProblem')}
+				</Text>
 			</View>
-		</BottomSheetView>
+		</StyledBottomSheetView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	contentContainer: {
-		flex: 1,
-		paddingHorizontal: theme.margins.page
-	},
-	text: {
-		color: theme.colors.text,
-		fontSize: 21,
-		fontWeight: 'bold'
-	}
-}))
