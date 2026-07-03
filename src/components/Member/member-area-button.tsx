@@ -26,7 +26,7 @@ export function MemberAreaButton(): React.JSX.Element | null {
 				onPress={() => {
 					router.navigate('/member')
 				}}
-				className="ios:rounded-ios android:rounded-md overflow-hidden w-full active:opacity-90"
+				className="ios:rounded-ios android:rounded-md overflow-hidden w-full border-0 active:opacity-90"
 			>
 				<LinearGradient
 					colors={['#000', '#015916']}
