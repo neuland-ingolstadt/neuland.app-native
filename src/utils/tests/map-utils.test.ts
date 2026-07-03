@@ -558,4 +558,47 @@ describe('map-utils', () => {
 
 		platform.OS = 'web'
 	})
+
+	it('getBuildingsIngolstadt - Should omit building L when v2.7 overlay is disabled', () => {
+		expect(mapUtils.getBuildingsIngolstadt(false)).toEqual(
+			mapUtils.BUILDINGS_IN
+		)
+		expect(mapUtils.getBuildingsIngolstadt(false)).not.toContain(
+			mapUtils.BUILDING_L
+		)
+	})
+
+	it('getBuildingsIngolstadt - Should insert building L after K when v2.7 overlay is enabled', () => {
+		const buildings = mapUtils.getBuildingsIngolstadt(true)
+
+		expect(buildings).toContain(mapUtils.BUILDING_L)
+		expect(buildings.indexOf('K')).toBeLessThan(
+			buildings.indexOf(mapUtils.BUILDING_L)
+		)
+		expect(buildings.indexOf(mapUtils.BUILDING_L)).toBeLessThan(
+			buildings.indexOf('M')
+		)
+	})
+
+	it('getBuildings - Should append Neuburg buildings for both overlay versions', () => {
+		expect(mapUtils.getBuildings(false)).toEqual([
+			...mapUtils.BUILDINGS_IN,
+			...mapUtils.BUILDINGS_ND
+		])
+		expect(mapUtils.getBuildings(true)).toEqual([
+			...mapUtils.getBuildingsIngolstadt(true),
+			...mapUtils.BUILDINGS_ND
+		])
+	})
+
+	it('getAllBuildings - Should prepend the all-buildings option', () => {
+		expect(mapUtils.getAllBuildings(false)).toEqual([
+			mapUtils.BUILDINGS_ALL,
+			...mapUtils.getBuildings(false)
+		])
+		expect(mapUtils.getAllBuildings(true)).toEqual([
+			mapUtils.BUILDINGS_ALL,
+			...mapUtils.getBuildings(true)
+		])
+	})
 })
