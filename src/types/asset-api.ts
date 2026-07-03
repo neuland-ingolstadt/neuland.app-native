@@ -63,7 +63,6 @@ export enum Gebaeude {
 	I = 'I',
 	J = 'J',
 	K = 'K',
-	L = 'L',
 	M = 'M',
 	N = 'N',
 	P = 'P',
