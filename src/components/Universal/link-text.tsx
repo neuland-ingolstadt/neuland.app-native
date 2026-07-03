@@ -57,7 +57,7 @@ const LinkText = ({
 					if (part.match(URL_REGEX)) {
 						return (
 							<Text
-								key={index}
+								key={`${part}-${index}`}
 								onPress={() => {
 									void Linking.openURL(part)
 								}}

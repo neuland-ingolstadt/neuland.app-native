@@ -19,7 +19,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 configureReanimatedLogger({
 	strict: false
@@ -82,7 +83,14 @@ function RootLayout(): React.JSX.Element {
 			subscription.remove()
 		}
 	}, [])
-	const { styles, theme: uniTheme } = useStyles(stylesheet)
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
 
 	const [isReady, setIsReady] = useState(false)
 	useEffect(() => {
@@ -106,10 +114,10 @@ function RootLayout(): React.JSX.Element {
 			</Head>
 			<Stack
 				screenOptions={{
-					contentStyle: styles.background,
-					headerStyle: styles.headerBackground,
-					headerTintColor: uniTheme.colors.primary,
-					headerTitleStyle: styles.headerTextStyle
+					contentStyle: { backgroundColor },
+					headerStyle: { backgroundColor: cardColor },
+					headerTintColor: primaryColor,
+					headerTitleStyle: { color: textColor }
 				}}
 			>
 				<Stack.Screen
@@ -538,8 +546,3 @@ const ProviderComponent = (): React.JSX.Element => {
 }
 
 export default ProviderComponent
-const stylesheet = createStyleSheet((theme) => ({
-	background: { backgroundColor: theme.colors.background },
-	headerBackground: { backgroundColor: theme.colors.card },
-	headerTextStyle: { color: theme.colors.text }
-}))

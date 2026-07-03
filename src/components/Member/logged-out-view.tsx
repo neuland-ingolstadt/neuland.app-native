@@ -3,10 +3,10 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 import LogoSVG from '../Flow/svgs/logo'
 import { BenefitCard } from './benefit-card'
-import { stylesheet } from './styles'
 
 interface LoggedOutViewProps {
 	request: AuthSession.AuthRequest | null
@@ -17,30 +17,32 @@ export function LoggedOutView({
 	request,
 	promptAsync
 }: LoggedOutViewProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const { t } = useTranslation('member')
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.loggedOutPage} edges={['top', 'bottom']}>
+			<SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
 				<ScrollView
-					contentContainerStyle={styles.loggedOutContainer}
+					contentContainerClassName="p-page"
 					showsVerticalScrollIndicator={false}
 					contentInsetAdjustmentBehavior="automatic"
 				>
-					<View style={styles.welcomeCard}>
-						<View style={styles.welcomeGradient}>
-							<LogoSVG size={55} color={theme.colors.text} />
-							<Text style={styles.welcomeTitle}>
+					<View className="rounded-lg overflow-hidden mb-6">
+						<View className="p-4 items-center bg-card">
+							<LogoSVG size={55} color={String(textColor)} />
+							<Text className="text-text text-[22px] font-bold mt-3">
 								{t('loggedOut.welcomeTitle')}
 							</Text>
-							<Text style={styles.welcomeSubtitle}>
+							<Text className="text-label-secondary text-sm mt-1 text-center">
 								{t('loggedOut.welcomeSubtitle')}
 							</Text>
 						</View>
 					</View>
 
-					<Text style={styles.sectionTitle}>{t('loggedOut.sectionTitle')}</Text>
+					<Text className="text-text text-xl font-bold mb-4">
+						{t('loggedOut.sectionTitle')}
+					</Text>
 
 					<BenefitCard
 						title={t('loggedOut.benefits.community.title')}
@@ -82,27 +84,21 @@ export function LoggedOutView({
 						}}
 					/>
 
-					<View style={styles.buttonContainer}>
+					<View className="mt-8 gap-3">
 						<Pressable
 							onPress={() => Linking.openURL('https://neuland-ingolstadt.de')}
-							style={({ pressed }) => [
-								styles.primaryButton,
-								pressed && styles.buttonPressed
-							]}
+							className="bg-primary py-3 rounded-md items-center active:opacity-80"
 						>
-							<Text style={styles.primaryButtonText}>
+							<Text className="text-background text-base font-bold">
 								{t('loggedOut.buttons.learnAboutClub')}
 							</Text>
 						</Pressable>
 						<Pressable
 							disabled={!request}
 							onPress={() => promptAsync()}
-							style={({ pressed }) => [
-								styles.secondaryButton,
-								pressed && styles.buttonPressed
-							]}
+							className="bg-card py-3 border border-border rounded-md items-center active:opacity-80"
 						>
-							<Text style={styles.secondaryButtonText}>
+							<Text className="text-primary text-base font-bold">
 								{t('loggedOut.buttons.signIn')}
 							</Text>
 						</Pressable>

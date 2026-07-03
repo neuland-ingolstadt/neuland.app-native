@@ -1,29 +1,30 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Image, Linking, Pressable, Text, View } from 'react-native'
 import API from '@/api/authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 import BaseCard from './base-card'
 
 const NewsCard = (): React.JSX.Element => {
 	const ref = useRef(null)
 	const { t } = useTranslation(['navigation', 'common'])
-	const { styles } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { data, isSuccess } = useQuery({
 		queryKey: ['thiNews'],
 		queryFn: async () => await API.getThiNews(),
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
+		staleTime: 1000 * 60 * 10,
+		gcTime: 1000 * 60 * 60 * 24,
 		enabled: userKind !== USER_GUEST
 	})
 
 	const noData = (
-		<Text style={styles.noDataText}>{t('common:error.noData.title')}</Text>
+		<Text className="text-text text-center mt-2.5">
+			{t('common:error.noData.title')}
+		</Text>
 	)
 
 	return (
@@ -35,22 +36,26 @@ const NewsCard = (): React.JSX.Element => {
 				noDataPredicate={() => isSuccess && data.length === 0}
 			>
 				{data != null && data.length > 0 && (
-					<View style={styles.newsContainer}>
+					<View className="py-2.5 gap-2.5">
 						{data.slice(0, 2).map((newsItem, index) => (
 							<React.Fragment key={index}>
 								<Pressable
-									style={styles.newsItemContainer}
+									className="flex-row p-2 rounded-md items-center bg-card-button border-border"
+									style={hairlineBorder}
 									onPress={() => {
 										void Linking.openURL(newsItem.href)
 									}}
 								>
 									<Image
-										style={styles.thumbnail}
+										className="w-[30%] max-w-[200px] h-[65px] rounded-[14px] mr-3"
 										source={{
 											uri: newsItem.img
 										}}
 									/>
-									<Text style={styles.newsTitle} numberOfLines={2}>
+									<Text
+										className="text-text text-base font-medium flex-1"
+										numberOfLines={2}
+									>
 										{newsItem.title}
 									</Text>
 								</Pressable>
@@ -59,8 +64,8 @@ const NewsCard = (): React.JSX.Element => {
 					</View>
 				)}
 				{data != null && data.length > 3 && (
-					<View style={styles.cardsFilled}>
-						<Text style={styles.description}>
+					<View className="pt-1">
+						<Text className="text-label text-sm font-medium">
 							{t('navigation:cards.news.more', {
 								count: data.length
 							})}
@@ -71,45 +76,5 @@ const NewsCard = (): React.JSX.Element => {
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	cardsFilled: { paddingTop: 4 },
-	newsContainer: {
-		paddingVertical: 10,
-		gap: 10
-	},
-	newsItemContainer: {
-		flexDirection: 'row',
-		padding: 8,
-		borderRadius: theme.radius.md,
-		alignItems: 'center',
-		backgroundColor: theme.colors.cardButton,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth
-	},
-	thumbnail: {
-		width: '30%',
-		maxWidth: 200,
-		height: 65,
-		borderRadius: 14,
-		marginRight: 12
-	},
-	newsTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500',
-		flex: 1
-	},
-	description: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	noDataText: {
-		color: theme.colors.text,
-		textAlign: 'center',
-		marginTop: 10
-	}
-}))
 
 export default NewsCard

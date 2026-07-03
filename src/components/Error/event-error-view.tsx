@@ -3,9 +3,10 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface EventErrorViewProps {
 	eventType: 'clEvents' | 'thiEvents' | 'sports'
@@ -18,7 +19,7 @@ export function EventErrorView({
 	title,
 	message
 }: EventErrorViewProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = useCSSVariable('--color-primary')
 	const { t } = useTranslation(['common', 'navigation'])
 
 	const getEventTypeIcon = (type: string) => {
@@ -82,8 +83,8 @@ export function EventErrorView({
 	}
 
 	return (
-		<View style={styles.container}>
-			<Animated.View style={styles.content}>
+		<View className="flex-1 items-center justify-center p-4">
+			<Animated.View className="w-full max-w-[400px] items-center justify-center rounded-2xl bg-card p-6">
 				<PlatformIcon
 					ios={{
 						name: getEventTypeIcon(eventType).ios,
@@ -97,21 +98,24 @@ export function EventErrorView({
 						name: getEventTypeIcon(eventType).web as LucideIcon,
 						size: 48
 					}}
-					style={{ color: theme.colors.primary }}
+					style={{ color: toColor(primaryColor) }}
 				/>
-				<View style={styles.textContainer}>
-					<View style={styles.titleContainer}>
-						<View style={styles.titleTextContainer}>
-							<Text style={styles.title}>
+				<View className="mt-6 w-full items-center">
+					<View className="mb-4 flex-row items-center justify-center">
+						<View className="mx-1 flex-1 items-center gap-1.5">
+							<Text className="mb-1 text-center text-xl font-semibold text-text">
 								{title ?? t('error.eventNotFound')}
 							</Text>
-							<Text style={styles.message}>
+							<Text className="text-center text-base text-text/80">
 								{message ?? t('error.eventNotFoundDescription')}
 							</Text>
 						</View>
 					</View>
-					<Pressable style={styles.button} onPress={handleBackToList}>
-						<Text style={styles.buttonText}>
+					<Pressable
+						className="mt-4 rounded-sm bg-primary px-4 py-2"
+						onPress={handleBackToList}
+					>
+						<Text className="text-base font-semibold text-background">
 							{t('error.backToEventList', {
 								type: getEventTypeTitle(eventType)
 							})}
@@ -122,63 +126,3 @@ export function EventErrorView({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 16
-	},
-	content: {
-		alignItems: 'center',
-		justifyContent: 'center',
-
-		padding: 24,
-		backgroundColor: theme.colors.card,
-		borderRadius: 16,
-		width: '100%',
-		maxWidth: 400
-	},
-	textContainer: {
-		marginTop: 24,
-		width: '100%',
-		alignItems: 'center',
-		textAlign: 'center'
-	},
-	titleContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginBottom: 16
-	},
-	titleTextContainer: {
-		marginHorizontal: 4,
-		gap: 6,
-		flex: 1,
-		alignItems: 'center'
-	},
-	title: {
-		fontSize: 20,
-		fontWeight: '600',
-		color: theme.colors.text,
-		marginBottom: 4
-	},
-	message: {
-		fontSize: 16,
-		color: theme.colors.text,
-		opacity: 0.8
-	},
-	button: {
-		backgroundColor: theme.colors.primary,
-		paddingHorizontal: 16,
-		paddingVertical: 8,
-		borderRadius: 8,
-		marginTop: 16
-	},
-	buttonText: {
-		color: theme.colors.background,
-		fontSize: 16,
-		fontWeight: '600'
-	}
-}))

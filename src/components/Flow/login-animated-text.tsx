@@ -9,7 +9,6 @@ import Animated, {
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const SUBTITLE_KEYS = [
 	'grades',
@@ -35,7 +34,6 @@ function shuffleArray(array: string[]): string[] {
 const shouldVibrate = Platform.OS === 'ios'
 
 function LoginAnimatedText(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('flow')
 	const texts = useMemo(
 		() => shuffleArray(SUBTITLE_KEYS.map((key) => t(`login.subtitles.${key}`))),
@@ -81,7 +79,9 @@ function LoginAnimatedText(): React.JSX.Element {
 	})
 	return (
 		<View>
-			<Text style={styles.header1}>{t('login.title1')}</Text>
+			<Text className="text-text text-[42px] font-bold text-left">
+				{t('login.title1')}
+			</Text>
 			<TouchableWithoutFeedback
 				onPress={() => {
 					goToNextText()
@@ -91,7 +91,11 @@ function LoginAnimatedText(): React.JSX.Element {
 				}}
 			>
 				<Animated.View style={animatedStyle}>
-					<Text style={styles.header3} numberOfLines={1} adjustsFontSizeToFit>
+					<Text
+						className="text-label text-[26px] font-normal mt-2.5 min-h-[30px] text-left"
+						numberOfLines={1}
+						adjustsFontSizeToFit
+					>
 						{texts[currentTextIndex]}
 					</Text>
 				</Animated.View>
@@ -101,21 +105,3 @@ function LoginAnimatedText(): React.JSX.Element {
 }
 
 export default LoginAnimatedText
-
-const stylesheet = createStyleSheet((theme) => ({
-	header1: {
-		color: theme.colors.text,
-		fontSize: 42,
-		fontWeight: 'bold',
-		textAlign: 'left'
-	},
-
-	header3: {
-		color: theme.colors.labelColor,
-		fontSize: 26,
-		fontWeight: '400',
-		marginTop: 10,
-		minHeight: 30,
-		textAlign: 'left'
-	}
-}))

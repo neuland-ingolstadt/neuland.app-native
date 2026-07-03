@@ -2,7 +2,6 @@ import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, type SectionListData, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type { Calendar } from '@/types/data'
 import { semesters } from '@/utils/calendar-utils'
 import { CalendarRow } from '../Rows/calendar-row'
@@ -14,6 +13,31 @@ type Section = {
 
 const ITEM_HEIGHT = 78
 
+const renderCalendarItem = ({ item }: { item: Calendar }) => (
+	<View className="mb-2">
+		<CalendarRow event={item} />
+	</View>
+)
+
+const renderSectionHeader = ({
+	section
+}: {
+	section: SectionListData<Calendar, Section>
+}) => (
+	<View className="bg-background py-2 mb-1">
+		<Text className="text-text text-[19px] font-semibold">{section.title}</Text>
+	</View>
+)
+
+const getItemLayout = (
+	_data: SectionListData<Calendar, Section>[] | null,
+	index: number
+) => ({
+	length: ITEM_HEIGHT,
+	offset: index * ITEM_HEIGHT,
+	index
+})
+
 export default function CalendarEventsPage({
 	handleLinkPress,
 	selectedEventId
@@ -21,7 +45,6 @@ export default function CalendarEventsPage({
 	handleLinkPress: () => void
 	selectedEventId?: string
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 	const sectionListRef = useRef<SectionList<Calendar, Section>>(null)
 	const [isReady, setIsReady] = useState(false)
@@ -59,28 +82,12 @@ export default function CalendarEventsPage({
 		}
 	}, [selectedEventId, isReady])
 
-	const renderCalendarItem = ({ item }: { item: Calendar }) => (
-		<View style={styles.rowWrapper}>
-			<CalendarRow event={item} />
-		</View>
-	)
-
-	const renderSectionHeader = ({
-		section
-	}: {
-		section: SectionListData<Calendar, Section>
-	}) => (
-		<View style={styles.sectionHeaderContainer}>
-			<Text style={styles.sectionHeaderText}>{section.title}</Text>
-		</View>
-	)
-
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
-			<View style={styles.footerContainer}>
-				<Text style={styles.footerText1}>
+			<View className="my-1 pb-bottom-safe">
+				<Text className="text-label text-xs font-normal pb-[25px] text-justify">
 					{t('pages.calendar.footer.part1')}
-					<Text style={styles.footerText2} onPress={handleLinkPress}>
+					<Text className="text-text font-semibold" onPress={handleLinkPress}>
 						{t('pages.calendar.footer.part2')}
 					</Text>
 					{t('pages.calendar.footer.part3')}
@@ -89,20 +96,8 @@ export default function CalendarEventsPage({
 		)
 	}
 
-	// Simplified getItemLayout calculation
-	const getItemLayout = (
-		_data: SectionListData<Calendar, Section>[] | null,
-		index: number
-	) => {
-		return {
-			length: ITEM_HEIGHT,
-			offset: index * ITEM_HEIGHT,
-			index
-		}
-	}
-
 	return (
-		<View style={styles.container}>
+		<View className="flex-1 w-full">
 			{semesters && semesters.length > 0 && (
 				<SectionList<Calendar, Section>
 					ref={sectionListRef}
@@ -113,7 +108,7 @@ export default function CalendarEventsPage({
 					renderItem={renderCalendarItem}
 					renderSectionHeader={renderSectionHeader}
 					keyExtractor={(item, index) => item.name[currentLang] + index}
-					contentContainerStyle={styles.flashListContentContainer}
+					contentContainerClassName="-mt-0.5 px-page"
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
 					stickySectionHeadersEnabled={true}
@@ -128,42 +123,3 @@ export default function CalendarEventsPage({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		width: '100%'
-	},
-	footerContainer: {
-		marginVertical: 4,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	footerText1: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		fontWeight: 'normal',
-		paddingBottom: 25,
-		textAlign: 'justify'
-	},
-	footerText2: {
-		color: theme.colors.text,
-		fontWeight: 600
-	},
-	rowWrapper: {
-		marginBottom: 8
-	},
-	flashListContentContainer: {
-		marginTop: -2,
-		paddingHorizontal: theme.margins.page
-	},
-	sectionHeaderContainer: {
-		backgroundColor: theme.colors.background,
-		paddingVertical: 8,
-		marginBottom: 4
-	},
-	sectionHeaderText: {
-		color: theme.colors.text,
-		fontSize: 19,
-		fontWeight: '600'
-	}
-}))

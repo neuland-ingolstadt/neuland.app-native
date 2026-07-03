@@ -16,7 +16,6 @@ import {
 	UIManager,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
 import { useRefreshByUser } from '@/hooks'
@@ -32,6 +31,7 @@ import {
 	isThiDepartmentOrganizerKind
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
@@ -73,7 +73,6 @@ export default function ClEventsPage({
 	organizerKind = CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
 	clubsListRoute
 }: ClEventsPageProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const isThiDepartment = isThiDepartmentOrganizerKind(organizerKind)
 	const i18nPage = isThiDepartment ? 'thiEvents' : 'clEvents'
@@ -180,7 +179,7 @@ export default function ClEventsPage({
 	}, [selectedOrganizerId])
 
 	const renderItem = ({ item }: { item: CampusLifeEvent }) => (
-		<View style={styles.rowWrapper}>
+		<View className="mb-2">
 			<MemoizedEventRow event={item} organizerKind={organizerKind} />
 		</View>
 	)
@@ -221,13 +220,13 @@ export default function ClEventsPage({
 							ListHeaderComponent={
 								<View style={styles.listHeaderContainer}>
 									{organizersQuery.isLoading ? (
-										<View style={styles.clubsLoadingContainer}>
+										<View className="items-start">
 											<LoadingIndicator />
 										</View>
 									) : featuredOrganizers.length > 0 ? (
-										<View style={styles.clubsContainer}>
-											<View style={styles.clubsHeaderRow}>
-												<Text style={styles.clubsTitle}>
+										<View className="gap-3">
+											<View className="flex-row items-center justify-between">
+												<Text className="text-text text-lg font-semibold">
 													{t(
 														`pages.${i18nPage}.${organizersSection}.title` as 'pages.clEvents.clubs.title'
 													)}
@@ -238,7 +237,7 @@ export default function ClEventsPage({
 															router.push(clubsListRoute)
 														}}
 													>
-														<Text style={styles.viewAllText}>
+														<Text className="text-primary text-sm font-semibold">
 															{t(
 																`pages.${i18nPage}.${organizersSection}.viewAll` as 'pages.clEvents.clubs.viewAll'
 															)}
@@ -253,23 +252,22 @@ export default function ClEventsPage({
 												contentContainerStyle={styles.clubsScrollContent}
 											>
 												<Pressable
-													style={({ pressed }) => [
-														styles.clubChip,
-														styles.allClubsChip,
-														selectedOrganizerId == null &&
-															styles.selectedClubFilterChip,
-														{ opacity: pressed ? 0.85 : 1 }
-													]}
+													className={`bg-card border-border rounded-infinite px-4 py-2.5 mr-2 ${
+														selectedOrganizerId == null
+															? 'bg-primary border-primary'
+															: ''
+													}`}
+													style={hairlineBorder}
 													onPress={() => {
 														onFilterPress(null)
 													}}
 												>
 													<Text
-														style={[
-															styles.clubChipText,
-															selectedOrganizerId == null &&
-																styles.selectedClubChipText
-														]}
+														className={`text-sm font-semibold ${
+															selectedOrganizerId == null
+																? 'text-background'
+																: 'text-text'
+														}`}
 													>
 														{t(
 															`pages.${i18nPage}.${organizersSection}.filterAll` as 'pages.clEvents.clubs.filterAll'
@@ -279,13 +277,12 @@ export default function ClEventsPage({
 												{featuredOrganizers.map((organizer) => (
 													<Pressable
 														key={organizer.id}
-														style={({ pressed }) => [
-															styles.clubChip,
-															styles.organizerChip,
-															selectedOrganizerId === organizer.id &&
-																styles.selectedClubFilterChip,
-															{ opacity: pressed ? 0.85 : 1 }
-														]}
+														className={`bg-card border-border rounded-infinite px-4 py-2.5 mr-2 ${
+															selectedOrganizerId === organizer.id
+																? 'bg-primary border-primary'
+																: ''
+														}`}
+														style={hairlineBorder}
 														onPressIn={() => {
 															didLongPressRef.current = false
 														}}
@@ -309,11 +306,11 @@ export default function ClEventsPage({
 														}}
 													>
 														<Text
-															style={[
-																styles.clubChipText,
-																selectedOrganizerId === organizer.id &&
-																	styles.selectedClubChipText
-															]}
+															className={`text-sm font-semibold ${
+																selectedOrganizerId === organizer.id
+																	? 'text-background'
+																	: 'text-text'
+															}`}
 														>
 															{organizer.name}
 														</Text>
@@ -322,16 +319,13 @@ export default function ClEventsPage({
 												{clubsListRoute != null &&
 													remainingOrganizersCount > 0 && (
 														<Pressable
-															style={({ pressed }) => [
-																styles.clubChip,
-																styles.addClubChip,
-																{ opacity: pressed ? 0.85 : 1 }
-															]}
+															className="bg-primary border-primary rounded-infinite px-4 py-2.5"
+															style={hairlineBorder}
 															onPress={() => {
 																router.push(clubsListRoute)
 															}}
 														>
-															<Text style={styles.addClubChipText}>
+															<Text className="text-background text-sm font-semibold">
 																+{remainingOrganizersCount}{' '}
 																{t(
 																	`pages.${i18nPage}.${organizersSection}.${organizersSection}` as 'pages.clEvents.clubs.clubs'
@@ -342,7 +336,7 @@ export default function ClEventsPage({
 											</ScrollView>
 										</View>
 									) : null}
-									<Text style={styles.sectionHeaderText}>
+									<Text className="text-text text-[19px] font-semibold pb-2">
 										{selectedOrganizerName ??
 											t(
 												`pages.${i18nPage}.events.subtitle` as 'pages.clEvents.events.subtitle'
@@ -390,10 +384,13 @@ export default function ClEventsPage({
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+const PAGE_MARGIN = 12
+const BOTTOM_SAFE_AREA = 90
+
+const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingHorizontal: theme.margins.page
+		paddingHorizontal: PAGE_MARGIN
 	},
 	contentContainer: {
 		backgroundColor: 'transparent',
@@ -401,88 +398,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%'
 	},
 	flashListContainer: {
-		paddingBottom: theme.margins.bottomSafeArea
+		paddingBottom: BOTTOM_SAFE_AREA
 	},
 	listHeaderContainer: {
 		gap: 24,
 		marginBottom: 8,
-		marginHorizontal: -theme.margins.page,
-		paddingHorizontal: theme.margins.page
-	},
-	clubsLoadingContainer: {
-		alignItems: 'flex-start'
-	},
-	clubsContainer: {
-		gap: 12
-	},
-	clubsHeaderRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	},
-	clubsTitle: {
-		color: theme.colors.text,
-		fontSize: 18,
-		fontWeight: '600'
-	},
-	viewAllText: {
-		color: theme.colors.primary,
-		fontSize: 14,
-		fontWeight: '600'
+		marginHorizontal: -PAGE_MARGIN,
+		paddingHorizontal: PAGE_MARGIN
 	},
 	clubsScrollContent: {
-		paddingRight: theme.margins.page,
-		paddingVertical: 2,
-		alignItems: 'center'
-	},
-	clubChip: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderRadius: 999,
-		borderWidth: StyleSheet.hairlineWidth,
-		paddingHorizontal: 16,
-		paddingVertical: 10
-	},
-	allClubsChip: {
-		marginRight: 8
-	},
-	organizerChip: {
-		marginRight: 8
-	},
-	selectedClubFilterChip: {
-		backgroundColor: theme.colors.primary,
-		borderColor: theme.colors.primary
-	},
-	clubChipText: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '600'
-	},
-	selectedClubChipText: {
-		color: theme.colors.background
-	},
-	addClubChip: {
-		backgroundColor: theme.colors.primary,
-		borderColor: theme.colors.primary,
-		marginRight: 0
-	},
-	addClubChipText: {
-		color: theme.colors.background,
-		fontSize: 14,
-		fontWeight: '600'
-	},
-	rowWrapper: {
-		marginBottom: 8
-	},
-	itemsContainer: {
-		alignSelf: 'center',
-		justifyContent: 'center',
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	sectionHeaderText: {
-		color: theme.colors.text,
-		fontSize: 19,
-		fontWeight: '600',
-		paddingBottom: 8
+		alignItems: 'center',
+		paddingRight: PAGE_MARGIN,
+		paddingVertical: 2
 	}
-}))
+})

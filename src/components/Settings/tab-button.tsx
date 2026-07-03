@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
+import { type ColorValue, Platform, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import { Avatar } from '@/components/Settings'
@@ -18,6 +18,125 @@ interface IndexHeaderRightProps {
 	color?: string
 	size?: number
 	focused?: boolean
+}
+
+function getDefaultIconProps(size: number, focused: boolean) {
+	return {
+		ios: {
+			name: focused ? 'person.crop.circle.fill' : 'person.crop.circle',
+			size
+		},
+		android: {
+			name: 'account_circle' as MaterialIcon,
+			size: size + 2,
+			variant: focused ? 'filled' : ('outlined' as 'filled' | 'outlined')
+		},
+		web: {
+			name: 'CircleUserRound' as LucideIcon,
+			size
+		}
+	}
+}
+
+interface SettingsTabIconProps {
+	userKind: string
+	initials: string
+	showLoadingIndicator: boolean
+	isError: boolean
+	isSuccess: boolean
+	persData: { mtknr?: string } | undefined
+	username: string
+	iconColor: ColorValue | undefined
+	labelColor: ColorValue | undefined
+	tabbarInactiveColor: ColorValue | undefined
+	contrastColor: ColorValue | undefined
+	size: number
+	focused: boolean
+}
+
+function SettingsTabIcon({
+	userKind,
+	initials,
+	showLoadingIndicator,
+	isError,
+	isSuccess,
+	persData,
+	username,
+	iconColor,
+	labelColor,
+	tabbarInactiveColor,
+	contrastColor,
+	size,
+	focused
+}: SettingsTabIconProps): React.JSX.Element {
+	const avatarStyle = focused
+		? { backgroundColor: iconColor, borderWidth: 0 }
+		: {
+				backgroundColor: 'transparent',
+				borderWidth: 1.5,
+				borderColor: Platform.OS === 'web' ? labelColor : tabbarInactiveColor
+			}
+
+	const defaultUserIcon = (
+		<PlatformIcon
+			{...getDefaultIconProps(size, focused)}
+			style={{ color: iconColor }}
+		/>
+	)
+
+	const avatarTextColor = focused
+		? contrastColor
+		: Platform.OS === 'web'
+			? labelColor
+			: tabbarInactiveColor
+
+	return userKind === USER_EMPLOYEE ? (
+		<Avatar size={size} style={avatarStyle}>
+			<Text
+				className="text-xs font-bold"
+				style={{ color: avatarTextColor }}
+				numberOfLines={1}
+				adjustsFontSizeToFit={true}
+			>
+				{getInitials((username as string) ?? '')}
+			</Text>
+		</Avatar>
+	) : userKind === USER_GUEST || isError || showLoadingIndicator ? (
+		defaultUserIcon
+	) : userKind === USER_STUDENT &&
+		isSuccess &&
+		persData?.mtknr === undefined ? (
+		<PlatformIcon
+			ios={{
+				name: focused
+					? 'person.crop.circle.badge.exclamationmark.fill'
+					: 'person.crop.circle.badge.exclamationmark',
+				size: size
+			}}
+			android={{
+				name: 'account_circle_off',
+				size: size + 2
+			}}
+			web={{
+				name: 'UserX',
+				size: size
+			}}
+			style={{ color: iconColor }}
+		/>
+	) : initials !== '' ? (
+		<Avatar size={size} style={avatarStyle}>
+			<Text
+				className="text-xs font-bold"
+				style={{ color: avatarTextColor }}
+				numberOfLines={1}
+				adjustsFontSizeToFit={true}
+			>
+				{initials}
+			</Text>
+		</Avatar>
+	) : (
+		defaultUserIcon
+	)
 }
 
 export const SettingsTabButton = ({
@@ -88,91 +207,24 @@ export const SettingsTabButton = ({
 		void fetchUsernameAndSetInitials()
 	}, [persData, userKind, username])
 
-	const IconComponent = (): React.JSX.Element => {
-		const avatarStyle = focused
-			? { backgroundColor: iconColor, borderWidth: 0 }
-			: {
-					backgroundColor: 'transparent',
-					borderWidth: 1.5,
-					borderColor: Platform.OS === 'web' ? labelColor : tabbarInactiveColor
-				}
-
-		const defaultIconProps = {
-			ios: {
-				name: focused ? 'person.crop.circle.fill' : 'person.crop.circle',
-				size
-			},
-			android: {
-				name: 'account_circle' as MaterialIcon,
-				size: size + 2,
-				variant: focused ? 'filled' : ('outlined' as 'filled' | 'outlined')
-			},
-			web: {
-				name: 'CircleUserRound' as LucideIcon,
-				size
-			}
-		}
-		const defaultUserIcon = (
-			<PlatformIcon {...defaultIconProps} style={{ color: iconColor }} />
-		)
-
-		const avatarTextColor = focused
-			? contrastColor
-			: Platform.OS === 'web'
-				? labelColor
-				: tabbarInactiveColor
-
-		return userKind === USER_EMPLOYEE ? (
-			<Avatar size={size} style={avatarStyle}>
-				<Text
-					className="text-xs font-bold"
-					style={{ color: avatarTextColor }}
-					numberOfLines={1}
-					adjustsFontSizeToFit={true}
-				>
-					{getInitials((username as string) ?? '')}
-				</Text>
-			</Avatar>
-		) : userKind === USER_GUEST || isError || showLoadingIndicator ? (
-			defaultUserIcon
-		) : userKind === USER_STUDENT &&
-			isSuccess &&
-			persData?.mtknr === undefined ? (
-			<PlatformIcon
-				ios={{
-					name: focused
-						? 'person.crop.circle.badge.exclamationmark.fill'
-						: 'person.crop.circle.badge.exclamationmark',
-					size: size
-				}}
-				android={{
-					name: 'account_circle_off',
-					size: size + 2
-				}}
-				web={{
-					name: 'UserX',
-					size: size
-				}}
-				style={{ color: iconColor }}
-			/>
-		) : initials !== '' ? (
-			<Avatar size={size} style={avatarStyle}>
-				<Text
-					className="text-xs font-bold"
-					style={{ color: avatarTextColor }}
-					numberOfLines={1}
-					adjustsFontSizeToFit={true}
-				>
-					{initials}
-				</Text>
-			</Avatar>
-		) : (
-			defaultUserIcon
-		)
-	}
-
 	const MemoIcon = React.useMemo(
-		() => <IconComponent />,
+		() => (
+			<SettingsTabIcon
+				userKind={userKind}
+				initials={initials}
+				showLoadingIndicator={showLoadingIndicator}
+				isError={isError}
+				isSuccess={isSuccess}
+				persData={persData}
+				username={username}
+				iconColor={iconColor}
+				labelColor={labelColor}
+				tabbarInactiveColor={tabbarInactiveColor}
+				contrastColor={contrastColor}
+				size={size}
+				focused={focused}
+			/>
+		),
 		[
 			userKind,
 			initials,
