@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { FeatureCollection } from 'geojson'
+import type { Feature, FeatureCollection } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
 import { SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
@@ -139,7 +139,11 @@ describe('map-screen-utils', () => {
 		const rooms: FeatureCollection = {
 			type: 'FeatureCollection',
 			features: [
-				{ type: 'Feature', properties: null, geometry: null },
+				{
+					type: 'Feature',
+					properties: null,
+					geometry: null
+				} as unknown as Feature,
 				featureCollection.features[0]
 			]
 		}
