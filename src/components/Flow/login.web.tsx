@@ -107,9 +107,9 @@ export default function Login(): React.JSX.Element {
 						className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full"
 						style={hairlineBorder}
 					>
-						{data.map((item, index) => (
+						{data.map((item) => (
 							<WhatsNewBox
-								key={index}
+								key={item.title}
 								title={item.title}
 								description={item.description}
 								icon={item.icon}

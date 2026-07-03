@@ -13,7 +13,6 @@ import {
 	View
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import LibraryCard from '@/components/Library/library-card'
@@ -36,7 +35,6 @@ import {
 } from '@/utils/api-utils'
 
 export default function LibraryCode(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [brightness, setBrightness] = useState<number>(0)
@@ -49,10 +47,9 @@ export default function LibraryCode(): React.JSX.Element {
 	const { data, isLoading, isError, isPaused, error, isSuccess, refetch } =
 		useQuery({
 			queryKey: ['personalData'],
-
 			queryFn: getPersonalData,
-			staleTime: 1000 * 60 * 60 * 12, // 12 hours
-			gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+			staleTime: 1000 * 60 * 60 * 12,
+			gcTime: 1000 * 60 * 60 * 24 * 60,
 			enabled: userKind === USER_STUDENT
 		})
 
@@ -86,7 +83,6 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}, [])
 
-	// some phd students accounts do not return any personal data, so we need to check if the bibnr is present
 	const isBibNumberPresent = (data?.bibnr ?? '').trim() !== ''
 
 	const sections: FormListSections[] = isBibNumberPresent
@@ -120,7 +116,7 @@ export default function LibraryCode(): React.JSX.Element {
 			) : userKind === USER_EMPLOYEE ? (
 				<ErrorView title={permissionError} />
 			) : isLoading ? (
-				<View style={styles.loadingContainer}>
+				<View className="items-center justify-center py-10">
 					<LoadingIndicator />
 				</View>
 			) : isError ? (
@@ -136,15 +132,13 @@ export default function LibraryCode(): React.JSX.Element {
 					refreshing={isRefetchingByUser}
 				/>
 			) : isSuccess && isBibNumberPresent ? (
-				<SafeAreaView style={styles.container}>
+				<SafeAreaView className="self-center px-page py-4 w-full">
 					<View>
 						<FormList sections={sections} />
 					</View>
 					<Pressable
-						style={{
-							...styles.barcodeContainer,
-							backgroundColor: staticColors.white
-						}}
+						className="self-center rounded-mg mx-page mt-5 py-3.5 w-full"
+						style={{ backgroundColor: staticColors.white }}
 						onPress={() => {
 							void toggleBrightness()
 						}}
@@ -154,11 +148,15 @@ export default function LibraryCode(): React.JSX.Element {
 							value={data.bibnr ?? ''}
 							maxWidth={Dimensions.get('window').width - 56}
 							width={5}
-							style={styles.barcodeStyle}
+							style={{
+								alignSelf: 'center',
+								marginVertical: 6,
+								paddingHorizontal: 10
+							}}
 						/>
 					</Pressable>
-					<View style={styles.notesContainer}>
-						<Text style={styles.notesText}>
+					<View className="self-center mb-2.5 mt-3.5 w-full">
+						<Text className="text-label text-xs text-left">
 							{t('pages.library.code.footer')}
 						</Text>
 					</View>
@@ -177,7 +175,7 @@ export default function LibraryCode(): React.JSX.Element {
 				/>
 			)}
 			{userKind === USER_STUDENT && (
-				<View style={[styles.container, styles.linksContainer]}>
+				<View className="self-center px-page py-4 gap-page w-full">
 					<LibraryCard
 						onPress={() => {
 							Linking.openURL(vscoutLink).catch((err) => {
@@ -219,45 +217,3 @@ export default function LibraryCode(): React.JSX.Element {
 		</SafeAreaProvider>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	barcodeContainer: {
-		alignSelf: 'center',
-		borderRadius: theme.radius.mg,
-		marginHorizontal: theme.margins.page,
-		marginTop: 20,
-		paddingVertical: 14,
-		width: '100%'
-	},
-	barcodeStyle: {
-		alignSelf: 'center',
-		marginVertical: 6,
-		paddingHorizontal: 10
-	},
-	container: {
-		alignSelf: 'center',
-		paddingHorizontal: theme.margins.page,
-		paddingVertical: 16,
-		width: '100%'
-	},
-	loadingContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingVertical: 40
-	},
-	linksContainer: {
-		gap: theme.margins.page,
-		width: '100%'
-	},
-	notesContainer: {
-		alignSelf: 'center',
-		marginBottom: 10,
-		marginTop: 14,
-		width: '100%'
-	},
-	notesText: {
-		color: theme.colors.labelColor,
-		fontSize: 12,
-		textAlign: 'left'
-	}
-}))

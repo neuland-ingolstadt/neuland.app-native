@@ -5,7 +5,8 @@ import Animated, {
 	useSharedValue,
 	withSpring
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface ThemePreviewCardProps {
 	isDark: boolean
@@ -20,7 +21,7 @@ const ThemePreviewCard = ({
 	label,
 	onPress
 }: ThemePreviewCardProps): React.JSX.Element => {
-	const { styles } = useStyles(previewCardStylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const scale = useSharedValue(1)
 
 	const animatedStyle = useAnimatedStyle(() => ({
@@ -28,8 +29,10 @@ const ThemePreviewCard = ({
 	}))
 
 	return (
-		<View style={styles.previewWrapper}>
-			<Text style={styles.themeLabel}>{label}</Text>
+		<View className="flex-1 gap-2">
+			<Text className="text-text text-[13px] font-semibold text-center">
+				{label}
+			</Text>
 			<Pressable
 				onPressIn={() => {
 					scale.value = withSpring(0.95, { damping: 15 })
@@ -38,91 +41,80 @@ const ThemePreviewCard = ({
 					scale.value = withSpring(1, { damping: 15 })
 				}}
 				onPress={onPress}
-				style={styles.pressable}
+				className="flex-1"
 			>
 				<Animated.View
+					className="flex-1 rounded-2xl overflow-hidden border-2"
 					style={[
-						styles.preview,
-						{ backgroundColor: isDark ? '#000000' : '#fff' },
-						isActive && styles.activePreview,
+						{
+							backgroundColor: isDark ? '#000000' : '#fff',
+							borderColor: isActive ? primaryColor : 'transparent'
+						},
 						animatedStyle
 					]}
 				>
-					<View style={styles.header}>
+					<View className="p-2 gap-1">
 						<View
-							style={[
-								styles.headerLine,
-								{ backgroundColor: isDark ? '#fff' : '#000', opacity: 0.15 }
-							]}
+							className="h-1 rounded-sm"
+							style={{
+								backgroundColor: isDark ? '#fff' : '#000',
+								opacity: 0.15
+							}}
 						/>
 						<View
-							style={[
-								styles.headerLine,
-								{
-									backgroundColor: isDark ? '#fff' : '#000',
-									opacity: 0.15,
-									width: '40%'
-								}
-							]}
+							className="h-1 rounded-sm"
+							style={{
+								backgroundColor: isDark ? '#fff' : '#000',
+								opacity: 0.15,
+								width: '40%'
+							}}
 						/>
 					</View>
-					<View style={styles.content}>
+					<View className="flex-1 p-2 gap-2">
 						<View
-							style={[
-								styles.card,
-								{ backgroundColor: isDark ? '#151515' : '#e9e9f0' }
-							]}
+							className="flex-1 rounded-sm overflow-hidden"
+							style={{ backgroundColor: isDark ? '#151515' : '#e9e9f0' }}
 						>
-							<View style={styles.cardContent}>
-								<View style={styles.cardLines}>
+							<View className="flex-1 p-2 justify-center">
+								<View className="gap-1">
 									<View
-										style={[
-											styles.cardLine,
-											{
-												backgroundColor: isDark ? '#fff' : '#000',
-												opacity: 0.1
-											}
-										]}
+										className="h-[3px] rounded-sm"
+										style={{
+											backgroundColor: isDark ? '#fff' : '#000',
+											opacity: 0.1
+										}}
 									/>
 									<View
-										style={[
-											styles.cardLine,
-											{
-												backgroundColor: isDark ? '#fff' : '#000',
-												opacity: 0.1,
-												width: '70%'
-											}
-										]}
+										className="h-[3px] rounded-sm"
+										style={{
+											backgroundColor: isDark ? '#fff' : '#000',
+											opacity: 0.1,
+											width: '70%'
+										}}
 									/>
 								</View>
 							</View>
 						</View>
 						<View
-							style={[
-								styles.card,
-								{ backgroundColor: isDark ? '#151515' : '#e9e9f0' }
-							]}
+							className="flex-1 rounded-sm overflow-hidden"
+							style={{ backgroundColor: isDark ? '#151515' : '#e9e9f0' }}
 						>
-							<View style={styles.cardContent}>
-								<View style={styles.cardLines}>
+							<View className="flex-1 p-2 justify-center">
+								<View className="gap-1">
 									<View
-										style={[
-											styles.cardLine,
-											{
-												backgroundColor: isDark ? '#fff' : '#000',
-												opacity: 0.1
-											}
-										]}
+										className="h-[3px] rounded-sm"
+										style={{
+											backgroundColor: isDark ? '#fff' : '#000',
+											opacity: 0.1
+										}}
 									/>
 									<View
-										style={[
-											styles.cardLine,
-											{
-												backgroundColor: isDark ? '#fff' : '#000',
-												opacity: 0.1,
-												width: '50%'
-											}
-										]}
+										className="h-[3px] rounded-sm"
+										style={{
+											backgroundColor: isDark ? '#fff' : '#000',
+											opacity: 0.1,
+											width: '50%'
+										}}
 									/>
 								</View>
 							</View>
@@ -133,61 +125,5 @@ const ThemePreviewCard = ({
 		</View>
 	)
 }
-
-const previewCardStylesheet = createStyleSheet((theme) => ({
-	previewWrapper: {
-		flex: 1,
-		gap: 8
-	},
-	pressable: {
-		flex: 1
-	},
-	themeLabel: {
-		color: theme.colors.text,
-		fontSize: 13,
-		fontWeight: '600',
-		textAlign: 'center'
-	},
-	preview: {
-		flex: 1,
-		borderRadius: 16,
-		overflow: 'hidden',
-		borderWidth: 2,
-		borderColor: 'transparent'
-	},
-	activePreview: {
-		borderColor: theme.colors.primary
-	},
-	header: {
-		padding: 8,
-		gap: 4
-	},
-	headerLine: {
-		height: 4,
-		borderRadius: 2
-	},
-	content: {
-		flex: 1,
-		padding: 8,
-		gap: 8
-	},
-	card: {
-		flex: 1,
-		borderRadius: 8,
-		overflow: 'hidden'
-	},
-	cardContent: {
-		flex: 1,
-		padding: 8,
-		justifyContent: 'center'
-	},
-	cardLines: {
-		gap: 4
-	},
-	cardLine: {
-		height: 3,
-		borderRadius: 2
-	}
-}))
 
 export default ThemePreviewCard

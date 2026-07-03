@@ -11,8 +11,8 @@ import Animated, {
 	useAnimatedStyle,
 	useScrollViewOffset
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
+import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import DetailsBody from '@/components/Timetable/details-body'
 import DetailsRow from '@/components/Timetable/details-row'
@@ -26,12 +26,15 @@ import type { FormListSections, SectionGroup } from '@/types/components'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function TimetableDetails(): React.JSX.Element {
 	const router = useRouter()
 	const navigation = useNavigation()
-	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('timetable')
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const shareRef = useRef<ViewShot>(null)
 	const lecture = useRouteParamsStore((state) => state.selectedLecture)
 	const setHtmlContent = useRouteParamsStore((state) => state.setHtmlContent)
@@ -161,13 +164,22 @@ export default function TimetableDetails(): React.JSX.Element {
 	]
 
 	return (
-		<Animated.ScrollView ref={ref} contentContainerStyle={styles.page}>
+		<Animated.ScrollView
+			ref={ref}
+			contentContainerClassName="flex pb-bottom-safe px-page pt-page"
+		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{lecture.name}
 								</HeaderTitle>
 							</Animated.View>
@@ -178,12 +190,12 @@ export default function TimetableDetails(): React.JSX.Element {
 			<View>
 				<DetailsRow>
 					<DetailsSymbol>
-						<View style={styles.eventColorCircle} />
+						<View className="aspect-square bg-primary rounded-infinite w-[15px]" />
 					</DetailsSymbol>
 					<DetailsBody>
-						<Text style={styles.eventName}>{lecture.name}</Text>
+						<Text className="text-text text-2xl font-bold">{lecture.name}</Text>
 						{lecture.shortName.length > 0 ? (
-							<Text style={styles.eventShortName}>{lecture.shortName}</Text>
+							<Text className="text-label text-sm">{lecture.shortName}</Text>
 						) : (
 							// biome-ignore lint/complexity/noUselessFragments: okay here
 							<></>
@@ -196,7 +208,7 @@ export default function TimetableDetails(): React.JSX.Element {
 				<DetailsRow>
 					<DetailsSymbol>
 						<PlatformIcon
-							style={styles.icon}
+							style={{ color: labelColor }}
 							ios={{
 								name: 'clock',
 								size: 21
@@ -214,22 +226,22 @@ export default function TimetableDetails(): React.JSX.Element {
 					</DetailsSymbol>
 
 					<DetailsBody>
-						<View style={styles.dateRow}>
+						<View className="flex-row items-center flex-1 justify-between pr-3 w-full">
 							<View>
-								<Text style={styles.text1}>
+								<Text className="text-text text-lg">
 									{formatFriendlyDate(startDate, {
 										weekday: 'long',
 										relative: false
 									})}
 								</Text>
 
-								<View style={styles.detailsContainer}>
-									<Text style={styles.text2}>
+								<View className="flex-row items-center gap-1">
+									<Text className="text-text text-sm">
 										{formatFriendlyTime(startDate)}
 									</Text>
 
 									<PlatformIcon
-										style={styles.icon}
+										style={{ color: labelColor }}
 										ios={{
 											name: 'chevron.forward',
 											size: 12
@@ -244,11 +256,11 @@ export default function TimetableDetails(): React.JSX.Element {
 										}}
 									/>
 
-									<Text style={styles.text2}>
+									<Text className="text-text text-sm">
 										{formatFriendlyTime(endDate)}
 									</Text>
 
-									<Text style={styles.text2Label}>
+									<Text className="text-label text-sm">
 										{`(${moment(endDate).diff(
 											moment(startDate),
 											'minutes'
@@ -280,12 +292,12 @@ export default function TimetableDetails(): React.JSX.Element {
 										name: 'MapPin',
 										size: 24
 									}}
-									style={styles.icon}
+									style={{ color: labelColor }}
 								/>
 							</DetailsSymbol>
 
 							<DetailsBody>
-								<View style={styles.roomContainer}>
+								<View className="flex-row">
 									{lecture.rooms.map((room, i) => {
 										const isValid = isValidRoom(room)
 										return (
@@ -301,10 +313,17 @@ export default function TimetableDetails(): React.JSX.Element {
 													}}
 													disabled={!isValid}
 												>
-													<Text style={styles.roomText(isValid)}>{room}</Text>
+													<Text
+														className="text-lg"
+														style={{
+															color: isValid ? primaryColor : textColor
+														}}
+													>
+														{room}
+													</Text>
 												</Pressable>
 												{i < lecture.rooms.length - 1 && (
-													<Text style={styles.text1}>{', '}</Text>
+													<Text className="text-text text-lg">{', '}</Text>
 												)}
 											</React.Fragment>
 										)
@@ -334,98 +353,30 @@ export default function TimetableDetails(): React.JSX.Element {
 										name: 'User',
 										size: 24
 									}}
-									style={styles.icon}
+									style={{ color: labelColor }}
 								/>
 							</DetailsSymbol>
 
 							<DetailsBody>
-								<Text style={styles.text1}>{lecture.lecturer}</Text>
+								<Text className="text-text text-lg">{lecture.lecturer}</Text>
 							</DetailsBody>
 						</DetailsRow>
 					</>
 				) : null}
-				<View style={styles.formListContainer}>
+				<View className="gap-3 mt-6">
 					<FormList sections={detailsList} />
 				</View>
-				<ViewShot ref={shareRef} style={styles.viewShot}>
+				<ViewShot
+					ref={shareRef}
+					style={{
+						transform: [{ translateX: -1000 }],
+						position: 'absolute',
+						zIndex: -1
+					}}
+				>
 					<ShareCard event={lecture} />
 				</ViewShot>
 			</View>
 		</Animated.ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	dateRow: {
-		alignItems: 'center',
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingRight: 12,
-		width: '100%'
-	},
-	detailsContainer: {
-		alignItems: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 4
-	},
-	eventColorCircle: {
-		aspectRatio: 1,
-		backgroundColor: theme.colors.primary,
-		borderRadius: 9999,
-		width: 15
-	},
-	eventName: {
-		color: theme.colors.text,
-		fontSize: 24,
-		fontWeight: 'bold'
-	},
-	eventShortName: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	},
-	formListContainer: {
-		gap: 12,
-		marginTop: 24
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	icon: {
-		color: theme.colors.labelColor
-	},
-	page: {
-		display: 'flex',
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingHorizontal: theme.margins.page,
-		paddingTop: theme.margins.page
-	},
-	roomContainer: {
-		display: 'flex',
-		flexDirection: 'row'
-	},
-	roomText: (isValid: boolean) => ({
-		color: isValid ? theme.colors.primary : theme.colors.text,
-		fontSize: 18
-	}),
-	text1: {
-		color: theme.colors.text,
-		fontSize: 18
-	},
-	text2: {
-		color: theme.colors.text,
-		fontSize: 14
-	},
-	text2Label: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	},
-	viewShot: {
-		position: 'absolute',
-		transform: [{ translateX: -1000 }],
-		zIndex: -1
-	}
-}))

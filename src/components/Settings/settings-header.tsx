@@ -59,14 +59,14 @@ export default function SettingsHeader({
 	if (userKind === 'student') {
 		return (
 			<View
-				className="self-center bg-card ios:rounded-ios android:rounded-md w-full mt-3"
+				className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3"
 				style={hairlineBorder}
 			>
 				<Pressable
 					onPress={() => {
 						router.navigate('/profile')
 					}}
-					className="ios:rounded-ios android:rounded-md overflow-hidden active:opacity-90"
+					className="ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden active:opacity-90"
 				>
 					<View className="items-center flex-row justify-between">
 						{isSuccess && personalData?.mtknr !== undefined ? (
@@ -172,7 +172,7 @@ export default function SettingsHeader({
 					router.navigate('/login')
 				}
 			}}
-			className="self-center bg-card ios:rounded-ios android:rounded-md w-full mt-3 active:opacity-90"
+			className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3 active:opacity-90"
 			style={hairlineBorder}
 		>
 			<View className="items-center flex-row justify-between">

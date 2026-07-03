@@ -34,7 +34,7 @@ const NeulandBox = (): React.JSX.Element | null => {
 		<View className="mt-2.5">
 			<Pressable
 				onPress={() => router.navigate('/member')}
-				className="ios:rounded-ios android:rounded-md border-border overflow-hidden w-full active:opacity-90"
+				className="ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden w-full active:opacity-90"
 				style={hairlineBorder}
 			>
 				<LinearGradient

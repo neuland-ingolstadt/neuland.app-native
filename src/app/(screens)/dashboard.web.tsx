@@ -3,11 +3,10 @@ import React, { use, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutAnimation, Platform, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type { ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import {
-	dashboardStyles,
 	GuestUserNote,
 	OrderableRowItem,
 	ResetOrderButton
@@ -17,24 +16,25 @@ import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { useFeatureFlags } from '@/contexts/feature-flags'
 import { USER_GUEST } from '@/data/constants'
 import { arraysEqual } from '@/utils/app-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 48
+	const labelBackgroundColor = toColor(
+		useCSSVariable('--color-label-background')
+	)
 
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		use(DashboardContext)
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const flags = useFeatureFlags()
-	const { styles, theme } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
 	const [transShownDashboardEntries, setTransShownDashboardEntries] = useState<
 		ExtendedCard[]
 	>([])
 
-	// Calculate translated entries when shownDashboardEntries changes
 	useEffect(() => {
-		// add translation to shownDashboardEntries with new key transText
 		const translatedEntries = shownDashboardEntries.map((item) => {
 			return {
 				...item,
@@ -54,35 +54,29 @@ export default function DashboardEdit(): React.JSX.Element {
 				(direction === 'down' &&
 					index === transShownDashboardEntries.length - 1)
 			) {
-				return // Can't move beyond boundaries
+				return
 			}
 
-			// Create a new array to avoid mutation issues
 			const newOrderedEntries = [...transShownDashboardEntries]
 			const newIndex = direction === 'up' ? index - 1 : index + 1
 
-			// Swap the items
 			const temp = newOrderedEntries[index]
 			newOrderedEntries[index] = newOrderedEntries[newIndex]
 			newOrderedEntries[newIndex] = temp
 
-			// Apply animation for smooth UI updates
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 
-			// Update state immediately to ensure UI reflects changes
 			setTransShownDashboardEntries(newOrderedEntries)
 
-			// Update the order in the context after state update
 			setTimeout(() => {
 				updateDashboardOrder(newOrderedEntries.map((x) => x.key))
 			}, 0)
 
-			// Provide haptic feedback
 			if (Platform.OS === 'ios') {
 				void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 			}
 		},
-		[transShownDashboardEntries]
+		[transShownDashboardEntries, updateDashboardOrder]
 	)
 
 	const handleReset = useCallback(() => {
@@ -111,27 +105,29 @@ export default function DashboardEdit(): React.JSX.Element {
 	return (
 		<View>
 			<ScrollView
-				contentContainerStyle={styles.page}
+				contentContainerClassName="px-page pb-page"
 				bounces={false}
 				contentInsetAdjustmentBehavior="automatic"
 			>
-				<View style={styles.wrapper}>
+				<View className="gap-3.5">
 					{userKind === USER_GUEST && <GuestUserNote />}
 
-					<View style={styles.block}>
-						<Text style={styles.blockHeader}>{t('dashboard.shown')}</Text>
-						<View style={[styles.card, styles.shownBg]}>
+					<View className="self-center gap-1.5 w-full">
+						<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold ios:pb-1 android:text-[13px] android:font-normal android:uppercase">
+							{t('dashboard.shown')}
+						</Text>
+						<View className="rounded-md overflow-hidden px-0 bg-background">
 							{transShownDashboardEntries.length === 0 ? (
 								<View
-									style={{
-										height: childrenHeight * 1.5,
-										...styles.emptyContainer
-									}}
+									className="bg-card rounded-md justify-center"
+									style={{ height: childrenHeight * 1.5 }}
 								>
-									<Text style={styles.textEmpty}>{t('dashboard.noShown')}</Text>
+									<Text className="text-text text-base text-center">
+										{t('dashboard.noShown')}
+									</Text>
 								</View>
 							) : (
-								<View style={styles.outer}>
+								<View className="rounded-md flex-1 overflow-hidden">
 									{transShownDashboardEntries.map((item, index) => (
 										<React.Fragment key={item.key}>
 											<OrderableRowItem
@@ -146,10 +142,7 @@ export default function DashboardEdit(): React.JSX.Element {
 												}
 											/>
 											{index !== transShownDashboardEntries.length - 1 && (
-												<Divider
-													width={'100%'}
-													color={theme.colors.labelBackground}
-												/>
+												<Divider width={'100%'} color={labelBackgroundColor} />
 											)}
 										</React.Fragment>
 									))}
@@ -163,7 +156,9 @@ export default function DashboardEdit(): React.JSX.Element {
 						onPress={handleReset}
 					/>
 
-					<Text style={styles.footer}>{t('dashboard.footer')}</Text>
+					<Text className="text-label text-xs font-normal text-left">
+						{t('dashboard.footer')}
+					</Text>
 				</View>
 			</ScrollView>
 		</View>
