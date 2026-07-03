@@ -98,6 +98,24 @@ describe('campus-life-utils', () => {
 		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT)
 	})
 
+	it('resolveCampusLifeOrganizerKind - Should parse a string param when it is non-empty', () => {
+		expect(
+			resolveCampusLifeOrganizerKind(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
+				'STUDENT_ASSOCIATION'
+			)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION)
+	})
+
+	it('resolveCampusLifeOrganizerKind - Should fall back when org param is undefined', () => {
+		expect(
+			resolveCampusLifeOrganizerKind(
+				CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT,
+				undefined
+			)
+		).toBe(CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT)
+	})
+
 	it('campusLifeEventListScreen - Should map organizer kind to screen', () => {
 		expect(
 			campusLifeEventListScreen(

@@ -42,4 +42,8 @@ describe('app-utils', () => {
 	it('arraysEqual - Should return false for arrays with equal values in different order', () => {
 		expect(arraysEqual([1, 2, 3], [3, 2, 1])).toBe(false)
 	})
+
+	it('arraysEqual - Should return false when values differ at the same index', () => {
+		expect(arraysEqual([1, 2, 3], [1, 9, 3])).toBe(false)
+	})
 })

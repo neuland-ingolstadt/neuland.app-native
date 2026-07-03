@@ -135,6 +135,26 @@ describe('map-screen-utils', () => {
 		expect(filterAvailableRooms(undefined, [{ room: 'G101' }])).toEqual([])
 	})
 
+	it('filterAvailableRooms - Should ignore features without properties', () => {
+		const rooms: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{ type: 'Feature', properties: null, geometry: null },
+				featureCollection.features[0]
+			]
+		}
+
+		expect(
+			filterAvailableRooms(rooms, [{ room: 'G101' }]).map(
+				(feature) => feature.properties?.Raum ?? ''
+			)
+		).toEqual(['G101'])
+	})
+
+	it('filterAvailableRooms - Should return an empty list when availability is unknown', () => {
+		expect(filterAvailableRooms(featureCollection, null)).toEqual([])
+	})
+
 	it('filterEtage - Should return only features on the requested floor', () => {
 		expect(
 			filterEtage('EG', featureCollection).map(
@@ -193,6 +213,37 @@ describe('map-screen-utils', () => {
 		expect(result.nextAvailable).toBeNull()
 	})
 
+	it('getRoomData - Should use the English function label when requested', () => {
+		const result = getRoomData('G101', null, featureCollection, i18nEn, t)
+
+		expect(result.subtitle).toBe('Lecture hall')
+	})
+
+	it('getRoomData - Should ignore openings that already started', () => {
+		const now = new Date()
+		const roomOpenings: RoomOpenings = {
+			G101: [
+				{
+					type: 'Lecture hall',
+					from: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+					until: new Date(now.getTime() - 60 * 60 * 1000),
+					capacity: 120
+				}
+			]
+		}
+
+		const result = getRoomData(
+			'G101',
+			null,
+			featureCollection,
+			i18nDe,
+			t,
+			roomOpenings
+		)
+
+		expect(result.nextAvailable).toBeNull()
+	})
+
 	it('getBuildingData - Should count total and available rooms for a building', () => {
 		const result = getBuildingData(
 			'G',
@@ -205,6 +256,47 @@ describe('map-screen-utils', () => {
 		expect(result.subtitle).toBe('pages.map.details.room.building')
 		expect(result.occupancies).toEqual({ total: 2, available: 2 })
 		expect(result.type).toBe(SEARCH_TYPES.BUILDING)
+	})
+
+	it('getBuildingData - Should expose building properties and zero availability without room status', () => {
+		const result = getBuildingData('G', featureCollection, null, t)
+
+		expect(result.properties?.Raum).toBe('G000')
+		expect(result.occupancies).toEqual({ total: 2, available: 0 })
+	})
+
+	it('getBuildingData - Should count only rooms matching the building prefix', () => {
+		const result = getBuildingData(
+			'G',
+			featureCollection,
+			[{ room: 'G101' }],
+			t
+		)
+
+		expect(result.occupancies).toEqual({ total: 2, available: 1 })
+	})
+
+	it('getBuildingData - Should return zero counts for unknown buildings', () => {
+		const result = getBuildingData(
+			'Z',
+			featureCollection,
+			[{ room: 'Z101' }],
+			t
+		)
+
+		expect(result.properties).toBeUndefined()
+		expect(result.occupancies).toEqual({ total: 0, available: 1 })
+	})
+
+	it('getBuildingData - Should accept a plain feature array', () => {
+		const result = getBuildingData(
+			'G',
+			featureCollection.features,
+			[{ room: 'G101' }, { room: 'G001' }],
+			t
+		)
+
+		expect(result.occupancies).toEqual({ total: 2, available: 2 })
 	})
 
 	it('getOngoingOrNextEvent - Should return the ongoing event when one is active', () => {

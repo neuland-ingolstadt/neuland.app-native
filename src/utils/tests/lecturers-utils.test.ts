@@ -70,4 +70,60 @@ describe('lecturers-utils', () => {
 		const result = normalizeLecturers(entries)
 		expect(result.map((entry) => entry.name)).toEqual(['Alpha', 'Zeta'])
 	})
+
+	it('normalizeLecturers - Should strip (0) and reformat international numbers', () => {
+		const entries = [
+			{
+				name: 'Mustermann',
+				vorname: 'Max',
+				tel_dienst: '+49 (0) 841 9348 - 100',
+				raum: 'G 123'
+			}
+		] as never
+
+		const result = normalizeLecturers(entries)
+		expect(result[0].tel_dienst).toBe('+49 841 9348100')
+	})
+
+	it('normalizeLecturers - Should add the THI prefix to 9348 numbers', () => {
+		const entries = [
+			{
+				name: 'Mustermann',
+				vorname: 'Max',
+				tel_dienst: '9348-200',
+				raum: 'G 123'
+			}
+		] as never
+
+		const result = normalizeLecturers(entries)
+		expect(result[0].tel_dienst).toBe('+49 841 9348200')
+	})
+
+	it('normalizeLecturers - Should fix numbers starting with 49 without a plus', () => {
+		const entries = [
+			{
+				name: 'Mustermann',
+				vorname: 'Max',
+				tel_dienst: '49 841 9348100',
+				raum: 'G 123'
+			}
+		] as never
+
+		const result = normalizeLecturers(entries)
+		expect(result[0].tel_dienst).toBe('+49 841 9348100')
+	})
+
+	it('normalizeLecturers - Should fall back to an empty room short code', () => {
+		const entries = [
+			{
+				name: 'Mustermann',
+				vorname: 'Max',
+				tel_dienst: '0841 / 9348 - 100',
+				raum: 'Lobby'
+			}
+		] as never
+
+		const result = normalizeLecturers(entries)
+		expect(result[0].room_short).toBe('')
+	})
 })

@@ -18,6 +18,12 @@ describe('parseUniversalLinkPath', () => {
 		).toBe('food/123?ref=qr')
 	})
 
+	it('parses paths with repeated leading slashes', () => {
+		expect(
+			parseUniversalLinkPath('https://web.neuland.app///member/office-toggle')
+		).toBe('member/office-toggle')
+	})
+
 	it('returns null for unrelated hosts', () => {
 		expect(parseUniversalLinkPath('https://example.com/member')).toBeNull()
 	})
@@ -40,6 +46,12 @@ describe('parseUniversalLinkPath', () => {
 describe('normalizeRoutePath', () => {
 	it('strips leading and trailing slashes', () => {
 		expect(normalizeRoutePath('/member/office-toggle/')).toBe(
+			'member/office-toggle'
+		)
+	})
+
+	it('collapses repeated leading and trailing slashes', () => {
+		expect(normalizeRoutePath('///member/office-toggle///')).toBe(
 			'member/office-toggle'
 		)
 	})

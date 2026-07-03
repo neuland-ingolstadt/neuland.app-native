@@ -168,4 +168,56 @@ describe('up-next-utils', () => {
 			shouldShowNextEvent(current, next, new Date('2026-06-16T10:30:00'))
 		).toBe(true)
 	})
+
+	it('getEventStatus - Should not mark lectures far in the future as starting soon', () => {
+		const now = new Date('2026-06-16T08:00:00')
+		const event = buildEvent(
+			'Later lecture',
+			new Date('2026-06-16T12:00:00'),
+			new Date('2026-06-16T13:30:00')
+		)
+
+		const status = getEventStatus(event, now)
+
+		expect(status.isSoon).toBe(false)
+		expect(status.isOngoing).toBe(false)
+		expect(status.progress).toBe(0)
+	})
+
+	it('getEventStatus - Should mark lectures exactly 30 minutes away as starting soon', () => {
+		const now = new Date('2026-06-16T09:30:00')
+		const event = buildEvent(
+			'Boundary lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T11:30:00')
+		)
+
+		expect(getEventStatus(event, now).isSoon).toBe(true)
+	})
+
+	it('getEventStatus - Should report progress halfway through an ongoing lecture', () => {
+		const event = buildEvent(
+			'Current lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T12:00:00')
+		)
+
+		const status = getEventStatus(event, new Date('2026-06-16T11:00:00'))
+
+		expect(status.isOngoing).toBe(true)
+		expect(status.isEndingSoon).toBe(false)
+		expect(status.progress).toBeCloseTo(0.5, 5)
+	})
+
+	it('getEventStatus - Should mark ongoing lectures with 30 minutes left as ending soon', () => {
+		const event = buildEvent(
+			'Current lecture',
+			new Date('2026-06-16T10:00:00'),
+			new Date('2026-06-16T11:30:00')
+		)
+
+		const status = getEventStatus(event, new Date('2026-06-16T11:00:00'))
+
+		expect(status.isEndingSoon).toBe(true)
+	})
 })
