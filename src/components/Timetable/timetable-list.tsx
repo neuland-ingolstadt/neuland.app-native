@@ -322,13 +322,13 @@ export default function TimetableList({
 							params: { event: item.id }
 						})
 					}}
-					className="mb-2.5 rounded-md overflow-hidden"
+					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(calendarItemColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
 						style={hairlineBorder}
 					>
 						<ColorBand color={calendarItemColor} />
@@ -376,13 +376,13 @@ export default function TimetableList({
 					onPress={() => {
 						showEventDetails(item)
 					}}
-					className="mb-2.5 rounded-md overflow-hidden"
+					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(primaryColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
 						style={hairlineBorder}
 					>
 						<ColorBand color={primaryColor} />
@@ -428,13 +428,13 @@ export default function TimetableList({
 					onPress={() => {
 						navigateToPage()
 					}}
-					className="mb-2.5 rounded-md overflow-hidden"
+					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(notificationColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
 						style={hairlineBorder}
 					>
 						<ColorBand color={notificationColor} />

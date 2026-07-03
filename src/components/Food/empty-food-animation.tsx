@@ -8,13 +8,13 @@ import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
 import { PlateAnimation } from './plate-animation'
 
+const handleSettingsPress = (): void => {
+	router.navigate('/food-preferences')
+}
+
 export const EmptyFoodAnimation = (): React.JSX.Element => {
 	const { t } = useTranslation('food')
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
-
-	const handleSettingsPress = () => {
-		router.navigate('/food-preferences')
-	}
 
 	return (
 		<Animated.View

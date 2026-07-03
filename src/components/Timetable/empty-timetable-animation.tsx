@@ -125,7 +125,7 @@ export const EmptyTimetableAnimation = ({
 
 					<View className="w-full gap-3 items-center">
 						<Pressable
-							className="flex-row items-center justify-center py-3.5 px-5 rounded-md gap-2.5 min-w-[220px]"
+							className="flex-row items-center justify-center py-3.5 px-5 ios:rounded-ios android:rounded-md web:rounded-md gap-2.5 min-w-[220px]"
 							style={{ backgroundColor: primaryColor }}
 							onPress={handleConfigurePress}
 						>
@@ -151,7 +151,7 @@ export const EmptyTimetableAnimation = ({
 						</Pressable>
 
 						<Pressable
-							className="flex-row items-center justify-center bg-card py-3 px-[18px] rounded-md gap-2 min-w-[180px]"
+							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px]"
 							style={hairlineBorder}
 							onPress={handleRefreshPress}
 						>

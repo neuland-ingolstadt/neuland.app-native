@@ -11,6 +11,7 @@ import { useFlowStore } from '@/hooks/useFlowStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import {
+	type CalendarCardEvent,
 	type CalendarCardExamInput,
 	calendar,
 	isCalendarCardExam,
@@ -20,6 +21,13 @@ import {
 import { toColor } from '@/utils/uniwind-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
+
+function getCalendarCardEventKey(event: CalendarCardEvent): string {
+	if (isCalendarCardExam(event)) {
+		return `exam-${event.examData.name}-${event.examData.date.getTime()}`
+	}
+	return event.id
+}
 
 const CalendarCard = (): React.JSX.Element => {
 	const router = useRouter()
@@ -88,9 +96,9 @@ const CalendarCard = (): React.JSX.Element => {
 			}
 		>
 			<View className="gap-3 mt-2.5">
-				{mixedCalendar.map((event, index) => (
+				{mixedCalendar.map((event) => (
 					<Pressable
-						key={index}
+						key={getCalendarCardEventKey(event)}
 						onPress={
 							isCalendarCardExam(event)
 								? () => {

@@ -33,6 +33,7 @@ export default function OrderableRowItem({
 }: OrderableRowItemProps): React.JSX.Element {
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const labelSecondaryColor = toColor(useCSSVariable('--color-label-secondary'))
+	const borderColor = toColor(useCSSVariable('--color-border'))
 	const bottomWidth = isLast ? 0 : 1
 	const isWeb = Platform.OS === 'web'
 	const { t } = useTranslation(['accessibility'])
@@ -41,10 +42,11 @@ export default function OrderableRowItem({
 		<View>
 			<Pressable
 				onLongPress={drag}
-				className="items-center bg-card flex-row gap-3.5 justify-center min-h-[50px] px-4 border-border"
+				className="items-center bg-card flex-row gap-3.5 justify-center min-h-[50px] px-4"
 				style={{
 					width: width - 24,
 					borderBottomWidth: bottomWidth,
+					borderBottomColor: borderColor,
 					opacity: isActive ? 0.8 : 1
 				}}
 			>

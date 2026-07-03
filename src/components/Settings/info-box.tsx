@@ -1,6 +1,6 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
-import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -15,7 +15,6 @@ interface InfoBoxProps {
 		web: LucideIcon
 		variant?: 'fill' | 'outline'
 	}
-	style?: ViewStyle
 	href: RelativePathString
 	isExternalLink?: boolean
 }
@@ -25,7 +24,6 @@ const InfoBox = ({
 	value,
 	icon,
 	href,
-	style,
 	isExternalLink
 }: InfoBoxProps): React.JSX.Element => {
 	const textColor = toColor(useCSSVariable('--color-text'))
@@ -34,8 +32,8 @@ const InfoBox = ({
 	return (
 		<Link href={href} asChild>
 			<Pressable
-				className="items-center bg-card border-border rounded-md ios:rounded-ios flex-1 justify-center p-4 min-h-20 active:opacity-90"
-				style={[hairlineBorder, style]}
+				className="w-full items-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md justify-center p-4 min-h-20 active:opacity-90"
+				style={hairlineBorder}
 			>
 				<View className="items-center justify-center mb-2">
 					<PlatformIcon

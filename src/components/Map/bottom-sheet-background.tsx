@@ -13,7 +13,7 @@ const BottomSheetBackground = (): React.JSX.Element => {
 
 	return Platform.OS === 'ios' ? (
 		<View
-			className="absolute inset-0 overflow-hidden rounded-t-[30px]"
+			className="absolute inset-0 overflow-hidden ios:rounded-t-[30px] android:rounded-t-lg web:rounded-t-lg"
 			style={{
 				backgroundColor: dark ? darkIos : lightIos
 			}}
@@ -26,7 +26,7 @@ const BottomSheetBackground = (): React.JSX.Element => {
 		</View>
 	) : (
 		<View
-			className="absolute inset-0 overflow-hidden rounded-t-[30px]"
+			className="absolute inset-0 overflow-hidden ios:rounded-t-[30px] android:rounded-t-lg web:rounded-t-lg"
 			style={{ backgroundColor }}
 		/>
 	)

@@ -40,7 +40,7 @@ const AvailableRoomsSuggestions = ({
 	return (
 		<View>
 			<View className="items-end flex-row justify-between mb-1">
-				<Text className="text-text text-xl font-semibold mb-0.5 pt-2 text-left">
+				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.availableRooms')}
 				</Text>
 				{userKind !== USER_GUEST && (
@@ -63,7 +63,7 @@ const AvailableRoomsSuggestions = ({
 				)}
 			</View>
 			<Pressable
-				className="bg-card rounded-[18px] overflow-hidden"
+				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden"
 				style={hairlineBorder}
 				onPress={() => {
 					router.navigate('/login')

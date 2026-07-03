@@ -1,20 +1,14 @@
 import type React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 
 export default function DetailsSymbol({
 	children
 }: {
 	children: React.JSX.Element
 }): React.JSX.Element {
-	return <View style={styles.detailsSymbol}>{children}</View>
+	return (
+		<View className="flex-row w-[50px] justify-center items-center">
+			{children}
+		</View>
+	)
 }
-
-const styles = StyleSheet.create({
-	detailsSymbol: {
-		display: 'flex',
-		flexDirection: 'row',
-		width: 50,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-})

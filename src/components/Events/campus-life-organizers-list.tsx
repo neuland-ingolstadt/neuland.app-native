@@ -1,13 +1,13 @@
+import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, Text, View } from 'react-native'
+import { RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import RowEntry from '@/components/Universal/row-entry'
-import { FlashList } from '@/components/Universal/styled'
 import { useRefreshByUser } from '@/hooks'
 import type {
 	CampusLifeOrganizer,
@@ -82,7 +82,7 @@ export default function CampusLifeOrganizersList({
 							}
 						/>
 					)}
-					contentContainerClassName="px-page py-page pb-bottom-safe"
+					contentContainerStyle={styles.listContent}
 					ListFooterComponent={
 						<View className="mt-3">
 							<Text className="text-label-secondary text-xs">
@@ -142,6 +142,14 @@ const OrganizerListItem = ({
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	listContent: {
+		paddingHorizontal: 12,
+		paddingVertical: 12,
+		paddingBottom: 122
+	}
+})
 
 const OrganizerRowContent = ({
 	organizer,

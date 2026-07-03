@@ -472,7 +472,7 @@ const MapScreen = (): React.JSX.Element => {
 					<LoadingIndicator />
 				</View>
 			)}
-			<div className="map-container" style={mapContainerStyle}>
+			<div style={mapContainerStyle}>
 				<Map
 					mapLib={maplibregl}
 					initialViewState={{

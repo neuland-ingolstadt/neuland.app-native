@@ -64,11 +64,11 @@ const BaseCard = ({
 
 	const cardContent = (
 		<View
-			className={`bg-card border-border ios:rounded-[28px] android:rounded-lg w-full ${onPressRoute == null ? 'opacity-80' : ''}`}
+			className={`bg-card border-border ios:rounded-[28px] android:rounded-lg web:rounded-lg w-full ${onPressRoute == null ? 'opacity-80' : ''}`}
 			style={hairlineBorder}
 		>
 			<View className="p-card my-[1.5px]">
-				<View className="items-center text-text flex-row gap-2.5">
+				<View className="items-center flex-row gap-2.5">
 					<View className="w-9 h-9 rounded-full justify-center items-center mr-1 bg-primary-background">
 						<Animated.View style={animatedIconStyle}>
 							<PlatformIcon

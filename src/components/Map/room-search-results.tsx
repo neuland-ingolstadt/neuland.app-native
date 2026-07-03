@@ -34,7 +34,7 @@ export function RoomSearchResults({
 				{t('pages.rooms.results')}
 			</Text>
 			<View className="pb-5">
-				<View className="bg-card rounded-md mb-4">
+				<View className="bg-card ios:rounded-ios android:rounded-md web:rounded-md mb-4">
 					{isLoading ? (
 						<LoadingIndicator style={{ paddingVertical: 30 }} />
 					) : isPaused ? (

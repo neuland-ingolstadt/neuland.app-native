@@ -46,11 +46,11 @@ const SearchHistory = ({
 	return (
 		<View className="mb-2.5">
 			<View className="items-end flex-row justify-between mb-1">
-				<Text className="text-text text-xl font-semibold mb-0.5 pt-2 text-left">
+				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.history')}
 				</Text>
 			</View>
-			<View className="rounded-2xl overflow-hidden">
+			<View className="ios:rounded-2xl android:rounded-lg web:rounded-lg overflow-hidden">
 				{searchHistory?.map((history, index) => (
 					<React.Fragment key={history.title}>
 						<Swipeable

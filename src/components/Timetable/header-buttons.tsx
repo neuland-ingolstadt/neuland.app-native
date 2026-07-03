@@ -22,9 +22,7 @@ export function HeaderRight({
 	const textColor = toColor(useCSSVariable('--color-text'))
 
 	return (
-		<View
-			className={`flex-row ${Platform.OS !== 'ios' ? 'gap-2.5 mx-1.5' : 'gap-5 mx-[3px]'}`}
-		>
+		<View className="flex-row ios:gap-5 ios:mx-[3px] android:gap-2.5 android:mx-1.5 web:gap-2.5 web:mx-1.5">
 			<Pressable
 				onPress={setToday}
 				hitSlop={10}

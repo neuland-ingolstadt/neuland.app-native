@@ -72,8 +72,11 @@ const TimetablePreview = ({
 							{ time: '10:00', type: 'primary' },
 							...(showExams ? [{ time: '12:30', type: 'exam' }] : []),
 							{ time: '15:15', type: 'primary' }
-						].map((event, i) => (
-							<View key={i} className="flex-row mb-3 h-10 items-center">
+						].map((event) => (
+							<View
+								key={event.time}
+								className="flex-row mb-3 h-10 items-center"
+							>
 								<View className="w-[50px] justify-center">
 									<Text className="text-xs text-label">{event.time}</Text>
 								</View>
@@ -294,9 +297,9 @@ const TimetablePreview = ({
 			<Text className="text-label-secondary text-[13px] font-normal mb-1.5 uppercase">
 				{t('timetable:preferences.preview')}
 			</Text>
-			<View className="opacity-100 py-4 px-4 bg-card rounded-ios shadow-sm max-w-[600px] items-center">
+			<View className="opacity-100 py-4 px-4 bg-card ios:rounded-ios android:rounded-md web:rounded-md shadow-sm max-w-[600px] items-center">
 				<View className="w-full">
-					<View className="h-[180px] rounded-md overflow-hidden bg-card-contrast">
+					<View className="h-[180px] ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden bg-card-contrast">
 						{renderPreview()}
 					</View>
 				</View>

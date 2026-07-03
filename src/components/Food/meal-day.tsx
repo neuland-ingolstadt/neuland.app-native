@@ -1,7 +1,7 @@
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
@@ -62,15 +62,15 @@ const MealCategory = ({
 	}
 
 	return (
-		<View key={category} className="pb-2">
+		<View style={styles.categoryContainerCollapsed}>
 			<Pressable
 				onPress={() => {
 					toggleCollapsed()
 				}}
-				className="active:opacity-80"
+				style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
 				hitSlop={{ top: 6, bottom: 6 }}
 			>
-				<View className="flex-row items-center justify-between py-[3px]">
+				<View style={styles.categoryContainer}>
 					<Text className="text-label text-[15px] font-medium">
 						{t(`categories.${category}`, category)}
 					</Text>
@@ -94,7 +94,7 @@ const MealCategory = ({
 			</Pressable>
 			<Collapsible collapsed={collapsed}>
 				{meals.map((meal: Meal, index: number) => (
-					<MealEntry key={index} meal={meal} index={index} />
+					<MealEntry key={`${meal.id}-${index}`} meal={meal} />
 				))}
 			</Collapsible>
 		</View>
@@ -117,13 +117,30 @@ const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	}, {})
 }
 
-export const MealDay = ({
-	day,
-	index
-}: {
-	day: Food
-	index: number
-}): React.JSX.Element => {
+interface RestaurantSectionProps {
+	title: string
+	meals: Meal[]
+	groupedMeals: Record<string, Meal[]>
+}
+
+const RestaurantSection = ({
+	title,
+	meals,
+	groupedMeals
+}: RestaurantSectionProps): React.JSX.Element | null => {
+	if (meals.length === 0) {
+		return null
+	}
+
+	return (
+		<View>
+			<Text className="text-text text-lg font-bold pb-[3px] pt-3">{title}</Text>
+			<MealGroup group={groupedMeals} />
+		</View>
+	)
+}
+
+export const MealDay = ({ day }: { day: Food }): React.JSX.Element => {
 	const mealData = useMemo(() => {
 		const ingolstadtMensa = filterMealsByRestaurant(
 			day.meals,
@@ -150,53 +167,48 @@ export const MealDay = ({
 		}
 	}, [day.meals])
 
-	interface RestaurantProps {
-		restaurantName: string
-		meals: Meal[]
-		groupedMeals: Record<string, Meal[]>
+	if (mealData.isEmpty) {
+		return <EmptyFoodAnimation />
 	}
 
-	const renderRestaurantView = useCallback(
-		({ restaurantName, meals, groupedMeals }: RestaurantProps) => {
-			if (meals.length > 0) {
-				return (
-					<View>
-						<Text className="text-text text-lg font-bold pb-[3px] pt-3">
-							{restaurantName}
-						</Text>
-						<MealGroup group={groupedMeals} />
-					</View>
-				)
-			}
-			return null
-		},
-		[]
-	)
-
-	return mealData.isEmpty ? (
-		<EmptyFoodAnimation />
-	) : (
-		<View key={index} className="pb-bottom-safe">
-			{renderRestaurantView({
-				restaurantName: 'Mensa Ingolstadt',
-				meals: mealData.ingolstadtMensa,
-				groupedMeals: mealData.ingolstadtMensaGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Theke Neuburg',
-				meals: mealData.neuburgMensa,
-				groupedMeals: mealData.neuburgMensaGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Reimanns',
-				meals: mealData.reimanns,
-				groupedMeals: mealData.reimannsGrouped
-			})}
-			{renderRestaurantView({
-				restaurantName: 'Canisius Konvikt',
-				meals: mealData.canisius,
-				groupedMeals: mealData.canisiusGrouped
-			})}
+	return (
+		<View style={styles.foodContainer}>
+			<RestaurantSection
+				title="Mensa Ingolstadt"
+				meals={mealData.ingolstadtMensa}
+				groupedMeals={mealData.ingolstadtMensaGrouped}
+			/>
+			<RestaurantSection
+				title="Theke Neuburg"
+				meals={mealData.neuburgMensa}
+				groupedMeals={mealData.neuburgMensaGrouped}
+			/>
+			<RestaurantSection
+				title="Reimanns"
+				meals={mealData.reimanns}
+				groupedMeals={mealData.reimannsGrouped}
+			/>
+			<RestaurantSection
+				title="Canisius Konvikt"
+				meals={mealData.canisius}
+				groupedMeals={mealData.canisiusGrouped}
+			/>
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	categoryContainer: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingBottom: 3,
+		paddingTop: 3
+	},
+	categoryContainerCollapsed: {
+		paddingBottom: 8
+	},
+	foodContainer: {
+		paddingBottom: 90
+	}
+})

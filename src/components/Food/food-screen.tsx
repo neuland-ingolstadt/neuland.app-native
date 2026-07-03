@@ -8,7 +8,13 @@ import {
 	useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, RefreshControl, ScrollView, View } from 'react-native'
+import {
+	Animated,
+	RefreshControl,
+	ScrollView,
+	StyleSheet,
+	View
+} from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
@@ -147,9 +153,9 @@ function FoodScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView className="flex-1" edges={['top']}>
+			<SafeAreaView style={styles.page} edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
-					<View className="items-center justify-center pt-20 pb-10">
+					<View style={styles.loadingContainer}>
 						<FoodLoadingIndicator size={140} />
 					</View>
 				) : isError ? (
@@ -171,8 +177,8 @@ function FoodScreen(): React.JSX.Element {
 				) : isSuccess && data.length > 0 ? (
 					<>
 						<Animated.View
-							className="w-full"
 							style={{
+								width: '100%',
 								borderBottomColor: borderColor,
 								borderBottomWidth: showAllergensBanner
 									? 0
@@ -183,7 +189,7 @@ function FoodScreen(): React.JSX.Element {
 										})
 							}}
 						>
-							<View className="flex-row justify-between mx-3 my-2.5">
+							<View style={styles.loadedContainer}>
 								{data.slice(0, 5).map((day: Food, index: number) => (
 									<FoodDayButton
 										key={getFoodDayKey(day)}
@@ -200,7 +206,7 @@ function FoodScreen(): React.JSX.Element {
 						{showAllergensBanner && <AllergensBanner scrollY={scrollY} />}
 						<PagerView
 							ref={pagerViewRef}
-							className="flex-1"
+							style={styles.page}
 							initialPage={initialPageRef.current}
 							onPageSelected={(e) => {
 								const page = e.nativeEvent.position
@@ -209,35 +215,40 @@ function FoodScreen(): React.JSX.Element {
 							scrollEnabled
 							overdrag
 						>
-							{data.map((day: Food, index: number) => (
-								<ScrollView
-									refreshControl={
-										<RefreshControl
-											refreshing={isRefetchingByUser}
-											onRefresh={() => {
-												void refetchByUser()
-											}}
-										/>
-									}
-									scrollEventThrottle={16}
-									onScroll={Animated.event(
-										[
-											{
-												nativeEvent: {
-													contentOffset: {
-														y: scrollY
+							{data.map((day: Food) => (
+								<View
+									key={getFoodDayKey(day)}
+									style={styles.page}
+									collapsable={false}
+								>
+									<ScrollView
+										refreshControl={
+											<RefreshControl
+												refreshing={isRefetchingByUser}
+												onRefresh={() => {
+													void refetchByUser()
+												}}
+											/>
+										}
+										scrollEventThrottle={16}
+										onScroll={Animated.event(
+											[
+												{
+													nativeEvent: {
+														contentOffset: {
+															y: scrollY
+														}
 													}
 												}
-											}
-										],
-										{ useNativeDriver: false }
-									)}
-									key={getFoodDayKey(day)}
-									showsVerticalScrollIndicator={false}
-									contentContainerClassName="mx-3 pb-bottom-safe"
-								>
-									<MealDay day={day} index={index} />
-								</ScrollView>
+											],
+											{ useNativeDriver: false }
+										)}
+										showsVerticalScrollIndicator={false}
+										contentContainerStyle={styles.innerScrollContainer}
+									>
+										<MealDay day={day} />
+									</ScrollView>
+								</View>
 							))}
 						</PagerView>
 					</>
@@ -246,5 +257,27 @@ function FoodScreen(): React.JSX.Element {
 		</SafeAreaProvider>
 	)
 }
+
+const styles = StyleSheet.create({
+	innerScrollContainer: {
+		marginHorizontal: 12,
+		paddingBottom: 90
+	},
+	loadedContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginHorizontal: 12,
+		marginVertical: 10
+	},
+	loadingContainer: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingTop: 80,
+		paddingBottom: 40
+	},
+	page: {
+		flex: 1
+	}
+})
 
 export default FoodScreen

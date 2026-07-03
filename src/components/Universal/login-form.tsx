@@ -12,7 +12,7 @@ import {
 	TouchableOpacity,
 	View
 } from 'react-native'
-import { useCSSVariable } from 'uniwind'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -28,15 +28,16 @@ import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import Button from './button'
 import PlatformIcon from './icon'
 
+const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
+const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
+const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
+
 const LoginForm = ({
 	navigateHome
 }: {
 	navigateHome: () => void
 }): React.JSX.Element => {
-	const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
-	const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
-	const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
-	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const labelColor = String(
@@ -202,24 +203,28 @@ const LoginForm = ({
 	const signInDisabled =
 		username.trim() === '' || password.trim() === '' || loading
 
+	const textInputStyle = useResolveClassNames(
+		'flex-1 text-text text-base py-3 ml-2'
+	)
+	const inputWrapperStyle = useResolveClassNames(
+		'flex-row items-center bg-input-background rounded-sm border-border px-3'
+	)
+
 	return (
 		<View className="items-center justify-center w-full">
 			<View
-				className="items-center justify-center max-w-[400px] pb-[30px] px-[25px] pt-[30px] w-full bg-card rounded-3xl border-border"
+				className="w-full max-w-[400px] self-center pb-[30px] px-[25px] pt-[30px] bg-card rounded-[24px] border-border"
 				style={[hairlineBorder, { elevation: 5 }]}
 			>
-				<Text className="text-text text-[28px] font-bold text-center mb-2">
+				<Text className="w-full text-text text-[28px] font-bold text-center mb-2">
 					{t('login.getStarted')}
 				</Text>
-				<Text className="text-label text-base text-center mb-[30px]">
+				<Text className="w-full text-label text-base text-center mb-[30px]">
 					{t('login.title2')}
 				</Text>
 
-				<View className="gap-4">
-					<View
-						className="flex-row items-center bg-input-background rounded-sm border-border px-3"
-						style={hairlineBorder}
-					>
+				<View className="w-full gap-4">
+					<View style={[inputWrapperStyle, hairlineBorder]}>
 						<PlatformIcon
 							ios={{ name: 'person', size: 20 }}
 							android={{ name: 'person', size: 24 }}
@@ -227,7 +232,7 @@ const LoginForm = ({
 							style={{ color: labelColor }}
 						/>
 						<TextInput
-							className="flex-1 text-text text-base py-3 ml-2"
+							style={textInputStyle}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
 							defaultValue={username}
@@ -243,8 +248,8 @@ const LoginForm = ({
 					</View>
 
 					<Animated.View
-						className="flex-row items-center bg-input-background rounded-sm border-border px-3"
 						style={[
+							inputWrapperStyle,
 							hairlineBorder,
 							{ transform: [{ translateX: shakeAnimation }] }
 						]}
@@ -256,7 +261,7 @@ const LoginForm = ({
 							style={{ color: labelColor }}
 						/>
 						<TextInput
-							className="flex-1 text-text text-base py-3 ml-2"
+							style={textInputStyle}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
 							placeholder={t('login.password')}
@@ -299,12 +304,12 @@ const LoginForm = ({
 					onPress={() =>
 						login().catch((error: unknown) => console.debug(error))
 					}
-					style={{ marginTop: 24 }}
+					style={{ marginTop: 24, width: '100%' }}
 				>
 					{t('login.button')}
 				</Button>
 
-				<View className="flex-row items-center mt-[26px]">
+				<View className="w-full flex-row items-center mt-[26px]">
 					<View
 						className="flex-1"
 						style={{
@@ -323,7 +328,7 @@ const LoginForm = ({
 				</View>
 
 				<TouchableOpacity
-					className="items-center pt-1.5 mt-3.5"
+					className="w-full items-center pt-1.5 mt-3.5"
 					onPress={() =>
 						guestLogin().catch((error: unknown) => console.debug(error))
 					}

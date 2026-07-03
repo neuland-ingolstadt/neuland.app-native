@@ -115,7 +115,7 @@ export const BottomSheetDetailModal = ({
 										}
 										handleShareModal(roomData.title)
 									}}
-									className="items-center bg-card rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
+									className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
 								>
 									<PlatformIcon
 										ios={{
@@ -144,7 +144,7 @@ export const BottomSheetDetailModal = ({
 									bottomSheetModalRef.current?.close()
 								}}
 							>
-								<View className="items-center bg-card rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
+								<View className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
 									<PlatformIcon
 										ios={{
 											name: 'xmark',

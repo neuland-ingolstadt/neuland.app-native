@@ -136,8 +136,8 @@ export default function ShareCard({
 
 				<DetailsBody>
 					<View className="flex flex-row gap-1">
-						{event.rooms.map((room, i) => (
-							<Text key={i} className="text-text text-lg">
+						{event.rooms.map((room) => (
+							<Text key={room} className="text-text text-lg">
 								{room}
 							</Text>
 						))}
