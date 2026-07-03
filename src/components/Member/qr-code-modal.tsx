@@ -11,66 +11,10 @@ import {
 	Text,
 	View
 } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
-
-const stylesheet = createStyleSheet(() => ({
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.85)',
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	animatedRing: {
-		position: 'absolute',
-		width: 400,
-		height: 400,
-		borderRadius: 200,
-		borderWidth: 2,
-		borderColor: '#00ff33'
-	},
-	outerRing: {
-		position: 'absolute',
-		width: 500,
-		height: 500,
-		borderRadius: 250,
-		borderWidth: 1,
-		borderColor: '#00ff33'
-	},
-	modalContent: {
-		backgroundColor: '#fff',
-		borderRadius: 20,
-		padding: 24,
-		alignItems: 'center',
-		justifyContent: 'center',
-		elevation: 10,
-		position: 'relative',
-		zIndex: 1
-	},
-	qrCodeContainer: {
-		width: 280,
-		height: 280,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	closeText: {
-		marginTop: 18,
-		color: '#222',
-		fontWeight: '600',
-		fontSize: 16,
-		textAlign: 'center'
-	},
-	faqButton: {
-		position: 'absolute',
-		top: 70,
-		right: 15,
-		zIndex: 10
-	},
-	faqIcon: {
-		color: 'rgba(255, 255, 255, 0.8)'
-	}
-}))
+import { toColor } from '@/utils/uniwind-utils'
 
 interface QRCodeModalProps {
 	visible: boolean
@@ -96,7 +40,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 	onClose
 }: QRCodeModalProps): React.JSX.Element {
 	const { t } = useTranslation('member')
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const [isClosing, setIsClosing] = useState(false)
 	const scaleAnim = useRef(new Animated.Value(0)).current
 	const pulseAnim = useRef(new Animated.Value(0)).current
@@ -132,35 +76,58 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 
 	const animatedRingStyle = useMemo(
 		() => [
-			styles.animatedRing,
+			{
+				position: 'absolute' as const,
+				width: 400,
+				height: 400,
+				borderRadius: 200,
+				borderWidth: 2,
+				borderColor: '#00ff33'
+			},
 			{
 				transform: [{ scale: pulseScale }],
 				opacity: pulseOpacity
 			}
 		],
-		[styles.animatedRing, pulseScale, pulseOpacity]
+		[pulseScale, pulseOpacity]
 	)
 
 	const outerRingStyle = useMemo(
 		() => [
-			styles.outerRing,
+			{
+				position: 'absolute' as const,
+				width: 500,
+				height: 500,
+				borderRadius: 250,
+				borderWidth: 1,
+				borderColor: '#00ff33'
+			},
 			{
 				transform: [{ scale: pulseScale }],
 				opacity: outerPulseOpacity
 			}
 		],
-		[styles.outerRing, pulseScale, outerPulseOpacity]
+		[pulseScale, outerPulseOpacity]
 	)
 
 	const modalContentStyle = useMemo(
 		() => [
-			styles.modalContent,
+			{
+				backgroundColor: '#fff',
+				borderRadius: 20,
+				padding: 24,
+				alignItems: 'center' as const,
+				justifyContent: 'center' as const,
+				elevation: 10,
+				position: 'relative' as const,
+				zIndex: 1
+			},
 			{
 				transform: [{ scale: scaleAnim }],
 				opacity: Animated.multiply(scaleAnim, contentOpacityAnim)
 			}
 		],
-		[styles.modalContent, scaleAnim, contentOpacityAnim]
+		[scaleAnim, contentOpacityAnim]
 	)
 
 	const handleClose = useCallback(() => {
@@ -195,7 +162,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 				useNativeDriver: true
 			})
 		]).start(() => onClose())
-	}, [pulseAnim, scaleAnim, onClose, isClosing])
+	}, [pulseAnim, scaleAnim, onClose, isClosing, contentOpacityAnim])
 
 	const handlePress = useCallback(() => {
 		handleClose()
@@ -271,7 +238,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			}
 			pulseAnim.stopAnimation()
 		}
-	}, [visible, scaleAnim, pulseAnim])
+	}, [visible, scaleAnim, pulseAnim, contentOpacityAnim])
 
 	return (
 		<Modal
@@ -281,26 +248,27 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			onRequestClose={handleClose}
 		>
 			<Pressable
-				style={styles.modalOverlay}
+				className="flex-1 bg-black/85 justify-center items-center"
 				onPress={isClosing ? undefined : handlePress}
 			>
 				<Animated.View style={animatedRingStyle} />
 				<Animated.View style={outerRingStyle} />
 				<Animated.View style={modalContentStyle} pointerEvents="auto">
-					<View style={styles.qrCodeContainer}>
+					<View className="w-[280px] h-[280px] items-center justify-center">
 						{qrData ? (
 							<MemoizedQRCode qrData={qrData} />
 						) : (
-							<ActivityIndicator size="large" color={theme.colors.text} />
+							<ActivityIndicator size="large" color={textColor} />
 						)}
 					</View>
 
-					<Text style={styles.closeText}>{t('qrCode.tapToClose')}</Text>
+					<Text className="mt-[18px] text-[#222] font-semibold text-base text-center">
+						{t('qrCode.tapToClose')}
+					</Text>
 				</Animated.View>
 
-				{/* FAQ Button */}
 				<Pressable
-					style={styles.faqButton}
+					className="absolute top-[70px] right-[15px] z-10"
 					hitSlop={15}
 					onPress={(e) => {
 						e.stopPropagation()
@@ -308,7 +276,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 					}}
 				>
 					<PlatformIcon
-						style={styles.faqIcon}
+						style={{ color: 'rgba(255, 255, 255, 0.8)' }}
 						ios={{
 							name: 'questionmark.circle',
 							size: 20,

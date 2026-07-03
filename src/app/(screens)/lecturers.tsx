@@ -17,15 +17,12 @@ import {
 	Platform,
 	RefreshControl,
 	SectionList,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
@@ -46,13 +43,14 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function LecturersScreen(): React.JSX.Element {
 	const router = useRouter()
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const navigation = useNavigation()
 	const [selectedPage, setSelectedPage] = useState(0)
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const { t } = useTranslation('common')
 	const pagerViewRef = useRef<PagerView>(null)
 	const [localSearch, setLocalSearch] = useState('')
@@ -221,9 +219,9 @@ export default function LecturersScreen(): React.JSX.Element {
 
 				...Platform.select({
 					android: {
-						headerIconColor: theme.colors.text,
-						hintTextColor: theme.colors.text,
-						textColor: theme.colors.text
+						headerIconColor: textColor,
+						hintTextColor: textColor,
+						textColor
 					}
 				}),
 				shouldShowHintSearchIcon: false,
@@ -244,7 +242,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 			}
 		})
-	}, [UnistylesRuntime.themeName, navigation, t])
+	}, [navigation, t, textColor])
 
 	const LecturerList = ({
 		lecturers,
@@ -263,13 +261,9 @@ export default function LecturersScreen(): React.JSX.Element {
 		isLoading: boolean
 		isPersonal?: boolean
 	}): React.JSX.Element => {
+		const cardRadius = 17
 		return isPaused && !isSuccess ? (
-			<View
-				style={{
-					...styles.viewHorizontal,
-					...styles.page
-				}}
-			>
+			<View style={[styles.viewHorizontal, styles.page]}>
 				<ErrorView
 					title={networkError}
 					refreshing={
@@ -283,12 +277,7 @@ export default function LecturersScreen(): React.JSX.Element {
 		) : isLoading ? (
 			<LoadingIndicator style={styles.loadingContainer} />
 		) : isError ? (
-			<View
-				style={{
-					...styles.viewHorizontal,
-					...styles.page
-				}}
-			>
+			<View style={[styles.viewHorizontal, styles.page]}>
 				<ErrorView
 					title={error?.message ?? t('error.title')}
 					refreshing={
@@ -303,7 +292,7 @@ export default function LecturersScreen(): React.JSX.Element {
 			<FlatList
 				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
-				keyExtractor={(_, index) => index.toString()}
+				keyExtractor={(item) => item.id}
 				contentContainerStyle={styles.loadedRows}
 				showsVerticalScrollIndicator={false}
 				refreshControl={
@@ -320,17 +309,16 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 				renderItem={({ item, index }) => (
 					<View
-						key={index}
 						style={[
 							styles.rowContainer,
 							{
 								overflow: 'hidden',
-								borderTopStartRadius: index === 0 ? theme.radius.mg : 0,
-								borderTopEndRadius: index === 0 ? theme.radius.mg : 0,
+								borderTopStartRadius: index === 0 ? cardRadius : 0,
+								borderTopEndRadius: index === 0 ? cardRadius : 0,
 								borderBottomStartRadius:
-									index === lecturers.length - 1 ? theme.radius.mg : 0,
+									index === lecturers.length - 1 ? cardRadius : 0,
 								borderBottomEndRadius:
-									index === lecturers.length - 1 ? theme.radius.mg : 0
+									index === lecturers.length - 1 ? cardRadius : 0
 							}
 						]}
 					>
@@ -398,21 +386,23 @@ export default function LecturersScreen(): React.JSX.Element {
 		) : (
 			<>
 				<View style={styles.resultsCountContainer}>
-					<Text style={styles.resultsCount}>
+					<Text className="text-label text-[13px] px-3 text-right">
 						{filteredLecturers.length} {t('pages.lecturers.results')}
 					</Text>
 				</View>
 				<SectionList
 					sections={sections}
-					keyExtractor={(_, index) => index.toString()}
-					renderItem={({ item, index }) => (
-						<View key={index} style={[styles.rowContainer]}>
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => (
+						<View style={styles.rowContainer}>
 							<LecturerRow item={item} />
 						</View>
 					)}
 					renderSectionHeader={({ section: { title } }) => (
-						<View style={styles.sectionHeaderContainer}>
-							<Text style={styles.sectionHeader}>{title}</Text>
+						<View className="bg-background px-1 py-2">
+							<Text className="text-text text-[17px] font-bold uppercase">
+								{title}
+							</Text>
 						</View>
 					)}
 					contentContainerStyle={styles.contentContainer}
@@ -448,7 +438,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							}}
 							ref={pagerViewRef}
 						>
-							<View key="personal" style={styles.page}>
+							<View key="personal" style={styles.page} collapsable={false}>
 								<LecturerList
 									lecturers={personalLecturersResult.data}
 									isPaused={personalLecturersResult.isPaused}
@@ -459,7 +449,7 @@ export default function LecturersScreen(): React.JSX.Element {
 									isPersonal
 								/>
 							</View>
-							<View key="faculty" style={styles.page}>
+							<View key="faculty" style={styles.page} collapsable={false}>
 								<LecturerList
 									lecturers={facultyData}
 									isPaused={allLecturersResult.isPaused}
@@ -479,30 +469,25 @@ export default function LecturersScreen(): React.JSX.Element {
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
-	contentContainer: {
-		marginHorizontal: theme.margins.page,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
+const PAGE_MARGIN = 12
+const BOTTOM_SAFE_AREA = 90
 
+const styles = StyleSheet.create({
+	contentContainer: {
+		marginHorizontal: PAGE_MARGIN,
+		paddingBottom: BOTTOM_SAFE_AREA
+	},
 	loadedRows: {
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingHorizontal: theme.margins.page
+		paddingBottom: BOTTOM_SAFE_AREA,
+		paddingHorizontal: PAGE_MARGIN
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1
+		flex: 1,
+		justifyContent: 'center'
 	},
 	page: {
 		flex: 1
-	},
-
-	resultsCount: {
-		color: theme.colors.labelColor,
-		fontSize: 13,
-		paddingHorizontal: 12,
-		textAlign: 'right'
 	},
 	resultsCountContainer: {
 		left: 0,
@@ -510,22 +495,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		right: 0,
 		zIndex: 1
 	},
-	searchContainer: { flex: 1, gap: 10, paddingTop: 10 },
-	sectionHeader: {
-		color: theme.colors.text,
-		fontSize: 17,
-		fontWeight: 'bold',
-		textTransform: 'uppercase'
+	rowContainer: {
+		marginBottom: 8
 	},
-	sectionHeaderContainer: {
-		backgroundColor: theme.colors.background,
-		paddingHorizontal: 4,
-		paddingVertical: 8
+	searchContainer: {
+		flex: 1,
+		gap: 10,
+		paddingTop: 10
 	},
 	viewHorizontal: {
-		paddingHorizontal: theme.margins.page
-	},
-	rowContainer: {
-		marginBottom: 8 // Adding spacing between rows
+		paddingHorizontal: PAGE_MARGIN
 	}
-}))
+})

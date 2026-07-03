@@ -1,8 +1,8 @@
 import * as Haptics from 'expo-haptics'
 import { memo, useCallback } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, Text, View } from 'react-native'
 import type { Food } from '@/types/neuland-api'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 
 interface FoodDayButtonProps {
 	day: Food
@@ -22,18 +22,11 @@ export const FoodDayButton = memo(
 		language,
 		onDayPress
 	}: FoodDayButtonProps): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet)
 		const date = new Date(day.timestamp)
 
 		const isFirstDay = index === 0
 		const isLastDay = index === daysCount - 1
 		const isSelected = selectedDay === index
-
-		const buttonStyle = [
-			{ flex: 1, marginHorizontal: 4 },
-			isFirstDay ? { marginLeft: 0 } : null,
-			isLastDay ? { marginRight: 0 } : null
-		]
 
 		const handlePress = useCallback(() => {
 			if (Platform.OS === 'ios' && index !== selectedDay) {
@@ -43,11 +36,24 @@ export const FoodDayButton = memo(
 		}, [index, onDayPress, selectedDay])
 
 		return (
-			<View style={buttonStyle}>
+			<View
+				className="flex-1 mx-1"
+				style={[
+					isFirstDay ? { marginLeft: 0 } : undefined,
+					isLastDay ? { marginRight: 0 } : undefined
+				]}
+			>
 				<Pressable onPress={handlePress}>
-					<View style={styles.dayButtonContainer}>
+					<View
+						className="items-center self-center bg-card rounded-md border-border h-[60px] justify-evenly py-2 w-full"
+						style={hairlineBorder}
+					>
 						<Text
-							style={styles.dayText2(isSelected)}
+							className={`text-[15px] ${
+								isSelected
+									? 'text-primary font-medium'
+									: 'text-text font-normal'
+							}`}
 							adjustsFontSizeToFit
 							minimumFontScale={0.8}
 							numberOfLines={1}
@@ -59,7 +65,11 @@ export const FoodDayButton = memo(
 								.slice(0, 2)}
 						</Text>
 						<Text
-							style={styles.dayText(isSelected)}
+							className={`text-base ${
+								isSelected
+									? 'text-primary font-medium'
+									: 'text-text font-normal'
+							}`}
 							adjustsFontSizeToFit
 							minimumFontScale={0.8}
 							numberOfLines={1}
@@ -77,29 +87,3 @@ export const FoodDayButton = memo(
 )
 
 FoodDayButton.displayName = 'FoodDayButton'
-
-const stylesheet = createStyleSheet((theme) => ({
-	dayButtonContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		height: 60,
-		justifyContent: 'space-evenly',
-		paddingVertical: 8,
-		width: '100%'
-	},
-	dayText: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 16,
-		fontWeight: selected ? '500' : 'normal'
-	}),
-	dayText2: (selected: boolean) => ({
-		color: selected ? theme.colors.primary : theme.colors.text,
-		fontSize: 15,
-		fontWeight: selected ? '500' : 'normal'
-	})
-}))

@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { RefreshControl, StyleSheet, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import RowEntry from '@/components/Universal/row-entry'
@@ -15,6 +15,7 @@ import type {
 } from '@/types/campus-life'
 import { campusLifeOrganiserParams } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 type OrganizersPage = 'clEvents' | 'thiEvents'
 type OrganizersSection = 'clubs' | 'departments'
@@ -30,8 +31,9 @@ export default function CampusLifeOrganizersList({
 	page,
 	section
 }: CampusLifeOrganizersListProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const cardColor = toColor(useCSSVariable('--color-card'))
+	const cardBackground = cardColor != null ? String(cardColor) : undefined
 	const sectionPrefix = `pages.${page}.${section}` as const
 
 	const organizersQuery = useQuery({
@@ -53,7 +55,7 @@ export default function CampusLifeOrganizersList({
 	return (
 		<>
 			{organizersQuery.isLoading ? (
-				<View style={styles.centered}>
+				<View className="flex-1 items-center justify-center">
 					<LoadingIndicator />
 				</View>
 			) : organizersQuery.isError ? (
@@ -74,6 +76,7 @@ export default function CampusLifeOrganizersList({
 						<OrganizerListItem
 							organizer={item}
 							organizerKind={organizerKind}
+							cardColor={cardBackground}
 							missingDescriptionKey={
 								`${sectionPrefix}.missingDescription` as 'pages.clEvents.clubs.missingDescription'
 							}
@@ -81,8 +84,8 @@ export default function CampusLifeOrganizersList({
 					)}
 					contentContainerStyle={styles.listContent}
 					ListFooterComponent={
-						<View style={styles.footerContainer}>
-							<Text style={styles.footerText}>
+						<View className="mt-3">
+							<Text className="text-label-secondary text-xs">
 								{t(
 									`${sectionPrefix}.footerInfo` as 'pages.clEvents.clubs.footerInfo'
 								)}
@@ -106,21 +109,21 @@ export default function CampusLifeOrganizersList({
 const OrganizerListItem = ({
 	organizer,
 	organizerKind,
+	cardColor,
 	missingDescriptionKey
 }: {
 	organizer: CampusLifeOrganizer
 	organizerKind: CampusLifePublicOrganizerKind
+	cardColor: string | undefined
 	missingDescriptionKey:
 		| 'pages.clEvents.clubs.missingDescription'
 		| 'pages.thiEvents.departments.missingDescription'
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
-
 	return (
-		<View style={styles.itemContainer}>
+		<View className="mb-3">
 			<RowEntry
 				title={organizer.name}
-				backgroundColor={theme.colors.card}
+				backgroundColor={cardColor != null ? String(cardColor) : undefined}
 				onPress={() => {
 					router.push({
 						pathname: '/events/organiser/[id]',
@@ -140,6 +143,14 @@ const OrganizerListItem = ({
 	)
 }
 
+const styles = StyleSheet.create({
+	listContent: {
+		paddingHorizontal: 12,
+		paddingVertical: 12,
+		paddingBottom: 122
+	}
+})
+
 const OrganizerRowContent = ({
 	organizer,
 	missingDescriptionKey
@@ -149,7 +160,6 @@ const OrganizerRowContent = ({
 		| 'pages.clEvents.clubs.missingDescription'
 		| 'pages.thiEvents.departments.missingDescription'
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
 
 	const localizedDescription = i18n.language.startsWith('de')
@@ -157,47 +167,15 @@ const OrganizerRowContent = ({
 		: (organizer.descriptions.en ?? organizer.descriptions.de)
 
 	return (
-		<View style={styles.rowContent}>
+		<View className="gap-1.5">
 			{organizer.location != null && organizer.location.trim() !== '' && (
-				<Text style={styles.itemSubtitle}>{organizer.location}</Text>
+				<Text className="text-label-secondary text-sm">
+					{organizer.location}
+				</Text>
 			)}
-			<Text style={styles.itemDescription} numberOfLines={2}>
+			<Text className="text-label-secondary text-[13px]" numberOfLines={2}>
 				{localizedDescription ?? t(missingDescriptionKey)}
 			</Text>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	centered: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	listContent: {
-		paddingHorizontal: theme.margins.page,
-		paddingVertical: theme.margins.page,
-		paddingBottom: theme.margins.bottomSafeArea + 32
-	},
-	itemContainer: {
-		marginBottom: 12
-	},
-	rowContent: {
-		gap: 6
-	},
-	itemSubtitle: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14
-	},
-	itemDescription: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13
-	},
-	footerContainer: {
-		marginTop: 12
-	},
-	footerText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 12
-	}
-}))

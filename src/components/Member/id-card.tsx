@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	Pressable as RNPressable,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -17,190 +18,15 @@ import Animated, {
 	withRepeat,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import QRCode from 'react-qr-code'
+import { useCSSVariable } from 'uniwind'
 import MemberAPI, { type ProfileQrResponse } from '@/api/member-api'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import type { MemberInfo } from '@/hooks/useMemberStore'
+import { toColor } from '@/utils/uniwind-utils'
 import { AnimatedSecurityLine } from './animated-security-line'
 import { QRCodeModal } from './qr-code-modal'
-
-const stylesheet = createStyleSheet((theme) => ({
-	shadow: {
-		borderColor: theme.colors.datePickerBackground,
-		borderRadius: theme.radius.lg,
-		borderWidth: 1,
-		elevation: 10
-	},
-	cardFooterText: {
-		marginTop: 6,
-		fontSize: 12,
-		paddingHorizontal: 6,
-		color: theme.colors.labelSecondaryColor
-	},
-	idCardContainer: {
-		borderRadius: theme.radius.lg,
-		overflow: 'hidden'
-	},
-	idCard: {
-		borderRadius: theme.radius.lg,
-		padding: 24,
-		minHeight: 200,
-		justifyContent: 'space-between',
-		backgroundColor: '#000000'
-	},
-	cardHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: 20,
-		position: 'relative'
-	},
-	logoContainer: {
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	titleContainer: {
-		alignItems: 'flex-end'
-	},
-	cardTitle: {
-		color: '#00ff33',
-		fontSize: 12,
-		fontWeight: '700',
-		letterSpacing: 1.5,
-		opacity: 0.9
-	},
-	cardContent: {
-		flex: 1,
-		justifyContent: 'center'
-	},
-	honoraryBadgeWrapper: {
-		marginLeft: 12,
-		alignSelf: 'flex-start'
-	},
-	honoraryBadgeGlow: {
-		position: 'absolute',
-		top: -6,
-		right: -6,
-		bottom: -6,
-		left: -6,
-		borderRadius: 22,
-		backgroundColor: '#f7d774',
-		opacity: 0.35
-	},
-	honoraryBadge: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8,
-		paddingHorizontal: 12,
-		paddingVertical: 8,
-		borderRadius: 18,
-		borderWidth: 1,
-		borderColor: 'rgba(0,0,0,0.2)',
-		elevation: 6,
-		shadowColor: '#000000',
-		shadowOpacity: 0.35,
-		shadowRadius: 8,
-		shadowOffset: { width: 0, height: 4 }
-	},
-	honoraryBadgeSeal: {
-		width: 18,
-		height: 18,
-		borderRadius: 9,
-		backgroundColor: '#1b1303',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderWidth: 1,
-		borderColor: '#f7d774'
-	},
-	honoraryBadgeSubtitle: {
-		color: '#1b1303',
-		fontSize: 9,
-		fontWeight: '600',
-		opacity: 0.8
-	},
-	honoraryBadgeLine: {
-		color: '#1b1303',
-		fontSize: 11,
-		fontWeight: '800',
-		letterSpacing: 1.2,
-		lineHeight: 13
-	},
-	nameSection: {
-		marginBottom: 20
-	},
-	nameRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between'
-	},
-	nameText: {
-		flexShrink: 1,
-		paddingRight: 12
-	},
-	nameLabel: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '600',
-		letterSpacing: 1,
-		opacity: 0.8,
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	name: {
-		color: '#ffffff',
-		fontSize: 32,
-		fontWeight: 'bold',
-		letterSpacing: 0.5
-	},
-	usernameSection: {
-		marginBottom: 20
-	},
-	fieldLabel: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '600',
-		letterSpacing: 1,
-		opacity: 0.8,
-		marginBottom: 4,
-		textTransform: 'uppercase'
-	},
-	username: {
-		color: '#ffffff',
-		fontSize: 18,
-		fontWeight: '500',
-		opacity: 0.9
-	},
-	qrCodeContainer: {
-		backgroundColor: '#ffffff',
-		padding: 10,
-		borderRadius: theme.radius.md,
-		marginTop: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 140,
-		height: 140,
-		alignSelf: 'center'
-	},
-	cardFooter: {
-		marginTop: 20,
-		marginBottom: -10
-	},
-	footerLine: {
-		height: 1,
-		backgroundColor: theme.colors.neulandGreen,
-		marginBottom: 12,
-		opacity: 0.8
-	},
-	footerText: {
-		color: theme.colors.neulandGreen,
-		fontSize: 12,
-		fontWeight: '500',
-		opacity: 0.8,
-		textAlign: 'center'
-	}
-}))
 
 interface IDCardProps {
 	info: MemberInfo
@@ -208,7 +34,10 @@ interface IDCardProps {
 }
 
 export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
+	const labelBackgroundColor = toColor(
+		useCSSVariable('--color-label-background')
+	)
 	const { t } = useTranslation('member')
 
 	const [modalVisible, setModalVisible] = useState(false)
@@ -286,7 +115,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							<LogoCardSVG />
 						</Animated.View>
 						<View style={styles.cardHeader}>
-							<View style={[styles.logoContainer]}>
+							<View style={styles.logoContainer}>
 								<LogoTextSVG size={16} color="#00ff33" />
 							</View>
 							<View style={styles.titleContainer}>
@@ -297,7 +126,9 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 
 						<View style={styles.cardContent}>
 							<View style={styles.nameSection}>
-								<Text style={styles.nameLabel}>{t('idCard.name')}</Text>
+								<Text style={[styles.nameLabel, { color: neulandGreen }]}>
+									{t('idCard.name')}
+								</Text>
 								<View style={styles.nameRow}>
 									<Text style={[styles.name, styles.nameText]}>
 										{info.name}
@@ -335,7 +166,9 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 
 							{info.preferred_username && (
 								<View style={styles.usernameSection}>
-									<Text style={styles.fieldLabel}>{t('idCard.username')}</Text>
+									<Text style={[styles.fieldLabel, { color: neulandGreen }]}>
+										{t('idCard.username')}
+									</Text>
 									<Text style={styles.username}>
 										@{info.preferred_username}
 									</Text>
@@ -343,18 +176,11 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							)}
 
 							{info.groups && info.groups.length > 0 && (
-								<View style={{ marginBottom: 12 }}>
-									<Text style={styles.fieldLabel}>{t('idCard.groups')}</Text>
-									<View
-										style={{
-											flexDirection: 'row',
-											flexWrap: 'wrap',
-											gap: 6,
-											justifyContent: 'flex-start',
-											alignItems: 'center',
-											marginTop: 4
-										}}
-									>
+								<View style={styles.groupsSection}>
+									<Text style={[styles.fieldLabel, { color: neulandGreen }]}>
+										{t('idCard.groups')}
+									</Text>
+									<View style={styles.groupsList}>
 										{info.groups
 											.filter(
 												(group) =>
@@ -363,24 +189,8 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 											)
 											.slice(0, 5)
 											.map((group) => (
-												<View
-													key={group}
-													style={{
-														backgroundColor: '#414141',
-														borderRadius: 8,
-														paddingHorizontal: 10,
-														paddingVertical: 4,
-														marginRight: 6,
-														marginBottom: 6
-													}}
-												>
-													<Text
-														style={{
-															color: '#ffffff',
-															fontSize: 12,
-															fontWeight: '500'
-														}}
-													>
+												<View key={group} style={styles.groupBadge}>
+													<Text style={styles.groupBadgeText}>
 														{group.charAt(0).toUpperCase() + group.slice(1)}
 													</Text>
 												</View>
@@ -390,21 +200,19 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 							)}
 
 							<RNPressable
-								style={{ alignSelf: 'center' }}
+								style={styles.qrPressable}
 								onPress={openModal}
 								disabled={!profileQrData?.qr}
 								hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 							>
-								<View style={[styles.qrCodeContainer]}>
+								<View style={styles.qrCodeContainer}>
 									{isLoading ? (
 										<ActivityIndicator
 											size="small"
-											color={theme.colors.labelBackground}
+											color={labelBackgroundColor}
 										/>
 									) : error ? (
-										<Text style={{ color: 'red', textAlign: 'center' }}>
-											{String(error)}
-										</Text>
+										<Text style={styles.qrErrorText}>{String(error)}</Text>
 									) : profileQrData?.qr ? (
 										<QRCode
 											value={profileQrData.qr}
@@ -419,13 +227,19 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 						</View>
 
 						<View style={styles.cardFooter}>
-							<View style={styles.footerLine} />
-							<Text style={styles.footerText}>{t('idCard.footer')}</Text>
+							<View
+								style={[styles.footerLine, { backgroundColor: neulandGreen }]}
+							/>
+							<Text style={[styles.footerText, { color: neulandGreen }]}>
+								{t('idCard.footer')}
+							</Text>
 						</View>
 					</LinearGradient>
 				</View>
 			</View>
-			<Text style={styles.cardFooterText}>{t('idCard.footerDescription')}</Text>
+			<Text className="mt-1.5 text-xs px-1.5 text-label-secondary">
+				{t('idCard.footerDescription')}
+			</Text>
 
 			<QRCodeModal
 				visible={modalVisible}
@@ -435,3 +249,196 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 		</>
 	)
 }
+
+const styles = StyleSheet.create({
+	cardContent: {
+		flex: 1,
+		justifyContent: 'center'
+	},
+	cardFooter: {
+		marginBottom: -10,
+		marginTop: 20
+	},
+	cardHeader: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 20,
+		position: 'relative'
+	},
+	cardTitle: {
+		color: '#00ff33',
+		fontSize: 12,
+		fontWeight: '700',
+		letterSpacing: 1.5,
+		opacity: 0.9
+	},
+	fieldLabel: {
+		fontSize: 12,
+		fontWeight: '600',
+		letterSpacing: 1,
+		marginBottom: 4,
+		opacity: 0.8,
+		textTransform: 'uppercase'
+	},
+	footerLine: {
+		height: 1,
+		marginBottom: 12,
+		opacity: 0.8
+	},
+	footerText: {
+		fontSize: 12,
+		fontWeight: '500',
+		opacity: 0.8,
+		textAlign: 'center'
+	},
+	groupBadge: {
+		backgroundColor: '#414141',
+		borderRadius: 8,
+		marginBottom: 6,
+		marginRight: 6,
+		paddingHorizontal: 10,
+		paddingVertical: 4
+	},
+	groupBadgeText: {
+		color: '#ffffff',
+		fontSize: 12,
+		fontWeight: '500'
+	},
+	groupsList: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: 6,
+		justifyContent: 'flex-start',
+		marginTop: 4
+	},
+	groupsSection: {
+		marginBottom: 12
+	},
+	honoraryBadge: {
+		alignItems: 'center',
+		borderColor: 'rgba(0,0,0,0.2)',
+		borderRadius: 18,
+		borderWidth: 1,
+		elevation: 6,
+		flexDirection: 'row',
+		gap: 8,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+		shadowColor: '#000000',
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.35,
+		shadowRadius: 8
+	},
+	honoraryBadgeGlow: {
+		backgroundColor: '#f7d774',
+		borderRadius: 22,
+		bottom: -6,
+		left: -6,
+		opacity: 0.35,
+		position: 'absolute',
+		right: -6,
+		top: -6
+	},
+	honoraryBadgeLine: {
+		color: '#1b1303',
+		fontSize: 11,
+		fontWeight: '800',
+		letterSpacing: 1.2,
+		lineHeight: 13
+	},
+	honoraryBadgeSeal: {
+		alignItems: 'center',
+		backgroundColor: '#1b1303',
+		borderColor: '#f7d774',
+		borderRadius: 9,
+		borderWidth: 1,
+		height: 18,
+		justifyContent: 'center',
+		width: 18
+	},
+	honoraryBadgeWrapper: {
+		alignSelf: 'flex-start',
+		marginLeft: 12
+	},
+	idCard: {
+		backgroundColor: '#000000',
+		borderRadius: 22,
+		justifyContent: 'space-between',
+		minHeight: 200,
+		padding: 24
+	},
+	idCardContainer: {
+		borderRadius: 22,
+		overflow: 'hidden'
+	},
+	logoContainer: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	name: {
+		color: '#ffffff',
+		fontSize: 32,
+		fontWeight: 'bold',
+		letterSpacing: 0.5
+	},
+	nameLabel: {
+		fontSize: 12,
+		fontWeight: '600',
+		letterSpacing: 1,
+		marginBottom: 4,
+		opacity: 0.8,
+		textTransform: 'uppercase'
+	},
+	nameRow: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	nameSection: {
+		marginBottom: 20
+	},
+	nameText: {
+		flexShrink: 1,
+		paddingRight: 12
+	},
+	qrCodeContainer: {
+		alignItems: 'center',
+		alignSelf: 'center',
+		backgroundColor: '#ffffff',
+		borderRadius: 17,
+		height: 140,
+		justifyContent: 'center',
+		marginTop: 20,
+		padding: 10,
+		width: 140
+	},
+	qrErrorText: {
+		color: 'red',
+		textAlign: 'center'
+	},
+	qrPressable: {
+		alignSelf: 'center'
+	},
+	shadow: {
+		borderRadius: 22,
+		elevation: 10,
+		shadowColor: '#000000',
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.35,
+		shadowRadius: 8
+	},
+	titleContainer: {
+		alignItems: 'flex-end'
+	},
+	username: {
+		color: '#ffffff',
+		fontSize: 18,
+		fontWeight: '500',
+		opacity: 0.9
+	},
+	usernameSection: {
+		marginBottom: 20
+	}
+})
