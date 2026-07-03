@@ -8,11 +8,13 @@ import { RoomSearchResults } from '@/components/Map/room-search-results'
 import { roomSearchStylesheet } from '@/components/Map/room-search-styles'
 import Divider from '@/components/Universal/divider'
 import PlatformIcon from '@/components/Universal/icon'
+import { useIsFeatureEnabled } from '@/hooks'
 import { usePickerBinding } from '@/hooks/usePickerBinding.ios'
 import { useRoomSearch } from '@/hooks/useRoomSearch'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
-import { ALL_BUILDINGS, ROOM_SEARCH_DURATIONS } from '@/utils/map-utils'
+import { getAllBuildings, ROOM_SEARCH_DURATIONS } from '@/utils/map-utils'
 
 const maximumSearchDate = new Date(
 	new Date().setDate(new Date().getDate() + 90)
@@ -22,6 +24,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const { styles, theme } = useStyles(roomSearchStylesheet)
 	const { styles: iosStyles } = useStyles(iosStylesheet)
 	const { t } = useTranslation('common')
+	const mapOverlayV27 = useIsFeatureEnabled(FeatureFlagKeys.mapOverlayV27)
+	const allBuildings = getAllBuildings(mapOverlayV27)
 	const headerPadding = useTransparentHeaderPadding() + 10
 	const roomSearch = useRoomSearch()
 
@@ -100,7 +104,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							tint={theme.colors.primary}
 							offset={{ x: 20, y: 0 }}
 						>
-							{ALL_BUILDINGS.map((option) => (
+							{allBuildings.map((option) => (
 								<Text key={option}>{option}</Text>
 							))}
 						</Picker>

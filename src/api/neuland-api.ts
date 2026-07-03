@@ -185,11 +185,15 @@ class NeulandAPIClient {
 
 	/**
 	 * Gets the map overlay
+	 * @param mapOverlayV27 When true, loads the v2.7 overlay (includes building L)
 	 * @returns {Promise<any>} A promise that resolves with the map overlay data
 	 */
-	async getMapOverlay(): Promise<FeatureCollection> {
+	async getMapOverlay(mapOverlayV27 = false): Promise<FeatureCollection> {
+		const asset = mapOverlayV27
+			? 'rooms_neuland_v2.7.geojson'
+			: 'rooms_neuland_v2.6.1.geojson'
 		return (await this.performRequest(
-			`${ASSET_ENDPOINT}/rooms_neuland_v2.6.1.geojson`
+			`${ASSET_ENDPOINT}/${asset}`
 		)) as FeatureCollection
 	}
 

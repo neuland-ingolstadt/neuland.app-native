@@ -9,7 +9,8 @@ import {
  */
 export const FeatureFlagKeys = {
 	thiEventsVisible: 'thi-events-visible',
-	memberOfficePresenceEnabled: 'member-officepresence-enabled'
+	memberOfficePresenceEnabled: 'member-officepresence-enabled',
+	mapOverlayV27: 'map-overlay-v2-7'
 } as const satisfies Record<string, string>
 
 export type FeatureFlagKey =

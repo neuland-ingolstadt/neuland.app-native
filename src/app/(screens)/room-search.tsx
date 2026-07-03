@@ -10,12 +10,14 @@ import { RoomSearchResults } from '@/components/Map/room-search-results'
 import { roomSearchStylesheet } from '@/components/Map/room-search-styles'
 import Divider from '@/components/Universal/divider'
 import Dropdown, { DropdownButton } from '@/components/Universal/dropdown'
+import { useIsFeatureEnabled } from '@/hooks'
 import { useRoomSearch } from '@/hooks/useRoomSearch'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
-	ALL_BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
+	getAllBuildings,
 	ROOM_SEARCH_DURATIONS
 } from '@/utils/map-utils'
 
@@ -26,6 +28,8 @@ const maximumSearchDate = new Date(
 export default function AdvancedSearch(): React.JSX.Element {
 	const { styles, theme } = useStyles(roomSearchStylesheet)
 	const { t } = useTranslation('common')
+	const mapOverlayV27 = useIsFeatureEnabled(FeatureFlagKeys.mapOverlayV27)
+	const allBuildings = getAllBuildings(mapOverlayV27)
 	const roomSearch = useRoomSearch()
 
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
@@ -161,7 +165,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.building')}
 						</Text>
 						<Dropdown
-							data={[...ALL_BUILDINGS]}
+							data={[...allBuildings]}
 							defaultValue={BUILDINGS_ALL}
 							onSelect={roomSearch.setBuilding}
 						/>

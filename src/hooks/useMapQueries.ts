@@ -12,6 +12,8 @@ import {
 import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
+import { useIsFeatureEnabled } from '@/hooks'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
 import type { NormalizedLecturer } from '@/types/utils'
@@ -19,10 +21,10 @@ import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import {
-	BUILDINGS,
 	FLOOR_ORDER,
 	FLOOR_SUBSTITUTES,
 	filterRooms,
+	getBuildings,
 	getCenter,
 	getCenterSingle,
 	getIcon,
@@ -42,12 +44,17 @@ export function useMapQueries(): {
 	const { userKind } = use(UserKindContext)
 	const { setNextLecture, setAvailableRooms, setRoomOpenings } = use(MapContext)
 	const { t } = useTranslation('common')
+	const mapOverlayV27 = useIsFeatureEnabled(FeatureFlagKeys.mapOverlayV27)
 	const currentDate = new Date()
 
 	const { data: mapOverlay, error: overlayError } = useQuery<FeatureCollection>(
 		{
-			queryKey: ['mapOverlay', packageInfo.version],
-			queryFn: async () => await NeulandAPI.getMapOverlay(),
+			queryKey: [
+				'mapOverlay',
+				packageInfo.version,
+				mapOverlayV27 ? 'v2.7' : 'v2.6.1'
+			],
+			queryFn: async () => await NeulandAPI.getMapOverlay(mapOverlayV27),
 			staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
 			gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
 			networkMode: 'always'
@@ -188,46 +195,51 @@ export function useMapQueries(): {
 				geometry
 			}
 		})
-		const buildings = BUILDINGS.map((building) => {
-			const buildingRooms = rooms.filter(
-				(room) => room.properties.Gebaeude === (building as Gebaeude)
-			)
-			if (buildingRooms.length === 0) {
-				return null
-			}
-			const floorCount = Array.from(
-				new Set(buildingRooms.map((room) => room.properties.Ebene))
-			).length
-			const location = buildingRooms[0].properties.Standort
-			const center = getCenter(buildingRooms.map((x) => x.geometry.coordinates))
-			return {
-				type: 'Feature',
-				id: building,
-				properties: {
-					Raum: building,
-					Funktion_en: t('buildingLabel', { lng: 'en' }),
-					Funktion_de: t('buildingLabel', { lng: 'de' }),
-					Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
-					Ebene: 'EG', // Dummy value to not break the floor picker
-					Etage: floorCount.toString(),
-					Standort: location,
-					rtype: SEARCH_TYPES.BUILDING,
-					center,
-					icon: getIcon(SEARCH_TYPES.BUILDING)
-				},
-				geometry: {
-					type: 'Point' as const,
-					coordinates: center
+		const buildings = getBuildings(mapOverlayV27)
+			.map((building) => {
+				const buildingRooms = rooms.filter(
+					(room) => room.properties.Gebaeude === (building as Gebaeude)
+				)
+				if (buildingRooms.length === 0) {
+					return null
 				}
-			} satisfies Feature
-		}).filter(
-			(building): building is NonNullable<typeof building> => building !== null
-		)
+				const floorCount = Array.from(
+					new Set(buildingRooms.map((room) => room.properties.Ebene))
+				).length
+				const location = buildingRooms[0].properties.Standort
+				const center = getCenter(
+					buildingRooms.map((x) => x.geometry.coordinates)
+				)
+				return {
+					type: 'Feature',
+					id: building,
+					properties: {
+						Raum: building,
+						Funktion_en: t('buildingLabel', { lng: 'en' }),
+						Funktion_de: t('buildingLabel', { lng: 'de' }),
+						Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
+						Ebene: 'EG', // Dummy value to not break the floor picker
+						Etage: floorCount.toString(),
+						Standort: location,
+						rtype: SEARCH_TYPES.BUILDING,
+						center,
+						icon: getIcon(SEARCH_TYPES.BUILDING)
+					},
+					geometry: {
+						type: 'Point' as const,
+						coordinates: center
+					}
+				} satisfies Feature
+			})
+			.filter(
+				(building): building is NonNullable<typeof building> =>
+					building !== null
+			)
 		return {
 			type: 'FeatureCollection',
 			features: [...rooms, ...buildings]
 		}
-	}, [mapOverlay])
+	}, [mapOverlay, mapOverlayV27, t])
 
 	const buildingGeoJSON: FeatureCollection = useMemo(() => {
 		return {

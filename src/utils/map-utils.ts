@@ -28,9 +28,32 @@ export const BUILDINGS_IN = [
 	'W',
 	'Z'
 ]
+export const BUILDING_L = 'L'
+export const BUILDINGS_ND = ['BN', 'CN']
+
+export function getBuildingsIngolstadt(mapOverlayV27: boolean): string[] {
+	if (!mapOverlayV27) {
+		return [...BUILDINGS_IN]
+	}
+
+	const kIndex = BUILDINGS_IN.indexOf('K')
+	return [
+		...BUILDINGS_IN.slice(0, kIndex + 1),
+		BUILDING_L,
+		...BUILDINGS_IN.slice(kIndex + 1)
+	]
+}
+
+export function getBuildings(mapOverlayV27: boolean): string[] {
+	return [...getBuildingsIngolstadt(mapOverlayV27), ...BUILDINGS_ND]
+}
+
+export function getAllBuildings(mapOverlayV27: boolean): string[] {
+	return [BUILDINGS_ALL, ...getBuildings(mapOverlayV27)]
+}
+
 export const INGOLSTADT_CENTER = [11.4328, 48.7663]
 export const NEUBURG_CENTER = [11.17261, 48.732]
-export const BUILDINGS_ND = ['BN', 'CN']
 export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
