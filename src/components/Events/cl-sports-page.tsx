@@ -9,12 +9,10 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
 import Collapsible from 'react-native-collapsible'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import type {
 	CampusType,
 	UniversitySportsFieldsFragment,
@@ -26,6 +24,7 @@ import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -40,7 +39,6 @@ export default function ClSportsPage({
 		Error
 	>
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { userCampus } = use(UserKindContext)
 	const [selectedLocation, setSelectedLocation] = useState<string>('Ingolstadt')
 
@@ -83,11 +81,11 @@ export default function ClSportsPage({
 	}): React.JSX.Element => {
 		return (
 			<View>
-				{data.map((section, index) => (
+				{data.map((section) => (
 					<SportsWeekday
 						title={section.title.toLowerCase() as Lowercase<WeekdayType>}
 						data={section.data}
-						key={index}
+						key={section.title}
 					/>
 				))}
 			</View>
@@ -104,7 +102,7 @@ export default function ClSportsPage({
 		const [collapsed, setCollapsed] = useState(false)
 
 		return (
-			<View style={styles.weekdaysContainer}>
+			<View className="mb-2.5">
 				<Pressable
 					onPress={() => {
 						setCollapsed(!collapsed)
@@ -112,8 +110,8 @@ export default function ClSportsPage({
 					style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
 					hitSlop={{ top: 6, bottom: 6 }}
 				>
-					<View style={styles.categoryContainer}>
-						<Text style={styles.categoryText}>
+					<View className="flex-row items-center justify-between pb-2.5">
+						<Text className="text-text text-base font-semibold pt-2.5">
 							{t(`dates.weekdays.${title}`)}
 						</Text>
 						<PlatformIcon
@@ -130,14 +128,14 @@ export default function ClSportsPage({
 								name: collapsed ? 'ChevronDown' : 'ChevronUp',
 								size: 20
 							}}
-							style={styles.toggleIcon}
+							style={{ alignSelf: 'flex-end', marginRight: 4 }}
 						/>
 					</View>
 				</Pressable>
 				<Collapsible collapsed={collapsed}>
-					<View style={styles.contentContainer}>
-						{data.map((event, _index) => (
-							<View key={event.id} style={styles.rowWrapper}>
+					<View className="rounded-md overflow-hidden">
+						{data.map((event) => (
+							<View key={event.id} className="mb-2">
 								<SportsRow event={event} />
 							</View>
 						))}
@@ -156,7 +154,8 @@ export default function ClSportsPage({
 
 		return (
 			<Pressable
-				style={styles.locationButtonContainer}
+				className="items-center bg-card border-border rounded-md justify-center p-2 px-4"
+				style={hairlineBorder}
 				onPress={() => {
 					setSelectedLocation(location)
 					if (Platform.OS === 'ios') {
@@ -164,10 +163,15 @@ export default function ClSportsPage({
 					}
 				}}
 			>
-				<View style={styles.locationTextContainer}>
-					{/* Invisible text to reserve space */}
-					<Text style={styles.invisibleFont}>{location}</Text>
-					<Text style={styles.locationText(isSelected)}>{location}</Text>
+				<View className="items-center relative">
+					<Text className="text-transparent font-semibold">{location}</Text>
+					<Text
+						className={`absolute top-0 left-0 right-0 text-center ${
+							isSelected ? 'text-primary font-semibold' : 'text-text'
+						}`}
+					>
+						{location}
+					</Text>
 				</View>
 			</Pressable>
 		)
@@ -175,7 +179,7 @@ export default function ClSportsPage({
 
 	return (
 		<ScrollView
-			contentContainerStyle={styles.itemsContainer}
+			contentContainerClassName="self-center justify-center pb-bottom-safe px-page w-full"
 			onScroll={Animated.event(
 				[
 					{
@@ -210,17 +214,15 @@ export default function ClSportsPage({
 				<ErrorView title={networkError} />
 			) : (
 				<View>
-					<Text style={styles.campusHeader}>{t('labels.campus')}</Text>
-					<View style={styles.locationRow}>
-						{locations.map((location, index) => (
-							<LocationButton location={location} key={index} />
+					<Text className="text-text text-base font-semibold">
+						{t('labels.campus')}
+					</Text>
+					<View className="flex-row items-center gap-2 pb-1 pt-2">
+						{locations.map((location) => (
+							<LocationButton location={location} key={location} />
 						))}
 					</View>
-					<View
-						style={{
-							...styles.contentBorder
-						}}
-					>
+					<View className="rounded-md">
 						{sportsResult.data != null ? (
 							<EventList data={sportsEvents} />
 						) : (
@@ -235,78 +237,3 @@ export default function ClSportsPage({
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	campusHeader: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		verticalAlign: 'middle'
-	},
-	categoryContainer: {
-		alignContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 10
-	},
-	categoryText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		paddingTop: 10
-	},
-	contentBorder: {
-		borderRadius: theme.radius.md
-	},
-	contentContainer: {
-		borderRadius: theme.radius.md,
-		overflow: 'hidden'
-	},
-	invisibleFont: {
-		color: '#00000000',
-		fontWeight: '600'
-	},
-	itemsContainer: {
-		alignSelf: 'center',
-		justifyContent: 'center',
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	locationButtonContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderRadius: theme.radius.md,
-		borderWidth: StyleSheet.hairlineWidth,
-		justifyContent: 'center',
-		padding: 8,
-		paddingHorizontal: 16
-	},
-	locationRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 8,
-		paddingBottom: 4,
-		paddingTop: 8
-	},
-	locationText: (isSelect: boolean) => ({
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		textAlign: 'center',
-		fontWeight: isSelect ? '600' : undefined,
-		color: isSelect ? theme.colors.primary : theme.colors.text
-	}),
-	locationTextContainer: { alignItems: 'center', position: 'relative' },
-	toggleIcon: {
-		alignSelf: 'flex-end',
-		marginRight: 4
-	},
-	weekdaysContainer: { marginBottom: 10 },
-	rowWrapper: {
-		marginBottom: 8
-	}
-}))

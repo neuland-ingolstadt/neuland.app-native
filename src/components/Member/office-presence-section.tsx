@@ -5,7 +5,7 @@ import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Platform, Text, View } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import {
 	checkInToOffice,
 	checkOutOfOffice,
@@ -16,14 +16,15 @@ import PlatformIcon from '@/components/Universal/icon'
 import PulsingDot from '@/components/Universal/pulsing-dot'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { getValidOfficePresenceToken } from '@/utils/office-presence-utils'
-import { stylesheet } from './styles'
+import { toColor } from '@/utils/uniwind-utils'
 
 export function officePresenceQueryKey(sub: string) {
 	return ['officePresence', sub] as const
 }
 
 export function OfficePresenceSection(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const successColor = String(useCSSVariable('--color-success') ?? '#21bc21')
 	const { t } = useTranslation('member')
 	const queryClient = useQueryClient()
 	const idToken = useMemberStore((s) => s.idToken)
@@ -87,23 +88,32 @@ export function OfficePresenceSection(): React.JSX.Element {
 	const countLabel = isLoading ? null : t('office.count', { count })
 
 	return (
-		<View style={styles.officeSection}>
-			<Text style={styles.officeHeader}>{t('office.header')}</Text>
-			<View style={styles.officeCard}>
-				<View style={styles.officeCountRow}>
+		<View className="mb-6">
+			<Text className="text-label-secondary text-[13px] font-semibold mb-2 ml-1 uppercase">
+				{t('office.header')}
+			</Text>
+			<View className="bg-card rounded-lg gap-4 p-4">
+				<View className="items-center flex-row gap-3">
 					<PlatformIcon
 						ios={{ name: 'building.2', size: 22 }}
 						android={{ name: 'apartment', size: 22 }}
 						web={{ name: 'Building2', size: 22 }}
-						style={{ color: theme.colors.primary }}
+						style={{ color: primaryColor }}
 					/>
 					{count > 0 && !isLoading && !isError ? (
-						<PulsingDot style={styles.smallPulsingDot} />
+						<PulsingDot
+							style={{
+								backgroundColor: successColor,
+								borderRadius: 3,
+								height: 6,
+								width: 6
+							}}
+						/>
 					) : null}
 					{isLoading ? (
-						<ActivityIndicator color={theme.colors.primary} />
+						<ActivityIndicator color={primaryColor} />
 					) : (
-						<Text style={styles.officeCountText}>
+						<Text className="text-text flex-1 text-base font-semibold">
 							{isError ? t('office.error') : countLabel}
 						</Text>
 					)}
@@ -117,7 +127,9 @@ export function OfficePresenceSection(): React.JSX.Element {
 				>
 					{data?.registered ? t('office.checkOut') : t('office.checkIn')}
 				</Button>
-				<Text style={styles.disclaimer}>{t('office.disclaimer')}</Text>
+				<Text className="text-label-secondary text-xs">
+					{t('office.disclaimer')}
+				</Text>
 			</View>
 		</View>
 	)

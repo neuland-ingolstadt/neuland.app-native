@@ -11,10 +11,11 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
@@ -22,16 +23,18 @@ import { useMemberStore } from '@/hooks/useMemberStore'
 import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 import { IDCard } from './id-card'
 import {
 	OfficePresenceSection,
 	officePresenceQueryKey
 } from './office-presence-section'
 import { SecurityWarningModal } from './security-warning-modal'
-import { stylesheet } from './styles'
 
 export function LoggedInView(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const notificationColor = String(
+		useCSSVariable('--color-notification') ?? '#ff3b30'
+	)
 	const { t } = useTranslation('member')
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
@@ -51,7 +54,6 @@ export function LoggedInView(): React.JSX.Element {
 		})
 	})
 
-	// only refresh on mount if expired
 	useEffect(() => {
 		if (!info?.exp) {
 			return
@@ -205,7 +207,11 @@ export function LoggedInView(): React.JSX.Element {
 
 			<FormList sections={[perksSection, ...quickLinksSections]} />
 
-			<Pressable onPress={logoutAlert} style={styles.logoutButton}>
+			<Pressable
+				onPress={logoutAlert}
+				className="items-center self-center bg-card rounded-mg flex-row gap-2.5 justify-center my-[30px] min-w-[165px] px-10 py-3"
+				style={hairlineBorder}
+			>
 				<PlatformIcon
 					ios={{
 						name: 'rectangle.portrait.and.arrow.right',
@@ -219,9 +225,11 @@ export function LoggedInView(): React.JSX.Element {
 						name: 'LogOut',
 						size: 22
 					}}
-					style={styles.notification}
+					style={{ color: notificationColor }}
 				/>
-				<Text style={styles.logoutText}>{t('logout.button')}</Text>
+				<Text className="text-notification text-base">
+					{t('logout.button')}
+				</Text>
 			</Pressable>
 
 			<SecurityWarningModal
@@ -232,3 +240,14 @@ export function LoggedInView(): React.JSX.Element {
 		</ScrollView>
 	)
 }
+
+const styles = StyleSheet.create({
+	cardWrapper: {
+		marginBottom: 50
+	},
+	container: {
+		paddingBottom: 30,
+		paddingHorizontal: 12,
+		paddingTop: 20
+	}
+})

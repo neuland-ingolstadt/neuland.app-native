@@ -6,7 +6,7 @@ import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { officePresenceQueryKey } from '@/components/Member/office-presence-section'
 import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
@@ -17,9 +17,10 @@ import {
 	setOfficeTogglePending,
 	toggleOfficePresence
 } from '@/utils/office-presence-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function OfficeToggle(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const { t } = useTranslation('member')
 	const memberSub = useMemberStore((s) => s.info?.sub as string | undefined)
 	const { userKind } = useUserKind()
@@ -103,17 +104,8 @@ export default function OfficeToggle(): React.JSX.Element {
 	}, [analyticsInitialized, authReady, memberSub, queryClient, t, userKind])
 
 	return (
-		<View style={styles.container}>
-			<ActivityIndicator color={theme.colors.primary} />
+		<View className="flex-1 items-center justify-center bg-background">
+			<ActivityIndicator color={primaryColor} />
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: theme.colors.background
-	}
-}))

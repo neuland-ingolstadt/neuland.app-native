@@ -17,7 +17,7 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import type {
 	UniversitySportsFieldsFragment,
 	WeekdayType
@@ -34,9 +34,13 @@ import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { pressLink as pressLinkUtil } from '@/utils/linking'
 import { copyToClipboard } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const textColor = toColor(useCSSVariable('--color-text'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const warningColor = toColor(useCSSVariable('--color-warning'))
+	const successColor = toColor(useCSSVariable('--color-success'))
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { t, i18n } = useTranslation('common')
 
@@ -118,7 +122,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 
 	if (isLoading || !queryData) {
 		return (
-			<View style={styles.loadingContainer}>
+			<View className="flex-1 justify-center items-center">
 				<LoadingIndicator />
 			</View>
 		)
@@ -197,8 +201,10 @@ export default function SportsEventDetail(): React.JSX.Element {
 								androidVariant: 'outlined',
 								web: 'BadgeCheck'
 							},
-					iconColor: styles.warning(sportsEvent?.requiresRegistration ?? false)
-						.color
+					iconColor:
+						(sportsEvent?.requiresRegistration ?? false)
+							? warningColor
+							: successColor
 				},
 				...(isEmailAvailable
 					? [
@@ -213,7 +219,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 								onPress: () => {
 									void Linking.openURL(`mailto:${sportsEvent.eMail}`)
 								},
-								textColor: theme.colors.primary
+								textColor: primaryColor
 							}
 						]
 					: []),
@@ -230,7 +236,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 								onPress: () => {
 									pressLink(sportsEvent.invitationLink)
 								},
-								textColor: theme.colors.primary
+								textColor: primaryColor
 							}
 						]
 					: [])
@@ -241,17 +247,23 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
 	return (
 		<Animated.ScrollView
-			style={styles.page}
-			contentContainerStyle={styles.container}
+			className="px-page"
+			contentContainerClassName="gap-3 pb-bottom-safe"
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{
 					headerTitle: (props) => (
-						<View style={styles.headerTitle}>
+						<View
+							className="overflow-hidden"
+							style={{
+								marginBottom: Platform.OS === 'ios' ? -10 : 0,
+								paddingRight: Platform.OS === 'ios' ? 0 : 50
+							}}
+						>
 							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={theme.colors.text}>
+								<HeaderTitle {...props} tintColor={String(textColor)}>
 									{title}
 								</HeaderTitle>
 							</Animated.View>
@@ -260,9 +272,9 @@ export default function SportsEventDetail(): React.JSX.Element {
 				}}
 			/>
 
-			<View style={styles.titleContainer}>
+			<View className="flex-row items-start pl-1.5 pb-1.5 justify-between">
 				<Text
-					style={styles.titleText}
+					className="text-text flex-1 text-2xl font-semibold pt-4 text-left"
 					allowFontScaling={true}
 					minimumFontScale={0.8}
 					numberOfLines={2}
@@ -270,52 +282,9 @@ export default function SportsEventDetail(): React.JSX.Element {
 					{title}
 				</Text>
 			</View>
-			<View style={styles.formList}>
+			<View className="self-center pb-3 w-full">
 				<FormList sections={sections} sheet />
 			</View>
 		</Animated.ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		gap: 12,
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	formList: {
-		alignSelf: 'center',
-		paddingBottom: 12,
-		width: '100%'
-	},
-	headerTitle: {
-		marginBottom: Platform.OS === 'ios' ? -10 : 0,
-		overflow: 'hidden',
-		paddingRight: Platform.OS === 'ios' ? 0 : 50
-	},
-	page: {
-		paddingHorizontal: theme.margins.page
-	},
-	titleContainer: {
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-		paddingLeft: 6,
-		paddingBottom: 6,
-		justifyContent: 'space-between'
-	},
-	titleText: {
-		color: theme.colors.text,
-		flex: 1,
-		fontSize: 24,
-		fontWeight: '600',
-		paddingTop: 16,
-		textAlign: 'left'
-	},
-	warning: (active: boolean) => ({
-		color: active ? theme.colors.warning : theme.colors.success
-	}),
-	loadingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-}))

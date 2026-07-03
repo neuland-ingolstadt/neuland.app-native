@@ -2,18 +2,20 @@ import { Link } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 import PlatformIcon from '../Universal/icon'
 
 export const FoodHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['accessibility'])
-	const { styles } = useStyles(stylesheet)
+	const iconColor = toColor(useCSSVariable('--color-text'))
+
 	return (
 		<Link asChild href="/food-preferences">
 			<Pressable
 				hitSlop={10}
-				style={styles.headerButton}
+				className={Platform.OS !== 'ios' ? 'mx-3.5' : 'mx-1.5'}
 				accessibilityLabel={t('button.foodPreferences')}
 			>
 				<PlatformIcon
@@ -29,18 +31,9 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 						name: 'ListFilter',
 						size: 24
 					}}
-					style={styles.icon}
+					style={{ color: iconColor }}
 				/>
 			</Pressable>
 		</Link>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	headerButton: {
-		marginHorizontal: Platform.OS !== 'ios' ? 14 : 6
-	},
-	icon: {
-		color: theme.colors.text
-	}
-}))

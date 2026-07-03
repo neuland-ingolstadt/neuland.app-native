@@ -59,7 +59,7 @@ export default function SettingsHeader({
 	if (userKind === 'student') {
 		return (
 			<View
-				className="self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3"
+				className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3"
 				style={hairlineBorder}
 			>
 				<Pressable
@@ -172,7 +172,7 @@ export default function SettingsHeader({
 					router.navigate('/login')
 				}
 			}}
-			className="self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3 active:opacity-90"
+			className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3 active:opacity-90"
 			style={hairlineBorder}
 		>
 			<View className="items-center flex-row justify-between">

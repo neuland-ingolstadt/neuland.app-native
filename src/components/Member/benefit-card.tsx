@@ -1,9 +1,9 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
-import { stylesheet } from './styles'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface BenefitCardProps {
 	title: string
@@ -20,21 +20,23 @@ export function BenefitCard({
 	description,
 	icon
 }: BenefitCardProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const contrastColor = toColor(useCSSVariable('--color-contrast'))
 
 	return (
-		<View style={styles.benefitCard}>
-			<View style={styles.benefitIconContainer}>
+		<View className="bg-card rounded-lg p-3 flex-row items-center mb-3">
+			<View className="bg-primary w-11 h-11 rounded-full justify-center items-center mr-3">
 				<PlatformIcon
 					ios={icon.ios}
 					android={icon.android}
 					web={icon.web}
-					style={styles.benefitIcon}
+					style={{ color: contrastColor }}
 				/>
 			</View>
-			<View style={styles.benefitTextContainer}>
-				<Text style={styles.benefitTitle}>{title}</Text>
-				<Text style={styles.benefitDescription}>{description}</Text>
+			<View className="flex-1">
+				<Text className="text-text text-base font-bold">{title}</Text>
+				<Text className="text-label-secondary text-[13px] mt-0.5">
+					{description}
+				</Text>
 			</View>
 		</View>
 	)
