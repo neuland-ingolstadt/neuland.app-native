@@ -16,6 +16,24 @@ import { toColor } from '@/utils/uniwind-utils'
 import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
+function handleSportsItemPress(id: string): void {
+	if (Platform.OS !== 'ios') {
+		router.navigate({
+			pathname: '/events/sports/[id]',
+			params: { id }
+		})
+		return
+	}
+
+	router.navigate({
+		pathname: '/sports',
+		params: {
+			openEvent: 'true',
+			id
+		}
+	})
+}
+
 const SportsCard = (): React.JSX.Element => {
 	const primaryColor = String(toColor(useCSSVariable('--color-primary')) ?? '')
 	const { t, i18n } = useTranslation('common')
@@ -30,24 +48,6 @@ const SportsCard = (): React.JSX.Element => {
 		() => sportsByWeekday.flatMap((section) => section.data).slice(0, 2),
 		[sportsByWeekday]
 	)
-
-	const handleSportsItemPress = (id: string) => {
-		if (Platform.OS !== 'ios') {
-			router.navigate({
-				pathname: '/events/sports/[id]',
-				params: { id }
-			})
-			return
-		}
-
-		router.navigate({
-			pathname: '/sports',
-			params: {
-				openEvent: 'true',
-				id
-			}
-		})
-	}
 
 	const noData = (
 		<Text className="mt-2.5 text-text text-base font-medium">

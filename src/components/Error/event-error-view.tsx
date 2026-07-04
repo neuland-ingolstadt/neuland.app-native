@@ -14,6 +14,39 @@ interface EventErrorViewProps {
 	message?: string
 }
 
+function getEventTypeIcon(type: string): {
+	ios: string
+	android: MaterialIcon
+	web: LucideIcon
+} {
+	switch (type) {
+		case 'clEvents':
+			return {
+				ios: 'calendar',
+				android: 'calendar_month' satisfies MaterialIcon,
+				web: 'Calendar' satisfies LucideIcon
+			}
+		case 'thiEvents':
+			return {
+				ios: 'building.columns.fill',
+				android: 'account_balance' satisfies MaterialIcon,
+				web: 'Building2' satisfies LucideIcon
+			}
+		case 'sports':
+			return {
+				ios: 'figure.run',
+				android: 'directions_run' satisfies MaterialIcon,
+				web: 'Volleyball' satisfies LucideIcon
+			}
+		default:
+			return {
+				ios: 'calendar',
+				android: 'calendar_month' satisfies MaterialIcon,
+				web: 'Calendar' satisfies LucideIcon
+			}
+	}
+}
+
 export function EventErrorView({
 	eventType,
 	title,
@@ -21,35 +54,6 @@ export function EventErrorView({
 }: EventErrorViewProps): React.JSX.Element {
 	const primaryColor = useCSSVariable('--color-primary')
 	const { t } = useTranslation(['common', 'navigation'])
-
-	const getEventTypeIcon = (type: string) => {
-		switch (type) {
-			case 'clEvents':
-				return {
-					ios: 'calendar',
-					android: 'calendar_month' satisfies MaterialIcon,
-					web: 'Calendar' satisfies LucideIcon
-				}
-			case 'thiEvents':
-				return {
-					ios: 'building.columns.fill',
-					android: 'account_balance' satisfies MaterialIcon,
-					web: 'Building2' satisfies LucideIcon
-				}
-			case 'sports':
-				return {
-					ios: 'figure.run',
-					android: 'directions_run' satisfies MaterialIcon,
-					web: 'Volleyball' satisfies LucideIcon
-				}
-			default:
-				return {
-					ios: 'calendar',
-					android: 'calendar_month' satisfies MaterialIcon,
-					web: 'Calendar' satisfies LucideIcon
-				}
-		}
-	}
 
 	const getEventTypeTitle = (type: string): string => {
 		switch (type) {
