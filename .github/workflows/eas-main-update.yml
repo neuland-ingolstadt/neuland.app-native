@@ -55,6 +55,9 @@ jobs:
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Bundle licenses
+        run: bun run licences:bundle
+
       - name: Publish update
         # Publishes to the main EAS branch — link it to your production channel in the Expo dashboard.
         run: eas update --auto --branch main --non-interactive --message "${{ github.sha }}"
