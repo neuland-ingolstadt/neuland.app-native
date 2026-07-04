@@ -19,7 +19,10 @@ import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import { FeatureFlagKeys } from '@/lib/feature-flags'
+import {
+	FeatureFlagKeys,
+	isMemberOfficePresenceVisible
+} from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { hairlineBorder } from '@/utils/uniwind-utils'
@@ -41,11 +44,14 @@ export function LoggedInView(): React.JSX.Element {
 	const officePresenceEnabled = useIsFeatureEnabled(
 		FeatureFlagKeys.memberOfficePresenceEnabled
 	)
+	const showOfficePresence = isMemberOfficePresenceVisible(
+		officePresenceEnabled
+	)
 
 	const memberSub = info?.sub as string | undefined
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
-		if (!officePresenceEnabled || !memberSub) {
+		if (!showOfficePresence || !memberSub) {
 			return
 		}
 		await queryClient.invalidateQueries({
@@ -190,7 +196,7 @@ export function LoggedInView(): React.JSX.Element {
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
-				officePresenceEnabled ? (
+				showOfficePresence ? (
 					<RefreshControl
 						refreshing={isRefetchingByUser}
 						onRefresh={() => {
@@ -206,7 +212,7 @@ export function LoggedInView(): React.JSX.Element {
 				</View>
 			)}
 
-			{officePresenceEnabled ? <OfficePresenceSection /> : null}
+			{showOfficePresence ? <OfficePresenceSection /> : null}
 
 			<FormList sections={[perksSection, ...quickLinksSections]} />
 
