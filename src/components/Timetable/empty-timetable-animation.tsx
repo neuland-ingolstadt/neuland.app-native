@@ -7,6 +7,10 @@ import PlatformIcon from '@/components/Universal/icon'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { TimetableAnimation } from './timetable-animation'
 
+const handleConfigurePress = () => {
+	void Linking.openURL('https://hiplan.thi.de/')
+}
+
 export const EmptyTimetableAnimation = ({
 	isEmpty = false,
 	onRefresh
@@ -19,10 +23,6 @@ export const EmptyTimetableAnimation = ({
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const borderColor = toColor(useCSSVariable('--color-border'))
-
-	const handleConfigurePress = () => {
-		void Linking.openURL('https://hiplan.thi.de/')
-	}
 
 	const handleRefreshPress = () => {
 		onRefresh?.()

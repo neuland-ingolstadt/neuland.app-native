@@ -6,6 +6,12 @@ import { useCSSVariable, useUniwind } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
 
 const SHEET_RADIUS = 30
+const sheetLayout = {
+	...StyleSheet.absoluteFillObject,
+	borderTopLeftRadius: SHEET_RADIUS,
+	borderTopRightRadius: SHEET_RADIUS,
+	overflow: 'hidden' as const
+}
 
 const BottomSheetBackground = ({
 	pointerEvents,
@@ -19,13 +25,6 @@ const BottomSheetBackground = ({
 	)
 	const darkIos = 'rgba(0, 0, 0, 0.45)'
 	const lightIos = 'rgba(200, 200, 200, 0.3)'
-
-	const sheetLayout = {
-		...StyleSheet.absoluteFillObject,
-		borderTopLeftRadius: SHEET_RADIUS,
-		borderTopRightRadius: SHEET_RADIUS,
-		overflow: 'hidden' as const
-	}
 
 	if (Platform.OS === 'ios') {
 		return (

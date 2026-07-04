@@ -33,16 +33,16 @@ import {
 	permissionError
 } from '@/utils/api-utils'
 
+const staticColors = {
+	white: '#ffffff'
+}
+
 export default function LibraryCode(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [brightness, setBrightness] = useState<number>(0)
 	const [barcodeMaxWidth, setBarcodeMaxWidth] = useState(0)
 	const brightnessRef = useRef<number>(0)
-
-	const staticColors = {
-		white: '#ffffff'
-	}
 
 	const { data, isLoading, isError, isPaused, error, isSuccess, refetch } =
 		useQuery({
