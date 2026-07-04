@@ -169,7 +169,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 									handlePress()
 								}
 							}}
-							key={index}
+							key={title}
 						>
 							<Animated.View style={animatedStyles}>
 								<Animated.View style={animatedStyle}>

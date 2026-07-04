@@ -111,10 +111,9 @@ const SearchResults = ({
 	}
 
 	const renderItem = useCallback(
-		({ item, index }: { item: SearchResult; index: number }) => (
+		({ item }: { item: SearchResult }) => (
 			<ResultRow
 				result={item}
-				index={index}
 				handlePresentModalPress={handlePresentModalPress}
 				updateSearchHistory={addToSearchHistory}
 			/>
