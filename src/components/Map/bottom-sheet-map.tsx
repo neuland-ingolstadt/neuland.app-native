@@ -28,6 +28,9 @@ interface MapBottomSheetProps {
 	allRooms: FeatureCollection
 }
 
+const IOS_SNAP_POINTS = ['20%', '39%', '90%']
+const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
+
 const MapBottomSheet = ({
 	bottomSheetRef,
 	currentPosition,
@@ -81,8 +84,7 @@ const MapBottomSheet = ({
 	}, [])
 
 	const width = t('misc.cancel').length * 11
-	const IOS_SNAP_POINTS = ['20%', '39%', '90%']
-	const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
+
 	return (
 		<StyledBottomSheet
 			ref={bottomSheetRef}

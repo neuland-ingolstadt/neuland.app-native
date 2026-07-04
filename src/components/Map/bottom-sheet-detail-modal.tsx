@@ -73,6 +73,9 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	)
 }
 
+const IOS_SNAP_POINTS = ['39%', '57%', '85%']
+const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
+
 export const BottomSheetDetailModal = ({
 	bottomSheetModalRef,
 	handleSheetChangesModal,
@@ -84,8 +87,7 @@ export const BottomSheetDetailModal = ({
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
 	const iconColor = Color(textColor).darken(0.1).hex()
-	const IOS_SNAP_POINTS = ['39%', '57%', '85%']
-	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
+
 	return (
 		<BottomSheetModalProvider>
 			<StyledBottomSheetModal
