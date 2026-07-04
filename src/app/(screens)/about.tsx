@@ -39,6 +39,14 @@ import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
+function handleWebsitePress(): void {
+	void Linking.openURL('https://neuland-ingolstadt.de/')
+}
+
+function handleContributorsPress(): void {
+	void Linking.openURL('https://neuland.app/about/contributors')
+}
+
 export default function About(): React.JSX.Element {
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
@@ -265,15 +273,6 @@ export default function About(): React.JSX.Element {
 			pressCountRef.current = 0
 		}
 	}, [t, unlockedAppIcons, addUnlockedAppIcon])
-
-	const handleWebsitePress = (): void => {
-		void Linking.openURL('https://neuland-ingolstadt.de/')
-	}
-
-	const handleContributorsPress = (): void => {
-		const url = 'https://neuland.app/about/contributors'
-		void Linking.openURL(url)
-	}
 
 	return (
 		<ScrollView
