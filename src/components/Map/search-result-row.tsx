@@ -16,14 +16,12 @@ import PlatformIcon from '../Universal/icon'
 
 interface ResultRowProps {
 	result: SearchResult
-	index: number
 	handlePresentModalPress: () => void
 	updateSearchHistory: (result: SearchResult) => void
 }
 
 const ResultRow = ({
 	result,
-	index,
 	handlePresentModalPress,
 	updateSearchHistory
 }: ResultRowProps): React.JSX.Element => {
@@ -36,7 +34,6 @@ const ResultRow = ({
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
 		<StyledBottomSheetTouchableOpacity
-			key={index}
 			className="items-center flex-row py-2.5"
 			onPress={() => {
 				const center = result.item.properties?.center as Position | undefined

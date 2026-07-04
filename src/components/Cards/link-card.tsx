@@ -33,13 +33,13 @@ const LinkCard = (): React.JSX.Element => {
 	return (
 		<BaseCard title="links" onPressRoute="/links">
 			<View className="flex-row flex-wrap gap-2.5 pt-2.5">
-				{userQuicklinks.map((link, index) => {
+				{userQuicklinks.map((link) => {
 					if (link === undefined) {
 						return null
 					}
 					return (
 						<Pressable
-							key={index}
+							key={link.key}
 							onPress={() => {
 								void linkPress(link.key, link.url)
 							}}
