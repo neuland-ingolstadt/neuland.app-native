@@ -1,4 +1,3 @@
-import { FlashList } from '@shopify/flash-list'
 import { selectionAsync } from 'expo-haptics'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
@@ -8,11 +7,11 @@ import { Platform, Pressable, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import { FlashList } from '@/components/Universal/styled'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
-import { lightTheme } from '@/styles/themes'
 import { toColor } from '@/utils/uniwind-utils'
 
 interface PickerItem {
@@ -141,11 +140,7 @@ const ItemsPickerScreen = ({
 				data={filteredEntries}
 				renderItem={renderItem}
 				estimatedItemSize={60}
-				contentContainerStyle={{
-					paddingHorizontal: lightTheme.margins.page,
-					paddingTop: 10,
-					paddingBottom: lightTheme.margins.bottomSafeArea
-				}}
+				contentContainerClassName="px-page pt-2.5 pb-bottom-safe"
 				showsVerticalScrollIndicator={false}
 				scrollEventThrottle={16}
 				disableAutoLayout

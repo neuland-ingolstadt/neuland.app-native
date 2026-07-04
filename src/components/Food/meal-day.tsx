@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
@@ -62,7 +62,7 @@ const MealCategory = ({
 	}
 
 	return (
-		<View style={styles.categoryContainerCollapsed}>
+		<View className="pb-2">
 			<Pressable
 				onPress={() => {
 					toggleCollapsed()
@@ -70,7 +70,7 @@ const MealCategory = ({
 				style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
 				hitSlop={{ top: 6, bottom: 6 }}
 			>
-				<View style={styles.categoryContainer}>
+				<View className="flex-row items-center justify-between py-[3px]">
 					<Text className="text-label text-[15px] font-medium">
 						{t(`categories.${category}`, category)}
 					</Text>
@@ -172,7 +172,7 @@ export const MealDay = ({ day }: { day: Food }): React.JSX.Element => {
 	}
 
 	return (
-		<View style={styles.foodContainer}>
+		<View>
 			<RestaurantSection
 				title="Mensa Ingolstadt"
 				meals={mealData.ingolstadtMensa}
@@ -196,19 +196,3 @@ export const MealDay = ({ day }: { day: Food }): React.JSX.Element => {
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	categoryContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingBottom: 3,
-		paddingTop: 3
-	},
-	categoryContainerCollapsed: {
-		paddingBottom: 8
-	},
-	foodContainer: {
-		paddingBottom: 90
-	}
-})

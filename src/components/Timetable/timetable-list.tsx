@@ -1,7 +1,6 @@
-import {
-	FlashList,
-	type ListRenderItemInfo,
-	type FlashList as ShopifyFlashList
+import type {
+	ListRenderItemInfo,
+	FlashList as ShopifyFlashList
 } from '@shopify/flash-list'
 import Color from 'color'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
@@ -21,11 +20,11 @@ import DragDropView from '@/components/Exclusive/drag-view'
 import Badge from '@/components/Universal/badge'
 import ColorBand from '@/components/Universal/color-band'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { FlashList } from '@/components/Universal/styled'
 import TimeDisplay from '@/components/Universal/time-display'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
-import { lightTheme } from '@/styles/themes'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
@@ -527,7 +526,7 @@ export default function TimetableList({
 					data={flatData}
 					extraData={listThemeData}
 					renderItem={renderItem}
-					contentContainerStyle={listStyles.contentContainer}
+					contentContainerClassName="px-page pb-bottom-safe"
 					estimatedItemSize={100}
 					keyExtractor={(item: FlatListItem, index: number) => {
 						// Updated keyExtractor for FlatListItem
@@ -571,10 +570,6 @@ export default function TimetableList({
 const listStyles = StyleSheet.create({
 	list: {
 		flex: 1
-	},
-	contentContainer: {
-		paddingBottom: 80,
-		paddingHorizontal: lightTheme.margins.page
 	}
 })
 
