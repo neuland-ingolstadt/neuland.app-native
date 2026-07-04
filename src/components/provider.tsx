@@ -17,15 +17,15 @@ import {
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import { FeatureFlagsProvider, useDashboard, useUserKind } from '@/contexts'
 import { useAppState, useOnlineManager } from '@/hooks'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePreferenceTracking } from '@/hooks/usePreferenceTracking'
 import { useUniwindThemeSync } from '@/hooks/useUniwindThemeSync'
 import { ensureFliptClient } from '@/lib/flipt'
-import { themeColorMap } from '@/styles/theme-colors'
 import { syncStoragePersister } from '@/utils/storage'
+import { toColor } from '@/utils/uniwind-utils'
 import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
@@ -35,7 +35,6 @@ interface ProviderProps {
 const QUERY_PERSIST_MAX_AGE_MS = 1000 * 60 * 60 * 24
 
 function onAppStateChange(status: AppStateStatus): void {
-	// React Query already supports in web browser refetch on window focus by default
 	if (Platform.OS !== 'web') {
 		focusManager.setFocused(status === 'active')
 	}
@@ -50,9 +49,6 @@ export const queryClient = new QueryClient({
 	}
 })
 
-/**
- * App contexts that depend on feature flags and the dashboard.
- */
 function AppContexts({ children }: ProviderProps): React.JSX.Element {
 	const userKind = useUserKind()
 	const dashboard = useDashboard()
@@ -69,13 +65,52 @@ function AppContexts({ children }: ProviderProps): React.JSX.Element {
 	)
 }
 
-/**
- * Inner provider tree — must render inside PersistQueryClientProvider because
- * feature flags are evaluated via React Query.
- */
+function NavigationThemeProvider({
+	children
+}: ProviderProps): React.JSX.Element {
+	const { theme } = useUniwind()
+	const isDark = theme === 'dark'
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const borderColor = String(
+		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
+	)
+
+	const navigationTheme = isDark
+		? {
+				...DarkTheme,
+				colors: {
+					...DarkTheme.colors,
+					background: backgroundColor,
+					card: cardColor,
+					text: textColor,
+					primary: primaryColor,
+					border: borderColor
+				}
+			}
+		: {
+				...DefaultTheme,
+				colors: {
+					...DefaultTheme.colors,
+					background: backgroundColor,
+					card: cardColor,
+					text: textColor,
+					primary: primaryColor,
+					border: borderColor
+				}
+			}
+
+	return <ThemeProvider value={navigationTheme}>{children}</ThemeProvider>
+}
+
 function ProviderContent({ children }: ProviderProps): React.JSX.Element {
 	const theme = usePreferencesStore((state) => state.theme)
-	const themeColor = usePreferencesStore((state) => state.themeColor)
 
 	useUniwindThemeSync()
 
@@ -89,59 +124,22 @@ function ProviderContent({ children }: ProviderProps): React.JSX.Element {
 			Appearance.setColorScheme(isFixedTheme ? theme : undefined)
 		}
 
-		UnistylesRuntime.setAdaptiveThemes(!isFixedTheme)
-		if (isFixedTheme) {
-			UnistylesRuntime.setTheme(theme)
-		}
-
 		return () => {
 			subscription.remove()
 		}
 	}, [theme])
 
-	useEffect(() => {
-		const colors = themeColorMap[themeColor]
-		UnistylesRuntime.updateTheme('light', (t) => ({
-			...t,
-			colors: {
-				...t.colors,
-				primary: colors.light,
-				secondary: colors.light,
-				primaryBackground: `${colors.light}15`
-			}
-		}))
-		UnistylesRuntime.updateTheme('dark', (t) => ({
-			...t,
-			colors: {
-				...t.colors,
-				primary: colors.dark,
-				secondary: colors.dark,
-				primaryBackground: `${colors.dark}25`
-			}
-		}))
-	}, [themeColor])
-
 	return (
-		<UnistylesProvider>
-			<ThemeProvider
-				value={UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme}
-			>
-				<BottomSheetModalProvider>
-					<FeatureFlagsProvider>
-						<AppContexts>{children}</AppContexts>
-					</FeatureFlagsProvider>
-				</BottomSheetModalProvider>
-			</ThemeProvider>
-		</UnistylesProvider>
+		<NavigationThemeProvider>
+			<BottomSheetModalProvider>
+				<FeatureFlagsProvider>
+					<AppContexts>{children}</AppContexts>
+				</FeatureFlagsProvider>
+			</BottomSheetModalProvider>
+		</NavigationThemeProvider>
 	)
 }
 
-/**
- * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
- * @param children - The child components to be wrapped by the Provider.
- * @param rest - Additional props to be passed to the Provider.
- * @returns The Provider component.
- */
 export default function Provider({
 	children
 }: ProviderProps): React.JSX.Element {

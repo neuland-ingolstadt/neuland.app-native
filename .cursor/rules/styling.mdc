@@ -1,5 +1,5 @@
 ---
-description: Uniwind and Unistyles styling conventions for Neuland Next
+description: Uniwind styling conventions for Neuland Next
 globs:
   - src/**/*.tsx
   - src/**/*.css
@@ -7,27 +7,18 @@ globs:
 alwaysApply: false
 ---
 
-# Styling (Uniwind + Unistyles)
+# Styling (Uniwind)
 
-Neuland Next is migrating from **Unistyles** to **Uniwind** (Tailwind CSS v4). Both run in parallel.
+Neuland Next uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on React Native primitives.
 
-## Which system to use
-
-| Situation | Use |
-| --- | --- |
-| Editing an already-migrated file (`className` present) | **Uniwind** |
-| New UI in migrated areas | **Uniwind** |
-| Everything else (most screens/components today) | **Unistyles** until migrated |
-
-Do not mix `createStyleSheet` and `className` in the same component unless you are actively migrating it.
-
-## Uniwind essentials
+## Essentials
 
 - **Entry**: `src/global.css` imported in `src/app/_layout.tsx` (never in Expo `index`)
 - **Metro**: `metro.config.js` — `withUniwindConfig` must be the outermost wrapper
 - **Tokens**: `@theme` + `@layer theme` / `@variant light|dark` in `global.css`; mirror `src/styles/themes.ts`
 - **Theme sync**: `useUniwindThemeSync` in `provider.tsx` — do not duplicate preference logic
 - **Helpers**: `@/utils/uniwind-utils` (`hairlineBorder`, `toColor`)
+- **Styled wrappers**: `@/components/Universal/styled` for FlashList, BottomSheet, expo-image
 - **Types**: run `bun uniwind:types` after changing `global.css`
 
 ```tsx
@@ -39,16 +30,40 @@ Do not mix `createStyleSheet` and `className` in the same component unless you a
 
 - Platform variants: `ios:`, `android:`, `web:`
 - Runtime colors: `useCSSVariable('--color-primary')` from `uniwind`
-- Style props for third-party children: `useResolveClassNames('text-text text-base')`
-- Keep inline `style` for: Reanimated, dynamic dimensions, hairline borders, dynamic per-item colors
+- Dark mode check: `useUniwind()` → `theme === 'dark'`
 
-## Unistyles (legacy)
+## When `className` is not enough — use `StyleSheet` / inline `style`
+
+Prefer `className` on React Native primitives (`View`, `Text`, `Pressable`, …). When Uniwind
+cannot target a component, fall back to React Native `StyleSheet.create` or inline `style`.
+
+**Use the fallback for:**
+
+- Third-party components that don't accept `className` (e.g. `LinearGradient`, Reanimated views)
+- Wrapped third-party components — add to `@/components/Universal/styled` via `withUniwind`, or use `style`
+- Passing resolved classes to children that only accept `style`: `useResolveClassNames('text-text text-base')`
+- Reanimated animations, dynamic dimensions, hairline borders (`hairlineBorder`), per-item dynamic colors
 
 ```tsx
-const { styles, theme } = useStyles(stylesheet)
+import { StyleSheet } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+
+// Third-party: className is ignored — use StyleSheet
+const styles = StyleSheet.create({
+	eventLine: {
+		borderBottomStartRadius: 5,
+		borderTopStartRadius: 5,
+		width: 4
+	}
+})
+
+<LinearGradient colors={[a, b]} style={styles.eventLine} />
+
+// RN primitive: className + dynamic color in style
+<View className="flex-1 flex-row" style={{ backgroundColor: primaryColor }}>
 ```
 
-Use `createStyleSheet((theme) => ({ … }))` and theme keys from `src/styles/themes.ts`.
+Do not put `className` on a third-party component and assume it works — verify or use `style`.
 
 ## Avoid
 
@@ -59,5 +74,5 @@ Use `createStyleSheet((theme) => ({ … }))` and theme keys from `src/styles/the
 
 ## References
 
-- Migrated example: `src/app/(screens)/version.tsx`
+- Example: `src/app/(screens)/version.tsx`
 - Full docs: `AGENTS.md` → Styling section; https://docs.uniwind.dev

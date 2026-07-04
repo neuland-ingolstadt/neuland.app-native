@@ -18,12 +18,8 @@ import React, {
 	useRef
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { StyleSheet, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
@@ -33,11 +29,18 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
 import WeekHeaderEvent from './week-header-event'
 import WeekLeftArea from './week-left-area'
+
+const renderEvent = (event: PackedEvent) => <EventComponent event={event} />
+
+const renderHeaderEvent = (event: PackedEvent) => (
+	<WeekHeaderEvent event={event} />
+)
 
 const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,
@@ -65,7 +68,22 @@ export default function TimetableWeek({
 	timetable,
 	exams
 }: ITimetableViewProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const contrastColor = String(
+		toColor(useCSSVariable('--color-contrast')) ?? '#ffffff'
+	)
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+	const borderColor = String(
+		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
+	)
+	const labelBackgroundColor = String(
+		toColor(useCSSVariable('--color-label-background')) ?? '#e5dede'
+	)
 	const { i18n, t } = useTranslation()
 	const today = moment().startOf('day').toDate()
 	const calendarRef = useRef<CalendarKitHandle>(null)
@@ -76,7 +94,6 @@ export default function TimetableWeek({
 	const [events, setEvents] = React.useState<PackedEvent[]>([])
 	const [calendarLoaded, setCalendarLoaded] = React.useState(false)
 	const [currentDate, setCurrentDate] = React.useState(today)
-	const isDark = UnistylesRuntime.themeName === 'dark'
 	const router = useRouter()
 	const navigation = useNavigation()
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
@@ -112,13 +129,13 @@ export default function TimetableWeek({
 
 	const calendarTheme = {
 		colors: {
-			primary: theme.colors.notification,
-			onPrimary: theme.colors.contrast,
-			background: theme.colors.background,
-			onBackground: theme.colors.text,
-			border: theme.colors.border,
-			text: theme.colors.text,
-			surface: theme.colors.labelBackground
+			primary: notificationColor,
+			onPrimary: contrastColor,
+			background: backgroundColor,
+			onBackground: textColor,
+			border: borderColor,
+			text: textColor,
+			surface: labelBackgroundColor
 		}
 	}
 
@@ -268,20 +285,6 @@ export default function TimetableWeek({
 		})
 	}, [navigation])
 
-	const renderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <EventComponent event={event} theme={theme} isDark={isDark} />
-		},
-		[theme.colors.primary, events]
-	)
-
-	const renderHeaderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <WeekHeaderEvent event={event} theme={theme} />
-		},
-		[theme.colors.primary, events]
-	)
-
 	const onPressPrevious = (): void => {
 		calendarRef.current?.goToPrevPage()
 	}
@@ -363,11 +366,7 @@ export default function TimetableWeek({
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
-	buttons: {
-		flexDirection: 'row',
-		gap: 4
-	},
+const styles = StyleSheet.create({
 	loadingContainer: {
 		alignItems: 'center',
 		flex: 1,
@@ -381,12 +380,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flex: 1
 	},
 	pendingContainer: {
+		alignItems: 'center',
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	pendingText: {
-		color: theme.colors.text,
-		fontSize: 16
+		justifyContent: 'center'
 	}
-}))
+})

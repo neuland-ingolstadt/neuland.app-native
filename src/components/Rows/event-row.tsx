@@ -14,6 +14,7 @@ import {
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
+import RelativeTimeLabel from '../Universal/relative-time-label'
 import RowEntry from '../Universal/row-entry'
 
 const CLEventRow = ({
@@ -60,18 +61,18 @@ const CLEventRow = ({
 				</View>
 			}
 			rightChildren={
-				<View className="flex-row items-end justify-end gap-1.5 p-row">
-					{isActive && (
-						<View className="mb-0.5 size-2 rounded-full bg-primary" />
-					)}
-					<Text
-						className={`text-sm text-label ${isActive ? 'font-medium text-primary' : ''}`}
-					>
-						{begin != null &&
-							(end != null && begin < new Date()
-								? `${t('dates.ends')} ${formatFriendlyRelativeTime(end)}`
-								: formatFriendlyRelativeTime(begin))}
-					</Text>
+				<View className="p-row">
+					<RelativeTimeLabel
+						showNowDot={isActive}
+						highlighted={isActive}
+						label={
+							begin != null
+								? end != null && begin < new Date()
+									? `${t('dates.ends')} ${formatFriendlyRelativeTime(end)}`
+									: formatFriendlyRelativeTime(begin)
+								: ''
+						}
+					/>
 				</View>
 			}
 		/>

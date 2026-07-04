@@ -1,13 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { use } from 'react'
-import { Platform, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import {
 	type Edges,
 	SafeAreaProvider,
 	SafeAreaView
 } from 'react-native-safe-area-context'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import TimetableList from '@/components/Timetable/timetable-list'
@@ -21,6 +20,7 @@ import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
+
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {
@@ -29,17 +29,13 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	return timetable
 }
 
-const LoadingView = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
-	return (
-		<View style={styles.loadingView}>
-			<LoadingIndicator />
-		</View>
-	)
-}
-function TimetableScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+const LoadingView = (): React.JSX.Element => (
+	<View style={styles.loadingView}>
+		<LoadingIndicator />
+	</View>
+)
 
+function TimetableScreen(): React.JSX.Element {
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 
 	const { userKind } = use(UserKindContext)
@@ -128,10 +124,9 @@ function TimetableScreen(): React.JSX.Element {
 
 export default TimetableScreen
 
-const stylesheet = createStyleSheet((theme) => ({
+const styles = StyleSheet.create({
 	loadingView: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.background,
 		flex: 1,
 		height: '100%',
 		justifyContent: 'center',
@@ -141,4 +136,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		flex: 1
 	}
-}))
+})

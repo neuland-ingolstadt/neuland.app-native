@@ -5,14 +5,13 @@ import { useFocusEffect } from 'expo-router'
 import React, { use, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-	Dimensions,
 	Linking,
 	Platform,
 	Pressable,
+	ScrollView,
 	Text,
 	View
 } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import LibraryCard from '@/components/Library/library-card'
@@ -34,15 +33,16 @@ import {
 	permissionError
 } from '@/utils/api-utils'
 
+const staticColors = {
+	white: '#ffffff'
+}
+
 export default function LibraryCode(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [brightness, setBrightness] = useState<number>(0)
+	const [barcodeMaxWidth, setBarcodeMaxWidth] = useState(0)
 	const brightnessRef = useRef<number>(0)
-
-	const staticColors = {
-		white: '#ffffff'
-	}
 
 	const { data, isLoading, isError, isPaused, error, isSuccess, refetch } =
 		useQuery({
@@ -110,7 +110,11 @@ export default function LibraryCode(): React.JSX.Element {
 		}
 	}
 	return (
-		<SafeAreaProvider>
+		<ScrollView
+			contentContainerClassName="px-page py-4 pb-bottom-safe"
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
+		>
 			{userKind === USER_GUEST ? (
 				<ErrorView title={guestError} />
 			) : userKind === USER_EMPLOYEE ? (
@@ -132,35 +136,38 @@ export default function LibraryCode(): React.JSX.Element {
 					refreshing={isRefetchingByUser}
 				/>
 			) : isSuccess && isBibNumberPresent ? (
-				<SafeAreaView className="self-center px-page py-4 w-full">
-					<View>
-						<FormList sections={sections} />
-					</View>
+				<>
+					<FormList sections={sections} />
 					<Pressable
-						className="self-center rounded-mg mx-page mt-5 py-3.5 w-full"
+						className="self-center rounded-mg mt-5 px-2.5 py-3.5 w-full"
 						style={{ backgroundColor: staticColors.white }}
 						onPress={() => {
 							void toggleBrightness()
 						}}
 					>
-						<Barcode
-							format="CODE39"
-							value={data.bibnr ?? ''}
-							maxWidth={Dimensions.get('window').width - 56}
-							width={5}
-							style={{
-								alignSelf: 'center',
-								marginVertical: 6,
-								paddingHorizontal: 10
+						<View
+							className="w-full items-center"
+							onLayout={(event) => {
+								setBarcodeMaxWidth(event.nativeEvent.layout.width)
 							}}
-						/>
+						>
+							{barcodeMaxWidth > 0 && (
+								<Barcode
+									format="CODE39"
+									value={data.bibnr ?? ''}
+									maxWidth={barcodeMaxWidth}
+									width={5}
+									style={{ marginVertical: 6 }}
+								/>
+							)}
+						</View>
 					</Pressable>
-					<View className="self-center mb-2.5 mt-3.5 w-full">
+					<View className="mb-2.5 mt-3.5 w-full">
 						<Text className="text-label text-xs text-left">
 							{t('pages.library.code.footer')}
 						</Text>
 					</View>
-				</SafeAreaView>
+				</>
 			) : isSuccess ? null : (
 				<ErrorView
 					title={
@@ -175,7 +182,7 @@ export default function LibraryCode(): React.JSX.Element {
 				/>
 			)}
 			{userKind === USER_STUDENT && (
-				<View className="self-center px-page py-4 gap-page w-full">
+				<View className="gap-page mt-4 w-full">
 					<LibraryCard
 						onPress={() => {
 							Linking.openURL(vscoutLink).catch((err) => {
@@ -214,6 +221,6 @@ export default function LibraryCode(): React.JSX.Element {
 					/>
 				</View>
 			)}
-		</SafeAreaProvider>
+		</ScrollView>
 	)
 }

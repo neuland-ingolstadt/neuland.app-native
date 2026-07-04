@@ -3,9 +3,10 @@ import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutAnimation, Platform, Pressable, Text, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import type { SearchResult } from '@/types/map'
+import { toColor } from '@/utils/uniwind-utils'
 
 import Divider from '../Universal/divider'
 import PlatformIcon from '../Universal/icon'
@@ -18,8 +19,8 @@ interface SearchHistoryProps {
 const SearchHistory = ({
 	handlePresentModalPress
 }: SearchHistoryProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const notificationColor = toColor(useCSSVariable('--color-notification'))
 	const { searchHistory, updateSearchHistory } = use(MapContext)
 
 	function addToSearchHistory(newHistory: SearchResult): void {
@@ -43,19 +44,19 @@ const SearchHistory = ({
 		updateSearchHistory(newSearchHistory)
 	}
 	return (
-		<View style={styles.suggestionContainer}>
-			<View style={styles.suggestionSectionHeaderContainer}>
-				<Text style={styles.suggestionSectionHeader}>
+		<View className="mb-2.5">
+			<View className="items-end flex-row justify-between mb-1">
+				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.history')}
 				</Text>
 			</View>
-			<View style={styles.radius}>
+			<View className="ios:rounded-2xl android:rounded-lg web:rounded-lg overflow-hidden">
 				{searchHistory?.map((history, index) => (
 					<React.Fragment key={history.title}>
 						<Swipeable
 							renderRightActions={() => (
 								<Pressable
-									style={styles.swipeableActionContainer}
+									className="items-center justify-center w-[70px]"
 									onPress={() => {
 										LayoutAnimation.configureNext(
 											LayoutAnimation.Presets.easeInEaseOut
@@ -79,12 +80,12 @@ const SearchHistory = ({
 											name: 'Trash',
 											size: 24
 										}}
-										style={styles.toast}
+										style={{ color: notificationColor }}
 									/>
 								</Pressable>
 							)}
 						>
-							<View style={styles.historyRow}>
+							<View className="bg-card px-3 py-[3px] w-full">
 								<ResultRow
 									result={history}
 									index={index}
@@ -104,46 +105,3 @@ const SearchHistory = ({
 }
 
 export default SearchHistory
-
-const stylesheet = createStyleSheet((theme) => ({
-	historyRow: {
-		backgroundColor: theme.colors.card,
-		paddingHorizontal: 12,
-		paddingVertical: 3,
-		width: '100%'
-	},
-
-	radius: {
-		borderRadius: 16,
-		overflow: 'hidden'
-	},
-
-	suggestionContainer: {
-		marginBottom: 10
-	},
-
-	suggestionSectionHeader: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '600',
-		marginBottom: 2,
-		paddingTop: 8,
-		textAlign: 'left'
-	},
-	suggestionSectionHeaderContainer: {
-		alignItems: 'flex-end',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: 4
-	},
-
-	swipeableActionContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 70
-	},
-
-	toast: {
-		color: theme.colors.notification
-	}
-}))

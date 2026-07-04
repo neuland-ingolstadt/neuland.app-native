@@ -1,4 +1,8 @@
-import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
+import {
+	FlashList,
+	type ListRenderItemInfo,
+	type FlashList as ShopifyFlashList
+} from '@shopify/flash-list'
 import Color from 'color'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import React, {
@@ -10,11 +14,7 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import {
-	createStyleSheet,
-	UnistylesRuntime,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/drag-view'
@@ -25,6 +25,7 @@ import TimeDisplay from '@/components/Universal/time-display'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
+import { lightTheme } from '@/styles/themes'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
@@ -40,6 +41,7 @@ import {
 	formatISODate
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { HeaderRight } from './header-buttons'
 
 type TimetableSection = {
@@ -88,7 +90,10 @@ const AnimatedTimetableItem = ({
 // Create a separate component for section headers to properly use hooks
 const SectionHeader = React.memo(
 	({ section, today }: { section: TimetableSection; today: Date }) => {
-		const { styles } = useStyles(stylesheet)
+		const primaryColor = toColor(useCSSVariable('--color-primary'))
+		const textColor = toColor(useCSSVariable('--color-text'))
+		const labelColor = toColor(useCSSVariable('--color-label'))
+		const backgroundColor = toColor(useCSSVariable('--color-background'))
 
 		const title = section.title
 		const isToday = formatISODate(title) === formatISODate(today)
@@ -96,16 +101,38 @@ const SectionHeader = React.memo(
 		const dateParts = formattedDate.split(', ')
 
 		return (
-			<View style={styles.sectionHeaderContainer}>
-				<View style={styles.sectionView}>
-					<View style={styles.sectionHeaderContent}>
-						<View style={styles.dayContainer}>
-							<Text style={styles.weekdayText(isToday)}>{dateParts[0]}</Text>
+			<View className="py-1 z-10" style={{ backgroundColor }}>
+				<View className="py-1.5 pt-page pb-1 mb-1">
+					<View className="flex-row items-center justify-between">
+						<View className="flex-col">
+							<Text
+								className="text-[19px] font-bold mb-0.5"
+								style={{ color: isToday ? primaryColor : textColor }}
+							>
+								{dateParts[0]}
+							</Text>
 							{dateParts.length > 1 && (
-								<Text style={styles.dateText(isToday)}>{dateParts[1]}</Text>
+								<Text
+									className="text-sm"
+									style={{
+										color: isToday ? primaryColor : labelColor,
+										fontWeight: isToday ? '600' : '400'
+									}}
+								>
+									{dateParts[1]}
+								</Text>
 							)}
 						</View>
-						{isToday && <View style={styles.dateIndicator(isToday)} />}
+						{isToday && (
+							<View
+								className="rounded-full me-1"
+								style={{
+									width: 8,
+									height: 8,
+									backgroundColor: primaryColor
+								}}
+							/>
+						)}
 					</View>
 				</View>
 			</View>
@@ -131,9 +158,23 @@ export default function TimetableList({
 	 */
 	const router = useRouter()
 	const navigation = useNavigation()
-	const listRef = useRef<FlashList<FlatListItem>>(null)
+	const listRef = useRef<ShopifyFlashList<FlatListItem>>(null)
 	const { t } = useTranslation('timetable')
-	const { styles, theme } = useStyles(stylesheet)
+	const { theme } = useUniwind()
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const calendarItemColor = String(
+		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
+	)
+	const listThemeData = {
+		primaryColor,
+		notificationColor,
+		calendarItemColor
+	}
 	const showExams = useTimetableStore((state) => state.showExams)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
@@ -221,7 +262,7 @@ export default function TimetableList({
 	 */
 	if (hasPendingUpdate) {
 		return (
-			<View style={styles.pendingContainer}>
+			<View style={pendingStyles.container}>
 				<LoadingIndicator />
 			</View>
 		)
@@ -287,22 +328,30 @@ export default function TimetableList({
 							params: { event: item.id }
 						})
 					}}
-					style={styles.cardPressable}
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
-						color: Color(theme.colors.calendarItem).alpha(0.1).string()
+						color: Color(calendarItemColor).alpha(0.1).string()
 					}}
 				>
-					<View style={styles.eventCard}>
-						<ColorBand color={theme.colors.calendarItem} />
-						<View style={styles.eventContent}>
-							<View style={styles.eventHeader}>
-								<Text style={styles.eventTitle} numberOfLines={1}>
+					<View
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
+						style={hairlineBorder}
+					>
+						<ColorBand color={calendarItemColor} />
+						<View className="flex-1 p-3.5 relative">
+							<View className="flex-row justify-between items-start mb-2">
+								<Text
+									className="text-[15.5px] font-semibold text-text flex-1 me-2"
+									numberOfLines={1}
+								>
 									{eventName}
 								</Text>
 							</View>
-							<View style={styles.eventInfoRow}>
-								<View style={styles.infoContainer}>
-									{infoText && <Text style={styles.eventInfo}>{infoText}</Text>}
+							<View className="flex-row justify-between items-center mt-1">
+								<View className="flex-row items-center gap-2.5">
+									{infoText && (
+										<Text className="text-sm text-label">{infoText}</Text>
+									)}
 									<Badge text="THI" type="calendar" />
 								</View>
 								{timeElement}
@@ -333,22 +382,28 @@ export default function TimetableList({
 					onPress={() => {
 						showEventDetails(item)
 					}}
-					style={styles.cardPressable}
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
-						color: Color(theme.colors.primary).alpha(0.1).string()
+						color: Color(primaryColor).alpha(0.1).string()
 					}}
 				>
-					<View style={styles.eventCard}>
-						<ColorBand color={theme.colors.primary} />
-						<View style={styles.eventContent}>
-							<View style={styles.eventHeader}>
-								<Text style={styles.eventTitle} numberOfLines={1}>
+					<View
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
+						style={hairlineBorder}
+					>
+						<ColorBand color={primaryColor} />
+						<View className="flex-1 p-3.5 relative">
+							<View className="flex-row justify-between items-start mb-2">
+								<Text
+									className="text-[15.5px] font-semibold text-text flex-1 me-2"
+									numberOfLines={1}
+								>
 									{item.name}
 								</Text>
 							</View>
-							<View style={styles.eventInfoRow}>
-								<View style={styles.eventLocation}>
-									<Text style={styles.locationText}>
+							<View className="flex-row justify-between items-center mt-1">
+								<View className="flex-row items-center">
+									<Text className="text-sm text-label">
 										{item.rooms.length > 0 ? item.rooms.join(', ') : ''}
 									</Text>
 								</View>
@@ -379,23 +434,29 @@ export default function TimetableList({
 					onPress={() => {
 						navigateToPage()
 					}}
-					style={styles.cardPressable}
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
-						color: Color(theme.colors.notification).alpha(0.1).string()
+						color: Color(notificationColor).alpha(0.1).string()
 					}}
 				>
-					<View style={styles.eventCard}>
-						<ColorBand color={theme.colors.notification} />
-						<View style={styles.eventContent}>
-							<View style={styles.eventHeader}>
-								<Text style={styles.eventTitle} numberOfLines={2}>
+					<View
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
+						style={hairlineBorder}
+					>
+						<ColorBand color={notificationColor} />
+						<View className="flex-1 p-3.5 relative">
+							<View className="flex-row justify-between items-start mb-2">
+								<Text
+									className="text-[15.5px] font-semibold text-text flex-1 me-2"
+									numberOfLines={2}
+								>
 									{exam.name}
 								</Text>
 							</View>
-							<View style={styles.eventInfoRow}>
-								<View style={styles.locationContainer}>
+							<View className="flex-row justify-between items-center mt-1">
+								<View className="flex-row items-center gap-2">
 									{(exam.seat ?? exam.rooms) != null && (
-										<Text style={styles.locationText}>
+										<Text className="text-sm text-label">
 											{exam.seat ?? exam.rooms}
 										</Text>
 									)}
@@ -460,11 +521,13 @@ export default function TimetableList({
 				/>
 			) : (
 				<FlashList
-					key={`flashlist-${UnistylesRuntime.themeName}`}
+					key={`flashlist-${theme}`}
 					ref={listRef}
+					style={listStyles.list}
 					data={flatData}
+					extraData={listThemeData}
 					renderItem={renderItem}
-					contentContainerStyle={styles.container}
+					contentContainerStyle={listStyles.contentContainer}
 					estimatedItemSize={100}
 					keyExtractor={(item: FlatListItem, index: number) => {
 						// Updated keyExtractor for FlatListItem
@@ -505,119 +568,20 @@ export default function TimetableList({
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
+const listStyles = StyleSheet.create({
+	list: {
+		flex: 1
+	},
+	contentContainer: {
 		paddingBottom: 80,
-		paddingHorizontal: theme.margins.page
-	},
-	// Section header styling
-	sectionHeaderContainer: {
-		paddingVertical: 4,
-		backgroundColor: theme.colors.background,
-		zIndex: 10
-	},
-	sectionView: {
-		paddingVertical: 6,
-		paddingTop: theme.margins.page - 8,
-		marginBottom: 4
-	},
-	sectionHeaderContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between'
-	},
-	dayContainer: {
-		flexDirection: 'column'
-	},
-	weekdayText: (isToday: boolean) => ({
-		fontSize: 19,
-		fontWeight: '700',
-		color: isToday ? theme.colors.primary : theme.colors.text,
-		marginBottom: 2
-	}),
-	dateText: (isToday: boolean) => ({
-		fontSize: 14,
-		color: isToday ? theme.colors.primary : theme.colors.labelColor,
-		fontWeight: isToday ? '600' : '400'
-	}),
-	dateIndicator: (isToday: boolean) => ({
-		width: isToday ? 8 : 0,
-		height: isToday ? 8 : 0,
-		borderRadius: 4,
-		backgroundColor: theme.colors.primary,
-		marginRight: isToday ? 4 : 0
-	}),
-
-	// Event card styling
-	cardPressable: {
-		marginBottom: 10,
-		borderRadius: theme.radius.md,
-		overflow: 'hidden'
-	},
-	eventCard: {
-		flexDirection: 'row',
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		overflow: 'hidden',
-		minHeight: 70,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	eventContent: {
-		flex: 1,
-		padding: 14,
-		position: 'relative'
-	},
-	eventHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'flex-start',
-		marginBottom: 8
-	},
-	eventTitle: {
-		fontSize: 15.5,
-		fontWeight: '600',
-		color: theme.colors.text,
-		flex: 1,
-		marginRight: 8
-	},
-	eventInfo: {
-		fontSize: 14,
-		color: theme.colors.labelColor
-	},
-	eventLocation: {
-		flexDirection: 'row',
-		alignItems: 'center'
-	},
-	locationContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8
-	},
-	locationText: {
-		fontSize: 14,
-		color: theme.colors.labelColor
-	},
-	eventInfoRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginTop: 4
-	},
-
-	// Other styling
-	pendingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	pendingText: {
-		color: theme.colors.text,
-		fontSize: 15
-	},
-	infoContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 10
+		paddingHorizontal: lightTheme.margins.page
 	}
-}))
+})
+
+const pendingStyles = StyleSheet.create({
+	container: {
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center'
+	}
+})

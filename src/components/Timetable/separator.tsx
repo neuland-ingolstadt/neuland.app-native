@@ -1,18 +1,19 @@
 import type React from 'react'
 import { View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function Separator(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const borderColor = useCSSVariable('--color-border')
 
-	return <View style={styles.separator} />
+	return (
+		<View
+			style={{
+				backgroundColor: toColor(borderColor),
+				height: 1,
+				marginLeft: 60,
+				marginVertical: 13
+			}}
+		/>
+	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	separator: {
-		backgroundColor: theme.colors.border,
-		height: 1,
-		marginLeft: 60, // Aligned with where the text begins in FormList
-		marginVertical: 13
-	}
-}))

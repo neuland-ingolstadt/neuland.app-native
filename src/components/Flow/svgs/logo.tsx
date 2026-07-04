@@ -1,6 +1,7 @@
 import type React from 'react'
 import { G, Path, Svg } from 'react-native-svg'
-import { useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function LogoSVG({
 	size,
@@ -9,12 +10,12 @@ export default function LogoSVG({
 	size: number
 	color?: string
 }): React.JSX.Element {
-	const { theme } = useStyles()
+	const textColor = toColor(useCSSVariable('--color-text'))
 
 	return (
 		<Svg
 			viewBox="0 0 75.09 95.05"
-			fill={color || theme.colors.text}
+			fill={color || textColor}
 			width={size}
 			height={size}
 		>

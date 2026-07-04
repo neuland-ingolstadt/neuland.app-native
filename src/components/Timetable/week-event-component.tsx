@@ -3,13 +3,10 @@ import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { Text, View } from 'react-native'
-import {
-	createStyleSheet,
-	type UnistylesTheme,
-	useStyles
-} from 'react-native-unistyles'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { formatFriendlyTime } from '@/utils/date-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 const EventLine = ({
 	color,
@@ -19,28 +16,37 @@ const EventLine = ({
 	color: string
 	background: string
 	isDark: boolean
-}) => {
-	const { styles } = useStyles(stylesheetLine)
-	return (
-		<LinearGradient
-			colors={[color, lineColor(color, background, isDark)]}
-			start={[0, 0.2]}
-			end={[1, 0.8]}
-			style={styles.eventLine}
-		/>
-	)
-}
+}) => (
+	<LinearGradient
+		colors={[color, lineColor(color, background, isDark)]}
+		start={[0, 0.2]}
+		end={[1, 0.8]}
+		style={{
+			borderBottomStartRadius: 5,
+			borderTopStartRadius: 5,
+			width: 4
+		}}
+	/>
+)
+
 const EventComponent = ({
-	event,
-	theme,
-	isDark
+	event
 }: {
 	event: PackedEvent
-	theme: UnistylesTheme
-	isDark: boolean
 }): React.JSX.Element | null => {
-	const { styles } = useStyles(stylesheet)
+	const { theme } = useUniwind()
+	const isDark = theme === 'dark'
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const calendarItemColor = String(
+		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
+	)
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
+
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
 		return null
 	}
@@ -52,16 +58,16 @@ const EventComponent = ({
 	const isOverflowing = duration < 1000 * 60 * 60
 	const nameParts = event.shortName?.split('_')?.slice(1) as string[]
 	const background = isExam
-		? eventBackgroundColor(theme.colors.notification, isDark)
+		? eventBackgroundColor(notificationColor, isDark)
 		: isCalendar
-			? eventBackgroundColor(theme.colors.calendarItem, isDark)
-			: eventBackgroundColor(theme.colors.primary, isDark)
+			? eventBackgroundColor(calendarItemColor, isDark)
+			: eventBackgroundColor(primaryColor, isDark)
 
 	const fontColor = isExam
-		? textColor(theme.colors.notification, background, isDark)
+		? textColor(notificationColor, background, isDark)
 		: isCalendar
-			? textColor(theme.colors.calendarItem, background, isDark)
-			: textColor(theme.colors.primary, background, isDark)
+			? textColor(calendarItemColor, background, isDark)
+			: textColor(primaryColor, background, isDark)
 	const eventName = event?.name as string
 	if (!eventName) {
 		return null
@@ -74,35 +80,30 @@ const EventComponent = ({
 					? (nameParts?.join('_') ?? eventName)
 					: (event.shortName as string)
 				: eventName
-	// hide ' - ' between time to prevent the date from using 3 lines
 
 	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
 	const lineColorByType = isExam
-		? theme.colors.notification
+		? notificationColor
 		: isCalendar
-			? theme.colors.calendarItem
-			: theme.colors.primary
+			? calendarItemColor
+			: primaryColor
 
 	return (
 		<View
-			style={{
-				...styles.eventContainer,
-				backgroundColor: background
-			}}
+			className="rounded-none flex-1 flex-row"
+			style={{ backgroundColor: background }}
 		>
 			<EventLine
 				color={lineColorByType}
 				background={background}
 				isDark={isDark}
 			/>
-			<View style={styles.eventText}>
+			<View className="flex-1 flex-col justify-between pl-[3px] pr-0.5 py-[3px]">
 				<View>
 					<Text
-						style={{
-							...styles.eventTitle,
-							color: fontColor
-						}}
+						className="text-[15px] font-bold mb-px"
+						style={{ color: fontColor }}
 						numberOfLines={2}
 					>
 						{nameToDisplay}
@@ -110,8 +111,8 @@ const EventComponent = ({
 
 					{!isOverflowing && (
 						<Text
+							className="text-sm font-medium"
 							style={{
-								...styles.eventTime,
 								color: fontColor,
 								fontVariant: ['tabular-nums']
 							}}
@@ -120,15 +121,13 @@ const EventComponent = ({
 						</Text>
 					)}
 				</View>
-				<View style={styles.roomRow}>
+				<View className="items-center flex-row gap-1">
 					{isOverflowing ? null : (
 						<Text
 							numberOfLines={1}
 							ellipsizeMode="tail"
-							style={{
-								...styles.eventLocation,
-								color: fontColor
-							}}
+							className="text-sm"
+							style={{ color: fontColor }}
 						>
 							{Array.isArray(event.rooms)
 								? event.rooms.join(', ')
@@ -154,18 +153,18 @@ const textColor = (
 	background: string,
 	isDark: boolean
 ): string => {
-	let textColor = Color(color)
+	let computedTextColor = Color(color)
 		.darken(isDark ? 0 : 0.5)
 		.lighten(isDark ? 0.65 : 0)
 		.saturate(0.5)
 		.hex()
 
-	const contrast = Color(background).contrast(Color(textColor))
+	const contrast = Color(background).contrast(Color(computedTextColor))
 
 	if (contrast < 3.5) {
-		textColor = Color(background).isLight() ? '#000000' : '#FFFFFF'
+		computedTextColor = Color(background).isLight() ? '#000000' : '#FFFFFF'
 	}
-	return textColor
+	return computedTextColor
 }
 
 const lineColor = (color: string, _: string, isDark: boolean): string =>
@@ -173,51 +172,5 @@ const lineColor = (color: string, _: string, isDark: boolean): string =>
 		.darken(isDark ? 0.2 : 0)
 		.lighten(isDark ? 0 : 0.2)
 		.hex()
-
-const stylesheet = createStyleSheet(() => ({
-	eventContainer: {
-		borderRadius: 0,
-		flex: 1,
-		flexDirection: 'row'
-	},
-	eventLine: {
-		borderBottomStartRadius: 5,
-		borderTopStartRadius: 5,
-		width: 4
-	},
-	eventLocation: {
-		fontSize: 14
-	},
-	eventText: {
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'space-between',
-		paddingLeft: 3,
-		paddingRight: 2,
-		paddingVertical: 3
-	},
-	eventTime: {
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	eventTitle: {
-		fontSize: 15,
-		fontWeight: 'bold',
-		marginBottom: 1
-	},
-	roomRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 4
-	}
-}))
-
-const stylesheetLine = createStyleSheet(() => ({
-	eventLine: {
-		borderBottomStartRadius: 5,
-		borderTopStartRadius: 5,
-		width: 4
-	}
-}))
 
 export default EventComponent
