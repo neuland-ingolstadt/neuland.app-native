@@ -1,19 +1,35 @@
 import * as AuthSession from 'expo-auth-session'
 import type React from 'react'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { ActivityIndicator, Platform, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import MemberAPI, { AUTH_DISCOVERY } from '@/api/member-api'
 import ErrorView from '@/components/Error/error-view'
-import { LoggedInView } from '@/components/Member/logged-in-view'
 import { LoggedOutView } from '@/components/Member/logged-out-view'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { useOfficeToggleAfterLogin } from '@/hooks/useOfficeToggleAfterLogin'
+import { toColor } from '@/utils/uniwind-utils'
+
+const LoggedInView = lazy(async () => {
+	const module = await import('@/components/Member/logged-in-view')
+	return { default: module.LoggedInView }
+})
 
 const redirectUri = AuthSession.makeRedirectUri({
 	scheme: 'neuland',
 	path: 'member'
 })
+
+function MemberLoading(): React.JSX.Element {
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+
+	return (
+		<View className="flex-1 items-center justify-center bg-background">
+			<ActivityIndicator color={primaryColor} />
+		</View>
+	)
+}
 
 export default function Member(): React.JSX.Element {
 	const idToken = useMemberStore((s) => s.idToken)
@@ -69,5 +85,9 @@ export default function Member(): React.JSX.Element {
 		return <LoggedOutView request={request} promptAsync={promptAsync} />
 	}
 
-	return <LoggedInView />
+	return (
+		<Suspense fallback={<MemberLoading />}>
+			<LoggedInView />
+		</Suspense>
+	)
 }

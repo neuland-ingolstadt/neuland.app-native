@@ -5,6 +5,10 @@ LFS_ASSET_PATHS=(
 	src/assets/android/ic_launcher.png
 	src/assets/android/ic_launcher_foreground.png
 	src/assets/splash/splashIconDark.png
+	src/assets/wallet/apple_wallet_de.svg
+	src/assets/wallet/apple_wallet_en.svg
+	src/assets/wallet/google_wallet_de.svg
+	src/assets/wallet/google_wallet_en.svg
 )
 
 is_lfs_pointer() {
