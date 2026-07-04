@@ -13,6 +13,7 @@
 			"!src/data/licenses.json",
 			"!**/*.svg",
 			"!src/uniwind-types.d.ts",
+			"!.stryker-tmp",
 			"patches/**",
 			"plugins/**",
 			"app.config.json",
