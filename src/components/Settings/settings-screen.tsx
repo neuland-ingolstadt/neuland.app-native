@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	LayoutAnimation,
-	Platform,
 	RefreshControl,
 	ScrollView,
 	Text,
@@ -169,7 +168,7 @@ export default function Settings(): React.JSX.Element {
 						isError ? new Error(t('menu.loadPersonalDataError')) : undefined
 					}
 				/>
-				{Platform.OS !== 'web' && idToken && <NeulandBox />}
+				{idToken && <NeulandBox />}
 				<View className="mt-2.5">
 					{userKind === USER_GUEST ? (
 						<GuestInfoSection />

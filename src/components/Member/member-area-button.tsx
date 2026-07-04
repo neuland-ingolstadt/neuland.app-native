@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import PlatformIcon from '@/components/Universal/icon'
@@ -12,10 +12,6 @@ export function MemberAreaButton(): React.JSX.Element | null {
 	const router = useRouter()
 	const whiteColor = toColor(useCSSVariable('--color-white'))
 	const { t } = useTranslation('settings')
-
-	if (Platform.OS === 'web') {
-		return null
-	}
 
 	return (
 		<View className="gap-1.5 w-full">

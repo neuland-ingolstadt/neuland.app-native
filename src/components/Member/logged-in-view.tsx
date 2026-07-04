@@ -164,20 +164,24 @@ export function LoggedInView(): React.JSX.Element {
 				}
 			]
 		},
-		{
-			header: t('labels.wallet', { ns: 'common' }),
-			items: [
-				{
-					title: t('securityWarning.buttons.addToWallet'),
-					onPress: handleAddToWallet,
-					icon: {
-						ios: 'wallet.pass',
-						android: 'wallet' as MaterialIcon,
-						web: 'Wallet' as LucideIcon
+		...(Platform.OS !== 'web'
+			? [
+					{
+						header: t('labels.wallet', { ns: 'common' }),
+						items: [
+							{
+								title: t('securityWarning.buttons.addToWallet'),
+								onPress: handleAddToWallet,
+								icon: {
+									ios: 'wallet.pass',
+									android: 'wallet' as MaterialIcon,
+									web: 'Wallet' as LucideIcon
+								}
+							}
+						]
 					}
-				}
-			]
-		}
+				]
+			: [])
 	]
 
 	return (

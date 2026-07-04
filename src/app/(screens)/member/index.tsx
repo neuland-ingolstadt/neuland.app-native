@@ -1,10 +1,7 @@
 import * as AuthSession from 'expo-auth-session'
 import type React from 'react'
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
 import MemberAPI, { AUTH_DISCOVERY } from '@/api/member-api'
-import ErrorView from '@/components/Error/error-view'
 import { LoggedInView } from '@/components/Member/logged-in-view'
 import { LoggedOutView } from '@/components/Member/logged-out-view'
 import { useMemberStore } from '@/hooks/useMemberStore'
@@ -18,7 +15,6 @@ const redirectUri = AuthSession.makeRedirectUri({
 export default function Member(): React.JSX.Element {
 	const idToken = useMemberStore((s) => s.idToken)
 	const setTokens = useMemberStore((s) => s.setTokens)
-	const { t } = useTranslation('member')
 
 	const [request, response, promptAsync] = AuthSession.useAuthRequest(
 		{
@@ -54,16 +50,6 @@ export default function Member(): React.JSX.Element {
 
 		void handleResponse()
 	}, [request, response, setTokens])
-
-	if (Platform.OS === 'web') {
-		return (
-			<ErrorView
-				title={t('web.title')}
-				message={t('web.message')}
-				isCritical={false}
-			/>
-		)
-	}
 
 	if (!idToken) {
 		return <LoggedOutView request={request} promptAsync={promptAsync} />
