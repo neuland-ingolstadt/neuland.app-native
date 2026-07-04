@@ -18,7 +18,7 @@ import React, {
 	useRef
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
@@ -314,16 +314,16 @@ export default function TimetableWeek({
 
 	if (hasPendingUpdate) {
 		return (
-			<View className="flex-1 justify-center items-center">
+			<View style={styles.pendingContainer}>
 				<LoadingIndicator />
 			</View>
 		)
 	}
 
 	return (
-		<View className="flex-1">
+		<View style={styles.page}>
 			{!calendarLoaded && (
-				<View className="items-center flex-1 h-full justify-center absolute w-full z-[1]">
+				<View style={styles.loadingContainer}>
 					<LoadingIndicator />
 				</View>
 			)}
@@ -373,3 +373,23 @@ export default function TimetableWeek({
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	loadingContainer: {
+		alignItems: 'center',
+		flex: 1,
+		height: '100%',
+		justifyContent: 'center',
+		position: 'absolute',
+		width: '100%',
+		zIndex: 1
+	},
+	page: {
+		flex: 1
+	},
+	pendingContainer: {
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center'
+	}
+})

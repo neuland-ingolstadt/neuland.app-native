@@ -1,6 +1,7 @@
-import type {
-	ListRenderItemInfo,
-	FlashList as ShopifyFlashList
+import {
+	FlashList,
+	type ListRenderItemInfo,
+	type FlashList as ShopifyFlashList
 } from '@shopify/flash-list'
 import Color from 'color'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
@@ -12,7 +13,7 @@ import React, {
 	useRef
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 // @ts-expect-error no types available
@@ -20,11 +21,11 @@ import DragDropView from '@/components/Exclusive/drag-view'
 import Badge from '@/components/Universal/badge'
 import ColorBand from '@/components/Universal/color-band'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { FlashList } from '@/components/Universal/styled'
 import TimeDisplay from '@/components/Universal/time-display'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import i18n from '@/localization/i18n'
+import { lightTheme } from '@/styles/themes'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
@@ -169,6 +170,10 @@ export default function TimetableList({
 	const calendarItemColor = String(
 		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
 	)
+	const listThemeData = useMemo(
+		() => ({ primaryColor, notificationColor, calendarItemColor }),
+		[primaryColor, notificationColor, calendarItemColor]
+	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
@@ -256,7 +261,7 @@ export default function TimetableList({
 	 */
 	if (hasPendingUpdate) {
 		return (
-			<View className="flex-1 justify-center items-center">
+			<View style={pendingStyles.container}>
 				<LoadingIndicator />
 			</View>
 		)
@@ -322,13 +327,13 @@ export default function TimetableList({
 							params: { event: item.id }
 						})
 					}}
-					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(calendarItemColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
 						style={hairlineBorder}
 					>
 						<ColorBand color={calendarItemColor} />
@@ -376,13 +381,13 @@ export default function TimetableList({
 					onPress={() => {
 						showEventDetails(item)
 					}}
-					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(primaryColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
 						style={hairlineBorder}
 					>
 						<ColorBand color={primaryColor} />
@@ -428,13 +433,13 @@ export default function TimetableList({
 					onPress={() => {
 						navigateToPage()
 					}}
-					className="mb-2.5 ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden"
+					className="mb-2.5 rounded-md overflow-hidden"
 					android_ripple={{
 						color: Color(notificationColor).alpha(0.1).string()
 					}}
 				>
 					<View
-						className="flex-row bg-card ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden min-h-[70px]"
+						className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
 						style={hairlineBorder}
 					>
 						<ColorBand color={notificationColor} />
@@ -514,12 +519,14 @@ export default function TimetableList({
 					isCritical={false}
 				/>
 			) : (
-				<FlashList<FlatListItem>
+				<FlashList
 					key={`flashlist-${theme}`}
 					ref={listRef}
+					style={listStyles.list}
 					data={flatData}
+					extraData={listThemeData}
 					renderItem={renderItem}
-					contentContainerClassName="pb-20 px-page"
+					contentContainerStyle={listStyles.contentContainer}
 					estimatedItemSize={100}
 					keyExtractor={(item: FlatListItem, index: number) => {
 						// Updated keyExtractor for FlatListItem
@@ -559,3 +566,21 @@ export default function TimetableList({
 		</>
 	)
 }
+
+const listStyles = StyleSheet.create({
+	list: {
+		flex: 1
+	},
+	contentContainer: {
+		paddingBottom: 80,
+		paddingHorizontal: lightTheme.margins.page
+	}
+})
+
+const pendingStyles = StyleSheet.create({
+	container: {
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center'
+	}
+})

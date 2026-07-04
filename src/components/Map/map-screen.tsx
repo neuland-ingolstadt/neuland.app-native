@@ -450,20 +450,22 @@ const MapScreen = (): React.JSX.Element => {
 							'map-marker': require('@/assets/map-marker.png')
 						}}
 					/>
-					<Camera
-						ref={cameraRef}
-						zoomLevel={16.5}
-						centerCoordinate={mapCenter}
-						animationDuration={0}
-						minZoomLevel={14}
-						maxZoomLevel={19}
-						followUserLocation={
-							cameraTriggerKey !== 0 &&
-							clickedElement == null &&
-							!disableFollowUser
-						}
-						followUserMode={UserTrackingMode.Follow}
-					/>
+					{mapLoadState === LoadingState.LOADED && (
+						<Camera
+							ref={cameraRef}
+							zoomLevel={16.5}
+							centerCoordinate={mapCenter}
+							animationDuration={0}
+							minZoomLevel={14}
+							maxZoomLevel={19}
+							followUserLocation={
+								cameraTriggerKey !== 0 &&
+								clickedElement == null &&
+								!disableFollowUser
+							}
+							followUserMode={UserTrackingMode.Follow}
+						/>
+					)}
 					<UserLocation
 						ref={locationRef}
 						renderMode="native"

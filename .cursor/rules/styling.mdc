@@ -36,7 +36,7 @@ Neuland Next uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className
 
 ## Avoid
 
-- `react-native-unistyles`, NativeWind, styled-components, or raw Tailwind config files outside `global.css`
+- NativeWind, styled-components, or raw Tailwind config files outside `global.css`
 - Hard-coded colors/sizes — use theme tokens
 - Editing `src/uniwind-types.d.ts` by hand
 - Importing `global.css` in the Expo entry file (breaks HMR)

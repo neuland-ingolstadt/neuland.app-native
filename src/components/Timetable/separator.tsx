@@ -1,9 +1,19 @@
 import type React from 'react'
 import { View } from 'react-native'
-import { hairlineBorder } from '@/utils/uniwind-utils'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function Separator(): React.JSX.Element {
+	const borderColor = useCSSVariable('--color-border')
+
 	return (
-		<View className="bg-border my-[13px] ml-[60px]" style={hairlineBorder} />
+		<View
+			style={{
+				backgroundColor: toColor(borderColor),
+				height: 1,
+				marginLeft: 60,
+				marginVertical: 13
+			}}
+		/>
 	)
 }

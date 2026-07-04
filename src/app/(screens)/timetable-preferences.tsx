@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/food-language-section'
@@ -9,11 +10,10 @@ import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
-import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
-	const headerPadding = useTransparentHeaderPadding()
+	const insets = useSafeAreaInsets()
 
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const setTimetableMode = useTimetableStore((state) => state.setTimetableMode)
@@ -81,7 +81,13 @@ export default function TimetablePreferences(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView style={{ paddingTop: headerPadding }}>
+		<ScrollView
+			style={{
+				paddingBottom: insets.bottom + 32
+			}}
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
+		>
 			<View className="flex-1">
 				<SectionView title={t('timetable:preferences.title')}>
 					<SingleSectionPicker

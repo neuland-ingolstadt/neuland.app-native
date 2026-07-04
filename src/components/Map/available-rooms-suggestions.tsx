@@ -63,7 +63,7 @@ const AvailableRoomsSuggestions = ({
 				)}
 			</View>
 			<Pressable
-				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden"
+				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-border"
 				style={hairlineBorder}
 				onPress={() => {
 					router.navigate('/login')

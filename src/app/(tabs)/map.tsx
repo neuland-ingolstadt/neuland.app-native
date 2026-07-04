@@ -102,7 +102,7 @@ export default function MapRootScreen(): React.JSX.Element {
 				{isPageOpen ? (
 					<MapContext.Provider value={contextValue}>
 						<SafeAreaProvider>
-							<SafeAreaView className="flex-1" edges={edges as Edges}>
+							<SafeAreaView style={{ flex: 1 }} edges={edges as Edges}>
 								<MapScreen />
 							</SafeAreaView>
 						</SafeAreaProvider>

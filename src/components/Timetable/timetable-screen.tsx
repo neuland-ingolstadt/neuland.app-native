@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { use } from 'react'
-import { Platform, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import {
 	type Edges,
 	SafeAreaProvider,
@@ -30,7 +30,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 }
 
 const LoadingView = (): React.JSX.Element => (
-	<View className="items-center bg-background flex-1 h-full justify-center absolute w-full">
+	<View style={styles.loadingView}>
 		<LoadingIndicator />
 	</View>
 )
@@ -81,7 +81,7 @@ function TimetableScreen(): React.JSX.Element {
 			: (['bottom', 'top'] as Edges)
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView className="flex-1" edges={edges}>
+			<SafeAreaView style={styles.page} edges={edges}>
 				{isLoading ? (
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (
@@ -123,3 +123,17 @@ function TimetableScreen(): React.JSX.Element {
 }
 
 export default TimetableScreen
+
+const styles = StyleSheet.create({
+	loadingView: {
+		alignItems: 'center',
+		flex: 1,
+		height: '100%',
+		justifyContent: 'center',
+		position: 'absolute',
+		width: '100%'
+	},
+	page: {
+		flex: 1
+	}
+})
