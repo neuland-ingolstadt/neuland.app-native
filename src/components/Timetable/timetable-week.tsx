@@ -36,6 +36,12 @@ import EventComponent from './week-event-component'
 import WeekHeaderEvent from './week-header-event'
 import WeekLeftArea from './week-left-area'
 
+const renderEvent = (event: PackedEvent) => <EventComponent event={event} />
+
+const renderHeaderEvent = (event: PackedEvent) => (
+	<WeekHeaderEvent event={event} />
+)
+
 const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,
 	[TimetableMode.Timeline1]: 1,
@@ -278,20 +284,6 @@ export default function TimetableWeek({
 			)
 		})
 	}, [navigation])
-
-	const renderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <EventComponent event={event} />
-		},
-		[events]
-	)
-
-	const renderHeaderEvent = useCallback(
-		(event: PackedEvent) => {
-			return <WeekHeaderEvent event={event} />
-		},
-		[events]
-	)
 
 	const onPressPrevious = (): void => {
 		calendarRef.current?.goToPrevPage()

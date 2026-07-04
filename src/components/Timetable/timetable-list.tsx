@@ -170,10 +170,11 @@ export default function TimetableList({
 	const calendarItemColor = String(
 		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
 	)
-	const listThemeData = useMemo(
-		() => ({ primaryColor, notificationColor, calendarItemColor }),
-		[primaryColor, notificationColor, calendarItemColor]
-	)
+	const listThemeData = {
+		primaryColor,
+		notificationColor,
+		calendarItemColor
+	}
 	const showExams = useTimetableStore((state) => state.showExams)
 	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
