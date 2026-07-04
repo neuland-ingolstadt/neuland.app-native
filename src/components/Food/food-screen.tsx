@@ -155,7 +155,7 @@ function FoodScreen(): React.JSX.Element {
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.page} edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
-					<View style={styles.loadingContainer}>
+					<View className="items-center justify-center flex-1 pt-20 pb-10">
 						<FoodLoadingIndicator size={140} />
 					</View>
 				) : isError ? (
@@ -189,7 +189,7 @@ function FoodScreen(): React.JSX.Element {
 										})
 							}}
 						>
-							<View style={styles.loadedContainer}>
+							<View className="flex-row justify-between mx-page my-2.5">
 								{data.slice(0, 5).map((day: Food, index: number) => (
 									<FoodDayButton
 										key={getFoodDayKey(day)}
@@ -244,7 +244,7 @@ function FoodScreen(): React.JSX.Element {
 											{ useNativeDriver: false }
 										)}
 										showsVerticalScrollIndicator={false}
-										contentContainerStyle={styles.innerScrollContainer}
+										contentContainerClassName="mx-page pb-bottom-safe"
 									>
 										<MealDay day={day} />
 									</ScrollView>
@@ -259,22 +259,6 @@ function FoodScreen(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-	innerScrollContainer: {
-		marginHorizontal: 12,
-		paddingBottom: 90
-	},
-	loadedContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginHorizontal: 12,
-		marginVertical: 10
-	},
-	loadingContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingTop: 80,
-		paddingBottom: 40
-	},
 	page: {
 		flex: 1
 	}

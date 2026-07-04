@@ -1,4 +1,3 @@
-import { FlashList } from '@shopify/flash-list'
 import { type UseQueryResult, useQuery } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import { type Href, router } from 'expo-router'
@@ -11,13 +10,13 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
-	StyleSheet,
 	Text,
 	UIManager,
 	View
 } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
+import { FlashList } from '@/components/Universal/styled'
 import { useRefreshByUser } from '@/hooks'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
@@ -185,7 +184,7 @@ export default function ClEventsPage({
 	)
 
 	return (
-		<View style={styles.container}>
+		<View className="flex-1 px-page">
 			{clEventsResult.isLoading ? (
 				<LoadingIndicator />
 			) : clEventsResult.isError ? (
@@ -198,14 +197,14 @@ export default function ClEventsPage({
 			) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
 				<ErrorView title={networkError} />
 			) : (
-				<View style={styles.contentContainer}>
+				<View className="flex-1 w-full">
 					{clEventsResult.data != null ? (
 						<FlashList
 							data={filteredEvents}
 							renderItem={renderItem}
 							keyExtractor={(item) => item.id}
 							estimatedItemSize={70}
-							contentContainerStyle={styles.flashListContainer}
+							contentContainerClassName="pb-bottom-safe"
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}
 							disableAutoLayout
@@ -218,7 +217,7 @@ export default function ClEventsPage({
 								/>
 							}
 							ListHeaderComponent={
-								<View style={styles.listHeaderContainer}>
+								<View className="-mx-page px-page gap-6 mb-2">
 									{organizersQuery.isLoading ? (
 										<View className="items-start">
 											<LoadingIndicator />
@@ -249,7 +248,7 @@ export default function ClEventsPage({
 												ref={clubsScrollRef}
 												horizontal
 												showsHorizontalScrollIndicator={false}
-												contentContainerStyle={styles.clubsScrollContent}
+												contentContainerClassName="items-center pr-page py-0.5"
 											>
 												<Pressable
 													className={`bg-card border-border rounded-infinite px-4 py-2.5 mr-2 ${
@@ -383,32 +382,3 @@ export default function ClEventsPage({
 		</View>
 	)
 }
-
-const PAGE_MARGIN = 12
-const BOTTOM_SAFE_AREA = 90
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingHorizontal: PAGE_MARGIN
-	},
-	contentContainer: {
-		backgroundColor: 'transparent',
-		flex: 1,
-		width: '100%'
-	},
-	flashListContainer: {
-		paddingBottom: BOTTOM_SAFE_AREA
-	},
-	listHeaderContainer: {
-		gap: 24,
-		marginBottom: 8,
-		marginHorizontal: -PAGE_MARGIN,
-		paddingHorizontal: PAGE_MARGIN
-	},
-	clubsScrollContent: {
-		alignItems: 'center',
-		paddingRight: PAGE_MARGIN,
-		paddingVertical: 2
-	}
-})

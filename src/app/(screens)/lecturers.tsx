@@ -263,7 +263,7 @@ export default function LecturersScreen(): React.JSX.Element {
 	}): React.JSX.Element => {
 		const cardRadius = 17
 		return isPaused && !isSuccess ? (
-			<View style={[styles.viewHorizontal, styles.page]}>
+			<View className="px-page flex-1">
 				<ErrorView
 					title={networkError}
 					refreshing={
@@ -277,7 +277,7 @@ export default function LecturersScreen(): React.JSX.Element {
 		) : isLoading ? (
 			<LoadingIndicator style={styles.loadingContainer} />
 		) : isError ? (
-			<View style={[styles.viewHorizontal, styles.page]}>
+			<View className="px-page flex-1">
 				<ErrorView
 					title={error?.message ?? t('error.title')}
 					refreshing={
@@ -293,7 +293,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
 				keyExtractor={(item) => item.id}
-				contentContainerStyle={styles.loadedRows}
+				contentContainerClassName="pb-bottom-safe px-page"
 				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl
@@ -309,25 +309,23 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 				renderItem={({ item, index }) => (
 					<View
-						style={[
-							styles.rowContainer,
-							{
-								overflow: 'hidden',
-								borderTopStartRadius: index === 0 ? cardRadius : 0,
-								borderTopEndRadius: index === 0 ? cardRadius : 0,
-								borderBottomStartRadius:
-									index === lecturers.length - 1 ? cardRadius : 0,
-								borderBottomEndRadius:
-									index === lecturers.length - 1 ? cardRadius : 0
-							}
-						]}
+						className="mb-2"
+						style={{
+							overflow: 'hidden',
+							borderTopStartRadius: index === 0 ? cardRadius : 0,
+							borderTopEndRadius: index === 0 ? cardRadius : 0,
+							borderBottomStartRadius:
+								index === lecturers.length - 1 ? cardRadius : 0,
+							borderBottomEndRadius:
+								index === lecturers.length - 1 ? cardRadius : 0
+						}}
 					>
 						<LecturerRow item={item} />
 					</View>
 				)}
 			/>
 		) : (
-			<View style={styles.viewHorizontal}>
+			<View className="px-page">
 				{isPersonal ? (
 					<ErrorView
 						title={t('pages.lecturers.error.title')}
@@ -364,7 +362,7 @@ export default function LecturersScreen(): React.JSX.Element {
 
 	const FilterSectionList = (): React.JSX.Element => {
 		return allLecturersResult.isLoading ? (
-			<View style={styles.viewHorizontal}>
+			<View className="px-page">
 				<LoadingIndicator style={styles.loadingContainer} />
 			</View>
 		) : allLecturersResult.isPaused ? (
@@ -394,7 +392,7 @@ export default function LecturersScreen(): React.JSX.Element {
 					sections={sections}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item }) => (
-						<View style={styles.rowContainer}>
+						<View className="mb-2">
 							<LecturerRow item={item} />
 						</View>
 					)}
@@ -405,7 +403,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							</Text>
 						</View>
 					)}
-					contentContainerStyle={styles.contentContainer}
+					contentContainerClassName="mx-page pb-bottom-safe"
 				/>
 			</>
 		)
@@ -417,8 +415,8 @@ export default function LecturersScreen(): React.JSX.Element {
 				{userKind === USER_GUEST ? (
 					<ErrorView title={guestError} />
 				) : !isSearchBarFocused ? (
-					<View style={styles.searchContainer}>
-						<View style={styles.viewHorizontal}>
+					<View className="flex-1 gap-2.5 pt-2.5">
+						<View className="px-page">
 							<ToggleRow
 								items={[
 									t('pages.lecturers.personal'),
@@ -469,18 +467,7 @@ export default function LecturersScreen(): React.JSX.Element {
 	)
 }
 
-const PAGE_MARGIN = 12
-const BOTTOM_SAFE_AREA = 90
-
 const styles = StyleSheet.create({
-	contentContainer: {
-		marginHorizontal: PAGE_MARGIN,
-		paddingBottom: BOTTOM_SAFE_AREA
-	},
-	loadedRows: {
-		paddingBottom: BOTTOM_SAFE_AREA,
-		paddingHorizontal: PAGE_MARGIN
-	},
 	loadingContainer: {
 		alignItems: 'center',
 		flex: 1,
@@ -494,16 +481,5 @@ const styles = StyleSheet.create({
 		position: 'relative',
 		right: 0,
 		zIndex: 1
-	},
-	rowContainer: {
-		marginBottom: 8
-	},
-	searchContainer: {
-		flex: 1,
-		gap: 10,
-		paddingTop: 10
-	},
-	viewHorizontal: {
-		paddingHorizontal: PAGE_MARGIN
 	}
 })
