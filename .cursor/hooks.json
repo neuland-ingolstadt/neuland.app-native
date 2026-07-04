@@ -18,7 +18,8 @@
 		"stop": [
 			{
 				"command": "bun run .cursor/hooks/typecheck-stop.ts",
-				"loop_limit": 3
+				"loop_limit": 3,
+				"timeout": 300
 			}
 		]
 	}

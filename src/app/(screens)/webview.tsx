@@ -3,20 +3,33 @@ import type React from 'react'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
+import { useCSSVariable } from 'uniwind'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { toColor } from '@/utils/uniwind-utils'
 
 const PADDING = 16
 const LOADING_TIMEOUT = 100
 const BOTTOM_PADDING = 80
 
+const decodeHtmlEntities = (html: string): string => {
+	const textarea = document.createElement('textarea')
+	textarea.innerHTML = html
+	return textarea.value
+}
+
 export default function NotesDetails(): React.JSX.Element {
 	const navigation = useNavigation()
 	const { t } = useTranslation('timetable')
-	const { styles, theme } = useStyles(stylesheet)
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c1e')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
 	const [loaded, setLoaded] = useState(false)
 	const [timeoutId, setTimeoutId] = useState<number | null>(null)
 
@@ -36,15 +49,15 @@ export default function NotesDetails(): React.JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           html, body {
-            background-color: ${theme.colors.background};
+            background-color: ${backgroundColor};
             margin: 0;
             padding: 0;
             height: 100%;
           }
           body {
             padding: ${PADDING}px;
-            color: ${theme.colors.text};
-            background-color: ${theme.colors.background};
+            color: ${textColor};
+            background-color: ${backgroundColor};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 16px;
             line-height: 1.5;
@@ -53,7 +66,7 @@ export default function NotesDetails(): React.JSX.Element {
             padding-bottom: ${BOTTOM_PADDING}px;
           }
           h1, h2, h3 {
-            color: ${theme.colors.text};
+            color: ${textColor};
             margin-top: 16px;
             margin-bottom: 8px;
           }
@@ -61,7 +74,7 @@ export default function NotesDetails(): React.JSX.Element {
             margin-bottom: 16px;
           }
           a {
-            color: ${theme.colors.primary};
+            color: ${primaryColor};
             text-decoration: none;
           }
           ul, ol {
@@ -99,14 +112,7 @@ export default function NotesDetails(): React.JSX.Element {
 		}
 	}, [timeoutId])
 
-	// For web platforms, render the content directly in a ScrollView
 	if (Platform.OS === 'web') {
-		const decodeHtmlEntities = (html: string) => {
-			const textarea = document.createElement('textarea')
-			textarea.innerHTML = html
-			return textarea.value
-		}
-
 		const plainTextContent = sanitizedHtml
 			.replace(
 				/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gi,
@@ -126,18 +132,20 @@ export default function NotesDetails(): React.JSX.Element {
 			.trim()
 
 		return (
-			<ScrollView contentContainerStyle={styles.webContentContainer}>
-				<Text style={styles.webContent}>{plainTextContent}</Text>
+			<ScrollView contentContainerClassName="p-4 pb-[80px] bg-background">
+				<Text className="text-text text-base leading-6">
+					{plainTextContent}
+				</Text>
 			</ScrollView>
 		)
 	}
 
 	return (
-		<View style={styles.container}>
+		<View className="flex-1 bg-background">
 			<WebView
 				source={{ html: styledHtml }}
 				scalesPageToFit
-				style={styles.webview}
+				className="flex-1 bg-background"
 				onLoadEnd={() => {
 					const id = setTimeout(() => {
 						setLoaded(true)
@@ -145,42 +153,18 @@ export default function NotesDetails(): React.JSX.Element {
 
 					setTimeoutId(id as unknown as number)
 				}}
-				backgroundColor={theme.colors.background}
+				backgroundColor={backgroundColor}
 				originWhitelist={['*']}
 				showsVerticalScrollIndicator={true}
 			/>
 			{!loaded && (
-				<View style={styles.loadingContainer}>
+				<View
+					className="bg-background items-center justify-center"
+					style={StyleSheet.absoluteFillObject}
+				>
 					<LoadingIndicator />
 				</View>
 			)}
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		backgroundColor: theme.colors.background
-	},
-	loadingContainer: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: theme.colors.background,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	webContentContainer: {
-		padding: PADDING,
-		paddingBottom: BOTTOM_PADDING,
-		backgroundColor: theme.colors.background
-	},
-	webContent: {
-		color: theme.colors.text,
-		fontSize: 16,
-		lineHeight: 24
-	},
-	webview: {
-		flex: 1,
-		backgroundColor: theme.colors.background
-	}
-}))

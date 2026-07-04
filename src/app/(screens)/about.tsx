@@ -14,7 +14,6 @@ import {
 	Platform,
 	Pressable,
 	ScrollView,
-	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -26,7 +25,7 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import { MemberAreaButton } from '@/components/Member/member-area-button'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
@@ -38,13 +37,16 @@ import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 export default function About(): React.JSX.Element {
 	const router = useRouter()
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation(['settings'])
 	const headerPadding = useTransparentHeaderPadding()
 	const memberInfo = useMemberStore((s) => s.info)
+	const labelTertiaryColor = String(
+		toColor(useCSSVariable('--color-label-tertiary')) ?? '#99999a'
+	)
 
 	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
 	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
@@ -60,7 +62,6 @@ export default function About(): React.JSX.Element {
 		Constants.expoConfig?.version ??
 		'unknown'
 
-	// Shimmer animation values
 	const shimmerOpacity = useSharedValue(0)
 	const shimmerPosition = useSharedValue(-100)
 	const shimmerScale = useSharedValue(1)
@@ -68,8 +69,8 @@ export default function About(): React.JSX.Element {
 
 	useEffect(() => {
 		const animate = () => {
-			shimmerPosition.value = -100
 			shimmerOpacity.value = 0
+			shimmerPosition.value = -100
 			shimmerScale.value = 1
 			shimmerRotation.value = 0
 
@@ -228,7 +229,6 @@ export default function About(): React.JSX.Element {
 		}
 	]
 
-	// Use useRef instead of useState to prevent re-renders
 	const pressCountRef = useRef(0)
 
 	const handlePress = useCallback((): void => {
@@ -277,13 +277,11 @@ export default function About(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={[
-				styles.contentContainer,
-				{ paddingTop: headerPadding }
-			]}
+			contentContainerClassName="pb-bottom-safe"
+			style={{ paddingTop: headerPadding }}
 		>
-			<View style={styles.container}>
-				<View style={styles.logoContainer}>
+			<View className="pb-5 pt-[30px]">
+				<View className="items-center flex-row justify-center gap-[30px] max-w-[600px] self-center w-full">
 					<Pressable
 						onPress={() => {
 							if (Platform.OS !== 'web') {
@@ -292,21 +290,48 @@ export default function About(): React.JSX.Element {
 							handlePress()
 						}}
 					>
-						<View style={styles.logoIcon}>
+						<View
+							className="bg-card border-border rounded-[18px] overflow-hidden"
+							style={[
+								hairlineBorder,
+								{ boxShadow: `4 4 10 0 ${labelTertiaryColor}` }
+							]}
+						>
 							<Image
 								source={require('@/assets/appIcons/default.png')}
 								alt="Neuland Next Logo"
-								style={styles.logoImage}
+								className="flex-1 h-[100px] w-[100px]"
+								style={{ resizeMode: 'contain' }}
 							/>
-							<Animated.View style={[styles.shimmer, shimmerStyle]} />
-							<Animated.View style={[styles.shimmerOverlay, shimmerStyle]} />
+							<Animated.View
+								className="absolute inset-0 w-[45%] z-[1]"
+								style={[
+									{
+										backgroundColor: 'rgba(255, 255, 255, 0.3)',
+										transform: [{ skewX: '-20deg' }]
+									},
+									shimmerStyle
+								]}
+							/>
+							<Animated.View
+								className="absolute inset-0 w-[55%] z-[2]"
+								style={[
+									{
+										backgroundColor: 'rgba(255, 255, 255, 0.15)',
+										transform: [{ skewX: '-20deg' }]
+									},
+									shimmerStyle
+								]}
+							/>
 						</View>
 					</Pressable>
 
-					<View style={styles.logoTextContainer}>
-						<View style={styles.appTitleContainer}>
-							<Text style={styles.header}>{'Neuland Next'}</Text>
-							<Text style={styles.text}>
+					<View className="flex-col">
+						<View className="mb-2.5">
+							<Text className="text-text text-[22px] font-bold">
+								{'Neuland Next'}
+							</Text>
+							<Text className="text-text text-base">
 								{Platform.OS !== 'web' ? 'Native' : 'Native Web'}
 								{(Application.applicationId?.endsWith('.dev') ?? false)
 									? ' Dev'
@@ -315,11 +340,14 @@ export default function About(): React.JSX.Element {
 							</Text>
 						</View>
 						<View>
-							<Text style={styles.subHeader}>
+							<Text className="text-text text-base font-bold">
 								{t('about.header.developed')}
 							</Text>
 							<Pressable onPress={handleWebsitePress}>
-								<Text style={styles.text} onPress={handleContributorsPress}>
+								<Text
+									className="text-text text-base"
+									onPress={handleContributorsPress}
+								>
 									{'Neuland Ingolstadt e.V.'}
 								</Text>
 							</Pressable>
@@ -328,7 +356,7 @@ export default function About(): React.JSX.Element {
 				</View>
 			</View>
 
-			<View style={styles.formlistContainer}>
+			<View className="self-center gap-4 mt-2.5 px-page w-full">
 				<FormList sections={[appSection]} />
 				{!memberInfo && <MemberAreaButton />}
 				<FormList sections={remainingSections} />
@@ -352,85 +380,3 @@ export default function About(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	appTitleContainer: {
-		marginBottom: 10
-	},
-	container: {
-		paddingBottom: 20,
-		paddingTop: 30
-	},
-	contentContainer: {
-		paddingBottom: theme.margins.bottomSafeArea
-	},
-	formlistContainer: {
-		alignSelf: 'center',
-		gap: 16,
-		marginTop: 10,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
-	},
-	header: {
-		color: theme.colors.text,
-		fontSize: 22,
-		fontWeight: 'bold'
-	},
-	logoContainer: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		gap: 30,
-		maxWidth: 600,
-		alignSelf: 'center',
-		width: '100%'
-	},
-	logoIcon: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 18,
-		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
-		overflow: 'hidden'
-	},
-	logoImage: {
-		flex: 1,
-		height: 100,
-		resizeMode: 'contain',
-		width: 100
-	},
-	logoTextContainer: {
-		flexDirection: 'column'
-	},
-	subHeader: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: 'bold'
-	},
-	text: {
-		color: theme.colors.text,
-		fontSize: 16
-	},
-	shimmer: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(255, 255, 255, 0.3)',
-		transform: [{ skewX: '-20deg' }],
-		width: '45%',
-		zIndex: 1
-	},
-	shimmerOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(255, 255, 255, 0.15)',
-		transform: [{ skewX: '-20deg' }],
-		width: '55%',
-		zIndex: 2
-	}
-}))
