@@ -7,6 +7,7 @@ import DraggableFlatList, {
 	ScaleDecorator
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useResolveClassNames } from 'uniwind'
 import type { ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import {
@@ -23,6 +24,7 @@ import { arraysEqual } from '@/utils/app-utils'
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
 	const headerPadding = useTransparentHeaderPadding() + 12
+	const dragContainerStyle = useResolveClassNames('rounded-md overflow-hidden')
 
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		use(DashboardContext)
@@ -149,11 +151,7 @@ export default function DashboardEdit(): React.JSX.Element {
 										}}
 										keyExtractor={(item) => item.key}
 										renderItem={renderItem}
-										containerStyle={{
-											borderRadius: 17,
-											flex: 1,
-											overflow: 'hidden'
-										}}
+										containerStyle={[dragContainerStyle, { flex: 1 }]}
 										activationDistance={10}
 										autoscrollThreshold={50}
 									/>

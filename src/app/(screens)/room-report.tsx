@@ -130,7 +130,6 @@ export default function RoomReport(): React.JSX.Element {
 						backgroundColor: inputBackground,
 						borderColor,
 						borderWidth: 1,
-						borderRadius: 17,
 						height: 40,
 						marginBottom: 10,
 						paddingHorizontal: 10

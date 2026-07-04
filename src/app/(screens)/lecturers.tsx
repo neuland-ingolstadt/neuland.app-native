@@ -261,7 +261,6 @@ export default function LecturersScreen(): React.JSX.Element {
 		isLoading: boolean
 		isPersonal?: boolean
 	}): React.JSX.Element => {
-		const cardRadius = 17
 		return isPaused && !isSuccess ? (
 			<View style={[styles.viewHorizontal, styles.page]}>
 				<ErrorView
@@ -309,18 +308,9 @@ export default function LecturersScreen(): React.JSX.Element {
 				}
 				renderItem={({ item, index }) => (
 					<View
-						style={[
-							styles.rowContainer,
-							{
-								overflow: 'hidden',
-								borderTopStartRadius: index === 0 ? cardRadius : 0,
-								borderTopEndRadius: index === 0 ? cardRadius : 0,
-								borderBottomStartRadius:
-									index === lecturers.length - 1 ? cardRadius : 0,
-								borderBottomEndRadius:
-									index === lecturers.length - 1 ? cardRadius : 0
-							}
-						]}
+						className={`mb-2 overflow-hidden${index === 0 ? ' rounded-t-md' : ''}${
+							index === lecturers.length - 1 ? ' rounded-b-md' : ''
+						}`}
 					>
 						<LecturerRow item={item} />
 					</View>

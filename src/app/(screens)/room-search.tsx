@@ -5,7 +5,7 @@ import type React from 'react'
 import { type ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
-import { useCSSVariable } from 'uniwind'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import { RoomSearchResults } from '@/components/Map/room-search-results'
 import Divider from '@/components/Universal/divider'
 import Dropdown, { DropdownButton } from '@/components/Universal/dropdown'
@@ -37,17 +37,19 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
 	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
 
+	const webRoundedStyle = useResolveClassNames('rounded-md')
+
 	const webInputStyle: React.CSSProperties = {
 		appearance: 'none',
 		backgroundColor: datePickerBackground,
 		border: 'none',
-		borderRadius: 17,
 		color: textColor,
 		height: 32,
 		outline: 'none',
 		paddingLeft: 10,
 		paddingRight: 10,
-		fontSize: 15
+		fontSize: 15,
+		...(webRoundedStyle as React.CSSProperties)
 	}
 
 	const openAndroidDatePicker = (): void => {

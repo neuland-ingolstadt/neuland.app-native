@@ -205,7 +205,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 								disabled={!profileQrData?.qr}
 								hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 							>
-								<View style={styles.qrCodeContainer}>
+								<View className="items-center self-center bg-white rounded-md h-[140px] w-[140px] justify-center mt-5 p-2.5">
 									{isLoading ? (
 										<ActivityIndicator
 											size="small"
@@ -402,17 +402,6 @@ const styles = StyleSheet.create({
 	nameText: {
 		flexShrink: 1,
 		paddingRight: 12
-	},
-	qrCodeContainer: {
-		alignItems: 'center',
-		alignSelf: 'center',
-		backgroundColor: '#ffffff',
-		borderRadius: 17,
-		height: 140,
-		justifyContent: 'center',
-		marginTop: 20,
-		padding: 10,
-		width: 140
 	},
 	qrErrorText: {
 		color: 'red',
