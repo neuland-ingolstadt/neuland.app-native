@@ -14,7 +14,7 @@ import Animated, {
 	withSequence,
 	withTiming
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import WhatsNewBox from '@/components/Flow/whats-new-box'
 import changelogData from '@/data/changelog.json'
 import { useFlowStore } from '@/hooks/useFlowStore'
@@ -22,11 +22,15 @@ import type { LanguageKey } from '@/localization/i18n'
 import type { Changelog } from '@/types/data'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function WhatsNewScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const changelog: Changelog = changelogData as Changelog
 	const { t, i18n } = useTranslation('flow')
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const buttonTextColor = getContrastColor(primaryColor)
 	const version = convertToMajorMinorPatch(
 		Application.nativeApplicationVersion ?? '0.0.0'
 	)
@@ -85,128 +89,74 @@ export default function WhatsNewScreen(): React.JSX.Element {
 	}, [])
 
 	return (
-		<View style={styles.page}>
-			<View style={styles.titleBox}>
-				<Text style={styles.title}>{t('whatsnew.title')}</Text>
-				<Text style={styles.subtitle}>
+		<View className="bg-contrast flex-1 gap-5 px-5 py-10">
+			<View className="flex-1 justify-end">
+				<Text className="text-text text-[32px] font-bold pb-2.5 text-center">
+					{t('whatsnew.title')}
+				</Text>
+				<Text className="text-label text-sm text-center">
 					{t('whatsnew.version', {
 						version
 					})}
 				</Text>
 			</View>
 
-			<View style={[styles.boxesContainer, styles.boxes]}>
-				{Object.keys(changelog.version)
-					.filter((key) => key === version)
-					.map((key, boxIndex) => (
-						<View key={key} style={styles.boxes}>
-							{changelog.version[key].map(
-								({ title, description, icon }, index) => {
-									const overallIndex =
-										boxIndex * changelog.version[key].length + index
+			<View className="flex-[4] justify-center gap-3">
+				{changelog.version[version]?.map(
+					({ title, description, icon }, index) => {
+						const opacityStyle = useAnimatedStyle(() => {
+							return {
+								opacity: opacityValues[index].value
+							}
+						})
 
-									const opacityStyle = useAnimatedStyle(() => {
-										return {
-											opacity: opacityValues[overallIndex].value
-										}
-									})
+						const rotationStyle = useAnimatedStyle(() => {
+							return {
+								transform: [
+									{
+										rotateZ: `${rotationValues[index].value}deg`
+									}
+								]
+							}
+						})
 
-									const rotationStyle = useAnimatedStyle(() => {
-										return {
-											transform: [
-												{
-													rotateZ: `${rotationValues[overallIndex].value}deg`
-												}
-											]
-										}
-									})
-
-									return (
-										<Animated.View
-											key={title[i18n.language as LanguageKey]}
-											style={[opacityStyle, rotationStyle]}
-										>
-											<Pressable
-												onPress={() => {
-													handlePress(overallIndex)
-												}}
-											>
-												<WhatsNewBox
-													title={title[i18n.language as LanguageKey]}
-													description={
-														description[i18n.language as LanguageKey]
-													}
-													icon={icon}
-												/>
-											</Pressable>
-										</Animated.View>
-									)
-								}
-							)}
-						</View>
-					))}
+						return (
+							<Animated.View
+								key={title[i18n.language as LanguageKey]}
+								style={[opacityStyle, rotationStyle]}
+							>
+								<Pressable
+									onPress={() => {
+										handlePress(index)
+									}}
+								>
+									<WhatsNewBox
+										title={title[i18n.language as LanguageKey]}
+										description={description[i18n.language as LanguageKey]}
+										icon={icon}
+									/>
+								</Pressable>
+							</Animated.View>
+						)
+					}
+				)}
 			</View>
-			<View style={styles.buttonContainer}>
+			<View className="flex-1">
 				<Pressable
-					style={styles.button}
+					className="self-center bg-primary rounded-md px-5 py-[15px] w-1/2"
 					onPress={() => {
 						toggleUpdated()
 						router.replace('/(tabs)')
 					}}
 				>
-					<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>
+					<Text
+						className="text-[15px] font-semibold text-center"
+						style={{ color: buttonTextColor }}
+					>
+						{t('whatsnew.continue')}
+					</Text>
 				</Pressable>
 			</View>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	boxes: {
-		gap: 12
-	},
-	boxesContainer: {
-		flex: 4,
-		justifyContent: 'center'
-	},
-	button: {
-		alignSelf: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.radius.md,
-		paddingHorizontal: 20,
-		paddingVertical: 15,
-		width: '50%'
-	},
-	buttonContainer: {
-		flex: 1
-	},
-	buttonText: {
-		color: getContrastColor(theme.colors.primary),
-		fontSize: 15,
-		fontWeight: '600',
-		textAlign: 'center'
-	},
-	page: {
-		backgroundColor: theme.colors.contrast,
-		flex: 1,
-		gap: 20,
-		paddingHorizontal: 20,
-		paddingVertical: 40
-	},
-	subtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		textAlign: 'center'
-	},
-	title: {
-		color: theme.colors.text,
-		fontSize: 32,
-		fontWeight: 'bold',
-		paddingBottom: 10,
-		textAlign: 'center'
-	},
-	titleBox: {
-		flex: 1,
-		justifyContent: 'flex-end'
-	}
-}))

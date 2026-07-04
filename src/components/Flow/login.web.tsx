@@ -104,7 +104,7 @@ export default function Login(): React.JSX.Element {
 						</View>
 					</View>
 					<View
-						className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full"
+						className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full border-border"
 						style={hairlineBorder}
 					>
 						{data.map((item) => (

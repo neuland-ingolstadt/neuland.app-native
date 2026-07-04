@@ -2,7 +2,6 @@ import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio from '@/components/Food/food-language-section'
 import AccentColorPicker from '@/components/Theme/accent-color-picker'
 import ThemePreview from '@/components/Theme/theme-preview'
@@ -29,7 +28,6 @@ export default function Theme(): React.JSX.Element {
 		(state) => state.setShowSplashScreen
 	)
 	const { t } = useTranslation(['settings', 'timetable'])
-	const { styles } = useStyles(stylesheet)
 
 	const onSelectThemeColor = (color: ThemeColor) => {
 		selectionAsync()
@@ -59,7 +57,8 @@ export default function Theme(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={[styles.container, { paddingTop: headerPadding }]}
+			className="flex-1 bg-background"
+			style={{ paddingTop: headerPadding }}
 		>
 			{Platform.OS !== 'web' && (
 				<SectionView title={t('settings:theme.splash.title')}>
@@ -93,8 +92,8 @@ export default function Theme(): React.JSX.Element {
 					/>
 				</SectionView>
 			)}
-			<View style={styles.preview}>
-				<Text style={styles.previewLabel}>
+			<View className="mx-page mt-[42px]">
+				<Text className="text-label-secondary text-[13px] font-normal mb-1.5 mt-4 uppercase">
 					{t('timetable:preferences.preview')}
 				</Text>
 				<ThemePreview theme={theme ?? 'auto'} onThemeChange={setTheme} />
@@ -102,22 +101,3 @@ export default function Theme(): React.JSX.Element {
 		</ScrollView>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		flex: 1,
-		backgroundColor: theme.colors.background
-	},
-	preview: {
-		marginHorizontal: theme.margins.page,
-		marginTop: 42
-	},
-	previewLabel: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 6,
-		marginTop: 16,
-		textTransform: 'uppercase'
-	}
-}))
