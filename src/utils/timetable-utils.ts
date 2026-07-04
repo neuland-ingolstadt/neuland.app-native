@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from '@/lib/dayjs'
 import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
@@ -116,7 +116,7 @@ export function getGroupedTimetable(
 			const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90)
 			return {
 				...exam,
-				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
+				endDate: dayjs(exam.date).add(duration, 'minute').toDate(),
 				eventType: 'exam'
 			}
 		})

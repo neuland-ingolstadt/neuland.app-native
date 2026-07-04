@@ -1,7 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
 import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
-import moment from 'moment'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Share, Text, View } from 'react-native'
@@ -23,7 +22,11 @@ import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections, SectionGroup } from '@/types/components'
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import {
+	diffInMinutes,
+	formatFriendlyDate,
+	formatFriendlyTime
+} from '@/utils/date-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -261,10 +264,7 @@ export default function TimetableDetails(): React.JSX.Element {
 									</Text>
 
 									<Text className="text-label text-sm">
-										{`(${moment(endDate).diff(
-											moment(startDate),
-											'minutes'
-										)} ${t('time.minutes')})`}
+										{`(${diffInMinutes(startDate, endDate)} ${t('time.minutes')})`}
 									</Text>
 								</View>
 							</View>
