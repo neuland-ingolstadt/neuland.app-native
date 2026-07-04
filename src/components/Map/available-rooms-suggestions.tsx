@@ -3,14 +3,15 @@ import { router } from 'expo-router'
 import type { FeatureCollection, Position } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Pressable, Text, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { ROOMS_ALL } from '@/utils/map-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
+import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { UserKindContext } from '../contexts'
 import Divider from '../Universal/divider'
 import PlatformIcon from '../Universal/icon'
@@ -25,19 +26,21 @@ const AvailableRoomsSuggestions = ({
 	allRooms,
 	handlePresentModalPress
 }: AvailableRoomsSuggestionsProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const {
-		setClickedElement,
-		availableRooms,
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
+	const notificationColor = String(
+		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
+	)
+	const contrastOnPrimary = getContrastColor(primaryColor)
+	const { setClickedElement, availableRooms, setCurrentFloor } = use(MapContext)
 
-		setCurrentFloor
-	} = use(MapContext)
 	return (
 		<View>
-			<View style={styles.suggestionSectionHeaderContainer}>
-				<Text style={styles.suggestionSectionHeader}>
+			<View className="items-end flex-row justify-between mb-1">
+				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.availableRooms')}
 				</Text>
 				{userKind !== USER_GUEST && (
@@ -51,29 +54,30 @@ const AvailableRoomsSuggestions = ({
 							right: 10,
 							top: 10
 						}}
-						style={styles.suggestionMoreButton}
+						className="shrink"
 					>
-						<Text style={styles.suggestionMoreButtonText}>
+						<Text className="text-primary text-base font-medium pe-2.5 text-right">
 							{t('misc.more')}
 						</Text>
 					</Pressable>
 				)}
 			</View>
 			<Pressable
-				style={styles.radiusBg}
+				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-border"
+				style={hairlineBorder}
 				onPress={() => {
 					router.navigate('/login')
 				}}
 				disabled={userKind !== USER_GUEST}
 			>
 				{userKind === USER_GUEST ? (
-					<Text style={styles.noResults}>
+					<Text className="text-text text-base py-[30px] text-center">
 						{t('pages.map.details.room.signIn')}
 					</Text>
 				) : availableRooms === null ? (
-					<LoadingIndicator style={styles.loadingMargin} />
+					<LoadingIndicator style={{ marginVertical: 30 }} />
 				) : availableRooms.length === 0 ? (
-					<Text style={styles.noResults}>
+					<Text className="text-text text-base py-[30px] text-center">
 						{t('pages.map.noAvailableRooms')}
 					</Text>
 				) : (
@@ -81,9 +85,12 @@ const AvailableRoomsSuggestions = ({
 						const roomSuggestions = availableRooms.slice(0, 3)
 						if (roomSuggestions.at(0)?.room === ROOMS_ALL) {
 							return (
-								<View style={styles.suggestionRow}>
-									<View style={styles.suggestionInnerRow}>
-										<View style={styles.suggestionIconContainer}>
+								<View className="flex-row px-3 py-[18px]">
+									<View className="items-center flex-row flex-1 justify-between">
+										<View
+											className="items-center rounded-full h-10 justify-center me-3.5 w-10"
+											style={{ backgroundColor: primaryColor }}
+										>
 											<PlatformIcon
 												ios={{
 													name: 'studentdesk',
@@ -97,15 +104,15 @@ const AvailableRoomsSuggestions = ({
 													name: 'Notebook',
 													size: 20
 												}}
-												style={styles.primaryContrast}
+												style={{ color: contrastOnPrimary }}
 											/>
 										</View>
 
-										<View style={styles.suggestionContent}>
-											<Text style={styles.suggestionTitle}>
+										<View className="flex-1 pe-3.5">
+											<Text className="text-text text-base font-semibold mb-px">
 												{t('pages.map.allRoomsAvailable.title')}
 											</Text>
-											<Text style={styles.suggestionSubtitle}>
+											<Text className="text-text text-sm font-normal">
 												{t('pages.map.allRoomsAvailable.subtitle')}
 											</Text>
 										</View>
@@ -116,14 +123,14 @@ const AvailableRoomsSuggestions = ({
 						return roomSuggestions.map((room, key) => (
 							<React.Fragment key={key}>
 								<Pressable
-									style={styles.suggestionRow}
+									className="flex-row px-3 py-[18px]"
 									onPress={() => {
 										const details = allRooms.features.find(
 											(x) => x.properties?.Raum === room.room
 										)
 
 										if (details == null) {
-											roomNotFoundToast(room.room, theme.colors.notification)
+											roomNotFoundToast(room.room, notificationColor)
 											return
 										}
 
@@ -151,8 +158,11 @@ const AvailableRoomsSuggestions = ({
 										handlePresentModalPress()
 									}}
 								>
-									<View style={styles.suggestionInnerRow}>
-										<View style={styles.suggestionIconContainer}>
+									<View className="items-center flex-row flex-1 justify-between">
+										<View
+											className="items-center rounded-full h-10 justify-center me-3.5 w-10"
+											style={{ backgroundColor: primaryColor }}
+										>
 											<PlatformIcon
 												ios={{
 													name: 'studentdesk',
@@ -166,13 +176,15 @@ const AvailableRoomsSuggestions = ({
 													name: 'Notebook',
 													size: 20
 												}}
-												style={styles.primaryContrast}
+												style={{ color: contrastOnPrimary }}
 											/>
 										</View>
 
-										<View style={styles.suggestionContent}>
-											<Text style={styles.suggestionTitle}>{room.room}</Text>
-											<Text style={styles.suggestionSubtitle}>
+										<View className="flex-1 pe-3.5">
+											<Text className="text-text text-base font-semibold mb-px">
+												{room.room}
+											</Text>
+											<Text className="text-text text-sm font-normal">
 												{room.type}
 												{room.capacity !== undefined && (
 													<>
@@ -183,11 +195,17 @@ const AvailableRoomsSuggestions = ({
 											</Text>
 										</View>
 									</View>
-									<View style={styles.suggestionRightContainer}>
-										<Text style={styles.timeLabel}>
+									<View className="flex-col justify-center">
+										<Text
+											className="text-label"
+											style={{ fontVariant: ['tabular-nums'] }}
+										>
 											{formatFriendlyTime(room.from)}
 										</Text>
-										<Text style={styles.time}>
+										<Text
+											className="text-text"
+											style={{ fontVariant: ['tabular-nums'] }}
+										>
 											{formatFriendlyTime(room.until)}
 										</Text>
 									</View>
@@ -202,98 +220,5 @@ const AvailableRoomsSuggestions = ({
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	loadingMargin: {
-		marginVertical: 30
-	},
-	noResults: {
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingVertical: 30,
-		textAlign: 'center'
-	},
-	primaryContrast: {
-		color: getContrastColor(theme.colors.primary)
-	},
-	radiusBg: {
-		backgroundColor: theme.colors.card,
-		borderColor: theme.colors.border,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 18,
-		overflow: 'hidden'
-	},
-	suggestionContent: {
-		flex: 1,
-		paddingRight: 14
-	},
-	suggestionIconContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: 50,
-		height: 40,
-		justifyContent: 'center',
-		marginRight: 14,
-		width: 40
-	},
-	suggestionInnerRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		flex: 1,
-		justifyContent: 'space-between'
-	},
-	suggestionMoreButton: {
-		flexShrink: 1
-	},
-	suggestionMoreButtonText: {
-		color: theme.colors.primary,
-		fontSize: 16,
-		fontWeight: '500',
-		paddingRight: 10,
-		textAlign: 'right'
-	},
-	suggestionRightContainer: {
-		flexDirection: 'column',
-		justifyContent: 'center'
-	},
-	suggestionRow: {
-		flexDirection: 'row',
-		paddingHorizontal: 12,
-		paddingVertical: 18
-	},
-	suggestionSectionHeader: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: '600',
-		marginBottom: 2,
-		paddingTop: 8,
-		textAlign: 'left'
-	},
-	suggestionSectionHeaderContainer: {
-		alignItems: 'flex-end',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: 4
-	},
-	suggestionSubtitle: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '400'
-	},
-	suggestionTitle: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		marginBottom: 1
-	},
-	time: {
-		color: theme.colors.text,
-		fontVariant: ['tabular-nums']
-	},
-	timeLabel: {
-		color: theme.colors.labelColor,
-		fontVariant: ['tabular-nums']
-	}
-}))
 
 export default AvailableRoomsSuggestions

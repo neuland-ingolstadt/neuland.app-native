@@ -16,6 +16,7 @@ import {
 } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
+import RelativeTimeLabel from '../Universal/relative-time-label'
 import RowEntry from '../Universal/row-entry'
 
 const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
@@ -47,20 +48,18 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 				</View>
 			}
 			rightChildren={
-				<View className="flex-row items-center justify-end gap-1.5">
-					{isActive && (
-						<View className="mt-0.5 size-2 rounded-full bg-primary" />
-					)}
-					<Text
-						className={`text-right text-sm text-label ${isActive || isSelected ? 'font-medium text-primary' : ''}`}
-						numberOfLines={2}
-					>
-						{event.begin != null &&
-							(event.end != null && event.begin < new Date()
+				<RelativeTimeLabel
+					showNowDot={isActive}
+					highlighted={isActive || isSelected}
+					numberOfLines={2}
+					label={
+						event.begin != null
+							? event.end != null && event.begin < new Date()
 								? `${t('dates.ends')} ${formatFriendlyRelativeTime(event.end)}`
-								: formatFriendlyRelativeTime(event.begin))}
-					</Text>
-				</View>
+								: formatFriendlyRelativeTime(event.begin)
+							: ''
+					}
+				/>
 			}
 			backgroundColor={
 				toColor(isSelected ? primaryBackgroundColor : cardColor) as
@@ -118,17 +117,12 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 				</View>
 			}
 			rightChildren={
-				<View className="flex-row items-center justify-end gap-1.5">
-					{isToday && (
-						<View className="mt-0.5 size-2 rounded-full bg-primary" />
-					)}
-					<Text
-						className={`text-right text-sm text-label ${isToday ? 'font-medium text-primary' : ''}`}
-						numberOfLines={1}
-					>
-						{formatFriendlyRelativeTime(new Date(event.date))}
-					</Text>
-				</View>
+				<RelativeTimeLabel
+					showNowDot={isToday}
+					highlighted={isToday}
+					numberOfLines={1}
+					label={formatFriendlyRelativeTime(new Date(event.date))}
+				/>
 			}
 			onPress={navigateToPage}
 			href={'/exam' as RelativePathString}

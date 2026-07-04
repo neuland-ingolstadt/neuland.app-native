@@ -1,10 +1,8 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { useStyles } from 'react-native-unistyles'
 import ErrorView from '@/components/Error/error-view'
 import { FreeRoomsList } from '@/components/Map/free-rooms-list'
-import { roomSearchStylesheet } from '@/components/Map/room-search-styles'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -28,16 +26,17 @@ export function RoomSearchResults({
 	error,
 	refetchByUser
 }: RoomSearchResultsProps): React.JSX.Element {
-	const { styles } = useStyles(roomSearchStylesheet)
 	const { t } = useTranslation('common')
 
 	return (
 		<>
-			<Text style={styles.sectionHeader}>{t('pages.rooms.results')}</Text>
-			<View style={styles.sectionContainer}>
-				<View style={styles.section}>
+			<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
+				{t('pages.rooms.results')}
+			</Text>
+			<View className="pb-5">
+				<View className="bg-card ios:rounded-ios android:rounded-md web:rounded-md mb-4">
 					{isLoading ? (
-						<LoadingIndicator style={styles.loadingIndicator} />
+						<LoadingIndicator style={{ paddingVertical: 30 }} />
 					) : isPaused ? (
 						<ErrorView
 							title={networkError}

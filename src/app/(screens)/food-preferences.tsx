@@ -4,6 +4,7 @@ import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
 import AutoShowNextDaySetting from '@/components/Food/auto-show-next-day-setting'
 import MultiSectionRadio, {
@@ -17,12 +18,12 @@ import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
-import { lightTheme } from '@/styles/themes'
 import type { FormListSections } from '@/types/components'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
+	const insets = useSafeAreaInsets()
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 	const elemtents = [
 		{
@@ -117,8 +118,8 @@ export default function FoodPreferences(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			contentContainerStyle={{
-				paddingBottom: lightTheme.margins.bottomSafeArea
+			style={{
+				paddingBottom: insets.bottom + 32
 			}}
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}

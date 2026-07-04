@@ -2,11 +2,12 @@ import moment from 'moment'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import PlatformIcon from '@/components/Universal/icon'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 import DetailsBody from './details-body'
 import DetailsRow from './details-row'
@@ -20,26 +21,31 @@ interface ShareCardProps {
 export default function ShareCard({
 	event
 }: ShareCardProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
-
 	const { t } = useTranslation('timetable')
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	const startDate = new Date(event.startDate)
 	const endDate = new Date(event.endDate)
 
 	return (
-		<View style={styles.wrapper}>
+		<View className="aspect-square bg-background flex gap-1 h-[350px] ps-1.5 pe-6 pt-6">
 			<DetailsRow>
 				<DetailsSymbol>
-					<View style={styles.eventColorCircle} />
+					<View
+						className="aspect-square rounded-infinite w-[15px]"
+						style={{ backgroundColor: primaryColor }}
+					/>
 				</DetailsSymbol>
 
 				<DetailsBody>
-					<Text numberOfLines={2} style={styles.title}>
+					<Text numberOfLines={2} className="text-text text-xl font-bold">
 						{event.name}
 					</Text>
 
-					<Text style={styles.shortName}>{event.shortName}</Text>
+					<Text className="text-base" style={{ color: labelColor }}>
+						{event.shortName}
+					</Text>
 				</DetailsBody>
 			</DetailsRow>
 
@@ -60,20 +66,22 @@ export default function ShareCard({
 							name: 'Clock',
 							size: 24
 						}}
-						style={styles.icon}
+						style={{ color: labelColor }}
 					/>
 				</DetailsSymbol>
 
 				<DetailsBody>
-					<Text style={styles.text1}>
+					<Text className="text-text text-lg">
 						{formatFriendlyDate(startDate, {
 							weekday: 'long',
 							relative: false
 						})}
 					</Text>
 
-					<View style={styles.detailsContainer}>
-						<Text style={styles.text2}>{formatFriendlyTime(startDate)}</Text>
+					<View className="items-center flex flex-row gap-1">
+						<Text className="text-text text-sm">
+							{formatFriendlyTime(startDate)}
+						</Text>
 
 						<PlatformIcon
 							ios={{
@@ -88,12 +96,14 @@ export default function ShareCard({
 								name: 'ChevronRight',
 								size: 16
 							}}
-							style={styles.icon}
+							style={{ color: labelColor }}
 						/>
 
-						<Text style={styles.text2}>{formatFriendlyTime(endDate)}</Text>
+						<Text className="text-text text-sm">
+							{formatFriendlyTime(endDate)}
+						</Text>
 
-						<Text style={styles.text3}>
+						<Text className="text-sm" style={{ color: labelColor }}>
 							{`(${moment(endDate).diff(
 								moment(startDate),
 								'minutes'
@@ -120,14 +130,14 @@ export default function ShareCard({
 							name: 'MapPin',
 							size: 24
 						}}
-						style={styles.icon}
+						style={{ color: labelColor }}
 					/>
 				</DetailsSymbol>
 
 				<DetailsBody>
-					<View style={styles.roomContainer}>
-						{event.rooms.map((room, i) => (
-							<Text key={i} style={styles.text1}>
+					<View className="flex flex-row gap-1">
+						{event.rooms.map((room) => (
+							<Text key={room} className="text-text text-lg">
 								{room}
 							</Text>
 						))}
@@ -152,87 +162,19 @@ export default function ShareCard({
 							name: 'User',
 							size: 24
 						}}
-						style={styles.icon}
+						style={{ color: labelColor }}
 					/>
 				</DetailsSymbol>
 
 				<DetailsBody>
-					<Text style={styles.text1}>{event.lecturer}</Text>
+					<Text className="text-text text-lg">{event.lecturer}</Text>
 				</DetailsBody>
 			</DetailsRow>
 
-			<View style={styles.waterMark}>
+			<View className="items-center bottom-4 flex flex-row gap-1.5 absolute right-6">
 				<LogoSVG size={24} />
-				<Text style={styles.waterMarkText}>{'Neuland Next'}</Text>
+				<Text className="text-text text-base font-bold">{'Neuland Next'}</Text>
 			</View>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	detailsContainer: {
-		alignItems: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 4
-	},
-	eventColorCircle: {
-		aspectRatio: 1,
-		backgroundColor: theme.colors.primary,
-		borderRadius: 9999,
-		width: 15
-	},
-	icon: {
-		color: theme.colors.labelColor
-	},
-	roomContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 4
-	},
-	shortName: {
-		color: theme.colors.labelColor,
-		fontSize: 16
-	},
-	text1: {
-		color: theme.colors.text,
-		fontSize: 18
-	},
-	text2: {
-		color: theme.colors.text,
-		fontSize: 14
-	},
-	text3: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	},
-	title: {
-		color: theme.colors.text,
-		fontSize: 20,
-		fontWeight: 'bold'
-	},
-	waterMark: {
-		alignItems: 'center',
-		bottom: 16,
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 6,
-		position: 'absolute',
-		right: 24
-	},
-	waterMarkText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: 'bold'
-	},
-	wrapper: {
-		aspectRatio: 1,
-		backgroundColor: theme.colors.background,
-		display: 'flex',
-		gap: 4,
-		height: 350,
-		paddingLeft: 6,
-		paddingRight: 24,
-		paddingTop: 24
-	}
-}))

@@ -1,23 +1,25 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from '../Universal/icon'
 
 const AttributionLink = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	return (
-		<View style={styles.attributionContainer}>
+		<View className="py-10">
 			<Pressable
 				onPress={() => {
 					void Linking.openURL('https://www.openstreetmap.org/copyright')
 				}}
-				style={styles.attributionLink}
+				className="items-center flex-row gap-1"
 			>
-				<Text style={styles.attributionText}>{t('pages.map.details.osm')}</Text>
+				<Text className="text-[15px] ps-1" style={{ color: labelColor }}>
+					{t('pages.map.details.osm')}
+				</Text>
 				<PlatformIcon
 					ios={{
 						name: 'chevron.forward',
@@ -31,7 +33,7 @@ const AttributionLink = (): React.JSX.Element => {
 						name: 'ChevronRight',
 						size: 16
 					}}
-					style={styles.label}
+					style={{ color: labelColor }}
 				/>
 			</Pressable>
 		</View>
@@ -39,20 +41,3 @@ const AttributionLink = (): React.JSX.Element => {
 }
 
 export default AttributionLink
-
-const stylesheet = createStyleSheet((theme) => ({
-	attributionContainer: { paddingVertical: 40 },
-	attributionLink: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 4
-	},
-	attributionText: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		paddingStart: 4
-	},
-	label: {
-		color: theme.colors.labelColor
-	}
-}))

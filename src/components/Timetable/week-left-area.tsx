@@ -12,12 +12,13 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useCSSVariable } from 'uniwind'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function WeekLeftArea(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
 	const { visibleDateUnixAnim } = useCalendar()
 	const { timeZone } = useTimezone()
+	const textColor = toColor(useCSSVariable('--color-text'))
 	const theme = useTheme((state) => ({
 		weekNumberBackgroundColor: state.colors.surface,
 		weekNumber: state.weekNumber,
@@ -48,39 +49,24 @@ export default function WeekLeftArea(): React.JSX.Element {
 
 	return (
 		<View
+			className="mx-2 mt-2 rounded-xs py-0.5 items-center"
 			style={[
-				styles.container,
 				{ backgroundColor: theme.weekNumberBackgroundColor },
 				theme.weekNumberContainer
 			]}
 		>
-			<Text style={[styles.weekText, theme.weekNumber]}>
+			<Text
+				className="text-[11px] text-center"
+				style={[theme.weekNumber, { color: textColor }]}
+			>
 				{`${t('weekNumberPrefix')}${week}`}
 			</Text>
-			<Text style={[styles.monthText, theme.weekNumber]}>{month}</Text>
+			<Text
+				className="text-xs text-center leading-[13px] font-medium"
+				style={[theme.weekNumber, { color: textColor }]}
+			>
+				{month}
+			</Text>
 		</View>
 	)
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-	container: {
-		backgroundColor: '#DADADA',
-		marginHorizontal: 8,
-		borderRadius: 4,
-		marginTop: 8,
-		paddingVertical: 2,
-		alignItems: 'center'
-	},
-	weekText: {
-		fontSize: 11,
-		textAlign: 'center',
-		color: theme.colors.text
-	},
-	monthText: {
-		fontSize: 12,
-		textAlign: 'center',
-		lineHeight: 13,
-		fontWeight: 500,
-		color: theme.colors.text
-	}
-}))

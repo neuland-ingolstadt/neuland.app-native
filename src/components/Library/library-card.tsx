@@ -30,7 +30,7 @@ const LibraryCard = ({
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	return (
 		<Pressable
-			className="items-center bg-card border-border rounded-sm flex-row gap-1.5 justify-between p-4"
+			className="items-center bg-card border-border rounded-md flex-row gap-1.5 justify-between p-4"
 			style={hairlineBorder}
 			onPress={onPress}
 		>
