@@ -35,6 +35,13 @@ iconImages = {
 
 export const appIcons = Object.keys(iconImages)
 
+const appIconCategories: Record<string, string[]> = {
+	exclusive: ['cat', 'retro'],
+	neuland: ['luxury', 'rainbowGlow', 'hacker'],
+	default: ['default', 'modernGreen', 'modernPink'],
+	rainbow: ['rainbowNeon', 'rainbowMoonLight']
+}
+
 export default function AppIconPicker(): React.JSX.Element {
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
@@ -44,12 +51,6 @@ export default function AppIconPicker(): React.JSX.Element {
 	const [currentIcon, setCurrentIcon] = React.useState<string>(
 		lowercaseFirstLetter(getAppIconName() ?? 'default')
 	)
-	const categories: Record<string, string[]> = {
-		exclusive: ['cat', 'retro'],
-		neuland: ['luxury', 'rainbowGlow', 'hacker'],
-		default: ['default', 'modernGreen', 'modernPink'],
-		rainbow: ['rainbowNeon', 'rainbowMoonLight']
-	}
 	const support = supportsAlternateIcons
 	if (!support) {
 		return (
@@ -72,7 +73,7 @@ export default function AppIconPicker(): React.JSX.Element {
 				footer={t('appIcon.exclusive')}
 			>
 				<View className="content-center bg-card rounded-md justify-center">
-					{categories.exclusive.map((icon, index) => {
+					{appIconCategories.exclusive.map((icon, index) => {
 						const unlocked = unlockedAppIcons.includes(icon)
 						return (
 							<React.Fragment key={icon}>
@@ -126,7 +127,7 @@ export default function AppIconPicker(): React.JSX.Element {
 										</Text>
 									)}
 								</Pressable>
-								{index !== categories.exclusive.length - 1 && (
+								{index !== appIconCategories.exclusive.length - 1 && (
 									<Divider paddingLeft={110} />
 								)}
 							</React.Fragment>
@@ -139,7 +140,7 @@ export default function AppIconPicker(): React.JSX.Element {
 			<SectionView title={t('appIcon.categories.neuland')}>
 				<View className="content-center bg-card rounded-md justify-center">
 					{memberInfo ? (
-						categories.neuland.map((icon, index) => (
+						appIconCategories.neuland.map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
 									className="items-center flex-row justify-between pe-5 ps-3 py-3"
@@ -175,7 +176,7 @@ export default function AppIconPicker(): React.JSX.Element {
 										/>
 									)}
 								</Pressable>
-								{index !== categories.neuland.length - 1 && (
+								{index !== appIconCategories.neuland.length - 1 && (
 									<Divider paddingLeft={110} />
 								)}
 							</React.Fragment>
@@ -215,7 +216,7 @@ export default function AppIconPicker(): React.JSX.Element {
 			{(['default', 'rainbow'] as const).map((key) => (
 				<SectionView title={t(`appIcon.categories.${key}`)} key={key}>
 					<View className="content-center bg-card rounded-md justify-center">
-						{categories[key].map((icon, index) => (
+						{appIconCategories[key].map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
 									className="items-center flex-row justify-between pe-5 ps-3 py-3"
@@ -256,7 +257,7 @@ export default function AppIconPicker(): React.JSX.Element {
 										/>
 									)}
 								</Pressable>
-								{index !== categories[key].length - 1 && (
+								{index !== appIconCategories[key].length - 1 && (
 									<Divider paddingLeft={110} />
 								)}
 							</React.Fragment>

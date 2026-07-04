@@ -52,6 +52,27 @@ import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import { copyToClipboard } from '@/utils/ui-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
+const foodDataSources = {
+	IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
+	NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
+	Reimanns: 'https://reimanns.in/mittagsgerichte-wochenkarte/',
+	Canisius:
+		'https://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
+} as const
+
+interface FoodRestaurantLocations {
+	IngolstadtMensa: string
+	Reimanns: string
+	Canisius: string
+	[key: string]: string
+}
+
+const foodRestaurantLocations: FoodRestaurantLocations = {
+	IngolstadtMensa: 'M001',
+	Reimanns: 'F001',
+	Canisius: 'X001'
+}
+
 export default function FoodDetail(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const textColor = toColor(useCSSVariable('--color-text'))
@@ -78,13 +99,6 @@ export default function FoodDetail(): React.JSX.Element {
 	)
 	const { t, i18n } = useTranslation('food')
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const dataSources = {
-		IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
-		NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
-		Reimanns: 'https://reimanns.in/mittagsgerichte-wochenkarte/',
-		Canisius:
-			'https://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
-	}
 
 	const navigation = useNavigation()
 
@@ -183,19 +197,6 @@ export default function FoodDetail(): React.JSX.Element {
 				message={t('details.error.message')}
 			/>
 		)
-	}
-
-	interface Locations {
-		IngolstadtMensa: string
-		Reimanns: string
-		Canisius: string
-		[key: string]: string
-	}
-
-	const locations: Locations = {
-		IngolstadtMensa: 'M001',
-		Reimanns: 'F001',
-		Canisius: 'X001'
 	}
 
 	function itemAlert(item: string, itemType: 'allergen' | 'flag'): void {
@@ -405,7 +406,10 @@ export default function FoodDetail(): React.JSX.Element {
 				foodData.restaurant.slice(1)
 			: ''
 	const handlePress = (): void => {
-		const location = locations[restaurant as keyof typeof locations]
+		const location =
+			foodRestaurantLocations[
+				restaurant as keyof typeof foodRestaurantLocations
+			]
 
 		if (restaurant != null && location !== undefined) {
 			router.dismissTo({
@@ -416,7 +420,8 @@ export default function FoodDetail(): React.JSX.Element {
 	}
 
 	const locationExists =
-		restaurant !== undefined && locations[restaurant] !== undefined
+		restaurant !== undefined &&
+		foodRestaurantLocations[restaurant] !== undefined
 	const humanLocation =
 		humanLocations[restaurant as keyof typeof humanLocations]
 	const humanCategory = t(
@@ -455,8 +460,8 @@ export default function FoodDetail(): React.JSX.Element {
 					onPress: () => {
 						if (foodData?.restaurant !== null) {
 							const restaurant =
-								foodData?.restaurant as keyof typeof dataSources
-							void Linking.openURL(dataSources[restaurant])
+								foodData?.restaurant as keyof typeof foodDataSources
+							void Linking.openURL(foodDataSources[restaurant])
 						}
 					}
 				}

@@ -37,6 +37,12 @@ function getGradeKey(grade: Grade): string {
 	return `${grade.stg}-${grade.kztn}-${grade.pon}`
 }
 
+const fuseOptions = {
+	keys: ['titel'],
+	threshold: 0.3,
+	ignoreLocation: true
+}
+
 export default function GradesSCreen(): React.JSX.Element {
 	const { t } = useTranslation('settings')
 	const textColor = toColor(useCSSVariable('--color-text'))
@@ -155,12 +161,6 @@ export default function GradesSCreen(): React.JSX.Element {
 			subscription.remove()
 		}
 	}, [])
-
-	const fuseOptions = {
-		keys: ['titel'],
-		threshold: 0.3,
-		ignoreLocation: true
-	}
 
 	const filteredGrades = React.useMemo(() => {
 		if (!grades) return null

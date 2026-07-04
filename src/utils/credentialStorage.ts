@@ -64,16 +64,17 @@ export default class CredentialStorage {
 		)
 		const iv = crypto.getRandomValues(new Uint8Array(12)) // AES-GCM typically uses a 12-byte IV
 
-		const encrypted = await crypto.subtle.encrypt(
-			{
-				name: 'AES-GCM',
-				iv
-			},
-			key,
-			objectToArrayBuffer(data)
-		)
-
-		const db = await this._openDatabase()
+		const [encrypted, db] = await Promise.all([
+			crypto.subtle.encrypt(
+				{
+					name: 'AES-GCM',
+					iv
+				},
+				key,
+				objectToArrayBuffer(data)
+			),
+			this._openDatabase()
+		])
 		try {
 			await db.put(STORE_NAME, { id, key, iv, encrypted })
 		} finally {
