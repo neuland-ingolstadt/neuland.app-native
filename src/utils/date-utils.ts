@@ -1,8 +1,7 @@
 import { t } from 'i18next'
-import moment from 'moment'
+import dayjs from '@/lib/dayjs'
 import i18n from '@/localization/i18n'
 import type { FriendlyDateOptions } from '@/types/utils'
-import 'moment/locale/de'
 
 /**
  * Formats a date like "Tue., 1.10.2020"
@@ -17,9 +16,9 @@ export function formatFriendlyDate(
 		relative: true
 	}
 ): string {
-	const date = moment(datetime)
-	const today = moment()
-	const tomorrow = moment().add(1, 'days')
+	const date = dayjs(datetime)
+	const today = dayjs()
+	const tomorrow = dayjs().add(1, 'day')
 
 	if (date.isSame(today, 'day') && options.relative !== false) {
 		return t('dates.today', { ns: 'common' })
@@ -59,7 +58,17 @@ export function formatFriendlyTime(datetime?: Date | string): string {
 	if (datetime == null || Number.isNaN(new Date(datetime).getTime())) {
 		return ''
 	}
-	return moment(datetime).locale('de').format('HH:mm')
+	return dayjs(datetime).locale('de').format('HH:mm')
+}
+
+/**
+ * Returns the difference between two datetimes in whole minutes.
+ */
+export function diffInMinutes(
+	start: Date | string,
+	end: Date | string
+): number {
+	return dayjs(end).diff(dayjs(start), 'minute')
 }
 
 /**
@@ -138,9 +147,9 @@ export function formatFriendlyDateTime(
  * @returns {string}
  */
 export function formatNearDate(datetime: Date | string): string {
-	const date = moment(datetime)
-	const today = moment()
-	const tomorrow = moment().add(1, 'days')
+	const date = dayjs(datetime)
+	const today = dayjs()
+	const tomorrow = dayjs().add(1, 'day')
 
 	if (date.isSame(today, 'day')) {
 		return t('dates.today', { ns: 'common' })
@@ -148,21 +157,7 @@ export function formatNearDate(datetime: Date | string): string {
 	if (date.isSame(tomorrow, 'day')) {
 		return t('dates.tomorrow', { ns: 'common' })
 	}
-	return date.format('dddd, D.M.')
-}
-
-/**
- * Formats a time delta like "in 5 Minuten".
- * @param {number} delta Time delta in milliseconds
- * @returns {string}
- */
-function formatFriendlyTimeDelta(delta: number): string {
-	moment.relativeTimeThreshold('d', 13)
-	moment.relativeTimeThreshold('w', 4)
-	moment.locale(i18n.language)
-	const duration = moment.duration(delta)
-	const relative = moment().add(duration)
-	return relative.fromNow()
+	return date.locale(i18n.language).format('dddd, D.M.')
 }
 
 /**
@@ -180,9 +175,7 @@ export function formatFriendlyRelativeTime(date: Date): string {
 		return ''
 	}
 
-	const deltaFromNow = moment(date).diff(moment())
-
-	return formatFriendlyTimeDelta(deltaFromNow)
+	return dayjs(date).locale(i18n.language).from(dayjs(Date.now()))
 }
 
 /**
@@ -448,11 +441,10 @@ export function formatCompactDateRange(
 	startDate: Date | string,
 	endDate?: Date | string | null
 ): string {
-	const start = moment(startDate)
-	const end = endDate ? moment(endDate) : null
+	const start = dayjs(startDate)
+	const end = endDate ? dayjs(endDate) : null
 
-	// Format just the day and month (1.10)
-	const formatDayMonth = (date: moment.Moment): string => date.format('DD.MM')
+	const formatDayMonth = (date: dayjs.Dayjs): string => date.format('DD.MM')
 
 	// If no end date or start and end are the same day
 	if (!end || (end && start.isSame(end, 'day'))) {

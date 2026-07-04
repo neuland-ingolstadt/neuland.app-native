@@ -210,6 +210,21 @@ describe('date-utils', () => {
 		).toBe('07.04 - 09.04')
 	})
 
+	it('diffInMinutes - Should return whole minutes between two datetimes', () => {
+		expect(
+			dateUtils.diffInMinutes(
+				new Date('2026-04-09T08:00:00'),
+				new Date('2026-04-09T09:30:00')
+			)
+		).toBe(90)
+	})
+
+	it('diffInMinutes - Should accept ISO date strings', () => {
+		expect(
+			dateUtils.diffInMinutes('2026-04-09T08:00:00', '2026-04-09T09:30:00')
+		).toBe(90)
+	})
+
 	describe('friendly formatters', () => {
 		const FIXED_NOW = Date.parse('2026-04-07T12:00:00')
 
@@ -375,6 +390,15 @@ describe('date-utils', () => {
 				const inFiveMinutes = new Date(FIXED_NOW + 5 * 60 * 1000)
 				expect(dateUtils.formatFriendlyRelativeTime(inFiveMinutes)).toBe(
 					'in 5 Minuten'
+				)
+			})
+		})
+
+		it('formatFriendlyRelativeTime - Should return a relative label for past dates', () => {
+			withFrozenNow(() => {
+				const tenMinutesAgo = new Date(FIXED_NOW - 10 * 60 * 1000)
+				expect(dateUtils.formatFriendlyRelativeTime(tenMinutesAgo)).toBe(
+					'vor 10 Minuten'
 				)
 			})
 		})
