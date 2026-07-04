@@ -102,55 +102,44 @@ export default function WhatsNewScreen(): React.JSX.Element {
 			</View>
 
 			<View className="flex-[4] justify-center gap-3">
-				{Object.keys(changelog.version)
-					.filter((key) => key === version)
-					.map((key, boxIndex) => (
-						<View key={key} className="gap-3">
-							{changelog.version[key].map(
-								({ title, description, icon }, index) => {
-									const overallIndex =
-										boxIndex * changelog.version[key].length + index
+				{changelog.version[version]?.map(
+					({ title, description, icon }, index) => {
+						const opacityStyle = useAnimatedStyle(() => {
+							return {
+								opacity: opacityValues[index].value
+							}
+						})
 
-									const opacityStyle = useAnimatedStyle(() => {
-										return {
-											opacity: opacityValues[overallIndex].value
-										}
-									})
+						const rotationStyle = useAnimatedStyle(() => {
+							return {
+								transform: [
+									{
+										rotateZ: `${rotationValues[index].value}deg`
+									}
+								]
+							}
+						})
 
-									const rotationStyle = useAnimatedStyle(() => {
-										return {
-											transform: [
-												{
-													rotateZ: `${rotationValues[overallIndex].value}deg`
-												}
-											]
-										}
-									})
-
-									return (
-										<Animated.View
-											key={title[i18n.language as LanguageKey]}
-											style={[opacityStyle, rotationStyle]}
-										>
-											<Pressable
-												onPress={() => {
-													handlePress(overallIndex)
-												}}
-											>
-												<WhatsNewBox
-													title={title[i18n.language as LanguageKey]}
-													description={
-														description[i18n.language as LanguageKey]
-													}
-													icon={icon}
-												/>
-											</Pressable>
-										</Animated.View>
-									)
-								}
-							)}
-						</View>
-					))}
+						return (
+							<Animated.View
+								key={title[i18n.language as LanguageKey]}
+								style={[opacityStyle, rotationStyle]}
+							>
+								<Pressable
+									onPress={() => {
+										handlePress(index)
+									}}
+								>
+									<WhatsNewBox
+										title={title[i18n.language as LanguageKey]}
+										description={description[i18n.language as LanguageKey]}
+										icon={icon}
+									/>
+								</Pressable>
+							</Animated.View>
+						)
+					}
+				)}
 			</View>
 			<View className="flex-1">
 				<Pressable

@@ -124,6 +124,8 @@ export default function FoodPreferences(): React.JSX.Element {
 				paddingTop: headerPadding,
 				paddingBottom: insets.bottom + 16
 			}}
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
 		>
 			<View className="flex-1">
 				<SectionView title={t('preferences.sections.restaurants')}>

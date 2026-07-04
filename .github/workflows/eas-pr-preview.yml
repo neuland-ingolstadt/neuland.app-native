@@ -38,6 +38,9 @@ jobs:
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
+      - name: Bundle licenses
+        run: bun run licences:bundle
+
       - name: Create preview
         # Publishes to an EAS branch named after the PR — isolated from production.
         # Requires a dev client build; does not OTA-update App Store / Play Store users.

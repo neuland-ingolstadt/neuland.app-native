@@ -189,7 +189,7 @@ class NeulandAPIClient {
 	 */
 	async getMapOverlay(): Promise<FeatureCollection> {
 		return (await this.performRequest(
-			`${ASSET_ENDPOINT}/rooms_neuland_v2.7.geojson`
+			`${ASSET_ENDPOINT}/rooms_neuland_v2.6.1.geojson`
 		)) as FeatureCollection
 	}
 

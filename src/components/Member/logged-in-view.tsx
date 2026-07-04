@@ -208,7 +208,7 @@ export function LoggedInView(): React.JSX.Element {
 
 			<Pressable
 				onPress={logoutAlert}
-				className="items-center self-center bg-card rounded-mg flex-row gap-2.5 justify-center my-[30px] min-w-[165px] px-10 py-3"
+				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center my-[30px] min-w-[165px] px-10 py-3"
 				style={hairlineBorder}
 			>
 				<PlatformIcon

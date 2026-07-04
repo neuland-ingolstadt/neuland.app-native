@@ -8,7 +8,7 @@ import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import AvatarCircle from './avatar-circle'
 
 const NeulandBox = (): React.JSX.Element | null => {
@@ -34,8 +34,7 @@ const NeulandBox = (): React.JSX.Element | null => {
 		<View className="mt-2.5">
 			<Pressable
 				onPress={() => router.navigate('/member')}
-				className="ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden w-full active:opacity-90"
-				style={hairlineBorder}
+				className="ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden w-full active:opacity-90"
 			>
 				<LinearGradient
 					colors={['#000', '#015916']}

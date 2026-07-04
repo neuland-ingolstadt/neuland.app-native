@@ -6,7 +6,7 @@ import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import PlatformIcon from '@/components/Universal/icon'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export function MemberAreaButton(): React.JSX.Element | null {
 	const router = useRouter()
@@ -26,8 +26,7 @@ export function MemberAreaButton(): React.JSX.Element | null {
 				onPress={() => {
 					router.navigate('/member')
 				}}
-				className="ios:rounded-ios android:rounded-md overflow-hidden w-full active:opacity-90"
-				style={hairlineBorder}
+				className="ios:rounded-ios android:rounded-md overflow-hidden w-full border-0 active:opacity-90"
 			>
 				<LinearGradient
 					colors={['#000', '#015916']}

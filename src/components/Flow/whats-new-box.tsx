@@ -27,7 +27,7 @@ const WhatsNewBox = ({
 }: WhatsNewBoxProps): React.JSX.Element => {
 	return (
 		<View
-			className="items-center bg-card-contrast rounded-2xl flex-row gap-4 px-5 py-4 w-full"
+			className="items-center bg-card-contrast rounded-2xl flex-row gap-4 px-5 py-4 w-full border-border"
 			style={hairlineBorder}
 		>
 			<View className="bg-primary-background rounded-2xl p-3 shrink-0">

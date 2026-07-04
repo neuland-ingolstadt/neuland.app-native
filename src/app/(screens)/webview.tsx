@@ -14,6 +14,12 @@ const PADDING = 16
 const LOADING_TIMEOUT = 100
 const BOTTOM_PADDING = 80
 
+const decodeHtmlEntities = (html: string): string => {
+	const textarea = document.createElement('textarea')
+	textarea.innerHTML = html
+	return textarea.value
+}
+
 export default function NotesDetails(): React.JSX.Element {
 	const navigation = useNavigation()
 	const { t } = useTranslation('timetable')
@@ -107,12 +113,6 @@ export default function NotesDetails(): React.JSX.Element {
 	}, [timeoutId])
 
 	if (Platform.OS === 'web') {
-		const decodeHtmlEntities = (html: string) => {
-			const textarea = document.createElement('textarea')
-			textarea.innerHTML = html
-			return textarea.value
-		}
-
 		const plainTextContent = sanitizedHtml
 			.replace(
 				/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gi,
