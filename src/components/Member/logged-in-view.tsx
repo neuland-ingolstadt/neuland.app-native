@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import type React from 'react'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -28,11 +28,7 @@ import {
 	OfficePresenceSection,
 	officePresenceQueryKey
 } from './office-presence-section'
-
-const SecurityWarningModal = lazy(async () => {
-	const module = await import('./security-warning-modal')
-	return { default: module.SecurityWarningModal }
-})
+import { SecurityWarningModal } from './security-warning-modal'
 
 export function LoggedInView(): React.JSX.Element {
 	const notificationColor = String(
@@ -235,15 +231,11 @@ export function LoggedInView(): React.JSX.Element {
 				</Text>
 			</Pressable>
 
-			{showSecurityWarning ? (
-				<Suspense fallback={null}>
-					<SecurityWarningModal
-						visible={showSecurityWarning}
-						onConfirm={handleConfirmAddToWallet}
-						onCancel={handleCancelAddToWallet}
-					/>
-				</Suspense>
-			) : null}
+			<SecurityWarningModal
+				visible={showSecurityWarning}
+				onConfirm={handleConfirmAddToWallet}
+				onCancel={handleCancelAddToWallet}
+			/>
 		</ScrollView>
 	)
 }

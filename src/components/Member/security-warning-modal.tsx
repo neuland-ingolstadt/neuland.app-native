@@ -1,22 +1,22 @@
+import { Image } from 'expo-image'
 import type React from 'react'
-import { lazy, Suspense } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	ActivityIndicator,
-	Animated,
-	Modal,
-	Pressable,
-	Text,
-	View
-} from 'react-native'
+import { Animated, Modal, Platform, Pressable, Text, View } from 'react-native'
+import WalletManager from 'react-native-wallet-manager'
 import { useCSSVariable } from 'uniwind'
+import MemberAPI from '@/api/member-api'
+// @ts-expect-error no types
+import AppleWalletDE from '@/assets/wallet/apple_wallet_de.svg'
+// @ts-expect-error no types
+import AppleWalletEN from '@/assets/wallet/apple_wallet_en.svg'
+// @ts-expect-error no types
+import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
+// @ts-expect-error no types
+import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
 import PlatformIcon from '@/components/Universal/icon'
+import { useMemberStore } from '@/hooks/useMemberStore'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
-
-const WalletPassButton = lazy(async () => {
-	const module = await import('./wallet-pass-button')
-	return { default: module.WalletPassButton }
-})
 
 interface SecurityWarningModalProps {
 	visible: boolean
@@ -30,7 +30,64 @@ export function SecurityWarningModal({
 	onCancel
 }: SecurityWarningModalProps): React.JSX.Element {
 	const { t } = useTranslation('member')
+	const { info, idToken } = useMemberStore()
+	const [isAddingToWallet, setIsAddingToWallet] = useState(false)
+	const { i18n } = useTranslation()
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
+
+	const currentLanguage = i18n.language || 'en'
+
+	const handleConfirm = async () => {
+		if (!idToken) {
+			onConfirm()
+			return
+		}
+
+		setIsAddingToWallet(true)
+
+		try {
+			const canAdd = await WalletManager.canAddPasses()
+			if (!canAdd) {
+				console.error('Device does not support adding passes')
+				onConfirm()
+				return
+			}
+
+			let currentToken = idToken
+			if (info?.exp) {
+				const expirationTime = info.exp * 1000
+				const now = Date.now()
+				const remaining = expirationTime - now
+
+				if (remaining <= 5000) {
+					await useMemberStore.getState().refreshTokens()
+					const updatedToken = useMemberStore.getState().idToken
+					if (updatedToken) {
+						currentToken = updatedToken
+					} else {
+						throw new Error('Failed to refresh token')
+					}
+				}
+			}
+
+			if (!currentToken) {
+				throw new Error('No token available for pkpass URL')
+			}
+			if (Platform.OS === 'android') {
+				const jwtData = await MemberAPI.getGoogleWalletPassJwt(currentToken)
+				await WalletManager.addPassToGoogleWallet(jwtData)
+			} else {
+				await WalletManager.addPassFromUrl(
+					MemberAPI.getAppleWalletPassUrl(currentToken)
+				)
+			}
+		} catch (error) {
+			console.error('Failed to add pass to wallet:', error)
+		} finally {
+			setIsAddingToWallet(false)
+			onConfirm()
+		}
+	}
 
 	const handleCancel = () => {
 		onCancel()
@@ -106,12 +163,30 @@ export function SecurityWarningModal({
 							</View>
 						</View>
 
-						<View className="items-center mb-[18px] min-h-[52px] justify-center">
-							{visible ? (
-								<Suspense fallback={<ActivityIndicator color={primaryColor} />}>
-									<WalletPassButton onComplete={onConfirm} />
-								</Suspense>
-							) : null}
+						<View className="items-center mb-[18px]">
+							<Pressable
+								onPress={handleConfirm}
+								disabled={isAddingToWallet}
+								className="active:opacity-70"
+							>
+								<Image
+									source={
+										Platform.OS === 'ios'
+											? currentLanguage === 'de'
+												? AppleWalletDE
+												: AppleWalletEN
+											: currentLanguage === 'de'
+												? GoogleWalletDE
+												: GoogleWalletEN
+									}
+									style={{
+										width: 160,
+										height: 52,
+										opacity: isAddingToWallet ? 0.5 : 1
+									}}
+									contentFit="contain"
+								/>
+							</Pressable>
 						</View>
 
 						<View className="items-center">

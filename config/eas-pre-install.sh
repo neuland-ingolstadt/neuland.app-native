@@ -1,26 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LFS_ASSET_PATHS=(
-	src/assets/android/ic_launcher.png
-	src/assets/android/ic_launcher_foreground.png
-	src/assets/splash/splashIconDark.png
-	src/assets/wallet/apple_wallet_de.svg
-	src/assets/wallet/apple_wallet_en.svg
-	src/assets/wallet/google_wallet_de.svg
-	src/assets/wallet/google_wallet_en.svg
-)
+LFS_SCAN_DIRS=(src/assets)
 
 is_lfs_pointer() {
 	[[ -f "$1" ]] && head -1 "$1" | grep -q '^version https://git-lfs.github.com/spec/v1'
 }
 
-lfs_assets_ready() {
-	for asset in "${LFS_ASSET_PATHS[@]}"; do
-		if [[ ! -f "$asset" ]] || is_lfs_pointer "$asset"; then
-			return 1
+list_lfs_pointers() {
+	while IFS= read -r -d '' file; do
+		if is_lfs_pointer "$file"; then
+			printf '%s\n' "$file"
 		fi
-	done
+	done < <(
+		find "${LFS_SCAN_DIRS[@]}" -type f \
+			\( -name '*.png' -o -name '*.svg' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.webp' -o -name '*.ttf' \) \
+			-print0 2>/dev/null
+	)
 }
 
 pull_git_lfs() {
@@ -50,13 +46,16 @@ ensure_git_lfs() {
 	fi
 }
 
-if lfs_assets_ready; then
-	echo "=====> Git LFS assets already present — skipping pull"
+missing_assets="$(list_lfs_pointers || true)"
+if [[ -z "$missing_assets" ]]; then
+	echo "=====> Git LFS assets already present"
 	exit 0
 fi
 
 if [[ ! -d .git ]]; then
-	echo "=====> Git LFS assets are missing and there is no .git directory to pull them"
+	echo "=====> Git LFS assets are missing and there is no .git directory to pull them:"
+	printf '%s\n' "$missing_assets"
+	echo "=====> Use a Git-based EAS build or run 'git lfs pull' before uploading the project archive"
 	exit 1
 fi
 
@@ -71,9 +70,11 @@ pull_git_lfs
 pull_status=$?
 set -e
 
-if lfs_assets_ready; then
+missing_assets="$(list_lfs_pointers || true)"
+if [[ -z "$missing_assets" ]]; then
 	exit 0
 fi
 
-echo "=====> Git LFS pull failed (exit ${pull_status}) and image assets are still missing"
+echo "=====> Git LFS pull failed (exit ${pull_status}) and assets are still missing:"
+printf '%s\n' "$missing_assets"
 exit 1
