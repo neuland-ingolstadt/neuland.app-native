@@ -20,7 +20,7 @@ export const FreeRoomsList = ({
 	return rooms !== null && rooms.length > 0 ? (
 		<View>
 			{rooms.map((room, index) => (
-				<View key={index}>
+				<View key={`${room.room}-${room.from.getTime()}`}>
 					<View className="items-center flex-row gap-[15px] justify-between px-4 py-[9px]">
 						<View>
 							<Pressable

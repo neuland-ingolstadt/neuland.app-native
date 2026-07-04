@@ -66,9 +66,11 @@ export async function createSession(
 	}
 
 	storage.set('sessionCreated', Date.now().toString())
-	await saveSecureAsync('session', session)
-	await saveSecureAsync('username', modifiedUsername)
-	await saveSecureAsync('password', password)
+	await Promise.all([
+		saveSecureAsync('session', session),
+		saveSecureAsync('username', modifiedUsername),
+		saveSecureAsync('password', password)
+	])
 	return isStudent
 }
 
@@ -107,8 +109,10 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	let username = await loadSecureAsync('username')
-	const password = await loadSecureAsync('password')
+	let [username, password] = await Promise.all([
+		loadSecureAsync('username'),
+		loadSecureAsync('password')
+	])
 
 	if (Platform.OS === 'web') {
 		if (session === 'guest' || session == null) {
