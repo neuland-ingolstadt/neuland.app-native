@@ -21,7 +21,11 @@ const EventLine = ({
 		colors={[color, lineColor(color, background, isDark)]}
 		start={[0, 0.2]}
 		end={[1, 0.8]}
-		className="rounded-s-[5px] w-1"
+		style={{
+			borderBottomStartRadius: 5,
+			borderTopStartRadius: 5,
+			width: 4
+		}}
 	/>
 )
 
