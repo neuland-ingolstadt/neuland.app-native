@@ -1,16 +1,14 @@
 import type React from 'react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { type FeatureFlagKey, FeatureFlagKeys } from '@/lib/feature-flags'
-import {
-	CalendarCard,
-	EventsCard,
-	LinkCard,
-	LoginCard,
-	SportsCard,
-	ThiEventsCard,
-	UpNextCard
-} from './Cards'
+import CalendarCard from './Cards/calendar-card'
+import EventsCard from './Cards/events-card'
+import LinkCard from './Cards/link-card'
+import LoginCard from './Cards/login-card'
 import NewsCard from './Cards/news-card'
+import SportsCard from './Cards/sports-card'
+import ThiEventsCard from './Cards/thi-events-card'
+import UpNextCard from './Cards/up-next/up-next-card'
 
 export const AllCards: Card[] = [
 	{

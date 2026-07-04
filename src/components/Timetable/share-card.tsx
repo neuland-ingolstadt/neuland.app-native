@@ -1,4 +1,3 @@
-import moment from 'moment'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -6,7 +5,11 @@ import { useCSSVariable } from 'uniwind'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import PlatformIcon from '@/components/Universal/icon'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import {
+	diffInMinutes,
+	formatFriendlyDate,
+	formatFriendlyTime
+} from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 import DetailsBody from './details-body'
@@ -104,10 +107,7 @@ export default function ShareCard({
 						</Text>
 
 						<Text className="text-sm" style={{ color: labelColor }}>
-							{`(${moment(endDate).diff(
-								moment(startDate),
-								'minutes'
-							)} ${t('time.minutes')})`}
+							{`(${diffInMinutes(startDate, endDate)} ${t('time.minutes')})`}
 						</Text>
 					</View>
 				</DetailsBody>
