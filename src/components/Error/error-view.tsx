@@ -24,6 +24,22 @@ import {
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
+function handleErrorButtonPress(
+	errorTitle: string,
+	onButtonPress?: () => void
+): void {
+	switch (errorTitle) {
+		case guestError || notLoggedInError:
+			router.navigate('/login')
+			break
+		default:
+			if (onButtonPress != null) {
+				onButtonPress()
+			}
+			break
+	}
+}
+
 export default function ErrorView({
 	title,
 	message,
@@ -134,18 +150,6 @@ export default function ErrorView({
 	}
 
 	const ErrorButton = (): React.JSX.Element => {
-		const buttonAction = (): void => {
-			switch (title) {
-				case guestError || notLoggedInError:
-					router.navigate('/login')
-					break
-				default:
-					if (onButtonPress != null) {
-						onButtonPress()
-					}
-					break
-			}
-		}
 		let buttonProps = null
 
 		if (title === guestError || title === notLoggedInError) {
@@ -156,9 +160,19 @@ export default function ErrorView({
 				text: t('error.guest.button')
 			}
 		} else if (onButtonPress != null && buttonText === undefined) {
-			buttonProps = { onPress: buttonAction, text: t('error.button') }
+			buttonProps = {
+				onPress: () => {
+					handleErrorButtonPress(title, onButtonPress)
+				},
+				text: t('error.button')
+			}
 		} else if (onButtonPress != null && buttonText !== undefined) {
-			buttonProps = { onPress: buttonAction, text: buttonText }
+			buttonProps = {
+				onPress: () => {
+					handleErrorButtonPress(title, onButtonPress)
+				},
+				text: buttonText
+			}
 		}
 
 		return (buttonProps != null ||
