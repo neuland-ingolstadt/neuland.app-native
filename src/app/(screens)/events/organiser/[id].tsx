@@ -125,20 +125,22 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	}
 
 	const statsItems: SectionGroup[] = []
-	if (organizer.registrationNumber) {
-		statsItems.push({
-			title: t('pages.event.organizerDetails.registrationNumber'),
-			value: organizer.registrationNumber
-		})
-	}
+	if (!isThiDepartmentOrganizerKind(organizerKind)) {
+		if (organizer.registrationNumber) {
+			statsItems.push({
+				title: t('pages.event.organizerDetails.registrationNumber'),
+				value: organizer.registrationNumber
+			})
+		}
 
-	if (organizer.nonProfit != null) {
-		statsItems.push({
-			title: t('pages.event.organizerDetails.nonProfit.label'),
-			value: organizer.nonProfit
-				? t('pages.event.organizerDetails.nonProfit.yes')
-				: t('pages.event.organizerDetails.nonProfit.no')
-		})
+		if (organizer.nonProfit != null) {
+			statsItems.push({
+				title: t('pages.event.organizerDetails.nonProfit.label'),
+				value: organizer.nonProfit
+					? t('pages.event.organizerDetails.nonProfit.yes')
+					: t('pages.event.organizerDetails.nonProfit.no')
+			})
+		}
 	}
 
 	const linkItems: SectionGroup[] = []
