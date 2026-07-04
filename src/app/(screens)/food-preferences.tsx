@@ -16,7 +16,6 @@ import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import { lightTheme } from '@/styles/themes'
 import type { FormListSections } from '@/types/components'
@@ -24,7 +23,6 @@ import { toColor } from '@/utils/uniwind-utils'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
-	const headerPadding = useTransparentHeaderPadding()
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 	const elemtents = [
 		{
@@ -120,7 +118,6 @@ export default function FoodPreferences(): React.JSX.Element {
 	return (
 		<ScrollView
 			contentContainerStyle={{
-				paddingTop: headerPadding,
 				paddingBottom: lightTheme.margins.bottomSafeArea
 			}}
 			contentInsetAdjustmentBehavior="automatic"
