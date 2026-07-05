@@ -42,6 +42,7 @@ jobs:
       - name: Export web bundle
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
@@ -87,6 +88,7 @@ jobs:
         if: steps.download-base.outcome == 'failure'
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
         run: |
@@ -107,6 +109,7 @@ jobs:
       - name: Export PR bundle
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
           EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
