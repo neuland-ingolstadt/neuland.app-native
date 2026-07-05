@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { useSessionStore } from '@/hooks/useSessionStore'
+import { captureSentryException } from '@/lib/sentry'
 import { toColor } from '@/utils/uniwind-utils'
 
 import LogoTextSVG from '../Flow/svgs/logo-text'
@@ -42,6 +43,10 @@ export default function CrashView({
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
+
+	useEffect(() => {
+		captureSentryException(error, { path, crash: 'true' })
+	}, [error, path])
 
 	useEffect(() => {
 		if (!analyticsInitialized) return

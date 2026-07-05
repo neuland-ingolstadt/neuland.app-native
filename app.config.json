@@ -101,6 +101,7 @@
 			}
 		},
 		"plugins": [
+			"@sentry/react-native",
 			[
 				"expo-router",
 				{
