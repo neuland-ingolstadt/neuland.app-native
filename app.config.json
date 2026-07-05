@@ -101,7 +101,12 @@
 			}
 		},
 		"plugins": [
-			"@sentry/react-native",
+			[
+				"@sentry/react-native",
+				{
+					"disableAutoUpload": true
+				}
+			],
 			[
 				"expo-router",
 				{

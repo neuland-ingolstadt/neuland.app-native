@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/react-native'
 import * as Application from 'expo-application'
 import Constants from 'expo-constants'
 
-const dsn = "https://009f5dcd6f26428bbb9453044e376a22@glitchtip.alexpts.de/1"
+const dsn = 'https://009f5dcd6f26428bbb9453044e376a22@glitchtip.alexpts.de/1'
 
 let initialized = false
 
