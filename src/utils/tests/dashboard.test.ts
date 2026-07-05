@@ -494,19 +494,22 @@ describe('dashboard context', () => {
 		if (shownDashboardEntriesState == null) {
 			throw new Error('expected shown dashboard entries to be set')
 		}
-		expect(shownDashboardEntriesState).toEqual(['events', 'timetable'])
+		expect(shownDashboardEntriesState as string[]).toEqual([
+			'events',
+			'timetable'
+		])
 
 		value.hideAnnouncement('announcement-1')
 		if (hiddenAnnouncementsState == null) {
 			throw new Error('expected hidden announcements to be set')
 		}
-		expect(hiddenAnnouncementsState).toEqual(['announcement-1'])
+		expect(hiddenAnnouncementsState as string[]).toEqual(['announcement-1'])
 
 		value.resetOrder(USER_STUDENT)
 		if (shownDashboardEntriesState == null) {
 			throw new Error('expected shown dashboard entries to be reset')
 		}
-		expect(shownDashboardEntriesState).toEqual(
+		expect(shownDashboardEntriesState as string[]).toEqual(
 			dashboard.getDefaultDashboardOrder(USER_STUDENT, featureFlagsState).shown
 		)
 	})
