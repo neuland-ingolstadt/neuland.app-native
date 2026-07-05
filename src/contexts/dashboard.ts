@@ -37,13 +37,43 @@ export function isCardEnabled(
 	return flags[card.featureFlag] === true
 }
 
-function isCardKeyEnabled(cardKey: string, flags: FeatureFlagState): boolean {
+export function isCardKeyEnabled(
+	cardKey: string,
+	flags: FeatureFlagState
+): boolean {
 	const card = cardByKey.get(cardKey)
 	if (card == null) {
 		return false
 	}
 
 	return isCardEnabled(card, flags)
+}
+
+export function normalizeShownDashboardEntries(
+	shownEntries: string[],
+	flags: FeatureFlagState
+): string[] {
+	const knownCardKeys = new Set(AllCards.map((card) => card.key))
+	const normalized: string[] = []
+
+	for (const key of shownEntries) {
+		if (!knownCardKeys.has(key)) {
+			continue
+		}
+		if (!isCardKeyEnabled(key, flags)) {
+			continue
+		}
+		normalized.push(key)
+	}
+
+	return normalized
+}
+
+export function resolveDashboardCards(keys: string[]): Card[] {
+	return keys.flatMap((key) => {
+		const card = cardByKey.get(key)
+		return card == null ? [] : [card]
+	})
 }
 
 export function getDefaultDashboardOrder(
@@ -130,6 +160,20 @@ export function mergeNewFlaggedCardsIntoDashboard(
 	return merged
 }
 
+export function syncDashboardEntriesWithFlags(
+	shownDashboardEntries: string[],
+	userKind: string | undefined,
+	flags: FeatureFlagState
+): string[] | null {
+	const merged = mergeNewFlaggedCardsIntoDashboard(
+		shownDashboardEntries,
+		userKind,
+		flags
+	)
+
+	return arraysEqual(merged, shownDashboardEntries) ? null : merged
+}
+
 export interface Dashboard {
 	shownDashboardEntries: Card[]
 	hiddenAnnouncements: string[]
@@ -158,13 +202,13 @@ export function useDashboard(): Dashboard {
 			return
 		}
 
-		const merged = mergeNewFlaggedCardsIntoDashboard(
+		const merged = syncDashboardEntriesWithFlags(
 			shownDashboardEntries,
 			userKind,
 			flags
 		)
 
-		if (!arraysEqual(merged, shownDashboardEntries)) {
+		if (merged != null) {
 			setShownDashboardEntries(merged)
 		}
 	}, [shownDashboardEntries, userKind, flags, setShownDashboardEntries])
@@ -172,28 +216,12 @@ export function useDashboard(): Dashboard {
 	const normalizedShownEntries = useMemo(() => {
 		const fallback = defaultEntries.shown
 		const shownEntries = shownDashboardEntries ?? fallback
-		const knownCardKeys = new Set(AllCards.map((card) => card.key))
-		const normalized: string[] = []
 
-		for (const key of shownEntries) {
-			if (!knownCardKeys.has(key)) {
-				continue
-			}
-			if (!isCardKeyEnabled(key, flags)) {
-				continue
-			}
-			normalized.push(key)
-		}
-
-		return normalized
+		return normalizeShownDashboardEntries(shownEntries, flags)
 	}, [shownDashboardEntries, defaultEntries.shown, flags])
 
 	const entries = useMemo(
-		() =>
-			normalizedShownEntries.flatMap((key) => {
-				const card = cardByKey.get(key)
-				return card == null ? [] : [card]
-			}),
+		() => resolveDashboardCards(normalizedShownEntries),
 		[normalizedShownEntries]
 	)
 
