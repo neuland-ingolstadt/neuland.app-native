@@ -21,6 +21,10 @@ import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { toColor } from '@/utils/uniwind-utils'
 
+function triggerTimetableAnimationHaptic(): void {
+	void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+}
+
 interface TimetableAnimationProps {
 	size?: number
 }
@@ -205,12 +209,8 @@ export const TimetableAnimation = ({
 	const calendarTapScale = useSharedValue(1)
 	const tapCount = useSharedValue(0)
 
-	const triggerHaptic = () => {
-		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-	}
-
 	const tapGesture = Gesture.Tap().onBegin(() => {
-		runOnJS(triggerHaptic)()
+		runOnJS(triggerTimetableAnimationHaptic)()
 
 		calendarTapScale.value = withSequence(
 			withTiming(0.95, { duration: 100, easing: Easing.out(Easing.quad) }),

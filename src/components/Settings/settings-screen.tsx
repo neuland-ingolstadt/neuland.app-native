@@ -34,6 +34,12 @@ import SettingsLogo from './settings-logo'
 import SettingsMenu from './settings-menu'
 import StudentInfoSection from './student-info-section'
 
+function trackHetznerClick(): void {
+	trackEvent('Sponsor', {
+		sponsor: 'Hetzner'
+	})
+}
+
 export default function Settings(): React.JSX.Element {
 	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 	const { resetOrder } = use(DashboardContext)
@@ -68,12 +74,6 @@ export default function Settings(): React.JSX.Element {
 				}
 			]
 		)
-	}
-
-	const trackHetznerClick = (): void => {
-		trackEvent('Sponsor', {
-			sponsor: 'Hetzner'
-		})
 	}
 
 	const { data, isLoading, isSuccess, refetch, isError } = useQuery({
