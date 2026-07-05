@@ -34,7 +34,7 @@ const SingleSectionPicker = ({
 						action(!selectedItem)
 					}
 				}}
-				className="bg-card rounded-2xl p-4 flex-row items-center justify-between h-full"
+				className="bg-card ios:rounded-ios android:rounded-md web:rounded-md p-4 flex-row items-center justify-between h-full"
 				style={({ pressed }) => [
 					disabled && { opacity: 0.5 },
 					pressed && !disabled && { opacity: 0.8 }
