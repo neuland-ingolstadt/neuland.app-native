@@ -28,6 +28,8 @@ import { hairlineBorder } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
+const sportsCampusLocations = ['Ingolstadt', 'Neuburg'] as const
+
 export default function ClSportsPage({
 	sportsResult
 }: {
@@ -63,7 +65,6 @@ export default function ClSportsPage({
 	}, [sportsResult.data, selectedLocation])
 
 	const { t } = useTranslation('common')
-	const locations = ['Ingolstadt', 'Neuburg']
 
 	const {
 		isRefetchingByUser: isRefetchingByUserSports,
@@ -218,7 +219,7 @@ export default function ClSportsPage({
 						{t('labels.campus')}
 					</Text>
 					<View className="flex-row items-center gap-2 pb-1 pt-2">
-						{locations.map((location) => (
+						{sportsCampusLocations.map((location) => (
 							<LocationButton location={location} key={location} />
 						))}
 					</View>

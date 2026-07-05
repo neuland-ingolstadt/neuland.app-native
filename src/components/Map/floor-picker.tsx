@@ -114,7 +114,7 @@ const FloorPicker = ({
 									}
 									setCurrentFloor({ floor, manual: true })
 								}}
-								key={index}
+								key={floor}
 							>
 								<View
 									className="content-center items-center self-center h-[38px] justify-center w-[38px]"

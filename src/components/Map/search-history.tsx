@@ -88,14 +88,13 @@ const SearchHistory = ({
 							<View className="bg-card px-3 py-[3px] w-full">
 								<ResultRow
 									result={history}
-									index={index}
 									handlePresentModalPress={handlePresentModalPress}
 									updateSearchHistory={addToSearchHistory}
 								/>
 							</View>
 						</Swipeable>
 						{index !== searchHistory.length - 1 && (
-							<Divider key={`divider-${index}`} />
+							<Divider key={`divider-${history.title}`} />
 						)}
 					</React.Fragment>
 				))}

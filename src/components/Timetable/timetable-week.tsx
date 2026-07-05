@@ -8,7 +8,6 @@ import {
 	type PackedEvent
 } from '@howljs/calendar-kit'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
-import moment from 'moment-timezone'
 import React, {
 	startTransition,
 	useCallback,
@@ -22,6 +21,7 @@ import { StyleSheet, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import dayjs from '@/lib/dayjs'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	Exam,
@@ -85,7 +85,7 @@ export default function TimetableWeek({
 		toColor(useCSSVariable('--color-label-background')) ?? '#e5dede'
 	)
 	const { i18n, t } = useTranslation()
-	const today = moment().startOf('day').toDate()
+	const today = dayjs().startOf('day').toDate()
 	const calendarRef = useRef<CalendarKitHandle>(null)
 	const setSelectedLecture = useRouteParamsStore(
 		(state) => state.setSelectedLecture
@@ -196,7 +196,7 @@ export default function TimetableWeek({
 					id: `exam_${index}`,
 					start: { dateTime: entry.date },
 					end: {
-						dateTime: moment(entry.date).add(duration, 'minutes').toDate()
+						dateTime: dayjs(entry.date).add(duration, 'minute').toDate()
 					}
 				}
 			})
@@ -212,15 +212,15 @@ export default function TimetableWeek({
 					let endDate: Date
 					const isAllDay = !event.hasHours
 					if (isAllDay) {
-						startDate = moment(event.begin).toDate()
+						startDate = dayjs(event.begin).toDate()
 						endDate = event.end
-							? moment(event.end).toDate()
-							: moment(startDate).toDate()
+							? dayjs(event.end).toDate()
+							: dayjs(startDate).toDate()
 					} else {
-						startDate = moment(event.begin).toDate()
+						startDate = dayjs(event.begin).toDate()
 						endDate = event.end
-							? moment(event.end).toDate()
-							: moment(startDate).add(2, 'hours').toDate()
+							? dayjs(event.end).toDate()
+							: dayjs(startDate).add(2, 'hour').toDate()
 					}
 					const eventName =
 						typeof event.name === 'object'
@@ -251,10 +251,10 @@ export default function TimetableWeek({
 		startTransition(() => {
 			setEvents(combinedEvents)
 			const firstFutureEvent = combinedEvents
-				.sort((a, b) => moment(a.start.dateTime).diff(moment(b.start.dateTime)))
+				.sort((a, b) => dayjs(a.start.dateTime).diff(dayjs(b.start.dateTime)))
 				.find(
 					(event) =>
-						moment(event.start.dateTime).startOf('day').toDate() >= today
+						dayjs(event.start.dateTime).startOf('day').toDate() >= today
 				)
 			if (firstFutureEvent?.start?.dateTime) {
 				setCurrentDate(new Date(firstFutureEvent.start.dateTime))
@@ -269,9 +269,9 @@ export default function TimetableWeek({
 					setToday={() => {
 						const calDate = calendarRef.current?.getVisibleStart()
 						if (calDate != null) {
-							const momentCalDate = moment(calDate).startOf('day')
-							const momentToday = moment().startOf('day')
-							const targetDate = momentCalDate.isSame(momentToday)
+							const calendarDay = dayjs(calDate).startOf('day')
+							const todayDay = dayjs().startOf('day')
+							const targetDate = calendarDay.isSame(todayDay, 'day')
 								? (currentDate ?? new Date())
 								: new Date()
 							calendarRef.current?.goToDate({ date: targetDate })

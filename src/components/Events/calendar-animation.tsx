@@ -21,6 +21,16 @@ import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { toColor } from '@/utils/uniwind-utils'
 
+function triggerSuperLightHaptic(): void {
+	if (Platform.OS === 'ios') {
+		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	}
+}
+
+function triggerCalendarAnimationHaptic(): void {
+	void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+}
+
 interface CalendarAnimationProps {
 	size?: number
 }
@@ -83,12 +93,6 @@ const FloatingEventIcon = ({
 	const scale = useSharedValue(0.6)
 	const floatY = useSharedValue(0)
 	const rotation = useSharedValue(Math.random() * 0.05 - 0.025)
-
-	const triggerSuperLightHaptic = () => {
-		if (Platform.OS === 'ios') {
-			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-		}
-	}
 
 	useAnimatedReaction(
 		() => tapCount.value,
@@ -221,12 +225,8 @@ export const CalendarAnimation = ({
 	const calendarTapScale = useSharedValue(1)
 	const tapCount = useSharedValue(0)
 
-	const triggerHaptic = () => {
-		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-	}
-
 	const tapGesture = Gesture.Tap().onBegin(() => {
-		runOnJS(triggerHaptic)()
+		runOnJS(triggerCalendarAnimationHaptic)()
 
 		calendarTapScale.value = withSequence(
 			withTiming(0.95, { duration: 100, easing: Easing.out(Easing.quad) }),
