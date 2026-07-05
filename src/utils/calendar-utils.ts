@@ -156,6 +156,15 @@ export function isCalendarCardExam(
 	return event.isExam === true
 }
 
+/** Rehydrates Date fields after React Query persistence serializes them to strings. */
+export function normalizeExamData(exam: Exam): Exam {
+	return {
+		...exam,
+		date: new Date(exam.date),
+		enrollment: new Date(exam.enrollment)
+	}
+}
+
 /**
  * Returns the next relevant moment of an event as a timestamp.
  *
@@ -198,9 +207,9 @@ export function selectCalendarCardEvents(
 			(item): CalendarCardExamEvent => ({
 				name: item.name,
 				begin: new Date(item.begin),
-				end: item.end,
+				end: item.end != null ? new Date(item.end) : undefined,
 				isExam: true,
-				examData: item.examData
+				examData: normalizeExamData(item.examData)
 			})
 		)
 	]

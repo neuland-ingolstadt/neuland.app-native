@@ -263,6 +263,28 @@ describe('calendar-utils', () => {
 			expect(calendarUtils.isCalendarCardExam(result[0])).toBe(true)
 			expect(result).toHaveLength(2)
 		})
+
+		it('rehydrates exam dates serialized by persisted React Query cache', () => {
+			const events = [makeCalendarEvent('soonEvent', '2026-06-05T00:00:00')]
+			const exams = [
+				{
+					name: 'Math',
+					begin: '2026-07-01T10:00:00.000Z' as unknown as Date,
+					examData: {
+						...makeExam('Math', '2026-07-01T10:00:00'),
+						date: '2026-07-01T10:00:00.000Z' as unknown as Date,
+						enrollment: '2026-06-01T00:00:00.000Z' as unknown as Date
+					}
+				}
+			]
+			const result = calendarUtils.selectCalendarCardEvents(events, exams, NOW)
+			expect(calendarUtils.isCalendarCardExam(result[0])).toBe(true)
+			expect(result[0].begin).toBeInstanceOf(Date)
+			expect(
+				calendarUtils.isCalendarCardExam(result[0]) &&
+					result[0].examData.date.getTime()
+			).toBe(new Date('2026-07-01T10:00:00').getTime())
+		})
 	})
 
 	describe('loadExamList', () => {
