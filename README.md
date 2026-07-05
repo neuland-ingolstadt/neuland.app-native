@@ -80,7 +80,7 @@ The real-time system status is available at [status.neuland.ing](https://status.
 
 We welcome contributions from the community! Whether you're a developer, designer, or student, you can help improve the app.
 
-1. Fork the repository and clone it to your local machine (`Git LFS` needs to be installed)
+1. Fork the repository and clone it to your local machine
 2. Check out the [setup guide](https://neuland.app/docs/contribute/setup) for development environment setup
 3. See the [contribution guidelines](https://neuland.app/docs/contribute/contribute) for more information
 
