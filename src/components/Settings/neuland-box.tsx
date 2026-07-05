@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import { t } from 'i18next'
 import type React from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
@@ -16,10 +16,6 @@ const NeulandBox = (): React.JSX.Element | null => {
 	const memberInfo = useMemberStore((s) => s.info)
 	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
 	const whiteColor = toColor(useCSSVariable('--color-white'))
-
-	if (Platform.OS === 'web') {
-		return null
-	}
 
 	if (!memberInfo) {
 		return null

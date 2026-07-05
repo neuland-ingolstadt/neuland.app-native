@@ -11,7 +11,7 @@ import { officePresenceQueryKey } from '@/components/Member/office-presence-sect
 import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import { evaluateBooleanFlag, FeatureFlagKeys } from '@/lib/feature-flags'
+import { evaluateMemberOfficePresenceEnabled } from '@/lib/feature-flags'
 import {
 	ensureMemberTokensLoaded,
 	setOfficeTogglePending,
@@ -43,11 +43,7 @@ export default function OfficeToggle(): React.JSX.Element {
 		handledRef.current = true
 
 		void (async () => {
-			const enabled = await evaluateBooleanFlag(
-				FeatureFlagKeys.memberOfficePresenceEnabled,
-				false,
-				{ userKind: userKind ?? 'guest' }
-			)
+			const enabled = await evaluateMemberOfficePresenceEnabled(userKind)
 
 			if (!enabled) {
 				toast({

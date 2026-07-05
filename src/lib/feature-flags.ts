@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import {
 	evaluateFliptBoolean,
 	type FeatureFlagContextAttributes
@@ -32,4 +33,22 @@ export async function evaluateBooleanFlag(
 	attributes: FeatureFlagContextAttributes = {}
 ): Promise<boolean> {
 	return evaluateFliptBoolean(flagKey, defaultValue, attributes)
+}
+
+export function isMemberOfficePresenceVisible(flagEnabled: boolean): boolean {
+	return flagEnabled || Platform.OS === 'web'
+}
+
+export async function evaluateMemberOfficePresenceEnabled(
+	userKind: string | undefined
+): Promise<boolean> {
+	if (Platform.OS === 'web') {
+		return true
+	}
+
+	return evaluateBooleanFlag(
+		FeatureFlagKeys.memberOfficePresenceEnabled,
+		false,
+		{ userKind: userKind ?? 'guest' }
+	)
 }

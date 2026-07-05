@@ -91,7 +91,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 	})
 
 	return (
-		<>
+		<View className="w-full max-w-[420px] self-center">
 			<View style={styles.idCardContainer}>
 				<View style={styles.shadow}>
 					<LinearGradient
@@ -246,7 +246,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 				qrData={profileQrData?.qr}
 				onClose={closeModal}
 			/>
-		</>
+		</View>
 	)
 }
 

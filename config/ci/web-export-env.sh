@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Public build-time env vars for CI web exports (matches Docker build args).
 export EXPO_PUBLIC_THI_API_KEY="${EXPO_PUBLIC_THI_API_KEY:-ci-placeholder}"
+export EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID="${EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID:-}"
 export EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT="${EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT:-https://api.neuland.app/graphql}"
 export EXPO_PUBLIC_APTABASE_KEY="${EXPO_PUBLIC_APTABASE_KEY:-}"
 export EXPO_PUBLIC_FLIPT_URL="${EXPO_PUBLIC_FLIPT_URL:-https://flipt.neuland.ing}"
