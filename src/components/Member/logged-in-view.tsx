@@ -241,11 +241,13 @@ export function LoggedInView(): React.JSX.Element {
 				</Text>
 			</Pressable>
 
-			<SecurityWarningModal
-				visible={showSecurityWarning}
-				onConfirm={handleConfirmAddToWallet}
-				onCancel={handleCancelAddToWallet}
-			/>
+			{Platform.OS !== 'web' ? (
+				<SecurityWarningModal
+					visible={showSecurityWarning}
+					onConfirm={handleConfirmAddToWallet}
+					onCancel={handleCancelAddToWallet}
+				/>
+			) : null}
 		</ScrollView>
 	)
 }
