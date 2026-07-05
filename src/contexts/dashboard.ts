@@ -13,6 +13,19 @@ interface DashboardOrder {
 	unavailable: string[]
 }
 
+const cardByKey = new Map(AllCards.map((card) => [card.key, card]))
+
+const cardEntries = AllCards.map((card, index) => ({
+	card,
+	index,
+	allowedRoles: new Set(card.allowed),
+	initialRoles: new Set(card.initial)
+}))
+
+function buildKeyIndex(keys: string[]): Map<string, number> {
+	return new Map(keys.map((key, index) => [key, index]))
+}
+
 export function isCardEnabled(
 	card: Pick<Card, 'featureFlag'>,
 	flags: FeatureFlagState
@@ -24,13 +37,43 @@ export function isCardEnabled(
 	return flags[card.featureFlag] === true
 }
 
-function isCardKeyEnabled(cardKey: string, flags: FeatureFlagState): boolean {
-	const card = AllCards.find((entry) => entry.key === cardKey)
+export function isCardKeyEnabled(
+	cardKey: string,
+	flags: FeatureFlagState
+): boolean {
+	const card = cardByKey.get(cardKey)
 	if (card == null) {
 		return false
 	}
 
 	return isCardEnabled(card, flags)
+}
+
+export function normalizeShownDashboardEntries(
+	shownEntries: string[],
+	flags: FeatureFlagState
+): string[] {
+	const knownCardKeys = new Set(AllCards.map((card) => card.key))
+	const normalized: string[] = []
+
+	for (const key of shownEntries) {
+		if (!knownCardKeys.has(key)) {
+			continue
+		}
+		if (!isCardKeyEnabled(key, flags)) {
+			continue
+		}
+		normalized.push(key)
+	}
+
+	return normalized
+}
+
+export function resolveDashboardCards(keys: string[]): Card[] {
+	return keys.flatMap((key) => {
+		const card = cardByKey.get(key)
+		return card == null ? [] : [card]
+	})
 }
 
 export function getDefaultDashboardOrder(
@@ -42,13 +85,13 @@ export function getDefaultDashboardOrder(
 	const shown: string[] = []
 	const unavailable: string[] = []
 
-	for (const card of AllCards) {
+	for (const { card, allowedRoles, initialRoles } of cardEntries) {
 		if (!isCardEnabled(card, flags)) {
 			continue
 		}
 
-		if (card.allowed.includes(userRole)) {
-			if (card.initial.includes(userRole)) {
+		if (allowedRoles.has(userRole)) {
+			if (initialRoles.has(userRole)) {
 				shown.push(card.key)
 			}
 		} else if (card.stillVisible ?? true) {
@@ -69,44 +112,66 @@ export function mergeNewFlaggedCardsIntoDashboard(
 	flags: FeatureFlagState
 ): string[] {
 	const userRole = userKind ?? USER_GUEST
-	let merged = [...shownEntries]
+	const merged = [...shownEntries]
+	const mergedKeys = new Set(merged)
+	let keyIndex = buildKeyIndex(merged)
 
-	for (const card of AllCards) {
+	for (const {
+		card,
+		index: cardIndex,
+		allowedRoles,
+		initialRoles
+	} of cardEntries) {
 		if (card.featureFlag == null || !isCardEnabled(card, flags)) {
 			continue
 		}
-		if (!card.allowed.includes(userRole) || !card.initial.includes(userRole)) {
+		if (!allowedRoles.has(userRole) || !initialRoles.has(userRole)) {
 			continue
 		}
-		if (merged.includes(card.key)) {
+		if (mergedKeys.has(card.key)) {
 			continue
 		}
 
-		const cardIndex = AllCards.indexOf(card)
 		let insertAt = merged.length
 
 		for (let index = cardIndex - 1; index >= 0; index--) {
-			const anchorIndex = merged.indexOf(AllCards[index].key)
-			if (anchorIndex !== -1) {
+			const anchorIndex = keyIndex.get(cardEntries[index].card.key)
+			if (anchorIndex !== undefined) {
 				insertAt = anchorIndex + 1
 				break
 			}
 		}
 
 		if (insertAt === merged.length) {
-			for (let index = cardIndex + 1; index < AllCards.length; index++) {
-				const anchorIndex = merged.indexOf(AllCards[index].key)
-				if (anchorIndex !== -1) {
+			for (let index = cardIndex + 1; index < cardEntries.length; index++) {
+				const anchorIndex = keyIndex.get(cardEntries[index].card.key)
+				if (anchorIndex !== undefined) {
 					insertAt = anchorIndex
 					break
 				}
 			}
 		}
 
-		merged = [...merged.slice(0, insertAt), card.key, ...merged.slice(insertAt)]
+		merged.splice(insertAt, 0, card.key)
+		mergedKeys.add(card.key)
+		keyIndex = buildKeyIndex(merged)
 	}
 
 	return merged
+}
+
+export function syncDashboardEntriesWithFlags(
+	shownDashboardEntries: string[],
+	userKind: string | undefined,
+	flags: FeatureFlagState
+): string[] | null {
+	const merged = mergeNewFlaggedCardsIntoDashboard(
+		shownDashboardEntries,
+		userKind,
+		flags
+	)
+
+	return arraysEqual(merged, shownDashboardEntries) ? null : merged
 }
 
 export interface Dashboard {
@@ -137,13 +202,13 @@ export function useDashboard(): Dashboard {
 			return
 		}
 
-		const merged = mergeNewFlaggedCardsIntoDashboard(
+		const merged = syncDashboardEntriesWithFlags(
 			shownDashboardEntries,
 			userKind,
 			flags
 		)
 
-		if (!arraysEqual(merged, shownDashboardEntries)) {
+		if (merged != null) {
 			setShownDashboardEntries(merged)
 		}
 	}, [shownDashboardEntries, userKind, flags, setShownDashboardEntries])
@@ -151,20 +216,12 @@ export function useDashboard(): Dashboard {
 	const normalizedShownEntries = useMemo(() => {
 		const fallback = defaultEntries.shown
 		const shownEntries = shownDashboardEntries ?? fallback
-		const knownCardKeys = new Set(AllCards.map((card) => card.key))
 
-		return shownEntries
-			.filter((key) => knownCardKeys.has(key))
-			.filter((key) => isCardKeyEnabled(key, flags))
+		return normalizeShownDashboardEntries(shownEntries, flags)
 	}, [shownDashboardEntries, defaultEntries.shown, flags])
 
 	const entries = useMemo(
-		() =>
-			normalizedShownEntries.reduce<Card[]>((acc, key) => {
-				const card = AllCards.find((y) => y.key === key)
-				if (card != null) acc.push(card)
-				return acc
-			}, []),
+		() => resolveDashboardCards(normalizedShownEntries),
 		[normalizedShownEntries]
 	)
 
