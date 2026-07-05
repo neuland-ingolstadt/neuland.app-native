@@ -24,7 +24,7 @@ import BaseCard from './base-card'
 
 function getCalendarCardEventKey(event: CalendarCardEvent): string {
 	if (isCalendarCardExam(event)) {
-		return `exam-${event.examData.name}-${event.examData.date.getTime()}`
+		return `exam-${event.examData.name}-${event.begin.getTime()}`
 	}
 	return event.id
 }
