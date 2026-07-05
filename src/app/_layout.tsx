@@ -13,6 +13,7 @@ import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
+import * as WebBrowser from 'expo-web-browser'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +21,8 @@ import { AppState, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
+
+WebBrowser.maybeCompleteAuthSession()
 
 configureReanimatedLogger({
 	strict: false

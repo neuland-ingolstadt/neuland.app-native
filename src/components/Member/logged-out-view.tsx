@@ -10,7 +10,7 @@ import { BenefitCard } from './benefit-card'
 
 interface LoggedOutViewProps {
 	request: AuthSession.AuthRequest | null
-	promptAsync: () => void
+	promptAsync: () => void | Promise<void>
 }
 
 export function LoggedOutView({
@@ -95,7 +95,9 @@ export function LoggedOutView({
 						</Pressable>
 						<Pressable
 							disabled={!request}
-							onPress={() => promptAsync()}
+							onPress={() => {
+								void promptAsync()
+							}}
 							className="bg-card py-3 border border-border rounded-md items-center active:opacity-80"
 						>
 							<Text className="text-primary text-base font-bold">

@@ -7,7 +7,7 @@ import { officePresenceQueryKey } from '@/components/Member/office-presence-sect
 import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import { evaluateBooleanFlag, FeatureFlagKeys } from '@/lib/feature-flags'
+import { evaluateMemberOfficePresenceEnabled } from '@/lib/feature-flags'
 import {
 	consumeOfficeTogglePending,
 	isOfficeTogglePending,
@@ -32,11 +32,7 @@ export function useOfficeToggleAfterLogin(): void {
 				return
 			}
 
-			const enabled = await evaluateBooleanFlag(
-				FeatureFlagKeys.memberOfficePresenceEnabled,
-				false,
-				{ userKind: userKind ?? 'guest' }
-			)
+			const enabled = await evaluateMemberOfficePresenceEnabled(userKind)
 
 			if (!enabled) {
 				toast({
