@@ -1,0 +1,4 @@
+interface:
+  display_name: "Changelog JSON"
+  short_description: "Generate bilingual What's New changelog JSON entries with valid cross-platform icons"
+  default_prompt: "Use $changelog-json to draft src/data/changelog.json entries for the current release. Match existing wording and length, validate iOS/Android/web icons, and run changelog:check."
