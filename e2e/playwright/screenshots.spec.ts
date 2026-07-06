@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { mkdir } from 'node:fs/promises'
-import { seedGuestUser, waitForAppShell } from './helpers'
+import { seedGuestUser, waitForAppShell, expectNotOnLogin } from './helpers'
 
 const outputDir = 'e2e/playwright/output'
 
@@ -26,7 +26,7 @@ test.describe('web screenshots', () => {
 		await seedGuestUser(page)
 		await page.goto('/')
 		await waitForAppShell(page)
-		await expect(page.locator('body')).toBeVisible()
+		await expectNotOnLogin(page)
 
 		await page.screenshot({
 			path: `${outputDir}/dashboard.png`,
@@ -38,7 +38,7 @@ test.describe('web screenshots', () => {
 		await seedGuestUser(page)
 		await page.goto('/food')
 		await waitForAppShell(page)
-		await expect(page.locator('body')).toBeVisible()
+		await expectNotOnLogin(page)
 
 		await page.screenshot({
 			path: `${outputDir}/food.png`,
@@ -50,7 +50,7 @@ test.describe('web screenshots', () => {
 		await seedGuestUser(page)
 		await page.goto('/settings')
 		await waitForAppShell(page)
-		await expect(page.locator('body')).toBeVisible()
+		await expectNotOnLogin(page)
 
 		await page.screenshot({
 			path: `${outputDir}/settings.png`,
