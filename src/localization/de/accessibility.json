@@ -15,5 +15,8 @@
 	"dashboard": {
 		"moveUp": "Nach oben verschieben",
 		"moveDown": "Nach unten verschieben"
+	},
+	"formList": {
+		"copyHint": "Doppeltippen zum Kopieren"
 	}
 }

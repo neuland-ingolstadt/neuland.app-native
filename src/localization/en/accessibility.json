@@ -15,5 +15,8 @@
 	"dashboard": {
 		"moveUp": "Move up",
 		"moveDown": "Move down"
+	},
+	"formList": {
+		"copyHint": "Double tap to copy"
 	}
 }
