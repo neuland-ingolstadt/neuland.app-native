@@ -22,6 +22,9 @@ outputs:
   workflows:
     description: CI workflow definitions changed
     value: ${{ steps.filter.outputs.workflows }}
+  playwright:
+    description: Playwright e2e screenshot tests changed
+    value: ${{ steps.filter.outputs.playwright }}
   changes:
     description: JSON array of matching filter names
     value: ${{ steps.filter.outputs.changes }}

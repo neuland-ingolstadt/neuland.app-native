@@ -1,0 +1,138 @@
+name: Playwright web screenshots
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: playwright-screenshots-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
+
+jobs:
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.detect.outputs.web }}
+      playwright: ${{ steps.detect.outputs.playwright }}
+      workflows: ${{ steps.detect.outputs.workflows }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Detect changes
+        uses: ./.github/actions/detect-changes
+        id: detect
+
+  playwright-screenshots:
+    name: Playwright web screenshots
+    needs: changes
+    if: |
+      needs.changes.outputs.web == 'true' ||
+      needs.changes.outputs.playwright == 'true' ||
+      needs.changes.outputs.workflows == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Export web bundle
+        run: |
+          source config/ci/web-export-env.sh
+          bun run licences:bundle
+          bunx expo export -p web -c
+
+      - name: Install Playwright browser
+        run: bunx playwright install chromium --with-deps
+
+      - name: Start static web server
+        run: bash config/ci/serve-web-export.sh 3000 /tmp/playwright-serve.pid
+
+      - name: Run Playwright screenshot tests
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_SKIP_WEB_SERVER: '1'
+          CI: 'true'
+        run: bun run test:e2e
+
+      - name: Stop static web server
+        if: always()
+        run: |
+          if [ -f /tmp/playwright-serve.pid ]; then
+            kill "$(cat /tmp/playwright-serve.pid)" || true
+          fi
+
+      - name: Upload screenshot artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-screenshots-pr-${{ github.event.pull_request.number }}
+          path: e2e/playwright/output/*.png
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Publish screenshots for PR comment
+        if: success()
+        id: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          base_url=$(bash config/ci/upload-playwright-screenshots.sh \
+            e2e/playwright/output \
+            "${{ github.event.pull_request.number }}")
+          echo "base_url=${base_url}" >> "$GITHUB_OUTPUT"
+
+      - name: Write PR comment
+        if: success()
+        run: |
+          bash config/ci/write-playwright-comment.sh \
+            "${{ steps.publish.outputs.base_url }}" \
+            e2e/playwright/output \
+            playwright-comment.md
+
+      - name: Comment on pull request
+        if: success()
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const fs = require('fs')
+            const body = fs.readFileSync('playwright-comment.md', 'utf8')
+            const marker = '<!-- playwright-screenshots -->'
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const existing = comments.find((comment) => comment.body?.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              })
+              return
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            })

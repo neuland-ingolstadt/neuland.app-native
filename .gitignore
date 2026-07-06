@@ -17,6 +17,11 @@
 !/ios/ci_scripts
 /android
 
+# playwright
+/e2e/playwright/output/
+/e2e/playwright/test-results/
+/playwright-report/
+
 # builds
 /dist
 *.aab

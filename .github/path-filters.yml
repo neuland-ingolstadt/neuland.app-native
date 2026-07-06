@@ -55,6 +55,13 @@ dependencies:
   - 'config/plugins/**'
   - '.bun-version'
 
+playwright:
+  - 'e2e/**'
+  - 'playwright.config.ts'
+  - 'config/ci/serve-web-export.sh'
+  - 'config/ci/upload-playwright-screenshots.sh'
+  - 'config/ci/write-playwright-comment.sh'
+
 workflows:
   - '.github/workflows/**'
   - '.github/actions/**'
