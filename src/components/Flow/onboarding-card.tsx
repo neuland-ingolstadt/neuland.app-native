@@ -17,7 +17,6 @@ interface OnboardingCardProps {
 	description: string
 	icon: OnboardingCardData['icon']
 	opacity: SharedValue<number>
-	scale: SharedValue<number>
 	translateY: SharedValue<number>
 	wobbleDisabled: boolean
 }
@@ -27,7 +26,6 @@ export function OnboardingCard({
 	description,
 	icon,
 	opacity,
-	scale,
 	translateY,
 	wobbleDisabled
 }: OnboardingCardProps): React.JSX.Element {
@@ -39,7 +37,7 @@ export function OnboardingCard({
 
 	const entranceStyle = useAnimatedStyle(() => ({
 		opacity: opacity.value,
-		transform: [{ translateY: translateY.value }, { scale: scale.value }]
+		transform: [{ translateY: translateY.value }]
 	}))
 
 	const handlePress = (): void => {

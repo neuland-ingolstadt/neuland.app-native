@@ -1,7 +1,7 @@
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	type ColorValue,
@@ -10,27 +10,33 @@ import {
 	Platform,
 	Pressable,
 	Text,
+	useWindowDimensions,
 	View
 } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import Animated, {
-	interpolate,
+	Easing,
+	runOnJS,
 	type SharedValue,
-	useAnimatedStyle
+	useAnimatedStyle,
+	useSharedValue,
+	withDelay,
+	withSpring,
+	withTiming
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
-import { OnboardingAmbient } from '@/components/Flow/onboarding-ambient'
 import { OnboardingCard } from '@/components/Flow/onboarding-card'
-import { OnboardingHero } from '@/components/Flow/onboarding-hero'
+import { OnboardingIntro } from '@/components/Flow/onboarding-intro'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
-import { useOnboardingSequence } from '@/components/Flow/use-onboarding-sequence'
 import PlatformIcon from '@/components/Universal/icon'
 import { PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
+
+const ONBOARDING_CARD_COUNT = 3
 
 interface OnboardingContinueButtonProps {
 	buttonTextColor: string
@@ -146,18 +152,29 @@ export default function OnboardingScreen(): React.JSX.Element {
 	const primaryColor = String(useCSSVariable('--color-primary') ?? '#007aff')
 	const buttonTextColor = getContrastColor(primaryColor)
 	const insets = useSafeAreaInsets()
+	const reanimatedWindow = useWindowDimensions()
 	const window = Dimensions.get('window')
 	const [isWhobbleDisabled, setWhobbleDisabled] = useState(true)
 	const [buttonDisabled, setButtonDisabled] = useState(true)
 
-	const onCardsReady = useCallback(() => {
-		setWhobbleDisabled(false)
-	}, [])
-	const onContinueReady = useCallback(() => {
-		setButtonDisabled(false)
-	}, [])
+	const cardOpacity0 = useSharedValue(0)
+	const cardOpacity1 = useSharedValue(0)
+	const cardOpacity2 = useSharedValue(0)
+	const cardTranslateY0 = useSharedValue(24)
+	const cardTranslateY1 = useSharedValue(24)
+	const cardTranslateY2 = useSharedValue(24)
+	const cardOpacities = [cardOpacity0, cardOpacity1, cardOpacity2]
+	const cardTranslateYs = [cardTranslateY0, cardTranslateY1, cardTranslateY2]
 
-	const animation = useOnboardingSequence({ onCardsReady, onContinueReady })
+	const legalOpacity = useSharedValue(0)
+	const legalTranslateY = useSharedValue(20)
+	const logoOpacity = useSharedValue(0)
+	const textTranslateY = useSharedValue(18)
+	const textOpacity = useSharedValue(0)
+	const cardsViewHeight = useSharedValue(0)
+	const textLogoOpacity = useSharedValue(1)
+	const heroMargin = useSharedValue(1)
+	const helpOpacity = useSharedValue(0)
 
 	const data: OnboardingCardData[] = [
 		{
@@ -189,28 +206,19 @@ export default function OnboardingScreen(): React.JSX.Element {
 		}
 	]
 
-	const heroAnimatedStyle = useAnimatedStyle(() => ({
-		opacity: animation.heroOpacity.value,
-		maxHeight: interpolate(animation.heroCollapse.value, [0, 1], [0, 420]),
-		marginTop: interpolate(animation.heroCollapse.value, [0, 1], [0, 24]),
-		marginBottom: interpolate(animation.heroCollapse.value, [0, 1], [0, 12]),
-		overflow: 'hidden' as const,
-		transform: [{ scale: animation.heroOpacity.value * 0.08 + 0.92 }]
-	}))
-
 	const textLogoAnimatedStyle = useAnimatedStyle(() => ({
-		opacity: animation.textLogoOpacity.value
+		opacity: textLogoOpacity.value
 	}))
 
 	const helpAnimatedStyle = useAnimatedStyle(() => ({
 		position: 'absolute',
 		top: insets.top + 15,
 		right: 18,
-		opacity: animation.helpOpacity.value
+		opacity: helpOpacity.value
 	}))
 
 	const cardsViewAnimatedStyle = useAnimatedStyle(() => ({
-		minHeight: animation.cardsViewHeight.value
+		minHeight: cardsViewHeight.value
 	}))
 
 	const handleContinue = (): void => {
@@ -226,6 +234,110 @@ export default function OnboardingScreen(): React.JSX.Element {
 		})
 	}
 
+	useEffect(() => {
+		logoOpacity.value = withDelay(
+			200,
+			withTiming(1, { duration: 700, easing: Easing.out(Easing.cubic) }, () => {
+				textTranslateY.value = withSpring(0, {
+					damping: 17,
+					stiffness: 120,
+					mass: 0.7
+				})
+
+				textOpacity.value = withTiming(
+					1,
+					{ duration: 550, easing: Easing.out(Easing.cubic) },
+					() => {
+						heroMargin.value = withDelay(
+							900,
+							withTiming(0, {
+								duration: 900,
+								easing: Easing.inOut(Easing.cubic)
+							})
+						)
+						textLogoOpacity.value = withDelay(
+							900,
+							withTiming(0, {
+								duration: 450,
+								easing: Easing.out(Easing.cubic)
+							})
+						)
+						logoOpacity.value = withDelay(
+							650,
+							withTiming(
+								0,
+								{ duration: 650, easing: Easing.inOut(Easing.cubic) },
+								() => {
+									cardsViewHeight.value = withTiming(
+										reanimatedWindow.height * 0.4,
+										{
+											duration: 50,
+											easing: Easing.out(Easing.quad)
+										}
+									)
+
+									const initialDelay = 500
+									for (let index = 0; index < ONBOARDING_CARD_COUNT; index++) {
+										const delay = initialDelay + index * 90
+
+										cardOpacities[index].value = withDelay(
+											delay,
+											withTiming(1, {
+												duration: 420,
+												easing: Easing.out(Easing.cubic)
+											})
+										)
+
+										cardTranslateYs[index].value = withDelay(
+											delay,
+											withSpring(0, {
+												damping: 16,
+												stiffness: 140,
+												mass: 0.65
+											})
+										)
+									}
+
+									runOnJS(setWhobbleDisabled)(false)
+									helpOpacity.value = withDelay(
+										1100,
+										withTiming(1, {
+											duration: 450,
+											easing: Easing.out(Easing.cubic)
+										})
+									)
+									legalOpacity.value = withDelay(
+										1100,
+										withTiming(1, {
+											duration: 450,
+											easing: Easing.out(Easing.cubic)
+										})
+									)
+
+									legalTranslateY.value = withDelay(
+										1100,
+										withTiming(
+											0,
+											{
+												duration: 450,
+												easing: Easing.out(Easing.cubic)
+											},
+											(isFinished) => {
+												if (isFinished === true) {
+													runOnJS(setButtonDisabled)(false)
+												}
+											}
+										)
+									)
+								}
+							)
+						)
+					}
+				)
+			})
+		)
+	}, [])
+
 	const scaleFontSize = (size: number): number => {
 		if (DeviceInfo.isTablet() || Platform.OS === 'web') {
 			return size
@@ -238,30 +350,24 @@ export default function OnboardingScreen(): React.JSX.Element {
 	return (
 		<>
 			<View
-				className="items-center bg-contrast flex-1 mx-1.5 overflow-hidden"
+				className="items-center bg-contrast flex-1 mx-1.5"
 				style={{
 					paddingTop: insets.top + 20,
 					paddingBottom: insets.bottom + 60
 				}}
 			>
-				<OnboardingAmbient
-					masterOpacity={animation.ambientOpacity}
-					networkProgress={animation.networkProgress}
-				/>
-
 				<View className="flex-1 justify-center items-center">
-					<Animated.View style={heroAnimatedStyle}>
-						<OnboardingHero
-							brandName="Neuland Next"
-							fontSize={scaledHeading}
-							heroProgress={animation.heroProgress}
-							logoScale={animation.logoScale}
-							rippleProgress={animation.rippleProgress}
-							titleOpacity={animation.titleOpacity}
-							titleTranslateY={animation.titleTranslateY}
-							welcomeTitle={t('onboarding.page1.title')}
-						/>
-					</Animated.View>
+					<OnboardingIntro
+						brandName="Neuland Next"
+						fontSize={scaledHeading}
+						heroMargin={heroMargin}
+						logoOpacity={logoOpacity}
+						screenHeight={reanimatedWindow.height}
+						shimmerActive={buttonDisabled}
+						textOpacity={textOpacity}
+						textTranslateY={textTranslateY}
+						welcomeTitle={t('onboarding.page1.title')}
+					/>
 				</View>
 
 				<Animated.View className="grow-[0.5]" style={cardsViewAnimatedStyle}>
@@ -272,9 +378,8 @@ export default function OnboardingScreen(): React.JSX.Element {
 								title={title}
 								description={description}
 								icon={icon}
-								opacity={animation.cardOpacities[index]}
-								scale={animation.cardScales[index]}
-								translateY={animation.cardTranslateYs[index]}
+								opacity={cardOpacities[index]}
+								translateY={cardTranslateYs[index]}
 								wobbleDisabled={isWhobbleDisabled}
 							/>
 						))}
@@ -287,8 +392,8 @@ export default function OnboardingScreen(): React.JSX.Element {
 						buttonTextColor={buttonTextColor}
 						continueLabel={t('whatsnew.continue')}
 						labelColor={labelColor}
-						legalOpacity={animation.legalOpacity}
-						legalTranslateY={animation.legalTranslateY}
+						legalOpacity={legalOpacity}
+						legalTranslateY={legalTranslateY}
 						onContinue={handleContinue}
 						privacyLabel={t('onboarding.links.privacy')}
 						agreePrefix={t('onboarding.links.agree1')}
