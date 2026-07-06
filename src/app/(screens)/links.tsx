@@ -53,7 +53,7 @@ const LinkScreen = (): React.JSX.Element => {
 	const sections = generateSections(typedQuicklinks)
 
 	return (
-		<View className="ios:mt-0 android:mt-3.5 px-page">
+		<View className="ios:mt-0 android:mt-3.5 web:mt-3 px-page">
 			<FormList sections={sections} sheet />
 		</View>
 	)
