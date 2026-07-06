@@ -8,7 +8,8 @@ export const primussLink =
 	'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
 const moodleLink = 'https://moodle.thi.de/'
 const mailLink = 'https://outlook.office.com/'
-const studverLink = 'https://studverthi.de'
+const studverLink =
+	'https://www.thi.de/hochschule/ueber-uns/hochschulgremien/studierendenvertretung/'
 const marketplaceLink = 'https://www.thi.de/service/marketplace/'
 export const libraryLink = 'https://opac.ku.de/index-hi.html'
 export const vscoutLink = 'https://vscout.thi.de'
