@@ -168,7 +168,7 @@
 				"title": "Termine"
 			},
 			"calendar": {
-				"link": "https://www.thi.de/studium/pruefung/semestertermine/",
+				"link": "https://www.thi.de/studium/semestertermine/",
 				"noData": {
 					"title": "Keine Daten gefunden",
 					"subtitle": "Bitte versuche es später erneut."
