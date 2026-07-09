@@ -168,16 +168,16 @@
 				"title": "Dates"
 			},
 			"calendar": {
-				"link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
+				"link": "https://www.thi.de/en/studies/semester-dates/",
 				"noData": {
 					"title": "No data found",
 					"subtitle": "Please try again later."
 				}
 			},
 			"footer": {
-				"part1": "All information without guarantee. Binding information is only available directly on the ",
-				"part2": "university website",
-				"part3": "."
+				"part1": "Semester dates are based on the official THI schedule (PDFs on the ",
+				"part2": "THI semester dates page",
+				"part3": "). All information without guarantee. Binding information is only available there."
 			}
 		},
 		"lecturers": {

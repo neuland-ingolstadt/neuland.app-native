@@ -168,16 +168,16 @@
 				"title": "Termine"
 			},
 			"calendar": {
-				"link": "https://www.thi.de/studium/pruefung/semestertermine/",
+				"link": "https://www.thi.de/studium/semestertermine/",
 				"noData": {
 					"title": "Keine Daten gefunden",
 					"subtitle": "Bitte versuche es später erneut."
 				}
 			},
 			"footer": {
-				"part1": "Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt auf der ",
-				"part2": "Universitätswebsite",
-				"part3": " verfügbar."
+				"part1": "Die Semestertermine stammen aus den offiziellen Angaben der THI (PDFs auf der ",
+				"part2": "Semestertermine-Seite der THI",
+				"part3": "). Alle Informationen ohne Gewähr. Verbindliche Angaben sind nur dort verfügbar."
 			}
 		},
 		"lecturers": {
