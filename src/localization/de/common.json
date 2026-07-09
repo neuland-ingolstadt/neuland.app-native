@@ -175,9 +175,9 @@
 				}
 			},
 			"footer": {
-				"part1": "Die Semestertermine stammen aus den offiziellen Angaben der THI (PDFs auf der ",
-				"part2": "Semestertermine-Seite der THI",
-				"part3": "). Alle Informationen ohne Gewähr. Verbindliche Angaben sind nur dort verfügbar."
+				"part1": "Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt auf der ",
+				"part2": "Universitätswebsite",
+				"part3": " verfügbar."
 			}
 		},
 		"lecturers": {
