@@ -4,7 +4,6 @@
 minimumReleaseAge = 259200
 
 [test]
-preload = ["./config/test/react-native-mock.ts"]
 coverageSkipTestFiles = true
 coveragePathIgnorePatterns = [
 	"src/__generated__/**",
