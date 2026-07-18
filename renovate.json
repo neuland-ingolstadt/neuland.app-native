@@ -6,12 +6,13 @@
 		"abandonments:recommended",
 		":configMigration",
 		"customManagers:biomeVersions",
-		":semanticCommitTypeAll(build)"
+		":semanticCommitTypeAll(build)",
+		"schedule:nonOfficeHours"
 	],
 	"timezone": "Europe/Berlin",
-	"schedule": ["before 6am on Monday"],
 	"minimumReleaseAge": "3 days",
-	"prConcurrentLimit": 8,
+	"prHourlyLimit": 3,
+	"prConcurrentLimit": 10,
 	"rebaseWhen": "behind-base-branch",
 	"reviewersFromCodeOwners": true,
 	"labels": ["dependencies"],
@@ -28,7 +29,7 @@
 	],
 	"lockFileMaintenance": {
 		"enabled": true,
-		"schedule": ["before 6am on Monday"],
+		"schedule": ["before 6am on Sunday"],
 		"commitMessageAction": "Refresh",
 		"commitMessageTopic": "bun.lock",
 		"labels": ["dependencies"]
