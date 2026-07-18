@@ -39,7 +39,6 @@
 		{
 			"description": "Expo SDK packages managed by bun pkgs (expo install --check)",
 			"matchManagers": ["bun"],
-			"matchDepTypes": ["dependencies"],
 			"matchPackageNames": [
 				"expo",
 				"expo-*",
@@ -48,6 +47,11 @@
 				"react-dom",
 				"react-native",
 				"metro",
+				"typescript",
+				"@babel/core",
+				"@types/react",
+				"@types/react-dom",
+				"@types/jest",
 				"@react-native-community/datetimepicker",
 				"@react-native-community/netinfo",
 				"react-native-gesture-handler",
