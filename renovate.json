@@ -96,6 +96,14 @@
 			"groupSlug": "stryker"
 		},
 		{
+			"description": "i18next and react-i18next are upgraded together",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["dependencies"],
+			"matchPackageNames": ["i18next", "react-i18next"],
+			"groupName": "i18n",
+			"groupSlug": "i18n"
+		},
+		{
 			"description": "Group GitHub Actions updates",
 			"matchManagers": ["github-actions"],
 			"groupName": "github-actions",
