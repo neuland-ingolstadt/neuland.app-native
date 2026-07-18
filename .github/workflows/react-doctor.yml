@@ -48,5 +48,4 @@ jobs:
       - uses: millionco/react-doctor@938008119a288f2fb47c66a69cd9279a21f31784 # v2.2.7
         with:
           directory: src
-          node-version: 26
           comment: false
