@@ -15,12 +15,7 @@
 	"rebaseWhen": "behind-base-branch",
 	"reviewersFromCodeOwners": true,
 	"labels": ["dependencies"],
-	"ignoreDeps": [
-		"@th3rdwave/react-navigation-bottom-sheet",
-		"getenv",
-		"recyclerlistview",
-		"@types/node"
-	],
+	"ignoreDeps": ["getenv", "recyclerlistview", "@types/node"],
 	"prBodyNotes": [
 		"Production dependencies are updated manually via `bun pkgs` (Expo SDK–compatible versions).",
 		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`."
@@ -37,24 +32,6 @@
 			"description": "Production deps are updated with bun pkgs (expo install --check)",
 			"matchManagers": ["bun"],
 			"matchDepTypes": ["dependencies"],
-			"enabled": false
-		},
-		{
-			"description": "Manually pinned Expo / React Native packages (see package.json expo.install.exclude)",
-			"matchManagers": ["bun"],
-			"matchPackageNames": [
-				"expo",
-				"expo-*",
-				"@expo/*",
-				"react",
-				"react-dom",
-				"react-native",
-				"react-native-*",
-				"@react-native/*",
-				"@react-native-community/*",
-				"@shopify/flash-list",
-				"react-native-reanimated"
-			],
 			"enabled": false
 		},
 		{
