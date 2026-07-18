@@ -116,11 +116,24 @@ jobs:
     permissions:
       issues: write
     steps:
-      - name: Create or update stale dev client issue
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      - name: Summarize fingerprint
+        id: fingerprint-summary
         env:
           CURRENT_FINGERPRINT: ${{ needs.fingerprint.outputs.current-fingerprint }}
           PREVIOUS_FINGERPRINT: ${{ needs.fingerprint.outputs.previous-fingerprint }}
+        run: |
+          echo "current-digest=$(printf '%s' "$CURRENT_FINGERPRINT" | sha256sum | cut -c1-12)" >> "$GITHUB_OUTPUT"
+          if [ -n "$PREVIOUS_FINGERPRINT" ]; then
+            echo "previous-digest=$(printf '%s' "$PREVIOUS_FINGERPRINT" | sha256sum | cut -c1-12)" >> "$GITHUB_OUTPUT"
+          else
+            echo "previous-digest=n/a" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update stale dev client issue
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          CURRENT_DIGEST: ${{ steps.fingerprint-summary.outputs.current-digest }}
+          PREVIOUS_DIGEST: ${{ steps.fingerprint-summary.outputs.previous-digest }}
         with:
           script: |
             const staleLabel = 'dev-client-stale'
@@ -138,10 +151,12 @@ jobs:
               '| | |',
               '|---|---|',
               `| Commit | [\`${context.sha.slice(0, 7)}\`](${commitUrl}) |`,
-              `| Current fingerprint | \`${process.env.CURRENT_FINGERPRINT}\` |`,
-              `| Previous fingerprint | \`${process.env.PREVIOUS_FINGERPRINT || 'n/a'}\` |`,
+              `| Current fingerprint | \`${process.env.CURRENT_DIGEST}\` |`,
+              `| Previous fingerprint | \`${process.env.PREVIOUS_DIGEST}\` |`,
               `| Detected | ${new Date().toISOString()} |`,
               `| Fingerprint check | [workflow run](${fingerprintRunUrl}) |`,
+              '',
+              'Fingerprint digests are SHA-256 prefixes. Open the workflow run for the full Expo fingerprint output.',
               '',
               '### Rebuild',
               '',
