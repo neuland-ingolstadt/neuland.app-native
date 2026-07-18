@@ -23,7 +23,7 @@
 		"@types/node"
 	],
 	"prBodyNotes": [
-		"Expo / React Native SDK packages are updated with `bun pkgs` (`expo install --check`).",
+		"Expo / React Native SDK packages are synced by the weekly Expo SDK dependencies workflow or `bun pkgs`.",
 		"Other production dependencies are updated by Renovate.",
 		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`."
 	],
