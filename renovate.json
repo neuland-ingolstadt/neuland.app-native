@@ -64,10 +64,17 @@
 			"enabled": false
 		},
 		{
+			"description": "Keep @biomejs/biome, bun.lock, and biome.json $schema in one PR",
+			"matchPackageNames": ["@biomejs/biome"],
+			"groupName": "biome",
+			"groupSlug": "biome"
+		},
+		{
 			"description": "Group dev dependency minor and patch updates (former Dependabot development-minor-patch group)",
 			"matchManagers": ["bun"],
 			"matchDepTypes": ["devDependencies"],
 			"matchUpdateTypes": ["minor", "patch"],
+			"matchPackageNames": ["!@biomejs/biome"],
 			"groupName": "development dependencies (non-major)",
 			"groupSlug": "development-minor-patch"
 		},
