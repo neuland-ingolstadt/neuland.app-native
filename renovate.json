@@ -25,7 +25,8 @@
 	"prBodyNotes": [
 		"Expo / React Native SDK packages are synced by the weekly Expo SDK dependencies workflow or `bun pkgs`.",
 		"Other production dependencies are updated by Renovate.",
-		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`."
+		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`.",
+		"If the native fingerprint changes (`fp:changed`), rebuild dev clients manually via Actions → **Build dev client** — auto-builds on `main` were removed to save EAS quota."
 	],
 	"lockFileMaintenance": {
 		"enabled": true,
