@@ -15,9 +15,15 @@
 	"rebaseWhen": "behind-base-branch",
 	"reviewersFromCodeOwners": true,
 	"labels": ["dependencies"],
-	"ignoreDeps": ["getenv", "recyclerlistview", "@types/node"],
+	"ignoreDeps": [
+		"@th3rdwave/react-navigation-bottom-sheet",
+		"getenv",
+		"recyclerlistview",
+		"@types/node"
+	],
 	"prBodyNotes": [
-		"Production dependencies are updated manually via `bun pkgs` (Expo SDK–compatible versions).",
+		"Expo / React Native SDK packages are updated with `bun pkgs` (`expo install --check`).",
+		"Other production dependencies are updated by Renovate.",
 		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`."
 	],
 	"lockFileMaintenance": {
@@ -29,9 +35,30 @@
 	},
 	"packageRules": [
 		{
-			"description": "Production deps are updated with bun pkgs (expo install --check)",
+			"description": "Expo SDK packages managed by bun pkgs (expo install --check)",
 			"matchManagers": ["bun"],
 			"matchDepTypes": ["dependencies"],
+			"matchPackageNames": [
+				"expo",
+				"expo-*",
+				"@expo/*",
+				"react",
+				"react-dom",
+				"react-native",
+				"metro",
+				"@react-native-community/datetimepicker",
+				"@react-native-community/netinfo",
+				"react-native-gesture-handler",
+				"react-native-pager-view",
+				"react-native-reanimated",
+				"react-native-safe-area-context",
+				"react-native-screens",
+				"react-native-svg",
+				"react-native-view-shot",
+				"react-native-web",
+				"react-native-webview",
+				"@shopify/flash-list"
+			],
 			"enabled": false
 		},
 		{
