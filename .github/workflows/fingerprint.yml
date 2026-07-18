@@ -121,25 +121,14 @@ jobs:
         env:
           CURRENT_FINGERPRINT: ${{ needs.fingerprint.outputs.current-fingerprint }}
           PREVIOUS_FINGERPRINT: ${{ needs.fingerprint.outputs.previous-fingerprint }}
-          FINGERPRINT_DIFF: ${{ needs.fingerprint.outputs.fingerprint-diff }}
         with:
           script: |
             const staleLabel = 'dev-client-stale'
             const issueTitle = 'Dev client rebuild needed'
             const marker = '<!-- dev-client-stale -->'
             const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/dev-client-build.yml`
+            const fingerprintRunUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`
             const commitUrl = `${context.payload.repository.html_url}/commit/${context.sha}`
-
-            let diff
-            try {
-              diff = JSON.parse(process.env.FINGERPRINT_DIFF || '[]')
-            } catch {
-              diff = process.env.FINGERPRINT_DIFF
-            }
-
-            const diffSummary = typeof diff === 'string'
-              ? diff
-              : '```json\n' + JSON.stringify(diff, null, 2) + '\n```'
 
             const body = [
               marker,
@@ -152,10 +141,7 @@ jobs:
               `| Current fingerprint | \`${process.env.CURRENT_FINGERPRINT}\` |`,
               `| Previous fingerprint | \`${process.env.PREVIOUS_FINGERPRINT || 'n/a'}\` |`,
               `| Detected | ${new Date().toISOString()} |`,
-              '',
-              '### Fingerprint diff',
-              '',
-              diffSummary,
+              `| Fingerprint check | [workflow run](${fingerprintRunUrl}) |`,
               '',
               '### Rebuild',
               '',
