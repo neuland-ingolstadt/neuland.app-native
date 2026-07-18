@@ -11,6 +11,7 @@ coveragePathIgnorePatterns = [
 	"src/app/**",
 	"src/components/**",
 	"src/assets/**",
+	"src/utils/tests/**",
 	"ios/**",
 	"android/**"
 ]

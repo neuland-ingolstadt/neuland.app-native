@@ -1,0 +1,120 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:recommended",
+		"docker:pinDigests",
+		"abandonments:recommended",
+		":configMigration",
+		"customManagers:biomeVersions",
+		":semanticCommitTypeAll(build)",
+		"schedule:nonOfficeHours"
+	],
+	"timezone": "Europe/Berlin",
+	"minimumReleaseAge": "3 days",
+	"prHourlyLimit": 3,
+	"prConcurrentLimit": 10,
+	"rebaseWhen": "behind-base-branch",
+	"reviewersFromCodeOwners": true,
+	"labels": ["dependencies"],
+	"ignoreDeps": [
+		"@th3rdwave/react-navigation-bottom-sheet",
+		"getenv",
+		"recyclerlistview",
+		"@types/node"
+	],
+	"prBodyNotes": [
+		"Expo / React Native SDK packages are synced by the weekly Expo SDK dependencies workflow or `bun pkgs`.",
+		"Other production dependencies are updated by Renovate.",
+		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`.",
+		"If the native fingerprint changes (`fp:changed`), rebuild dev clients manually via Actions → **Build dev client** — auto-builds on `main` were removed to save EAS quota."
+	],
+	"lockFileMaintenance": {
+		"enabled": true,
+		"schedule": ["before 6am on Sunday"],
+		"commitMessageAction": "Refresh",
+		"commitMessageTopic": "bun.lock",
+		"labels": ["dependencies"]
+	},
+	"packageRules": [
+		{
+			"description": "Expo SDK packages managed by bun pkgs (expo install --check)",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["dependencies"],
+			"matchPackageNames": [
+				"expo",
+				"expo-*",
+				"@expo/*",
+				"react",
+				"react-dom",
+				"react-native",
+				"metro",
+				"@react-native-community/datetimepicker",
+				"@react-native-community/netinfo",
+				"react-native-gesture-handler",
+				"react-native-pager-view",
+				"react-native-reanimated",
+				"react-native-safe-area-context",
+				"react-native-screens",
+				"react-native-svg",
+				"react-native-view-shot",
+				"react-native-web",
+				"react-native-webview",
+				"@shopify/flash-list"
+			],
+			"enabled": false
+		},
+		{
+			"description": "Group dev dependency minor and patch updates (former Dependabot development-minor-patch group)",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "development dependencies (non-major)",
+			"groupSlug": "development-minor-patch"
+		},
+		{
+			"description": "Keep Bun runtime (.bun-version) and type packages aligned",
+			"matchManagers": ["bun", "bun-version"],
+			"matchPackageNames": ["bun", "bun-types", "@types/bun"],
+			"groupName": "bun toolchain",
+			"groupSlug": "bun-toolchain",
+			"labels": ["dependencies", "ci"]
+		},
+		{
+			"description": "GraphQL codegen packages are upgraded together",
+			"matchManagers": ["bun"],
+			"matchPackageNames": [
+				"@graphql-codegen/**",
+				"graphql-codegen-typescript-operation-types"
+			],
+			"groupName": "graphql-codegen",
+			"groupSlug": "graphql-codegen"
+		},
+		{
+			"description": "Stryker mutation testing packages are upgraded together",
+			"matchManagers": ["bun"],
+			"matchPackageNames": ["@stryker-mutator/**", "@hughescr/stryker-bun-runner"],
+			"groupName": "stryker",
+			"groupSlug": "stryker"
+		},
+		{
+			"description": "i18next and react-i18next are upgraded together",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["dependencies"],
+			"matchPackageNames": ["i18next", "react-i18next"],
+			"groupName": "i18n",
+			"groupSlug": "i18n"
+		},
+		{
+			"description": "Group GitHub Actions updates",
+			"matchManagers": ["github-actions"],
+			"groupName": "github-actions",
+			"labels": ["dependencies", "ci"]
+		},
+		{
+			"description": "Docker base images in config/Dockerfile",
+			"matchManagers": ["dockerfile"],
+			"matchFileNames": ["config/Dockerfile"],
+			"labels": ["dependencies", "ci"]
+		}
+	]
+}

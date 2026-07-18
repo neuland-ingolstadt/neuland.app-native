@@ -1,0 +1,217 @@
+name: Build dev client
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to build
+        type: choice
+        options:
+          - both
+          - android
+          - ios
+        default: both
+      close_stale_alert:
+        description: Close the dev-client-stale issue after a successful build
+        type: boolean
+        default: true
+  schedule:
+    # Wednesday 09:00 UTC — nudge if a stale alert is still open
+    - cron: '0 9 * * 3'
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_PROD }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
+
+jobs:
+  resolve-platform:
+    name: Resolve platform
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      build-android: ${{ steps.platform.outputs.build-android }}
+      build-ios: ${{ steps.platform.outputs.build-ios }}
+    steps:
+      - id: platform
+        run: |
+          case "${{ github.event.inputs.platform }}" in
+            android)
+              echo "build-android=true" >> "$GITHUB_OUTPUT"
+              echo "build-ios=false" >> "$GITHUB_OUTPUT"
+              ;;
+            ios)
+              echo "build-android=false" >> "$GITHUB_OUTPUT"
+              echo "build-ios=true" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "build-android=true" >> "$GITHUB_OUTPUT"
+              echo "build-ios=true" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+  build-android:
+    name: Build Android dev client
+    needs: resolve-platform
+    if: github.event_name == 'workflow_dispatch' && needs.resolve-platform.outputs.build-android == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: android-dev-client-main
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Bundle licenses
+        run: bun run licences:bundle
+
+      - name: Build dev client on EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile development --non-interactive
+
+  build-ios:
+    name: Build iOS dev client
+    needs: resolve-platform
+    if: github.event_name == 'workflow_dispatch' && needs.resolve-platform.outputs.build-ios == 'true'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ios-dev-client-main
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: ./.github/actions/setup
+
+      - uses: ./.github/actions/setup-eas
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Bundle licenses
+        run: bun run licences:bundle
+
+      - name: Build dev client on EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform ios --profile development --non-interactive
+
+  finish:
+    name: Finish dev client build
+    needs: [resolve-platform, build-android, build-ios]
+    if: |
+      always() &&
+      github.event_name == 'workflow_dispatch' &&
+      needs.resolve-platform.result == 'success' &&
+      (needs.build-android.result == 'success' || needs.build-android.result == 'skipped') &&
+      (needs.build-ios.result == 'success' || needs.build-ios.result == 'skipped') &&
+      needs.build-android.result != 'failure' &&
+      needs.build-ios.result != 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update stale dev client issue
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          CLOSE_STALE_ALERT: ${{ github.event.inputs.close_stale_alert }}
+          PLATFORM: ${{ github.event.inputs.platform }}
+        with:
+          script: |
+            const staleLabel = 'dev-client-stale'
+            const closeStaleAlert = process.env.CLOSE_STALE_ALERT === 'true'
+            const platform = process.env.PLATFORM || 'both'
+            const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: staleLabel,
+              state: 'open',
+              per_page: 1,
+            })
+
+            if (issues.length === 0) {
+              core.info('No open dev-client-stale issue found.')
+              return
+            }
+
+            const issue = issues[0]
+            const comment = [
+              `Dev client build finished (${platform}) via [workflow run](${runUrl}).`,
+              closeStaleAlert
+                ? 'Closing this alert because **Close stale alert** was enabled.'
+                : 'Leaving this alert open — rebuild the other platform or re-run with **Close stale alert** when done.',
+            ].join('\n\n')
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: comment,
+            })
+
+            if (!closeStaleAlert) {
+              return
+            }
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              state: 'closed',
+              state_reason: 'completed',
+            })
+
+  stale-reminder:
+    name: Remind about stale dev client
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on open stale issues
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const staleLabel = 'dev-client-stale'
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/dev-client-build.yml`
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: staleLabel,
+              state: 'open',
+              per_page: 100,
+            })
+
+            if (issues.length === 0) {
+              core.info('No open dev-client-stale issues.')
+              return
+            }
+
+            for (const issue of issues) {
+              const openedAt = new Date(issue.created_at)
+              const daysOpen = Math.floor((Date.now() - openedAt.getTime()) / (1000 * 60 * 60 * 24))
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: [
+                  `Reminder: dev client rebuild still pending (${daysOpen} day(s) since this alert was opened).`,
+                  '',
+                  `Run [**Build dev client**](${workflowUrl}) when you are ready to publish fresh development builds.`,
+                ].join('\n'),
+              })
+            }
