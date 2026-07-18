@@ -80,6 +80,7 @@ jobs:
     if: |
       github.event_name != 'pull_request' ||
       needs.changes.outputs.src == 'true' ||
+      needs.changes.outputs.dependencies == 'true' ||
       needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -118,6 +119,7 @@ jobs:
     if: |
       github.event_name != 'pull_request' ||
       needs.changes.outputs.src == 'true' ||
+      needs.changes.outputs.dependencies == 'true' ||
       needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
     steps:
