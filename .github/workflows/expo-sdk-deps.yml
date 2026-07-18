@@ -1,0 +1,55 @@
+name: Expo SDK dependencies
+
+on:
+  schedule:
+    # Monday 04:00 UTC — aligns with Renovate off-hours in Europe/Berlin
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: expo-sdk-deps
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync Expo SDK dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: ./.github/actions/setup
+
+      - name: Check Expo SDK dependencies
+        id: check
+        run: |
+          if bun pkgs; then
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply Expo SDK dependency sync
+        if: steps.check.outputs.needed == 'true'
+        run: bunx expo install --fix
+
+      - name: Create pull request
+        if: steps.check.outputs.needed == 'true'
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/expo-sdk-deps
+          base: main
+          title: build(deps): sync expo sdk dependencies
+          commit-message: build(deps): sync expo sdk dependencies
+          labels: dependencies
+          body: |
+            Automated sync of Expo SDK-compatible dependency versions via `expo install --fix`.
+
+            These packages are intentionally excluded from Renovate — see `renovate.json` and the [Outline guide](https://outline.neuland.ing/doc/dependency-updates-renovate-6RwfLJGo58).
+
+            After merging, confirm CI passes (especially React Doctor).
