@@ -11,7 +11,7 @@
         "@expo/metro-runtime": "~6.1.2",
         "@expo/vector-icons": "^15.0.3",
         "@flipt-io/flipt": "^1.5.0",
-        "@gorhom/bottom-sheet": "5.2.13",
+        "@gorhom/bottom-sheet": "5.2.14",
         "@howljs/calendar-kit": "2.5.6",
         "@kichiyaki/react-native-barcode-generator": "^0.6.7",
         "@maplibre/maplibre-react-native": "10.4.2",
@@ -448,7 +448,7 @@
 
     "@formatjs/ts-transformer": ["@formatjs/ts-transformer@4.4.13", "", { "dependencies": { "@formatjs/icu-messageformat-parser": "3.5.11", "@types/babel__core": "^7.20.5", "@types/node": "22 || 24", "json-stable-stringify": "^1.3.0", "typescript": "^5.6 || 6" }, "peerDependencies": { "ts-jest": "^29" }, "optionalPeers": ["ts-jest"] }, "sha512-MQZyDrwULZ7MrJz6ar4cuCWCVn8HTlEXMEJffZfhpGJMI+RLx6WwmM7aCGeVa7q3rcV9ChAGFym5Bm2ZBUwV8A=="],
 
-    "@gorhom/bottom-sheet": ["@gorhom/bottom-sheet@5.2.13", "", { "dependencies": { "@gorhom/portal": "1.0.14", "invariant": "^2.2.4" }, "peerDependencies": { "@types/react": "*", "@types/react-native": "*", "react": "*", "react-native": "*", "react-native-gesture-handler": ">=2.16.1", "react-native-reanimated": ">=3.16.0 || >=4.0.0-" }, "optionalPeers": ["@types/react", "@types/react-native"] }, "sha512-cMxyd9kIowMME9kw2wwXAuWrXUQnPkJQz7rDbOSBBomZ+PpV/C/tlO1UozBrAe2zs3tp9th3JMW21FI/y0VeuQ=="],
+    "@gorhom/bottom-sheet": ["@gorhom/bottom-sheet@5.2.14", "", { "dependencies": { "@gorhom/portal": "1.0.14", "invariant": "^2.2.4" }, "peerDependencies": { "@types/react": "*", "@types/react-native": "*", "react": "*", "react-native": "*", "react-native-gesture-handler": ">=2.16.1", "react-native-reanimated": ">=3.16.0 || >=4.0.0-" }, "optionalPeers": ["@types/react", "@types/react-native"] }, "sha512-uLQFlDjp9z+jrOFcMSEldPqL5JdaXL3vXOh+juhwoNvXgTsEorJLjHTugXu+YccAG/0KJnShzKCrb71MHBsvJg=="],
 
     "@gorhom/portal": ["@gorhom/portal@1.0.14", "", { "dependencies": { "nanoid": "^3.3.1" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A=="],
 
@@ -1670,7 +1670,7 @@
 
     "leven": ["leven@3.1.0", "", {}, "sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A=="],
 
-    "license-checker": ["license-checker@github:mwittig/license-checker#d546e3f", { "dependencies": { "chalk": "~0.5.1", "mkdirp": "^0.3.5", "nopt": "^2.2.0", "read-installed": "~3.1.3", "treeify": "^1.0.1" }, "bin": { "license-checker": "./bin/license-checker" } }, "mwittig-license-checker-d546e3f"],
+    "license-checker": ["license-checker@github:mwittig/license-checker#d546e3f", { "dependencies": { "chalk": "~0.5.1", "mkdirp": "^0.3.5", "nopt": "^2.2.0", "read-installed": "~3.1.3", "treeify": "^1.0.1" }, "bin": { "license-checker": "./bin/license-checker" } }, "mwittig-license-checker-d546e3f", "sha512-H+RGKI8y/iKjedqkZePYGFl6Mm1Ij8FoHDYbamSPqi4muqRl90+KJbAtMqIKfZ02kuH+iLi5NTfXdJo7hXAHzQ=="],
 
     "lighthouse-logger": ["lighthouse-logger@1.4.2", "", { "dependencies": { "debug": "^2.6.9", "marky": "^1.2.2" } }, "sha512-gPWxznF6TKmUHrOQjlVo2UbaL2EJ71mb2CCeRs/2qBpi4L/g4LUVc9+3lKQ6DTUZwJswfM7ainGrLO1+fOqa2g=="],
 
