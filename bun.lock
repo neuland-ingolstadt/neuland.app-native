@@ -71,7 +71,7 @@
         "react-native-bottom-tabs": "^0.12.0",
         "react-native-collapsible": "1.6.2",
         "react-native-context-menu-view": "^1.21.0",
-        "react-native-device-info": "^14.1.1",
+        "react-native-device-info": "^15.0.0",
         "react-native-draggable-flatlist": "^4.0.3",
         "react-native-gesture-handler": "~2.28.0",
         "react-native-mmkv": "^4.3.2",
@@ -2028,7 +2028,7 @@
 
     "react-native-context-menu-view": ["react-native-context-menu-view@1.21.0", "", { "peerDependencies": { "react": "^16.8.1 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-native": ">=0.60.0-rc.0 <1.0.x" } }, "sha512-GVQckdDxKyM4BYqWqiApnfzzk56vLEMWiVLsvs95mPhJJYvzRXx+Ev3T6DVEasWCZxk6PbgtcZaWi9jnXGdhCQ=="],
 
-    "react-native-device-info": ["react-native-device-info@14.1.1", "", { "peerDependencies": { "react-native": "*" } }, "sha512-lXFpe6DJmzbQXNLWxlMHP2xuTU5gwrKAvI8dCAZuERhW9eOXSubOQIesk9lIBnsi9pI19GMrcpJEvs4ARPRYmw=="],
+    "react-native-device-info": ["react-native-device-info@15.0.2", "", { "peerDependencies": { "react-native": "*" } }, "sha512-dd71eXG2l3Cwp66IvKNadMTB8fhU3PEjyVddI97sYan+D4bgIAUmgGDhbSOFvHcGavksb2U17kiQYaDiK2WK2g=="],
 
     "react-native-draggable-flatlist": ["react-native-draggable-flatlist@4.0.3", "", { "dependencies": { "@babel/preset-typescript": "^7.17.12" }, "peerDependencies": { "react-native": ">=0.64.0", "react-native-gesture-handler": ">=2.0.0", "react-native-reanimated": ">=2.8.0" } }, "sha512-2F4x5BFieWdGq9SetD2nSAR7s7oQCSgNllYgERRXXtNfSOuAGAVbDb/3H3lP0y5f7rEyNwabKorZAD/SyyNbDw=="],
 
