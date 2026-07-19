@@ -203,17 +203,6 @@ jobs:
           distribution: zulu
           java-version: '17'
 
-      - name: Plan AAB to APK conversion
-        uses: roberteggl/bundletool-action@64713a9081adc6f5ea408a9c19917a3e23f9f287 # v1.0.0
-        with:
-          aab-file: neuland-next.aab
-          keystore-base64: ${{ secrets.KEYSTORE_BASE64 }}
-          keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
-          key-alias: ${{ secrets.KEYSTORE_ALIAS }}
-          key-password: ${{ secrets.KEYSTORE_PASSWORD }}
-          dry-run: true
-          verbose: true
-
       - name: Convert AAB to APK
         id: convert_aab
         uses: roberteggl/bundletool-action@64713a9081adc6f5ea408a9c19917a3e23f9f287 # v1.0.0
