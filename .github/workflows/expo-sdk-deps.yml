@@ -44,8 +44,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: chore/expo-sdk-deps
           base: main
-          title: build(deps): sync expo sdk dependencies
-          commit-message: build(deps): sync expo sdk dependencies
+          title: 'build(deps): sync expo sdk dependencies'
+          commit-message: 'build(deps): sync expo sdk dependencies'
           labels: dependencies
           body: |
             Automated sync of Expo SDK-compatible dependency versions via `expo install --fix`.
