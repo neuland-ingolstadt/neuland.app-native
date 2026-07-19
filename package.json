@@ -106,7 +106,7 @@
 		"react-native-bottom-tabs": "^0.12.0",
 		"react-native-collapsible": "1.6.2",
 		"react-native-context-menu-view": "^1.21.0",
-		"react-native-device-info": "^14.1.1",
+		"react-native-device-info": "^15.0.0",
 		"react-native-draggable-flatlist": "^4.0.3",
 		"react-native-gesture-handler": "~2.28.0",
 		"react-native-mmkv": "^4.3.2",
