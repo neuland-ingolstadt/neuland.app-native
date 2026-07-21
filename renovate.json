@@ -3,6 +3,7 @@
 	"extends": [
 		"config:recommended",
 		"docker:pinDigests",
+		"helpers:pinGitHubActionDigestsToSemver",
 		"abandonments:recommended",
 		":configMigration",
 		"customManagers:biomeVersions",
