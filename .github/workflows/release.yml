@@ -197,15 +197,21 @@ jobs:
         with:
           name: android-build-artifacts
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5.5.0
+        with:
+          distribution: zulu
+          java-version: '17'
+
       - name: Convert AAB to APK
         id: convert_aab
-        uses: ethanneff/bundletool-action@d8f4ef98761dc0c71e869e6ccf24fd3f8864238c # v1.0.8
+        uses: roberteggl/bundletool-action@64713a9081adc6f5ea408a9c19917a3e23f9f287 # v1.0.0
         with:
-          aabFile: neuland-next.aab
-          base64Keystore: ${{ secrets.KEYSTORE_BASE64 }}
-          keystorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keystoreAlias: ${{ secrets.KEYSTORE_ALIAS }}
-          keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          aab-file: neuland-next.aab
+          keystore-base64: ${{ secrets.KEYSTORE_BASE64 }}
+          keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+          key-alias: ${{ secrets.KEYSTORE_ALIAS }}
+          key-password: ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Upload APK to release
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -213,7 +219,7 @@ jobs:
           script: |
             const fs = require('fs');
             
-            const apkPath = '${{ steps.convert_aab.outputs.apkPath }}';
+            const apkPath = '${{ steps.convert_aab.outputs.apk-path }}';
             const assetName = 'neuland-next.apk';
             
             if (!fs.existsSync(apkPath)) {
