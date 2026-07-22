@@ -38,7 +38,7 @@ const staticColors = {
 }
 
 export default function LibraryCode(): React.JSX.Element {
-	const { t } = useTranslation('common')
+	const { t } = useTranslation(['common', 'accessibility'])
 	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [brightness, setBrightness] = useState<number>(0)
 	const [barcodeMaxWidth, setBarcodeMaxWidth] = useState(0)
@@ -144,6 +144,10 @@ export default function LibraryCode(): React.JSX.Element {
 						onPress={() => {
 							void toggleBrightness()
 						}}
+						accessibilityRole="button"
+						accessibilityLabel={t('button.libraryBarcode', {
+							ns: 'accessibility'
+						})}
 					>
 						<View
 							className="w-full items-center"

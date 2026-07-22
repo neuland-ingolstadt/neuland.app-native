@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
 import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import Divider from '@/components/Universal/divider'
@@ -47,6 +48,24 @@ const handlePress = (onPress?: () => Promise<void> | void): void => {
 
 const handleTextCopy = async (text: string): Promise<void> => {
 	await copyToClipboard(text)
+}
+
+const getDefaultAccessibilityLabel = (
+	item: SectionGroup
+): string | undefined => {
+	const parts = [item.title, item.value].filter(
+		(part): part is string => part != null && part !== ''
+	)
+
+	if (parts.length === 0) {
+		return undefined
+	}
+
+	return parts.join(', ')
+}
+
+const isRowPressable = (item: SectionGroup): boolean => {
+	return item.onPress != null && !(item.disabled ?? false)
 }
 
 const RenderSectionItem = ({
@@ -105,6 +124,7 @@ const RenderSectionItems = ({
 	rowStyle,
 	sheet
 }: RenderSectionItemsProps): React.JSX.Element => {
+	const { t } = useTranslation('accessibility')
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
@@ -116,6 +136,8 @@ const RenderSectionItems = ({
 	)
 
 	const renderValueText = (item: SectionGroup) => {
+		const defaultLabel = getDefaultAccessibilityLabel(item)
+
 		const textComponent = (
 			<Text
 				style={[
@@ -142,6 +164,9 @@ const RenderSectionItems = ({
 						)
 					}
 					className="active:opacity-70"
+					accessibilityRole="button"
+					accessibilityLabel={item.accessibilityLabel ?? defaultLabel}
+					accessibilityHint={item.accessibilityHint ?? t('formList.copyHint')}
 				>
 					{textComponent}
 				</Pressable>
@@ -153,143 +178,173 @@ const RenderSectionItems = ({
 
 	return (
 		<View className={blockCardClassName(sheet)} style={hairlineBorder}>
-			{items.map((item, index) => (
-				<React.Fragment key={index}>
-					<Pressable
-						onPress={() => {
-							handlePress(item.onPress)
-						}}
-						className="w-full active:opacity-90"
-						disabled={item.disabled ?? item.onPress === undefined}
-					>
-						<View
-							className={
-								item.layout === 'column'
-									? 'flex-row items-start py-3.5 px-0'
-									: 'flex-row items-center py-[15px]'
-							}
-							style={rowStyle}
-						>
-							{item.icon != null && item.icon.endIcon !== true && (
-								<View className="w-7 items-center justify-center ml-4">
-									<PlatformIcon
-										ios={{
-											name: item.icon.ios,
-											fallback: item.icon.iosFallback,
-											size: (item.icon.iosFallback ?? false) ? 22 : 18
-										}}
-										android={{
-											name: item.icon.android,
-											size: 20,
-											variant: item.icon.androidVariant ?? 'outlined'
-										}}
-										web={{
-											name: item.icon.web,
-											size: 20
-										}}
-										style={{
-											color: item.iconColor ?? textColor
-										}}
-									/>
-								</View>
-							)}
+			{items.map((item, index) => {
+				const defaultLabel = getDefaultAccessibilityLabel(item)
+				const rowPressable = isRowPressable(item)
+				const hasCopyableValue = Boolean(item.copyable) && item.value != null
+				const isStaticRow = !rowPressable && !hasCopyableValue
 
+				return (
+					<React.Fragment key={index}>
+						<Pressable
+							onPress={() => {
+								handlePress(item.onPress)
+							}}
+							className="w-full active:opacity-90"
+							disabled={item.disabled ?? item.onPress === undefined}
+							accessible={rowPressable}
+							accessibilityRole={rowPressable ? 'button' : undefined}
+							accessibilityLabel={
+								rowPressable
+									? (item.accessibilityLabel ?? defaultLabel)
+									: undefined
+							}
+							accessibilityHint={
+								rowPressable ? item.accessibilityHint : undefined
+							}
+							importantForAccessibility={
+								hasCopyableValue ? 'no-hide-descendants' : 'auto'
+							}
+						>
 							<View
 								className={
 									item.layout === 'column'
-										? 'flex-1 flex-col items-start gap-1 pl-4 pr-2'
-										: 'flex-1 flex-row justify-between items-center pl-4 pr-2'
+										? 'flex-row items-start py-3.5 px-0'
+										: 'flex-row items-center py-[15px]'
+								}
+								style={rowStyle}
+								accessible={isStaticRow}
+								accessibilityLabel={
+									isStaticRow
+										? (item.accessibilityLabel ?? defaultLabel)
+										: undefined
 								}
 							>
-								{item.title != null && (
-									<Text className="text-text text-base pr-2">{item.title}</Text>
-								)}
-
-								{item.value != null && !privacyHidden && renderValueText(item)}
-								{!item.value &&
-									item.customComponent &&
-									!privacyHidden &&
-									item.customComponent([
-										item.layout === 'column'
-											? columnDetailsStyle
-											: rowDetailsStyle,
-										{
-											color: item.textColor ?? labelColor,
-											fontWeight: item.fontWeight ?? 'normal'
-										}
-									])}
-							</View>
-
-							{(item.value != null || item.customComponent != null) && (
-								<View className="mr-3" />
-							)}
-
-							{item.icon?.endIcon ? (
-								<View className="mr-4 items-center justify-center w-[22px]">
-									<PlatformIcon
-										ios={{
-											name: item.icon.ios,
-											fallback: item.icon.iosFallback,
-											size: (item.icon.iosFallback ?? false) ? 22 : 18
-										}}
-										android={{
-											name: item.icon.android,
-											size: 20,
-											variant: item.icon.androidVariant ?? 'outlined'
-										}}
-										web={{
-											name: item.icon.web,
-											size: 20
-										}}
-										style={{
-											color: item.iconColor ?? textColor
-										}}
-									/>
-								</View>
-							) : (
-								item.onPress != null &&
-								item.hideChevron !== true &&
-								item.value == null && (
-									<View className="mr-4 items-center justify-center w-[22px]">
+								{item.icon != null && item.icon.endIcon !== true && (
+									<View className="w-7 items-center justify-center ml-4">
 										<PlatformIcon
 											ios={{
-												name: 'chevron.right',
-												size: 10,
-												weight: 'semibold'
+												name: item.icon.ios,
+												fallback: item.icon.iosFallback,
+												size: (item.icon.iosFallback ?? false) ? 22 : 18
 											}}
 											android={{
-												name: 'chevron_right',
-												size: 19
+												name: item.icon.android,
+												size: 20,
+												variant: item.icon.androidVariant ?? 'outlined'
 											}}
 											web={{
-												name: 'ChevronRight',
-												size: 16
+												name: item.icon.web,
+												size: 20
 											}}
 											style={{
-												color: labelTertiaryColor
+												color: item.iconColor ?? textColor
 											}}
 										/>
 									</View>
-								)
-							)}
-						</View>
-					</Pressable>
+								)}
 
-					{index < items.length - 1 && (
-						<View className="w-full">
-							<Divider
-								paddingLeft={
-									item.icon && (item.icon.endIcon ?? false) !== true
-										? 60
-										: Platform.OS === 'ios'
-											? 16
-											: 0
-								}
-							/>
-						</View>
-					)}
-				</React.Fragment>
-			))}
+								<View
+									className={
+										item.layout === 'column'
+											? 'flex-1 flex-col items-start gap-1 pl-4 pr-2'
+											: 'flex-1 flex-row justify-between items-center pl-4 pr-2'
+									}
+								>
+									{item.title != null && (
+										<Text className="text-text text-base pr-2">
+											{item.title}
+										</Text>
+									)}
+
+									{item.value != null &&
+										!privacyHidden &&
+										renderValueText(item)}
+									{!item.value &&
+										item.customComponent &&
+										!privacyHidden &&
+										item.customComponent([
+											item.layout === 'column'
+												? columnDetailsStyle
+												: rowDetailsStyle,
+											{
+												color: item.textColor ?? labelColor,
+												fontWeight: item.fontWeight ?? 'normal'
+											}
+										])}
+								</View>
+
+								{(item.value != null || item.customComponent != null) && (
+									<View className="mr-3" />
+								)}
+
+								{item.icon?.endIcon ? (
+									<View className="mr-4 items-center justify-center w-[22px]">
+										<PlatformIcon
+											ios={{
+												name: item.icon.ios,
+												fallback: item.icon.iosFallback,
+												size: (item.icon.iosFallback ?? false) ? 22 : 18
+											}}
+											android={{
+												name: item.icon.android,
+												size: 20,
+												variant: item.icon.androidVariant ?? 'outlined'
+											}}
+											web={{
+												name: item.icon.web,
+												size: 20
+											}}
+											style={{
+												color: item.iconColor ?? textColor
+											}}
+										/>
+									</View>
+								) : (
+									item.onPress != null &&
+									item.hideChevron !== true &&
+									item.value == null && (
+										<View className="mr-4 items-center justify-center w-[22px]">
+											<PlatformIcon
+												ios={{
+													name: 'chevron.right',
+													size: 10,
+													weight: 'semibold'
+												}}
+												android={{
+													name: 'chevron_right',
+													size: 19
+												}}
+												web={{
+													name: 'ChevronRight',
+													size: 16
+												}}
+												style={{
+													color: labelTertiaryColor
+												}}
+											/>
+										</View>
+									)
+								)}
+							</View>
+						</Pressable>
+
+						{index < items.length - 1 && (
+							<View className="w-full">
+								<Divider
+									paddingLeft={
+										item.icon && (item.icon.endIcon ?? false) !== true
+											? 60
+											: Platform.OS === 'ios'
+												? 16
+												: 0
+									}
+								/>
+							</View>
+						)}
+					</React.Fragment>
+				)
+			})}
 		</View>
 	)
 }
