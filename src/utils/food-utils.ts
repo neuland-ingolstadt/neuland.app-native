@@ -21,6 +21,36 @@ export const humanLocations = {
 	Canisius: 'Canisius Konvikt'
 }
 
+export const FOOD_DETAIL_RESTAURANTS = [
+	'IngolstadtMensa',
+	'NeuburgMensa',
+	'Reimanns',
+	'Canisius'
+] as const
+
+export const foodDataSources = {
+	IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
+	NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
+	Reimanns: 'https://reimanns.in/mittagsgerichte-wochenkarte/',
+	Canisius:
+		'https://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
+} as const
+
+export const foodRestaurantLocations = {
+	IngolstadtMensa: 'M001',
+	Reimanns: 'F001',
+	Canisius: 'X001'
+} as const
+
+export function capitalizeRestaurant(
+	restaurant: string | null | undefined
+): string {
+	if (restaurant == null) {
+		return ''
+	}
+	return restaurant.charAt(0).toUpperCase() + restaurant.slice(1)
+}
+
 /**
  * Fetches and parses the meal plan
  * @param {string[]} restaurants Requested restaurants
