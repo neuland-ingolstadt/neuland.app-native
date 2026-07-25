@@ -79,16 +79,17 @@ const SearchResults = ({
 
 	const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
 		const results = fuse.search(localSearch.trim().toUpperCase())
-		const roomResults = results.map((result) => ({
-			title: result.item.properties?.Raum as string,
-			subtitle: result.item.properties?.Funktion_en as string,
-			isExactMatch: Boolean(
-				(result.item.properties?.Raum as string)
-					.toUpperCase()
-					.includes(localSearch.toUpperCase())
-			),
-			item: result.item
-		}))
+		const roomResults = results.map((result) => {
+			const room = result.item.properties?.Raum as string | undefined
+			return {
+				title: room as string,
+				subtitle: result.item.properties?.Funktion_en as string,
+				isExactMatch: Boolean(
+					room?.toUpperCase().includes(localSearch.toUpperCase())
+				),
+				item: result.item
+			}
+		})
 
 		const exactMatches = roomResults.filter((result) => result.isExactMatch)
 		const fuzzyMatches = roomResults.filter((result) => !result.isExactMatch)

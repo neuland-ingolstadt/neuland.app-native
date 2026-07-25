@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       fingerprint-diff: ${{ steps.fingerprint.outputs.fingerprint-diff }}
+      current-fingerprint: ${{ steps.fingerprint.outputs.current-fingerprint }}
+      previous-fingerprint: ${{ steps.fingerprint.outputs.previous-fingerprint }}
     concurrency: fingerprint-${{ github.event_name != 'pull_request' && 'main' || github.run_id }}
     permissions:
       pull-requests: write
@@ -30,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
@@ -104,58 +106,96 @@ jobs:
               labels: labels.add,
             })
 
-  build-android-dev-client:
-    name: Build Android dev client
+  dev-client-stale-alert:
+    name: Flag stale dev client
     needs: fingerprint
     if: |
       github.event_name == 'push' &&
       needs.fingerprint.outputs.fingerprint-diff != '[]'
     runs-on: ubuntu-latest
-    concurrency:
-      group: android-dev-client-main
-      cancel-in-progress: false
+    permissions:
+      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - uses: ./.github/actions/setup
-
-      - uses: ./.github/actions/setup-eas
-        with:
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Bundle licenses
-        run: bun run licences:bundle
-
-      - name: Build dev client on EAS
+      - name: Summarize fingerprint
+        id: fingerprint-summary
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile development --non-interactive
+          CURRENT_FINGERPRINT: ${{ needs.fingerprint.outputs.current-fingerprint }}
+          PREVIOUS_FINGERPRINT: ${{ needs.fingerprint.outputs.previous-fingerprint }}
+        run: |
+          echo "current-digest=$(printf '%s' "$CURRENT_FINGERPRINT" | sha256sum | cut -c1-12)" >> "$GITHUB_OUTPUT"
+          if [ -n "$PREVIOUS_FINGERPRINT" ]; then
+            echo "previous-digest=$(printf '%s' "$PREVIOUS_FINGERPRINT" | sha256sum | cut -c1-12)" >> "$GITHUB_OUTPUT"
+          else
+            echo "previous-digest=n/a" >> "$GITHUB_OUTPUT"
+          fi
 
-  build-ios-dev-client:
-    name: Build iOS dev client
-    needs: fingerprint
-    if: |
-      github.event_name == 'push' &&
-      needs.fingerprint.outputs.fingerprint-diff != '[]'
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ios-dev-client-main
-      cancel-in-progress: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - uses: ./.github/actions/setup
-
-      - uses: ./.github/actions/setup-eas
-        with:
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Bundle licenses
-        run: bun run licences:bundle
-
-      - name: Build dev client on EAS
+      - name: Create or update stale dev client issue
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform ios --profile development --non-interactive
+          CURRENT_DIGEST: ${{ steps.fingerprint-summary.outputs.current-digest }}
+          PREVIOUS_DIGEST: ${{ steps.fingerprint-summary.outputs.previous-digest }}
+        with:
+          script: |
+            const staleLabel = 'dev-client-stale'
+            const issueTitle = 'Dev client rebuild needed'
+            const marker = '<!-- dev-client-stale -->'
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/dev-client-build.yml`
+            const fingerprintRunUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`
+            const commitUrl = `${context.payload.repository.html_url}/commit/${context.sha}`
+
+            const body = [
+              marker,
+              '',
+              'The native fingerprint on `main` changed. Install a fresh development client before testing native changes locally or on device.',
+              '',
+              '| | |',
+              '|---|---|',
+              `| Commit | [\`${context.sha.slice(0, 7)}\`](${commitUrl}) |`,
+              `| Current fingerprint | \`${process.env.CURRENT_DIGEST}\` |`,
+              `| Previous fingerprint | \`${process.env.PREVIOUS_DIGEST}\` |`,
+              `| Detected | ${new Date().toISOString()} |`,
+              `| Fingerprint check | [workflow run](${fingerprintRunUrl}) |`,
+              '',
+              'Fingerprint digests are SHA-256 prefixes. Open the workflow run for the full Expo fingerprint output.',
+              '',
+              '### Rebuild',
+              '',
+              `Run the [**Build dev client**](${workflowUrl}) workflow manually (Actions → Build dev client → Run workflow).`,
+              '',
+              'Choose **both** platforms when distributing to the team. Uncheck **Close stale alert** if you only rebuild one platform for now.',
+              '',
+              'This issue is closed automatically when a dev client build finishes with **Close stale alert** enabled.',
+            ].join('\n')
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: staleLabel,
+              state: 'open',
+              per_page: 1,
+            })
+
+            if (issues.length > 0) {
+              const issue = issues[0]
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body,
+              })
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Fingerprint changed again on [\`${context.sha.slice(0, 7)}\`](${commitUrl}). Rebuild dev clients when ready.`,
+              })
+              return
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body,
+              labels: [staleLabel],
+            })

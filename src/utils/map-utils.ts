@@ -1,12 +1,12 @@
 import { trackEvent } from '@aptabase/react-native'
 import type { GeoJsonProperties, Position } from 'geojson'
-import { Platform, Share } from 'react-native'
+import { Platform } from 'react-native'
 import { SEARCH_TYPES } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import type { Rooms, TypeStunde } from '@/types/thi-api'
 import type { AvailableRoom } from '@/types/utils'
 import { formatISODate } from './date-utils'
-import { copyToClipboard } from './ui-utils'
+import { copyToClipboard, shareNative } from './ui-utils'
 
 const IGNORE_GAPS = 15
 
@@ -368,7 +368,7 @@ export const handleShareModal = (room: string): void => {
 		return
 	}
 
-	void Share.share(
+	void shareNative(
 		Platform.OS === 'android' ? { message: payload } : { url: payload }
 	)
 }

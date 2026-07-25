@@ -3,7 +3,7 @@ import { toast } from 'burnt'
 import Color from 'color'
 import * as Clipboard from 'expo-clipboard'
 import { t } from 'i18next'
-import { type ColorValue, Platform } from 'react-native'
+import { type ColorValue, Platform, type ShareContent } from 'react-native'
 export enum LoadingState {
 	LOADING = 0,
 	LOADED = 1,
@@ -145,6 +145,11 @@ export function getRandomHSLColor(): string {
 	const s = rand(60, 100) // saturation
 	const l = rand(30, 70) // lightness
 	return `hsl(${h},${s}%,${l}%)`
+}
+
+export function shareNative(content: ShareContent): void {
+	const { Share } = require('react-native') as typeof import('react-native')
+	void Share.share(content)
 }
 
 export const copyToClipboard = async (
