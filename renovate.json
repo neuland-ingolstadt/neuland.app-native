@@ -7,13 +7,14 @@
 		"abandonments:recommended",
 		":configMigration",
 		"customManagers:biomeVersions",
-		":semanticCommitTypeAll(build)",
-		"schedule:nonOfficeHours"
+		":semanticCommitTypeAll(build)"
 	],
 	"timezone": "Europe/Berlin",
+	"schedule": ["before 6am on Monday", "before 6am on Thursday"],
+	"updateNotScheduled": false,
 	"minimumReleaseAge": "3 days",
-	"prHourlyLimit": 3,
-	"prConcurrentLimit": 10,
+	"prHourlyLimit": 5,
+	"prConcurrentLimit": 5,
 	"rebaseWhen": "behind-base-branch",
 	"reviewersFromCodeOwners": true,
 	"labels": ["dependencies"],
@@ -25,7 +26,7 @@
 	],
 	"prBodyNotes": [
 		"Expo / React Native SDK packages are synced by the weekly Expo SDK dependencies workflow or `bun pkgs`.",
-		"Other production dependencies are updated by Renovate.",
+		"Other dependencies are updated by Renovate in grouped PRs twice a week (Monday and Thursday mornings, Europe/Berlin).",
 		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`.",
 		"If the native fingerprint changes (`fp:changed`), rebuild dev clients manually via Actions → **Build dev client** — auto-builds on `main` were removed to save EAS quota."
 	],
@@ -75,15 +76,6 @@
 			"groupSlug": "biome"
 		},
 		{
-			"description": "Group dev dependency minor and patch updates (former Dependabot development-minor-patch group)",
-			"matchManagers": ["bun"],
-			"matchDepTypes": ["devDependencies"],
-			"matchUpdateTypes": ["minor", "patch"],
-			"matchPackageNames": ["!@biomejs/biome"],
-			"groupName": "development dependencies (non-major)",
-			"groupSlug": "development-minor-patch"
-		},
-		{
 			"description": "Keep Bun runtime (.bun-version) and type packages aligned",
 			"matchManagers": ["bun", "bun-version"],
 			"matchPackageNames": ["bun", "bun-types", "@types/bun"],
@@ -126,7 +118,33 @@
 			"description": "Docker base images in config/Dockerfile",
 			"matchManagers": ["dockerfile"],
 			"matchFileNames": ["config/Dockerfile"],
+			"groupName": "docker",
+			"groupSlug": "docker",
 			"labels": ["dependencies", "ci"]
+		},
+		{
+			"description": "Group all remaining production dependency updates",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["dependencies"],
+			"matchPackageNames": ["!i18next", "!react-i18next"],
+			"groupName": "production dependencies",
+			"groupSlug": "production"
+		},
+		{
+			"description": "Group all remaining development dependency updates",
+			"matchManagers": ["bun"],
+			"matchDepTypes": ["devDependencies"],
+			"matchPackageNames": [
+				"!@biomejs/biome",
+				"!@graphql-codegen/**",
+				"!graphql-codegen-typescript-operation-types",
+				"!@stryker-mutator/**",
+				"!@hughescr/stryker-bun-runner",
+				"!bun-types",
+				"!@types/bun"
+			],
+			"groupName": "development dependencies",
+			"groupSlug": "development"
 		}
 	]
 }
