@@ -1,6 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import type { i18n, TFunction } from 'i18next'
-import { Platform, Share } from 'react-native'
+import { Platform } from 'react-native'
 import { getFragmentData } from '@/__generated__/gql'
 import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
@@ -12,7 +12,7 @@ import type { LanguageKey } from '@/localization/i18n'
 import type { Food, Meal, Name } from '@/types/neuland-api'
 import type { Labels, Prices } from '@/types/utils'
 import { formatISODate } from './date-utils'
-import { copyToClipboard } from './ui-utils'
+import { copyToClipboard, shareNative } from './ui-utils'
 
 export const humanLocations = {
 	IngolstadtMensa: 'Mensa Ingolstadt',
@@ -211,7 +211,7 @@ export function shareMeal(
 		return
 	}
 
-	void Share.share({
+	void shareNative({
 		message
 	})
 }
