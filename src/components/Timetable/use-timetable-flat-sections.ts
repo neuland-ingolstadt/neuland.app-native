@@ -35,9 +35,8 @@ export function useTimetableFlatSections({
 	showCalendarEvents,
 	today
 }: UseTimetableFlatSectionsParams) {
-	const examsList = showExams ? exams : []
-
 	const filteredTimetableSections = useMemo(() => {
+		const examsList = showExams ? exams : []
 		const grouped = getGroupedTimetable(
 			timetable,
 			examsList,
@@ -45,7 +44,7 @@ export function useTimetableFlatSections({
 			calendar
 		)
 		return grouped.filter((section) => section.title >= today)
-	}, [timetable, examsList, showCalendarEvents, today])
+	}, [timetable, exams, showExams, showCalendarEvents, today])
 
 	const flatData = useMemo(() => {
 		const data: FlatListItem[] = []
