@@ -1,20 +1,17 @@
+import type { UseQueryResult } from '@tanstack/react-query'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, Text, View } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
 import LecturerRow from '@/components/Rows/lecturer-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { useRefreshByUser } from '@/hooks'
 import type { NormalizedLecturer } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
 import { lecturersStyles as styles } from './lecturers-styles'
 
 interface LecturerSearchSectionListProps {
-	isLoading: boolean
-	isPaused: boolean
-	isError: boolean
-	error: Error | null
-	isRefetchingByUserAll: boolean
-	refetchByUserAll: () => Promise<unknown>
+	queryResult: UseQueryResult<NormalizedLecturer[], Error>
 	filteredLecturersCount: number
 	sections: {
 		title: string
@@ -23,16 +20,15 @@ interface LecturerSearchSectionListProps {
 }
 
 export default function LecturerSearchSectionList({
-	isLoading,
-	isPaused,
-	isError,
-	error,
-	isRefetchingByUserAll,
-	refetchByUserAll,
+	queryResult,
 	filteredLecturersCount,
 	sections
 }: LecturerSearchSectionListProps): React.JSX.Element {
 	const { t } = useTranslation('common')
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(
+		queryResult.refetch
+	)
+	const { isLoading, isPaused, isError, error } = queryResult
 
 	return isLoading ? (
 		<View style={styles.viewHorizontal}>
@@ -41,17 +37,17 @@ export default function LecturerSearchSectionList({
 	) : isPaused ? (
 		<ErrorView
 			title={networkError}
-			refreshing={isRefetchingByUserAll}
+			refreshing={isRefetchingByUser}
 			onRefresh={() => {
-				void refetchByUserAll()
+				void refetchByUser()
 			}}
 		/>
 	) : isError ? (
 		<ErrorView
 			title={error?.message ?? t('error.title')}
-			refreshing={isRefetchingByUserAll}
+			refreshing={isRefetchingByUser}
 			onRefresh={() => {
-				void refetchByUserAll()
+				void refetchByUser()
 			}}
 		/>
 	) : (

@@ -30,10 +30,6 @@ export default function LecturersScreen(): React.JSX.Element {
 	const {
 		allLecturersResult,
 		personalLecturersResult,
-		isRefetchingByUserPersonal,
-		refetchByUserPersonal,
-		isRefetchingByUserAll,
-		refetchByUserAll,
 		facultyData,
 		displaysProfessors,
 		filteredLecturers,
@@ -107,45 +103,23 @@ export default function LecturersScreen(): React.JSX.Element {
 						>
 							<View key="personal" style={styles.page} collapsable={false}>
 								<LecturerList
+									queryResult={personalLecturersResult}
 									lecturers={personalLecturersResult.data}
-									isPaused={personalLecturersResult.isPaused}
-									isError={personalLecturersResult.isError}
-									isSuccess={personalLecturersResult.isSuccess}
-									error={personalLecturersResult.error}
-									isLoading={personalLecturersResult.isLoading}
-									isPersonal
-									isRefetchingByUserPersonal={isRefetchingByUserPersonal}
-									isRefetchingByUserAll={isRefetchingByUserAll}
-									allLecturersIsRefetching={allLecturersResult.isRefetching}
-									refetchByUserPersonal={refetchByUserPersonal}
-									refetchByUserAll={refetchByUserAll}
+									variant="personal"
 								/>
 							</View>
 							<View key="faculty" style={styles.page} collapsable={false}>
 								<LecturerList
+									queryResult={allLecturersResult}
 									lecturers={facultyData}
-									isPaused={allLecturersResult.isPaused}
-									isError={allLecturersResult.isError}
-									isSuccess={allLecturersResult.isSuccess}
-									error={allLecturersResult.error}
-									isLoading={allLecturersResult.isLoading}
-									isRefetchingByUserPersonal={isRefetchingByUserPersonal}
-									isRefetchingByUserAll={isRefetchingByUserAll}
-									allLecturersIsRefetching={allLecturersResult.isRefetching}
-									refetchByUserPersonal={refetchByUserPersonal}
-									refetchByUserAll={refetchByUserAll}
+									variant="faculty"
 								/>
 							</View>
 						</PagerView>
 					</View>
 				) : (
 					<LecturerSearchSectionList
-						isLoading={allLecturersResult.isLoading}
-						isPaused={allLecturersResult.isPaused}
-						isError={allLecturersResult.isError}
-						error={allLecturersResult.error}
-						isRefetchingByUserAll={isRefetchingByUserAll}
-						refetchByUserAll={refetchByUserAll}
+						queryResult={allLecturersResult}
 						filteredLecturersCount={filteredLecturers.length}
 						sections={sections}
 					/>

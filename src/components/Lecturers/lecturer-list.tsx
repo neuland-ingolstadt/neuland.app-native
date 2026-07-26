@@ -1,54 +1,42 @@
+import type { UseQueryResult } from '@tanstack/react-query'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, Linking, RefreshControl, View } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
 import LecturerRow from '@/components/Rows/lecturer-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { useRefreshByUser } from '@/hooks'
 import type { NormalizedLecturer } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
 import { lecturersStyles as styles } from './lecturers-styles'
 
 interface LecturerListProps {
+	queryResult: UseQueryResult<NormalizedLecturer[], Error>
 	lecturers: NormalizedLecturer[] | undefined
-	isPaused: boolean
-	isError: boolean
-	isSuccess: boolean
-	error: Error | null
-	isLoading: boolean
-	isPersonal?: boolean
-	isRefetchingByUserPersonal: boolean
-	isRefetchingByUserAll: boolean
-	allLecturersIsRefetching: boolean
-	refetchByUserPersonal: () => Promise<unknown>
-	refetchByUserAll: () => Promise<unknown>
+	variant: 'personal' | 'faculty'
 }
 
 export default function LecturerList({
+	queryResult,
 	lecturers,
-	isPaused,
-	isError,
-	isSuccess,
-	error,
-	isLoading,
-	isPersonal = false,
-	isRefetchingByUserPersonal,
-	isRefetchingByUserAll,
-	allLecturersIsRefetching,
-	refetchByUserPersonal,
-	refetchByUserAll
+	variant
 }: LecturerListProps): React.JSX.Element {
 	const { t } = useTranslation('common')
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(
+		queryResult.refetch
+	)
+	const isPersonal = variant === 'personal'
 	const cardRadius = 17
+	const { isPaused, isError, isSuccess, error, isLoading, isRefetching } =
+		queryResult
 
 	return isPaused && !isSuccess ? (
 		<View style={[styles.viewHorizontal, styles.page]}>
 			<ErrorView
 				title={networkError}
-				refreshing={
-					isPersonal ? isRefetchingByUserPersonal : isRefetchingByUserAll
-				}
+				refreshing={isRefetchingByUser}
 				onRefresh={() => {
-					void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
+					void refetchByUser()
 				}}
 			/>
 		</View>
@@ -58,28 +46,24 @@ export default function LecturerList({
 		<View style={[styles.viewHorizontal, styles.page]}>
 			<ErrorView
 				title={error?.message ?? t('error.title')}
-				refreshing={
-					isPersonal ? isRefetchingByUserPersonal : isRefetchingByUserAll
-				}
+				refreshing={isRefetchingByUser}
 				onRefresh={() => {
-					void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
+					void refetchByUser()
 				}}
 			/>
 		</View>
 	) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
 		<FlatList
-			key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
+			key={`lecturers-list-${variant}`}
 			data={lecturers}
 			keyExtractor={(item) => item.id}
 			contentContainerStyle={styles.loadedRows}
 			showsVerticalScrollIndicator={false}
 			refreshControl={
 				<RefreshControl
-					refreshing={
-						isPersonal ? isRefetchingByUserPersonal : allLecturersIsRefetching
-					}
+					refreshing={isPersonal ? isRefetchingByUser : isRefetching}
 					onRefresh={() => {
-						void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
+						void refetchByUser()
 					}}
 				/>
 			}
@@ -117,20 +101,20 @@ export default function LecturerList({
 						ns: 'timetable'
 					})}
 					onButtonPress={() => {
-						void Linking.openURL('https://hiplan.thi.de/')
+						void Linking.openURL('[REDACTED]/')
 					}}
-					refreshing={isRefetchingByUserPersonal}
+					refreshing={isRefetchingByUser}
 					onRefresh={() => {
-						void refetchByUserPersonal()
+						void refetchByUser()
 					}}
 					isCritical={false}
 				/>
 			) : (
 				<ErrorView
 					title={t('error.title')}
-					refreshing={isRefetchingByUserAll}
+					refreshing={isRefetchingByUser}
 					onRefresh={() => {
-						void refetchByUserAll()
+						void refetchByUser()
 					}}
 				/>
 			)}

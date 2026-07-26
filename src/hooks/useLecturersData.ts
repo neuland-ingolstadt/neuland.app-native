@@ -11,7 +11,6 @@ import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
 import { Funktion, type Lecturers } from '@/types/thi-api'
 import type { NormalizedLecturer } from '@/types/utils'
 import { extractFaculty, getPersonalData } from '@/utils/api-utils'
@@ -46,10 +45,6 @@ function generateSections(lecturers: NormalizedLecturer[] | undefined): {
 export function useLecturersData(localSearch: string): {
 	allLecturersResult: UseQueryResult<NormalizedLecturer[], Error>
 	personalLecturersResult: UseQueryResult<NormalizedLecturer[], Error>
-	isRefetchingByUserPersonal: boolean
-	refetchByUserPersonal: () => Promise<unknown>
-	isRefetchingByUserAll: boolean
-	refetchByUserAll: () => Promise<unknown>
 	facultyData: NormalizedLecturer[]
 	displaysProfessors: boolean
 	filteredLecturers: NormalizedLecturer[]
@@ -113,14 +108,6 @@ export function useLecturersData(localSearch: string): {
 
 	const allLecturersResult = results[0]
 	const personalLecturersResult = results[1]
-	const {
-		isRefetchingByUser: isRefetchingByUserPersonal,
-		refetchByUser: refetchByUserPersonal
-	} = useRefreshByUser(personalLecturersResult.refetch)
-	const {
-		isRefetchingByUser: isRefetchingByUserAll,
-		refetchByUser: refetchByUserAll
-	} = useRefreshByUser(allLecturersResult.refetch)
 
 	const faculty = useMemo(() => {
 		if (data !== null && data !== undefined) {
@@ -188,10 +175,6 @@ export function useLecturersData(localSearch: string): {
 	return {
 		allLecturersResult,
 		personalLecturersResult,
-		isRefetchingByUserPersonal,
-		refetchByUserPersonal,
-		isRefetchingByUserAll,
-		refetchByUserAll,
 		facultyData,
 		displaysProfessors,
 		filteredLecturers,
