@@ -65,3 +65,4 @@ coverage/
 reports/mutation/
 src/data/licenses.json
 .cursor/hooks/state/
+.understand-anything
