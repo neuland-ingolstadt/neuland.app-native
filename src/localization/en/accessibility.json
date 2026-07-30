@@ -6,6 +6,7 @@
 		"settingsLogo": "Neuland Logo",
 		"settingsDashboard": "Dashboard Settings",
 		"libraryBarcode": "Library Number as Barcode",
+		"libraryBarcodeBrightness": "Toggle brightness for barcode scanning",
 		"previous": "Previous",
 		"next": "Next"
 	},

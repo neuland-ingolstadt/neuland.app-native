@@ -6,6 +6,7 @@
 		"settingsLogo": "Neuland Logo",
 		"settingsDashboard": "Dashboard Einstellungen",
 		"libraryBarcode": "Bibliotheksnummer als Barcode",
+		"libraryBarcodeBrightness": "Helligkeit zum Scannen umschalten",
 		"previous": "Zurück",
 		"next": "Weiter"
 	},

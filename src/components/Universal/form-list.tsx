@@ -202,9 +202,7 @@ const RenderSectionItems = ({
 							accessibilityHint={
 								rowPressable ? item.accessibilityHint : undefined
 							}
-							importantForAccessibility={
-								hasCopyableValue ? 'no-hide-descendants' : 'auto'
-							}
+							importantForAccessibility={hasCopyableValue ? 'no' : 'auto'}
 						>
 							<View
 								className={
@@ -252,7 +250,10 @@ const RenderSectionItems = ({
 									}
 								>
 									{item.title != null && (
-										<Text className="text-text text-base pr-2">
+										<Text
+											className="text-text text-base pr-2"
+											accessible={!hasCopyableValue}
+										>
 											{item.title}
 										</Text>
 									)}

@@ -145,9 +145,12 @@ export default function LibraryCode(): React.JSX.Element {
 							void toggleBrightness()
 						}}
 						accessibilityRole="button"
-						accessibilityLabel={t('button.libraryBarcode', {
-							ns: 'accessibility'
-						})}
+						accessibilityLabel={t(
+							Platform.OS === 'ios'
+								? 'button.libraryBarcodeBrightness'
+								: 'button.libraryBarcode',
+							{ ns: 'accessibility' }
+						)}
 					>
 						<View
 							className="w-full items-center"
