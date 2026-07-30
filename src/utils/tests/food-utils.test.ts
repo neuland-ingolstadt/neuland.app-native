@@ -159,6 +159,13 @@ describe('food-utils', () => {
 		expect(foodUtils.formatPrice(undefined)).toBe('')
 	})
 
+	it('capitalizeRestaurant - Should capitalize the restaurant name', () => {
+		expect(foodUtils.capitalizeRestaurant('ingolstadtMensa')).toBe(
+			'IngolstadtMensa'
+		)
+		expect(foodUtils.capitalizeRestaurant(null)).toBe('')
+	})
+
 	it('getUserSpecificPrice - Should select the guest price', () => {
 		const meal = {
 			prices: {
