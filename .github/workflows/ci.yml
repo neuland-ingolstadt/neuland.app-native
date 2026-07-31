@@ -78,7 +78,7 @@ jobs:
     name: Unit tests
     needs: changes
     if: |
-      github.event_name != 'pull_request' ||
+      github.event_name == 'pull_request' ||
       needs.changes.outputs.src == 'true' ||
       needs.changes.outputs.dependencies == 'true' ||
       needs.changes.outputs.workflows == 'true'
