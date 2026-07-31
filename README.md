@@ -45,7 +45,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ### 📱 App
 
-The app unites all important information for students in one place. It's available for iOS, Android, and MacOS, with a web version that can be used on all common browsers.
+The app unites all important information for students in one place. It's available for iOS, Android, and macOS, with a web version that can be used on all common browsers.
 
 Learn more about the app on the [Neuland Next website](https://neuland.app).
 
