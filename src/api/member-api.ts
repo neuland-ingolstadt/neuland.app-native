@@ -1,9 +1,9 @@
 import { Platform } from 'react-native'
-import packageInfo from '../../package.json'
+import { appHomepage, appVersion } from '@/data/app-version'
 
 const ID_API_BASE = 'https://id.neuland-ingolstadt.de/api'
 const AUTH_TOKEN_ENDPOINT = 'https://auth.neuland.ing/application/o/token/'
-const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
+const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 
 export const AUTH_DISCOVERY = {
 	authorizationEndpoint: 'https://auth.neuland.ing/application/o/authorize/',

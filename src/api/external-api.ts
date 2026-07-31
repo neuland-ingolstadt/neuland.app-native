@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
-import packageInfo from '../../package.json'
+import { appHomepage, appVersion } from '@/data/app-version'
 
-const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
+const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 
 class ExternalAPIClient {
 	async fetchLicenseText(url: string): Promise<string> {

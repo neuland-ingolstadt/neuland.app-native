@@ -1,7 +1,8 @@
 import { HeaderTitle } from '@react-navigation/elements'
 import { Stack } from 'expo-router'
-import { Platform, View } from 'react-native'
+import { Platform, View, type ViewStyle } from 'react-native'
 import Animated, {
+	type AnimatedStyle,
 	interpolate,
 	useAnimatedScrollHandler,
 	useAnimatedStyle,
@@ -12,7 +13,7 @@ import { toColor } from '@/utils/uniwind-utils'
 
 export function useMealDetailScroll(): {
 	scrollHandler: ReturnType<typeof useAnimatedScrollHandler>
-	headerStyle: ReturnType<typeof useAnimatedStyle>
+	headerStyle: AnimatedStyle<ViewStyle>
 } {
 	const scrollOffset = useSharedValue(0)
 	const scrollHandler = useAnimatedScrollHandler({
@@ -43,7 +44,7 @@ export function useMealDetailScroll(): {
 
 interface MealDetailStackHeaderProps {
 	title: string
-	headerStyle: ReturnType<typeof useAnimatedStyle>
+	headerStyle: AnimatedStyle<ViewStyle>
 }
 
 export function MealDetailStackHeader({

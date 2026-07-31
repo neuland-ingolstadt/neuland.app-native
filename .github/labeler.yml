@@ -21,7 +21,7 @@ documentation:
 android:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app.config.json'
+          - 'app.config.ts'
           - 'config/plugins/withDrawableAssets.js'
           - 'src/assets/android/**'
           - '**/*.android.tsx'
@@ -62,7 +62,7 @@ api:
 config:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app.config.json'
+          - 'app.config.ts'
           - 'eas.json'
           - 'babel.config.js'
           - 'tsconfig.json'

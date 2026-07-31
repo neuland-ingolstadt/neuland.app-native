@@ -3,7 +3,7 @@
 web:
   - 'src/**'
   - '**/*.web.tsx'
-  - 'app.config.json'
+  - 'app.config.ts'
   - 'config/Dockerfile'
   - 'config/nginx.conf'
   - 'babel.config.js'
@@ -13,7 +13,7 @@ web:
   - 'patches/**'
 
 android:
-  - 'app.config.json'
+  - 'app.config.ts'
   - 'config/plugins/**'
   - 'src/assets/android/**'
   - '**/*.android.tsx'
@@ -27,7 +27,7 @@ src:
 docker:
   - 'src/**'
   - '**/*.web.tsx'
-  - 'app.config.json'
+  - 'app.config.ts'
   - 'config/Dockerfile'
   - 'config/nginx.conf'
   - 'babel.config.js'
@@ -38,7 +38,7 @@ docker:
 
 code:
   - 'src/**'
-  - 'app.config.json'
+  - 'app.config.ts'
   - 'babel.config.js'
   - 'tsconfig.json'
   - 'biome.json'
@@ -51,7 +51,7 @@ dependencies:
   - 'package.json'
   - 'bun.lock'
   - 'patches/**'
-  - 'app.config.json'
+  - 'app.config.ts'
   - 'config/plugins/**'
   - '.bun-version'
 
