@@ -34,6 +34,7 @@ const config = {
 		'config',
 		'.github',
 		'.agents',
+		'.claude',
 		'patches',
 		'CHANGELOG.md'
 	],
