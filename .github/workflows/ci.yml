@@ -32,7 +32,7 @@ jobs:
     name: Biome and TypeScript checks
     needs: changes
     if: |
-      github.event_name != 'pull_request' ||
+      github.event_name == 'pull_request' ||
       needs.changes.outputs.code == 'true' ||
       needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
