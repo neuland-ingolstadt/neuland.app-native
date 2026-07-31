@@ -26,7 +26,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 ## ✨ Features
 
 <p align="center">
-  <img src="config/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
+  <img src="config/github/1.jpg" alt="Neuland Next Dashboard" width="200"/>
   <img src="config/github/2.jpg" alt="Neuland Next Timetable" width="200"/>
   <img src="config/github/3.jpg" alt="Neuland Next Map" width="200"/>
 </p>
@@ -45,7 +45,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ### 📱 App
 
-The app unites all important information for students in one place. It's available for iOS, Android, and MacOS, with a web version that can be used on all common browsers.
+The app unites all important information for students in one place. It's available for iOS, Android, and macOS, with a web version that can be used on all common browsers.
 
 Learn more about the app on the [Neuland Next website](https://neuland.app).
 
@@ -67,7 +67,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ## 📊 System Status
 
-The real-time system status is available at [status.neuland.ing](https://status.neuland.ing). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
+The real-time system status is available at [status.neuland.ing](https://status.neuland.ing). Here, you can find information about the current status of the different services and APIs that Neuland Next depends on.
 
 | Service | Status |  Uptime (24h)
 |---------|--------|--------|

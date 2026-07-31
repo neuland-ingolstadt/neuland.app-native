@@ -8,6 +8,12 @@
 		},
 		"uniwind": {
 			"url": "https://docs.uniwind.dev/mcp"
-		}
+    },
+    "argent": {
+      "command": "argent",
+      "args": [
+        "mcp"
+      ]
+    }
 	}
 }
