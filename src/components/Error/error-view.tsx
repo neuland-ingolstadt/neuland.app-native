@@ -28,15 +28,13 @@ function handleErrorButtonPress(
 	errorTitle: string,
 	onButtonPress?: () => void
 ): void {
-	switch (errorTitle) {
-		case guestError || notLoggedInError:
-			router.navigate('/login')
-			break
-		default:
-			if (onButtonPress != null) {
-				onButtonPress()
-			}
-			break
+	if (errorTitle === guestError || errorTitle === notLoggedInError) {
+		router.navigate('/login')
+		return
+	}
+
+	if (onButtonPress != null) {
+		onButtonPress()
 	}
 }
 
@@ -79,6 +77,7 @@ export default function ErrorView({
 			case networkError:
 				return 'wifi.slash'
 			case guestError:
+			case notLoggedInError:
 				return 'person.crop.circle.badge.questionmark'
 			case permissionError:
 				return 'person.crop.circle.badge.exclamationmark'
@@ -92,6 +91,7 @@ export default function ErrorView({
 			case networkError:
 				return 'wifi_off'
 			case guestError:
+			case notLoggedInError:
 				return 'person_cancel'
 			case permissionError:
 				return 'person_alert'
@@ -104,6 +104,7 @@ export default function ErrorView({
 		!(
 			networkError === title ||
 			guestError === title ||
+			notLoggedInError === title ||
 			permissionError === title
 		) && isCritical
 
@@ -124,6 +125,8 @@ export default function ErrorView({
 				return t('error.network.title')
 			case guestError:
 				return t('error.guest.title')
+			case notLoggedInError:
+				return t('error.notLoggedIn.title')
 			case permissionError:
 				return t('error.permission.title')
 			default:
@@ -245,7 +248,9 @@ export default function ErrorView({
 				</View>
 
 				<ErrorButton />
-				{(refreshing != null && title !== guestError) ||
+				{(refreshing != null &&
+					title !== guestError &&
+					title !== notLoggedInError) ||
 				showPullLabel === true ? (
 					<Text className="mt-4 text-center text-base font-semibold text-text">
 						{t('error.pull')}

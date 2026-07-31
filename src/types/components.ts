@@ -37,6 +37,8 @@ export interface SectionGroup {
 		| undefined
 	selectable?: boolean
 	copyable?: boolean | string
+	accessibilityLabel?: string
+	accessibilityHint?: string
 }
 
 export interface FormListSections {
