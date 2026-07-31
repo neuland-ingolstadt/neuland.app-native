@@ -26,7 +26,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 ## ✨ Features
 
 <p align="center">
-  <img src="config/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
+  <img src="config/github/1.jpg" alt="Neuland Next Dashboard" width="200"/>
   <img src="config/github/2.jpg" alt="Neuland Next Timetable" width="200"/>
   <img src="config/github/3.jpg" alt="Neuland Next Map" width="200"/>
 </p>
