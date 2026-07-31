@@ -67,7 +67,7 @@ Learn more about the app on the [Neuland Next website](https://neuland.app).
 
 ## 📊 System Status
 
-The real-time system status is available at [status.neuland.ing](https://status.neuland.ing). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
+The real-time system status is available at [status.neuland.ing](https://status.neuland.ing). Here, you can find information about the current status of the different services and APIs that Neuland Next depends on.
 
 | Service | Status |  Uptime (24h)
 |---------|--------|--------|
