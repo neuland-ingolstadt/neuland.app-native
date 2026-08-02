@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+---
+- runFlow:
+    when:
+      visible: ".*Development Build.*"
+    commands:
+      - openLink: ${DEV_CLIENT_URL}
+- runFlow:
+    when:
+      visible: "(Open|Öffnen)"
+    commands:
+      - tapOn: "(Open|Öffnen)"
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Reload"
+    commands:
+      - tapOn: "Reload"
+- runFlow:
+    when:
+      platform: Android
+      notVisible:
+        id: "onboarding-continue|.*-screen"
+    commands:
+      - launchApp:
+          clearState: false
+          stopApp: false
+      - waitForAnimationToEnd:
+          timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|.*-screen"
+    timeout: 120000

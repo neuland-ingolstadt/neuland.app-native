@@ -1,0 +1,82 @@
+appId: ${APP_ID}
+name: authenticated-lecture-content
+tags:
+  - authenticated
+  - seeded-data
+  - native-share
+  - native-module
+---
+# Precondition: the persisted THI test account has an upcoming lecture whose
+# Goal, Content, or Literature field is populated.
+- launchApp:
+    clearState: false
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-preferences-screen"
+    timeout: 10000
+- tapOn:
+    id: "radio-option-timeline-3"
+- tapOn:
+    id: "timetable-list-mode"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-lecture-entry"
+    timeout: 20000
+- tapOn:
+    id: "timetable-lecture-entry"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "lecture-details-screen"
+    timeout: 10000
+- tapOn:
+    id: "share-header-button"
+- assertVisible: ".*(Copy|Kopieren|AirDrop|Share with|Teilen mit).*"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 30%"
+          end: "50%, 95%"
+          duration: 500
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- assertVisible:
+    id: "lecture-details-screen"
+- scrollUntilVisible:
+    element: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+    direction: DOWN
+    timeout: 10000
+- tapOn: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+- extendedWaitUntil:
+    visible:
+      id: "lecture-webview-screen"
+    timeout: 10000
+- scroll
+- runFlow:
+    file: "../subflows/navigate-back.yaml"
+- assertVisible:
+    id: "lecture-details-screen"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- tapOn:
+    id: "radio-option-timeline-3"

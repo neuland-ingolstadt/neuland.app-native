@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: map-location-denied
+tags:
+  - regression
+  - guest
+  - map
+  - permissions
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- tapOn:
+    id: "map-current-location"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "map-screen"
+- stopApp
+- launchApp:
+    clearState: false
+    stopApp: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 20000
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- assertVisible:
+    id: "map-search-input"
