@@ -37,11 +37,7 @@ export const AllergensBanner = ({
 				className="rounded-md mb-2.5 mt-0.5 p-2.5 border"
 				style={{
 					backgroundColor: `${primary}33`,
-					borderColor: `${primary}20`,
-					shadowColor: primary,
-					shadowOffset: { width: 0, height: 1 },
-					shadowOpacity: 0.1,
-					shadowRadius: 2
+					borderColor: `${primary}20`
 				}}
 			>
 				<TouchableOpacity
