@@ -455,7 +455,7 @@ const MapScreen = (): React.JSX.Element => {
 	)
 
 	return (
-		<View className="flex-1">
+		<View testID="map-screen" className="flex-1">
 			{mapLoadState === LoadingState.ERROR && (
 				<View
 					className="flex-1 h-full justify-center absolute w-full z-[100]"
@@ -472,7 +472,7 @@ const MapScreen = (): React.JSX.Element => {
 					<LoadingIndicator />
 				</View>
 			)}
-			<div style={mapContainerStyle}>
+			<div data-testid="map-canvas" style={mapContainerStyle}>
 				<Map
 					mapLib={maplibregl}
 					initialViewState={{

@@ -12,6 +12,7 @@ const AttributionLink = (): React.JSX.Element => {
 	return (
 		<View className="py-10">
 			<Pressable
+				testID="map-attribution"
 				onPress={() => {
 					void Linking.openURL('https://www.openstreetmap.org/copyright')
 				}}

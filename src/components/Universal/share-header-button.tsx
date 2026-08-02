@@ -33,6 +33,9 @@ export function ShareHeaderButton({
 	if (noShare) return undefined
 	return (
 		<Pressable
+			testID="share-header-button"
+			accessible
+			accessibilityRole="button"
 			onPress={() => {
 				void onPress()
 				if (Platform.OS === 'web') {
@@ -68,7 +71,13 @@ export const CloseHeaderButton = (): React.JSX.Element | undefined => {
 
 	if (Platform.OS !== 'ios') return undefined
 	return (
-		<Pressable onPress={() => router.back()} style={shareButtonStyle}>
+		<Pressable
+			testID="close-header-button"
+			accessible
+			accessibilityRole="button"
+			onPress={() => router.back()}
+			style={shareButtonStyle}
+		>
 			<PlatformIcon
 				ios={{ name: 'xmark', size: 15, weight: 'semibold' }}
 				android={{ name: 'close', size: 20 }}

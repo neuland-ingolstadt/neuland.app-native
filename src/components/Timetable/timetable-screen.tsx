@@ -81,7 +81,7 @@ function TimetableScreen(): React.JSX.Element {
 			: (['bottom', 'top'] as Edges)
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={edges}>
+			<SafeAreaView testID="timetable-screen" style={styles.page} edges={edges}>
 				{isLoading ? (
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (

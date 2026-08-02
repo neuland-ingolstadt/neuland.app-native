@@ -95,6 +95,7 @@ export function SecurityWarningModal({
 
 	return (
 		<Modal
+			testID="wallet-security-modal"
 			visible={visible}
 			transparent
 			animationType="fade"
@@ -165,6 +166,7 @@ export function SecurityWarningModal({
 
 						<View className="items-center mb-[18px]">
 							<Pressable
+								testID="wallet-confirm"
 								onPress={handleConfirm}
 								disabled={isAddingToWallet}
 								className="active:opacity-70"
@@ -191,6 +193,7 @@ export function SecurityWarningModal({
 
 						<View className="items-center">
 							<Pressable
+								testID="wallet-cancel"
 								onPress={handleCancel}
 								className="py-3 px-6 rounded-md items-center justify-center bg-card-button active:opacity-70"
 							>

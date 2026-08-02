@@ -42,6 +42,7 @@ const CLEventRow = ({
 
 	return (
 		<RowEntry
+			testID="campus-life-event-row"
 			backgroundColor={
 				toColor(inSheet ? cardSheetColor : cardColor) as string | undefined
 			}

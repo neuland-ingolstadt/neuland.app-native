@@ -38,7 +38,7 @@ const AvailableRoomsSuggestions = ({
 	const { setClickedElement, availableRooms, setCurrentFloor } = use(MapContext)
 
 	return (
-		<View>
+		<View testID="map-available-rooms">
 			<View className="items-end flex-row justify-between mb-1">
 				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.availableRooms')}
@@ -123,6 +123,7 @@ const AvailableRoomsSuggestions = ({
 						return roomSuggestions.map((room, key) => (
 							<React.Fragment key={key}>
 								<Pressable
+									testID="map-available-room-row"
 									className="flex-row px-3 py-[18px]"
 									onPress={() => {
 										const details = allRooms.features.find(

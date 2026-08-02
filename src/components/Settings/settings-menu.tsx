@@ -57,6 +57,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			header: t('menu.formlist.preferences.title'),
 			items: [
 				{
+					testID: 'settings-dashboard-link',
 					title: t('menu.formlist.preferences.dashboard'),
 					icon: {
 						ios: 'rectangle.stack',
@@ -68,6 +69,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					}
 				},
 				{
+					testID: 'settings-food-preferences-link',
 					title: t('menu.formlist.preferences.food'),
 					icon: {
 						android: 'restaurant',
@@ -117,6 +119,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			header: t('menu.formlist.appearance.title'),
 			items: [
 				{
+					testID: 'settings-theme-link',
 					title: t('menu.formlist.appearance.theme'),
 					icon: {
 						ios: 'moon.stars',
@@ -130,6 +133,7 @@ export default function SettingsMenu(): React.JSX.Element {
 				...(Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop'
 					? [
 							{
+								testID: 'settings-app-icon-link',
 								title: t('menu.formlist.appearance.appIcon'),
 								icon: {
 									ios: 'star.square.on.square',
@@ -148,6 +152,7 @@ export default function SettingsMenu(): React.JSX.Element {
 			header: t('menu.formlist.legal.title'),
 			items: [
 				{
+					testID: 'settings-about-link',
 					title: t('menu.formlist.legal.about'),
 					icon: {
 						ios: 'info.circle',
@@ -159,6 +164,7 @@ export default function SettingsMenu(): React.JSX.Element {
 					}
 				},
 				{
+					testID: 'settings-share-link',
 					title: t('menu.formlist.legal.share'),
 					icon: {
 						ios: 'square.and.arrow.up',

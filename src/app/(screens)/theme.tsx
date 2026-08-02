@@ -57,6 +57,7 @@ export default function Theme(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="theme-screen"
 			className="flex-1 bg-background"
 			style={{ paddingTop: headerPadding }}
 		>

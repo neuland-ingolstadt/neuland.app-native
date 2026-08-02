@@ -77,6 +77,7 @@ export default function AutoShowNextDaySetting({
 	return (
 		<View>
 			<SingleSectionPicker
+				testID="food-auto-next-day-toggle"
 				title={title}
 				selectedItem={enabled}
 				action={onToggle}
@@ -111,6 +112,7 @@ export default function AutoShowNextDaySetting({
 						<View className="flex-row items-center justify-between py-1">
 							<Text className="text-text text-base">{timeLabel}</Text>
 							<DateTimePicker
+								testID="food-auto-next-day-time"
 								mode={'time'}
 								display={'compact'}
 								value={time}
@@ -120,6 +122,7 @@ export default function AutoShowNextDaySetting({
 					) : (
 						<>
 							<Pressable
+								testID="food-auto-next-day-time"
 								onPress={() => {
 									setShowAndroidTimePicker(true)
 								}}
@@ -135,6 +138,7 @@ export default function AutoShowNextDaySetting({
 							</Pressable>
 							{showAndroidTimePicker && (
 								<DateTimePicker
+									testID="food-auto-next-day-time-picker"
 									mode={'time'}
 									value={time}
 									onChange={handleSetTime}

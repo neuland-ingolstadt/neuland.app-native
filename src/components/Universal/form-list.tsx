@@ -187,6 +187,7 @@ const RenderSectionItems = ({
 				return (
 					<React.Fragment key={index}>
 						<Pressable
+							testID={item.testID}
 							onPress={() => {
 								handlePress(item.onPress)
 							}}

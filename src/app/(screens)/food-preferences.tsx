@@ -101,12 +101,14 @@ export default function FoodPreferences(): React.JSX.Element {
 			header: t('preferences.sections.labels'),
 			items: [
 				{
+					testID: 'food-allergens-link',
 					title: t('preferences.formlist.allergens'),
 					onPress: () => {
 						router.navigate('/food-allergens')
 					}
 				},
 				{
+					testID: 'food-flags-link',
 					title: t('preferences.formlist.flags'),
 					onPress: () => {
 						router.navigate('/food-flags')

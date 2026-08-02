@@ -36,6 +36,12 @@ const MultiSectionPicker = ({
 				<React.Fragment key={index}>
 					<View className="h-[52px]">
 						<Pressable
+							testID={`multi-option-${item.key}`}
+							accessibilityRole="checkbox"
+							accessibilityState={{
+								checked: selectedItems.includes(item.key),
+								disabled: item.disabled
+							}}
 							onPress={() => {
 								if (!item.disabled) {
 									if (Platform.OS === 'ios') void selectionAsync()

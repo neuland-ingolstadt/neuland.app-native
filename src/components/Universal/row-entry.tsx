@@ -10,7 +10,8 @@ const RowEntry = ({
 	onPress,
 	href,
 	backgroundColor,
-	icon
+	icon,
+	testID
 }: {
 	title: string
 	leftChildren: React.JSX.Element
@@ -20,6 +21,7 @@ const RowEntry = ({
 	isExamCard?: boolean
 	backgroundColor?: string
 	icon?: React.JSX.Element
+	testID?: string
 }): React.JSX.Element => {
 	const content = (
 		<View
@@ -53,7 +55,11 @@ const RowEntry = ({
 
 	if (!href) {
 		return onPress ? (
-			<Pressable onPress={onPress} className="active:opacity-90">
+			<Pressable
+				testID={testID}
+				onPress={onPress}
+				className="active:opacity-90"
+			>
 				{content}
 			</Pressable>
 		) : (
@@ -63,7 +69,11 @@ const RowEntry = ({
 
 	return (
 		<Link href={href} asChild>
-			<Pressable onPress={onPress} className="active:opacity-90">
+			<Pressable
+				testID={testID}
+				onPress={onPress}
+				className="active:opacity-90"
+			>
 				{content}
 			</Pressable>
 		</Link>

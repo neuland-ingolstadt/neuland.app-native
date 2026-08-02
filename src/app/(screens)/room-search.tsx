@@ -79,7 +79,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 	}
 
 	return (
-		<ScrollView className="p-3">
+		<ScrollView testID="room-search-screen" className="p-3">
 			<View>
 				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
 					{t('pages.rooms.options.title')}
@@ -110,6 +110,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						) : (
 							showDate && (
 								<DateTimePicker
+									testID="room-search-date"
 									value={roomSearch.searchDateTime}
 									mode="date"
 									accentColor={primaryColor}
@@ -149,6 +150,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						) : (
 							showTime && (
 								<DateTimePicker
+									testID="room-search-time"
 									value={roomSearch.searchDateTime}
 									mode="time"
 									is24Hour={true}
