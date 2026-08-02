@@ -8,7 +8,7 @@ import {
 	SafeAreaProvider,
 	SafeAreaView
 } from 'react-native-safe-area-context'
-import MapScreen, { requestPermission } from '@/components/Map/map-screen'
+import MapScreen from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
@@ -77,10 +77,6 @@ export default function MapRootScreen(): React.JSX.Element {
 		searchHistory,
 		setSearchHistory,
 		updateSearchHistory
-	}
-
-	if (Platform.OS === 'android') {
-		void requestPermission()
 	}
 
 	const edges =
