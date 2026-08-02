@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import Color from 'color'
 import { router } from 'expo-router'
 import type React from 'react'
@@ -89,94 +88,90 @@ export const BottomSheetDetailModal = ({
 	const iconColor = Color(textColor).darken(0.1).hex()
 
 	return (
-		<BottomSheetModalProvider>
-			<StyledBottomSheetModal
-				index={0}
-				// @ts-expect-error withUniwind ref generic mismatch
-				ref={bottomSheetModalRef}
-				snapPoints={
-					Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS
-				}
-				onDismiss={handleSheetChangesModal}
-				backgroundComponent={BottomSheetBackground}
-				animatedPosition={currentPositionModal}
-				handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
-			>
-				<StyledBottomSheetView className="flex-1 px-page">
-					<View className="flex-row justify-between pb-0">
-						<Text className="text-text text-[26px] font-semibold text-left">
-							{roomData.title}
-						</Text>
-						<View className="flex-row gap-2.5 mb-[3px]">
-							{roomData.type === SEARCH_TYPES.ROOM && (
-								<Pressable
-									onPress={() => {
-										if (Platform.OS === 'web') {
-											setCopied(true)
-											setTimeout(() => setCopied(false), 1000)
-										}
-										handleShareModal(roomData.title)
-									}}
-									className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
-								>
-									<PlatformIcon
-										ios={{
-											name: copied ? 'checkmark' : 'square.and.arrow.up',
-											size: 14,
-											weight: 'bold'
-										}}
-										android={{
-											name: copied ? 'check' : 'share',
-											size: 16
-										}}
-										web={{
-											name: copied ? 'Check' : 'Share',
-											size: 16
-										}}
-										style={{
-											color: iconColor,
-											marginRight: Platform.OS === 'android' ? 2 : 0,
-											marginBottom: Platform.OS === 'ios' ? 3 : 0
-										}}
-									/>
-								</Pressable>
-							)}
+		<StyledBottomSheetModal
+			index={0}
+			// @ts-expect-error withUniwind ref generic mismatch
+			ref={bottomSheetModalRef}
+			snapPoints={Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS}
+			onDismiss={handleSheetChangesModal}
+			backgroundComponent={BottomSheetBackground}
+			animatedPosition={currentPositionModal}
+			handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
+		>
+			<StyledBottomSheetView className="flex-1 px-page">
+				<View className="flex-row justify-between pb-0">
+					<Text className="text-text text-[26px] font-semibold text-left">
+						{roomData.title}
+					</Text>
+					<View className="flex-row gap-2.5 mb-[3px]">
+						{roomData.type === SEARCH_TYPES.ROOM && (
 							<Pressable
 								onPress={() => {
-									bottomSheetModalRef.current?.close()
+									if (Platform.OS === 'web') {
+										setCopied(true)
+										setTimeout(() => setCopied(false), 1000)
+									}
+									handleShareModal(roomData.title)
 								}}
+								className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
 							>
-								<View className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
-									<PlatformIcon
-										ios={{
-											name: 'xmark',
-											size: 13,
-											weight: 'bold'
-										}}
-										android={{
-											name: 'expand_more',
-											size: 22
-										}}
-										web={{
-											name: 'X',
-											size: 22
-										}}
-										style={{
-											color: iconColor,
-											marginTop: Platform.OS === 'ios' ? 1 : 0
-										}}
-									/>
-								</View>
+								<PlatformIcon
+									ios={{
+										name: copied ? 'checkmark' : 'square.and.arrow.up',
+										size: 14,
+										weight: 'bold'
+									}}
+									android={{
+										name: copied ? 'check' : 'share',
+										size: 16
+									}}
+									web={{
+										name: copied ? 'Check' : 'Share',
+										size: 16
+									}}
+									style={{
+										color: iconColor,
+										marginRight: Platform.OS === 'android' ? 2 : 0,
+										marginBottom: Platform.OS === 'ios' ? 3 : 0
+									}}
+								/>
 							</Pressable>
-						</View>
+						)}
+						<Pressable
+							onPress={() => {
+								bottomSheetModalRef.current?.close()
+							}}
+						>
+							<View className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
+								<PlatformIcon
+									ios={{
+										name: 'xmark',
+										size: 13,
+										weight: 'bold'
+									}}
+									android={{
+										name: 'expand_more',
+										size: 22
+									}}
+									web={{
+										name: 'X',
+										size: 22
+									}}
+									style={{
+										color: iconColor,
+										marginTop: Platform.OS === 'ios' ? 1 : 0
+									}}
+								/>
+							</View>
+						</Pressable>
 					</View>
-					<Text className="text-text text-base">{roomData.subtitle}</Text>
-					<View className="self-center my-4 w-full">
-						<FormList sections={modalSection} />
-					</View>
-					<ReportLink roomTitle={roomData.title} />
-				</StyledBottomSheetView>
-			</StyledBottomSheetModal>
-		</BottomSheetModalProvider>
+				</View>
+				<Text className="text-text text-base">{roomData.subtitle}</Text>
+				<View className="self-center my-4 w-full">
+					<FormList sections={modalSection} />
+				</View>
+				<ReportLink roomTitle={roomData.title} />
+			</StyledBottomSheetView>
+		</StyledBottomSheetModal>
 	)
 }
