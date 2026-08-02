@@ -1,21 +1,14 @@
 import type BottomSheet from '@gorhom/bottom-sheet'
 import type { BottomSheetModal } from '@gorhom/bottom-sheet'
-import type {
-	CameraRef,
-	MapViewRef,
-	UserLocationRef
-} from '@maplibre/maplibre-react-native'
+import type { CameraRef } from '@maplibre/maplibre-react-native'
 import {
 	Camera,
-	FillLayer,
+	GeoJSONSource,
 	Images,
-	LineLayer,
-	MapView,
-	requestAndroidLocationPermissions,
-	ShapeSource,
-	SymbolLayer,
-	UserLocation,
-	UserTrackingMode
+	Layer,
+	LocationManager,
+	Map as MapLibreMap,
+	NativeUserLocation
 } from '@maplibre/maplibre-react-native'
 import { router, useNavigation } from 'expo-router'
 import type { Position } from 'geojson'
@@ -62,12 +55,6 @@ import { toColor } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { modalSection } from './modal-sections'
 
-export function requestPermission(): void {
-	if (Platform.OS === 'android') {
-		void requestAndroidLocationPermissions()
-	}
-}
-
 const MapScreen = (): React.JSX.Element => {
 	const navigation = useNavigation()
 	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
@@ -87,7 +74,9 @@ const MapScreen = (): React.JSX.Element => {
 		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
 	)
 	const { userKind, userFaculty } = use(UserKindContext)
-	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
+	const [mapCenter, setMapCenter] = useState<[number, number]>([
+		...INGOLSTADT_CENTER
+	] as [number, number])
 	const { t, i18n } = useTranslation('common')
 	const bottomSheetRef = useRef<BottomSheet>(null)
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -103,9 +92,10 @@ const MapScreen = (): React.JSX.Element => {
 	} = use(MapContext)
 	const [disableFollowUser, setDisableFollowUser] = useState(false)
 	const [showAllFloors, setShowAllFloors] = useState(false)
-	const mapRef = useRef<MapViewRef>(null)
 	const cameraRef = useRef<CameraRef>(null)
-	const locationRef = useRef<UserLocationRef>(null)
+	const [locationPermissionGranted, setLocationPermissionGranted] = useState(
+		Platform.OS !== 'android'
+	)
 
 	enum Locations {
 		IN = 'Ingolstadt',
@@ -119,6 +109,29 @@ const MapScreen = (): React.JSX.Element => {
 	const [isVisible, setIsVisible] = useState(true)
 	const [tabBarPressed, setTabBarPressed] = useState(false)
 	const opacity = useSharedValue(1)
+
+	useEffect(() => {
+		if (Platform.OS !== 'android') {
+			return
+		}
+
+		let cancelled = false
+		void LocationManager.requestPermissions()
+			.then((granted) => {
+				if (!cancelled) {
+					setLocationPermissionGranted(granted)
+				}
+			})
+			.catch(() => {
+				if (!cancelled) {
+					setLocationPermissionGranted(false)
+				}
+			})
+
+		return () => {
+			cancelled = true
+		}
+	}, [])
 
 	const toggleShowAllFloors = (): void => {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -139,8 +152,12 @@ const MapScreen = (): React.JSX.Element => {
 
 	const handleSheetChangesModal = useCallback(() => {
 		setClickedElement(null)
+		if (currentFloor?.manual !== true) {
+			setCurrentFloor({ floor: 'EG', manual: false })
+		}
+		setView()
 		bottomSheetRef.current?.snapToIndex(1)
-	}, [setClickedElement])
+	}, [currentFloor, mapCenter, setClickedElement, setCurrentFloor])
 
 	const handlePresentModalPress = useCallback(() => {
 		bottomSheetRef.current?.close()
@@ -201,9 +218,9 @@ const MapScreen = (): React.JSX.Element => {
 
 	useEffect(() => {
 		setMapCenter(
-			userFaculty === 'Nachhaltige Infrastruktur'
+			(userFaculty === 'Nachhaltige Infrastruktur'
 				? NEUBURG_CENTER
-				: INGOLSTADT_CENTER
+				: INGOLSTADT_CENTER) as [number, number]
 		)
 	}, [userFaculty])
 
@@ -288,12 +305,11 @@ const MapScreen = (): React.JSX.Element => {
 
 	function setView(clickedElement: ClickedMapElement | null = null): void {
 		if (clickedElement?.center == null) {
-			cameraRef.current?.setCamera({
-				centerCoordinate: mapCenter,
-				zoomLevel: 16.5,
-				animationDuration: 400,
-				heading: 0,
-				animationMode: 'flyTo'
+			cameraRef.current?.flyTo({
+				center: mapCenter,
+				zoom: 16.5,
+				duration: 400,
+				bearing: 0
 			})
 			return
 		}
@@ -301,35 +317,21 @@ const MapScreen = (): React.JSX.Element => {
 		const [longitude, latitude] = clickedElement.center
 		const adjustedLatitude = latitude - 0.0003
 		// Use the adjusted center for flyTo
-		cameraRef.current?.setCamera({
-			centerCoordinate: [longitude, adjustedLatitude],
-			zoomLevel: 17,
-			animationDuration: 500,
-			animationMode: 'flyTo'
+		cameraRef.current?.flyTo({
+			center: [longitude, adjustedLatitude],
+			zoom: 17,
+			duration: 500
 		})
 	}
 
 	const [cameraTriggerKey, setCameraTriggerKey] = useState(0)
 
 	useEffect(() => {
-		if (mapOverlay == null) {
+		if (mapLoadState !== LoadingState.LOADED || clickedElement == null) {
 			return
 		}
-		if (clickedElement == null) {
-			if (currentFloor?.manual !== true) {
-				setCurrentFloor({ floor: 'EG', manual: false })
-			}
-			cameraRef.current?.setCamera({
-				centerCoordinate: mapCenter,
-				zoomLevel: 16.5,
-				animationDuration: 500,
-				heading: 0,
-				animationMode: 'flyTo'
-			})
-		} else if (clickedElement !== null) {
-			setView(clickedElement)
-		}
-	}, [clickedElement])
+		setView(clickedElement)
+	}, [clickedElement, mapLoadState])
 
 	useEffect(() => {
 		setDisableFollowUser(false)
@@ -344,20 +346,20 @@ const MapScreen = (): React.JSX.Element => {
 
 	const layerStyles = {
 		allRooms: {
-			fillAntialias: true,
-			fillColor: isDark ? '#6a7178' : '#a4a4a4',
-			fillOpacity: 0.1
+			'fill-antialias': true,
+			'fill-color': isDark ? '#6a7178' : '#a4a4a4',
+			'fill-opacity': 0.1
 		},
 		allRoomsOutline: {
-			lineColor: isDark ? '#2d3035' : '#8e8e8e',
-			lineWidth: 2.3
+			'line-color': isDark ? '#2d3035' : '#8e8e8e',
+			'line-width': 2.3
 		},
 		availableRooms: {
-			fillAntialias: true,
-			fillOpacity: 0.2
+			'fill-antialias': true,
+			'fill-opacity': 0.2
 		},
 		availableRoomsOutline: {
-			lineWidth: 2.4
+			'line-width': 2.4
 		},
 		osmBackground: {
 			backgroundColor: isDark
@@ -421,155 +423,154 @@ const MapScreen = (): React.JSX.Element => {
 			)}
 
 			<View testID="map-canvas" className="flex-1" style={{ marginBottom: 0 }}>
-				<MapView
+				<MapLibreMap
 					key={mapKey}
 					style={{ flex: 1 }}
 					tintColor={Platform.OS === 'ios' ? primaryColor : undefined}
-					logoEnabled={false}
+					logo={false}
 					mapStyle={isDark ? darkStyle : lightStyle}
-					attributionEnabled={false}
+					attribution={false}
 					onDidFailLoadingMap={() => {
 						setMapLoadState(LoadingState.ERROR)
 					}}
 					onDidFinishLoadingMap={() => {
 						setMapLoadState(LoadingState.LOADED)
 					}}
-					ref={mapRef}
 					onDidFinishRenderingMapFully={() => {
 						setRegionChange(false)
 					}}
 					onRegionIsChanging={() => {
 						setRegionChange(true)
 					}}
-					compassEnabled={Platform.OS === 'ios'}
+					compass={Platform.OS === 'ios'}
 				>
 					<Images
-						nativeAssetImages={['pin']}
 						images={{
 							// https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
-							'map-marker': require('@/assets/map-marker.png')
+							'map-marker': require('@/assets/map-marker.png'),
+							pin: 'pin'
 						}}
 					/>
-					{mapLoadState === LoadingState.LOADED && (
-						<Camera
-							ref={cameraRef}
-							zoomLevel={16.5}
-							centerCoordinate={mapCenter}
-							animationDuration={0}
-							minZoomLevel={14}
-							maxZoomLevel={19}
-							followUserLocation={
-								cameraTriggerKey !== 0 &&
-								clickedElement == null &&
-								!disableFollowUser
-							}
-							followUserMode={UserTrackingMode.Follow}
-						/>
-					)}
-					<UserLocation
-						ref={locationRef}
-						renderMode="native"
-						animated={true}
-						showsUserHeadingIndicator
+					<Camera
+						ref={cameraRef}
+						initialViewState={{
+							center: mapCenter,
+							zoom: 16.5,
+							bearing: 0
+						}}
+						minZoom={14}
+						maxZoom={19}
+						trackUserLocation={
+							cameraTriggerKey !== 0 &&
+							clickedElement == null &&
+							!disableFollowUser
+								? 'default'
+								: undefined
+						}
 					/>
+					{locationPermissionGranted && <NativeUserLocation mode="heading" />}
+					{filteredGeoJSON != null && hasFilteredRooms && (
+						<GeoJSONSource
+							id="allRoomsSource"
+							data={filteredGeoJSON}
+							onPress={(event) => {
+								event.stopPropagation()
+								const properties = event.nativeEvent.features[0]?.properties
+								if (properties == null) {
+									return
+								}
+								selectRoom({
+									room: properties.Raum as string,
+									center: properties.center as Position | undefined,
+									origin: 'MapClick',
+									manual: true
+								})
+							}}
+						>
+							<Layer
+								id="allRoomsFill"
+								type="fill"
+								paint={layerStyles.allRooms}
+							/>
+							<Layer
+								id="allRoomsOutline"
+								type="line"
+								paint={layerStyles.allRoomsOutline}
+							/>
+						</GeoJSONSource>
+					)}
+					{availableFilteredGeoJSON != null && hasAvailableFilteredRooms && (
+						<GeoJSONSource
+							id="availableRoomsSource"
+							data={availableFilteredGeoJSON}
+						>
+							<Layer
+								id="availableRoomsFill"
+								type="fill"
+								paint={{
+									...layerStyles.availableRooms,
+									'fill-color': primaryColor
+								}}
+							/>
+							<Layer
+								id="availableRoomsOutline"
+								type="line"
+								paint={{
+									...layerStyles.availableRoomsOutline,
+									'line-color': primaryColor
+								}}
+							/>
+						</GeoJSONSource>
+					)}
+					{buildingGeoJSON.features.length > 0 && (
+						<GeoJSONSource id="buildingLettersSource" data={buildingGeoJSON}>
+							<Layer
+								id="buildingLettersLayer"
+								type="symbol"
+								layout={{
+									'text-field': ['get', 'Raum'],
+									'text-allow-overlap': true,
+									'text-size': 14
+								}}
+								paint={{
+									'text-color': labelColor,
+									'text-halo-color': backgroundColor,
+									'text-halo-width': 1
+								}}
+							/>
+						</GeoJSONSource>
+					)}
 					{clickedElement !== null && (
-						<ShapeSource
+						<GeoJSONSource
 							id="clickedElementSource"
-							shape={{
+							data={{
 								type: 'FeatureCollection',
 								features: [
 									{
 										type: 'Feature',
 										geometry: {
 											type: 'Point',
-											coordinates: clickedElement.center as number[]
+											coordinates: clickedElement.center as [number, number]
 										},
 										properties: {}
 									}
 								]
 							}}
 						>
-							<SymbolLayer
+							<Layer
 								id="clickedElementMarker"
-								style={{
-									iconImage: 'map-marker',
-									iconColor: primaryColor,
-									iconSize: 0.17,
-									iconAnchor: 'bottom',
-									iconAllowOverlap: true
+								type="symbol"
+								layout={{
+									'icon-image': 'map-marker',
+									'icon-size': 0.17,
+									'icon-anchor': 'bottom',
+									'icon-allow-overlap': true
 								}}
-								layerIndex={110}
+								paint={{ 'icon-color': primaryColor }}
 							/>
-						</ShapeSource>
+						</GeoJSONSource>
 					)}
-					{hasFilteredRooms && (
-						<ShapeSource
-							id="allRoomsSource"
-							shape={filteredGeoJSON}
-							onPress={(e) => {
-								selectRoom({
-									room: e.features[0].properties?.Raum as string,
-									center: e.features[0].properties?.center as
-										| Position
-										| undefined,
-									origin: 'MapClick',
-									manual: true
-								})
-							}}
-							hitbox={{ width: 0, height: 0 }}
-						>
-							<FillLayer
-								id="allRoomsFill"
-								style={layerStyles.allRooms}
-								layerIndex={100}
-							/>
-							<LineLayer
-								id="allRoomsOutline"
-								style={layerStyles.allRoomsOutline}
-								layerIndex={101}
-							/>
-						</ShapeSource>
-					)}
-					{hasAvailableFilteredRooms && (
-						<ShapeSource
-							id="availableRoomsSource"
-							shape={availableFilteredGeoJSON}
-						>
-							<FillLayer
-								id="availableRoomsFill"
-								style={{
-									...layerStyles.availableRooms,
-									fillColor: primaryColor
-								}}
-								layerIndex={102}
-							/>
-							<LineLayer
-								id="availableRoomsOutline"
-								style={{
-									...layerStyles.availableRoomsOutline,
-									lineColor: primaryColor
-								}}
-								layerIndex={103}
-							/>
-						</ShapeSource>
-					)}
-					{buildingGeoJSON.features.length > 0 && (
-						<ShapeSource id="buildingLettersSource" shape={buildingGeoJSON}>
-							<SymbolLayer
-								id="buildingLettersLayer"
-								style={{
-									textField: ['get', 'Raum'],
-									textColor: labelColor,
-									textHaloColor: backgroundColor,
-									textHaloWidth: 1,
-									textAllowOverlap: true,
-									textSize: 14
-								}}
-								layerIndex={105}
-							/>
-						</ShapeSource>
-					)}
-				</MapView>
+				</MapLibreMap>
 				{overlayError === null && (
 					<FloorPicker
 						floors={uniqueEtages}
