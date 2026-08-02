@@ -1,0 +1,11 @@
+flows:
+  - "flows/*"
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - onboarding-guest
+    - guest-navigation
+    - map-regression
+    - food-regression
+    - settings-persistence
+    - public-content-and-links

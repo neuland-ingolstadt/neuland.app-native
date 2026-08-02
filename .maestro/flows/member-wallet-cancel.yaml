@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: member-wallet-cancel
+tags:
+  - regression
+  - authenticated
+  - member
+  - wallet
+  - native-module
+---
+# Precondition: the device has a persisted Neuland member login.
+- launchApp:
+    clearState: false
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://settings"
+- extendedWaitUntil:
+    visible:
+      id: "member-area-entry"
+    timeout: 15000
+- tapOn:
+    id: "member-area-entry"
+- extendedWaitUntil:
+    visible:
+      id: "member-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
+    direction: DOWN
+    timeout: 10000
+- tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
+- extendedWaitUntil:
+    visible:
+      id: "wallet-security-modal"
+    timeout: 10000
+- assertVisible: ".*(Security Notice|Sicherheitshinweis).*"
+- tapOn:
+    id: "wallet-cancel"
+- assertNotVisible:
+    id: "wallet-security-modal"
+- assertVisible:
+    id: "member-screen"

@@ -1,0 +1,186 @@
+appId: ${APP_ID}
+name: map-regression
+tags:
+  - smoke
+  - regression
+  - guest
+  - map
+  - critical
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- assertVisible:
+    id: "map-canvas"
+- assertVisible:
+    id: "map-available-rooms"
+- assertVisible: ".*(Sign in to see available rooms|Melden dich an, um verfügbare Räume anzuzeigen).*"
+- assertVisible:
+    id: "map-attribution"
+    enabled: true
+- assertVisible:
+    id: "map-search-input"
+- repeat:
+    times: 3
+    commands:
+      - doubleTapOn:
+          point: "45%, 34%"
+          delay: 120
+- swipe:
+    start: "75%, 35%"
+    end: "25%, 35%"
+    duration: 700
+- swipe:
+    start: "25%, 45%"
+    end: "75%, 45%"
+    duration: 700
+- swipe:
+    start: "50%, 25%"
+    end: "50%, 55%"
+    duration: 700
+- swipe:
+    start: "50%, 55%"
+    end: "50%, 25%"
+    duration: 700
+- runFlow:
+    when:
+      visible:
+        id: "map-room-detail"
+    commands:
+      - tapOn:
+          id: "map-room-detail-close"
+- assertVisible:
+    id: "map-screen"
+- assertVisible:
+    id: "map-search-input"
+- tapOn:
+    id: "map-floor-picker"
+- assertVisible:
+    id: "map-floor-EG"
+- tapOn:
+    id: "map-floor-EG"
+- tapOn:
+    id: "map-floor-picker-close"
+- tapOn:
+    id: "map-search-input"
+- inputText: "B106"
+- extendedWaitUntil:
+    visible: "B106"
+    timeout: 15000
+- tapOn:
+    id: "map-search-result-B106"
+- extendedWaitUntil:
+    visible:
+      id: "map-room-detail"
+    timeout: 15000
+- assertVisible: "B106"
+- tapOn:
+    id: "map-room-share"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: ".*(Copy|Kopieren|AirDrop).*"
+      - swipe:
+          start: "50%, 30%"
+          end: "50%, 95%"
+          duration: 500
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: ".*(Share with|Teilen mit).*"
+      - pressKey: Back
+- assertVisible:
+    id: "map-room-detail"
+- swipe:
+    start: "50%, 63%"
+    end: "50%, 20%"
+    duration: 700
+- extendedWaitUntil:
+    visible:
+      id: "map-room-report"
+    timeout: 10000
+- tapOn:
+    id: "map-room-report"
+- extendedWaitUntil:
+    visible:
+      id: "room-report-screen"
+    timeout: 10000
+- assertVisible:
+    id: "room-report-room"
+- tapOn:
+    id: "room-report-category"
+- tapOn:
+    id: "room-report-category-option-OTHER"
+- tapOn:
+    id: "room-report-description"
+- inputText: "Automated Maestro validation - do not submit"
+- assertVisible:
+    id: "room-report-submit"
+    enabled: true
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 18%"
+          end: "50%, 95%"
+          duration: 700
+- extendedWaitUntil:
+    visible:
+      id: "map-room-detail"
+    timeout: 10000
+- tapOn:
+    id: "map-room-detail-close"
+- extendedWaitUntil:
+    visible:
+      id: "map-search-input"
+    timeout: 10000
+- tapOn:
+    id: "map-search-input"
+- eraseText
+- assertVisible:
+    id: "map-search-result-B106"
+- tapOn:
+    id: "map-search-cancel"
+- tapOn:
+    id: "map-current-location"
+- assertVisible:
+    id: "map-screen"
+- pressKey: Home
+- launchApp:
+    clearState: false
+    stopApp: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- extendedWaitUntil:
+    visible:
+      id: "map-screen"
+    timeout: 20000
+- tapOn: "Home"
+- assertVisible:
+    id: "home-screen"
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- assertVisible:
+    id: "map-screen"
