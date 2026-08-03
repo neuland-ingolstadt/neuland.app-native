@@ -19,6 +19,7 @@ import ErrorView from '@/components/Error/error-view'
 import GradesRow from '@/components/Rows/grades-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import SectionView from '@/components/Universal/sections-view'
+import { appVersion } from '@/data/app-version'
 import { useRefreshByUser } from '@/hooks'
 import type { Grade } from '@/types/thi-api'
 import type { GradeAverage } from '@/types/utils'
@@ -30,8 +31,6 @@ import {
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-import packageInfo from '../../../package.json'
 
 function getGradeKey(grade: Grade): string {
 	return `${grade.stg}-${grade.kztn}-${grade.pon}`
@@ -95,7 +94,7 @@ export default function GradesSCreen(): React.JSX.Element {
 	}
 
 	const { data: spoWeights, isLoading: isSpoLoading } = useQuery({
-		queryKey: ['spoWeights', packageInfo.version],
+		queryKey: ['spoWeights', appVersion],
 		queryFn: async () => await NeulandAPI.getSpoWeights(),
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		gcTime: 1000 * 60 * 60 * 24 * 14

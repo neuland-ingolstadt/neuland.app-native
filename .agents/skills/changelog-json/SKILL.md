@@ -9,7 +9,7 @@ Generate entries for `src/data/changelog.json` — the in-app **What's New** scr
 
 ## When to use
 
-- Bumping `app.config.json` `expo.version` for a release
+- Bumping `package.json` `version` for a release
 - Writing What's New copy from a PR, issue, or feature list
 - Adding or refreshing entries under a `version["x.y"]` key
 
@@ -40,7 +40,7 @@ Generate entries for `src/data/changelog.json` — the in-app **What's New** scr
 | `description` | 1–2 sentences, both `de` and `en`. Shown on What's New; changelog screen shows title + icon only. |
 | `icon` | All three platforms required. Typed as `Version` in `src/types/data.ts`. |
 
-**CI:** `bun changelog:check` fails if `app.config.json` `expo.version` has no matching key with ≥1 entry.
+**CI:** `bun changelog:check` fails if `package.json` `version` has no matching key with ≥1 entry.
 
 ## Workflow
 
