@@ -3,7 +3,6 @@ import { Stack } from 'expo-router'
 import type { ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
 import Animated, {
-	type AnimatedStyle,
 	interpolate,
 	useAnimatedScrollHandler,
 	useAnimatedStyle,
