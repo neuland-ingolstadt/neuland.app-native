@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "mcp": {
+    "neuland-outline": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://outline.neuland.ing/mcp",
+    },
+    "argent": {
+      "type": "local",
+      "command": [
+        "node",
+        "node_modules/@swmansion/argent/dist/cli.js",
+        "mcp"
+      ],
+      "enabled": true
+    },
+  },
+  "tools": {
+    "argent*": true
+  },
+}
