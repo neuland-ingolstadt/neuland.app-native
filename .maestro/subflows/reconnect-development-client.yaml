@@ -28,9 +28,19 @@ appId: ${APP_ID}
     commands:
       - launchApp:
           clearState: false
-          stopApp: false
+          stopApp: true
       - waitForAnimationToEnd:
           timeout: 5000
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Reload"
+    commands:
+      - tapOn: "Reload"
 - extendedWaitUntil:
     visible:
       id: "onboarding-continue|.*-screen"

@@ -14,6 +14,10 @@ tags:
 - assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
 - tapOn:
     id: "onboarding-continue"
+- extendedWaitUntil:
+    visible:
+      id: "login-submit"
+    timeout: 20000
 - scrollUntilVisible:
     element:
       id: "login-guest"
@@ -46,6 +50,10 @@ tags:
     duration: 700
 - tapOn:
     id: "map-floor-picker"
+- extendedWaitUntil:
+    visible:
+      id: "map-floor-EG"
+    timeout: 10000
 - tapOn:
     id: "map-floor-EG"
 - tapOn:
