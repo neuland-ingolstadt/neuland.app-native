@@ -127,6 +127,11 @@ tags:
 - tapOn:
     id: "room-report-description"
 - inputText: "Automated Maestro validation - do not submit"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - hideKeyboard
 - assertVisible:
     id: "room-report-submit"
     enabled: true

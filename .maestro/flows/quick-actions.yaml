@@ -38,6 +38,14 @@ tags:
           start: "50%, 75%"
           end: "50%, 12%"
           duration: 500
+      - runFlow:
+          when:
+            notVisible: "Neuland Next"
+          commands:
+            - swipe:
+                start: "50%, 75%"
+                end: "50%, 12%"
+                duration: 500
       - extendedWaitUntil:
           visible: "Neuland Next"
           timeout: 10000
@@ -75,6 +83,14 @@ tags:
           start: "50%, 75%"
           end: "50%, 12%"
           duration: 500
+      - runFlow:
+          when:
+            notVisible: "Neuland Next"
+          commands:
+            - swipe:
+                start: "50%, 75%"
+                end: "50%, 12%"
+                duration: 500
       - extendedWaitUntil:
           visible: "Neuland Next"
           timeout: 10000
