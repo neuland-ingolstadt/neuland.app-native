@@ -35,7 +35,7 @@ export const EmptyTimetableAnimation = ({
 		>
 			<Animated.View
 				entering={FadeIn.duration(600).delay(300)}
-				className="w-full max-w-120 items-center py-4"
+				className="w-full max-w-[480px] items-center py-4"
 			>
 				<View className="mb-10 items-center">
 					<TimetableAnimation size={130} />
@@ -154,7 +154,7 @@ export const EmptyTimetableAnimation = ({
 						</Pressable>
 
 						<Pressable
-							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px]"
+							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px] border-border"
 							style={hairlineBorder}
 							onPress={handleRefreshPress}
 						>
