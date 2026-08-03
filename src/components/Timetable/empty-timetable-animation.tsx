@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, Text, View } from 'react-native'
+import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
@@ -29,11 +29,14 @@ export const EmptyTimetableAnimation = ({
 	}
 
 	return (
-		<Animated.View
-			className="flex-1 items-center justify-center w-full px-5 py-2.5"
-			entering={FadeIn.duration(600).delay(300)}
+		<ScrollView
+			contentContainerClassName="flex-1 items-center justify-center w-full px-5 py-2.5 pb-bottom-safe"
+			showsVerticalScrollIndicator={false}
 		>
-			<View className="w-full max-w-[480px] items-center py-4">
+			<Animated.View
+				entering={FadeIn.duration(600).delay(300)}
+				className="w-full max-w-[480px] items-center py-4"
+			>
 				<View className="mb-10 items-center">
 					<TimetableAnimation size={130} />
 				</View>
@@ -151,7 +154,7 @@ export const EmptyTimetableAnimation = ({
 						</Pressable>
 
 						<Pressable
-							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px]"
+							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px] border-border"
 							style={hairlineBorder}
 							onPress={handleRefreshPress}
 						>
@@ -164,7 +167,7 @@ export const EmptyTimetableAnimation = ({
 						</Pressable>
 					</View>
 				</View>
-			</View>
-		</Animated.View>
+			</Animated.View>
+		</ScrollView>
 	)
 }
