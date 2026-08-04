@@ -29,6 +29,7 @@ const MultiSectionPicker = ({
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
+	const selectedItemKeys = new Set(selectedItems)
 
 	return (
 		<>
@@ -39,7 +40,7 @@ const MultiSectionPicker = ({
 							testID={`multi-option-${item.key}`}
 							accessibilityRole="checkbox"
 							accessibilityState={{
-								checked: selectedItems.includes(item.key),
+								checked: selectedItemKeys.has(item.key),
 								disabled: item.disabled
 							}}
 							onPress={() => {
@@ -61,7 +62,7 @@ const MultiSectionPicker = ({
 							>
 								{item.title}
 							</Text>
-							{selectedItems.includes(item.key) && (
+							{selectedItemKeys.has(item.key) && (
 								<PlatformIcon
 									ios={{ name: 'checkmark.circle.fill', size: 18 }}
 									android={{ name: 'check_circle', size: 21 }}
