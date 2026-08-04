@@ -102,6 +102,7 @@ export function SecurityWarningModal({
 			onRequestClose={handleCancel}
 		>
 			<Pressable
+				accessible={false}
 				className="flex-1 bg-black/70 justify-center items-center p-page"
 				onPress={handleCancel}
 			>
@@ -109,7 +110,7 @@ export function SecurityWarningModal({
 					className="bg-card rounded-lg max-w-[400px] w-full"
 					style={hairlineBorder}
 				>
-					<Pressable onPress={() => {}} className="p-6">
+					<Pressable accessible={false} onPress={() => {}} className="p-6">
 						<View className="items-center mb-4">
 							<PlatformIcon
 								ios={{ name: 'exclamationmark.triangle.fill', size: 32 }}
