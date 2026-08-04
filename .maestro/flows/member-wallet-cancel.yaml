@@ -29,19 +29,38 @@ tags:
     visible:
       id: "member-screen"
     timeout: 15000
-- scrollUntilVisible:
-    element: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
-    direction: DOWN
+- scroll
+- scroll
+- extendedWaitUntil:
+    visible: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
     timeout: 10000
 - tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
 - extendedWaitUntil:
     visible:
-      id: "wallet-security-modal"
+      text: ".*(Security Notice|Sicherheitshinweis).*"
     timeout: 10000
 - assertVisible: ".*(Security Notice|Sicherheitshinweis).*"
-- tapOn:
-    id: "wallet-cancel"
-- assertNotVisible:
-    id: "wallet-security-modal"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          id: "wallet-cancel"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: ".*(Use App Instead|App verwenden).*"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertNotVisible:
+          id: "wallet-security-modal"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertNotVisible: ".*(Security Notice|Sicherheitshinweis).*"
 - assertVisible:
     id: "member-screen"
