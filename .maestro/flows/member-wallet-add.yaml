@@ -23,20 +23,19 @@ tags:
     visible:
       id: "member-screen"
     timeout: 15000
-- scrollUntilVisible:
-    element: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
-    direction: DOWN
+- scroll
+- scroll
+- extendedWaitUntil:
+    visible: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
     timeout: 10000
 - tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
 - extendedWaitUntil:
-    visible:
-      id: "wallet-security-modal"
+    visible: ".*(Security Notice|Sicherheitshinweis).*"
     timeout: 10000
 - tapOn:
     id: "wallet-confirm"
 - extendedWaitUntil:
-    notVisible:
-      id: "wallet-security-modal"
+    notVisible: ".*(Security Notice|Sicherheitshinweis).*"
     timeout: 60000
 - assertVisible:
     id: "member-screen"
