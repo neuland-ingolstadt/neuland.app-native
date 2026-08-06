@@ -47,15 +47,17 @@ tags:
     when:
       platform: Android
     commands:
-      - hideKeyboard
+      - tapOn: "(Los geht's|Get started)"
 - runFlow:
     when:
       platform: iOS
     commands:
       - tapOn: "(Los geht's|Get started)"
-- assertVisible:
-    id: "login-submit"
-    enabled: true
+- extendedWaitUntil:
+    visible:
+      id: "login-submit"
+      enabled: true
+    timeout: 30000
 - tapOn:
     id: "login-toggle-password"
 - tapOn:
