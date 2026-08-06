@@ -131,10 +131,14 @@ tags:
     when:
       platform: Android
     commands:
-      - hideKeyboard
-- assertVisible:
-    id: "room-report-submit"
-    enabled: true
+      - tapOn: "(Fehler melden|Report an issue)"
+- waitForAnimationToEnd:
+    timeout: 3000
+- extendedWaitUntil:
+    visible:
+      id: "room-report-submit"
+      enabled: true
+    timeout: 30000
 - runFlow:
     when:
       platform: Android

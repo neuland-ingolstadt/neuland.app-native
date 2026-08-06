@@ -12,6 +12,11 @@ appId: ${APP_ID}
       - tapOn: "(Open|Öffnen)"
 - runFlow:
     when:
+      visible: "http://.*:8081"
+    commands:
+      - tapOn: "http://.*:8081"
+- runFlow:
+    when:
       visible: "Continue"
     commands:
       - tapOn: "Continue"
@@ -24,7 +29,7 @@ appId: ${APP_ID}
     when:
       platform: Android
       notVisible:
-        id: "onboarding-continue|.*-screen"
+        id: "onboarding-continue|login-guest|.*-screen"
     commands:
       - launchApp:
           clearState: false
@@ -43,5 +48,5 @@ appId: ${APP_ID}
       - tapOn: "Reload"
 - extendedWaitUntil:
     visible:
-      id: "onboarding-continue|.*-screen"
+      id: "onboarding-continue|login-guest|.*-screen"
     timeout: 120000
