@@ -8,6 +8,7 @@ import type {
 	TypedDocumentString,
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
+import { appHomepage, appVersion } from '@/data/app-version'
 import type { SpoWeights } from '@/types/asset-api'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
@@ -15,7 +16,6 @@ import {
 	type PublicEventResponse,
 	type PublicOrganizerResponse
 } from '@/types/campus-life'
-import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
 	CREATE_ROOM_REPORT,
@@ -29,7 +29,7 @@ const GRAPHQL_ENDPOINT: string =
 const GRAPHQL_ENDPOINT_PROD = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT = 'https://assets.neuland.app'
 const CAMPUS_LIFE_API_ENDPOINT = 'https://cl.neuland-ingolstadt.de'
-const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
+const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 
 /**
  * Neuland API client class for performing requests against the neuland.app API

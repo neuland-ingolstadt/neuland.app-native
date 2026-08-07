@@ -11,6 +11,7 @@ import {
 } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
+import { appVersion } from '@/data/app-version'
 import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
@@ -29,7 +30,6 @@ import {
 	getRoomOpenings
 } from '@/utils/map-utils'
 import { loadTimetable } from '@/utils/timetable-utils'
-import packageInfo from '../../package.json'
 
 export function useMapQueries(): {
 	mapOverlay: FeatureCollection | undefined
@@ -46,7 +46,7 @@ export function useMapQueries(): {
 
 	const { data: mapOverlay, error: overlayError } = useQuery<FeatureCollection>(
 		{
-			queryKey: ['mapOverlay', packageInfo.version],
+			queryKey: ['mapOverlay', appVersion],
 			queryFn: async () => await NeulandAPI.getMapOverlay(),
 			staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
 			gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days

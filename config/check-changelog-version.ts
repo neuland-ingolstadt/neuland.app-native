@@ -1,9 +1,9 @@
-import appConfig from '../app.config.json'
+import appConfig from '../app.config'
 import changelogData from '../src/data/changelog.json'
 import type { Changelog } from '../src/types/data'
 import { validateAppVersionHasChangelogEntries } from '../src/utils/changelog-utils'
 
-const appVersion = appConfig.expo.version
+const appVersion = appConfig.version
 const result = validateAppVersionHasChangelogEntries(
 	appVersion,
 	changelogData as Changelog

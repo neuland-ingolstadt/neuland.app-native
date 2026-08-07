@@ -16,7 +16,7 @@
 			"!.stryker-tmp",
 			"patches/**",
 			"plugins/**",
-			"app.config.json",
+			"app.config.ts",
 			"biome.json",
 			"babel.config.js",
 			"package.json",

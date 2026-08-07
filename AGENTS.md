@@ -43,7 +43,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Toasts / dialogs  | `burnt` for toasts / inline alerts (`Toaster` registered globally in `provider.tsx`) |
 | Tabs / sheets     | Expo Router native tabs (iOS), `@bottom-tabs/react-navigation` (Android), Expo Router tabs (web), `@gorhom/bottom-sheet` + `@th3rdwave/react-navigation-bottom-sheet` |
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
-| Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.json`) |
+| Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
 ---
 
@@ -193,7 +193,7 @@ iOS-only files that must survive prebuild (export options, TestFlight notes, …
 
 The `android/` directory is **gitignored** and generated locally via `bun prebuild:android`.
 Android-specific assets (quick-action icons, drawables) live under `src/assets/android/` and are
-wired in through `app.config.json` plugins.
+wired in through `app.config.ts` plugins.
 
 Path aliases (defined in `tsconfig.json`):
 
@@ -605,7 +605,7 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   `src/data/package-licenses.json` is committed as an empty stub; release pipelines
   overwrite it ephemerally via `bun licences:bundle`.
 - **Don't commit the `ios/` folder** (only the `ios/ci_scripts` symlink for Xcode Cloud). It is
-  gitignored; run `bun prebuild:ios` and change `app.config.json`, config plugins, or
+gitignored; run `bun prebuild:ios` and change `app.config.ts`, config plugins, or
   `config/ios-artifacts/` instead. Edit `config/ios-artifacts/ci_scripts/ci_post_clone.sh` for
   Xcode Cloud setup.
 - **Don't disable Biome rules globally.** Inline `// biome-ignore` with a reason if
@@ -628,7 +628,7 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 
 - Match the closest existing example. Most patterns repeat — there's almost always a
   similar screen, store, hook, or component to copy from.
-- If a change touches `app.config.json`, `eas.json`, `tsconfig.json`, `babel.config.js`,
+- If a change touches `app.config.ts`, `eas.json`, `tsconfig.json`, `babel.config.js`,
   or anything in `.github/` or `config/`, expect review from the CODEOWNERS listed in
   `.github/CODEOWNERS`.
 - Prefer changing Expo config / plugins over editing `ios/` or `android/` directly. Touch

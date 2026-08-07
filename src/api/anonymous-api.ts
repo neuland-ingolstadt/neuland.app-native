@@ -1,13 +1,11 @@
 import { Platform } from 'react-native'
-
-import packageInfo from '../../package.json'
+import { appHomepage, appVersion } from '@/data/app-version'
 
 const ENDPOINT_HOST =
 	process.env.EXPO_PUBLIC_ENDPOINT_HOST ?? 'https://hiplan.thi.de'
 const ENDPOINT_URL =
 	process.env.EXPO_PUBLIC_ENDPOINT_URL ?? '/webservice/zits_s_40_test/index.php'
-const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
-
+const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 /**
  * Error that is thrown when the API indicates an error.
  */
