@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: authenticated-logout
+tags:
+  - authenticated
+  - destructive-auth
+  - secure-storage
+---
+# Precondition: a disposable THI account is signed in. This flow deletes its saved credentials.
+- launchApp:
+    clearState: false
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://profile"
+- extendedWaitUntil:
+    visible:
+      id: "profile-screen"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "profile-logout"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "profile-logout"
+- assertVisible: "(Confirm|Bestätigen)"
+- tapOn: "(Cancel|Abbrechen)"
+- assertVisible:
+    id: "profile-screen"
+- tapOn:
+    id: "profile-logout"
+- tapOn: "(Logout|Abmelden)"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 30000
+- assertVisible:
+    id: "login-submit"
+    enabled: false

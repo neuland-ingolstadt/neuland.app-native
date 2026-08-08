@@ -1,0 +1,41 @@
+appId: ${APP_ID}
+name: member-wallet-add
+tags:
+  - authenticated
+  - member
+  - wallet
+  - native-module
+  - external-side-effect
+---
+# Precondition: persisted member login and a disposable test Wallet environment.
+- launchApp:
+    clearState: false
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://member"
+- extendedWaitUntil:
+    visible:
+      id: "member-screen"
+    timeout: 15000
+- scroll
+- scroll
+- extendedWaitUntil:
+    visible: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
+    timeout: 10000
+- tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
+- extendedWaitUntil:
+    visible: ".*(Security Notice|Sicherheitshinweis).*"
+    timeout: 10000
+- tapOn:
+    id: "wallet-confirm"
+- extendedWaitUntil:
+    notVisible: ".*(Security Notice|Sicherheitshinweis).*"
+    timeout: 60000
+- assertVisible:
+    id: "member-screen"

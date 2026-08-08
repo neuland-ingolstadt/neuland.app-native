@@ -1,0 +1,227 @@
+appId: ${APP_ID}
+name: authenticated-student
+tags:
+  - regression
+  - authenticated
+  - student
+  - persistence
+---
+# Precondition: a dedicated test device is already signed in with a THI student account.
+# This flow intentionally never clears app state or logs the account out.
+- launchApp:
+    clearState: false
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://settings"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 20000
+- assertNotVisible:
+    id: "guest-login-banner"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://grades"
+- extendedWaitUntil:
+    visible:
+      id: "grades-screen"
+    timeout: 20000
+- assertVisible: "(Grades|Noten)"
+- scroll
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://library"
+- extendedWaitUntil:
+    visible:
+      id: "library-barcode"
+    timeout: 20000
+- assertVisible: "(Library Number|Bibliotheksnummer)"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://calendar"
+- extendedWaitUntil:
+    visible:
+      id: "calendar-screen"
+    timeout: 20000
+- tapOn:
+    id: "calendar-page-1"
+- assertVisible:
+    id: "calendar-page-1"
+    selected: true
+- tapOn:
+    id: "calendar-page-0"
+- assertVisible:
+    id: "calendar-page-0"
+    selected: true
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-preferences-screen"
+    timeout: 10000
+- tapOn:
+    id: "radio-option-timeline-5"
+- assertVisible:
+    id: "radio-option-timeline-5"
+    selected: true
+- tapOn:
+    id: "multi-option-showCalendarEvents"
+- tapOn:
+    id: "multi-option-showCalendarEvents"
+- tapOn:
+    id: "multi-option-showExams"
+- tapOn:
+    id: "multi-option-showExams"
+- scroll
+- assertVisible:
+    id: "timetable-preferences-screen"
+- tapOn:
+    id: "radio-option-timeline-3"
+- assertVisible:
+    id: "radio-option-timeline-3"
+    selected: true
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-screen"
+    timeout: 20000
+- swipe:
+    from:
+      id: "timetable-screen"
+    direction: LEFT
+    duration: 700
+- swipe:
+    from:
+      id: "timetable-screen"
+    direction: RIGHT
+    duration: 700
+- assertVisible:
+    id: "timetable-screen"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- tapOn:
+    id: "timetable-list-mode"
+- assertVisible:
+    id: "timetable-list-mode"
+    checked: true
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-screen"
+    timeout: 20000
+- swipe:
+    direction: UP
+    duration: 600
+- runFlow:
+    when:
+      visible:
+        id: "timetable-lecture-entry"
+    commands:
+      - tapOn:
+          id: "timetable-lecture-entry"
+          index: 0
+      - assertVisible: "(Details)"
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    when:
+      visible:
+        id: "timetable-exam-entry"
+    commands:
+      - tapOn:
+          id: "timetable-exam-entry"
+          index: 0
+      - assertVisible: "(Exam Details|Prüfungsdetails)"
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- tapOn:
+    id: "radio-option-timeline-3"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://lecturers"
+- extendedWaitUntil:
+    visible:
+      id: "lecturers-screen"
+    timeout: 20000
+- swipe:
+    direction: UP
+    duration: 600
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://settings"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://map"
+- extendedWaitUntil:
+    visible:
+      id: "map-floor-picker"
+    timeout: 20000
+- runFlow:
+    when:
+      visible:
+        id: "map-next-lecture-row"
+    commands:
+      - tapOn:
+          id: "map-next-lecture-row"
+          index: 0
+      - assertVisible:
+          id: "map-room-detail"
+      - tapOn:
+          id: "map-room-detail-close"
+- runFlow:
+    when:
+      visible:
+        id: "map-available-room-row"
+    commands:
+      - tapOn:
+          id: "map-available-room-row"
+          index: 0
+      - assertVisible:
+          id: "map-room-detail"
+      - tapOn:
+          id: "map-room-detail-close"
+- stopApp
+- launchApp:
+    clearState: false
+    stopApp: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- assertVisible:
+    id: "radio-option-timeline-3"
+    selected: true

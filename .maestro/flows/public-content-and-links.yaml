@@ -1,0 +1,126 @@
+appId: ${APP_ID}
+name: public-content-and-links
+tags:
+  - regression
+  - guest
+  - navigation
+  - public-content
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- scrollUntilVisible:
+    element:
+      id: "dashboard-card-events"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "dashboard-card-events"
+    point: "50%, 12%"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-events-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-event-row"
+    timeout: 20000
+- tapOn:
+    id: "campus-life-event-row"
+    index: 0
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-event-detail-screen"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    point: "357, 347"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: BACK
+- assertVisible:
+    id: "campus-life-events-screen"
+- runFlow:
+    file: "../subflows/navigate-back.yaml"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "dashboard-card-sports"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "dashboard-card-sports"
+    point: "50%, 12%"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "sports-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "sports-event-row"
+    timeout: 20000
+- tapOn:
+    id: "sports-event-row"
+    index: 0
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "sports-event-detail-screen"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    point: "357, 347"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: BACK
+- assertVisible:
+    id: "sports-screen"
+- runFlow:
+    file: "../subflows/navigate-back.yaml"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "dashboard-card-links"
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: "dashboard-card-links"
+    point: "50%, 20%"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "quick-links-screen"
+    timeout: 10000
+- assertVisible: "Quick Links"
+- assertVisible: ".*(Moodle).*"
+- swipe:
+    direction: UP
+    duration: 500
+- assertVisible:
+    id: "quick-links-screen"

@@ -1,0 +1,103 @@
+url: ${WEB_URL}
+name: web-regression
+tags:
+  - regression
+  - web
+  - map
+  - navigation
+---
+- openLink: "${WEB_URL}/onboarding"
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue"
+    timeout: 30000
+- assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
+- tapOn:
+    id: "onboarding-continue"
+- extendedWaitUntil:
+    visible:
+      id: "login-submit"
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: "login-guest"
+    direction: DOWN
+    timeout: 15000
+    centerElement: true
+- tapOn:
+    id: "login-guest"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 20000
+- openLink: "${WEB_URL}/map"
+- extendedWaitUntil:
+    visible:
+      id: "map-screen"
+    timeout: 30000
+- assertVisible:
+    id: "map-canvas"
+- repeat:
+    times: 3
+    commands:
+      - tapOn:
+          id: "Zoom in"
+- tapOn:
+    id: "Zoom out"
+- swipe:
+    start: "70%, 35%"
+    end: "30%, 35%"
+    duration: 700
+- tapOn:
+    id: "map-floor-picker"
+- extendedWaitUntil:
+    visible:
+      id: "map-floor-EG"
+    timeout: 10000
+- tapOn:
+    id: "map-floor-EG"
+- tapOn:
+    id: "map-floor-picker-close"
+- tapOn:
+    id: "map-search-input"
+- inputText: "B106"
+- extendedWaitUntil:
+    visible: "B106"
+    timeout: 15000
+- tapOn:
+    id: "map-search-result-B106"
+- assertVisible:
+    id: "map-room-detail"
+- tapOn:
+    id: "map-room-detail-close"
+- openLink: "${WEB_URL}/food"
+- extendedWaitUntil:
+    visible:
+      id: "food-screen"
+    timeout: 20000
+- assertVisible:
+    id: "food-day-0"
+- runFlow:
+    when:
+      visible:
+        id: "food-day-1"
+    commands:
+      - tapOn:
+          id: "food-day-1"
+      - assertVisible:
+          id: "food-day-1"
+- tapOn:
+    id: "(Food Preferences|Essenspräferenzen)"
+- extendedWaitUntil:
+    visible:
+      id: "multi-option-Reimanns"
+    timeout: 10000
+- openLink: "${WEB_URL}/settings"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- assertVisible:
+    id: "guest-login-banner"
+- openLink: "${WEB_URL}/this-route-must-not-exist"
+- assertVisible: ".*(Not found|Nicht gefunden).*"

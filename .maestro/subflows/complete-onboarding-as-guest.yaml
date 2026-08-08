@@ -1,0 +1,39 @@
+appId: ${APP_ID}
+---
+- runFlow:
+    when:
+      visible:
+        id: "onboarding-continue"
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "onboarding-continue"
+            enabled: true
+          timeout: 30000
+      - assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
+      - assertVisible: ".*(Von Studierenden für Studierende|By students for students).*"
+      - assertVisible: ".*(Weit verbreitet und vertrauenswürdig|Widely used and trustworthy).*"
+      - tapOn:
+          id: "onboarding-continue"
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - runFlow:
+          when:
+            visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+          commands:
+            - tapOn: "OK"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 120000
+- runFlow:
+    when:
+      visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+    commands:
+      - tapOn: "OK"
+- tapOn:
+    id: "login-guest"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 20000

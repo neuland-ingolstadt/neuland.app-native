@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+---
+- runFlow:
+    when:
+      visible: ".*Development Build.*"
+    commands:
+      - openLink: ${DEV_CLIENT_URL}
+- runFlow:
+    when:
+      visible: "(Open|Öffnen)"
+    commands:
+      - tapOn: "(Open|Öffnen)"
+- runFlow:
+    when:
+      visible: "http://.*:8081"
+    commands:
+      - tapOn: "http://.*:8081"
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Reload"
+    commands:
+      - tapOn: "Reload"
+- runFlow:
+    when:
+      platform: Android
+      notVisible:
+        id: "onboarding-continue|login-guest|.*-screen"
+    commands:
+      - launchApp:
+          clearState: false
+          stopApp: true
+      - waitForAnimationToEnd:
+          timeout: 5000
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Reload"
+    commands:
+      - tapOn: "Reload"
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|login-guest|.*-screen"
+    timeout: 120000

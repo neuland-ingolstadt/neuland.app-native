@@ -1,0 +1,208 @@
+appId: ${APP_ID}
+name: food-regression
+tags:
+  - smoke
+  - regression
+  - guest
+  - food
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- tapOn: "(Food|Essen)"
+- extendedWaitUntil:
+    visible:
+      id: "food-day-0"
+    timeout: 20000
+- assertVisible:
+    id: "food-screen"
+- runFlow:
+    when:
+      visible:
+        id: "food-day-1"
+    commands:
+      - tapOn:
+          id: "food-day-1"
+      - assertVisible:
+          id: "food-day-1"
+          selected: true
+- swipe:
+    from:
+      id: "food-pager"
+    direction: LEFT
+    duration: 500
+- swipe:
+    from:
+      id: "food-pager"
+    direction: RIGHT
+    duration: 500
+- scrollUntilVisible:
+    element:
+      id: "food-meal-entry"
+    direction: DOWN
+    timeout: 15000
+    speed: 45
+    visibilityPercentage: 70
+- tapOn:
+    id: "food-meal-entry"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: "food-detail-screen"
+    timeout: 15000
+- scroll
+- assertVisible:
+    id: "food-detail-screen"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 18%"
+          end: "50%, 95%"
+          duration: 700
+- assertVisible:
+    id: "food-screen"
+- tapOn: "(Food Preferences|Essenspräferenzen)"
+- extendedWaitUntil:
+    visible:
+      id: "multi-option-Reimanns"
+    timeout: 120000
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "multi-option-Reimanns"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "multi-option-Reimanns"
+          checked: false
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertNotVisible:
+          id: "multi-option-Reimanns"
+          text: ".*(selected|ausgewählt).*"
+- tapOn:
+    id: "multi-option-Reimanns"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "multi-option-Reimanns"
+          checked: true
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible:
+          id: "multi-option-Reimanns"
+          text: ".*(selected|ausgewählt).*"
+- tapOn:
+    id: "food-allergens-link"
+- extendedWaitUntil:
+    visible:
+      id: "allergens-picker"
+    timeout: 10000
+- tapOn:
+    id: "allergens-option-1"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "allergens-option-1"
+          checked: true
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible:
+          id: "allergens-option-1"
+          text: ".*(selected|ausgewählt).*"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 18%"
+          end: "50%, 95%"
+          duration: 700
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: "food-flags-link"
+- extendedWaitUntil:
+    visible:
+      id: "flags-picker"
+    timeout: 10000
+- tapOn:
+    id: "flags-option-B"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "flags-option-B"
+          checked: true
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible:
+          id: "flags-option-B"
+          text: ".*(selected|ausgewählt).*"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/navigate-back.yaml"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 18%"
+          end: "50%, 95%"
+          duration: 700
+- scrollUntilVisible:
+    element:
+      text: "(Automatically switch to next day|Automatisch zum nächsten Tag wechseln)"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "food-auto-next-day-toggle"
+    retryTapIfNoChange: false
+- assertVisible:
+    id: "food-auto-next-day-time"

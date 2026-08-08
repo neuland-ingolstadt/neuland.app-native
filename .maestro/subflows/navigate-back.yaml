@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+      visible:
+        id: "BackButton"
+    commands:
+      - tapOn:
+          id: "BackButton"
+- runFlow:
+    when:
+      platform: iOS
+      notVisible:
+        id: "BackButton"
+    commands:
+      - swipe:
+          start: "2%, 50%"
+          end: "90%, 50%"
+          duration: 500
+- waitForAnimationToEnd:
+    timeout: 3000
