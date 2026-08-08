@@ -96,7 +96,10 @@ export default function RoomReport(): React.JSX.Element {
 		: primaryColor
 
 	return (
-		<ScrollView contentContainerClassName="bg-background p-page">
+		<ScrollView
+			testID="room-report-screen"
+			contentContainerClassName="bg-background p-page"
+		>
 			<View className="justify-center pb-5 pt-2.5">
 				<View className="flex-row justify-between pb-2.5">
 					<Text className="text-text text-[23px] font-semibold mb-3.5">
@@ -108,6 +111,7 @@ export default function RoomReport(): React.JSX.Element {
 					{t('pages.rooms.report.room.title')}
 				</Text>
 				<TextInput
+					testID="room-report-room"
 					className="bg-input-background rounded-mg text-text flex-1 text-[17px] h-10 mb-2.5 px-2.5 border"
 					style={{ borderColor, backgroundColor: inputBackground }}
 					value={roomTitle}
@@ -119,6 +123,7 @@ export default function RoomReport(): React.JSX.Element {
 					{t('pages.rooms.report.category.title')}
 				</Text>
 				<CustomDropdown
+					testID="room-report-category"
 					value={reportCategory}
 					onChange={setReportCategory}
 					options={reportCategories.map((category) => ({
@@ -141,6 +146,7 @@ export default function RoomReport(): React.JSX.Element {
 					{t('pages.rooms.report.description.title')}
 				</Text>
 				<TextInput
+					testID="room-report-description"
 					editable
 					multiline
 					numberOfLines={4}
@@ -157,6 +163,7 @@ export default function RoomReport(): React.JSX.Element {
 				/>
 
 				<Pressable
+					testID="room-report-submit"
 					disabled={submitDisabled}
 					onPress={() => {
 						if (!reportCategory || !description || !room) return

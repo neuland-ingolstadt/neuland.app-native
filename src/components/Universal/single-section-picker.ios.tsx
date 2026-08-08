@@ -7,6 +7,7 @@ import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
 
 interface SectionPickerProps {
+	testID?: string
 	title: string
 	selectedItem: boolean
 	action: (state: boolean) => void
@@ -14,6 +15,7 @@ interface SectionPickerProps {
 }
 
 const SingleSectionPicker = ({
+	testID,
 	title,
 	selectedItem,
 	action,
@@ -47,11 +49,19 @@ const SingleSectionPicker = ({
 				>
 					{title}
 				</Text>
-				<Toggle
-					isOn={isOn}
-					onChange={handleToggleChange}
-					style={disabled ? { opacity: 0.5 } : undefined}
-				/>
+				<View
+					testID={testID}
+					accessible={true}
+					accessibilityLabel={title}
+					accessibilityRole="switch"
+					accessibilityState={{ checked: selectedItem, disabled }}
+				>
+					<Toggle
+						isOn={isOn}
+						onChange={handleToggleChange}
+						style={disabled ? { opacity: 0.5 } : undefined}
+					/>
+				</View>
 			</View>
 		</View>
 	)

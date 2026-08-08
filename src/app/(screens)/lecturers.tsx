@@ -76,7 +76,11 @@ export default function LecturersScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView
+				testID="lecturers-screen"
+				style={styles.page}
+				edges={['top']}
+			>
 				{userKind === USER_GUEST ? (
 					<ErrorView title={guestError} />
 				) : !isSearchBarFocused ? (

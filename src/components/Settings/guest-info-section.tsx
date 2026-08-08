@@ -12,6 +12,7 @@ export default function GuestInfoSection(): React.JSX.Element {
 
 	return (
 		<Pressable
+			testID="guest-login-banner"
 			className="bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md p-5 flex-row items-center justify-between gap-4 active:opacity-90"
 			style={hairlineBorder}
 			onPress={() => {

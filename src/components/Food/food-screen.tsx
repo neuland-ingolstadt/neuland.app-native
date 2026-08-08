@@ -153,7 +153,7 @@ function FoodScreen(): React.JSX.Element {
 
 	return (
 		<SafeAreaProvider>
-			<SafeAreaView style={styles.page} edges={['top']}>
+			<SafeAreaView testID="food-screen" style={styles.page} edges={['top']}>
 				{isLoading && !isRefetchingByUser ? (
 					<View style={styles.loadingContainer}>
 						<FoodLoadingIndicator size={140} />
@@ -205,6 +205,7 @@ function FoodScreen(): React.JSX.Element {
 						</Animated.View>
 						{showAllergensBanner && <AllergensBanner scrollY={scrollY} />}
 						<PagerView
+							testID="food-pager"
 							ref={pagerViewRef}
 							style={styles.page}
 							initialPage={initialPageRef.current}

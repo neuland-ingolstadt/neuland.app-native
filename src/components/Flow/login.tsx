@@ -66,6 +66,7 @@ export default function Login(): React.JSX.Element {
 		<TouchableWithoutFeedback
 			onPress={Keyboard.dismiss}
 			disabled={Platform.OS === 'web'}
+			accessible={false}
 		>
 			<View
 				className="self-center flex-1 w-[90%]"

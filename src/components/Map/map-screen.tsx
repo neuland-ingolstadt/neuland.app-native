@@ -399,7 +399,7 @@ const MapScreen = (): React.JSX.Element => {
 	}, [])
 
 	return (
-		<View className="flex-1">
+		<View testID="map-screen" className="flex-1">
 			{mapLoadState === LoadingState.ERROR && (
 				<View
 					className="flex-1 h-full justify-center absolute w-full z-[100]"
@@ -420,7 +420,7 @@ const MapScreen = (): React.JSX.Element => {
 				</View>
 			)}
 
-			<View className="flex-1" style={{ marginBottom: 0 }}>
+			<View testID="map-canvas" className="flex-1" style={{ marginBottom: 0 }}>
 				<MapView
 					key={mapKey}
 					style={{ flex: 1 }}

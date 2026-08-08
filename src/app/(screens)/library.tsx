@@ -139,6 +139,7 @@ export default function LibraryCode(): React.JSX.Element {
 				<>
 					<FormList sections={sections} />
 					<Pressable
+						testID="library-barcode"
 						className="self-center rounded-mg mt-5 px-2.5 py-3.5 w-full"
 						style={{ backgroundColor: staticColors.white }}
 						onPress={() => {

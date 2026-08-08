@@ -168,6 +168,7 @@ export default function TimetableDetails(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
+			testID="lecture-details-screen"
 			ref={ref}
 			contentContainerClassName="flex pb-bottom-safe px-page pt-page"
 		>

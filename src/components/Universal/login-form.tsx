@@ -232,6 +232,7 @@ const LoginForm = ({
 							style={{ color: labelColor }}
 						/>
 						<TextInput
+							testID="login-username"
 							style={textInputStyle}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
@@ -261,6 +262,7 @@ const LoginForm = ({
 							style={{ color: labelColor }}
 						/>
 						<TextInput
+							testID="login-password"
 							style={textInputStyle}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
@@ -282,6 +284,7 @@ const LoginForm = ({
 							autoCorrect={false}
 						/>
 						<TouchableOpacity
+							testID="login-toggle-password"
 							className="p-1"
 							onPress={() => setShowPassword(!showPassword)}
 						>
@@ -299,6 +302,7 @@ const LoginForm = ({
 				</View>
 
 				<Button
+					testID="login-submit"
 					disabled={signInDisabled}
 					loading={loading}
 					onPress={() =>
@@ -328,6 +332,7 @@ const LoginForm = ({
 				</View>
 
 				<TouchableOpacity
+					testID="login-guest"
 					className="w-full items-center pt-1.5 mt-3.5"
 					onPress={() =>
 						guestLogin().catch((error: unknown) => console.debug(error))

@@ -192,6 +192,7 @@ export function LoggedInView(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="member-screen"
 			contentContainerClassName="px-page pt-5 pb-[30px]"
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"

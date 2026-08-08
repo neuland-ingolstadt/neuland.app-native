@@ -30,7 +30,11 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const duration = usePickerBinding(roomSearch.duration, roomSearch.setDuration)
 
 	return (
-		<ScrollView className="p-3" style={{ paddingTop: headerPadding }}>
+		<ScrollView
+			testID="room-search-screen"
+			className="p-3"
+			style={{ paddingTop: headerPadding }}
+		>
 			<View>
 				<Text className="text-label-secondary text-[13px] font-normal mb-1 uppercase">
 					{t('pages.rooms.options.title')}
@@ -42,6 +46,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Text>
 
 						<DateTimePicker
+							testID="room-search-date"
 							value={roomSearch.searchDateTime}
 							mode="date"
 							accentColor={primaryColor}
@@ -61,6 +66,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Text>
 
 						<DateTimePicker
+							testID="room-search-time"
 							value={roomSearch.searchDateTime}
 							mode="time"
 							is24Hour={true}
@@ -73,7 +79,10 @@ export default function AdvancedSearch(): React.JSX.Element {
 						/>
 					</View>
 					<Divider paddingLeft={16} />
-					<View className="items-center flex-row justify-between px-[15px] py-2">
+					<View
+						testID="room-search-duration"
+						className="items-center flex-row justify-between px-[15px] py-2"
+					>
 						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.duration')}
 						</Text>
@@ -90,7 +99,10 @@ export default function AdvancedSearch(): React.JSX.Element {
 						</Picker>
 					</View>
 					<Divider paddingLeft={16} />
-					<View className="items-center flex-row justify-between px-[15px] py-2">
+					<View
+						testID="room-search-building"
+						className="items-center flex-row justify-between px-[15px] py-2"
+					>
 						<Text className="text-text text-[15px]">
 							{t('pages.rooms.options.building')}
 						</Text>

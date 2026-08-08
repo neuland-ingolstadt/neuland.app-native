@@ -4,6 +4,7 @@ import type { CommunityIcon, WebIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from './material-icons'
 
 export interface SectionGroup {
+	testID?: string
 	title?: string
 	value?: string
 	customComponent?: (textStyle: StyleProp<TextStyle>) => React.ReactNode

@@ -131,6 +131,7 @@ export default function About(): React.JSX.Element {
 		header: t('about.formlist.app.title'),
 		items: [
 			{
+				testID: 'about-version-link',
 				title: t('about.formlist.app.version'),
 				icon: {
 					ios: 'info.circle',
@@ -144,6 +145,7 @@ export default function About(): React.JSX.Element {
 				}
 			},
 			{
+				testID: 'about-changelog-link',
 				title: t('about.formlist.app.changelog'),
 				icon: {
 					ios: 'list.bullet.rectangle',
@@ -223,6 +225,7 @@ export default function About(): React.JSX.Element {
 			header: t('about.formlist.legal.title'),
 			items: [
 				{
+					testID: 'about-legal-link',
 					title: t('about.formlist.legal.button'),
 					icon: {
 						ios: 'hand.raised',
@@ -276,6 +279,7 @@ export default function About(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="about-screen"
 			contentContainerClassName="pb-bottom-safe"
 			style={{ paddingTop: headerPadding }}
 		>
@@ -371,6 +375,7 @@ export default function About(): React.JSX.Element {
 				}}
 			>
 				<SingleSectionPicker
+					testID="analytics-consent-toggle"
 					title={t('about.analytics.toggle')}
 					selectedItem={analyticsAllowed === true}
 					action={setAnalyticsAllowed}

@@ -43,7 +43,11 @@ export default function SportsScreen(): React.JSX.Element {
 	)
 
 	return (
-		<View className="flex-1" style={{ paddingTop: headerPadding + 12 }}>
+		<View
+			testID="sports-screen"
+			className="flex-1"
+			style={{ paddingTop: headerPadding + 12 }}
+		>
 			<ClSportsPage sportsResult={sportsResult} />
 		</View>
 	)
