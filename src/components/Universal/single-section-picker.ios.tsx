@@ -55,6 +55,9 @@ const SingleSectionPicker = ({
 					accessibilityLabel={title}
 					accessibilityRole="switch"
 					accessibilityState={{ checked: selectedItem, disabled }}
+					onAccessibilityTap={() => {
+						handleToggleChange()
+					}}
 				>
 					<Toggle
 						isOn={isOn}

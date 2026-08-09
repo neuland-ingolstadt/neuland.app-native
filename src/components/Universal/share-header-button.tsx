@@ -1,6 +1,7 @@
 import { router } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
@@ -24,6 +25,7 @@ export function ShareHeaderButton({
 	onPress,
 	noShare = false
 }: ShareButtonProps): React.JSX.Element | undefined {
+	const { t } = useTranslation(['accessibility'])
 	const [copied, setCopied] = useState(false)
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
@@ -36,6 +38,7 @@ export function ShareHeaderButton({
 			testID="share-header-button"
 			accessible
 			accessibilityRole="button"
+			accessibilityLabel={t('button.share')}
 			onPress={() => {
 				void onPress()
 				if (Platform.OS === 'web') {
@@ -64,6 +67,7 @@ export function ShareHeaderButton({
 }
 
 export const CloseHeaderButton = (): React.JSX.Element | undefined => {
+	const { t } = useTranslation(['accessibility'])
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
@@ -75,6 +79,7 @@ export const CloseHeaderButton = (): React.JSX.Element | undefined => {
 			testID="close-header-button"
 			accessible
 			accessibilityRole="button"
+			accessibilityLabel={t('button.close')}
 			onPress={() => router.back()}
 			style={shareButtonStyle}
 		>

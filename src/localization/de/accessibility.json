@@ -1,5 +1,7 @@
 {
 	"button": {
+		"share": "Teilen",
+		"close": "Schließen",
 		"foodPreferences": "Essenspräferenzen",
 		"timetableMode": "Stundenplanansicht wechseln",
 		"timetableBack": "Zu heute springen",
