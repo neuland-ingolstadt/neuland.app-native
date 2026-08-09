@@ -1,9 +1,55 @@
-import type { Feature, FeatureCollection } from 'geojson'
+import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
 import type { FeatureProperties } from '@/types/asset-api'
-import { type RoomData, SEARCH_TYPES } from '@/types/map'
+import { type MapCoordinate, type RoomData, SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import type { RoomOpenings } from '@/utils/map-utils'
+import type { RoomOpenings } from '@/utils/map-room-utils'
+
+export function parseMapCoordinate(value: unknown): MapCoordinate | undefined {
+	let parsedValue = value
+
+	if (typeof parsedValue === 'string') {
+		try {
+			parsedValue = JSON.parse(parsedValue) as unknown
+		} catch {
+			return undefined
+		}
+	}
+
+	if (!Array.isArray(parsedValue) || parsedValue.length < 2) {
+		return undefined
+	}
+
+	const [longitude, latitude] = parsedValue
+	if (
+		typeof longitude !== 'number' ||
+		typeof latitude !== 'number' ||
+		!Number.isFinite(longitude) ||
+		!Number.isFinite(latitude) ||
+		longitude < -180 ||
+		longitude > 180 ||
+		latitude < -90 ||
+		latitude > 90
+	) {
+		return undefined
+	}
+
+	return [longitude, latitude]
+}
+
+export function getRoomSelectionFromProperties(
+	properties: GeoJsonProperties | null | undefined
+): { room: string; center?: MapCoordinate } | undefined {
+	const room = properties?.Raum
+	if (typeof room !== 'string' || room.length === 0) {
+		return undefined
+	}
+
+	return {
+		room,
+		center: parseMapCoordinate(properties?.center)
+	}
+}
 
 /**
  * Get the ongoing event or next upcoming event from a timetable

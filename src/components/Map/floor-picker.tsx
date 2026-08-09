@@ -13,14 +13,16 @@ interface FloorPickerProps {
 	floors: string[]
 	showAllFloors: boolean
 	toggleShowAllFloors: () => void
-	setCameraTriggerKey: React.Dispatch<React.SetStateAction<number>>
+	locationPermissionGranted?: boolean
+	onLocate?: () => void
 }
 
 const FloorPicker = ({
 	floors,
 	showAllFloors,
 	toggleShowAllFloors,
-	setCameraTriggerKey
+	locationPermissionGranted = false,
+	onLocate = () => {}
 }: FloorPickerProps): React.JSX.Element => {
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation(['accessibility'])
@@ -144,14 +146,18 @@ const FloorPicker = ({
 			{Platform.OS !== 'web' && (
 				<Pressable
 					testID="map-current-location"
-					onPress={() => {
-						setCameraTriggerKey((prev) => prev + 1)
-					}}
+					onPress={onLocate}
+					disabled={!locationPermissionGranted}
+					accessibilityState={{ disabled: !locationPermissionGranted }}
 					accessibilityLabel={t('map.centerOnCurrentLocation')}
 				>
 					<View
 						className="rounded-[10px] border mt-[5px] overflow-hidden"
-						style={{ borderColor, backgroundColor: cardColor }}
+						style={{
+							borderColor,
+							backgroundColor: cardColor,
+							opacity: locationPermissionGranted ? 1 : 0.5
+						}}
 					>
 						<View className="content-center items-center self-center h-[38px] justify-center w-[38px]">
 							<PlatformIcon

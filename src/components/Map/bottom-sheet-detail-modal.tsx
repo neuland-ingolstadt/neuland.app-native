@@ -13,7 +13,7 @@ import {
 } from '@/components/Universal/styled'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
-import { handleShareModal } from '@/utils/map-utils'
+import { handleShareModal } from '@/utils/map-actions'
 import { toColor } from '@/utils/uniwind-utils'
 import FormList from '../Universal/form-list'
 import PlatformIcon from '../Universal/icon'

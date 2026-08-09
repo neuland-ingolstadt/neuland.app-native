@@ -1,6 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
-import type { FeatureCollection, Position } from 'geojson'
+import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -9,7 +9,8 @@ import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { ROOMS_ALL } from '@/utils/map-utils'
+import { ROOMS_ALL } from '@/utils/map-constants'
+import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import { UserKindContext } from '../contexts'
@@ -146,9 +147,7 @@ const AvailableRoomsSuggestions = ({
 										setClickedElement({
 											data: room.room,
 											type: SEARCH_TYPES.ROOM,
-											center: details?.properties?.center as
-												| Position
-												| undefined,
+											center: parseMapCoordinate(details.properties?.center),
 											manual: false
 										})
 										trackEvent('Room', {
