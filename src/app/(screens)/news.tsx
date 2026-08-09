@@ -38,7 +38,7 @@ export default function NewsScreen(): React.JSX.Element {
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<View className="flex-1 web:h-full">
+		<View testID="news-screen" className="flex-1 web:h-full">
 			{isLoading ? (
 				<View className="items-center justify-center ios:pt-[140px] android:pt-10">
 					<LoadingIndicator />

@@ -30,6 +30,9 @@ const MultiSectionRadio = ({
 				<React.Fragment key={index}>
 					<View className="h-[52px]">
 						<Pressable
+							testID={`radio-option-${item.key}`}
+							accessibilityRole="radio"
+							accessibilityState={{ selected: selectedItem === item.key }}
 							onPress={() => {
 								if (Platform.OS === 'ios') {
 									void selectionAsync()

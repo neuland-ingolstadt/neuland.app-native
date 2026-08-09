@@ -235,6 +235,7 @@ export default function Profile(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="profile-screen"
 			contentContainerClassName="pb-8"
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
@@ -295,6 +296,7 @@ export default function Profile(): React.JSX.Element {
 				))}
 
 			<Pressable
+				testID="profile-logout"
 				onPress={logoutAlert}
 				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center mb-[30px] mt-2.5 min-w-copy-button-min px-10 py-3"
 				style={hairlineBorder}

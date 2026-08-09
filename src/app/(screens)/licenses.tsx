@@ -101,6 +101,7 @@ export default function Licenses(): React.JSX.Element {
 	]
 	return (
 		<ScrollView
+			testID="licenses-screen"
 			contentContainerClassName="pb-modal-bottom"
 			contentInsetAdjustmentBehavior="automatic"
 		>

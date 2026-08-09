@@ -167,6 +167,7 @@ export default function FoodDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
+			testID="food-detail-screen"
 			contentContainerClassName="mx-page pb-bottom-safe"
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}

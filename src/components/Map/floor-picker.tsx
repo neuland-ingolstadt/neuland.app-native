@@ -41,6 +41,7 @@ const FloorPicker = ({
 		<View className="mx-2 mt-[110px] absolute right-0">
 			{!showAllFloors && (
 				<Pressable
+					testID="map-floor-picker"
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
@@ -76,6 +77,7 @@ const FloorPicker = ({
 			)}
 			{showAllFloors && (
 				<Pressable
+					testID="map-floor-picker-close"
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
@@ -108,6 +110,7 @@ const FloorPicker = ({
 						const isLast = index === floors.length - 1
 						return (
 							<Pressable
+								testID={`map-floor-${floor}`}
 								onPress={() => {
 									if (Platform.OS === 'ios') {
 										void Haptics.selectionAsync()
@@ -140,6 +143,7 @@ const FloorPicker = ({
 			)}
 			{Platform.OS !== 'web' && (
 				<Pressable
+					testID="map-current-location"
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
 					}}

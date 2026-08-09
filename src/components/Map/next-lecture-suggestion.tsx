@@ -38,7 +38,7 @@ const NextLectureSuggestion = ({
 		return null
 	}
 	return (
-		<View className="mb-2.5">
+		<View testID="map-next-lecture" className="mb-2.5">
 			<View className="items-end flex-row justify-between mb-1">
 				<Text className="text-text text-label-secondary ios:text-base ios:font-semibold android:text-[13px] android:font-normal android:uppercase web:text-base web:font-semibold mb-0.5 pt-2 text-left">
 					{t('pages.map.details.room.nextLecture')}
@@ -57,6 +57,7 @@ const NextLectureSuggestion = ({
 				{nextLecture.map((lecture, key) => (
 					<React.Fragment key={key}>
 						<Pressable
+							testID="map-next-lecture-row"
 							disabled={
 								lecture.rooms.length === 0 || !isValidRoom(lecture.rooms[0])
 							}

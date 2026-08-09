@@ -41,6 +41,7 @@ export default function OrderableRowItem({
 	return (
 		<View>
 			<Pressable
+				testID={`dashboard-order-item-${item.key}`}
 				onLongPress={drag}
 				className="items-center bg-card flex-row gap-3.5 justify-center min-h-[50px] px-4"
 				style={{

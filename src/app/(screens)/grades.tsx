@@ -178,6 +178,7 @@ export default function GradesSCreen(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="grades-screen"
 			contentContainerClassName="pb-8"
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={

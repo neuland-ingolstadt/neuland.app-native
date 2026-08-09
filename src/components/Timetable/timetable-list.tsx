@@ -153,9 +153,9 @@ export default function TimetableList({
 		router.navigate('/exam')
 	}
 
-	const renderItem = ({
+	function renderItem({
 		item
-	}: ListRenderItemInfo<FlatListItem>): React.JSX.Element | null => {
+	}: ListRenderItemInfo<FlatListItem>): React.JSX.Element | null {
 		if (item.type === 'header') {
 			return <TimetableSectionHeader title={item.title} today={today} />
 		}

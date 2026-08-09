@@ -19,6 +19,7 @@ export function MemberAreaButton(): React.JSX.Element | null {
 				{t('about.formlist.neuland')}
 			</Text>
 			<Pressable
+				testID="member-area-entry"
 				onPress={() => {
 					router.navigate('/member')
 				}}

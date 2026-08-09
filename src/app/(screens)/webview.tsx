@@ -132,7 +132,10 @@ export default function NotesDetails(): React.JSX.Element {
 			.trim()
 
 		return (
-			<ScrollView contentContainerClassName="p-4 pb-[80px] bg-background">
+			<ScrollView
+				testID="lecture-webview-screen"
+				contentContainerClassName="p-4 pb-[80px] bg-background"
+			>
 				<Text className="text-text text-base leading-6">
 					{plainTextContent}
 				</Text>
@@ -141,7 +144,7 @@ export default function NotesDetails(): React.JSX.Element {
 	}
 
 	return (
-		<View className="flex-1 bg-background">
+		<View testID="lecture-webview-screen" className="flex-1 bg-background">
 			<WebView
 				source={{ html: styledHtml }}
 				scalesPageToFit

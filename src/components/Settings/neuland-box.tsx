@@ -29,6 +29,7 @@ const NeulandBox = (): React.JSX.Element | null => {
 	return (
 		<View className="mt-2.5">
 			<Pressable
+				testID="member-area-entry"
 				onPress={() => router.navigate('/member')}
 				className="ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden w-full active:opacity-90 border-border"
 			>

@@ -4,6 +4,7 @@ import type { ViewStyle } from 'react-native'
 import { Modal, Pressable, Text, View } from 'react-native'
 
 interface CustomDropdownProps<T> {
+	testID?: string
 	value?: T
 	onChange: (value: T) => void
 	options: Array<{
@@ -15,6 +16,7 @@ interface CustomDropdownProps<T> {
 }
 
 export function CustomDropdown<T>({
+	testID,
 	value,
 	onChange,
 	options,
@@ -28,6 +30,7 @@ export function CustomDropdown<T>({
 	return (
 		<>
 			<Pressable
+				testID={testID}
 				className="bg-input-background rounded-md border-border h-10 justify-center px-2.5"
 				style={[{ borderWidth: 1 }, style]}
 				onPress={() => setIsOpen(true)}
@@ -44,12 +47,14 @@ export function CustomDropdown<T>({
 				onRequestClose={() => setIsOpen(false)}
 			>
 				<Pressable
+					accessible={false}
 					className="flex-1 bg-black/50 justify-center items-center"
 					onPress={() => setIsOpen(false)}
 				>
 					<View className="bg-card rounded-lg p-2.5 w-[80%] max-h-[80%]">
 						{options.map((option) => (
 							<Pressable
+								testID={`${testID ?? 'dropdown'}-option-${String(option.value)}`}
 								key={String(option.value)}
 								className={`py-3 px-4 rounded-md ${
 									option.value === value ? 'bg-primary' : ''

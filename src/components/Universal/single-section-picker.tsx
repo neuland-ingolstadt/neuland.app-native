@@ -6,6 +6,7 @@ import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
 interface SectionPickerProps {
+	testID?: string
 	title: string
 	selectedItem: boolean
 	action: (state: boolean) => void
@@ -13,6 +14,7 @@ interface SectionPickerProps {
 }
 
 const SingleSectionPicker = ({
+	testID,
 	title,
 	selectedItem,
 	action,
@@ -28,6 +30,9 @@ const SingleSectionPicker = ({
 	return (
 		<View className="h-[52px]">
 			<Pressable
+				testID={testID}
+				accessibilityRole="checkbox"
+				accessibilityState={{ checked: selectedItem, disabled }}
 				onPress={() => {
 					if (!disabled) {
 						if (Platform.OS === 'ios') void selectionAsync()

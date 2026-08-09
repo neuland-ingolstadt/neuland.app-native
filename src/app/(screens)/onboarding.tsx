@@ -53,6 +53,7 @@ function OnboardingContinueButton({
 }: OnboardingContinueButtonProps): React.JSX.Element {
 	return (
 		<Pressable
+			testID="onboarding-continue"
 			className="self-center bg-primary rounded-md px-6 py-3.5 w-1/2"
 			onPress={onContinue}
 			disabled={disabled}

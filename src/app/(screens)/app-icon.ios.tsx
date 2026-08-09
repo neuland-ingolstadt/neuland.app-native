@@ -63,6 +63,7 @@ export default function AppIconPicker(): React.JSX.Element {
 	}
 	return (
 		<ScrollView
+			testID="app-icon-screen"
 			contentContainerClassName="self-center pb-[50px] w-full"
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
@@ -78,6 +79,12 @@ export default function AppIconPicker(): React.JSX.Element {
 						return (
 							<React.Fragment key={icon}>
 								<Pressable
+									testID={`app-icon-${icon}`}
+									accessibilityRole="radio"
+									accessibilityState={{
+										selected: unlocked && currentIcon === icon,
+										disabled: !unlocked
+									}}
 									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={
 										unlocked
@@ -143,6 +150,9 @@ export default function AppIconPicker(): React.JSX.Element {
 						appIconCategories.neuland.map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
+									testID={`app-icon-${icon}`}
+									accessibilityRole="radio"
+									accessibilityState={{ selected: currentIcon === icon }}
 									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={async () => {
 										try {
@@ -219,6 +229,9 @@ export default function AppIconPicker(): React.JSX.Element {
 						{appIconCategories[key].map((icon, index) => (
 							<React.Fragment key={icon}>
 								<Pressable
+									testID={`app-icon-${icon}`}
+									accessibilityRole="radio"
+									accessibilityState={{ selected: currentIcon === icon }}
 									className="items-center flex-row justify-between pe-5 ps-3 py-3"
 									onPress={async () => {
 										try {

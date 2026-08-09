@@ -109,6 +109,9 @@ const ItemsPickerScreen = ({
 		return (
 			<View className="mb-2 h-[52px]">
 				<Pressable
+					testID={`${type}-option-${item.key}`}
+					accessibilityRole="checkbox"
+					accessibilityState={{ checked: isSelected }}
 					className="bg-card rounded-2xl p-4 flex-row items-center justify-between h-full"
 					onPress={toggleItem}
 				>
@@ -138,6 +141,7 @@ const ItemsPickerScreen = ({
 	if (filteredEntries.length > 0) {
 		return (
 			<FlashList
+				testID={`${type}-picker`}
 				data={filteredEntries}
 				renderItem={renderItem}
 				estimatedItemSize={60}
