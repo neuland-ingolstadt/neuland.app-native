@@ -1,5 +1,8 @@
 appId: ${APP_ID}
 ---
+- openLink: "neuland://onboarding"
+- waitForAnimationToEnd:
+    timeout: 3000
 - runFlow:
     when:
       visible:

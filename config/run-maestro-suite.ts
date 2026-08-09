@@ -1,6 +1,3 @@
-const DEV_CLIENT_URL =
-	'exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081'
-
 const commonFlows = [
 	'onboarding-guest',
 	'guest-navigation',
@@ -24,6 +21,10 @@ if (suite !== 'default' && suite !== 'ios' && suite !== 'android') {
 
 const appId = suite === 'android' ? 'app.neuland' : 'de.neuland-ingolstadt.neuland-app'
 const flows = suite === 'ios' ? [...commonFlows, 'ios-app-icon'] : commonFlows
+const devServerHost =
+	process.env.DEV_SERVER_HOST ?? (suite === 'android' ? '10.0.2.2' : 'localhost')
+const devServerAddress = `${devServerHost}:8081`
+const DEV_CLIENT_URL = `exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081`
 
 interface SimctlDevice {
 	name: string
@@ -110,27 +111,32 @@ function runFlow(flow: string, deviceId: string, retry = false): boolean {
 			`APP_ID=${appId}`,
 			'-e',
 			`DEV_CLIENT_URL=${DEV_CLIENT_URL}`,
+			'-e',
+			`DEV_SERVER_ADDRESS=${devServerAddress}`,
 			`.maestro/flows/${flow}.yaml`
 		],
 		cwd: process.cwd(),
 		env: process.env,
 		stdout: 'inherit',
 		stderr: 'inherit',
-		timeout: 6 * 60 * 1000,
+		timeout: 10 * 60 * 1000,
 		killSignal: 'SIGKILL'
 	})
 
 	return result.success
 }
 
+const skipIosSimulatorRestart = process.env.MAESTRO_SKIP_SIMULATOR_RESTART === '1'
 let deviceId = process.env.MAESTRO_DEVICE_ID
 
 if (deviceId == null) {
 	deviceId =
 		suite === 'android'
 			? getConnectedAndroidDeviceId()
-			: restartBootedIosSimulator()?.udid
-} else if (suite !== 'android') {
+			: skipIosSimulatorRestart
+				? getBootedIosSimulator()?.udid
+				: restartBootedIosSimulator()?.udid
+	} else if (suite !== 'android' && !skipIosSimulatorRestart) {
 	restartBootedIosSimulator()
 }
 
@@ -141,7 +147,12 @@ if (deviceId == null) {
 
 let failures = flows.filter((flow) => !runFlow(flow, deviceId))
 
-if (failures.length > 0 && suite !== 'android' && restartBootedIosSimulator() != null) {
+if (
+	failures.length > 0 &&
+	suite !== 'android' &&
+	!skipIosSimulatorRestart &&
+	restartBootedIosSimulator() != null
+) {
 	console.log(`\nRetrying ${failures.length} failed iOS flow(s) with a fresh XCTest service.`)
 	failures = failures.filter((flow) => !runFlow(flow, deviceId, true))
 }

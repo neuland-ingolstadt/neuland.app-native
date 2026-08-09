@@ -1,0 +1,68 @@
+appId: ${APP_ID}
+name: login-as-test-account
+---
+# Credentials must be supplied at runtime through THI_TEST_USERNAME and
+# THI_TEST_PASSWORD. Never commit test-account credentials to a flow.
+- runFlow:
+    when:
+      visible:
+        id: "onboarding-continue"
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "onboarding-continue"
+            enabled: true
+          timeout: 30000
+      - tapOn:
+          id: "onboarding-continue"
+      - waitForAnimationToEnd:
+          timeout: 3000
+- runFlow:
+    when:
+      visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+    commands:
+      - tapOn: "OK"
+- runFlow:
+    when:
+      visible:
+        id: "home-screen"
+    commands:
+      - openLink: "neuland://login"
+- runFlow:
+    when:
+      visible:
+        id: "guest-login-banner"
+    commands:
+      - tapOn:
+          id: "guest-login-banner"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 120000
+- tapOn:
+    id: "login-username"
+- eraseText
+- inputText: ${THI_TEST_USERNAME}
+- runFlow:
+    when:
+      platform: Android
+      visible: "Try out your stylus"
+    commands:
+      - tapOn: "Cancel"
+- tapOn:
+    id: "login-password"
+- eraseText
+- inputText: ${THI_TEST_PASSWORD}
+- tapOn:
+    id: "login-submit"
+- runFlow:
+    when:
+      visible: '(Passwort sichern\?|Save Password\?)'
+    commands:
+      - tapOn: "(Später|Not Now|Not now)"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 120000
+- assertVisible:
+    id: "home-screen"

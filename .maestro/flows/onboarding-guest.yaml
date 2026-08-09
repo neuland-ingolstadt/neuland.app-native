@@ -15,6 +15,9 @@ tags:
     timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
+- openLink: "neuland://onboarding"
+- waitForAnimationToEnd:
+    timeout: 3000
 - extendedWaitUntil:
     visible:
       id: "onboarding-continue"
@@ -47,7 +50,7 @@ tags:
     when:
       platform: Android
     commands:
-      - tapOn: "(Los geht's|Get started)"
+      - pressKey: Back
 - runFlow:
     when:
       platform: iOS

@@ -1,5 +1,8 @@
+const devServerHost = process.env.DEV_SERVER_HOST ?? 'localhost'
+const devServerAddress = `${devServerHost}:8081`
 const DEV_CLIENT_URL =
-	'exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081'
+	process.env.DEV_CLIENT_URL ??
+	`exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081`
 const IOS_APP_ID = 'de.neuland-ingolstadt.neuland-app'
 
 const suites = {
@@ -56,6 +59,19 @@ if (deviceId == null) {
 }
 
 const suite = suites[suiteName]
+const requiresThiTestAccount = ['authenticated', 'lecture', 'logout'].includes(suiteName)
+const testAccountEnvKeys = ['THI_TEST_USERNAME', 'THI_TEST_PASSWORD'] as const
+const missingTestAccountEnv = requiresThiTestAccount
+	? testAccountEnvKeys.filter((key) => process.env[key] == null || process.env[key] === '')
+	: []
+
+if (missingTestAccountEnv.length > 0) {
+	console.error(
+		`Missing ${missingTestAccountEnv.join(' and ')}. Provide the disposable THI test account through environment variables.`
+	)
+	process.exit(2)
+}
+
 const command = [
 	'maestro',
 	'test',
@@ -65,9 +81,16 @@ const command = [
 	'-e',
 	`APP_ID=${process.env.APP_ID ?? IOS_APP_ID}`,
 	'-e',
-	`DEV_CLIENT_URL=${process.env.DEV_CLIENT_URL ?? DEV_CLIENT_URL}`,
+	`DEV_CLIENT_URL=${DEV_CLIENT_URL}`,
+	'-e',
+	`DEV_SERVER_ADDRESS=${process.env.DEV_SERVER_ADDRESS ?? devServerAddress}`,
 	`--include-tags=${suite.includeTags}`
 ]
+
+for (const key of testAccountEnvKeys) {
+	const value = process.env[key]
+	if (value != null) command.push('-e', `${key}=${value}`)
+}
 
 if ('excludeTags' in suite) {
 	command.push(`--exclude-tags=${suite.excludeTags}`)

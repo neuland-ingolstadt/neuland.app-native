@@ -5,14 +5,17 @@ tags:
   - destructive-auth
   - secure-storage
 ---
-# Precondition: a disposable THI account is signed in. This flow deletes its saved credentials.
+# Credentials are supplied to the reusable login sub-flow at runtime. This flow
+# deletes the account's saved credentials, so use a disposable test account.
 - launchApp:
-    clearState: false
+    clearState: true
     stopApp: true
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/login-as-test-account.yaml"
 - runFlow:
     file: "../subflows/open-deep-link.yaml"
     env:
@@ -37,8 +40,17 @@ tags:
 - tapOn: "(Logout|Abmelden)"
 - extendedWaitUntil:
     visible:
-      id: "login-guest"
+      id: "home-screen"
     timeout: 30000
 - assertVisible:
-    id: "login-submit"
-    enabled: false
+    id: "home-screen"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://settings"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- assertVisible:
+    id: "guest-login-banner"

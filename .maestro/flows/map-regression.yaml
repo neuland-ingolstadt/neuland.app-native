@@ -12,7 +12,6 @@ tags:
     stopApp: true
     permissions:
       notifications: deny
-      location: never
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
@@ -20,7 +19,13 @@ tags:
 - runFlow:
     file: "../subflows/complete-onboarding-as-guest.yaml"
 - runFlow:
-    file: "../subflows/open-map-tab.yaml"
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+- runFlow:
+    file: "../subflows/open-map-tab-location-allowed.yaml"
 - assertVisible:
     id: "map-canvas"
 - assertVisible:
@@ -66,8 +71,10 @@ tags:
     id: "map-search-input"
 - tapOn:
     id: "map-floor-picker"
-- assertVisible:
-    id: "map-floor-EG"
+- extendedWaitUntil:
+    visible:
+      id: "map-floor-EG"
+    timeout: 15000
 - tapOn:
     id: "map-floor-EG"
 - tapOn:

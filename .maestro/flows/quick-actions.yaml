@@ -35,17 +35,19 @@ tags:
       platform: Android
     commands:
       - swipe:
-          start: "50%, 75%"
-          end: "50%, 12%"
-          duration: 500
+          start: "50%, 90%"
+          end: "50%, 15%"
+          duration: 800
       - runFlow:
           when:
             notVisible: "Neuland Next"
           commands:
             - swipe:
-                start: "50%, 75%"
-                end: "50%, 12%"
-                duration: 500
+                start: "50%, 90%"
+                end: "50%, 15%"
+                duration: 800
+      - waitForAnimationToEnd:
+          timeout: 3000
       - extendedWaitUntil:
           visible: "Neuland Next"
           timeout: 10000
@@ -80,17 +82,19 @@ tags:
       platform: Android
     commands:
       - swipe:
-          start: "50%, 75%"
-          end: "50%, 12%"
-          duration: 500
+          start: "50%, 90%"
+          end: "50%, 15%"
+          duration: 800
       - runFlow:
           when:
             notVisible: "Neuland Next"
           commands:
             - swipe:
-                start: "50%, 75%"
-                end: "50%, 12%"
-                duration: 500
+                start: "50%, 90%"
+                end: "50%, 15%"
+                duration: 800
+      - waitForAnimationToEnd:
+          timeout: 3000
       - extendedWaitUntil:
           visible: "Neuland Next"
           timeout: 10000

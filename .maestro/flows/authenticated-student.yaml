@@ -6,15 +6,16 @@ tags:
   - student
   - persistence
 ---
-# Precondition: a dedicated test device is already signed in with a THI student account.
-# This flow intentionally never clears app state or logs the account out.
+# Credentials are supplied to the reusable login sub-flow at runtime.
 - launchApp:
-    clearState: false
+    clearState: true
     stopApp: true
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/login-as-test-account.yaml"
 - runFlow:
     file: "../subflows/open-deep-link.yaml"
     env:
@@ -198,6 +199,8 @@ tags:
           id: "map-room-detail"
       - tapOn:
           id: "map-room-detail-close"
+      - waitForAnimationToEnd:
+          timeout: 3000
 - runFlow:
     when:
       visible:
@@ -206,8 +209,9 @@ tags:
       - tapOn:
           id: "map-available-room-row"
           index: 0
-      - assertVisible:
-          id: "map-room-detail"
+      - extendedWaitUntil:
+          visible: "B106"
+          timeout: 10000
       - tapOn:
           id: "map-room-detail-close"
 - stopApp

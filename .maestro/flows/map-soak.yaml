@@ -54,7 +54,8 @@ tags:
     visible: "B106"
     timeout: 15000
 - tapOn:
-    text: "B106"
-    index: 0
-- assertVisible:
-    id: "map-room-detail"
+    id: "map-search-result-B106"
+- extendedWaitUntil:
+    visible:
+      id: "map-room-detail"
+    timeout: 15000

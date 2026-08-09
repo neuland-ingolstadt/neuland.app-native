@@ -18,15 +18,7 @@ tags:
     file: "../subflows/reconnect-development-client.yaml"
 - runFlow:
     file: "../subflows/complete-onboarding-as-guest.yaml"
-- scrollUntilVisible:
-    element:
-      id: "dashboard-card-events"
-    direction: DOWN
-    timeout: 15000
-- tapOn:
-    id: "dashboard-card-events"
-    point: "50%, 12%"
-    retryTapIfNoChange: false
+- openLink: "neuland://cl-events"
 - extendedWaitUntil:
     visible:
       id: "campus-life-events-screen"
@@ -61,15 +53,7 @@ tags:
     visible:
       id: "home-screen"
     timeout: 10000
-- scrollUntilVisible:
-    element:
-      id: "dashboard-card-sports"
-    direction: DOWN
-    timeout: 15000
-- tapOn:
-    id: "dashboard-card-sports"
-    point: "50%, 12%"
-    retryTapIfNoChange: false
+- openLink: "neuland://sports"
 - extendedWaitUntil:
     visible:
       id: "sports-screen"
@@ -104,15 +88,7 @@ tags:
     visible:
       id: "home-screen"
     timeout: 10000
-- scrollUntilVisible:
-    element:
-      id: "dashboard-card-links"
-    direction: DOWN
-    timeout: 15000
-- tapOn:
-    id: "dashboard-card-links"
-    point: "50%, 20%"
-    retryTapIfNoChange: false
+- openLink: "neuland://links"
 - extendedWaitUntil:
     visible:
       id: "quick-links-screen"

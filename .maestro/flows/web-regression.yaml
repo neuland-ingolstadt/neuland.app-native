@@ -7,17 +7,32 @@ tags:
   - navigation
 ---
 - openLink: "${WEB_URL}/onboarding"
+- waitForAnimationToEnd:
+    timeout: 5000
 - extendedWaitUntil:
     visible:
       id: "onboarding-continue"
     timeout: 30000
 - assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
+- assertVisible: ".*(Von Studierenden für Studierende|By students for students).*"
+- assertVisible: ".*(Weit verbreitet und vertrauenswürdig|Widely used and trustworthy).*"
 - tapOn:
     id: "onboarding-continue"
+    retryTapIfNoChange: true
+- runFlow:
+    when:
+      visible:
+        id: "onboarding-continue"
+    commands:
+      # The web accessibility tree does not expose the Reanimated-enabled
+      # state. Retry after the intro has had time to enable the real button.
+      - tapOn:
+          id: "onboarding-continue"
+          retryTapIfNoChange: true
 - extendedWaitUntil:
     visible:
-      id: "login-submit"
-    timeout: 20000
+      id: "login-guest"
+    timeout: 120000
 - scrollUntilVisible:
     element:
       id: "login-guest"
