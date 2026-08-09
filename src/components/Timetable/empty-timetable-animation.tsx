@@ -155,12 +155,12 @@ export const EmptyTimetableAnimation = ({
 
 						<Pressable
 							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px] border-border"
-							style={hairlineBorder}
+							style={{ ...hairlineBorder, borderColor }}
 							onPress={handleRefreshPress}
 						>
 							<Text
 								className="text-[15px] font-medium"
-								style={{ color: textColor, borderColor }}
+								style={{ color: textColor }}
 							>
 								{t('error.empty.refresh')}
 							</Text>
