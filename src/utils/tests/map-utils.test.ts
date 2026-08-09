@@ -387,6 +387,7 @@ describe('map-utils', () => {
 			mapUtils.INGOLSTADT_CENTER
 		)
 		expect(mapUtils.getCenterSingle([])).toEqual(mapUtils.INGOLSTADT_CENTER)
+		expect(mapUtils.getCenterSingle([[]])).toEqual(mapUtils.INGOLSTADT_CENTER)
 	})
 
 	it('getCenterSingle - Should calculate the center of one polygon', () => {
@@ -400,6 +401,21 @@ describe('map-utils', () => {
 		])
 		expect(center[0]).toBe(1)
 		expect(center[1]).toBe(1)
+	})
+
+	it('sortFloors - Should keep known floors ordered without mutating the input', () => {
+		const floors = ['EG', '5', '1', '4']
+		expect(mapUtils.sortFloors(floors)).toEqual(['4', '1', 'EG', '5'])
+		expect(floors).toEqual(['EG', '5', '1', '4'])
+	})
+
+	it('getBuildingCodes - Should deduplicate and sort building codes', () => {
+		expect(mapUtils.getBuildingCodes(['C', 'BN', 'A', 'C', 'S'])).toEqual([
+			'A',
+			'BN',
+			'C',
+			'S'
+		])
 	})
 
 	it('getIcon - Should return the building icon for building search types', () => {

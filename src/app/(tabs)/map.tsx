@@ -12,7 +12,7 @@ import MapScreen from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
-import type { RoomOpenings } from '@/utils/map-utils'
+import type { RoomOpenings } from '@/utils/map-room-utils'
 import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {

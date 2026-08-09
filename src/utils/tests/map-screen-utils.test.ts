@@ -8,7 +8,9 @@ import {
 	filterEtage,
 	getBuildingData,
 	getOngoingOrNextEvent,
-	getRoomData
+	getRoomData,
+	getRoomSelectionFromProperties,
+	parseMapCoordinate
 } from '../map-screen-utils'
 import type { RoomOpenings } from '../map-utils'
 
@@ -119,6 +121,30 @@ const buildEvent = (
 })
 
 describe('map-screen-utils', () => {
+	it('parseMapCoordinate - Should accept valid numeric coordinates', () => {
+		expect(parseMapCoordinate([11.4328, 48.7663])).toEqual([11.4328, 48.7663])
+		expect(parseMapCoordinate('[11.4328,48.7663]')).toEqual([11.4328, 48.7663])
+	})
+
+	it('parseMapCoordinate - Should reject malformed or out-of-range coordinates', () => {
+		expect(parseMapCoordinate(['11.4328', 48.7663])).toBeUndefined()
+		expect(parseMapCoordinate([181, 48.7663])).toBeUndefined()
+		expect(parseMapCoordinate([11.4328, Number.NaN])).toBeUndefined()
+		expect(parseMapCoordinate('not-json')).toBeUndefined()
+	})
+
+	it('getRoomSelectionFromProperties - Should require a room and normalize its center', () => {
+		expect(
+			getRoomSelectionFromProperties({
+				Raum: 'G101',
+				center: '[11.4328,48.7663]'
+			})
+		).toEqual({ room: 'G101', center: [11.4328, 48.7663] })
+		expect(
+			getRoomSelectionFromProperties({ center: [11.4328, 48.7663] })
+		).toBeUndefined()
+	})
+
 	it('filterAvailableRooms - Should return only features for rooms that are available', () => {
 		expect(
 			filterAvailableRooms(featureCollection, [{ room: 'G101' }]).map(

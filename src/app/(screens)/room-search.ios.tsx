@@ -11,7 +11,7 @@ import { usePickerBinding } from '@/hooks/usePickerBinding.ios'
 import { useRoomSearch } from '@/hooks/useRoomSearch'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
-import { ALL_BUILDINGS, ROOM_SEARCH_DURATIONS } from '@/utils/map-utils'
+import { BUILDINGS_ALL, ROOM_SEARCH_DURATIONS } from '@/utils/map-constants'
 import { toColor } from '@/utils/uniwind-utils'
 
 const maximumSearchDate = new Date(
@@ -113,7 +113,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							tint={primaryColor}
 							offset={{ x: 20, y: 0 }}
 						>
-							{ALL_BUILDINGS.map((option) => (
+							{[BUILDINGS_ALL, ...roomSearch.buildings].map((option) => (
 								<Text key={option}>{option}</Text>
 							))}
 						</Picker>
