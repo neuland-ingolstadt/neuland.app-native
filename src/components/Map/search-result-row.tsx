@@ -1,5 +1,4 @@
 import { trackEvent } from '@aptabase/react-native'
-import type { Position } from 'geojson'
 import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +8,7 @@ import { StyledBottomSheetTouchableOpacity } from '@/components/Universal/styled
 import { MapContext } from '@/contexts/map'
 import type { SEARCH_TYPES, SearchResult } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
+import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -37,7 +37,7 @@ const ResultRow = ({
 			testID={`map-search-result-${result.title}`}
 			className="items-center flex-row py-2.5"
 			onPress={() => {
-				const center = result.item.properties?.center as Position | undefined
+				const center = parseMapCoordinate(result.item.properties?.center)
 				updateSearchHistory(result)
 				setClickedElement({
 					data: result.title,

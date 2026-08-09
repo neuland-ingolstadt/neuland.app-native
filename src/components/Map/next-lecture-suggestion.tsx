@@ -1,5 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
-import type { FeatureCollection, Position } from 'geojson'
+import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -7,6 +7,7 @@ import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
@@ -78,7 +79,7 @@ const NextLectureSuggestion = ({
 								setClickedElement({
 									data: lecture.rooms[0],
 									type: SEARCH_TYPES.ROOM,
-									center: details?.properties?.center as Position | undefined,
+									center: parseMapCoordinate(details.properties?.center),
 									manual: false
 								})
 								trackEvent('Room', {

@@ -1,6 +1,8 @@
-import type { Feature, GeoJsonProperties, Position } from 'geojson'
+import type { Feature, GeoJsonProperties } from 'geojson'
 
 import type { AvailableRoom } from './utils'
+
+export type MapCoordinate = [number, number]
 
 export enum SEARCH_TYPES {
 	BUILDING = 0,
@@ -23,7 +25,7 @@ export interface BuildingOccupancy {
 export interface ClickedMapElement {
 	type: SEARCH_TYPES
 	data: string
-	center?: Position
+	center?: MapCoordinate
 	manual?: boolean
 }
 

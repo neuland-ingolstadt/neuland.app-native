@@ -1,8 +1,8 @@
 import type { FeatureCollection } from 'geojson'
 import { useMemo } from 'react'
 import type { AvailableRoom } from '@/types/utils'
+import { sortFloors } from '@/utils/map-constants'
 import { filterAvailableRooms, filterEtage } from '@/utils/map-screen-utils'
-import { FLOOR_ORDER } from '@/utils/map-utils'
 
 interface UseMapGeoJsonFiltersOptions {
 	mapOverlay: FeatureCollection | undefined
@@ -25,18 +25,17 @@ export function useMapGeoJsonFilters({
 } {
 	const uniqueEtages = useMemo(
 		() =>
-			Array.from(
-				new Set(
-					allRooms.features
-						.map((room) => {
-							const ebene = room.properties?.Ebene
-							return typeof ebene === 'string' ? ebene : ''
-						})
-						.filter((etage) => etage !== '')
+			sortFloors(
+				Array.from(
+					new Set(
+						allRooms.features
+							.map((room) => {
+								const ebene = room.properties?.Ebene
+								return typeof ebene === 'string' ? ebene : ''
+							})
+							.filter((etage) => etage !== '')
+					)
 				)
-			).sort(
-				(a: string, b: string) =>
-					FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
 			),
 		[allRooms]
 	)

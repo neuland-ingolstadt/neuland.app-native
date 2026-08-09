@@ -1,11 +1,12 @@
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { router, useLocalSearchParams } from 'expo-router'
-import type { FeatureCollection, Position } from 'geojson'
+import type { FeatureCollection } from 'geojson'
 import type { RefObject } from 'react'
 import { use, useCallback, useEffect, useRef } from 'react'
 import { MapContext } from '@/contexts/map'
-import { SEARCH_TYPES } from '@/types/map'
+import { type MapCoordinate, SEARCH_TYPES } from '@/types/map'
+import { getRoomSelectionFromProperties } from '@/utils/map-screen-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 
 type RoomSelectionOrigin = 'MapClick' | 'InAppLink'
@@ -27,7 +28,7 @@ export function useMapRoomSelection({
 }: UseMapRoomSelectionOptions): {
 	selectRoom: (options: {
 		room: string
-		center?: Position
+		center?: MapCoordinate
 		origin: RoomSelectionOrigin
 		manual: boolean
 		floor?: string
@@ -50,7 +51,7 @@ export function useMapRoomSelection({
 			floor
 		}: {
 			room: string
-			center?: Position
+			center?: MapCoordinate
 			origin: RoomSelectionOrigin
 			manual: boolean
 			floor?: string
@@ -87,9 +88,10 @@ export function useMapRoomSelection({
 
 		const room = allRooms.features.find(
 			(x) => x.properties?.Raum === params.room
-		)?.properties
+		)
+		const selection = getRoomSelectionFromProperties(room?.properties)
 
-		if (room == null) {
+		if (selection == null) {
 			roomNotFoundToast(params.room, notificationColor)
 			router.setParams({ room: '' })
 			return
@@ -97,10 +99,13 @@ export function useMapRoomSelection({
 		bottomSheetRef.current?.close()
 		selectRoom({
 			room: params.room,
-			center: room.center as Position | undefined,
+			center: selection.center,
 			origin: 'InAppLink',
 			manual: false,
-			floor: (room.Ebene as string) ?? 'EG'
+			floor:
+				typeof room?.properties?.Ebene === 'string'
+					? room.properties.Ebene
+					: 'EG'
 		})
 		router.setParams({ room: '' })
 	}, [
