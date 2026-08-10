@@ -69,6 +69,7 @@ jobs:
         run: |
           source config/ci/web-export-env.sh
           bun run licences:bundle
+          bun maplibre:worker
           bunx expo export -p web -c
 
       - name: Deploy to EAS Hosting

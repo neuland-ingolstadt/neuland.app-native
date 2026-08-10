@@ -7,7 +7,9 @@ import {
 	NavigationControl,
 	Source
 } from '@vis.gl/react-maplibre'
-import maplibregl from 'maplibre-gl'
+import type { MapMouseEvent } from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
+import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
 import { useEffect, useRef } from 'react'
 import {
@@ -25,6 +27,10 @@ import {
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import 'maplibre-gl/dist/maplibre-gl.css'
+
+// Metro cannot resolve the v6 ESM worker via import.meta.url; serve it from public/
+// (synced by `bun maplibre:worker`). Shared chunk must sit next to the worker.
+setWorkerUrl('/maplibre-gl-worker.mjs')
 
 const mapContainerStyle = {
 	height: '100%',
@@ -115,7 +121,7 @@ export default function WebMapCanvas({
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 
-	const handleMapClick = (event: maplibregl.MapMouseEvent): void => {
+	const handleMapClick = (event: MapMouseEvent): void => {
 		if (!filteredGeoJSON || !mapRef.current) {
 			return
 		}
