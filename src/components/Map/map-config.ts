@@ -3,6 +3,8 @@ export const MAP_STYLE_URLS = {
 	dark: 'https://tile.neuland.app/styles/dark/style.json'
 } as const
 
+export type MapMode = keyof typeof MAP_STYLE_URLS
+
 export const MAP_IDS = {
 	sources: {
 		allRooms: 'allRoomsSource',
