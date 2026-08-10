@@ -71,7 +71,6 @@ export default function CampusLifeOrganizersList({
 				<FlashList
 					data={organizersQuery.data}
 					keyExtractor={(item) => item.id.toString()}
-					estimatedItemSize={64}
 					renderItem={({ item }) => (
 						<OrganizerListItem
 							organizer={item}

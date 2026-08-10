@@ -13,7 +13,7 @@ import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner
 import ErrorView from '@/components/Error/error-view'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/home-header-right'
-import { FlashList, MasonryFlashList } from '@/components/Universal/styled'
+import { FlashList } from '@/components/Universal/styled'
 import WorkaroundStack from '@/components/Universal/workaround-stack'
 
 export const unstable_settings = {
@@ -162,34 +162,20 @@ const HomeScreen = memo(function HomeScreen() {
 				isCritical={false}
 			/>
 		</View>
-	) : columns === 1 ? (
+	) : (
 		<FlashList
 			testID="home-screen"
-			estimatedItemSize={130}
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
 			contentInset={{ top: 0, bottom: 90 }}
 			contentContainerClassName="pt-1.5 bg-background"
 			showsVerticalScrollIndicator={false}
 			data={shownDashboardEntries}
-			renderItem={renderSingleColumnItem}
+			renderItem={columns === 1 ? renderSingleColumnItem : renderMasonryItem}
 			keyExtractor={keyExtractor}
 			ListHeaderComponent={listHeader}
-		/>
-	) : (
-		<MasonryFlashList
-			testID="home-screen"
-			key={orientation}
-			contentInsetAdjustmentBehavior="automatic"
-			contentInset={{ top: 0, bottom: 90 }}
-			contentContainerClassName="pt-1.5 bg-background"
-			showsVerticalScrollIndicator={false}
-			data={shownDashboardEntries}
-			renderItem={renderMasonryItem}
-			keyExtractor={keyExtractor}
-			numColumns={2}
-			estimatedItemSize={114}
-			ListHeaderComponent={listHeader}
+			masonry={columns > 1}
+			numColumns={columns}
 		/>
 	)
 })

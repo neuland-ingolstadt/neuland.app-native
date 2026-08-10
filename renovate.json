@@ -21,7 +21,6 @@
 	"ignoreDeps": [
 		"@th3rdwave/react-navigation-bottom-sheet",
 		"getenv",
-		"recyclerlistview",
 		"@types/node"
 	],
 	"prBodyNotes": [
