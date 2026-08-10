@@ -18,7 +18,7 @@ import {
 	type MapMode
 } from '@/components/Map/map-config'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
-import type { ClickedMapElement } from '@/types/map'
+import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getRoomSelectionFromProperties,
 	parseMapCoordinate
@@ -35,7 +35,7 @@ interface NativeMapCanvasProps {
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
-	selectRoom: MapScreenModel['selectRoom']
+	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
 	labelColor: string
@@ -79,7 +79,7 @@ export default function NativeMapCanvas({
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
 	clickedElement,
-	selectRoom,
+	selectMapElement,
 	mapMode,
 	primaryColor,
 	labelColor,
@@ -100,10 +100,10 @@ export default function NativeMapCanvas({
 	}, [clickedElement, mapCenter, mapLoadState])
 
 	useEffect(() => {
-		if (cameraResetRequestId > 0) {
+		if (cameraResetRequestId > 0 && mapLoadState === LoadingState.LOADED) {
 			setNativeMapView(cameraRef, mapCenter)
 		}
-	}, [cameraResetRequestId, mapCenter])
+	}, [cameraResetRequestId, mapCenter, mapLoadState])
 
 	const layerStyles = getMapLayerStyles(
 		isDark,
@@ -164,8 +164,9 @@ export default function NativeMapCanvas({
 						if (selection == null) {
 							return
 						}
-						selectRoom({
+						selectMapElement({
 							room: selection.room,
+							type: SEARCH_TYPES.ROOM,
 							center: selection.center,
 							origin: 'MapClick',
 							manual: true

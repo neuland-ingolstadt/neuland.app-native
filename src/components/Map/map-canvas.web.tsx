@@ -18,7 +18,7 @@ import {
 	type MapMode
 } from '@/components/Map/map-config'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
-import type { ClickedMapElement } from '@/types/map'
+import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getRoomSelectionFromProperties,
 	parseMapCoordinate
@@ -33,14 +33,14 @@ const mapContainerStyle = {
 
 interface WebMapCanvasProps {
 	setMapLoadState: React.Dispatch<React.SetStateAction<LoadingState>>
+	mapLoadState: LoadingState
 	cameraResetRequestId: number
 	mapCenter: MapScreenModel['mapCenter']
-	mapOverlay: MapScreenModel['mapOverlay']
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
-	selectRoom: MapScreenModel['selectRoom']
+	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
 	labelColor: string
@@ -77,14 +77,14 @@ function setWebMapView(
 
 export default function WebMapCanvas({
 	setMapLoadState,
+	mapLoadState,
 	cameraResetRequestId,
 	mapCenter,
-	mapOverlay,
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
 	clickedElement,
-	selectRoom,
+	selectMapElement,
 	mapMode,
 	primaryColor,
 	labelColor,
@@ -95,17 +95,17 @@ export default function WebMapCanvas({
 	const isDark = mapMode === 'dark'
 
 	useEffect(() => {
-		if (mapRef.current == null || mapOverlay == null) {
+		if (mapRef.current == null || mapLoadState !== LoadingState.LOADED) {
 			return
 		}
 		setWebMapView(mapRef, mapCenter, clickedElement)
-	}, [clickedElement, mapCenter, mapOverlay])
+	}, [clickedElement, mapCenter, mapLoadState])
 
 	useEffect(() => {
-		if (cameraResetRequestId > 0) {
+		if (cameraResetRequestId > 0 && mapLoadState === LoadingState.LOADED) {
 			setWebMapView(mapRef, mapCenter)
 		}
-	}, [cameraResetRequestId, mapCenter])
+	}, [cameraResetRequestId, mapCenter, mapLoadState])
 
 	const layerStyles = getMapLayerStyles(
 		isDark,
@@ -129,8 +129,9 @@ export default function WebMapCanvas({
 			return
 		}
 
-		selectRoom({
+		selectMapElement({
 			room: selection.room,
+			type: SEARCH_TYPES.ROOM,
 			center: selection.center,
 			origin: 'MapClick',
 			manual: true

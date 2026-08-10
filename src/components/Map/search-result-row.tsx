@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,7 +5,7 @@ import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { StyledBottomSheetTouchableOpacity } from '@/components/Universal/styled'
 import { MapContext } from '@/contexts/map'
-import type { SEARCH_TYPES, SearchResult } from '@/types/map'
+import type { SEARCH_TYPES, SearchResult, SelectMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -16,16 +15,16 @@ import PlatformIcon from '../Universal/icon'
 
 interface ResultRowProps {
 	result: SearchResult
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
 	updateSearchHistory: (result: SearchResult) => void
 }
 
 const ResultRow = ({
 	result,
-	handlePresentModalPress,
+	selectMapElement,
 	updateSearchHistory
 }: ResultRowProps): React.JSX.Element => {
-	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
+	const { setLocalSearch } = use(MapContext)
 	const { i18n } = useTranslation()
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
@@ -39,21 +38,17 @@ const ResultRow = ({
 			onPress={() => {
 				const center = parseMapCoordinate(result.item.properties?.center)
 				updateSearchHistory(result)
-				setClickedElement({
-					data: result.title,
+				selectMapElement({
+					room: result.title,
 					type: result.item.properties?.rtype as SEARCH_TYPES,
 					center,
-					manual: false
+					origin: 'Search',
+					manual: false,
+					floor:
+						typeof result.item.properties?.Ebene === 'string'
+							? result.item.properties.Ebene
+							: 'EG'
 				})
-				setCurrentFloor({
-					floor: (result.item.properties?.Ebene as string) ?? 'EG',
-					manual: false
-				})
-				trackEvent('Room', {
-					room: result.title,
-					origin: 'Search'
-				})
-				handlePresentModalPress()
 				setLocalSearch('')
 			}}
 		>

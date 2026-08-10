@@ -13,6 +13,7 @@ import Animated, {
 import { useCSSVariable, useUniwind } from 'uniwind'
 import { StyledBottomSheet } from '@/components/Universal/styled'
 import { MapContext } from '@/contexts/map'
+import type { SelectMapElement } from '@/types/map'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import AttributionLink from './attribution-link'
 import AvailableRoomsSuggestions from './available-rooms-suggestions'
@@ -24,8 +25,8 @@ import SearchResults from './search-results'
 interface MapBottomSheetProps {
 	bottomSheetRef: React.RefObject<BottomSheet | null>
 	currentPosition: SharedValue<number>
-	handlePresentModalPress: () => void
 	allRooms: FeatureCollection
+	selectMapElement: SelectMapElement
 }
 
 const IOS_SNAP_POINTS = ['20%', '39%', '90%']
@@ -34,8 +35,8 @@ const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
 const MapBottomSheet = ({
 	bottomSheetRef,
 	currentPosition,
-	handlePresentModalPress,
-	allRooms
+	allRooms,
+	selectMapElement
 }: MapBottomSheetProps): React.JSX.Element => {
 	const { theme } = useUniwind()
 	const isDark = theme === 'dark'
@@ -169,7 +170,7 @@ const MapBottomSheet = ({
 				</View>
 
 				{searchFocused && localSearch === '' && searchHistory.length !== 0 && (
-					<SearchHistory handlePresentModalPress={handlePresentModalPress} />
+					<SearchHistory selectMapElement={selectMapElement} />
 				)}
 
 				{searchFocused && localSearch === '' && (
@@ -180,18 +181,18 @@ const MapBottomSheet = ({
 
 				{localSearch !== '' ? (
 					<SearchResults
-						handlePresentModalPress={handlePresentModalPress}
+						selectMapElement={selectMapElement}
 						allRooms={allRooms}
 					/>
 				) : searchFocused ? null : (
 					<>
 						<NextLectureSuggestion
 							allRooms={allRooms}
-							handlePresentModalPress={handlePresentModalPress}
+							selectMapElement={selectMapElement}
 						/>
 						<AvailableRoomsSuggestions
 							allRooms={allRooms}
-							handlePresentModalPress={handlePresentModalPress}
+							selectMapElement={selectMapElement}
 						/>
 						<AttributionLink />
 					</>
