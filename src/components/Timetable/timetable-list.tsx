@@ -1,7 +1,7 @@
 import {
 	FlashList,
-	type ListRenderItemInfo,
-	type FlashList as ShopifyFlashList
+	type FlashListRef,
+	type ListRenderItemInfo
 } from '@shopify/flash-list'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import type React from 'react'
@@ -58,7 +58,7 @@ export default function TimetableList({
 
 	const router = useRouter()
 	const navigation = useNavigation()
-	const listRef = useRef<ShopifyFlashList<FlatListItem>>(null)
+	const listRef = useRef<FlashListRef<FlatListItem>>(null)
 	const { t } = useTranslation('timetable')
 	const { theme } = useUniwind()
 	const primaryColor = String(
@@ -218,7 +218,6 @@ export default function TimetableList({
 					extraData={listThemeData}
 					renderItem={renderItem}
 					contentContainerStyle={listStyles.contentContainer}
-					estimatedItemSize={100}
 					keyExtractor={getTimetableFlatListKey}
 					viewabilityConfig={{
 						itemVisiblePercentThreshold: 10

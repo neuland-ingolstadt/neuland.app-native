@@ -204,11 +204,9 @@ export default function ClEventsPage({
 							data={filteredEvents}
 							renderItem={renderItem}
 							keyExtractor={(item) => item.id}
-							estimatedItemSize={70}
 							contentContainerStyle={styles.flashListContainer}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}
-							disableAutoLayout
 							refreshControl={
 								<RefreshControl
 									refreshing={isRefetchingByUserClEvents}

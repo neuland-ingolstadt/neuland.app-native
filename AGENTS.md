@@ -381,9 +381,10 @@ Docs: https://docs.uniwind.dev
 - Icons go through `@/components/Universal/Icon` (`PlatformIcon`), which renders SF
   Symbols on iOS, Material Symbols (custom font) on Android, and Lucide on Web. Always
   pass all three variants when adding a new icon.
-- For large, simple lists, prefer `@shopify/flash-list` (`FlashList` /
-  `MasonryFlashList`) and provide `estimatedItemSize`. `FlatList` / `SectionList` are
-  acceptable when grouping, APIs, or the surrounding code make them the better fit.
+- For large, simple lists, prefer `@shopify/flash-list` (`FlashList`). Use the
+  `masonry` prop for masonry grids — `MasonryFlashList` and `estimatedItemSize` are
+  gone in v2. `FlatList` / `SectionList` are acceptable when grouping, APIs, or the
+  surrounding code make them the better fit.
 - **Maps are dual-runtime**: native uses `@maplibre/maplibre-react-native`, web uses
   `maplibre-gl` + `@vis.gl/react-maplibre`. The two render trees are completely
   different, so most map screens have a `*.web.tsx` counterpart (e.g.
