@@ -1,5 +1,4 @@
 import type { FeatureCollection } from 'geojson'
-import { useMemo } from 'react'
 import type { AvailableRoom } from '@/types/utils'
 import { sortFloors } from '@/utils/map-constants'
 import { filterAvailableRooms, filterEtage } from '@/utils/map-screen-utils'
@@ -20,27 +19,21 @@ export function useMapGeoJsonFilters({
 	uniqueEtages: string[]
 	filteredGeoJSON: FeatureCollection | undefined
 	availableFilteredGeoJSON: FeatureCollection | undefined
-	hasFilteredRooms: boolean
-	hasAvailableFilteredRooms: boolean
 } {
-	const uniqueEtages = useMemo(
-		() =>
-			sortFloors(
-				Array.from(
-					new Set(
-						allRooms.features
-							.map((room) => {
-								const ebene = room.properties?.Ebene
-								return typeof ebene === 'string' ? ebene : ''
-							})
-							.filter((etage) => etage !== '')
-					)
-				)
-			),
-		[allRooms]
+	const uniqueEtages = sortFloors(
+		Array.from(
+			new Set(
+				allRooms.features
+					.map((room) => {
+						const ebene = room.properties?.Ebene
+						return typeof ebene === 'string' ? ebene : ''
+					})
+					.filter((etage) => etage !== '')
+			)
+		)
 	)
 
-	const filteredGeoJSON = useMemo(() => {
+	const filteredGeoJSON = (() => {
 		if (mapOverlay == null) {
 			return undefined
 		}
@@ -49,9 +42,9 @@ export function useMapGeoJsonFilters({
 			...mapOverlay,
 			features: filteredFeatures
 		}
-	}, [currentFloor, allRooms, mapOverlay])
+	})()
 
-	const availableFilteredGeoJSON = useMemo(() => {
+	const availableFilteredGeoJSON = (() => {
 		if (mapOverlay == null) {
 			return undefined
 		}
@@ -63,19 +56,11 @@ export function useMapGeoJsonFilters({
 			type: 'FeatureCollection' as const,
 			features: filteredFeatures
 		}
-	}, [availableRooms, filteredGeoJSON, mapOverlay])
-
-	const hasFilteredRooms =
-		filteredGeoJSON != null && filteredGeoJSON.features.length > 0
-	const hasAvailableFilteredRooms =
-		availableFilteredGeoJSON != null &&
-		availableFilteredGeoJSON.features.length > 0
+	})()
 
 	return {
 		uniqueEtages,
 		filteredGeoJSON,
-		availableFilteredGeoJSON,
-		hasFilteredRooms,
-		hasAvailableFilteredRooms
+		availableFilteredGeoJSON
 	}
 }

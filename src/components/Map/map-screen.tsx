@@ -100,8 +100,6 @@ const MapScreen = (): React.JSX.Element => {
 		uniqueEtages,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
-		hasFilteredRooms,
-		hasAvailableFilteredRooms,
 		clickedElement,
 		currentFloor,
 		selectRoom,
@@ -118,13 +116,13 @@ const MapScreen = (): React.JSX.Element => {
 	const animatedStyles = useAnimatedStyle(() => {
 		const bottom =
 			clickedElement != null
-				? currentPositionModal.value
-				: currentPosition.value
+				? currentPositionModal.get()
+				: currentPosition.get()
 
 		return {
 			transform: [{ translateY: bottom }],
-			height: opacity.value === 0 ? 0 : 'auto',
-			opacity: opacity.value
+			height: opacity.get() === 0 ? 0 : 'auto',
+			opacity: opacity.get()
 		}
 	})
 
@@ -190,9 +188,11 @@ const MapScreen = (): React.JSX.Element => {
 				return
 			}
 			fadeOutStarted.current = true
-			opacity.value = withTiming(0, { duration: 500 }, () => {
-				runOnJS(setIsVisible)(false)
-			})
+			opacity.set(
+				withTiming(0, { duration: 500 }, () => {
+					runOnJS(setIsVisible)(false)
+				})
+			)
 		}
 
 		if (regionChange) {
@@ -245,12 +245,10 @@ const MapScreen = (): React.JSX.Element => {
 					mapCenter={mapCenter}
 					filteredGeoJSON={filteredGeoJSON}
 					availableFilteredGeoJSON={availableFilteredGeoJSON}
-					hasFilteredRooms={hasFilteredRooms}
-					hasAvailableFilteredRooms={hasAvailableFilteredRooms}
 					buildingGeoJSON={buildingGeoJSON}
 					clickedElement={clickedElement}
 					selectRoom={selectRoom}
-					isDark={isDark}
+					mapMode={isDark ? 'dark' : 'light'}
 					primaryColor={primaryColor}
 					labelColor={labelColor}
 					backgroundColor={backgroundColor}

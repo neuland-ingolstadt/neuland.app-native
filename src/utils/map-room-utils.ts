@@ -1,4 +1,4 @@
-import type { Rooms, TypeStunde } from '@/types/thi-api'
+import type { Rooms } from '@/types/thi-api'
 import type { AvailableRoom } from '@/types/utils'
 import { formatISODate } from './date-utils'
 import { BUILDINGS_ALL, DURATION_PRESET, ROOMS_ALL } from './map-constants'
@@ -42,44 +42,38 @@ export function addMinutes(date: Date, minutes: number): Date {
 export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 	const isoDate = formatISODate(date)
 	const openings: RoomOpenings = {}
-	rooms
-		.filter((room) => room.datum.startsWith(isoDate))
-		.flatMap((room) => room.rtypes)
-		.flatMap((rtype) =>
-			Object.values(rtype.stunden).map((stunde) => ({
-				...stunde,
-				type: rtype.raumtyp
-			}))
-		)
-		.flatMap((stunde: TypeStunde) =>
-			stunde.raeume.map(
-				([, , room, capacity]: [string, string, number, number]) => ({
-					room: room === 0 ? ROOMS_ALL : room.toString(),
-					type: stunde.type.replace(/ \(.*\)$/, '').trim(),
-					from: new Date(stunde.von),
-					until: new Date(stunde.bis),
-					capacity
-				})
-			)
-		)
-		.forEach(({ room, type, from, until, capacity }) => {
-			let roomOpenings = openings[room]
-			if (roomOpenings == null) {
-				roomOpenings = []
-				openings[room] = roomOpenings
+	for (const room of rooms) {
+		if (!room.datum.startsWith(isoDate)) {
+			continue
+		}
+
+		for (const rtype of room.rtypes) {
+			for (const stunde of rtype.stunden) {
+				for (const [, , roomNumber, capacity] of stunde.raeume) {
+					const roomName = roomNumber === 0 ? ROOMS_ALL : roomNumber.toString()
+					const type = rtype.raumtyp.replace(/ \(.*\)$/, '').trim()
+					const from = new Date(stunde.von)
+					const until = new Date(stunde.bis)
+					let roomOpenings = openings[roomName]
+					if (roomOpenings == null) {
+						roomOpenings = []
+						openings[roomName] = roomOpenings
+					}
+					const opening = roomOpenings.find(
+						(existingOpening) =>
+							from <= addMinutes(existingOpening.until, IGNORE_GAPS) &&
+							until >= addMinutes(existingOpening.from, -IGNORE_GAPS)
+					)
+					if (opening != null) {
+						opening.from = minDate(from, opening.from)
+						opening.until = maxDate(until, opening.until)
+					} else {
+						roomOpenings.push({ type, from, until, capacity })
+					}
+				}
 			}
-			const opening = roomOpenings.find(
-				(existingOpening) =>
-					from <= addMinutes(existingOpening.until, IGNORE_GAPS) &&
-					until >= addMinutes(existingOpening.from, -IGNORE_GAPS)
-			)
-			if (opening != null) {
-				opening.from = minDate(from, opening.from)
-				opening.until = maxDate(until, opening.until)
-			} else {
-				roomOpenings.push({ type, from, until, capacity })
-			}
-		})
+		}
+	}
 	return openings
 }
 

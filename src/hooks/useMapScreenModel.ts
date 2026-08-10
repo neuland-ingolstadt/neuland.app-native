@@ -1,7 +1,7 @@
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { router } from 'expo-router'
 import type { RefObject } from 'react'
-import { use, useCallback, useMemo } from 'react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserKindContext } from '@/components/contexts'
 import { modalSection } from '@/components/Map/modal-sections'
@@ -45,8 +45,6 @@ export interface MapScreenModel {
 	availableFilteredGeoJSON: ReturnType<
 		typeof useMapGeoJsonFilters
 	>['availableFilteredGeoJSON']
-	hasFilteredRooms: boolean
-	hasAvailableFilteredRooms: boolean
 	clickedElement: ClickedMapElement | null
 	currentFloor: { floor: string; manual: boolean } | null
 	setCurrentFloor: (value: { floor: string; manual: boolean }) => void
@@ -87,15 +85,15 @@ export function useMapScreenModel({
 		availableRooms
 	})
 
-	const handleSheetChangesModal = useCallback(() => {
+	const handleSheetChangesModal = (): void => {
 		setClickedElement(null)
 		if (currentFloor?.manual !== true) {
 			setCurrentFloor({ floor: 'EG', manual: false })
 		}
 		bottomSheetRef.current?.snapToIndex(1)
-	}, [bottomSheetRef, currentFloor, setClickedElement, setCurrentFloor])
+	}
 
-	const roomData: RoomData = useMemo(() => {
+	const roomData: RoomData = (() => {
 		switch (clickedElement?.type) {
 			case SEARCH_TYPES.ROOM:
 				return getRoomData(
@@ -122,27 +120,17 @@ export function useMapScreenModel({
 					occupancies: null
 				} as RoomData
 		}
-	}, [
-		availableRooms,
-		clickedElement,
-		i18n,
-		mapQueries.allRooms,
-		roomOpenings,
-		t
-	])
+	})()
 
 	const setSelectedLecturer = useRouteParamsStore(
 		(state) => state.setSelectedLecturer
 	)
-	const handleOpenLecturer = useCallback(
-		(lecturer: NormalizedLecturer) => {
-			setSelectedLecturer(lecturer)
-			router.navigate('/lecturer')
-		},
-		[setSelectedLecturer]
-	)
+	const handleOpenLecturer = (lecturer: NormalizedLecturer): void => {
+		setSelectedLecturer(lecturer)
+		router.navigate('/lecturer')
+	}
 
-	const lecturerSection = useMemo(() => {
+	const lecturerSection = (() => {
 		if (
 			clickedElement?.type !== SEARCH_TYPES.ROOM ||
 			mapQueries.lecturers == null
@@ -168,16 +156,14 @@ export function useMapScreenModel({
 				}))
 			}
 		]
-	}, [clickedElement, handleOpenLecturer, mapQueries.lecturers, t])
+	})()
 
-	const baseSections = useMemo(
-		() => modalSection(roomData, LOCATIONS, userKind === USER_GUEST),
-		[roomData, userKind]
+	const baseSections = modalSection(
+		roomData,
+		LOCATIONS,
+		userKind === USER_GUEST
 	)
-	const allSections = useMemo(
-		() => [...lecturerSection, ...baseSections],
-		[baseSections, lecturerSection]
-	)
+	const allSections = [...lecturerSection, ...baseSections]
 
 	return {
 		mapCenter:
