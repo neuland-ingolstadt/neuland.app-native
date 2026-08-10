@@ -70,7 +70,6 @@ const MapScreen = (): React.JSX.Element => {
 
 	const {
 		mapCenter,
-		mapOverlay,
 		overlayError,
 		allRooms,
 		buildingGeoJSON,
@@ -79,7 +78,7 @@ const MapScreen = (): React.JSX.Element => {
 		availableFilteredGeoJSON,
 		clickedElement,
 		currentFloor,
-		selectRoom,
+		selectMapElement,
 		roomData,
 		allSections,
 		handleSheetChangesModal
@@ -189,14 +188,14 @@ const MapScreen = (): React.JSX.Element => {
 			)}
 			<WebMapCanvas
 				setMapLoadState={setMapLoadState}
+				mapLoadState={mapLoadState}
 				cameraResetRequestId={cameraResetRequestId}
 				mapCenter={mapCenter}
-				mapOverlay={mapOverlay}
 				filteredGeoJSON={filteredGeoJSON}
 				availableFilteredGeoJSON={availableFilteredGeoJSON}
 				buildingGeoJSON={buildingGeoJSON}
 				clickedElement={clickedElement}
-				selectRoom={selectRoom}
+				selectMapElement={selectMapElement}
 				mapMode={isDark ? 'dark' : 'light'}
 				primaryColor={primaryColor}
 				labelColor={labelColor}
@@ -234,8 +233,8 @@ const MapScreen = (): React.JSX.Element => {
 			<MapBottomSheet
 				bottomSheetRef={bottomSheetRef}
 				currentPosition={currentPosition}
-				handlePresentModalPress={handlePresentModalPress}
 				allRooms={allRooms}
+				selectMapElement={selectMapElement}
 			/>
 			<BottomSheetDetailModal
 				bottomSheetModalRef={bottomSheetModalRef}

@@ -5,11 +5,13 @@ import type { FeatureCollection } from 'geojson'
 import type { RefObject } from 'react'
 import { use, useCallback, useEffect, useRef } from 'react'
 import { MapContext } from '@/contexts/map'
-import { type MapCoordinate, SEARCH_TYPES } from '@/types/map'
+import {
+	SEARCH_TYPES,
+	type SelectMapElement,
+	type SelectMapElementOptions
+} from '@/types/map'
 import { getRoomSelectionFromProperties } from '@/utils/map-screen-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
-
-type RoomSelectionOrigin = 'MapClick' | 'InAppLink'
 
 interface UseMapRoomSelectionOptions {
 	allRooms: FeatureCollection
@@ -25,15 +27,7 @@ export function useMapRoomSelection({
 	handlePresentModalPress,
 	bottomSheetRef,
 	notificationColor
-}: UseMapRoomSelectionOptions): {
-	selectRoom: (options: {
-		room: string
-		center?: MapCoordinate
-		origin: RoomSelectionOrigin
-		manual: boolean
-		floor?: string
-	}) => void
-} {
+}: UseMapRoomSelectionOptions): { selectMapElement: SelectMapElement } {
 	const params = useLocalSearchParams<{ room: string }>()
 	const { localSearch, setClickedElement, setCurrentFloor } = use(MapContext)
 	const handlePresentModalPressRef = useRef(handlePresentModalPress)
@@ -42,23 +36,18 @@ export function useMapRoomSelection({
 		handlePresentModalPressRef.current = handlePresentModalPress
 	}, [handlePresentModalPress])
 
-	const selectRoom = useCallback(
+	const selectMapElement = useCallback(
 		({
 			room,
+			type,
 			center,
 			origin,
 			manual,
 			floor
-		}: {
-			room: string
-			center?: MapCoordinate
-			origin: RoomSelectionOrigin
-			manual: boolean
-			floor?: string
-		}) => {
+		}: SelectMapElementOptions) => {
 			setClickedElement({
 				data: room,
-				type: SEARCH_TYPES.ROOM,
+				type,
 				center,
 				manual
 			})
@@ -97,8 +86,9 @@ export function useMapRoomSelection({
 			return
 		}
 		bottomSheetRef.current?.close()
-		selectRoom({
+		selectMapElement({
 			room: params.room,
+			type: SEARCH_TYPES.ROOM,
 			center: selection.center,
 			origin: 'InAppLink',
 			manual: false,
@@ -114,7 +104,7 @@ export function useMapRoomSelection({
 		allRooms,
 		notificationColor,
 		bottomSheetRef,
-		selectRoom
+		selectMapElement
 	])
 
 	useEffect(() => {
@@ -123,5 +113,5 @@ export function useMapRoomSelection({
 		}
 	}, [localSearch, params.room])
 
-	return { selectRoom }
+	return { selectMapElement }
 }

@@ -5,7 +5,7 @@ import { LayoutAnimation, Platform, Pressable, Text, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
-import type { SearchResult } from '@/types/map'
+import type { SearchResult, SelectMapElement } from '@/types/map'
 import { toColor } from '@/utils/uniwind-utils'
 
 import Divider from '../Universal/divider'
@@ -13,11 +13,11 @@ import PlatformIcon from '../Universal/icon'
 import ResultRow from './search-result-row'
 
 interface SearchHistoryProps {
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
 }
 
 const SearchHistory = ({
-	handlePresentModalPress
+	selectMapElement
 }: SearchHistoryProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const notificationColor = toColor(useCSSVariable('--color-notification'))
@@ -88,7 +88,7 @@ const SearchHistory = ({
 							<View className="bg-card px-3 py-[3px] w-full">
 								<ResultRow
 									result={history}
-									handlePresentModalPress={handlePresentModalPress}
+									selectMapElement={selectMapElement}
 									updateSearchHistory={addToSearchHistory}
 								/>
 							</View>

@@ -1,4 +1,3 @@
-import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
@@ -7,7 +6,7 @@ import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
-import { SEARCH_TYPES } from '@/types/map'
+import { SEARCH_TYPES, type SelectMapElement } from '@/types/map'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { ROOMS_ALL } from '@/utils/map-constants'
 import { parseMapCoordinate } from '@/utils/map-screen-utils'
@@ -20,12 +19,12 @@ import LoadingIndicator from '../Universal/loading-indicator'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
 }
 
 const AvailableRoomsSuggestions = ({
 	allRooms,
-	handlePresentModalPress
+	selectMapElement
 }: AvailableRoomsSuggestionsProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
@@ -36,7 +35,7 @@ const AvailableRoomsSuggestions = ({
 		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
 	)
 	const contrastOnPrimary = getContrastColor(primaryColor)
-	const { setClickedElement, availableRooms, setCurrentFloor } = use(MapContext)
+	const { availableRooms } = use(MapContext)
 
 	return (
 		<View testID="map-available-rooms">
@@ -140,22 +139,14 @@ const AvailableRoomsSuggestions = ({
 											| string
 											| undefined
 
-										setCurrentFloor({
-											floor: etage ?? 'EG',
-											manual: false
-										})
-										setClickedElement({
-											data: room.room,
+										selectMapElement({
+											room: room.room,
 											type: SEARCH_TYPES.ROOM,
 											center: parseMapCoordinate(details.properties?.center),
-											manual: false
+											origin: 'AvailableRoomsSuggestion',
+											manual: false,
+											floor: etage ?? 'EG'
 										})
-										trackEvent('Room', {
-											room: room.room,
-											origin: 'AvailableRoomsSuggestion'
-										})
-
-										handlePresentModalPress()
 									}}
 								>
 									<View className="items-center flex-row flex-1 justify-between">
