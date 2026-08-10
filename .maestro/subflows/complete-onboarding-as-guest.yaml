@@ -36,6 +36,12 @@ appId: ${APP_ID}
       - tapOn: "OK"
 - tapOn:
     id: "login-guest"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
 - extendedWaitUntil:
     visible:
       id: "home-screen"

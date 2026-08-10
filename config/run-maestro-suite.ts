@@ -5,8 +5,8 @@ const commonFlows = [
 	'food-regression',
 	'settings-persistence',
 	'public-content-and-links',
-	'map-location-allowed',
 	'map-location-denied',
+	'map-location-allowed',
 	'native-controls-and-share',
 	'dashboard-context-menu',
 	'quick-actions'

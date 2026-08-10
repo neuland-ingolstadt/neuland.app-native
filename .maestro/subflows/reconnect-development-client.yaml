@@ -14,6 +14,11 @@ appId: ${APP_ID}
           timeout: 10000
       - runFlow:
           when:
+            visible: "http://localhost:8081"
+          commands:
+            - tapOn: "http://localhost:8081"
+      - runFlow:
+          when:
             visible: "Enter URL manually"
           commands:
             - tapOn: "Enter URL manually"
@@ -25,19 +30,33 @@ appId: ${APP_ID}
                   visible: "Connect"
                 commands:
                   - tapOn: "Connect"
-      - tapOn:
-          text: "(Open|Öffnen)"
-          optional: true
-      - tapOn:
-          text: "Continue"
-          optional: true
-      - runFlow:
-          when:
-            visible:
-              id: "xmark"
+      - repeat:
+          times: 3
           commands:
-            - tapOn:
-                id: "xmark"
+            - waitForAnimationToEnd:
+                timeout: 5000
+            - runFlow:
+                when:
+                  visible: "http://localhost:8081"
+                commands:
+                  - tapOn: "http://localhost:8081"
+            - runFlow:
+                when:
+                  visible: "(Open|Öffnen)"
+                commands:
+                  - tapOn: "(Open|Öffnen)"
+            - runFlow:
+                when:
+                  visible: "Continue"
+                commands:
+                  - tapOn: "Continue"
+            - runFlow:
+                when:
+                  visible:
+                    id: "xmark"
+                commands:
+                  - tapOn:
+                      id: "xmark"
 - repeat:
     times: 3
     commands:

@@ -17,6 +17,12 @@ tags:
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
 - runFlow:
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+- runFlow:
     file: "../subflows/complete-onboarding-as-guest.yaml"
 - runFlow:
     file: "../subflows/open-map-tab-location-allowed.yaml"

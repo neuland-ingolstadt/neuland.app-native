@@ -8,6 +8,12 @@ appId: ${APP_ID}
       visible: "(While using the app|Bei Nutzung der App)"
     commands:
       - tapOn: "(While using the app|Bei Nutzung der App)"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
 - extendedWaitUntil:
     visible:
       id: "map-screen"
