@@ -1,11 +1,10 @@
-import { trackEvent } from '@aptabase/react-native'
 import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
-import { SEARCH_TYPES } from '@/types/map'
+import { SEARCH_TYPES, type SelectMapElement } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
@@ -17,14 +16,14 @@ import PlatformIcon from '../Universal/icon'
 
 interface NextLectureSuggestionsProps {
 	allRooms: FeatureCollection
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
 }
 
 const NextLectureSuggestion = ({
 	allRooms,
-	handlePresentModalPress
+	selectMapElement
 }: NextLectureSuggestionsProps): React.JSX.Element | null => {
-	const { setClickedElement, nextLecture, setCurrentFloor } = use(MapContext)
+	const { nextLecture } = use(MapContext)
 	const { t } = useTranslation('common')
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
@@ -72,22 +71,14 @@ const NextLectureSuggestion = ({
 									return
 								}
 								const etage = (details?.properties?.Ebene as string) ?? 'EG'
-								setCurrentFloor({
-									floor: etage,
-									manual: false
-								})
-								setClickedElement({
-									data: lecture.rooms[0],
+								selectMapElement({
+									room: lecture.rooms[0],
 									type: SEARCH_TYPES.ROOM,
 									center: parseMapCoordinate(details.properties?.center),
-									manual: false
+									origin: 'NextLecture',
+									manual: false,
+									floor: etage
 								})
-								trackEvent('Room', {
-									room: lecture.rooms[0],
-									origin: 'NextLecture'
-								})
-
-								handlePresentModalPress()
 							}}
 						>
 							<View className="items-center flex-row flex-1 justify-between">

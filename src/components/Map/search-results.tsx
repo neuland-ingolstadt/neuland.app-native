@@ -8,19 +8,19 @@ import { Alert, Platform, SectionList, Text } from 'react-native'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import type { SearchResult } from '@/types/map'
+import type { SearchResult, SelectMapElement } from '@/types/map'
 
 import Divider from '../Universal/divider'
 import ResultRow from './search-result-row'
 
 interface SearchResultsProps {
-	handlePresentModalPress: () => void
 	allRooms: FeatureCollection
+	selectMapElement: SelectMapElement
 }
 
 const SearchResults = ({
-	handlePresentModalPress,
-	allRooms
+	allRooms,
+	selectMapElement
 }: SearchResultsProps): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
 	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
@@ -111,15 +111,12 @@ const SearchResults = ({
 		updateSearchHistory(newSearchHistory)
 	}
 
-	const renderItem = useCallback(
-		({ item }: { item: SearchResult }) => (
-			<ResultRow
-				result={item}
-				handlePresentModalPress={handlePresentModalPress}
-				updateSearchHistory={addToSearchHistory}
-			/>
-		),
-		[handlePresentModalPress, addToSearchHistory]
+	const renderItem = ({ item }: { item: SearchResult }): React.JSX.Element => (
+		<ResultRow
+			result={item}
+			selectMapElement={selectMapElement}
+			updateSearchHistory={addToSearchHistory}
+		/>
 	)
 
 	const renderSectionHeader = useCallback(

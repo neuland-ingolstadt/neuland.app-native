@@ -11,6 +11,7 @@ import { useMapGeoJsonFilters } from '@/hooks/useMapGeoJsonFilters'
 import { useMapQueries } from '@/hooks/useMapQueries'
 import { useMapRoomSelection } from '@/hooks/useMapRoomSelection'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { SelectMapElement } from '@/types/map'
 import {
 	type ClickedMapElement,
 	type RoomData,
@@ -48,7 +49,7 @@ export interface MapScreenModel {
 	clickedElement: ClickedMapElement | null
 	currentFloor: { floor: string; manual: boolean } | null
 	setCurrentFloor: (value: { floor: string; manual: boolean }) => void
-	selectRoom: ReturnType<typeof useMapRoomSelection>['selectRoom']
+	selectMapElement: SelectMapElement
 	roomData: RoomData
 	allSections: ReturnType<typeof modalSection>
 	handleSheetChangesModal: () => void
@@ -71,7 +72,7 @@ export function useMapScreenModel({
 		setCurrentFloor
 	} = use(MapContext)
 	const mapQueries = useMapQueries()
-	const { selectRoom } = useMapRoomSelection({
+	const { selectMapElement } = useMapRoomSelection({
 		allRooms: mapQueries.allRooms,
 		mapLoadState,
 		handlePresentModalPress,
@@ -175,7 +176,7 @@ export function useMapScreenModel({
 		clickedElement,
 		currentFloor,
 		setCurrentFloor,
-		selectRoom,
+		selectMapElement,
 		roomData,
 		allSections,
 		handleSheetChangesModal

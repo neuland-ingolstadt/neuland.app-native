@@ -29,6 +29,24 @@ export interface ClickedMapElement {
 	manual?: boolean
 }
 
+export type MapSelectionOrigin =
+	| 'MapClick'
+	| 'InAppLink'
+	| 'Search'
+	| 'AvailableRoomsSuggestion'
+	| 'NextLecture'
+
+export interface SelectMapElementOptions {
+	room: string
+	type: SEARCH_TYPES
+	center?: MapCoordinate
+	origin: MapSelectionOrigin
+	manual: boolean
+	floor?: string
+}
+
+export type SelectMapElement = (options: SelectMapElementOptions) => void
+
 export interface SearchResult {
 	title: string
 	subtitle: string
