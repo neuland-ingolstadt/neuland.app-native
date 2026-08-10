@@ -107,35 +107,22 @@ const HomeScreen = memo(function HomeScreen() {
 
 	const listHeader = useMemo(
 		() => (
-			<>
+			<View className={columns > 1 ? '-mx-1.5' : undefined}>
 				<RueWarningBannerContainer />
 				{announcementHeader}
-			</>
+			</View>
 		),
-		[announcementHeader]
+		[announcementHeader, columns]
 	)
 
-	const renderSingleColumnItem = useCallback(
+	const renderItem = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		({ item }: { item: any }) => (
-			<View className="mx-page my-1.5">{item.card()}</View>
+			<View className={columns > 1 ? 'my-1.5 mx-1.5' : 'mx-page my-1.5'}>
+				{item.card()}
+			</View>
 		),
-		[]
-	)
-
-	const renderMasonryItem = useCallback(
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		({ item, index }: { item: any; index: number }) => {
-			const paddingStyle =
-				index % 2 === 0 ? { marginRight: 6 } : { marginLeft: 6 }
-
-			return (
-				<View className="mx-page my-1.5" style={paddingStyle}>
-					{item.card()}
-				</View>
-			)
-		},
-		[]
+		[columns]
 	)
 
 	const keyExtractor = useCallback(
@@ -168,10 +155,12 @@ const HomeScreen = memo(function HomeScreen() {
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
 			contentInset={{ top: 0, bottom: 90 }}
-			contentContainerClassName="pt-1.5 bg-background"
+			contentContainerClassName={
+				columns > 1 ? 'px-1.5 pt-1.5 bg-background' : 'pt-1.5 bg-background'
+			}
 			showsVerticalScrollIndicator={false}
 			data={shownDashboardEntries}
-			renderItem={columns === 1 ? renderSingleColumnItem : renderMasonryItem}
+			renderItem={renderItem}
 			keyExtractor={keyExtractor}
 			ListHeaderComponent={listHeader}
 			masonry={columns > 1}
