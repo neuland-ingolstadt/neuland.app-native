@@ -1,9 +1,9 @@
 import type { FeatureCollection } from 'geojson'
 import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, type TextInput, View } from 'react-native'
+import { Keyboard, Text, type TextInput, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
-import { BottomSheet } from '@/components/Universal/bottom-sheet'
+import { BottomSheet, type Detent } from '@/components/Universal/bottom-sheet'
 import { useSheetPosition } from '@/components/Universal/use-sheet-position'
 import { MapContext } from '@/contexts/map'
 import type { SelectMapElement } from '@/types/map'
@@ -21,7 +21,7 @@ import { SEARCH_FULL, SEARCH_HALF } from './sheet-detents'
 interface MapBottomSheetProps {
 	index: number
 	onIndexChange: (index: number) => void
-	detents: number[]
+	detents: Detent[]
 	currentPosition: SharedValue<number>
 	allRooms: FeatureCollection
 	selectMapElement: SelectMapElement
@@ -41,21 +41,24 @@ const MapBottomSheet = ({
 	const textInputRef = useRef<TextInput>(null)
 	const [searchFocused, setSearchFocused] = React.useState(false)
 
+	React.useEffect(() => {
+		if (index > SEARCH_HALF) {
+			return
+		}
+		textInputRef.current?.blur()
+		Keyboard.dismiss()
+		if (localSearch !== '') {
+			setLocalSearch('')
+		}
+	}, [index, localSearch, setLocalSearch])
+
 	return (
 		<BottomSheet
 			index={index}
 			detents={detents}
 			animateIn={false}
 			surface={<BottomSheetBackground />}
-			onIndexChange={(nextIndex) => {
-				onIndexChange(nextIndex)
-				if (nextIndex <= SEARCH_HALF) {
-					if (localSearch !== '') {
-						setLocalSearch('')
-					}
-					textInputRef.current?.blur()
-				}
-			}}
+			onIndexChange={onIndexChange}
 			style={sheetHostStyle}
 			{...sheetPosition}
 		>

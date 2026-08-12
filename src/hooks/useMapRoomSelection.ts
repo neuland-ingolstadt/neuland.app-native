@@ -2,6 +2,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
 import { use, useCallback, useEffect, useRef } from 'react'
+import { Keyboard } from 'react-native'
 import { MapContext } from '@/contexts/map'
 import {
 	SEARCH_TYPES,
@@ -43,6 +44,7 @@ export function useMapRoomSelection({
 			manual,
 			floor
 		}: SelectMapElementOptions) => {
+			Keyboard.dismiss()
 			setClickedElement({
 				data: room,
 				type,

@@ -83,6 +83,12 @@ function triggerToggleHaptic(): void {
 	}
 }
 
+function triggerResetHaptic(): void {
+	if (Platform.OS !== 'web') {
+		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+	}
+}
+
 const FloorPicker = ({
 	floors,
 	showAllFloors,
@@ -158,14 +164,12 @@ const FloorPicker = ({
 		toggleShowAllFloors()
 	}, [toggleShowAllFloors])
 
-	const handleLongPress = useCallback(() => {
+	const resetToGroundFloor = useCallback(() => {
 		if (currentFloor?.floor === 'EG') {
-			handleToggle()
 			return
 		}
 		setCurrentFloor({ floor: 'EG', manual: true })
-		triggerSelectionHaptic()
-	}, [currentFloor?.floor, handleToggle, setCurrentFloor])
+	}, [currentFloor?.floor, setCurrentFloor])
 
 	const handleSelectFloor = useCallback(
 		(floor: string) => {
@@ -227,13 +231,15 @@ const FloorPicker = ({
 		})
 
 	const longPress = Gesture.LongPress()
-		.enabled(!showAllFloors)
-		.minDuration(450)
+		.enabled(!showAllFloors && currentFloor?.floor !== 'EG')
+		.minDuration(400)
+		.maxDistance(12)
 		.onStart(() => {
-			runOnJS(handleLongPress)()
+			runOnJS(triggerResetHaptic)()
+			runOnJS(resetToGroundFloor)()
 		})
 
-	const collapsedGestures = Gesture.Exclusive(pan, longPress, tap)
+	const collapsedGestures = Gesture.Exclusive(Gesture.Race(pan, longPress), tap)
 
 	const closeStyle = useAnimatedStyle(() => ({
 		width: CELL,
@@ -265,7 +271,7 @@ const FloorPicker = ({
 	})
 
 	const listStyle = useAnimatedStyle(() => ({
-		width: CELL,
+		width: '100%',
 		transform: [
 			{
 				translateY: interpolate(
@@ -279,7 +285,7 @@ const FloorPicker = ({
 	}))
 
 	const pillStyle = useAnimatedStyle(() => ({
-		width: CELL,
+		width: '100%',
 		height: CELL,
 		opacity: interpolate(
 			expanded.value,

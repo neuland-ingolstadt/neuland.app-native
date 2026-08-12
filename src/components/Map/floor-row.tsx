@@ -40,20 +40,22 @@ export const FloorRow = memo(function FloorRow({
 			accessibilityRole="button"
 			accessibilityState={{ selected: isCurrent }}
 			accessibilityLabel={floorLabel(floor)}
-			className="items-center justify-center"
+			className="w-full items-center justify-center"
 			style={{
 				height: CELL,
-				width: CELL,
+				width: '100%',
 				backgroundColor: isCurrent && interactive ? 'transparent' : cardColor,
 				borderBottomColor: borderColor,
 				borderBottomWidth: isLast || !interactive ? 0 : 1
 			}}
 		>
 			<Text
-				className="font-medium text-[15px]"
+				className="w-full text-center font-medium text-[15px]"
 				style={{
 					color: isCurrent && interactive ? contrastColor : textColor,
-					fontVariant: ['tabular-nums']
+					fontVariant: ['tabular-nums'],
+					includeFontPadding: false,
+					textAlign: 'center'
 				}}
 			>
 				{floorLabel(floor)}

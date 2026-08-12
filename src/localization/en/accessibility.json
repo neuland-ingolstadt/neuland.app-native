@@ -15,7 +15,7 @@
 	"map": {
 		"centerOnCurrentLocation": "Center on current location",
 		"floorPicker": "Floor picker",
-		"floorPickerHint": "Swipe up or down to change floor. Double tap to show all floors."
+		"floorPickerHint": "Swipe up or down to change floor. Double tap to show all floors. Long press to return to ground floor."
 	},
 	"dashboard": {
 		"moveUp": "Move up",

@@ -20,6 +20,7 @@ import { OsmCopyright } from '@/components/Map/osm-copyright'
 import {
 	DETAIL_HIDDEN,
 	DETAIL_OPEN,
+	detentHeight,
 	getMapDetailDetents,
 	getMapSearchDetents,
 	SEARCH_HALF,
@@ -60,7 +61,9 @@ const MapScreen = (): React.JSX.Element => {
 	)
 	const [searchIndex, setSearchIndex] = useState(SEARCH_HALF)
 	const [detailIndex, setDetailIndex] = useState(DETAIL_HIDDEN)
-	const currentPosition = useSharedValue(searchDetents[SEARCH_HALF] ?? 0)
+	const currentPosition = useSharedValue(
+		detentHeight(searchDetents[SEARCH_HALF])
+	)
 	const currentPositionModal = useSharedValue(0)
 	const [disableFollowUser, setDisableFollowUser] = useState(false)
 	const [showAllFloors, setShowAllFloors] = useState(false)

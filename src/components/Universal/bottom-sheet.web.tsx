@@ -28,6 +28,21 @@ export type {
 	PositionChangeEventData
 }
 
+export function programmatic(
+	value: Exclude<Detent, { value: unknown }>
+): Detent {
+	return { value, programmatic: true }
+}
+
+function isProgrammaticDetent(detent: Detent | undefined): boolean {
+	return (
+		typeof detent === 'object' &&
+		detent != null &&
+		'programmatic' in detent &&
+		detent.programmatic === true
+	)
+}
+
 function detentToHeight(detent: Detent, maxHeight: number): number {
 	if (typeof detent === 'number') {
 		return detent
@@ -38,10 +53,18 @@ function detentToHeight(detent: Detent, maxHeight: number): number {
 	return detentToHeight(detent.value, maxHeight)
 }
 
-function snapToDetent(position: number, heights: number[]): number {
+function snapToDetent(
+	position: number,
+	heights: number[],
+	draggable: boolean[]
+): number {
+	'worklet'
 	let nearest = 0
 	let best = Number.POSITIVE_INFINITY
 	for (let i = 0; i < heights.length; i++) {
+		if (draggable[i] !== true) {
+			continue
+		}
 		const distance = Math.abs(heights[i] - position)
 		if (distance < best) {
 			best = distance
@@ -73,9 +96,16 @@ export function BottomSheet({
 		() => detents.map((detent) => detentToHeight(detent, windowHeight)),
 		[detents, windowHeight]
 	)
+	const draggable = useMemo(
+		() => detents.map((detent) => !isProgrammaticDetent(detent)),
+		[detents]
+	)
 	const heightSV = useSharedValue(heights[index] ?? 0)
 	const startHeight = useSharedValue(heights[index] ?? 0)
-	const minHeight = heights[0] ?? 0
+	const collapsedHeight = heights[0] ?? 0
+	const minHeight =
+		heights.find((_, detentIndex) => draggable[detentIndex] === true) ??
+		collapsedHeight
 	const maxHeight = heights[heights.length - 1] ?? windowHeight
 
 	useEffect(() => {
@@ -108,7 +138,7 @@ export function BottomSheet({
 			heightSV.set(next)
 		})
 		.onEnd(() => {
-			const nextIndex = snapToDetent(heightSV.get(), heights)
+			const nextIndex = snapToDetent(heightSV.get(), heights, draggable)
 			heightSV.set(
 				withSpring(heights[nextIndex] ?? 0, { damping: 20, stiffness: 200 })
 			)
@@ -124,7 +154,7 @@ export function BottomSheet({
 	return (
 		<GestureDetector gesture={pan}>
 			<Animated.View
-				pointerEvents={index === 0 && minHeight === 0 ? 'none' : 'auto'}
+				pointerEvents={index === 0 && collapsedHeight === 0 ? 'none' : 'auto'}
 				style={[styles.sheet, style, sheetStyle]}
 			>
 				{surface}
