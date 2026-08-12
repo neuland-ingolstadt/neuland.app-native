@@ -1,4 +1,3 @@
-import type BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import type { FeatureCollection } from 'geojson'
 import React, { use, useRef } from 'react'
@@ -11,29 +10,34 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { useCSSVariable, useUniwind } from 'uniwind'
-import { StyledBottomSheet } from '@/components/Universal/styled'
+import { BottomSheet } from '@/components/Universal/bottom-sheet'
+import { useSheetPosition } from '@/components/Universal/use-sheet-position'
 import { MapContext } from '@/contexts/map'
 import type { SelectMapElement } from '@/types/map'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 import AttributionLink from './attribution-link'
 import AvailableRoomsSuggestions from './available-rooms-suggestions'
 import BottomSheetBackground from './bottom-sheet-background'
+import { MapSheetHandle } from './map-sheet-handle'
 import NextLectureSuggestion from './next-lecture-suggestion'
 import SearchHistory from './search-history'
 import SearchResults from './search-results'
+import { sheetHostStyle } from './sheet-chrome'
+import { SEARCH_FULL, SEARCH_HALF } from './sheet-detents'
 
 interface MapBottomSheetProps {
-	bottomSheetRef: React.RefObject<BottomSheet | null>
+	index: number
+	onIndexChange: (index: number) => void
+	detents: number[]
 	currentPosition: SharedValue<number>
 	allRooms: FeatureCollection
 	selectMapElement: SelectMapElement
 }
 
-const IOS_SNAP_POINTS = ['20%', '39%', '90%']
-const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
-
 const MapBottomSheet = ({
-	bottomSheetRef,
+	index,
+	onIndexChange,
+	detents,
 	currentPosition,
 	allRooms,
 	selectMapElement
@@ -43,7 +47,6 @@ const MapBottomSheet = ({
 	const { t } = useTranslation('common')
 	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)
 	const labelColor = toColor(useCSSVariable('--color-label'))
-	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
 	const borderColor = String(
 		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
@@ -56,6 +59,7 @@ const MapBottomSheet = ({
 		: Color(cardColor)
 				.darken(Platform.OS === 'ios' ? 0.03 : 0.01)
 				.hex()
+	const sheetPosition = useSheetPosition(currentPosition)
 
 	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	const textInputRef = useRef<any>(null)
@@ -87,27 +91,26 @@ const MapBottomSheet = ({
 	const width = t('misc.cancel').length * 11
 
 	return (
-		<StyledBottomSheet
-			ref={bottomSheetRef}
-			accessible={false}
-			index={1}
-			snapPoints={Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS}
-			backgroundComponent={BottomSheetBackground}
-			animatedPosition={currentPosition}
-			keyboardBehavior="extend"
-			onChange={(index) => {
-				if (index <= 1) {
+		<BottomSheet
+			index={index}
+			detents={detents}
+			animateIn={false}
+			surface={<BottomSheetBackground />}
+			onIndexChange={(nextIndex) => {
+				onIndexChange(nextIndex)
+				if (nextIndex <= SEARCH_HALF) {
 					if (localSearch !== '') {
 						setLocalSearch('')
 					}
 					textInputRef.current?.blur()
 				}
 			}}
-			enableDynamicSizing={false}
-			handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
+			style={sheetHostStyle}
+			{...sheetPosition}
 		>
+			<MapSheetHandle />
 			<View className="px-page">
-				<View className="flex-row h-10 mb-2.5">
+				<View className="flex-row h-10 mb-2.5 mt-1">
 					<TextInput
 						testID="map-search-input"
 						ref={textInputRef}
@@ -130,7 +133,7 @@ const MapBottomSheet = ({
 						onFocus={() => {
 							setSearchFocused(true)
 							animate(width)
-							bottomSheetRef.current?.expand()
+							onIndexChange(SEARCH_FULL)
 						}}
 						onBlur={() => {
 							if (blurTimeoutRef.current) {
@@ -153,7 +156,7 @@ const MapBottomSheet = ({
 							onPress={() => {
 								setLocalSearch('')
 								textInputRef.current?.blur()
-								bottomSheetRef.current?.snapToIndex(1)
+								onIndexChange(SEARCH_HALF)
 							}}
 							className="self-center ps-2.5 pe-0.5"
 						>
@@ -198,7 +201,7 @@ const MapBottomSheet = ({
 					</>
 				)}
 			</View>
-		</StyledBottomSheet>
+		</BottomSheet>
 	)
 }
 

@@ -42,14 +42,29 @@ export function addMinutes(date: Date, minutes: number): Date {
 export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 	const isoDate = formatISODate(date)
 	const openings: RoomOpenings = {}
+	if (!Array.isArray(rooms)) {
+		return openings
+	}
+
 	for (const room of rooms) {
-		if (!room.datum.startsWith(isoDate)) {
+		if (!room.datum.startsWith(isoDate) || !Array.isArray(room.rtypes)) {
 			continue
 		}
 
 		for (const rtype of room.rtypes) {
+			if (!Array.isArray(rtype.stunden)) {
+				continue
+			}
 			for (const stunde of rtype.stunden) {
-				for (const [, , roomNumber, capacity] of stunde.raeume) {
+				if (!Array.isArray(stunde.raeume)) {
+					continue
+				}
+				for (const slot of stunde.raeume) {
+					if (!Array.isArray(slot) || slot.length < 4) {
+						continue
+					}
+					const roomNumber = slot[2]
+					const capacity = slot[3]
 					const roomName = roomNumber === 0 ? ROOMS_ALL : roomNumber.toString()
 					const type = rtype.raumtyp.replace(/ \(.*\)$/, '').trim()
 					const from = new Date(stunde.von)

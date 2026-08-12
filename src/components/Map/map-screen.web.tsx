@@ -1,8 +1,6 @@
-import type BottomSheet from '@gorhom/bottom-sheet'
-import type { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Appearance,
@@ -10,6 +8,7 @@ import {
 	Linking,
 	Pressable,
 	Text,
+	useWindowDimensions,
 	View
 } from 'react-native'
 import Animated, {
@@ -24,6 +23,14 @@ import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-mod
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import WebMapCanvas from '@/components/Map/map-canvas.web'
+import {
+	DETAIL_HIDDEN,
+	DETAIL_OPEN,
+	getMapDetailDetents,
+	getMapSearchDetents,
+	SEARCH_HALF,
+	SEARCH_HIDDEN
+} from '@/components/Map/sheet-detents'
 import { useMapScreenModel } from '@/hooks/useMapScreenModel'
 import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -47,9 +54,18 @@ const MapScreen = (): React.JSX.Element => {
 		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
 	)
 	const { t } = useTranslation('common')
-	const bottomSheetRef = useRef<BottomSheet>(null)
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-	const currentPosition = useSharedValue(0)
+	const { height: windowHeight } = useWindowDimensions()
+	const searchDetents = useMemo(
+		() => getMapSearchDetents(windowHeight),
+		[windowHeight]
+	)
+	const detailDetents = useMemo(
+		() => getMapDetailDetents(windowHeight),
+		[windowHeight]
+	)
+	const [searchIndex, setSearchIndex] = useState(SEARCH_HALF)
+	const [detailIndex, setDetailIndex] = useState(DETAIL_HIDDEN)
+	const currentPosition = useSharedValue(searchDetents[SEARCH_HALF] ?? 0)
 	const currentPositionModal = useSharedValue(0)
 	const [showAllFloors, setShowAllFloors] = useState(false)
 
@@ -63,9 +79,15 @@ const MapScreen = (): React.JSX.Element => {
 		setShowAllFloors(!showAllFloors)
 	}
 
+	const hideSearchSheet = useCallback(() => {
+		setSearchIndex(SEARCH_HIDDEN)
+	}, [])
+	const restoreSearchSheet = useCallback(() => {
+		setSearchIndex(SEARCH_HALF)
+	}, [])
 	const handlePresentModalPress = useCallback(() => {
-		bottomSheetRef.current?.close()
-		bottomSheetModalRef.current?.present()
+		setSearchIndex(SEARCH_HIDDEN)
+		setDetailIndex(DETAIL_OPEN)
 	}, [])
 
 	const {
@@ -84,19 +106,34 @@ const MapScreen = (): React.JSX.Element => {
 		handleSheetChangesModal
 	} = useMapScreenModel({
 		mapLoadState,
-		bottomSheetRef,
+		hideSearchSheet,
+		restoreSearchSheet,
 		handlePresentModalPress,
 		notificationColor
 	})
 
+	const detailIndexRef = useRef(detailIndex)
+	detailIndexRef.current = detailIndex
+
+	const handleDetailIndexChange = useCallback(
+		(next: number) => {
+			const wasOpen = detailIndexRef.current !== DETAIL_HIDDEN
+			setDetailIndex(next)
+			if (wasOpen && next === DETAIL_HIDDEN) {
+				handleSheetChangesModal()
+			}
+		},
+		[handleSheetChangesModal]
+	)
+
 	const animatedStyles = useAnimatedStyle(() => {
-		const bottom =
+		const sheetFromBottom =
 			clickedElement != null
 				? currentPositionModal.get()
 				: currentPosition.get()
 
 		return {
-			transform: [{ translateY: bottom }],
+			bottom: sheetFromBottom,
 			height: opacity.get() === 0 ? 0 : 'auto',
 			opacity: opacity.get()
 		}
@@ -104,29 +141,29 @@ const MapScreen = (): React.JSX.Element => {
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
-			bottomSheetModalRef.current?.close()
+			handleDetailIndexChange(DETAIL_HIDDEN)
 		})
 
 		return () => {
 			subscription.remove()
 		}
-	}, [])
+	}, [handleDetailIndexChange])
 
 	useEffect(() => {
 		// @ts-expect-error wrong type
 		const unsubscribe = navigation.addListener('tabPress', () => {
-			bottomSheetModalRef.current?.close()
+			handleDetailIndexChange(DETAIL_HIDDEN)
 			setCameraResetRequestId((previous) => previous + 1)
 		})
 
 		return unsubscribe
-	}, [navigation])
+	}, [handleDetailIndexChange, navigation])
 
 	useEffect(() => {
 		if (clickedElement != null && currentFloor?.manual === true) {
-			bottomSheetModalRef.current?.close()
+			handleDetailIndexChange(DETAIL_HIDDEN)
 		}
-	}, [currentFloor])
+	}, [clickedElement, currentFloor, handleDetailIndexChange])
 
 	const layerStyles = {
 		osmBackground: {
@@ -212,7 +249,7 @@ const MapScreen = (): React.JSX.Element => {
 			{mapLoadState === LoadingState.LOADED && (
 				<Animated.View
 					className="items-end h-[30px] me-1 absolute right-0 z-[99]"
-					style={[animatedStyles, { top: -22 }]}
+					style={animatedStyles}
 				>
 					<Pressable
 						onPress={() => {
@@ -231,14 +268,17 @@ const MapScreen = (): React.JSX.Element => {
 				</Animated.View>
 			)}
 			<MapBottomSheet
-				bottomSheetRef={bottomSheetRef}
+				index={searchIndex}
+				onIndexChange={setSearchIndex}
+				detents={searchDetents}
 				currentPosition={currentPosition}
 				allRooms={allRooms}
 				selectMapElement={selectMapElement}
 			/>
 			<BottomSheetDetailModal
-				bottomSheetModalRef={bottomSheetModalRef}
-				handleSheetChangesModal={handleSheetChangesModal}
+				index={detailIndex}
+				onIndexChange={handleDetailIndexChange}
+				detents={detailDetents}
 				currentPositionModal={currentPositionModal}
 				roomData={roomData}
 				modalSection={allSections}

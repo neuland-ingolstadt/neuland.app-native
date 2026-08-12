@@ -1,5 +1,3 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import Color from 'color'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -7,23 +5,24 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import {
-	StyledBottomSheetModal,
-	StyledBottomSheetView
-} from '@/components/Universal/styled'
+import { BottomSheet } from '@/components/Universal/bottom-sheet'
+import { useSheetPosition } from '@/components/Universal/use-sheet-position'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
+import type { MaterialIcon } from '@/types/material-icons'
 import { handleShareModal } from '@/utils/map-actions'
 import { toColor } from '@/utils/uniwind-utils'
 import FormList from '../Universal/form-list'
-import PlatformIcon from '../Universal/icon'
+import PlatformIcon, { type WebIcon } from '../Universal/icon'
 import BottomSheetBackground from './bottom-sheet-background'
+import { MapSheetHandle } from './map-sheet-handle'
+import { sheetHostStyle } from './sheet-chrome'
+import { DETAIL_HIDDEN } from './sheet-detents'
 
 interface BottomSheetDetailModalProps {
-	bottomSheetModalRef: React.RefObject<
-		import('@gorhom/bottom-sheet').BottomSheetModal | null
-	>
-	handleSheetChangesModal: () => void
+	index: number
+	onIndexChange: (index: number) => void
+	detents: number[]
 	currentPositionModal: SharedValue<number>
 	roomData: RoomData
 	modalSection: FormListSections[]
@@ -31,6 +30,68 @@ interface BottomSheetDetailModalProps {
 
 interface ReportLinkProps {
 	roomTitle: string
+}
+
+interface SheetActionButtonProps {
+	testID: string
+	accessibilityLabel: string
+	onPress: () => void
+	iosFilledSymbol: string
+	androidName: MaterialIcon
+	webName: WebIcon
+}
+
+const IOS_ACTION_SIZE = 38
+
+const SheetActionButton = ({
+	testID,
+	accessibilityLabel,
+	onPress,
+	iosFilledSymbol,
+	androidName,
+	webName
+}: SheetActionButtonProps): React.JSX.Element => {
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label-secondary')) ?? '#8e8e93'
+	)
+	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
+
+	return (
+		<Pressable
+			testID={testID}
+			accessible
+			accessibilityRole="button"
+			accessibilityLabel={accessibilityLabel}
+			onPress={onPress}
+			hitSlop={8}
+			className={
+				Platform.OS === 'ios'
+					? 'items-center justify-center'
+					: 'h-10 w-10 items-center justify-center rounded-full bg-label-background'
+			}
+			style={
+				Platform.OS === 'ios'
+					? { width: IOS_ACTION_SIZE, height: IOS_ACTION_SIZE }
+					: undefined
+			}
+		>
+			<PlatformIcon
+				ios={{
+					name: iosFilledSymbol,
+					size: IOS_ACTION_SIZE - 7,
+					renderMode: 'hierarchical'
+				}}
+				android={{ name: androidName, size: 22 }}
+				web={{ name: webName, size: 18 }}
+				style={{
+					color: Platform.OS === 'ios' ? labelColor : textColor,
+					...(Platform.OS === 'ios'
+						? { width: IOS_ACTION_SIZE, height: IOS_ACTION_SIZE }
+						: {})
+				}}
+			/>
+		</Pressable>
+	)
 }
 
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
@@ -74,115 +135,85 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	)
 }
 
-const IOS_SNAP_POINTS = ['39%', '57%', '85%']
-const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
-
 export const BottomSheetDetailModal = ({
-	bottomSheetModalRef,
-	handleSheetChangesModal,
+	index,
+	onIndexChange,
+	detents,
 	currentPositionModal,
 	roomData,
 	modalSection
 }: BottomSheetDetailModalProps): React.JSX.Element => {
+	const { t } = useTranslation(['common', 'accessibility'])
 	const [copied, setCopied] = useState(false)
-	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
-	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
-	const iconColor = Color(textColor).darken(0.1).hex()
+	const sheetPosition = useSheetPosition(currentPositionModal)
 
 	return (
-		<BottomSheetModalProvider>
-			<StyledBottomSheetModal
-				index={0}
-				// @ts-expect-error withUniwind ref generic mismatch
-				ref={bottomSheetModalRef}
-				snapPoints={
-					Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS
-				}
-				onDismiss={handleSheetChangesModal}
-				backgroundComponent={BottomSheetBackground}
-				animatedPosition={currentPositionModal}
-				handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
-			>
-				<StyledBottomSheetView
-					testID="map-room-detail"
-					className="flex-1 px-page"
-				>
-					<View className="flex-row justify-between pb-0">
-						<Text className="text-text text-[26px] font-semibold text-left">
+		<BottomSheet
+			index={index}
+			detents={detents}
+			animateIn={false}
+			surface={<BottomSheetBackground />}
+			onIndexChange={onIndexChange}
+			style={sheetHostStyle}
+			{...sheetPosition}
+		>
+			<View testID="map-room-detail" className="flex-1 px-page">
+				<MapSheetHandle />
+				<View className="flex-row items-start gap-3 px-2 mt-1">
+					<View className="flex-1 shrink">
+						<Text
+							className="text-text ios:text-[28px] ios:leading-8.5 ios:font-bold android:text-2xl android:leading-8 android:font-semibold web:text-[28px] web:leading-8.5 web:font-bold"
+							numberOfLines={2}
+						>
 							{roomData.title}
 						</Text>
-						<View className="flex-row gap-2.5 mb-[3px]">
-							{roomData.type === SEARCH_TYPES.ROOM && (
-								<Pressable
-									testID="map-room-share"
-									onPress={() => {
-										if (Platform.OS === 'web') {
-											setCopied(true)
-											setTimeout(() => setCopied(false), 1000)
-										}
-										handleShareModal(roomData.title)
-									}}
-									className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]"
-								>
-									<PlatformIcon
-										ios={{
-											name: copied ? 'checkmark' : 'square.and.arrow.up',
-											size: 14,
-											weight: 'bold'
-										}}
-										android={{
-											name: copied ? 'check' : 'share',
-											size: 16
-										}}
-										web={{
-											name: copied ? 'Check' : 'Share',
-											size: 16
-										}}
-										style={{
-											color: iconColor,
-											marginRight: Platform.OS === 'android' ? 2 : 0,
-											marginBottom: Platform.OS === 'ios' ? 3 : 0
-										}}
-									/>
-								</Pressable>
-							)}
-							<Pressable
-								testID="map-room-detail-close"
-								onPress={() => {
-									bottomSheetModalRef.current?.close()
-								}}
+						{roomData.subtitle !== '' && (
+							<Text
+								className="text-label text-[15px] leading-5 mt-0.5"
+								numberOfLines={2}
 							>
-								<View className="items-center bg-card ios:rounded-full android:rounded-[25px] web:rounded-[25px] h-[34px] justify-center p-[7px] w-[34px]">
-									<PlatformIcon
-										ios={{
-											name: 'xmark',
-											size: 13,
-											weight: 'bold'
-										}}
-										android={{
-											name: 'expand_more',
-											size: 22
-										}}
-										web={{
-											name: 'X',
-											size: 22
-										}}
-										style={{
-											color: iconColor,
-											marginTop: Platform.OS === 'ios' ? 1 : 0
-										}}
-									/>
-								</View>
-							</Pressable>
-						</View>
+								{roomData.subtitle}
+							</Text>
+						)}
 					</View>
-					<Text className="text-text text-base">{roomData.subtitle}</Text>
-					<View className="self-center my-4 w-full">
-						<FormList sections={modalSection} />
+					<View className="flex-row items-center gap-2 shrink-0 pt-0.5">
+						{roomData.type === SEARCH_TYPES.ROOM && (
+							<SheetActionButton
+								testID="map-room-share"
+								accessibilityLabel={t('button.share', { ns: 'accessibility' })}
+								onPress={() => {
+									if (Platform.OS === 'web') {
+										setCopied(true)
+										setTimeout(() => setCopied(false), 1000)
+									}
+									handleShareModal(roomData.title)
+								}}
+								iosFilledSymbol={
+									copied
+										? 'checkmark.circle.fill'
+										: 'square.and.arrow.up.circle.fill'
+								}
+								androidName={copied ? 'check' : 'share'}
+								webName={copied ? 'Check' : 'Share'}
+							/>
+						)}
+						<SheetActionButton
+							testID="map-room-detail-close"
+							accessibilityLabel={t('button.close', { ns: 'accessibility' })}
+							onPress={() => {
+								onIndexChange(DETAIL_HIDDEN)
+							}}
+							iosFilledSymbol="xmark.circle.fill"
+							androidName="close"
+							webName="X"
+						/>
 					</View>
-					<ReportLink roomTitle={roomData.title} />
-				</StyledBottomSheetView>
-			</StyledBottomSheetModal>
-		</BottomSheetModalProvider>
+				</View>
+				<View className="self-center my-4 w-full">
+					<FormList sections={modalSection} />
+				</View>
+				<ReportLink roomTitle={roomData.title} />
+			</View>
+		</BottomSheet>
 	)
 }

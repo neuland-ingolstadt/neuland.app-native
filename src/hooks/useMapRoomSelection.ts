@@ -1,8 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
-import type BottomSheet from '@gorhom/bottom-sheet'
 import { router, useLocalSearchParams } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
-import type { RefObject } from 'react'
 import { use, useCallback, useEffect, useRef } from 'react'
 import { MapContext } from '@/contexts/map'
 import {
@@ -17,7 +15,7 @@ interface UseMapRoomSelectionOptions {
 	allRooms: FeatureCollection
 	mapLoadState: LoadingState
 	handlePresentModalPress: () => void
-	bottomSheetRef: RefObject<BottomSheet | null>
+	hideSearchSheet: () => void
 	notificationColor: string
 }
 
@@ -25,7 +23,7 @@ export function useMapRoomSelection({
 	allRooms,
 	mapLoadState,
 	handlePresentModalPress,
-	bottomSheetRef,
+	hideSearchSheet,
 	notificationColor
 }: UseMapRoomSelectionOptions): { selectMapElement: SelectMapElement } {
 	const params = useLocalSearchParams<{ room: string }>()
@@ -85,7 +83,7 @@ export function useMapRoomSelection({
 			router.setParams({ room: '' })
 			return
 		}
-		bottomSheetRef.current?.close()
+		hideSearchSheet()
 		selectMapElement({
 			room: params.room,
 			type: SEARCH_TYPES.ROOM,
@@ -103,7 +101,7 @@ export function useMapRoomSelection({
 		mapLoadState,
 		allRooms,
 		notificationColor,
-		bottomSheetRef,
+		hideSearchSheet,
 		selectMapElement
 	])
 

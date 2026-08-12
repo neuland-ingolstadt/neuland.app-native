@@ -47,7 +47,6 @@
 		"@expo/metro-runtime": "~6.1.2",
 		"@expo/vector-icons": "^15.0.3",
 		"@flipt-io/flipt": "^1.5.0",
-		"@gorhom/bottom-sheet": "5.2.14",
 		"@howljs/calendar-kit": "2.5.6",
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
 		"@maplibre/maplibre-react-native": "11.3.6",
@@ -59,10 +58,10 @@
 		"@react-navigation/native-stack": "^7.3.16",
 		"@react-navigation/stack": "^7.6.13",
 		"@shopify/flash-list": "2.3.2",
+		"@swmansion/react-native-bottom-sheet": "0.16.2",
 		"@tanstack/query-sync-storage-persister": "5.101.4",
 		"@tanstack/react-query": "5.101.4",
 		"@tanstack/react-query-persist-client": "5.101.4",
-		"@th3rdwave/react-navigation-bottom-sheet": "0.3.2",
 		"@vis.gl/react-maplibre": "8.1.2",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"burnt": "0.13.0",
@@ -79,6 +78,7 @@
 		"expo-crypto": "~15.0.9",
 		"expo-dev-client": "~6.0.21",
 		"expo-font": "~14.0.12",
+		"expo-glass-effect": "~0.1.10",
 		"expo-haptics": "~15.0.8",
 		"expo-image": "~3.0.11",
 		"expo-linear-gradient": "~15.0.8",
@@ -160,7 +160,6 @@
 		"typescript": "~5.9.2"
 	},
 	"patchedDependencies": {
-		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch"
 	},
 	"trustedDependencies": [

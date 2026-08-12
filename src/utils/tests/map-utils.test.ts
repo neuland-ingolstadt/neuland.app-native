@@ -171,6 +171,38 @@ describe('map-utils', () => {
 		expect(openings.Alle[0].capacity).toBe(999)
 	})
 
+	it('getRoomOpenings - Should skip malformed room slots instead of throwing', () => {
+		const data = [
+			{
+				datum: '2026-04-07T00:00:00',
+				rtypes: [
+					{
+						raumtyp: 'PC-Pool',
+						stunden: [
+							{
+								von: '2026-04-07T08:00:00',
+								bis: '2026-04-07T09:00:00',
+								type: 'PC-Pool',
+								raeume: [{}, ['', ''], ['', '', 110, 20]]
+							}
+						]
+					}
+				]
+			},
+			{
+				datum: '2026-04-07T00:00:00',
+				rtypes: null
+			}
+		]
+
+		const openings = mapUtils.getRoomOpenings(
+			data as never,
+			new Date('2026-04-07')
+		)
+		expect(openings['110']).toHaveLength(1)
+		expect(openings['110'][0].capacity).toBe(20)
+	})
+
 	it('getRoomOpenings - Should keep separate openings for non-overlapping slots', () => {
 		const data = [
 			{

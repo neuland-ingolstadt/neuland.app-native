@@ -1,9 +1,8 @@
 import type React from 'react'
 import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { StyledBottomSheetTouchableOpacity } from '@/components/Universal/styled'
 import { MapContext } from '@/contexts/map'
 import type { SEARCH_TYPES, SearchResult, SelectMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -32,7 +31,7 @@ const ResultRow = ({
 	const iconColor = getContrastColor(primaryColor)
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
-		<StyledBottomSheetTouchableOpacity
+		<Pressable
 			testID={`map-search-result-${result.title}`}
 			className="items-center flex-row py-2.5"
 			onPress={() => {
@@ -82,7 +81,7 @@ const ResultRow = ({
 					{result.item.properties?.[roomTypeKey] ?? result.subtitle}
 				</Text>
 			</View>
-		</StyledBottomSheetTouchableOpacity>
+		</Pressable>
 	)
 }
 

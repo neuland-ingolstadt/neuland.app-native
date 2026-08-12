@@ -18,7 +18,7 @@ Neuland Next uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className
 - **Tokens**: `@theme` + `@layer theme` / `@variant light|dark` in `global.css`; mirror `src/styles/themes.ts`
 - **Theme sync**: `useUniwindThemeSync` in `provider.tsx` — do not duplicate preference logic
 - **Helpers**: `@/utils/uniwind-utils` (`hairlineBorder`, `toColor`)
-- **Styled wrappers**: `@/components/Universal/styled` for FlashList, BottomSheet, expo-image
+- **Styled wrappers**: `@/components/Universal/styled` for FlashList, expo-image
 - **Types**: run `bun uniwind:types` after changing `global.css`
 
 ```tsx

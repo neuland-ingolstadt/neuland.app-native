@@ -1,6 +1,4 @@
-import type BottomSheet from '@gorhom/bottom-sheet'
 import { router } from 'expo-router'
-import type { RefObject } from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserKindContext } from '@/components/contexts'
@@ -29,7 +27,8 @@ const LOCATIONS: Record<string, string> = {
 
 interface UseMapScreenModelOptions {
 	mapLoadState: LoadingState
-	bottomSheetRef: RefObject<BottomSheet | null>
+	hideSearchSheet: () => void
+	restoreSearchSheet: () => void
 	handlePresentModalPress: () => void
 	notificationColor: string
 }
@@ -57,7 +56,8 @@ export interface MapScreenModel {
 
 export function useMapScreenModel({
 	mapLoadState,
-	bottomSheetRef,
+	hideSearchSheet,
+	restoreSearchSheet,
 	handlePresentModalPress,
 	notificationColor
 }: UseMapScreenModelOptions): MapScreenModel {
@@ -76,7 +76,7 @@ export function useMapScreenModel({
 		allRooms: mapQueries.allRooms,
 		mapLoadState,
 		handlePresentModalPress,
-		bottomSheetRef,
+		hideSearchSheet,
 		notificationColor
 	})
 	const mapFilters = useMapGeoJsonFilters({
@@ -91,7 +91,7 @@ export function useMapScreenModel({
 		if (currentFloor?.manual !== true) {
 			setCurrentFloor({ floor: 'EG', manual: false })
 		}
-		bottomSheetRef.current?.snapToIndex(1)
+		restoreSearchSheet()
 	}
 
 	const roomData: RoomData = (() => {

@@ -152,16 +152,18 @@ const FloorPicker = ({
 					accessibilityLabel={t('map.centerOnCurrentLocation')}
 				>
 					<View
-						className="rounded-[10px] border mt-[5px] overflow-hidden"
+						className="rounded-[10px] border mt-[5px]"
 						style={{
 							borderColor,
-							backgroundColor: cardColor,
-							opacity: locationPermissionGranted ? 1 : 0.5
+							backgroundColor: isDark ? 'rgb(18, 18, 18)' : 'rgb(255, 255, 255)'
 						}}
 					>
 						<View className="content-center items-center self-center h-[38px] justify-center w-[38px]">
 							<PlatformIcon
-								style={{ color: labelColor }}
+								style={{
+									color: labelColor,
+									opacity: locationPermissionGranted ? 1 : 0.5
+								}}
 								ios={{
 									name: 'location.fill',
 									size: 18
