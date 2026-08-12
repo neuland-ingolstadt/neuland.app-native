@@ -113,7 +113,7 @@
 		"react-native-mmkv": "^4.3.2",
 		"react-native-nitro-modules": "^0.36.1",
 		"react-native-pager-view": "6.9.1",
-		"react-native-reanimated": "3.19.1",
+		"react-native-reanimated": "~4.1.1",
 		"react-native-safe-area-context": "~5.6.2",
 		"react-native-screens": "~4.16.0",
 		"react-native-select-dropdown": "^4.0.1",
@@ -164,13 +164,5 @@
 	},
 	"trustedDependencies": [
 		"@biomejs/biome"
-	],
-	"expo": {
-		"install": {
-			"exclude": [
-				"@shopify/flash-list",
-				"react-native-reanimated"
-			]
-		}
-	}
+	]
 }

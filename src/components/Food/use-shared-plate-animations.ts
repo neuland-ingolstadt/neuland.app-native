@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics'
 import { useEffect } from 'react'
+import type { ViewStyle } from 'react-native'
 import {
 	Easing,
 	interpolateColor,
@@ -61,7 +62,7 @@ export const useSharedPlateAnimations = ({
 		)
 	}, [])
 
-	const plateAnimatedStyle = useAnimatedStyle(() => {
+	const plateAnimatedStyle = useAnimatedStyle<ViewStyle>(() => {
 		const tapScale = enableTapAnimations ? 1 - platePressPulse.value * 0.05 : 1
 
 		return {
@@ -75,7 +76,7 @@ export const useSharedPlateAnimations = ({
 		}
 	})
 
-	const plateInnerAnimatedStyle = useAnimatedStyle(() => {
+	const plateInnerAnimatedStyle = useAnimatedStyle<ViewStyle>(() => {
 		if (enableTapAnimations) {
 			const progress = Math.max(
 				0,
