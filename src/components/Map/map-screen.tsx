@@ -284,6 +284,7 @@ const MapScreen = (): React.JSX.Element => {
 					disableFollowUser={disableFollowUser}
 					onRegionChange={setRegionChange}
 					focusPaddingBottom={focusPaddingBottom}
+					overlayFloor={currentFloor?.floor ?? 'EG'}
 				/>
 				{overlayError === null && (
 					<FloorPicker

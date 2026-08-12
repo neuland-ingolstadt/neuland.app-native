@@ -1,4 +1,5 @@
 import type { FeatureCollection } from 'geojson'
+import { useMemo } from 'react'
 import type { AvailableRoom } from '@/types/utils'
 import { sortFloors } from '@/utils/map-constants'
 import { filterAvailableRooms, filterEtage } from '@/utils/map-screen-utils'
@@ -20,43 +21,44 @@ export function useMapGeoJsonFilters({
 	filteredGeoJSON: FeatureCollection | undefined
 	availableFilteredGeoJSON: FeatureCollection | undefined
 } {
-	const uniqueEtages = sortFloors(
-		Array.from(
-			new Set(
-				allRooms.features
-					.map((room) => {
-						const ebene = room.properties?.Ebene
-						return typeof ebene === 'string' ? ebene : ''
-					})
-					.filter((etage) => etage !== '')
-			)
-		)
+	const floor = currentFloor?.floor ?? 'EG'
+
+	const uniqueEtages = useMemo(
+		() =>
+			sortFloors(
+				Array.from(
+					new Set(
+						allRooms.features
+							.map((room) => {
+								const ebene = room.properties?.Ebene
+								return typeof ebene === 'string' ? ebene : ''
+							})
+							.filter((etage) => etage !== '')
+					)
+				)
+			),
+		[allRooms]
 	)
 
-	const filteredGeoJSON = (() => {
+	const filteredGeoJSON = useMemo(() => {
 		if (mapOverlay == null) {
 			return undefined
 		}
-		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG', allRooms)
 		return {
 			...mapOverlay,
-			features: filteredFeatures
+			features: filterEtage(floor, allRooms)
 		}
-	})()
+	}, [allRooms, floor, mapOverlay])
 
-	const availableFilteredGeoJSON = (() => {
+	const availableFilteredGeoJSON = useMemo(() => {
 		if (mapOverlay == null) {
 			return undefined
 		}
-		const filteredFeatures = filterAvailableRooms(
-			filteredGeoJSON,
-			availableRooms
-		)
 		return {
 			type: 'FeatureCollection' as const,
-			features: filteredFeatures
+			features: filterAvailableRooms(filteredGeoJSON, availableRooms)
 		}
-	})()
+	}, [availableRooms, filteredGeoJSON, mapOverlay])
 
 	return {
 		uniqueEtages,

@@ -230,6 +230,7 @@ const MapScreen = (): React.JSX.Element => {
 				backgroundColor={backgroundColor}
 				onRegionChange={setRegionChange}
 				focusPaddingBottom={focusPaddingBottom}
+				overlayFloor={currentFloor?.floor ?? 'EG'}
 			/>
 			{overlayError === null && (
 				<FloorPicker

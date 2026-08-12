@@ -17,6 +17,7 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
+import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
@@ -46,6 +47,7 @@ interface NativeMapCanvasProps {
 	disableFollowUser: boolean
 	onRegionChange: (changing: boolean) => void
 	focusPaddingBottom: number
+	overlayFloor: string
 }
 
 function setNativeMapView(
@@ -93,10 +95,17 @@ export default function NativeMapCanvas({
 	locationRequestId,
 	disableFollowUser,
 	onRegionChange,
-	focusPaddingBottom
+	focusPaddingBottom,
+	overlayFloor
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
 	const isDark = mapMode === 'dark'
+	const { displayedRooms, displayedAvailableRooms, overlayOpacity } =
+		useFloorOverlayFade({
+			floor: overlayFloor,
+			rooms: filteredGeoJSON,
+			availableRooms: availableFilteredGeoJSON
+		})
 
 	useEffect(() => {
 		if (mapLoadState !== LoadingState.LOADED) {
@@ -115,7 +124,8 @@ export default function NativeMapCanvas({
 		isDark,
 		primaryColor,
 		labelColor,
-		backgroundColor
+		backgroundColor,
+		overlayOpacity
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 
@@ -158,10 +168,10 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			{filteredGeoJSON != null && filteredGeoJSON.features.length > 0 && (
+			{displayedRooms != null && displayedRooms.features.length > 0 && (
 				<GeoJSONSource
 					id={MAP_IDS.sources.allRooms}
-					data={filteredGeoJSON}
+					data={displayedRooms}
 					onPress={(event) => {
 						event.stopPropagation()
 						const selection = getRoomSelectionFromProperties(
@@ -191,11 +201,11 @@ export default function NativeMapCanvas({
 					/>
 				</GeoJSONSource>
 			)}
-			{availableFilteredGeoJSON != null &&
-				availableFilteredGeoJSON.features.length > 0 && (
+			{displayedAvailableRooms != null &&
+				displayedAvailableRooms.features.length > 0 && (
 					<GeoJSONSource
 						id={MAP_IDS.sources.availableRooms}
-						data={availableFilteredGeoJSON}
+						data={displayedAvailableRooms}
 					>
 						<Layer
 							id={MAP_IDS.layers.availableRoomsFill}

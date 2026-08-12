@@ -32,6 +32,14 @@ export const MAP_CAMERA = {
 	focusDuration: 500
 } as const
 
+export const FLOOR_OVERLAY_FADE_MS = 180
+export const FLOOR_OVERLAY_FADE_HALF_MS = FLOOR_OVERLAY_FADE_MS / 2
+
+const FLOOR_OVERLAY_FADE_TRANSITION = {
+	duration: FLOOR_OVERLAY_FADE_HALF_MS,
+	delay: 0
+} as const
+
 export const MAP_COLORS = {
 	roomFill: {
 		light: '#a4a4a4',
@@ -54,7 +62,8 @@ export function getMapLayerStyles(
 	isDark: boolean,
 	primaryColor: string,
 	labelColor: string,
-	backgroundColor: string
+	backgroundColor: string,
+	overlayOpacity = 1
 ) {
 	return {
 		allRooms: {
@@ -62,22 +71,28 @@ export function getMapLayerStyles(
 			'fill-color': isDark
 				? MAP_COLORS.roomFill.dark
 				: MAP_COLORS.roomFill.light,
-			'fill-opacity': MAP_COLORS.roomFillOpacity
+			'fill-opacity': MAP_COLORS.roomFillOpacity * overlayOpacity,
+			'fill-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
 		},
 		allRoomsOutline: {
 			'line-color': isDark
 				? MAP_COLORS.roomOutline.dark
 				: MAP_COLORS.roomOutline.light,
-			'line-width': MAP_COLORS.roomOutlineWidth
+			'line-width': MAP_COLORS.roomOutlineWidth,
+			'line-opacity': overlayOpacity,
+			'line-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
 		},
 		availableRooms: {
 			'fill-antialias': true,
 			'fill-color': primaryColor,
-			'fill-opacity': MAP_COLORS.availableRoomFillOpacity
+			'fill-opacity': MAP_COLORS.availableRoomFillOpacity * overlayOpacity,
+			'fill-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
 		},
 		availableRoomsOutline: {
 			'line-color': primaryColor,
-			'line-width': MAP_COLORS.availableRoomOutlineWidth
+			'line-width': MAP_COLORS.availableRoomOutlineWidth,
+			'line-opacity': overlayOpacity,
+			'line-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
 		},
 		buildingLabels: {
 			layout: {

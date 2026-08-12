@@ -19,6 +19,7 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
+import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
@@ -54,6 +55,7 @@ interface WebMapCanvasProps {
 	backgroundColor: string
 	onRegionChange: (changing: boolean) => void
 	focusPaddingBottom: number
+	overlayFloor: string
 }
 
 function setWebMapView(
@@ -97,10 +99,17 @@ export default function WebMapCanvas({
 	labelColor,
 	backgroundColor,
 	onRegionChange,
-	focusPaddingBottom
+	focusPaddingBottom,
+	overlayFloor
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
 	const isDark = mapMode === 'dark'
+	const { displayedRooms, displayedAvailableRooms, overlayOpacity } =
+		useFloorOverlayFade({
+			floor: overlayFloor,
+			rooms: filteredGeoJSON,
+			availableRooms: availableFilteredGeoJSON
+		})
 
 	useEffect(() => {
 		if (mapRef.current == null || mapLoadState !== LoadingState.LOADED) {
@@ -119,7 +128,8 @@ export default function WebMapCanvas({
 		isDark,
 		primaryColor,
 		labelColor,
-		backgroundColor
+		backgroundColor,
+		overlayOpacity
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 
@@ -165,11 +175,11 @@ export default function WebMapCanvas({
 			>
 				<NavigationControl position="top-right" />
 
-				{filteredGeoJSON != null && filteredGeoJSON.features.length > 0 && (
+				{displayedRooms != null && displayedRooms.features.length > 0 && (
 					<Source
 						id={MAP_IDS.sources.allRooms}
 						type="geojson"
-						data={filteredGeoJSON}
+						data={displayedRooms}
 					>
 						<Layer
 							id={MAP_IDS.layers.allRoomsFill}
@@ -184,12 +194,12 @@ export default function WebMapCanvas({
 					</Source>
 				)}
 
-				{availableFilteredGeoJSON != null &&
-					availableFilteredGeoJSON.features.length > 0 && (
+				{displayedAvailableRooms != null &&
+					displayedAvailableRooms.features.length > 0 && (
 						<Source
 							id={MAP_IDS.sources.availableRooms}
 							type="geojson"
-							data={availableFilteredGeoJSON}
+							data={displayedAvailableRooms}
 						>
 							<Layer
 								id={MAP_IDS.layers.availableRoomsFill}
