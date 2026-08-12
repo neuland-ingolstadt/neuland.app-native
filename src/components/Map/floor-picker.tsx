@@ -194,7 +194,7 @@ const FloorPicker = ({
 	)
 
 	const pan = Gesture.Pan()
-		.enabled(!showAllFloors && floors.length > 1)
+		.enabled(Platform.OS !== 'web' && !showAllFloors && floors.length > 1)
 		.activeOffsetY([-8, 8])
 		.failOffsetX([-24, 24])
 		.maxPointers(1)
@@ -230,7 +230,7 @@ const FloorPicker = ({
 		})
 
 	const tap = Gesture.Tap()
-		.enabled(!showAllFloors)
+		.enabled(Platform.OS !== 'web' && !showAllFloors)
 		.onEnd((_event, success) => {
 			if (success) {
 				scheduleOnRN(handleToggle)
@@ -238,7 +238,9 @@ const FloorPicker = ({
 		})
 
 	const longPress = Gesture.LongPress()
-		.enabled(!showAllFloors && currentFloor?.floor !== 'EG')
+		.enabled(
+			Platform.OS !== 'web' && !showAllFloors && currentFloor?.floor !== 'EG'
+		)
 		.minDuration(400)
 		.maxDistance(12)
 		.onStart(() => {
@@ -321,6 +323,90 @@ const FloorPicker = ({
 	const containerHeight =
 		PICKER_TOP + floorCount * CELL + (Platform.OS === 'web' ? 0 : GAP + CELL)
 
+	const floorPicker = (
+		<Animated.View
+			testID="map-floor-picker"
+			collapsable={false}
+			hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+			accessibilityRole="adjustable"
+			accessibilityLabel={t('map.floorPicker')}
+			accessibilityHint={t('map.floorPickerHint')}
+			accessibilityValue={{
+				text: floorLabel(currentFloor?.floor ?? 'EG')
+			}}
+			accessibilityState={{ expanded: showAllFloors }}
+			accessibilityActions={
+				floors.length > 1
+					? [{ name: 'increment' }, { name: 'decrement' }]
+					: undefined
+			}
+			onAccessibilityAction={(event) => {
+				if (floors.length === 0) {
+					return
+				}
+				const delta = event.nativeEvent.actionName === 'increment' ? -1 : 1
+				const next = Math.min(
+					floors.length - 1,
+					Math.max(0, currentIndex + delta)
+				)
+				selectFloorByIndex(next)
+			}}
+			className="absolute overflow-hidden rounded-[10px] border"
+			style={[
+				{
+					top: PICKER_TOP,
+					width: CELL,
+					borderColor,
+					backgroundColor: cardColor,
+					borderCurve: 'continuous',
+					boxShadow: shadow
+				},
+				clipStyle
+			]}
+		>
+			<Animated.View
+				pointerEvents={showAllFloors ? 'auto' : 'none'}
+				style={listStyle}
+			>
+				<Animated.View
+					pointerEvents="none"
+					className="absolute left-0 right-0"
+					style={[
+						{
+							height: CELL,
+							backgroundColor: primaryColor
+						},
+						pillStyle
+					]}
+				/>
+				{floors.map((floor, index) => (
+					<FloorRow
+						key={floor}
+						floor={floor}
+						isCurrent={currentFloor?.floor === floor}
+						isLast={index === floors.length - 1}
+						interactive={showAllFloors}
+						borderColor={borderColor}
+						cardColor={cardColor}
+						textColor={textColor}
+						contrastColor={contrastColor}
+						onSelect={handleSelectFloor}
+					/>
+				))}
+			</Animated.View>
+			{Platform.OS === 'web' && !showAllFloors && (
+				<Pressable
+					testID="map-floor-picker-open"
+					onPress={handleToggle}
+					accessibilityRole="button"
+					accessibilityLabel={t('map.floorPicker')}
+					accessibilityHint={t('map.floorPickerHint')}
+					className="absolute inset-0 cursor-pointer"
+				/>
+			)}
+		</Animated.View>
+	)
+
 	return (
 		<View
 			className="absolute right-0 z-20 mx-2"
@@ -363,79 +449,13 @@ const FloorPicker = ({
 				</Pressable>
 			</Animated.View>
 
-			<GestureDetector gesture={collapsedGestures}>
-				<Animated.View
-					testID="map-floor-picker"
-					collapsable={false}
-					hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
-					accessibilityRole="adjustable"
-					accessibilityLabel={t('map.floorPicker')}
-					accessibilityHint={t('map.floorPickerHint')}
-					accessibilityValue={{
-						text: floorLabel(currentFloor?.floor ?? 'EG')
-					}}
-					accessibilityState={{ expanded: showAllFloors }}
-					accessibilityActions={
-						floors.length > 1
-							? [{ name: 'increment' }, { name: 'decrement' }]
-							: undefined
-					}
-					onAccessibilityAction={(event) => {
-						if (floors.length === 0) {
-							return
-						}
-						const delta = event.nativeEvent.actionName === 'increment' ? -1 : 1
-						const next = Math.min(
-							floors.length - 1,
-							Math.max(0, currentIndex + delta)
-						)
-						selectFloorByIndex(next)
-					}}
-					className="absolute overflow-hidden rounded-[10px] border"
-					style={[
-						{
-							top: PICKER_TOP,
-							width: CELL,
-							borderColor,
-							backgroundColor: cardColor,
-							borderCurve: 'continuous',
-							boxShadow: shadow
-						},
-						clipStyle
-					]}
-				>
-					<Animated.View
-						pointerEvents={showAllFloors ? 'auto' : 'none'}
-						style={listStyle}
-					>
-						<Animated.View
-							pointerEvents="none"
-							className="absolute left-0 right-0"
-							style={[
-								{
-									height: CELL,
-									backgroundColor: primaryColor
-								},
-								pillStyle
-							]}
-						/>
-						{floors.map((floor, index) => (
-							<FloorRow
-								key={floor}
-								floor={floor}
-								isCurrent={currentFloor?.floor === floor}
-								isLast={index === floors.length - 1}
-								interactive={showAllFloors}
-								borderColor={borderColor}
-								cardColor={cardColor}
-								textColor={textColor}
-								contrastColor={contrastColor}
-								onSelect={handleSelectFloor}
-							/>
-						))}
-					</Animated.View>
-				</Animated.View>
-			</GestureDetector>
+			{Platform.OS === 'web' ? (
+				floorPicker
+			) : (
+				<GestureDetector gesture={collapsedGestures}>
+					{floorPicker}
+				</GestureDetector>
+			)}
 
 			{Platform.OS !== 'web' && (
 				<Animated.View className="absolute right-0" style={locateStyle}>

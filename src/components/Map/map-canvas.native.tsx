@@ -11,6 +11,7 @@ import type React from 'react'
 import { useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
 import {
+	EMPTY_MAP_FEATURES,
 	getMapLayerStyles,
 	MAP_CAMERA,
 	MAP_IDS,
@@ -179,75 +180,6 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			{displayedRooms != null && displayedRooms.features.length > 0 && (
-				<GeoJSONSource
-					id={MAP_IDS.sources.allRooms}
-					data={displayedRooms}
-					onPress={(event) => {
-						event.stopPropagation()
-						const selection = getRoomSelectionFromProperties(
-							event.nativeEvent.features[0]?.properties
-						)
-						if (selection == null) {
-							return
-						}
-						triggerSelectionPop()
-						selectMapElement({
-							room: selection.room,
-							type: SEARCH_TYPES.ROOM,
-							center: selection.center,
-							origin: 'MapClick',
-							manual: true
-						})
-					}}
-				>
-					<Layer
-						id={MAP_IDS.layers.allRoomsFill}
-						type="fill"
-						paint={layerStyles.allRooms}
-					/>
-					<Layer
-						id={MAP_IDS.layers.allRoomsOutline}
-						type="line"
-						paint={layerStyles.allRoomsOutline}
-					/>
-				</GeoJSONSource>
-			)}
-			{displayedAvailableRooms != null &&
-				displayedAvailableRooms.features.length > 0 && (
-					<GeoJSONSource
-						id={MAP_IDS.sources.availableRooms}
-						data={displayedAvailableRooms}
-					>
-						<Layer
-							id={MAP_IDS.layers.availableRoomsFill}
-							type="fill"
-							paint={{
-								...layerStyles.availableRooms
-							}}
-						/>
-						<Layer
-							id={MAP_IDS.layers.availableRoomsOutline}
-							type="line"
-							paint={{
-								...layerStyles.availableRoomsOutline
-							}}
-						/>
-					</GeoJSONSource>
-				)}
-			{buildingGeoJSON.features.length > 0 && (
-				<GeoJSONSource
-					id={MAP_IDS.sources.buildingLabels}
-					data={buildingGeoJSON}
-				>
-					<Layer
-						id={MAP_IDS.layers.buildingLabels}
-						type="symbol"
-						layout={layerStyles.buildingLabels.layout}
-						paint={layerStyles.buildingLabels.paint}
-					/>
-				</GeoJSONSource>
-			)}
 			<GeoJSONSource
 				id={MAP_IDS.sources.selectedRoom}
 				data={{
@@ -274,28 +206,86 @@ export default function NativeMapCanvas({
 					paint={layerStyles.selectedRoomMarker.paint}
 				/>
 			</GeoJSONSource>
-			{selectedFeatures.length > 0 && (
-				<GeoJSONSource
-					id={MAP_IDS.sources.selectedOverlay}
-					data={{
-						type: 'FeatureCollection',
-						features: selectedFeatures
-					}}
-				>
-					<Layer
-						id={MAP_IDS.layers.selectedFill}
-						type="fill"
-						paint={layerStyles.selectedFill}
-						beforeId={MAP_IDS.layers.selectedRoomMarker}
-					/>
-					<Layer
-						id={MAP_IDS.layers.selectedOutline}
-						type="line"
-						paint={layerStyles.selectedOutline}
-						beforeId={MAP_IDS.layers.selectedRoomMarker}
-					/>
-				</GeoJSONSource>
-			)}
+			<GeoJSONSource
+				id={MAP_IDS.sources.selectedOverlay}
+				data={{
+					type: 'FeatureCollection',
+					features: selectedFeatures
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.selectedFill}
+					type="fill"
+					paint={layerStyles.selectedFill}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+				<Layer
+					id={MAP_IDS.layers.selectedOutline}
+					type="line"
+					paint={layerStyles.selectedOutline}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource id={MAP_IDS.sources.buildingLabels} data={buildingGeoJSON}>
+				<Layer
+					id={MAP_IDS.layers.buildingLabels}
+					type="symbol"
+					layout={layerStyles.buildingLabels.layout}
+					paint={layerStyles.buildingLabels.paint}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.allRooms}
+				data={displayedRooms ?? EMPTY_MAP_FEATURES}
+				onPress={(event) => {
+					event.stopPropagation()
+					const selection = getRoomSelectionFromProperties(
+						event.nativeEvent.features[0]?.properties
+					)
+					if (selection == null) {
+						return
+					}
+					triggerSelectionPop()
+					selectMapElement({
+						room: selection.room,
+						type: SEARCH_TYPES.ROOM,
+						center: selection.center,
+						origin: 'MapClick',
+						manual: true
+					})
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.allRoomsFill}
+					type="fill"
+					paint={layerStyles.allRooms}
+					beforeId={MAP_IDS.layers.selectedFill}
+				/>
+				<Layer
+					id={MAP_IDS.layers.allRoomsOutline}
+					type="line"
+					paint={layerStyles.allRoomsOutline}
+					beforeId={MAP_IDS.layers.selectedFill}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.availableRooms}
+				data={displayedAvailableRooms ?? EMPTY_MAP_FEATURES}
+			>
+				<Layer
+					id={MAP_IDS.layers.availableRoomsFill}
+					type="fill"
+					paint={layerStyles.availableRooms}
+					beforeId={MAP_IDS.layers.selectedFill}
+				/>
+				<Layer
+					id={MAP_IDS.layers.availableRoomsOutline}
+					type="line"
+					paint={layerStyles.availableRoomsOutline}
+					beforeId={MAP_IDS.layers.selectedFill}
+				/>
+			</GeoJSONSource>
 		</MapLibreMap>
 	)
 }

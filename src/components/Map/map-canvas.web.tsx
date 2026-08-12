@@ -13,6 +13,7 @@ import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
 import { useEffect, useRef } from 'react'
 import {
+	EMPTY_MAP_FEATURES,
 	getMapLayerStyles,
 	MAP_CAMERA,
 	MAP_IDS,
@@ -187,81 +188,76 @@ export default function WebMapCanvas({
 			>
 				<NavigationControl position="top-right" />
 
-				{displayedRooms != null && displayedRooms.features.length > 0 && (
-					<Source
-						id={MAP_IDS.sources.allRooms}
-						type="geojson"
-						data={displayedRooms}
-					>
-						<Layer
-							id={MAP_IDS.layers.allRoomsFill}
-							type="fill"
-							paint={layerStyles.allRooms}
-						/>
-						<Layer
-							id={MAP_IDS.layers.allRoomsOutline}
-							type="line"
-							paint={layerStyles.allRoomsOutline}
-						/>
-					</Source>
-				)}
+				<Source
+					id={MAP_IDS.sources.selectedOverlay}
+					type="geojson"
+					data={{
+						type: 'FeatureCollection',
+						features: selectedFeatures
+					}}
+				>
+					<Layer
+						id={MAP_IDS.layers.selectedFill}
+						type="fill"
+						paint={layerStyles.selectedFill}
+					/>
+					<Layer
+						id={MAP_IDS.layers.selectedOutline}
+						type="line"
+						paint={layerStyles.selectedOutline}
+					/>
+				</Source>
 
-				{displayedAvailableRooms != null &&
-					displayedAvailableRooms.features.length > 0 && (
-						<Source
-							id={MAP_IDS.sources.availableRooms}
-							type="geojson"
-							data={displayedAvailableRooms}
-						>
-							<Layer
-								id={MAP_IDS.layers.availableRoomsFill}
-								type="fill"
-								paint={layerStyles.availableRooms}
-							/>
-							<Layer
-								id={MAP_IDS.layers.availableRoomsOutline}
-								type="line"
-								paint={layerStyles.availableRoomsOutline}
-							/>
-						</Source>
-					)}
+				<Source
+					id={MAP_IDS.sources.buildingLabels}
+					type="geojson"
+					data={buildingGeoJSON}
+				>
+					<Layer
+						id={MAP_IDS.layers.buildingLabels}
+						type="symbol"
+						layout={layerStyles.buildingLabels.layout}
+						paint={layerStyles.buildingLabels.paint}
+					/>
+				</Source>
 
-				{buildingGeoJSON.features.length > 0 && (
-					<Source
-						id={MAP_IDS.sources.buildingLabels}
-						type="geojson"
-						data={buildingGeoJSON}
-					>
-						<Layer
-							id={MAP_IDS.layers.buildingLabels}
-							type="symbol"
-							layout={layerStyles.buildingLabels.layout}
-							paint={layerStyles.buildingLabels.paint}
-						/>
-					</Source>
-				)}
+				<Source
+					id={MAP_IDS.sources.allRooms}
+					type="geojson"
+					data={displayedRooms ?? EMPTY_MAP_FEATURES}
+				>
+					<Layer
+						id={MAP_IDS.layers.allRoomsFill}
+						type="fill"
+						paint={layerStyles.allRooms}
+						beforeId={MAP_IDS.layers.selectedFill}
+					/>
+					<Layer
+						id={MAP_IDS.layers.allRoomsOutline}
+						type="line"
+						paint={layerStyles.allRoomsOutline}
+						beforeId={MAP_IDS.layers.selectedFill}
+					/>
+				</Source>
 
-				{selectedFeatures.length > 0 && (
-					<Source
-						id={MAP_IDS.sources.selectedOverlay}
-						type="geojson"
-						data={{
-							type: 'FeatureCollection',
-							features: selectedFeatures
-						}}
-					>
-						<Layer
-							id={MAP_IDS.layers.selectedFill}
-							type="fill"
-							paint={layerStyles.selectedFill}
-						/>
-						<Layer
-							id={MAP_IDS.layers.selectedOutline}
-							type="line"
-							paint={layerStyles.selectedOutline}
-						/>
-					</Source>
-				)}
+				<Source
+					id={MAP_IDS.sources.availableRooms}
+					type="geojson"
+					data={displayedAvailableRooms ?? EMPTY_MAP_FEATURES}
+				>
+					<Layer
+						id={MAP_IDS.layers.availableRoomsFill}
+						type="fill"
+						paint={layerStyles.availableRooms}
+						beforeId={MAP_IDS.layers.selectedFill}
+					/>
+					<Layer
+						id={MAP_IDS.layers.availableRoomsOutline}
+						type="line"
+						paint={layerStyles.availableRoomsOutline}
+						beforeId={MAP_IDS.layers.selectedFill}
+					/>
+				</Source>
 
 				{selectedRoomCenter != null && (
 					<Marker

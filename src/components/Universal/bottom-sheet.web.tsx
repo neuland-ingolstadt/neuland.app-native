@@ -18,8 +18,16 @@ import Animated, {
 	useAnimatedReaction,
 	useAnimatedStyle,
 	useSharedValue,
+	type WithSpringConfig,
 	withSpring
 } from 'react-native-reanimated'
+
+const SHEET_SPRING = {
+	damping: 120,
+	stiffness: 900,
+	mass: 4,
+	overshootClamping: true
+} as const satisfies WithSpringConfig
 
 export type {
 	BottomSheetProps,
@@ -109,9 +117,7 @@ export function BottomSheet({
 	const maxHeight = heights[heights.length - 1] ?? windowHeight
 
 	useEffect(() => {
-		heightSV.set(
-			withSpring(heights[index] ?? 0, { damping: 20, stiffness: 200 })
-		)
+		heightSV.set(withSpring(heights[index] ?? 0, SHEET_SPRING))
 	}, [heightSV, heights, index])
 
 	useAnimatedReaction(
@@ -139,9 +145,7 @@ export function BottomSheet({
 		})
 		.onEnd(() => {
 			const nextIndex = snapToDetent(heightSV.get(), heights, draggable)
-			heightSV.set(
-				withSpring(heights[nextIndex] ?? 0, { damping: 20, stiffness: 200 })
-			)
+			heightSV.set(withSpring(heights[nextIndex] ?? 0, SHEET_SPRING))
 			if (onIndexChange != null) {
 				runOnJS(onIndexChange)(nextIndex)
 			}

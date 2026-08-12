@@ -1,7 +1,14 @@
+import type { FeatureCollection } from 'geojson'
+
 export const MAP_STYLE_URLS = {
 	light: 'https://tile.neuland.app/styles/light/style.json',
 	dark: 'https://tile.neuland.app/styles/dark/style.json'
 } as const
+
+export const EMPTY_MAP_FEATURES: FeatureCollection = {
+	type: 'FeatureCollection',
+	features: []
+}
 
 export type MapMode = keyof typeof MAP_STYLE_URLS
 

@@ -20,7 +20,7 @@ export function useMapSelectionPop(): {
 
 	const triggerSelectionPop = useCallback(() => {
 		if (Platform.OS !== 'web') {
-			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
 		}
 		setSelectionPop(true)
 		if (timeoutRef.current != null) {
