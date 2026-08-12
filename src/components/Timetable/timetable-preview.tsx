@@ -1,7 +1,7 @@
 import { t } from 'i18next'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { type ColorValue, Text, View } from 'react-native'
+import { type ColorValue, Text, View, type ViewStyle } from 'react-native'
 import Animated, {
 	type AnimatedStyle,
 	Easing,
@@ -22,7 +22,7 @@ interface TimetablePreviewProps {
 
 interface TimetablePreviewContentProps {
 	visibleMode: TimetableMode
-	animatedContainerStyle: AnimatedStyle<Record<string, unknown>>
+	animatedContainerStyle: AnimatedStyle<ViewStyle>
 	primaryColor: ColorValue
 	notificationColor: ColorValue
 	calendarItemColor: ColorValue
@@ -298,7 +298,7 @@ const TimetablePreview = ({
 		}
 	}, [mode, animationProgress, prevMode])
 
-	const animatedContainerStyle = useAnimatedStyle(() => {
+	const animatedContainerStyle = useAnimatedStyle<ViewStyle>(() => {
 		const scale = interpolate(animationProgress.value, [0, 1], [0.95, 1])
 		const opacity = interpolate(animationProgress.value, [0, 0.3, 1], [0, 0, 1])
 
