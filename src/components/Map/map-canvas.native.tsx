@@ -20,6 +20,7 @@ import {
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	getMapFocusPadding,
 	getRoomSelectionFromProperties,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
@@ -44,28 +45,32 @@ interface NativeMapCanvasProps {
 	locationRequestId: number
 	disableFollowUser: boolean
 	onRegionChange: (changing: boolean) => void
+	focusPaddingBottom: number
 }
 
 function setNativeMapView(
 	cameraRef: { current: CameraRef | null },
 	mapCenter: MapScreenModel['mapCenter'],
-	element: ClickedMapElement | null = null
+	element: ClickedMapElement | null = null,
+	focusPaddingBottom = 0
 ): void {
 	if (element?.center == null) {
 		cameraRef.current?.flyTo({
 			center: mapCenter,
 			zoom: MAP_CAMERA.initialZoom,
 			duration: MAP_CAMERA.resetDuration,
-			bearing: 0
+			bearing: 0,
+			padding: getMapFocusPadding(0)
 		})
 		return
 	}
 
 	const [longitude, latitude] = element.center
 	cameraRef.current?.flyTo({
-		center: [longitude, latitude + MAP_CAMERA.focusLatitudeOffset],
+		center: [longitude, latitude],
 		zoom: MAP_CAMERA.focusZoom,
-		duration: MAP_CAMERA.focusDuration
+		duration: MAP_CAMERA.focusDuration,
+		padding: getMapFocusPadding(focusPaddingBottom)
 	})
 }
 
@@ -87,7 +92,8 @@ export default function NativeMapCanvas({
 	locationPermissionGranted,
 	locationRequestId,
 	disableFollowUser,
-	onRegionChange
+	onRegionChange,
+	focusPaddingBottom
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
 	const isDark = mapMode === 'dark'
@@ -96,8 +102,8 @@ export default function NativeMapCanvas({
 		if (mapLoadState !== LoadingState.LOADED) {
 			return
 		}
-		setNativeMapView(cameraRef, mapCenter, clickedElement)
-	}, [clickedElement, mapCenter, mapLoadState])
+		setNativeMapView(cameraRef, mapCenter, clickedElement, focusPaddingBottom)
+	}, [clickedElement, focusPaddingBottom, mapCenter, mapLoadState])
 
 	useEffect(() => {
 		if (cameraResetRequestId > 0 && mapLoadState === LoadingState.LOADED) {

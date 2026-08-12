@@ -1,9 +1,37 @@
 import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
+import { MAP_CAMERA } from '@/components/Map/map-config'
 import type { FeatureProperties } from '@/types/asset-api'
 import { type MapCoordinate, type RoomData, SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import type { RoomOpenings } from '@/utils/map-room-utils'
+
+export interface MapCameraPadding {
+	top: number
+	right: number
+	bottom: number
+	left: number
+}
+
+const ZERO_MAP_CAMERA_PADDING: MapCameraPadding = {
+	top: 0,
+	right: 0,
+	bottom: 0,
+	left: 0
+}
+
+export function getMapFocusPadding(sheetHeightPx: number): MapCameraPadding {
+	if (!(sheetHeightPx > 0)) {
+		return ZERO_MAP_CAMERA_PADDING
+	}
+
+	return {
+		top: 0,
+		right: 0,
+		bottom: sheetHeightPx + MAP_CAMERA.focusPaddingGap,
+		left: 0
+	}
+}
 
 export function parseMapCoordinate(value: unknown): MapCoordinate | undefined {
 	let parsedValue = value

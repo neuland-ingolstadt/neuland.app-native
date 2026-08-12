@@ -21,7 +21,6 @@ export default function MapRootScreen(): React.JSX.Element {
 	useEffect(() => {
 		setIsPageOpen(true)
 	}, [])
-	const [localSearch, setLocalSearch] = useState<string>('')
 	const [clickedElement, setClickedElement] =
 		useState<ClickedMapElement | null>(null)
 	const [availableRooms, setAvailableRooms] = useState<AvailableRoom[] | null>(
@@ -62,8 +61,6 @@ export default function MapRootScreen(): React.JSX.Element {
 	}, [])
 
 	const contextValue = {
-		localSearch,
-		setLocalSearch,
 		clickedElement,
 		setClickedElement,
 		availableRooms,

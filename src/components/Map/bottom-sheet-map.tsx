@@ -1,3 +1,4 @@
+import { router, useLocalSearchParams } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
 import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,10 +37,23 @@ const MapBottomSheet = ({
 	selectMapElement
 }: MapBottomSheetProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
-	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)
+	const { searchHistory } = use(MapContext)
+	const params = useLocalSearchParams<{ room: string }>()
 	const sheetPosition = useSheetPosition(currentPosition)
 	const textInputRef = useRef<TextInput>(null)
+	const [searchQuery, setSearchQuery] = React.useState('')
 	const [searchFocused, setSearchFocused] = React.useState(false)
+
+	const clearSearch = (): void => {
+		setSearchQuery('')
+	}
+
+	const handleSearchChange = (text: string): void => {
+		setSearchQuery(text)
+		if (params.room != null && params.room !== '') {
+			router.setParams(undefined)
+		}
+	}
 
 	React.useEffect(() => {
 		if (index > SEARCH_HALF) {
@@ -47,10 +61,10 @@ const MapBottomSheet = ({
 		}
 		textInputRef.current?.blur()
 		Keyboard.dismiss()
-		if (localSearch !== '') {
-			setLocalSearch('')
+		if (searchQuery !== '') {
+			setSearchQuery('')
 		}
-	}, [index, localSearch, setLocalSearch])
+	}, [index, searchQuery])
 
 	return (
 		<BottomSheet
@@ -65,13 +79,13 @@ const MapBottomSheet = ({
 			<MapSheetHandle />
 			<View className="px-page">
 				<MapSearchBar
-					value={localSearch}
-					onChangeText={setLocalSearch}
+					value={searchQuery}
+					onChangeText={handleSearchChange}
 					onFocus={() => {
 						onIndexChange(SEARCH_FULL)
 					}}
 					onCancel={() => {
-						setLocalSearch('')
+						clearSearch()
 						textInputRef.current?.blur()
 						onIndexChange(SEARCH_HALF)
 					}}
@@ -79,20 +93,25 @@ const MapBottomSheet = ({
 					inputRef={textInputRef}
 				/>
 
-				{searchFocused && localSearch === '' && searchHistory.length !== 0 && (
-					<SearchHistory selectMapElement={selectMapElement} />
+				{searchFocused && searchQuery === '' && searchHistory.length !== 0 && (
+					<SearchHistory
+						selectMapElement={selectMapElement}
+						onClearSearch={clearSearch}
+					/>
 				)}
 
-				{searchFocused && localSearch === '' && (
+				{searchFocused && searchQuery === '' && (
 					<Text className="text-label text-base pt-[60px] py-[30px] text-center">
 						{t('pages.map.search.placeholder')}
 					</Text>
 				)}
 
-				{localSearch !== '' ? (
+				{searchQuery !== '' ? (
 					<SearchResults
 						selectMapElement={selectMapElement}
 						allRooms={allRooms}
+						searchQuery={searchQuery}
+						onClearSearch={clearSearch}
 					/>
 				) : searchFocused ? null : (
 					<>

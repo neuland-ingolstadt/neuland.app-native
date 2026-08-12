@@ -179,8 +179,17 @@ const FloorPicker = ({
 			}
 			triggerSelectionHaptic()
 			setCurrentFloor({ floor, manual: true })
+			if (showAllFloors) {
+				toggleShowAllFloors()
+			}
 		},
-		[currentFloor?.floor, handleToggle, setCurrentFloor]
+		[
+			currentFloor?.floor,
+			handleToggle,
+			setCurrentFloor,
+			showAllFloors,
+			toggleShowAllFloors
+		]
 	)
 
 	const pan = Gesture.Pan()

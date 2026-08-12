@@ -27,7 +27,7 @@ export const MAP_CAMERA = {
 	focusZoom: 17,
 	minZoom: 14,
 	maxZoom: 19,
-	focusLatitudeOffset: -0.0003,
+	focusPaddingGap: 12,
 	resetDuration: 400,
 	focusDuration: 500
 } as const

@@ -16,14 +16,18 @@ import ResultRow from './search-result-row'
 interface SearchResultsProps {
 	allRooms: FeatureCollection
 	selectMapElement: SelectMapElement
+	searchQuery: string
+	onClearSearch: () => void
 }
 
 const SearchResults = ({
 	allRooms,
-	selectMapElement
+	selectMapElement,
+	searchQuery,
+	onClearSearch
 }: SearchResultsProps): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
-	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
+	const { searchHistory, updateSearchHistory } = use(MapContext)
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
 	)
@@ -35,7 +39,7 @@ const SearchResults = ({
 	)
 	useEffect(() => {
 		if (
-			localSearch.toLocaleLowerCase() === 'neuland' &&
+			searchQuery.toLocaleLowerCase() === 'neuland' &&
 			Platform.OS === 'ios'
 		) {
 			if (unlockedAppIcons.includes('retro')) {
@@ -59,7 +63,7 @@ const SearchResults = ({
 
 			addUnlockedAppIcon('retro')
 		}
-	}, [localSearch])
+	}, [searchQuery])
 
 	const fuse = useMemo(
 		() =>
@@ -78,14 +82,14 @@ const SearchResults = ({
 	)
 
 	const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
-		const results = fuse.search(localSearch.trim().toUpperCase())
+		const results = fuse.search(searchQuery.trim().toUpperCase())
 		const roomResults = results.map((result) => {
 			const room = result.item.properties?.Raum as string | undefined
 			return {
 				title: room as string,
 				subtitle: result.item.properties?.Funktion_en as string,
 				isExactMatch: Boolean(
-					room?.toUpperCase().includes(localSearch.toUpperCase())
+					room?.toUpperCase().includes(searchQuery.toUpperCase())
 				),
 				item: result.item
 			}
@@ -95,7 +99,7 @@ const SearchResults = ({
 		const fuzzyMatches = roomResults.filter((result) => !result.isExactMatch)
 
 		return [exactMatches, fuzzyMatches]
-	}, [localSearch, allRooms])
+	}, [searchQuery, allRooms])
 
 	function addToSearchHistory(newHistory: SearchResult): void {
 		const newSearchHistory = searchHistory.filter(
@@ -116,6 +120,7 @@ const SearchResults = ({
 			result={item}
 			selectMapElement={selectMapElement}
 			updateSearchHistory={addToSearchHistory}
+			onClearSearch={onClearSearch}
 		/>
 	)
 

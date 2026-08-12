@@ -28,7 +28,7 @@ export function useMapRoomSelection({
 	notificationColor
 }: UseMapRoomSelectionOptions): { selectMapElement: SelectMapElement } {
 	const params = useLocalSearchParams<{ room: string }>()
-	const { localSearch, setClickedElement, setCurrentFloor } = use(MapContext)
+	const { setClickedElement, setCurrentFloor } = use(MapContext)
 	const handlePresentModalPressRef = useRef(handlePresentModalPress)
 
 	useEffect(() => {
@@ -106,12 +106,6 @@ export function useMapRoomSelection({
 		hideSearchSheet,
 		selectMapElement
 	])
-
-	useEffect(() => {
-		if (localSearch.length === 1 && params.room != null) {
-			router.setParams(undefined)
-		}
-	}, [localSearch, params.room])
 
 	return { selectMapElement }
 }

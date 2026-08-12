@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'bun:test'
 import type { FeatureCollection } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
+import { MAP_CAMERA } from '@/components/Map/map-config'
 import { SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import {
 	filterAvailableRooms,
 	filterEtage,
 	getBuildingData,
+	getMapFocusPadding,
 	getOngoingOrNextEvent,
 	getRoomData,
 	getRoomSelectionFromProperties,
@@ -121,6 +123,30 @@ const buildEvent = (
 })
 
 describe('map-screen-utils', () => {
+	it('getMapFocusPadding - Should pad the bottom by sheet height plus gap', () => {
+		expect(getMapFocusPadding(312)).toEqual({
+			top: 0,
+			right: 0,
+			bottom: 312 + MAP_CAMERA.focusPaddingGap,
+			left: 0
+		})
+	})
+
+	it('getMapFocusPadding - Should return zero padding when the sheet is hidden', () => {
+		expect(getMapFocusPadding(0)).toEqual({
+			top: 0,
+			right: 0,
+			bottom: 0,
+			left: 0
+		})
+		expect(getMapFocusPadding(-8)).toEqual({
+			top: 0,
+			right: 0,
+			bottom: 0,
+			left: 0
+		})
+	})
+
 	it('parseMapCoordinate - Should accept valid numeric coordinates', () => {
 		expect(parseMapCoordinate([11.4328, 48.7663])).toEqual([11.4328, 48.7663])
 		expect(parseMapCoordinate('[11.4328,48.7663]')).toEqual([11.4328, 48.7663])

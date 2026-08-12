@@ -107,6 +107,9 @@ const MapScreen = (): React.JSX.Element => {
 		notificationColor
 	})
 
+	const focusPaddingBottom =
+		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0
+
 	const detailIndexRef = useRef(detailIndex)
 	detailIndexRef.current = detailIndex
 	const clickedElementRef = useRef(clickedElement)
@@ -226,6 +229,7 @@ const MapScreen = (): React.JSX.Element => {
 				labelColor={labelColor}
 				backgroundColor={backgroundColor}
 				onRegionChange={setRegionChange}
+				focusPaddingBottom={focusPaddingBottom}
 			/>
 			{overlayError === null && (
 				<FloorPicker

@@ -1,9 +1,8 @@
 import type React from 'react'
-import { memo, use } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { MapContext } from '@/contexts/map'
 import type { SEARCH_TYPES, SearchResult, SelectMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { parseMapCoordinate } from '@/utils/map-screen-utils'
@@ -16,14 +15,15 @@ interface ResultRowProps {
 	result: SearchResult
 	selectMapElement: SelectMapElement
 	updateSearchHistory: (result: SearchResult) => void
+	onClearSearch: () => void
 }
 
 const ResultRow = ({
 	result,
 	selectMapElement,
-	updateSearchHistory
+	updateSearchHistory,
+	onClearSearch
 }: ResultRowProps): React.JSX.Element => {
-	const { setLocalSearch } = use(MapContext)
 	const { i18n } = useTranslation()
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
@@ -48,7 +48,7 @@ const ResultRow = ({
 							? result.item.properties.Ebene
 							: 'EG'
 				})
-				setLocalSearch('')
+				onClearSearch()
 			}}
 		>
 			<View

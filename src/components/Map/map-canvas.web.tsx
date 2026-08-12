@@ -22,6 +22,7 @@ import {
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	getMapFocusPadding,
 	getRoomSelectionFromProperties,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
@@ -52,12 +53,14 @@ interface WebMapCanvasProps {
 	labelColor: string
 	backgroundColor: string
 	onRegionChange: (changing: boolean) => void
+	focusPaddingBottom: number
 }
 
 function setWebMapView(
 	mapRef: { current: MapRef | null },
 	mapCenter: MapScreenModel['mapCenter'],
-	element: ClickedMapElement | null = null
+	element: ClickedMapElement | null = null,
+	focusPaddingBottom = 0
 ): void {
 	if (!mapRef.current) {
 		return
@@ -70,14 +73,12 @@ function setWebMapView(
 	}
 
 	mapRef.current.getMap().flyTo({
-		center:
-			element == null
-				? center
-				: [center[0], center[1] + MAP_CAMERA.focusLatitudeOffset],
+		center,
 		zoom: element == null ? MAP_CAMERA.initialZoom : MAP_CAMERA.focusZoom,
 		...(element == null ? { bearing: 0 } : {}),
 		duration:
-			element == null ? MAP_CAMERA.resetDuration : MAP_CAMERA.focusDuration
+			element == null ? MAP_CAMERA.resetDuration : MAP_CAMERA.focusDuration,
+		padding: getMapFocusPadding(element == null ? 0 : focusPaddingBottom)
 	})
 }
 
@@ -95,7 +96,8 @@ export default function WebMapCanvas({
 	primaryColor,
 	labelColor,
 	backgroundColor,
-	onRegionChange
+	onRegionChange,
+	focusPaddingBottom
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
 	const isDark = mapMode === 'dark'
@@ -104,8 +106,8 @@ export default function WebMapCanvas({
 		if (mapRef.current == null || mapLoadState !== LoadingState.LOADED) {
 			return
 		}
-		setWebMapView(mapRef, mapCenter, clickedElement)
-	}, [clickedElement, mapCenter, mapLoadState])
+		setWebMapView(mapRef, mapCenter, clickedElement, focusPaddingBottom)
+	}, [clickedElement, focusPaddingBottom, mapCenter, mapLoadState])
 
 	useEffect(() => {
 		if (cameraResetRequestId > 0 && mapLoadState === LoadingState.LOADED) {

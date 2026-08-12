@@ -8,10 +8,12 @@ import { SearchHistoryItem } from './search-history-item'
 
 interface SearchHistoryProps {
 	selectMapElement: SelectMapElement
+	onClearSearch: () => void
 }
 
 const SearchHistory = ({
-	selectMapElement
+	selectMapElement,
+	onClearSearch
 }: SearchHistoryProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const { searchHistory, updateSearchHistory } = use(MapContext)
@@ -51,6 +53,7 @@ const SearchHistory = ({
 							selectMapElement={selectMapElement}
 							onSelect={addToSearchHistory}
 							onDelete={deleteSearchHistoryItem}
+							onClearSearch={onClearSearch}
 						/>
 						{index !== searchHistory.length - 1 && (
 							<Divider key={`divider-${history.title}`} />

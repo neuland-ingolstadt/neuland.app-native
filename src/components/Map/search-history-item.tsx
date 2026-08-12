@@ -13,13 +13,15 @@ interface SearchHistoryItemProps {
 	selectMapElement: SelectMapElement
 	onSelect: (result: SearchResult) => void
 	onDelete: (result: SearchResult) => void
+	onClearSearch: () => void
 }
 
 export const SearchHistoryItem = ({
 	history,
 	selectMapElement,
 	onSelect,
-	onDelete
+	onDelete,
+	onClearSearch
 }: SearchHistoryItemProps): React.JSX.Element => {
 	const notificationColor = toColor(useCSSVariable('--color-notification'))
 
@@ -59,6 +61,7 @@ export const SearchHistoryItem = ({
 					result={history}
 					selectMapElement={selectMapElement}
 					updateSearchHistory={onSelect}
+					onClearSearch={onClearSearch}
 				/>
 			</View>
 		</Swipeable>
