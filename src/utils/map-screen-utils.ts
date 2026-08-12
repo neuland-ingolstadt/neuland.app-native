@@ -1,6 +1,5 @@
 import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
-import { MAP_CAMERA } from '@/components/Map/map-config'
 import type { FeatureProperties } from '@/types/asset-api'
 import {
 	type ClickedMapElement,
@@ -9,6 +8,7 @@ import {
 	SEARCH_TYPES
 } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
+import { MAP_CAMERA } from '@/utils/map-constants'
 import type { RoomOpenings } from '@/utils/map-room-utils'
 
 export interface MapCameraPadding {

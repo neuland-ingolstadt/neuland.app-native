@@ -1,5 +1,15 @@
 import type { MapCoordinate } from '@/types/map'
 
+export const MAP_CAMERA = {
+	initialZoom: 16.5,
+	focusZoom: 17,
+	minZoom: 14,
+	maxZoom: 19,
+	focusPaddingGap: 12,
+	resetDuration: 400,
+	focusDuration: 500
+} as const
+
 export const INGOLSTADT_CENTER: MapCoordinate = [11.4328, 48.7663]
 export const NEUBURG_CENTER: MapCoordinate = [11.17261, 48.732]
 export const BUILDINGS_ALL = 'Alle'

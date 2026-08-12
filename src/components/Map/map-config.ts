@@ -25,15 +25,7 @@ export const MAP_IDS = {
 	}
 } as const
 
-export const MAP_CAMERA = {
-	initialZoom: 16.5,
-	focusZoom: 17,
-	minZoom: 14,
-	maxZoom: 19,
-	focusPaddingGap: 12,
-	resetDuration: 400,
-	focusDuration: 500
-} as const
+export { MAP_CAMERA } from '@/utils/map-constants'
 
 export const FLOOR_OVERLAY_FADE_MS = 180
 export const FLOOR_OVERLAY_FADE_HALF_MS = FLOOR_OVERLAY_FADE_MS / 2
