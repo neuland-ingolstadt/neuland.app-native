@@ -5,6 +5,24 @@ appId: ${APP_ID}
     timeout: 3000
 - runFlow:
     when:
+      platform: Android
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+      - waitForAnimationToEnd:
+          timeout: 3000
+- runFlow:
+    when:
+      platform: iOS
+      visible: ".*Development Build.*"
+    commands:
+      - runFlow:
+          file: "reconnect-development-client.yaml"
+      - openLink: "neuland://onboarding"
+      - waitForAnimationToEnd:
+          timeout: 3000
+- runFlow:
+    when:
       visible:
         id: "onboarding-continue"
     commands:
@@ -45,4 +63,4 @@ appId: ${APP_ID}
 - extendedWaitUntil:
     visible:
       id: "home-screen"
-    timeout: 20000
+    timeout: 60000

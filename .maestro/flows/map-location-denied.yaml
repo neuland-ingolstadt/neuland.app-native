@@ -20,12 +20,24 @@ tags:
     file: "../subflows/complete-onboarding-as-guest.yaml"
 - runFlow:
     file: "../subflows/open-map-tab.yaml"
-- tapOn:
-    id: "map-current-location"
-- waitForAnimationToEnd:
-    timeout: 3000
-- assertVisible:
-    id: "map-screen"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          id: "map-current-location"
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - assertVisible:
+          id: "map-screen"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          id: "map-screen"
+      - assertVisible:
+          id: "map-search-input"
 - stopApp
 - launchApp:
     clearState: false

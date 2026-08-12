@@ -57,6 +57,20 @@ appId: ${APP_ID}
                 commands:
                   - tapOn:
                       id: "xmark"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "Enter URL manually"
+    commands:
+      - tapOn: "Enter URL manually"
+      - eraseText
+      - inputText: ${DEV_SERVER_ADDRESS}
+      - pressKey: ENTER
+      - runFlow:
+          when:
+            visible: "Connect"
+          commands:
+            - tapOn: "Connect"
 - repeat:
     times: 3
     commands:
@@ -114,6 +128,30 @@ appId: ${APP_ID}
             visible: "Reload"
           commands:
             - tapOn: "Reload"
+- runFlow:
+    when:
+      platform: Android
+      visible: "(Connect|Verbinden)"
+    commands:
+      - tapOn: "http://.*:8081"
+      - eraseText
+      - inputText: ${DEV_SERVER_ADDRESS}
+      - tapOn: "(Connect|Verbinden)"
+- repeat:
+    times: 3
+    commands:
+      - waitForAnimationToEnd:
+          timeout: 10000
+      - runFlow:
+          when:
+            platform: Android
+            visible: "Reloading..."
+          commands:
+            - launchApp:
+                clearState: false
+                stopApp: false
+            - waitForAnimationToEnd:
+                timeout: 10000
 - runFlow:
     when:
       platform: Android

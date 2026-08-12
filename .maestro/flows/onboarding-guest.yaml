@@ -103,7 +103,11 @@ tags:
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
-    file: "../subflows/reconnect-development-client.yaml"
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/reconnect-development-client.yaml"
 - extendedWaitUntil:
     visible:
       id: "home-screen"

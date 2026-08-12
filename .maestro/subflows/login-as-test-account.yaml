@@ -3,6 +3,10 @@ name: login-as-test-account
 ---
 # Credentials must be supplied at runtime through THI_TEST_USERNAME and
 # THI_TEST_PASSWORD. Never commit test-account credentials to a flow.
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
+    timeout: 120000
 - runFlow:
     when:
       visible:
