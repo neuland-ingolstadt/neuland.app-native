@@ -43,7 +43,12 @@ export const FoodDayButton = memo(
 					isLastDay ? { marginRight: 0 } : undefined
 				]}
 			>
-				<Pressable onPress={handlePress}>
+				<Pressable
+					testID={`food-day-${index}`}
+					accessibilityRole="button"
+					accessibilityState={{ selected: isSelected }}
+					onPress={handlePress}
+				>
 					<View
 						className="items-center self-center bg-card rounded-md border-border h-[60px] justify-evenly py-2 w-full"
 						style={hairlineBorder}

@@ -95,12 +95,14 @@ export function SecurityWarningModal({
 
 	return (
 		<Modal
+			testID="wallet-security-modal"
 			visible={visible}
 			transparent
 			animationType="fade"
 			onRequestClose={handleCancel}
 		>
 			<Pressable
+				accessible={false}
 				className="flex-1 bg-black/70 justify-center items-center p-page"
 				onPress={handleCancel}
 			>
@@ -108,7 +110,7 @@ export function SecurityWarningModal({
 					className="bg-card rounded-lg max-w-[400px] w-full"
 					style={hairlineBorder}
 				>
-					<Pressable onPress={() => {}} className="p-6">
+					<Pressable accessible={false} onPress={() => {}} className="p-6">
 						<View className="items-center mb-4">
 							<PlatformIcon
 								ios={{ name: 'exclamationmark.triangle.fill', size: 32 }}
@@ -165,6 +167,7 @@ export function SecurityWarningModal({
 
 						<View className="items-center mb-[18px]">
 							<Pressable
+								testID="wallet-confirm"
 								onPress={handleConfirm}
 								disabled={isAddingToWallet}
 								className="active:opacity-70"
@@ -191,6 +194,7 @@ export function SecurityWarningModal({
 
 						<View className="items-center">
 							<Pressable
+								testID="wallet-cancel"
 								onPress={handleCancel}
 								className="py-3 px-6 rounded-md items-center justify-center bg-card-button active:opacity-70"
 							>

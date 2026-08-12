@@ -34,6 +34,7 @@ const ResultRow = ({
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
 		<StyledBottomSheetTouchableOpacity
+			testID={`map-search-result-${result.title}`}
 			className="items-center flex-row py-2.5"
 			onPress={() => {
 				const center = result.item.properties?.center as Position | undefined

@@ -37,6 +37,7 @@ export default function About(): React.JSX.Element {
 						(await Linking.openURL(IMPRINT_URL)) as Promise<void>
 				},
 				{
+					testID: 'legal-licenses-link',
 					title: t('navigation.licenses.title', { ns: 'navigation' }),
 					icon: {
 						ios: 'shield',
@@ -94,6 +95,7 @@ export default function About(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="legal-screen"
 			contentContainerClassName="pb-bottom-safe"
 			style={{ paddingTop: headerPadding }}
 		>

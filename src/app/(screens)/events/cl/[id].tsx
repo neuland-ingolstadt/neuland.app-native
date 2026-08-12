@@ -357,6 +357,7 @@ export default function ClEventDetail(): React.JSX.Element {
 
 	return (
 		<Animated.ScrollView
+			testID="campus-life-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
 			onScroll={scrollHandler}

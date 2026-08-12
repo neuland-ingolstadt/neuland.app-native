@@ -137,6 +137,7 @@ export default function Settings(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="settings-screen"
 			refreshControl={
 				isError && userKind === 'student' ? (
 					<RefreshControl

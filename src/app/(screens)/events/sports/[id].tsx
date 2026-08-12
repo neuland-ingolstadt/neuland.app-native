@@ -247,6 +247,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
 	return (
 		<Animated.ScrollView
+			testID="sports-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-bottom-safe"
 			onScroll={scrollHandler}

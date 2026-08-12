@@ -1,5 +1,7 @@
 {
 	"button": {
+		"share": "Share",
+		"close": "Close",
 		"foodPreferences": "Food Preferences",
 		"timetableMode": "Switch Timetable View",
 		"timetableBack": "Jump to today",

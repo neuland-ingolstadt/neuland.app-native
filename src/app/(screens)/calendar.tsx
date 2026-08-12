@@ -92,16 +92,22 @@ export default function CalendarPage(): React.JSX.Element {
 	}, [shouldOpenExam])
 
 	return (
-		<View className="flex-1" style={{ paddingTop: headerPadding }}>
+		<View
+			testID="calendar-screen"
+			className="flex-1"
+			style={{ paddingTop: headerPadding }}
+		>
 			<View className="border-border pb-3.5 px-page">
 				<ToggleRow
 					items={displayTypes}
 					selectedElement={selectedData}
 					setSelectedElement={setPage}
+					testID="calendar-page"
 				/>
 			</View>
 
 			<PagerView
+				testID="calendar-pager"
 				ref={pagerViewRef}
 				style={{
 					flex: 1,

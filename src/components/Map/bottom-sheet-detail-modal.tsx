@@ -47,6 +47,7 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	return (
 		<View className="py-2.5">
 			<Pressable
+				testID="map-room-report"
 				onPress={() => handleReportRoom()}
 				className="items-center flex-row gap-1"
 			>
@@ -102,7 +103,10 @@ export const BottomSheetDetailModal = ({
 				animatedPosition={currentPositionModal}
 				handleIndicatorStyle={{ backgroundColor: labelTertiaryColor }}
 			>
-				<StyledBottomSheetView className="flex-1 px-page">
+				<StyledBottomSheetView
+					testID="map-room-detail"
+					className="flex-1 px-page"
+				>
 					<View className="flex-row justify-between pb-0">
 						<Text className="text-text text-[26px] font-semibold text-left">
 							{roomData.title}
@@ -110,6 +114,7 @@ export const BottomSheetDetailModal = ({
 						<View className="flex-row gap-2.5 mb-[3px]">
 							{roomData.type === SEARCH_TYPES.ROOM && (
 								<Pressable
+									testID="map-room-share"
 									onPress={() => {
 										if (Platform.OS === 'web') {
 											setCopied(true)
@@ -142,6 +147,7 @@ export const BottomSheetDetailModal = ({
 								</Pressable>
 							)}
 							<Pressable
+								testID="map-room-detail-close"
 								onPress={() => {
 									bottomSheetModalRef.current?.close()
 								}}

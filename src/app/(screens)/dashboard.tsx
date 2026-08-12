@@ -131,6 +131,7 @@ export default function DashboardEdit(): React.JSX.Element {
 							) : (
 								<View className="rounded-md flex-1 overflow-hidden">
 									<DraggableFlatList
+										testID="dashboard-order-list"
 										data={transShownDashboardEntries}
 										onDragBegin={() => {
 											if (Platform.OS === 'ios') {

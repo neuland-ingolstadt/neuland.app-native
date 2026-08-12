@@ -92,6 +92,7 @@ export const MealEntry = memo(({ meal }: { meal: Meal }): React.JSX.Element => {
 	const cardContent = (
 		<Link asChild href={`/food/${meal.id}`}>
 			<Pressable
+				testID="food-meal-entry"
 				delayLongPress={300}
 				onLongPress={() => {
 					/* nothing */

@@ -82,6 +82,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 
 	return (
 		<ScrollView
+			testID="timetable-preferences-screen"
 			style={{
 				paddingBottom: insets.bottom + 32
 			}}
@@ -91,6 +92,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 			<View className="flex-1">
 				<SectionView title={t('timetable:preferences.title')}>
 					<SingleSectionPicker
+						testID="timetable-list-mode"
 						title={t('timetable:viewModes.list')}
 						selectedItem={timetableMode === TimetableMode.List}
 						action={toggleListMode}

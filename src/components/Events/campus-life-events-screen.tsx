@@ -108,7 +108,11 @@ export default function CampusLifeEventsScreen({
 	}
 
 	return (
-		<View className="flex-1" style={{ paddingTop: headerPadding + 12 }}>
+		<View
+			testID="campus-life-events-screen"
+			className="flex-1"
+			style={{ paddingTop: headerPadding + 12 }}
+		>
 			{enableSportsTabRedirect && tab === 'sports' ? (
 				<View className="flex-1 justify-center items-center">
 					<LoadingIndicator />

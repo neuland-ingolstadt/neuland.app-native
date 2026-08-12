@@ -29,6 +29,7 @@ const MultiSectionPicker = ({
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
+	const selectedItemKeys = new Set(selectedItems)
 
 	return (
 		<>
@@ -36,6 +37,12 @@ const MultiSectionPicker = ({
 				<React.Fragment key={index}>
 					<View className="h-[52px]">
 						<Pressable
+							testID={`multi-option-${item.key}`}
+							accessibilityRole="checkbox"
+							accessibilityState={{
+								checked: selectedItemKeys.has(item.key),
+								disabled: item.disabled
+							}}
 							onPress={() => {
 								if (!item.disabled) {
 									if (Platform.OS === 'ios') void selectionAsync()
@@ -55,7 +62,7 @@ const MultiSectionPicker = ({
 							>
 								{item.title}
 							</Text>
-							{selectedItems.includes(item.key) && (
+							{selectedItemKeys.has(item.key) && (
 								<PlatformIcon
 									ios={{ name: 'checkmark.circle.fill', size: 18 }}
 									android={{ name: 'check_circle', size: 21 }}

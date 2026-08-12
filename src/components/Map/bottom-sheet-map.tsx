@@ -88,6 +88,7 @@ const MapBottomSheet = ({
 	return (
 		<StyledBottomSheet
 			ref={bottomSheetRef}
+			accessible={false}
 			index={1}
 			snapPoints={Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS}
 			backgroundComponent={BottomSheetBackground}
@@ -107,6 +108,7 @@ const MapBottomSheet = ({
 			<View className="px-page">
 				<View className="flex-row h-10 mb-2.5">
 					<TextInput
+						testID="map-search-input"
 						ref={textInputRef}
 						className="rounded-mg flex-1 text-[17px] h-10 mb-2.5 px-2.5"
 						style={{
@@ -146,6 +148,7 @@ const MapBottomSheet = ({
 
 					<Animated.View className="justify-center" style={animatedCancelStyle}>
 						<Pressable
+							testID="map-search-cancel"
 							onPress={() => {
 								setLocalSearch('')
 								textInputRef.current?.blur()

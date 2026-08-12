@@ -164,6 +164,7 @@ const HomeScreen = memo(function HomeScreen() {
 		</View>
 	) : columns === 1 ? (
 		<FlashList
+			testID="home-screen"
 			estimatedItemSize={130}
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
@@ -177,6 +178,7 @@ const HomeScreen = memo(function HomeScreen() {
 		/>
 	) : (
 		<MasonryFlashList
+			testID="home-screen"
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
 			contentInset={{ top: 0, bottom: 90 }}

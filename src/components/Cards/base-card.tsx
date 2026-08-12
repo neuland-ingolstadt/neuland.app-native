@@ -21,6 +21,7 @@ import { CardContextMenu } from './card-context-menu'
 
 interface BaseCardProps {
 	title: string
+	testID?: string
 	onPressRoute?: Href
 	children?: React.ReactNode
 	noDataComponent?: React.ReactNode
@@ -29,6 +30,7 @@ interface BaseCardProps {
 
 const BaseCard = ({
 	title,
+	testID,
 	onPressRoute,
 	children,
 	noDataComponent,
@@ -129,6 +131,7 @@ const BaseCard = ({
 			<CardContextMenu
 				card={
 					<Pressable
+						testID={testID ?? `dashboard-card-${title}`}
 						disabled={onPressRoute == null}
 						onPress={() => {
 							if (onPressRoute != null) {
@@ -156,6 +159,7 @@ const BaseCard = ({
 			disabled={onPressRoute == null}
 		>
 			<Pressable
+				testID={testID ?? `dashboard-card-${title}`}
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				className="w-full"

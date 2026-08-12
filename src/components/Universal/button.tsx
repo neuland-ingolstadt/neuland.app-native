@@ -14,6 +14,7 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
 interface ButtonProps {
+	testID?: string
 	variant?: 'primary' | 'secondary'
 	disabled?: boolean
 	loading?: boolean
@@ -34,6 +35,7 @@ function resolveActiveTheme(
 }
 
 const Button = ({
+	testID,
 	variant = 'primary',
 	disabled = false,
 	loading = false,
@@ -74,6 +76,7 @@ const Button = ({
 
 	return (
 		<TouchableOpacity
+			testID={testID}
 			disabled={isDisabled}
 			onPress={onPress}
 			className={buttonClassName}

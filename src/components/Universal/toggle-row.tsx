@@ -6,11 +6,13 @@ import { hairlineBorder } from '@/utils/uniwind-utils'
 const ToggleRow = ({
 	items,
 	selectedElement,
-	setSelectedElement
+	setSelectedElement,
+	testID
 }: {
 	items: string[]
 	selectedElement: number
 	setSelectedElement: (element: number) => void
+	testID?: string
 }): React.JSX.Element => {
 	const pressHandler = (index: number) => {
 		setSelectedElement(index)
@@ -27,6 +29,9 @@ const ToggleRow = ({
 				return (
 					<View key={item} className="flex-1">
 						<Pressable
+							testID={testID == null ? undefined : `${testID}-${index}`}
+							accessibilityRole="tab"
+							accessibilityState={{ selected: isSelected }}
 							onPress={() => {
 								pressHandler(index)
 							}}

@@ -18,6 +18,7 @@ const SportsRow = ({
 
 	return (
 		<RowEntry
+			testID="sports-event-row"
 			title={event.title[i18n.language as LanguageKey] ?? ''}
 			href={`/events/sports/${event.id}` as RelativePathString}
 			leftChildren={
