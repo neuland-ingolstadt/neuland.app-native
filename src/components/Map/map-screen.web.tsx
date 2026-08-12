@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Appearance,
-	LayoutAnimation,
 	Linking,
 	Pressable,
 	Text,
@@ -75,7 +74,6 @@ const MapScreen = (): React.JSX.Element => {
 	const fadeOutStarted = useRef(false)
 
 	const toggleShowAllFloors = (): void => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 		setShowAllFloors(!showAllFloors)
 	}
 
@@ -114,6 +112,8 @@ const MapScreen = (): React.JSX.Element => {
 
 	const detailIndexRef = useRef(detailIndex)
 	detailIndexRef.current = detailIndex
+	const clickedElementRef = useRef(clickedElement)
+	clickedElementRef.current = clickedElement
 
 	const handleDetailIndexChange = useCallback(
 		(next: number) => {
@@ -160,10 +160,11 @@ const MapScreen = (): React.JSX.Element => {
 	}, [handleDetailIndexChange, navigation])
 
 	useEffect(() => {
-		if (clickedElement != null && currentFloor?.manual === true) {
-			handleDetailIndexChange(DETAIL_HIDDEN)
+		if (clickedElementRef.current == null || currentFloor?.manual !== true) {
+			return
 		}
-	}, [clickedElement, currentFloor, handleDetailIndexChange])
+		handleDetailIndexChange(DETAIL_HIDDEN)
+	}, [currentFloor, handleDetailIndexChange])
 
 	const layerStyles = {
 		osmBackground: {
