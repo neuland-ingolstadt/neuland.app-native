@@ -2,7 +2,12 @@ import type { Feature, FeatureCollection, GeoJsonProperties } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
 import { MAP_CAMERA } from '@/components/Map/map-config'
 import type { FeatureProperties } from '@/types/asset-api'
-import { type MapCoordinate, type RoomData, SEARCH_TYPES } from '@/types/map'
+import {
+	type ClickedMapElement,
+	type MapCoordinate,
+	type RoomData,
+	SEARCH_TYPES
+} from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import type { RoomOpenings } from '@/utils/map-room-utils'
 
@@ -137,6 +142,36 @@ export function filterEtage(
 	return allRooms.features.filter(
 		(feature) => feature.properties?.Ebene === etage
 	)
+}
+
+export function getSelectedMapFeatures(
+	clicked: ClickedMapElement | null,
+	rooms: FeatureCollection | undefined
+): Feature[] {
+	if (clicked == null || rooms == null) {
+		return []
+	}
+
+	if (clicked.type === SEARCH_TYPES.ROOM) {
+		const feature = rooms.features.find(
+			(item) =>
+				item.geometry?.type === 'Polygon' &&
+				item.properties?.rtype === SEARCH_TYPES.ROOM &&
+				item.properties?.Raum === clicked.data
+		)
+		return feature == null ? [] : [feature]
+	}
+
+	if (clicked.type === SEARCH_TYPES.BUILDING) {
+		return rooms.features.filter(
+			(item) =>
+				item.geometry?.type === 'Polygon' &&
+				item.properties?.rtype === SEARCH_TYPES.ROOM &&
+				item.properties?.Gebaeude === clicked.data
+		)
+	}
+
+	return []
 }
 
 /**

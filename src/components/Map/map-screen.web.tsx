@@ -38,6 +38,9 @@ const MapScreen = (): React.JSX.Element => {
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
 	)
+	const selectionColor = String(
+		toColor(useCSSVariable('--color-text')) ?? '#1c1c1e'
+	)
 	const notificationColor = String(
 		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
 	)
@@ -226,6 +229,7 @@ const MapScreen = (): React.JSX.Element => {
 				selectMapElement={selectMapElement}
 				mapMode={isDark ? 'dark' : 'light'}
 				primaryColor={primaryColor}
+				selectionColor={selectionColor}
 				labelColor={labelColor}
 				backgroundColor={backgroundColor}
 				onRegionChange={setRegionChange}

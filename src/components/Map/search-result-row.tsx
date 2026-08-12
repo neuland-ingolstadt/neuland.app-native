@@ -15,7 +15,7 @@ interface ResultRowProps {
 	result: SearchResult
 	selectMapElement: SelectMapElement
 	updateSearchHistory: (result: SearchResult) => void
-	onClearSearch: () => void
+	onClearSearch?: () => void
 }
 
 const ResultRow = ({
@@ -48,7 +48,7 @@ const ResultRow = ({
 							? result.item.properties.Ebene
 							: 'EG'
 				})
-				onClearSearch()
+				onClearSearch?.()
 			}}
 		>
 			<View

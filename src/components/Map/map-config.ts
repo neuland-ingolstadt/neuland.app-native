@@ -10,7 +10,8 @@ export const MAP_IDS = {
 		allRooms: 'allRoomsSource',
 		availableRooms: 'availableRoomsSource',
 		buildingLabels: 'buildingLettersSource',
-		selectedRoom: 'clickedElementSource'
+		selectedRoom: 'clickedElementSource',
+		selectedOverlay: 'selectedOverlaySource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -18,7 +19,9 @@ export const MAP_IDS = {
 		availableRoomsFill: 'availableRoomsFill',
 		availableRoomsOutline: 'availableRoomsOutline',
 		buildingLabels: 'buildingLettersLayer',
-		selectedRoomMarker: 'clickedElementMarker'
+		selectedRoomMarker: 'clickedElementMarker',
+		selectedFill: 'selectedRoomFill',
+		selectedOutline: 'selectedRoomOutline'
 	}
 } as const
 
@@ -55,7 +58,19 @@ export const MAP_COLORS = {
 	availableRoomOutlineWidth: 2.4,
 	buildingLabelSize: 14,
 	buildingLabelHaloWidth: 1,
-	selectedRoomMarkerSize: 0.17
+	selectedRoomMarkerSize: 0.17,
+	selectedFillOpacity: 0.38,
+	selectedFillOpacityPop: 0.58,
+	selectedOutlineWidth: 2.8,
+	selectedOutlineWidthPop: 3.4
+} as const
+
+export const SELECTED_POP_HOLD_MS = 80
+export const SELECTED_POP_TRANSITION_MS = 120
+
+const SELECTED_POP_TRANSITION = {
+	duration: SELECTED_POP_TRANSITION_MS,
+	delay: 0
 } as const
 
 export function getMapLayerStyles(
@@ -63,7 +78,9 @@ export function getMapLayerStyles(
 	primaryColor: string,
 	labelColor: string,
 	backgroundColor: string,
-	overlayOpacity = 1
+	overlayOpacity = 1,
+	selectionPop = false,
+	selectionColor = primaryColor
 ) {
 	return {
 		allRooms: {
@@ -113,7 +130,25 @@ export function getMapLayerStyles(
 				'icon-anchor': 'bottom' as const,
 				'icon-allow-overlap': true
 			},
-			paint: { 'icon-color': primaryColor }
+			paint: { 'icon-color': selectionColor }
+		},
+		selectedFill: {
+			'fill-antialias': true,
+			'fill-color': selectionColor,
+			'fill-opacity':
+				(selectionPop
+					? MAP_COLORS.selectedFillOpacityPop
+					: MAP_COLORS.selectedFillOpacity) * overlayOpacity,
+			'fill-opacity-transition': SELECTED_POP_TRANSITION
+		},
+		selectedOutline: {
+			'line-color': selectionColor,
+			'line-width': selectionPop
+				? MAP_COLORS.selectedOutlineWidthPop
+				: MAP_COLORS.selectedOutlineWidth,
+			'line-width-transition': SELECTED_POP_TRANSITION,
+			'line-opacity': overlayOpacity,
+			'line-opacity-transition': SELECTED_POP_TRANSITION
 		}
 	}
 }

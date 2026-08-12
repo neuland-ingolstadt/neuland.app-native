@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
-import React, { use, useRef } from 'react'
+import React, { use, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, Text, type TextInput, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
@@ -44,9 +44,9 @@ const MapBottomSheet = ({
 	const [searchQuery, setSearchQuery] = React.useState('')
 	const [searchFocused, setSearchFocused] = React.useState(false)
 
-	const clearSearch = (): void => {
+	const clearSearch = useCallback((): void => {
 		setSearchQuery('')
-	}
+	}, [])
 
 	const handleSearchChange = (text: string): void => {
 		setSearchQuery(text)

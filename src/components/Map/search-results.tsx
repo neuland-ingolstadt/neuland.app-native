@@ -101,27 +101,33 @@ const SearchResults = ({
 		return [exactMatches, fuzzyMatches]
 	}, [searchQuery, allRooms])
 
-	function addToSearchHistory(newHistory: SearchResult): void {
-		const newSearchHistory = searchHistory.filter(
-			(history) => history.title !== newHistory.title
-		)
+	const addToSearchHistory = useCallback(
+		(newHistory: SearchResult): void => {
+			const newSearchHistory = searchHistory.filter(
+				(history) => history.title !== newHistory.title
+			)
 
-		newSearchHistory.unshift(newHistory)
+			newSearchHistory.unshift(newHistory)
 
-		if (newSearchHistory.length > 5) {
-			newSearchHistory.length = 5
-		}
+			if (newSearchHistory.length > 5) {
+				newSearchHistory.length = 5
+			}
 
-		updateSearchHistory(newSearchHistory)
-	}
+			updateSearchHistory(newSearchHistory)
+		},
+		[searchHistory, updateSearchHistory]
+	)
 
-	const renderItem = ({ item }: { item: SearchResult }): React.JSX.Element => (
-		<ResultRow
-			result={item}
-			selectMapElement={selectMapElement}
-			updateSearchHistory={addToSearchHistory}
-			onClearSearch={onClearSearch}
-		/>
+	const renderItem = useCallback(
+		({ item }: { item: SearchResult }): React.JSX.Element => (
+			<ResultRow
+				result={item}
+				selectMapElement={selectMapElement}
+				updateSearchHistory={addToSearchHistory}
+				onClearSearch={onClearSearch}
+			/>
+		),
+		[addToSearchHistory, onClearSearch, selectMapElement]
 	)
 
 	const renderSectionHeader = useCallback(
@@ -170,6 +176,7 @@ const SearchResults = ({
 			]}
 			keyExtractor={(item, index) => `${item.title}${index}`}
 			renderItem={renderItem}
+			extraData={onClearSearch}
 			ItemSeparatorComponent={itemSeparator}
 			stickySectionHeadersEnabled={false}
 			renderSectionHeader={renderSectionHeader}

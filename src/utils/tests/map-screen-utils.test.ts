@@ -12,6 +12,7 @@ import {
 	getOngoingOrNextEvent,
 	getRoomData,
 	getRoomSelectionFromProperties,
+	getSelectedMapFeatures,
 	parseMapCoordinate
 } from '../map-screen-utils'
 import type { RoomOpenings } from '../map-utils'
@@ -193,6 +194,36 @@ describe('map-screen-utils', () => {
 				(feature) => feature.properties?.Raum ?? ''
 			)
 		).toEqual(['G001'])
+	})
+
+	it('getSelectedMapFeatures - Should return the polygon for a selected room', () => {
+		const features = getSelectedMapFeatures(
+			{
+				type: SEARCH_TYPES.ROOM,
+				data: 'G101'
+			},
+			featureCollection
+		)
+		expect(features).toHaveLength(1)
+		expect(features[0]?.properties?.Raum).toBe('G101')
+	})
+
+	it('getSelectedMapFeatures - Should return floor polygons for a selected building', () => {
+		const features = getSelectedMapFeatures(
+			{
+				type: SEARCH_TYPES.BUILDING,
+				data: 'G'
+			},
+			featureCollection
+		)
+		expect(features.map((feature) => feature.properties?.Raum)).toEqual([
+			'G101',
+			'G001'
+		])
+	})
+
+	it('getSelectedMapFeatures - Should return nothing without a selection', () => {
+		expect(getSelectedMapFeatures(null, featureCollection)).toEqual([])
 	})
 
 	it('getRoomData - Should resolve room metadata, occupancy and next availability', () => {

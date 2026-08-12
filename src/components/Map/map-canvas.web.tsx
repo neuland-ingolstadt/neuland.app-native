@@ -21,10 +21,12 @@ import {
 } from '@/components/Map/map-config'
 import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
+import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getMapFocusPadding,
 	getRoomSelectionFromProperties,
+	getSelectedMapFeatures,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -51,6 +53,7 @@ interface WebMapCanvasProps {
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
+	selectionColor: string
 	labelColor: string
 	backgroundColor: string
 	onRegionChange: (changing: boolean) => void
@@ -96,6 +99,7 @@ export default function WebMapCanvas({
 	selectMapElement,
 	mapMode,
 	primaryColor,
+	selectionColor,
 	labelColor,
 	backgroundColor,
 	onRegionChange,
@@ -110,6 +114,7 @@ export default function WebMapCanvas({
 			rooms: filteredGeoJSON,
 			availableRooms: availableFilteredGeoJSON
 		})
+	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
 
 	useEffect(() => {
 		if (mapRef.current == null || mapLoadState !== LoadingState.LOADED) {
@@ -129,9 +134,15 @@ export default function WebMapCanvas({
 		primaryColor,
 		labelColor,
 		backgroundColor,
-		overlayOpacity
+		overlayOpacity,
+		selectionPop,
+		selectionColor
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
+	const selectedFeatures = getSelectedMapFeatures(
+		clickedElement,
+		filteredGeoJSON
+	)
 
 	const handleMapClick = (event: MapMouseEvent): void => {
 		if (!filteredGeoJSON || !mapRef.current) {
@@ -147,6 +158,7 @@ export default function WebMapCanvas({
 			return
 		}
 
+		triggerSelectionPop()
 		selectMapElement({
 			room: selection.room,
 			type: SEARCH_TYPES.ROOM,
@@ -229,11 +241,33 @@ export default function WebMapCanvas({
 					</Source>
 				)}
 
+				{selectedFeatures.length > 0 && (
+					<Source
+						id={MAP_IDS.sources.selectedOverlay}
+						type="geojson"
+						data={{
+							type: 'FeatureCollection',
+							features: selectedFeatures
+						}}
+					>
+						<Layer
+							id={MAP_IDS.layers.selectedFill}
+							type="fill"
+							paint={layerStyles.selectedFill}
+						/>
+						<Layer
+							id={MAP_IDS.layers.selectedOutline}
+							type="line"
+							paint={layerStyles.selectedOutline}
+						/>
+					</Source>
+				)}
+
 				{selectedRoomCenter != null && (
 					<Marker
 						longitude={selectedRoomCenter[0]}
 						latitude={selectedRoomCenter[1]}
-						color={primaryColor}
+						color={selectionColor}
 					/>
 				)}
 			</Map>

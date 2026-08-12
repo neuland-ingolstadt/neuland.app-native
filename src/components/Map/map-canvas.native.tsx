@@ -19,10 +19,12 @@ import {
 } from '@/components/Map/map-config'
 import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
+import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getMapFocusPadding,
 	getRoomSelectionFromProperties,
+	getSelectedMapFeatures,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -40,6 +42,7 @@ interface NativeMapCanvasProps {
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
+	selectionColor: string
 	labelColor: string
 	backgroundColor: string
 	locationPermissionGranted: boolean
@@ -89,6 +92,7 @@ export default function NativeMapCanvas({
 	selectMapElement,
 	mapMode,
 	primaryColor,
+	selectionColor,
 	labelColor,
 	backgroundColor,
 	locationPermissionGranted,
@@ -106,6 +110,7 @@ export default function NativeMapCanvas({
 			rooms: filteredGeoJSON,
 			availableRooms: availableFilteredGeoJSON
 		})
+	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
 
 	useEffect(() => {
 		if (mapLoadState !== LoadingState.LOADED) {
@@ -125,9 +130,15 @@ export default function NativeMapCanvas({
 		primaryColor,
 		labelColor,
 		backgroundColor,
-		overlayOpacity
+		overlayOpacity,
+		selectionPop,
+		selectionColor
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
+	const selectedFeatures = getSelectedMapFeatures(
+		clickedElement,
+		filteredGeoJSON
+	)
 
 	return (
 		<MapLibreMap
@@ -180,6 +191,7 @@ export default function NativeMapCanvas({
 						if (selection == null) {
 							return
 						}
+						triggerSelectionPop()
 						selectMapElement({
 							room: selection.room,
 							type: SEARCH_TYPES.ROOM,
@@ -236,28 +248,51 @@ export default function NativeMapCanvas({
 					/>
 				</GeoJSONSource>
 			)}
-			{selectedRoomCenter != null && (
+			<GeoJSONSource
+				id={MAP_IDS.sources.selectedRoom}
+				data={{
+					type: 'FeatureCollection',
+					features:
+						selectedRoomCenter == null
+							? []
+							: [
+									{
+										type: 'Feature',
+										geometry: {
+											type: 'Point',
+											coordinates: selectedRoomCenter
+										},
+										properties: {}
+									}
+								]
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.selectedRoomMarker}
+					type="symbol"
+					layout={layerStyles.selectedRoomMarker.layout}
+					paint={layerStyles.selectedRoomMarker.paint}
+				/>
+			</GeoJSONSource>
+			{selectedFeatures.length > 0 && (
 				<GeoJSONSource
-					id={MAP_IDS.sources.selectedRoom}
+					id={MAP_IDS.sources.selectedOverlay}
 					data={{
 						type: 'FeatureCollection',
-						features: [
-							{
-								type: 'Feature',
-								geometry: {
-									type: 'Point',
-									coordinates: selectedRoomCenter
-								},
-								properties: {}
-							}
-						]
+						features: selectedFeatures
 					}}
 				>
 					<Layer
-						id={MAP_IDS.layers.selectedRoomMarker}
-						type="symbol"
-						layout={layerStyles.selectedRoomMarker.layout}
-						paint={layerStyles.selectedRoomMarker.paint}
+						id={MAP_IDS.layers.selectedFill}
+						type="fill"
+						paint={layerStyles.selectedFill}
+						beforeId={MAP_IDS.layers.selectedRoomMarker}
+					/>
+					<Layer
+						id={MAP_IDS.layers.selectedOutline}
+						type="line"
+						paint={layerStyles.selectedOutline}
+						beforeId={MAP_IDS.layers.selectedRoomMarker}
 					/>
 				</GeoJSONSource>
 			)}
