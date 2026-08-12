@@ -6,3 +6,7 @@ export const CONTAINER_TOP = 110 - PICKER_TOP
 
 export const EXPAND_SPRING = { damping: 18, stiffness: 220, mass: 0.8 }
 export const SNAP_SPRING = { damping: 24, stiffness: 280, mass: 0.7 }
+
+export function floorLabel(floor: string): string {
+	return floor === 'EG' ? '0' : floor
+}

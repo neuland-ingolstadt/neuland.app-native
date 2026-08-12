@@ -63,7 +63,13 @@ const SearchResults = ({
 
 			addUnlockedAppIcon('retro')
 		}
-	}, [searchQuery])
+	}, [
+		addUnlockedAppIcon,
+		analyticsInitialized,
+		searchQuery,
+		t,
+		unlockedAppIcons
+	])
 
 	const fuse = useMemo(
 		() =>
@@ -99,7 +105,7 @@ const SearchResults = ({
 		const fuzzyMatches = roomResults.filter((result) => !result.isExactMatch)
 
 		return [exactMatches, fuzzyMatches]
-	}, [searchQuery, allRooms])
+	}, [fuse, searchQuery])
 
 	const addToSearchHistory = useCallback(
 		(newHistory: SearchResult): void => {

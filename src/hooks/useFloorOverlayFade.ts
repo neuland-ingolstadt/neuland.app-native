@@ -17,37 +17,32 @@ export function useFloorOverlayFade({
 	displayedAvailableRooms: FeatureCollection | undefined
 	overlayOpacity: number
 } {
-	const [displayedFloor, setDisplayedFloor] = useState(floor)
-	const [displayedRooms, setDisplayedRooms] = useState(rooms)
-	const [displayedAvailableRooms, setDisplayedAvailableRooms] =
-		useState(availableRooms)
-	const [overlayOpacity, setOverlayOpacity] = useState(1)
+	const [heldFloor, setHeldFloor] = useState(floor)
+	const [heldRooms, setHeldRooms] = useState(rooms)
+	const [heldAvailableRooms, setHeldAvailableRooms] = useState(availableRooms)
+
+	const isHoldingPreviousFloor = floor !== heldFloor
+	const displayedRooms = isHoldingPreviousFloor ? heldRooms : rooms
+	const displayedAvailableRooms = isHoldingPreviousFloor
+		? heldAvailableRooms
+		: availableRooms
+	const overlayOpacity = isHoldingPreviousFloor ? 0 : 1
 
 	useEffect(() => {
-		if (floor !== displayedFloor) {
-			return
-		}
-		setDisplayedRooms(rooms)
-		setDisplayedAvailableRooms(availableRooms)
-	}, [availableRooms, displayedFloor, floor, rooms])
-
-	useEffect(() => {
-		if (floor === displayedFloor) {
+		if (floor === heldFloor) {
 			return
 		}
 
-		setOverlayOpacity(0)
 		const timeout = setTimeout(() => {
-			setDisplayedRooms(rooms)
-			setDisplayedAvailableRooms(availableRooms)
-			setDisplayedFloor(floor)
-			setOverlayOpacity(1)
+			setHeldRooms(rooms)
+			setHeldAvailableRooms(availableRooms)
+			setHeldFloor(floor)
 		}, FLOOR_OVERLAY_FADE_HALF_MS)
 
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [availableRooms, displayedFloor, floor, rooms])
+	}, [availableRooms, heldFloor, floor, rooms])
 
 	return {
 		displayedRooms,

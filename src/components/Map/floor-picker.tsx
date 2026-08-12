@@ -7,11 +7,11 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Extrapolation,
 	interpolate,
-	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring
 } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import { MapContext } from '@/contexts/map'
@@ -22,11 +22,12 @@ import {
 	CLOSE,
 	CONTAINER_TOP,
 	EXPAND_SPRING,
+	floorLabel,
 	GAP,
 	PICKER_TOP,
 	SNAP_SPRING
 } from './floor-picker-layout'
-import { FloorRow, floorLabel } from './floor-row'
+import { FloorRow } from './floor-row'
 
 interface FloorPickerProps {
 	floors: string[]
@@ -127,25 +128,25 @@ const FloorPicker = ({
 	const floorCountSV = useSharedValue(floorCount)
 
 	useEffect(() => {
-		floorCountSV.value = floorCount
+		floorCountSV.set(floorCount)
 	}, [floorCount, floorCountSV])
 
 	useEffect(() => {
-		expanded.value = withSpring(showAllFloors ? 1 : 0, EXPAND_SPRING)
+		expanded.set(withSpring(showAllFloors ? 1 : 0, EXPAND_SPRING))
 	}, [expanded, showAllFloors])
 
 	useEffect(() => {
 		const target = currentIndex * CELL
 		if (!didInit.current) {
 			didInit.current = true
-			scrollY.value = target
-			highlightY.value = target
+			scrollY.set(target)
+			highlightY.set(target)
 			return
 		}
-		if (Math.abs(scrollY.value - target) > 1) {
-			scrollY.value = withSpring(target, SNAP_SPRING)
+		if (Math.abs(scrollY.get() - target) > 1) {
+			scrollY.set(withSpring(target, SNAP_SPRING))
 		}
-		highlightY.value = withSpring(target, SNAP_SPRING)
+		highlightY.set(withSpring(target, SNAP_SPRING))
 	}, [currentIndex, highlightY, scrollY])
 
 	const selectFloorByIndex = useCallback(
@@ -198,44 +199,41 @@ const FloorPicker = ({
 		.failOffsetX([-24, 24])
 		.maxPointers(1)
 		.onBegin(() => {
-			startY.value = scrollY.value
-			lastTickIndex.value = Math.round(scrollY.value / CELL)
+			startY.set(scrollY.get())
+			lastTickIndex.set(Math.round(scrollY.get() / CELL))
 		})
 		.onUpdate((event) => {
-			const maxScroll = Math.max(floorCountSV.value - 1, 0) * CELL
-			scrollY.value = rubberClamp(
-				startY.value + event.translationY,
-				0,
-				maxScroll,
-				CELL
+			const maxScroll = Math.max(floorCountSV.get() - 1, 0) * CELL
+			scrollY.set(
+				rubberClamp(startY.get() + event.translationY, 0, maxScroll, CELL)
 			)
-			const index = Math.round(scrollY.value / CELL)
+			const index = Math.round(scrollY.get() / CELL)
 			if (
-				index !== lastTickIndex.value &&
+				index !== lastTickIndex.get() &&
 				index >= 0 &&
-				index < floorCountSV.value
+				index < floorCountSV.get()
 			) {
-				lastTickIndex.value = index
-				runOnJS(triggerTickHaptic)()
+				lastTickIndex.set(index)
+				scheduleOnRN(triggerTickHaptic)
 			}
 		})
 		.onEnd((event) => {
-			const maxIndex = Math.max(floorCountSV.value - 1, 0)
-			const projected = scrollY.value + event.velocityY * 0.14
+			const maxIndex = Math.max(floorCountSV.get() - 1, 0)
+			const projected = scrollY.get() + event.velocityY * 0.14
 			const next = clamp(Math.round(projected / CELL), 0, maxIndex)
-			scrollY.value = withSpring(next * CELL, SNAP_SPRING)
-			if (next !== lastTickIndex.value) {
-				lastTickIndex.value = next
-				runOnJS(triggerTickHaptic)()
+			scrollY.set(withSpring(next * CELL, SNAP_SPRING))
+			if (next !== lastTickIndex.get()) {
+				lastTickIndex.set(next)
+				scheduleOnRN(triggerTickHaptic)
 			}
-			runOnJS(selectFloorByIndex)(next)
+			scheduleOnRN(selectFloorByIndex, next)
 		})
 
 	const tap = Gesture.Tap()
 		.enabled(!showAllFloors)
 		.onEnd((_event, success) => {
 			if (success) {
-				runOnJS(handleToggle)()
+				scheduleOnRN(handleToggle)
 			}
 		})
 
@@ -244,8 +242,8 @@ const FloorPicker = ({
 		.minDuration(400)
 		.maxDistance(12)
 		.onStart(() => {
-			runOnJS(triggerResetHaptic)()
-			runOnJS(resetToGroundFloor)()
+			scheduleOnRN(triggerResetHaptic)
+			scheduleOnRN(resetToGroundFloor)
 		})
 
 	const collapsedGestures = Gesture.Exclusive(Gesture.Race(pan, longPress), tap)
@@ -253,11 +251,11 @@ const FloorPicker = ({
 	const closeStyle = useAnimatedStyle(() => ({
 		width: CELL,
 		height: CLOSE,
-		opacity: expanded.value,
+		opacity: expanded.get(),
 		transform: [
 			{
 				translateY: interpolate(
-					expanded.value,
+					expanded.get(),
 					[0, 1],
 					[8, 0],
 					Extrapolation.CLAMP
@@ -267,11 +265,11 @@ const FloorPicker = ({
 	}))
 
 	const clipStyle = useAnimatedStyle(() => {
-		const listHeight = Math.max(floorCountSV.value, 1) * CELL
+		const listHeight = Math.max(floorCountSV.get(), 1) * CELL
 		return {
 			width: CELL,
 			height: interpolate(
-				expanded.value,
+				expanded.get(),
 				[0, 1],
 				[CELL, listHeight],
 				Extrapolation.CLAMP
@@ -284,9 +282,9 @@ const FloorPicker = ({
 		transform: [
 			{
 				translateY: interpolate(
-					expanded.value,
+					expanded.get(),
 					[0, 1],
-					[-scrollY.value, 0],
+					[-scrollY.get(), 0],
 					Extrapolation.CLAMP
 				)
 			}
@@ -297,19 +295,19 @@ const FloorPicker = ({
 		width: '100%',
 		height: CELL,
 		opacity: interpolate(
-			expanded.value,
+			expanded.get(),
 			[0.15, 0.7],
 			[0, 1],
 			Extrapolation.CLAMP
 		),
-		transform: [{ translateY: highlightY.value }]
+		transform: [{ translateY: highlightY.get() }]
 	}))
 
 	const locateStyle = useAnimatedStyle(() => {
 		const pickerHeight = interpolate(
-			expanded.value,
+			expanded.get(),
 			[0, 1],
-			[CELL, Math.max(floorCountSV.value, 1) * CELL],
+			[CELL, Math.max(floorCountSV.get(), 1) * CELL],
 			Extrapolation.CLAMP
 		)
 		return {

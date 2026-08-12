@@ -1,7 +1,7 @@
 import type React from 'react'
 import { memo } from 'react'
 import { Pressable, Text } from 'react-native'
-import { CELL } from './floor-picker-layout'
+import { CELL, floorLabel } from './floor-picker-layout'
 
 interface FloorRowProps {
 	floor: string
@@ -13,10 +13,6 @@ interface FloorRowProps {
 	textColor: string
 	contrastColor: string
 	onSelect: (floor: string) => void
-}
-
-export function floorLabel(floor: string): string {
-	return floor === 'EG' ? '0' : floor
 }
 
 export const FloorRow = memo(function FloorRow({

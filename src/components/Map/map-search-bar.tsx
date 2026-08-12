@@ -38,15 +38,17 @@ export const MapSearchBar = ({
 	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const animatedCancelStyle = useAnimatedStyle(() => ({
-		width: cancelWidth.value,
-		opacity: cancelOpacity.value
+		width: cancelWidth.get(),
+		opacity: cancelOpacity.get()
 	}))
 
 	const animate = (toValue: number): void => {
-		cancelWidth.value = withTiming(toValue, { duration: 200 })
-		cancelOpacity.value = withTiming(toValue === 0 ? 0 : 1, {
-			duration: 250
-		})
+		cancelWidth.set(withTiming(toValue, { duration: 200 }))
+		cancelOpacity.set(
+			withTiming(toValue === 0 ? 0 : 1, {
+				duration: 250
+			})
+		)
 	}
 
 	useEffect(() => {

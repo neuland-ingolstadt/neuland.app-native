@@ -44,6 +44,10 @@ const MapBottomSheet = ({
 	const [searchQuery, setSearchQuery] = React.useState('')
 	const [searchFocused, setSearchFocused] = React.useState(false)
 
+	if (index <= SEARCH_HALF && searchQuery !== '') {
+		setSearchQuery('')
+	}
+
 	const clearSearch = useCallback((): void => {
 		setSearchQuery('')
 	}, [])
@@ -61,10 +65,7 @@ const MapBottomSheet = ({
 		}
 		textInputRef.current?.blur()
 		Keyboard.dismiss()
-		if (searchQuery !== '') {
-			setSearchQuery('')
-		}
-	}, [index, searchQuery])
+	}, [index])
 
 	return (
 		<BottomSheet

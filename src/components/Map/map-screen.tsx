@@ -137,13 +137,14 @@ const MapScreen = (): React.JSX.Element => {
 		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0
 
 	const detailIndexRef = useRef(detailIndex)
-	detailIndexRef.current = detailIndex
-	const clickedElementRef = useRef(clickedElement)
-	clickedElementRef.current = clickedElement
+	useEffect(() => {
+		detailIndexRef.current = detailIndex
+	}, [detailIndex])
 
 	const handleDetailIndexChange = useCallback(
 		(next: number) => {
 			const wasOpen = detailIndexRef.current !== DETAIL_HIDDEN
+			detailIndexRef.current = next
 			setDetailIndex(next)
 			if (wasOpen && next === DETAIL_HIDDEN) {
 				handleSheetChangesModal()
@@ -187,10 +188,12 @@ const MapScreen = (): React.JSX.Element => {
 	}, [handleDetailIndexChange, navigation])
 
 	useEffect(() => {
-		if (clickedElementRef.current == null || currentFloor?.manual !== true) {
+		if (clickedElement == null || currentFloor?.manual !== true) {
 			return
 		}
 		handleDetailIndexChange(DETAIL_HIDDEN)
+		// clickedElement is read from this render on purpose: a room tap must
+		// not re-run this when the floor was already chosen manually.
 	}, [currentFloor, handleDetailIndexChange])
 
 	useEffect(() => {
