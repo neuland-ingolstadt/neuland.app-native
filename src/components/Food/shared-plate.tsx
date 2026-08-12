@@ -1,5 +1,5 @@
 import type React from 'react'
-import { View } from 'react-native'
+import { View, type ViewStyle } from 'react-native'
 import Animated, { type AnimatedStyle } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
@@ -8,8 +8,8 @@ import CurvedText from './curved-text'
 
 interface SharedPlateProps {
 	size: number
-	plateAnimatedStyle: AnimatedStyle<Record<string, unknown>>
-	plateInnerAnimatedStyle: AnimatedStyle<Record<string, unknown>>
+	plateAnimatedStyle: AnimatedStyle<ViewStyle>
+	plateInnerAnimatedStyle: AnimatedStyle<ViewStyle>
 	showCurvedText?: boolean
 }
 
