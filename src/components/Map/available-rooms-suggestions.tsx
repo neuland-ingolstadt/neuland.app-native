@@ -3,19 +3,16 @@ import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
-import { SEARCH_TYPES, type SelectMapElement } from '@/types/map'
-import { formatFriendlyTime } from '@/utils/date-utils'
+import type { SelectMapElement } from '@/types/map'
 import { ROOMS_ALL } from '@/utils/map-constants'
-import { parseMapCoordinate } from '@/utils/map-screen-utils'
-import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { hairlineBorder } from '@/utils/uniwind-utils'
 import { UserKindContext } from '../contexts'
 import Divider from '../Universal/divider'
-import PlatformIcon from '../Universal/icon'
 import LoadingIndicator from '../Universal/loading-indicator'
+import { AllRoomsAvailable } from './all-rooms-available'
+import { AvailableRoomRow } from './available-room-row'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection
@@ -28,13 +25,6 @@ const AvailableRoomsSuggestions = ({
 }: AvailableRoomsSuggestionsProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const primaryColor = String(
-		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
-	)
-	const notificationColor = String(
-		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
-	)
-	const contrastOnPrimary = getContrastColor(primaryColor)
 	const { availableRooms } = use(MapContext)
 
 	return (
@@ -85,122 +75,19 @@ const AvailableRoomsSuggestions = ({
 						const roomSuggestions = availableRooms.slice(0, 3)
 						if (roomSuggestions.at(0)?.room === ROOMS_ALL) {
 							return (
-								<View className="flex-row px-3 py-[18px]">
-									<View className="items-center flex-row flex-1 justify-between">
-										<View
-											className="items-center rounded-full h-10 justify-center me-3.5 w-10"
-											style={{ backgroundColor: primaryColor }}
-										>
-											<PlatformIcon
-												ios={{
-													name: 'studentdesk',
-													size: 18
-												}}
-												android={{
-													name: 'school',
-													size: 20
-												}}
-												web={{
-													name: 'Notebook',
-													size: 20
-												}}
-												style={{ color: contrastOnPrimary }}
-											/>
-										</View>
-
-										<View className="flex-1 pe-3.5">
-											<Text className="text-text text-base font-semibold mb-px">
-												{t('pages.map.allRoomsAvailable.title')}
-											</Text>
-											<Text className="text-text text-sm font-normal">
-												{t('pages.map.allRoomsAvailable.subtitle')}
-											</Text>
-										</View>
-									</View>
-								</View>
+								<AllRoomsAvailable
+									title={t('pages.map.allRoomsAvailable.title')}
+									subtitle={t('pages.map.allRoomsAvailable.subtitle')}
+								/>
 							)
 						}
 						return roomSuggestions.map((room, key) => (
 							<React.Fragment key={key}>
-								<Pressable
-									testID="map-available-room-row"
-									className="flex-row px-3 py-[18px]"
-									onPress={() => {
-										const details = allRooms.features.find(
-											(x) => x.properties?.Raum === room.room
-										)
-
-										if (details == null) {
-											roomNotFoundToast(room.room, notificationColor)
-											return
-										}
-
-										const etage = details?.properties?.Ebene as
-											| string
-											| undefined
-
-										selectMapElement({
-											room: room.room,
-											type: SEARCH_TYPES.ROOM,
-											center: parseMapCoordinate(details.properties?.center),
-											origin: 'AvailableRoomsSuggestion',
-											manual: false,
-											floor: etage ?? 'EG'
-										})
-									}}
-								>
-									<View className="items-center flex-row flex-1 justify-between">
-										<View
-											className="items-center rounded-full h-10 justify-center me-3.5 w-10"
-											style={{ backgroundColor: primaryColor }}
-										>
-											<PlatformIcon
-												ios={{
-													name: 'studentdesk',
-													size: 18
-												}}
-												android={{
-													name: 'school',
-													size: 20
-												}}
-												web={{
-													name: 'Notebook',
-													size: 20
-												}}
-												style={{ color: contrastOnPrimary }}
-											/>
-										</View>
-
-										<View className="flex-1 pe-3.5">
-											<Text className="text-text text-base font-semibold mb-px">
-												{room.room}
-											</Text>
-											<Text className="text-text text-sm font-normal">
-												{room.type}
-												{room.capacity !== undefined && (
-													<>
-														{' '}
-														({room.capacity} {t('pages.rooms.options.seats')})
-													</>
-												)}
-											</Text>
-										</View>
-									</View>
-									<View className="flex-col justify-center">
-										<Text
-											className="text-label"
-											style={{ fontVariant: ['tabular-nums'] }}
-										>
-											{formatFriendlyTime(room.from)}
-										</Text>
-										<Text
-											className="text-text"
-											style={{ fontVariant: ['tabular-nums'] }}
-										>
-											{formatFriendlyTime(room.until)}
-										</Text>
-									</View>
-								</Pressable>
+								<AvailableRoomRow
+									room={room}
+									allRooms={allRooms}
+									selectMapElement={selectMapElement}
+								/>
 								{roomSuggestions.length > 1 &&
 									key < roomSuggestions.length - 1 && <Divider />}
 							</React.Fragment>

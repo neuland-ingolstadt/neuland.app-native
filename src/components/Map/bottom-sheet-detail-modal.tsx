@@ -1,21 +1,18 @@
-import { router } from 'expo-router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
-import { useCSSVariable } from 'uniwind'
 import { BottomSheet } from '@/components/Universal/bottom-sheet'
 import { useSheetPosition } from '@/components/Universal/use-sheet-position'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
-import type { MaterialIcon } from '@/types/material-icons'
 import { handleShareModal } from '@/utils/map-actions'
-import { toColor } from '@/utils/uniwind-utils'
 import FormList from '../Universal/form-list'
-import PlatformIcon, { type WebIcon } from '../Universal/icon'
 import BottomSheetBackground from './bottom-sheet-background'
 import { MapSheetHandle } from './map-sheet-handle'
+import { RoomReportLink } from './room-report-link'
+import { SheetActionButton } from './sheet-action-button'
 import { sheetHostStyle } from './sheet-chrome'
 import { DETAIL_HIDDEN } from './sheet-detents'
 
@@ -26,113 +23,6 @@ interface BottomSheetDetailModalProps {
 	currentPositionModal: SharedValue<number>
 	roomData: RoomData
 	modalSection: FormListSections[]
-}
-
-interface ReportLinkProps {
-	roomTitle: string
-}
-
-interface SheetActionButtonProps {
-	testID: string
-	accessibilityLabel: string
-	onPress: () => void
-	iosFilledSymbol: string
-	androidName: MaterialIcon
-	webName: WebIcon
-}
-
-const IOS_ACTION_SIZE = 38
-
-const SheetActionButton = ({
-	testID,
-	accessibilityLabel,
-	onPress,
-	iosFilledSymbol,
-	androidName,
-	webName
-}: SheetActionButtonProps): React.JSX.Element => {
-	const labelColor = String(
-		toColor(useCSSVariable('--color-label-secondary')) ?? '#8e8e93'
-	)
-	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
-
-	return (
-		<Pressable
-			testID={testID}
-			accessible
-			accessibilityRole="button"
-			accessibilityLabel={accessibilityLabel}
-			onPress={onPress}
-			hitSlop={8}
-			className={
-				Platform.OS === 'ios'
-					? 'items-center justify-center'
-					: 'h-10 w-10 items-center justify-center rounded-full bg-label-background'
-			}
-			style={
-				Platform.OS === 'ios'
-					? { width: IOS_ACTION_SIZE, height: IOS_ACTION_SIZE }
-					: undefined
-			}
-		>
-			<PlatformIcon
-				ios={{
-					name: iosFilledSymbol,
-					size: IOS_ACTION_SIZE - 7,
-					renderMode: 'hierarchical'
-				}}
-				android={{ name: androidName, size: 22 }}
-				web={{ name: webName, size: 18 }}
-				style={{
-					color: Platform.OS === 'ios' ? labelColor : textColor,
-					...(Platform.OS === 'ios'
-						? { width: IOS_ACTION_SIZE, height: IOS_ACTION_SIZE }
-						: {})
-				}}
-			/>
-		</Pressable>
-	)
-}
-
-const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
-	const { t } = useTranslation('common')
-	const labelColor = toColor(useCSSVariable('--color-label'))
-
-	const handleReportRoom = useCallback(() => {
-		router.navigate({
-			pathname: '/room-report',
-			params: { room: roomTitle }
-		})
-	}, [roomTitle])
-
-	return (
-		<View className="py-2.5">
-			<Pressable
-				testID="map-room-report"
-				onPress={() => handleReportRoom()}
-				className="items-center flex-row gap-1"
-			>
-				<Text className="text-[15px] ps-1" style={{ color: labelColor }}>
-					{t('pages.map.details.room.report')}
-				</Text>
-				<PlatformIcon
-					style={{ color: labelColor }}
-					ios={{
-						name: 'chevron.forward',
-						size: 6
-					}}
-					android={{
-						name: 'chevron_right',
-						size: 16
-					}}
-					web={{
-						name: 'ChevronRight',
-						size: 16
-					}}
-				/>
-			</Pressable>
-		</View>
-	)
 }
 
 export const BottomSheetDetailModal = ({
@@ -212,7 +102,7 @@ export const BottomSheetDetailModal = ({
 				<View className="self-center my-4 w-full">
 					<FormList sections={modalSection} />
 				</View>
-				<ReportLink roomTitle={roomData.title} />
+				<RoomReportLink roomTitle={roomData.title} />
 			</View>
 		</BottomSheet>
 	)

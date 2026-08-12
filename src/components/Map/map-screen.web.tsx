@@ -2,15 +2,8 @@ import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Appearance, useWindowDimensions, View } from 'react-native'
 import {
-	Appearance,
-	Linking,
-	Pressable,
-	Text,
-	useWindowDimensions,
-	View
-} from 'react-native'
-import Animated, {
 	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
@@ -22,6 +15,7 @@ import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-mod
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import WebMapCanvas from '@/components/Map/map-canvas.web'
+import { OsmCopyright } from '@/components/Map/osm-copyright'
 import {
 	DETAIL_HIDDEN,
 	DETAIL_OPEN,
@@ -166,16 +160,6 @@ const MapScreen = (): React.JSX.Element => {
 		handleDetailIndexChange(DETAIL_HIDDEN)
 	}, [currentFloor, handleDetailIndexChange])
 
-	const layerStyles = {
-		osmBackground: {
-			backgroundColor: isDark
-				? 'rgba(166, 173, 181, 0.70)'
-				: 'rgba(218, 218, 218, 0.70)',
-			paddingHorizontal: 4,
-			borderRadius: 4
-		}
-	}
-
 	const [regionChange, setRegionChange] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -248,25 +232,7 @@ const MapScreen = (): React.JSX.Element => {
 				/>
 			)}
 			{mapLoadState === LoadingState.LOADED && (
-				<Animated.View
-					className="items-end h-[30px] me-1 absolute right-0 z-[99]"
-					style={animatedStyles}
-				>
-					<Pressable
-						onPress={() => {
-							void Linking.openURL('https://www.openstreetmap.org/copyright')
-						}}
-						style={layerStyles.osmBackground}
-					>
-						<Text
-							className="text-[13px]"
-							numberOfLines={1}
-							ellipsizeMode="tail"
-						>
-							{'© OpenStreetMap'}
-						</Text>
-					</Pressable>
-				</Animated.View>
+				<OsmCopyright style={animatedStyles} />
 			)}
 			<MapBottomSheet
 				index={searchIndex}

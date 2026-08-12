@@ -1,18 +1,14 @@
 import type { FeatureCollection } from 'geojson'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
-import { SEARCH_TYPES, type SelectMapElement } from '@/types/map'
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { parseMapCoordinate } from '@/utils/map-screen-utils'
-import { isValidRoom } from '@/utils/timetable-utils'
-import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
+import type { SelectMapElement } from '@/types/map'
+import { formatFriendlyDate } from '@/utils/date-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
-
 import Divider from '../Universal/divider'
-import PlatformIcon from '../Universal/icon'
+import { NextLectureRow } from './next-lecture-row'
 
 interface NextLectureSuggestionsProps {
 	allRooms: FeatureCollection
@@ -25,14 +21,10 @@ const NextLectureSuggestion = ({
 }: NextLectureSuggestionsProps): React.JSX.Element | null => {
 	const { nextLecture } = use(MapContext)
 	const { t } = useTranslation('common')
-	const primaryColor = String(
-		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
-	)
 	const notificationColor = String(
 		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
 	)
 	const labelColor = toColor(useCSSVariable('--color-label'))
-	const contrastOnPrimary = getContrastColor(primaryColor)
 
 	if (nextLecture == null || nextLecture.length === 0) {
 		return null
@@ -56,80 +48,12 @@ const NextLectureSuggestion = ({
 			>
 				{nextLecture.map((lecture, key) => (
 					<React.Fragment key={key}>
-						<Pressable
-							testID="map-next-lecture-row"
-							disabled={
-								lecture.rooms.length === 0 || !isValidRoom(lecture.rooms[0])
-							}
-							className="flex-row px-3 py-[18px]"
-							onPress={() => {
-								const details = allRooms.features.find(
-									(x) => x.properties?.Raum === lecture.rooms[0]
-								)
-								if (details == null) {
-									roomNotFoundToast(lecture.rooms[0], notificationColor)
-									return
-								}
-								const etage = (details?.properties?.Ebene as string) ?? 'EG'
-								selectMapElement({
-									room: lecture.rooms[0],
-									type: SEARCH_TYPES.ROOM,
-									center: parseMapCoordinate(details.properties?.center),
-									origin: 'NextLecture',
-									manual: false,
-									floor: etage
-								})
-							}}
-						>
-							<View className="items-center flex-row flex-1 justify-between">
-								<View
-									className="items-center rounded-full h-10 justify-center me-3.5 w-10"
-									style={{ backgroundColor: primaryColor }}
-								>
-									<PlatformIcon
-										ios={{
-											name: 'clock.fill',
-											size: 18
-										}}
-										android={{
-											name: 'school',
-											size: 20
-										}}
-										web={{
-											name: 'Clock',
-											size: 20
-										}}
-										style={{ color: contrastOnPrimary }}
-									/>
-								</View>
-
-								<View className="flex-1 pe-3.5">
-									<Text
-										className="text-text text-base font-semibold mb-px"
-										numberOfLines={2}
-									>
-										{lecture.name}
-									</Text>
-									<Text className="text-text text-sm font-normal">
-										{lecture.rooms.join(', ')}
-									</Text>
-								</View>
-							</View>
-							<View className="flex-col justify-center">
-								<Text
-									className="text-label"
-									style={{ fontVariant: ['tabular-nums'] }}
-								>
-									{formatFriendlyTime(lecture.startDate)}
-								</Text>
-								<Text
-									className="text-text"
-									style={{ fontVariant: ['tabular-nums'] }}
-								>
-									{formatFriendlyTime(lecture.endDate)}
-								</Text>
-							</View>
-						</Pressable>
+						<NextLectureRow
+							lecture={lecture}
+							allRooms={allRooms}
+							selectMapElement={selectMapElement}
+							notificationColor={notificationColor}
+						/>
 						{key !== nextLecture.length - 1 && <Divider />}
 					</React.Fragment>
 				))}

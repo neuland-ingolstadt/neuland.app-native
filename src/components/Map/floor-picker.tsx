@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, use, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Extrapolation,
@@ -17,15 +17,16 @@ import PlatformIcon from '@/components/Universal/icon'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-const CELL = 38
-const GAP = 5
-const CLOSE = 38
-const PICKER_TOP = CLOSE + GAP
-const CONTAINER_TOP = 110 - PICKER_TOP
-
-const EXPAND_SPRING = { damping: 18, stiffness: 220, mass: 0.8 }
-const SNAP_SPRING = { damping: 24, stiffness: 280, mass: 0.7 }
+import {
+	CELL,
+	CLOSE,
+	CONTAINER_TOP,
+	EXPAND_SPRING,
+	GAP,
+	PICKER_TOP,
+	SNAP_SPRING
+} from './floor-picker-layout'
+import { FloorRow, floorLabel } from './floor-row'
 
 interface FloorPickerProps {
 	floors: string[]
@@ -33,22 +34,6 @@ interface FloorPickerProps {
 	toggleShowAllFloors: () => void
 	locationPermissionGranted?: boolean
 	onLocate?: () => void
-}
-
-interface FloorRowProps {
-	floor: string
-	isCurrent: boolean
-	isLast: boolean
-	interactive: boolean
-	borderColor: string
-	cardColor: string
-	textColor: string
-	contrastColor: string
-	onSelect: (floor: string) => void
-}
-
-function floorLabel(floor: string): string {
-	return floor === 'EG' ? '0' : floor
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -97,49 +82,6 @@ function triggerToggleHaptic(): void {
 		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 	}
 }
-
-const FloorRow = memo(function FloorRow({
-	floor,
-	isCurrent,
-	isLast,
-	interactive,
-	borderColor,
-	cardColor,
-	textColor,
-	contrastColor,
-	onSelect
-}: FloorRowProps): React.JSX.Element {
-	return (
-		<Pressable
-			testID={`map-floor-${floor}`}
-			onPress={() => {
-				onSelect(floor)
-			}}
-			disabled={!interactive}
-			accessibilityRole="button"
-			accessibilityState={{ selected: isCurrent }}
-			accessibilityLabel={floorLabel(floor)}
-			className="items-center justify-center"
-			style={{
-				height: CELL,
-				width: CELL,
-				backgroundColor: isCurrent && interactive ? 'transparent' : cardColor,
-				borderBottomColor: borderColor,
-				borderBottomWidth: isLast || !interactive ? 0 : 1
-			}}
-		>
-			<Text
-				className="font-medium text-[15px]"
-				style={{
-					color: isCurrent && interactive ? contrastColor : textColor,
-					fontVariant: ['tabular-nums']
-				}}
-			>
-				{floorLabel(floor)}
-			</Text>
-		</Pressable>
-	)
-})
 
 const FloorPicker = ({
 	floors,
