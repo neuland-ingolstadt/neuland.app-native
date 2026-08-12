@@ -186,7 +186,7 @@ export default function WebMapCanvas({
 				onMoveStart={() => onRegionChange(true)}
 				attributionControl={false}
 			>
-				<NavigationControl position="top-right" />
+				<NavigationControl position="top-left" />
 
 				<Source
 					id={MAP_IDS.sources.selectedOverlay}
