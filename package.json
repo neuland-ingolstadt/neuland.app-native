@@ -8,7 +8,6 @@
 		"dev": "bun maplibre:worker && EXPO_UNSTABLE_MCP_SERVER=1 EXPO_USE_FAST_RESOLVER=1 expo start",
 		"start": "bun maplibre:worker && EXPO_UNSTABLE_MCP_SERVER=1 EXPO_USE_FAST_RESOLVER=1 expo start --no-dev --clear --port 3000",
 		"atlas": "bun maplibre:worker && EXPO_UNSTABLE_ATLAS=true npx expo export --platform all",
-		"web": "bun maplibre:worker && EXPO_UNSTABLE_MCP_SERVER=1 expo start --web --port 3000",
 		"maplibre:worker": "bun config/sync-maplibre-worker.ts",
 		"android": "expo run:android --device",
 		"ios": "expo run:ios --device",
