@@ -1,4 +1,7 @@
 # bunfig.toml
+[install]
+# Only install package versions published at least 3 days ago
+minimumReleaseAge = 259200
 
 [test]
 preload = ["./src/utils/tests/setup.ts"]
