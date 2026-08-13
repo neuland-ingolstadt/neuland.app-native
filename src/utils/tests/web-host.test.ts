@@ -1,18 +1,7 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { beforeAll, describe, expect, it } from 'bun:test'
+import { reactNativePlatform } from './react-native-mock'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
-
-const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
-
-mock.module('react-native', () => ({
-	__esModule: true,
-	default: {
-		Platform: platform,
-		Linking: { openURL: async () => {} }
-	},
-	Platform: platform,
-	Linking: { openURL: async () => {} }
-}))
 
 let resolveAnnouncementPlatform: typeof import('../web-host').resolveAnnouncementPlatform
 let getAnnouncementPlatform: typeof import('../web-host').getAnnouncementPlatform
@@ -59,15 +48,15 @@ describe('web-host', () => {
 	})
 
 	it('resolveAnnouncementPlatform - Should return IOS on iOS', () => {
-		platform.OS = 'ios'
+		reactNativePlatform.OS = 'ios'
 		expect(resolveAnnouncementPlatform()).toBe('IOS')
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 
 	it('resolveAnnouncementPlatform - Should return ANDROID on Android', () => {
-		platform.OS = 'android'
+		reactNativePlatform.OS = 'android'
 		expect(resolveAnnouncementPlatform()).toBe('ANDROID')
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 
 	it('resolveAnnouncementPlatform - Should default to WEB when hostname is omitted', () => {

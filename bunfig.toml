@@ -4,6 +4,7 @@
 minimumReleaseAge = 259200
 
 [test]
+preload = ["./src/utils/tests/setup.ts"]
 coverageSkipTestFiles = true
 coveragePathIgnorePatterns = [
 	"src/__generated__/**",
