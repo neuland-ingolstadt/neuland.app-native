@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -40,6 +40,11 @@ beforeAll(async () => {
 })
 
 describe('api-utils', () => {
+	beforeEach(() => {
+		loadSecureAsyncMock.mockReset()
+		loadSecureAsyncMock.mockImplementation(async () => 'alex.muster')
+	})
+
 	it('trimErrorMsg - Should remove the wrapped message and keep the text inside quotes', () => {
 		expect(
 			apiUtils.trimErrorMsg('"Service for user-group not defined" (-120)')
@@ -70,7 +75,6 @@ describe('api-utils', () => {
 	})
 
 	it('getUsername - Should return an empty string when secure storage fails', async () => {
-		loadSecureAsyncMock.mockReset()
 		loadSecureAsyncMock.mockImplementationOnce(async () => {
 			throw new Error('storage unavailable')
 		})

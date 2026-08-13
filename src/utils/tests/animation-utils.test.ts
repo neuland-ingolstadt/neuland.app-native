@@ -1,41 +1,9 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test'
+import { reactNativePlatform } from './react-native-mock'
 
 const impactAsyncMock = mock(async () => {})
 const randomizeColorMock = mock(() => {})
 const onBounceMock = mock(() => {})
-
-mock.module('react-native', () => ({
-	__esModule: true,
-	default: {
-		Platform: { OS: 'ios' },
-		Share: { share: () => Promise.resolve() },
-		Linking: { openURL: async () => {} },
-		NativeEventEmitter: class {
-			addListener() {
-				return { remove: () => {} }
-			}
-			removeAllListeners() {}
-		},
-		TurboModuleRegistry: {
-			get: () => null,
-			getEnforcing: () => null
-		}
-	},
-	Platform: { OS: 'ios' },
-	Share: { share: () => Promise.resolve() },
-	Linking: { openURL: async () => {} },
-	NativeModules: {},
-	NativeEventEmitter: class {
-		addListener() {
-			return { remove: () => {} }
-		}
-		removeAllListeners() {}
-	},
-	TurboModuleRegistry: {
-		get: () => null,
-		getEnforcing: () => null
-	}
-}))
 
 mock.module('expo-clipboard', () => ({
 	setStringAsync: async () => {}
@@ -66,7 +34,12 @@ mock.module('react-native-reanimated', () => ({
 let animationUtils: typeof import('../animation-utils')
 
 beforeAll(async () => {
+	reactNativePlatform.OS = 'ios'
 	animationUtils = await import('../animation-utils')
+})
+
+afterAll(() => {
+	reactNativePlatform.OS = 'web'
 })
 
 describe('animation-utils', () => {
