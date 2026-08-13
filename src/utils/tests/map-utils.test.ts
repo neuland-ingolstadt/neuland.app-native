@@ -1,10 +1,9 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import { SEARCH_TYPES } from '@/types/map'
+import { reactNativePlatform, reactNativeShareMock } from './react-native-mock'
 
 const UTILS_ROOT = new URL('../', import.meta.url).pathname
 
-const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
-const shareMock = mock(async () => {})
 const trackEventMock = mock(() => {})
 const clipboardSetStringAsyncMock = mock(async () => {})
 
@@ -18,38 +17,6 @@ mock.module('expo-localization', () => ({
 
 mock.module('react-i18next', () => ({
 	initReactI18next: {}
-}))
-
-mock.module('react-native', () => ({
-	__esModule: true,
-	default: {
-		Platform: platform,
-		Share: { share: shareMock },
-		Linking: { openURL: async () => {} },
-		NativeEventEmitter: class {
-			addListener() {
-				return { remove: () => {} }
-			}
-			removeAllListeners() {}
-		},
-		TurboModuleRegistry: {
-			get: () => null,
-			getEnforcing: () => null
-		}
-	},
-	Platform: platform,
-	Share: { share: shareMock },
-	Linking: { openURL: async () => {} },
-	NativeEventEmitter: class {
-		addListener() {
-			return { remove: () => {} }
-		}
-		removeAllListeners() {}
-	},
-	TurboModuleRegistry: {
-		get: () => null,
-		getEnforcing: () => null
-	}
 }))
 
 mock.module('@aptabase/react-native', () => ({
@@ -612,7 +579,7 @@ describe('map-utils', () => {
 	})
 
 	it('handleShareModal - Should copy the room link on web', () => {
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 		trackEventMock.mockReset()
 		clipboardSetStringAsyncMock.mockReset()
 
@@ -623,19 +590,19 @@ describe('map-utils', () => {
 			'https://web.neuland.app/map/?room=G101'
 		)
 
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 
 	it('handleShareModal - Should use the native share sheet off web', () => {
-		platform.OS = 'ios'
-		shareMock.mockReset()
+		reactNativePlatform.OS = 'ios'
+		reactNativeShareMock.mockReset()
 
 		mapUtils.handleShareModal('H201')
 
-		expect(shareMock).toHaveBeenCalledWith({
+		expect(reactNativeShareMock).toHaveBeenCalledWith({
 			url: 'https://web.neuland.app/map/?room=H201'
 		})
 
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 })

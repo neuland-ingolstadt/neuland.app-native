@@ -1,6 +1,7 @@
 # bunfig.toml
 
 [test]
+preload = ["./src/utils/tests/setup.ts"]
 coverageSkipTestFiles = true
 coveragePathIgnorePatterns = [
 	"src/__generated__/**",
