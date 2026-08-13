@@ -15,16 +15,26 @@ export type MapMode = keyof typeof MAP_STYLE_URLS
 export const MAP_IDS = {
 	sources: {
 		allRooms: 'allRoomsSource',
+		allRoomsOutgoing: 'allRoomsOutgoingSource',
+		allRoomsOutline: 'allRoomsOutlineSource',
+		allRoomsOutgoingOutline: 'allRoomsOutgoingOutlineSource',
 		availableRooms: 'availableRoomsSource',
+		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
+		availableRoomsOutline: 'availableRoomsOutlineSource',
+		availableRoomsOutgoingOutline: 'availableRoomsOutgoingOutlineSource',
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
 		selectedOverlay: 'selectedOverlaySource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
+		allRoomsOutgoingFill: 'allRoomsOutgoingFill',
 		allRoomsOutline: 'allRoomsOutline',
+		allRoomsOutgoingOutline: 'allRoomsOutgoingOutline',
 		availableRoomsFill: 'availableRoomsFill',
+		availableRoomsOutgoingFill: 'availableRoomsOutgoingFill',
 		availableRoomsOutline: 'availableRoomsOutline',
+		availableRoomsOutgoingOutline: 'availableRoomsOutgoingOutline',
 		buildingLabels: 'buildingLettersLayer',
 		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
@@ -34,13 +44,16 @@ export const MAP_IDS = {
 
 export { MAP_CAMERA } from '@/utils/map-constants'
 
-export const FLOOR_OVERLAY_FADE_MS = 180
-export const FLOOR_OVERLAY_FADE_HALF_MS = FLOOR_OVERLAY_FADE_MS / 2
-
-const FLOOR_OVERLAY_FADE_TRANSITION = {
-	duration: FLOOR_OVERLAY_FADE_HALF_MS,
-	delay: 0
+export const ROOM_PRESS_HITBOX = {
+	top: 2,
+	right: 2,
+	bottom: 2,
+	left: 2
 } as const
+
+export const GEOJSON_TOLERANCE = 0
+
+export const FLOOR_OVERLAY_FADE_MS = 200
 
 export const MAP_COLORS = {
 	roomFill: {
@@ -78,9 +91,15 @@ export function getMapLayerStyles(
 	labelColor: string,
 	backgroundColor: string,
 	overlayOpacity = 1,
+	overlayFadeDuration = FLOOR_OVERLAY_FADE_MS,
 	selectionPop = false,
 	selectionColor = primaryColor
 ) {
+	const overlayFadeTransition = {
+		duration: overlayFadeDuration,
+		delay: 0
+	} as const
+
 	return {
 		allRooms: {
 			'fill-antialias': true,
@@ -88,7 +107,7 @@ export function getMapLayerStyles(
 				? MAP_COLORS.roomFill.dark
 				: MAP_COLORS.roomFill.light,
 			'fill-opacity': MAP_COLORS.roomFillOpacity * overlayOpacity,
-			'fill-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
+			'fill-opacity-transition': overlayFadeTransition
 		},
 		allRoomsOutline: {
 			'line-color': isDark
@@ -96,19 +115,19 @@ export function getMapLayerStyles(
 				: MAP_COLORS.roomOutline.light,
 			'line-width': MAP_COLORS.roomOutlineWidth,
 			'line-opacity': overlayOpacity,
-			'line-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
+			'line-opacity-transition': overlayFadeTransition
 		},
 		availableRooms: {
 			'fill-antialias': true,
 			'fill-color': primaryColor,
 			'fill-opacity': MAP_COLORS.availableRoomFillOpacity * overlayOpacity,
-			'fill-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
+			'fill-opacity-transition': overlayFadeTransition
 		},
 		availableRoomsOutline: {
 			'line-color': primaryColor,
 			'line-width': MAP_COLORS.availableRoomOutlineWidth,
 			'line-opacity': overlayOpacity,
-			'line-opacity-transition': FLOOR_OVERLAY_FADE_TRANSITION
+			'line-opacity-transition': overlayFadeTransition
 		},
 		buildingLabels: {
 			layout: {
@@ -134,10 +153,9 @@ export function getMapLayerStyles(
 		selectedFill: {
 			'fill-antialias': true,
 			'fill-color': selectionColor,
-			'fill-opacity':
-				(selectionPop
-					? MAP_COLORS.selectedFillOpacityPop
-					: MAP_COLORS.selectedFillOpacity) * overlayOpacity,
+			'fill-opacity': selectionPop
+				? MAP_COLORS.selectedFillOpacityPop
+				: MAP_COLORS.selectedFillOpacity,
 			'fill-opacity-transition': SELECTED_POP_TRANSITION
 		},
 		selectedOutline: {
@@ -145,9 +163,7 @@ export function getMapLayerStyles(
 			'line-width': selectionPop
 				? MAP_COLORS.selectedOutlineWidthPop
 				: MAP_COLORS.selectedOutlineWidth,
-			'line-width-transition': SELECTED_POP_TRANSITION,
-			'line-opacity': overlayOpacity,
-			'line-opacity-transition': SELECTED_POP_TRANSITION
+			'line-width-transition': SELECTED_POP_TRANSITION
 		}
 	}
 }

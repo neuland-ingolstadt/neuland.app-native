@@ -1,15 +1,9 @@
 import { LocationManager } from '@maplibre/maplibre-react-native'
-import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Appearance, useWindowDimensions, View } from 'react-native'
-import {
-	runOnJS,
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
+import { useWindowDimensions, View } from 'react-native'
+import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-modal'
@@ -26,13 +20,14 @@ import {
 	SEARCH_HALF,
 	SEARCH_HIDDEN
 } from '@/components/Map/sheet-detents'
+import { useMapDetailSheet } from '@/hooks/useMapDetailSheet'
 import { useMapScreenModel } from '@/hooks/useMapScreenModel'
+import { useOsmAttributionFade } from '@/hooks/useOsmAttributionFade'
 import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 
 const MapScreen = (): React.JSX.Element => {
-	const navigation = useNavigation()
 	const { t } = useTranslation('common')
 	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
 	const [mapKey, setMapKey] = useState(0)
@@ -63,7 +58,6 @@ const MapScreen = (): React.JSX.Element => {
 		[windowHeight]
 	)
 	const [searchIndex, setSearchIndex] = useState(SEARCH_HALF)
-	const [detailIndex, setDetailIndex] = useState(DETAIL_HIDDEN)
 	const currentPosition = useSharedValue(
 		detentHeight(searchDetents[SEARCH_HALF])
 	)
@@ -73,10 +67,9 @@ const MapScreen = (): React.JSX.Element => {
 	const [locationPermissionGranted, setLocationPermissionGranted] =
 		useState(false)
 	const [locationRequestId, setLocationRequestId] = useState(0)
-	const [cameraResetRequestId, setCameraResetRequestId] = useState(0)
-	const [isVisible, setIsVisible] = useState(true)
-	const opacity = useSharedValue(1)
-	const fadeOutStarted = useRef(false)
+	const { opacity, onRegionChange } = useOsmAttributionFade(
+		mapLoadState === LoadingState.LOADED
+	)
 
 	useEffect(() => {
 		let cancelled = false
@@ -106,9 +99,10 @@ const MapScreen = (): React.JSX.Element => {
 	const restoreSearchSheet = useCallback(() => {
 		setSearchIndex(SEARCH_HALF)
 	}, [])
+	const presentDetailSheetRef = useRef<() => void>(() => {})
 	const handlePresentModalPress = useCallback(() => {
 		setSearchIndex(SEARCH_HIDDEN)
-		setDetailIndex(DETAIL_OPEN)
+		presentDetailSheetRef.current()
 	}, [])
 
 	const {
@@ -133,25 +127,31 @@ const MapScreen = (): React.JSX.Element => {
 		notificationColor
 	})
 
+	const handleTabPress = useCallback(() => {
+		setDisableFollowUser(true)
+	}, [])
+
+	const {
+		detailIndex,
+		handleDetailIndexChange,
+		presentDetailSheet,
+		cameraResetRequestId
+	} = useMapDetailSheet({
+		clickedElement,
+		currentFloor,
+		handleSheetChangesModal,
+		onTabPress: handleTabPress
+	})
+	presentDetailSheetRef.current = presentDetailSheet
+
+	useEffect(() => {
+		if (clickedElement !== null) {
+			setDisableFollowUser(true)
+		}
+	}, [clickedElement])
+
 	const focusPaddingBottom =
 		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0
-
-	const detailIndexRef = useRef(detailIndex)
-	useEffect(() => {
-		detailIndexRef.current = detailIndex
-	}, [detailIndex])
-
-	const handleDetailIndexChange = useCallback(
-		(next: number) => {
-			const wasOpen = detailIndexRef.current !== DETAIL_HIDDEN
-			detailIndexRef.current = next
-			setDetailIndex(next)
-			if (wasOpen && next === DETAIL_HIDDEN) {
-				handleSheetChangesModal()
-			}
-		},
-		[handleSheetChangesModal]
-	)
 
 	const animatedStyles = useAnimatedStyle(() => {
 		const sheetFromBottom =
@@ -166,42 +166,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	})
 
-	useEffect(() => {
-		const subscription = Appearance.addChangeListener(() => {
-			handleDetailIndexChange(DETAIL_HIDDEN)
-		})
-
-		return () => {
-			subscription.remove()
-		}
-	}, [handleDetailIndexChange])
-
-	useEffect(() => {
-		// @ts-expect-error wrong type
-		const unsubscribe = navigation.addListener('tabPress', () => {
-			setDisableFollowUser(true)
-			handleDetailIndexChange(DETAIL_HIDDEN)
-			setCameraResetRequestId((previous) => previous + 1)
-		})
-
-		return unsubscribe
-	}, [handleDetailIndexChange, navigation])
-
-	useEffect(() => {
-		if (clickedElement == null || currentFloor?.manual !== true) {
-			return
-		}
-		handleDetailIndexChange(DETAIL_HIDDEN)
-		// clickedElement is read from this render on purpose: a room tap must
-		// not re-run this when the floor was already chosen manually.
-	}, [currentFloor, handleDetailIndexChange])
-
-	useEffect(() => {
-		if (clickedElement !== null) {
-			setDisableFollowUser(true)
-		}
-	}, [clickedElement])
-
 	const handleLocate = useCallback(() => {
 		if (!locationPermissionGranted) {
 			return
@@ -211,39 +175,8 @@ const MapScreen = (): React.JSX.Element => {
 		handleDetailIndexChange(DETAIL_HIDDEN)
 	}, [handleDetailIndexChange, locationPermissionGranted])
 
-	const [regionChange, setRegionChange] = useState<boolean>(false)
-
-	useEffect(() => {
-		// As required by the OSM attribution, the attribution must be displayed until the user interacts with the map or 5 seconds after the map has loaded
-		let timer: ReturnType<typeof setTimeout>
-		const startFadeOut = (): void => {
-			if (fadeOutStarted.current) {
-				return
-			}
-			fadeOutStarted.current = true
-			opacity.set(
-				withTiming(0, { duration: 500 }, () => {
-					runOnJS(setIsVisible)(false)
-				})
-			)
-		}
-
-		if (regionChange) {
-			startFadeOut()
-		} else if (isVisible) {
-			timer = setTimeout(() => {
-				startFadeOut()
-			}, 5000)
-		}
-
-		return () => {
-			clearTimeout(timer)
-		}
-	}, [regionChange, isVisible, opacity])
-
 	const handleRefresh = useCallback(() => {
 		setMapLoadState(LoadingState.LOADING)
-		// Force a reload by incrementing the key
 		setMapKey((prev) => prev + 1)
 	}, [])
 
@@ -289,7 +222,7 @@ const MapScreen = (): React.JSX.Element => {
 					locationPermissionGranted={locationPermissionGranted}
 					locationRequestId={locationRequestId}
 					disableFollowUser={disableFollowUser}
-					onRegionChange={setRegionChange}
+					onRegionChange={onRegionChange}
 					focusPaddingBottom={focusPaddingBottom}
 					overlayFloor={currentFloor?.floor ?? 'EG'}
 				/>

@@ -9,6 +9,7 @@ import {
 } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { MAP_CAMERA } from '@/utils/map-constants'
+import { getPolygonArea } from '@/utils/map-geometry-utils'
 import type { RoomOpenings } from '@/utils/map-room-utils'
 
 export interface MapCameraPadding {
@@ -36,6 +37,14 @@ export function getMapFocusPadding(sheetHeightPx: number): MapCameraPadding {
 		bottom: sheetHeightPx + MAP_CAMERA.focusPaddingGap,
 		left: 0
 	}
+}
+
+export function getSelectionFocusZoom(currentZoom: number | undefined): number {
+	if (currentZoom == null || !Number.isFinite(currentZoom)) {
+		return MAP_CAMERA.focusZoom
+	}
+
+	return Math.max(currentZoom, MAP_CAMERA.focusZoom)
 }
 
 export function parseMapCoordinate(value: unknown): MapCoordinate | undefined {
@@ -82,6 +91,60 @@ export function getRoomSelectionFromProperties(
 		room,
 		center: parseMapCoordinate(properties?.center)
 	}
+}
+
+function isRoomPolygonFeature(feature: Feature): boolean {
+	if (feature.geometry != null && feature.geometry.type !== 'Polygon') {
+		return false
+	}
+
+	const rtype = feature.properties?.rtype
+	if (rtype != null && rtype !== SEARCH_TYPES.ROOM) {
+		return false
+	}
+
+	const room = feature.properties?.Raum
+	return typeof room === 'string' && room.length > 0
+}
+
+function polygonAreaOf(feature: Feature): number {
+	if (feature.geometry?.type !== 'Polygon') {
+		return Number.POSITIVE_INFINITY
+	}
+	const area = getPolygonArea(feature.geometry.coordinates)
+	return area > 0 ? area : Number.POSITIVE_INFINITY
+}
+
+export function getRoomSelectionFromFeatures(
+	features: Feature[] | undefined
+): { room: string; center?: MapCoordinate } | undefined {
+	if (features == null || features.length === 0) {
+		return undefined
+	}
+
+	const byRoom = new Map<string, Feature>()
+	for (const feature of features) {
+		if (!isRoomPolygonFeature(feature)) {
+			continue
+		}
+		const room = feature.properties?.Raum
+		if (typeof room !== 'string') {
+			continue
+		}
+		const existing = byRoom.get(room)
+		if (existing == null || polygonAreaOf(feature) < polygonAreaOf(existing)) {
+			byRoom.set(room, feature)
+		}
+	}
+
+	let best: Feature | undefined
+	for (const feature of byRoom.values()) {
+		if (best == null || polygonAreaOf(feature) < polygonAreaOf(best)) {
+			best = feature
+		}
+	}
+
+	return getRoomSelectionFromProperties(best?.properties)
 }
 
 /**

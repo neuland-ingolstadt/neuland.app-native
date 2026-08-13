@@ -55,3 +55,27 @@ export function getCenterSingle(
 		centerPoints.lat / centerPoints.count
 	]
 }
+
+export function getPolygonArea(coordinates: Position[][] | undefined): number {
+	const ring = coordinates?.[0]
+	if (ring == null || ring.length < 3) {
+		return 0
+	}
+
+	let area = 0
+	for (let i = 0; i < ring.length - 1; i++) {
+		const [x1, y1] = ring[i]
+		const [x2, y2] = ring[i + 1]
+		if (
+			typeof x1 !== 'number' ||
+			typeof y1 !== 'number' ||
+			typeof x2 !== 'number' ||
+			typeof y2 !== 'number'
+		) {
+			return 0
+		}
+		area += x1 * y2 - x2 * y1
+	}
+
+	return Math.abs(area) / 2
+}

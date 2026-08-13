@@ -435,6 +435,38 @@ describe('map-utils', () => {
 		expect(center[1]).toBe(1)
 	})
 
+	it('getPolygonArea - Should return the shoelace area of the outer ring', () => {
+		expect(
+			mapUtils.getPolygonArea([
+				[
+					[0, 0],
+					[2, 0],
+					[2, 2],
+					[0, 2],
+					[0, 0]
+				]
+			])
+		).toBe(4)
+		expect(mapUtils.getPolygonArea(undefined)).toBe(0)
+		expect(mapUtils.getPolygonArea([[]])).toBe(0)
+	})
+
+	it('getFloorLevel - Should map EG and numeric floor labels', () => {
+		expect(mapUtils.getFloorLevel('EG')).toBe(0)
+		expect(mapUtils.getFloorLevel('1')).toBe(1)
+		expect(mapUtils.getFloorLevel('1.5')).toBe(1.5)
+		expect(mapUtils.getFloorLevel('-1')).toBe(-1)
+		expect(Number.isNaN(mapUtils.getFloorLevel('Dach'))).toBe(true)
+	})
+
+	it('getFloorSlideDirection - Should treat higher floors as an upward elevator', () => {
+		expect(mapUtils.getFloorSlideDirection('1', '2')).toBe(1)
+		expect(mapUtils.getFloorSlideDirection('2', '1')).toBe(-1)
+		expect(mapUtils.getFloorSlideDirection('EG', '1')).toBe(1)
+		expect(mapUtils.getFloorSlideDirection('1', 'EG')).toBe(-1)
+		expect(mapUtils.getFloorSlideDirection('1', '1')).toBe(0)
+	})
+
 	it('sortFloors - Should keep known floors ordered without mutating the input', () => {
 		const floors = ['EG', '5', '1', '4']
 		expect(mapUtils.sortFloors(floors)).toEqual(['4', '1', 'EG', '5'])

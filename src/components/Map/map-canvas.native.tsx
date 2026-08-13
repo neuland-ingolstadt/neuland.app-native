@@ -12,20 +12,23 @@ import { useEffect, useRef } from 'react'
 import { Platform } from 'react-native'
 import {
 	EMPTY_MAP_FEATURES,
+	GEOJSON_TOLERANCE,
 	getMapLayerStyles,
 	MAP_CAMERA,
 	MAP_IDS,
 	MAP_STYLE_URLS,
-	type MapMode
+	type MapMode,
+	ROOM_PRESS_HITBOX
 } from '@/components/Map/map-config'
-import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
+import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getMapFocusPadding,
-	getRoomSelectionFromProperties,
+	getRoomSelectionFromFeatures,
 	getSelectedMapFeatures,
+	getSelectionFocusZoom,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -58,7 +61,8 @@ function setNativeMapView(
 	cameraRef: { current: CameraRef | null },
 	mapCenter: MapScreenModel['mapCenter'],
 	element: ClickedMapElement | null = null,
-	focusPaddingBottom = 0
+	focusPaddingBottom = 0,
+	currentZoom?: number
 ): void {
 	if (element?.center == null) {
 		cameraRef.current?.flyTo({
@@ -74,7 +78,7 @@ function setNativeMapView(
 	const [longitude, latitude] = element.center
 	cameraRef.current?.flyTo({
 		center: [longitude, latitude],
-		zoom: MAP_CAMERA.focusZoom,
+		zoom: getSelectionFocusZoom(currentZoom),
 		duration: MAP_CAMERA.focusDuration,
 		padding: getMapFocusPadding(focusPaddingBottom)
 	})
@@ -104,20 +108,26 @@ export default function NativeMapCanvas({
 	overlayFloor
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
+	const currentZoomRef = useRef<number | undefined>(undefined)
 	const isDark = mapMode === 'dark'
-	const { displayedRooms, displayedAvailableRooms, overlayOpacity } =
-		useFloorOverlayFade({
-			floor: overlayFloor,
-			rooms: filteredGeoJSON,
-			availableRooms: availableFilteredGeoJSON
-		})
+	const { incoming, outgoing } = useFloorOverlaySlide({
+		floor: overlayFloor,
+		rooms: filteredGeoJSON,
+		availableRooms: availableFilteredGeoJSON
+	})
 	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
 
 	useEffect(() => {
 		if (mapLoadState !== LoadingState.LOADED) {
 			return
 		}
-		setNativeMapView(cameraRef, mapCenter, clickedElement, focusPaddingBottom)
+		setNativeMapView(
+			cameraRef,
+			mapCenter,
+			clickedElement,
+			focusPaddingBottom,
+			currentZoomRef.current
+		)
 	}, [clickedElement, focusPaddingBottom, mapCenter, mapLoadState])
 
 	useEffect(() => {
@@ -131,10 +141,22 @@ export default function NativeMapCanvas({
 		primaryColor,
 		labelColor,
 		backgroundColor,
-		overlayOpacity,
+		incoming.opacity,
+		incoming.fadeDuration,
 		selectionPop,
 		selectionColor
 	)
+	const outgoingStyles =
+		outgoing == null
+			? null
+			: getMapLayerStyles(
+					isDark,
+					primaryColor,
+					labelColor,
+					backgroundColor,
+					outgoing.opacity,
+					outgoing.fadeDuration
+				)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 	const selectedFeatures = getSelectedMapFeatures(
 		clickedElement,
@@ -152,8 +174,15 @@ export default function NativeMapCanvas({
 			onDidFailLoadingMap={() => setMapLoadState(LoadingState.ERROR)}
 			onDidFinishLoadingMap={() => setMapLoadState(LoadingState.LOADED)}
 			onDidFinishRenderingMapFully={() => onRegionChange(false)}
-			onRegionIsChanging={() => onRegionChange(true)}
+			onRegionIsChanging={(event) => {
+				currentZoomRef.current = event.nativeEvent.zoom
+				onRegionChange(true)
+			}}
+			onRegionDidChange={(event) => {
+				currentZoomRef.current = event.nativeEvent.zoom
+			}}
 			compass={Platform.OS === 'ios'}
+			compassPosition={{ top: 8, left: 8 }}
 		>
 			<Images
 				images={{
@@ -212,6 +241,7 @@ export default function NativeMapCanvas({
 					type: 'FeatureCollection',
 					features: selectedFeatures
 				}}
+				tolerance={GEOJSON_TOLERANCE}
 			>
 				<Layer
 					id={MAP_IDS.layers.selectedFill}
@@ -235,18 +265,74 @@ export default function NativeMapCanvas({
 					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
+			{outgoingStyles != null && outgoing != null && (
+				<>
+					<GeoJSONSource
+						id={MAP_IDS.sources.allRoomsOutgoing}
+						data={outgoing.rooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.allRoomsOutgoingFill}
+							type="fill"
+							paint={outgoingStyles.allRooms}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</GeoJSONSource>
+					<GeoJSONSource
+						id={MAP_IDS.sources.allRoomsOutgoingOutline}
+						data={outgoing.rooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.allRoomsOutgoingOutline}
+							type="line"
+							paint={outgoingStyles.allRoomsOutline}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</GeoJSONSource>
+					<GeoJSONSource
+						id={MAP_IDS.sources.availableRoomsOutgoing}
+						data={outgoing.availableRooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.availableRoomsOutgoingFill}
+							type="fill"
+							paint={outgoingStyles.availableRooms}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</GeoJSONSource>
+					<GeoJSONSource
+						id={MAP_IDS.sources.availableRoomsOutgoingOutline}
+						data={outgoing.availableRooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
+							type="line"
+							paint={outgoingStyles.availableRoomsOutline}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</GeoJSONSource>
+				</>
+			)}
 			<GeoJSONSource
 				id={MAP_IDS.sources.allRooms}
-				data={displayedRooms ?? EMPTY_MAP_FEATURES}
+				data={incoming.rooms ?? EMPTY_MAP_FEATURES}
+				tolerance={GEOJSON_TOLERANCE}
+				hitbox={ROOM_PRESS_HITBOX}
 				onPress={(event) => {
 					event.stopPropagation()
-					const selection = getRoomSelectionFromProperties(
-						event.nativeEvent.features[0]?.properties
+					const selection = getRoomSelectionFromFeatures(
+						event.nativeEvent.features
 					)
 					if (selection == null) {
 						return
 					}
-					triggerSelectionPop()
+					if (clickedElement?.data === selection.room) {
+						triggerSelectionPop()
+					}
 					selectMapElement({
 						room: selection.room,
 						type: SEARCH_TYPES.ROOM,
@@ -262,6 +348,12 @@ export default function NativeMapCanvas({
 					paint={layerStyles.allRooms}
 					beforeId={MAP_IDS.layers.selectedFill}
 				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.allRoomsOutline}
+				data={incoming.rooms ?? EMPTY_MAP_FEATURES}
+				tolerance={GEOJSON_TOLERANCE}
+			>
 				<Layer
 					id={MAP_IDS.layers.allRoomsOutline}
 					type="line"
@@ -271,7 +363,8 @@ export default function NativeMapCanvas({
 			</GeoJSONSource>
 			<GeoJSONSource
 				id={MAP_IDS.sources.availableRooms}
-				data={displayedAvailableRooms ?? EMPTY_MAP_FEATURES}
+				data={incoming.availableRooms ?? EMPTY_MAP_FEATURES}
+				tolerance={GEOJSON_TOLERANCE}
 			>
 				<Layer
 					id={MAP_IDS.layers.availableRoomsFill}
@@ -279,6 +372,12 @@ export default function NativeMapCanvas({
 					paint={layerStyles.availableRooms}
 					beforeId={MAP_IDS.layers.selectedFill}
 				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.availableRoomsOutline}
+				data={incoming.availableRooms ?? EMPTY_MAP_FEATURES}
+				tolerance={GEOJSON_TOLERANCE}
+			>
 				<Layer
 					id={MAP_IDS.layers.availableRoomsOutline}
 					type="line"

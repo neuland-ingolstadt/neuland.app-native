@@ -146,7 +146,9 @@ const FloorPicker = ({
 		if (Math.abs(scrollY.get() - target) > 1) {
 			scrollY.set(withSpring(target, SNAP_SPRING))
 		}
-		highlightY.set(withSpring(target, SNAP_SPRING))
+		if (Math.abs(highlightY.get() - target) > 1) {
+			highlightY.set(withSpring(target, SNAP_SPRING))
+		}
 	}, [currentIndex, highlightY, scrollY])
 
 	const selectFloorByIndex = useCallback(
@@ -169,8 +171,20 @@ const FloorPicker = ({
 		if (currentFloor?.floor === 'EG') {
 			return
 		}
+		const egIndex = Math.max(0, floors.indexOf('EG'))
+		const target = egIndex * CELL
+		scrollY.set(target)
+		highlightY.set(target)
+		lastTickIndex.set(egIndex)
 		setCurrentFloor({ floor: 'EG', manual: true })
-	}, [currentFloor?.floor, setCurrentFloor])
+	}, [
+		currentFloor?.floor,
+		floors,
+		highlightY,
+		lastTickIndex,
+		scrollY,
+		setCurrentFloor
+	])
 
 	const handleSelectFloor = useCallback(
 		(floor: string) => {

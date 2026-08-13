@@ -1,6 +1,4 @@
-import * as Haptics from 'expo-haptics'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Platform } from 'react-native'
 import { SELECTED_POP_HOLD_MS } from '@/components/Map/map-config'
 
 export function useMapSelectionPop(): {
@@ -19,9 +17,6 @@ export function useMapSelectionPop(): {
 	}, [])
 
 	const triggerSelectionPop = useCallback(() => {
-		if (Platform.OS !== 'web') {
-			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
-		}
 		setSelectionPop(true)
 		if (timeoutRef.current != null) {
 			clearTimeout(timeoutRef.current)

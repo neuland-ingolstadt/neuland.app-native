@@ -4,7 +4,10 @@ export {
 	DURATION_PRESET,
 	FLOOR_ORDER,
 	FLOOR_SUBSTITUTES,
+	formatCampusLocation,
 	getBuildingCodes,
+	getFloorLevel,
+	getFloorSlideDirection,
 	INGOLSTADT_CENTER,
 	NEUBURG_CENTER,
 	ROOM_SEARCH_DURATIONS,
@@ -12,7 +15,11 @@ export {
 	SUGGESTION_DURATION_PRESET,
 	sortFloors
 } from './map-constants'
-export { getCenter, getCenterSingle } from './map-geometry-utils'
+export {
+	getCenter,
+	getCenterSingle,
+	getPolygonArea
+} from './map-geometry-utils'
 export type { RoomOpenings } from './map-room-utils'
 export {
 	addMinutes,

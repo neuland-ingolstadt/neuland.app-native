@@ -14,20 +14,22 @@ import type React from 'react'
 import { useEffect, useRef } from 'react'
 import {
 	EMPTY_MAP_FEATURES,
+	GEOJSON_TOLERANCE,
 	getMapLayerStyles,
 	MAP_CAMERA,
 	MAP_IDS,
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
-import { useFloorOverlayFade } from '@/hooks/useFloorOverlayFade'
+import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
 	getMapFocusPadding,
-	getRoomSelectionFromProperties,
+	getRoomSelectionFromFeatures,
 	getSelectedMapFeatures,
+	getSelectionFocusZoom,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -78,9 +80,13 @@ function setWebMapView(
 		return
 	}
 
-	mapRef.current.getMap().flyTo({
+	const map = mapRef.current.getMap()
+	map.flyTo({
 		center,
-		zoom: element == null ? MAP_CAMERA.initialZoom : MAP_CAMERA.focusZoom,
+		zoom:
+			element == null
+				? MAP_CAMERA.initialZoom
+				: getSelectionFocusZoom(map.getZoom()),
 		...(element == null ? { bearing: 0 } : {}),
 		duration:
 			element == null ? MAP_CAMERA.resetDuration : MAP_CAMERA.focusDuration,
@@ -109,12 +115,11 @@ export default function WebMapCanvas({
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
 	const isDark = mapMode === 'dark'
-	const { displayedRooms, displayedAvailableRooms, overlayOpacity } =
-		useFloorOverlayFade({
-			floor: overlayFloor,
-			rooms: filteredGeoJSON,
-			availableRooms: availableFilteredGeoJSON
-		})
+	const { incoming, outgoing } = useFloorOverlaySlide({
+		floor: overlayFloor,
+		rooms: filteredGeoJSON,
+		availableRooms: availableFilteredGeoJSON
+	})
 	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
 
 	useEffect(() => {
@@ -135,10 +140,22 @@ export default function WebMapCanvas({
 		primaryColor,
 		labelColor,
 		backgroundColor,
-		overlayOpacity,
+		incoming.opacity,
+		incoming.fadeDuration,
 		selectionPop,
 		selectionColor
 	)
+	const outgoingStyles =
+		outgoing == null
+			? null
+			: getMapLayerStyles(
+					isDark,
+					primaryColor,
+					labelColor,
+					backgroundColor,
+					outgoing.opacity,
+					outgoing.fadeDuration
+				)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 	const selectedFeatures = getSelectedMapFeatures(
 		clickedElement,
@@ -154,12 +171,14 @@ export default function WebMapCanvas({
 		const features = map.queryRenderedFeatures(event.point, {
 			layers: [MAP_IDS.layers.allRoomsFill]
 		})
-		const selection = getRoomSelectionFromProperties(features[0]?.properties)
+		const selection = getRoomSelectionFromFeatures(features)
 		if (selection == null) {
 			return
 		}
 
-		triggerSelectionPop()
+		if (clickedElement?.data === selection.room) {
+			triggerSelectionPop()
+		}
 		selectMapElement({
 			room: selection.room,
 			type: SEARCH_TYPES.ROOM,
@@ -224,7 +243,8 @@ export default function WebMapCanvas({
 				<Source
 					id={MAP_IDS.sources.allRooms}
 					type="geojson"
-					data={displayedRooms ?? EMPTY_MAP_FEATURES}
+					data={incoming.rooms ?? EMPTY_MAP_FEATURES}
+					tolerance={GEOJSON_TOLERANCE}
 				>
 					<Layer
 						id={MAP_IDS.layers.allRoomsFill}
@@ -240,10 +260,33 @@ export default function WebMapCanvas({
 					/>
 				</Source>
 
+				{outgoingStyles != null && outgoing != null && (
+					<Source
+						id={MAP_IDS.sources.allRoomsOutgoing}
+						type="geojson"
+						data={outgoing.rooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.allRoomsOutgoingFill}
+							type="fill"
+							paint={outgoingStyles.allRooms}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+						<Layer
+							id={MAP_IDS.layers.allRoomsOutgoingOutline}
+							type="line"
+							paint={outgoingStyles.allRoomsOutline}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</Source>
+				)}
+
 				<Source
 					id={MAP_IDS.sources.availableRooms}
 					type="geojson"
-					data={displayedAvailableRooms ?? EMPTY_MAP_FEATURES}
+					data={incoming.availableRooms ?? EMPTY_MAP_FEATURES}
+					tolerance={GEOJSON_TOLERANCE}
 				>
 					<Layer
 						id={MAP_IDS.layers.availableRoomsFill}
@@ -258,6 +301,28 @@ export default function WebMapCanvas({
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
+
+				{outgoingStyles != null && outgoing != null && (
+					<Source
+						id={MAP_IDS.sources.availableRoomsOutgoing}
+						type="geojson"
+						data={outgoing.availableRooms ?? EMPTY_MAP_FEATURES}
+						tolerance={GEOJSON_TOLERANCE}
+					>
+						<Layer
+							id={MAP_IDS.layers.availableRoomsOutgoingFill}
+							type="fill"
+							paint={outgoingStyles.availableRooms}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+						<Layer
+							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
+							type="line"
+							paint={outgoingStyles.availableRoomsOutline}
+							beforeId={MAP_IDS.layers.allRoomsFill}
+						/>
+					</Source>
+				)}
 
 				{selectedRoomCenter != null && (
 					<Marker

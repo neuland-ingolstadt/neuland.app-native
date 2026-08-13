@@ -3,7 +3,7 @@ import type { FeatureCollection } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
 import { SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import { MAP_CAMERA } from '@/utils/map-constants'
+import { formatCampusLocation, MAP_CAMERA } from '@/utils/map-constants'
 import type { RoomOpenings } from '../map-room-utils'
 import {
 	filterAvailableRooms,
@@ -12,8 +12,10 @@ import {
 	getMapFocusPadding,
 	getOngoingOrNextEvent,
 	getRoomData,
+	getRoomSelectionFromFeatures,
 	getRoomSelectionFromProperties,
 	getSelectedMapFeatures,
+	getSelectionFocusZoom,
 	parseMapCoordinate
 } from '../map-screen-utils'
 
@@ -181,6 +183,26 @@ describe('map-screen-utils', () => {
 		})
 	})
 
+	it('getSelectionFocusZoom - Should use the default focus zoom when current zoom is unknown', () => {
+		expect(getSelectionFocusZoom(undefined)).toBe(MAP_CAMERA.focusZoom)
+		expect(getSelectionFocusZoom(Number.NaN)).toBe(MAP_CAMERA.focusZoom)
+	})
+
+	it('getSelectionFocusZoom - Should zoom in when the current zoom is below the default', () => {
+		expect(getSelectionFocusZoom(MAP_CAMERA.initialZoom)).toBe(
+			MAP_CAMERA.focusZoom
+		)
+		expect(getSelectionFocusZoom(MAP_CAMERA.minZoom)).toBe(MAP_CAMERA.focusZoom)
+	})
+
+	it('getSelectionFocusZoom - Should keep a zoom that is already at or above the default', () => {
+		expect(getSelectionFocusZoom(MAP_CAMERA.focusZoom)).toBe(
+			MAP_CAMERA.focusZoom
+		)
+		expect(getSelectionFocusZoom(18.5)).toBe(18.5)
+		expect(getSelectionFocusZoom(MAP_CAMERA.maxZoom)).toBe(MAP_CAMERA.maxZoom)
+	})
+
 	it('parseMapCoordinate - Should accept valid numeric coordinates', () => {
 		expect(parseMapCoordinate([11.4328, 48.7663])).toEqual([11.4328, 48.7663])
 		expect(parseMapCoordinate('[11.4328,48.7663]')).toEqual([11.4328, 48.7663])
@@ -220,6 +242,156 @@ describe('map-screen-utils', () => {
 		expect(getRoomSelectionFromProperties(null)).toBeUndefined()
 		expect(
 			getRoomSelectionFromProperties({ center: [11.4328, 48.7663] })
+		).toBeUndefined()
+	})
+
+	it('getRoomSelectionFromFeatures - Should select a single room feature', () => {
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G101',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [11.4328, 48.7663]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[2, 0],
+								[2, 2],
+								[0, 2],
+								[0, 0]
+							]
+						]
+					}
+				}
+			])
+		).toEqual({ room: 'G101', center: [11.4328, 48.7663] })
+	})
+
+	it('getRoomSelectionFromFeatures - Should pick the smaller polygon when rooms overlap', () => {
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'HALL',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [1, 1]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[10, 0],
+								[10, 10],
+								[0, 10],
+								[0, 0]
+							]
+						]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G102',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [1.5, 1.5]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[1, 1],
+								[2, 1],
+								[2, 2],
+								[1, 2],
+								[1, 1]
+							]
+						]
+					}
+				}
+			])
+		).toEqual({ room: 'G102', center: [1.5, 1.5] })
+	})
+
+	it('getRoomSelectionFromFeatures - Should ignore buildings and features without a room', () => {
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G',
+						rtype: SEARCH_TYPES.BUILDING
+					},
+					geometry: {
+						type: 'Point',
+						coordinates: [11.4328, 48.7663]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: {
+						center: [11.4328, 48.7663]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 0],
+								[1, 1],
+								[0, 1],
+								[0, 0]
+							]
+						]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G101',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [11.4328, 48.7663]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 0],
+								[1, 1],
+								[0, 1],
+								[0, 0]
+							]
+						]
+					}
+				}
+			])
+		).toEqual({ room: 'G101', center: [11.4328, 48.7663] })
+	})
+
+	it('getRoomSelectionFromFeatures - Should return undefined when no room polygons match', () => {
+		expect(getRoomSelectionFromFeatures(undefined)).toBeUndefined()
+		expect(getRoomSelectionFromFeatures([])).toBeUndefined()
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G',
+						rtype: SEARCH_TYPES.BUILDING
+					},
+					geometry: {
+						type: 'Point',
+						coordinates: [11.4328, 48.7663]
+					}
+				}
+			])
 		).toBeUndefined()
 	})
 
@@ -476,5 +648,16 @@ describe('map-screen-utils', () => {
 		expect(getOngoingOrNextEvent([], new Date('2026-06-16T10:30:00'))).toEqual(
 			[]
 		)
+	})
+
+	it('formatCampusLocation - Should map overlay campus codes to display names', () => {
+		expect(formatCampusLocation('IN')).toBe('Ingolstadt')
+		expect(formatCampusLocation('ND')).toBe('Neuburg')
+		expect(formatCampusLocation('Ingolstadt')).toBe('Ingolstadt')
+		expect(formatCampusLocation('THI Campus Ingolstadt')).toBe(
+			'THI Campus Ingolstadt'
+		)
+		expect(formatCampusLocation('')).toBeUndefined()
+		expect(formatCampusLocation(undefined)).toBeUndefined()
 	})
 })

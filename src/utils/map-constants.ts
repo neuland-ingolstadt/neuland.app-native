@@ -12,6 +12,21 @@ export const MAP_CAMERA = {
 
 export const INGOLSTADT_CENTER: MapCoordinate = [11.4328, 48.7663]
 export const NEUBURG_CENTER: MapCoordinate = [11.17261, 48.732]
+
+/** Overlay Standort values → display names. GeoJSON v2.6+ uses IN / ND. */
+export const CAMPUS_LABELS: Record<string, string> = {
+	IN: 'Ingolstadt',
+	ND: 'Neuburg',
+	Ingolstadt: 'Ingolstadt',
+	Neuburg: 'Neuburg'
+}
+
+export function formatCampusLocation(standort: unknown): string | undefined {
+	if (typeof standort !== 'string' || standort.length === 0) {
+		return undefined
+	}
+	return CAMPUS_LABELS[standort] ?? standort
+}
 export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
@@ -40,6 +55,27 @@ export const FLOOR_SUBSTITUTES: Record<string, string> = {
 	2: '2',
 	3: '3',
 	4: '4'
+}
+
+export function getFloorLevel(floor: string): number {
+	if (floor === 'EG') {
+		return 0
+	}
+	const parsed = Number.parseFloat(floor.replace(',', '.'))
+	return Number.isFinite(parsed) ? parsed : Number.NaN
+}
+
+/** +1 going to a higher floor, -1 going lower, 0 if the levels match or are unknown. */
+export function getFloorSlideDirection(
+	fromFloor: string,
+	toFloor: string
+): number {
+	const from = getFloorLevel(fromFloor)
+	const to = getFloorLevel(toFloor)
+	if (!Number.isFinite(from) || !Number.isFinite(to) || from === to) {
+		return 0
+	}
+	return to > from ? 1 : -1
 }
 
 export function sortFloors(floors: string[]): string[] {

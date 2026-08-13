@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { use } from 'react'
+import { use, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserKindContext } from '@/components/contexts'
 import { modalSection } from '@/components/Map/modal-sections'
@@ -9,21 +9,16 @@ import { useMapGeoJsonFilters } from '@/hooks/useMapGeoJsonFilters'
 import { useMapQueries } from '@/hooks/useMapQueries'
 import { useMapRoomSelection } from '@/hooks/useMapRoomSelection'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import type { SelectMapElement } from '@/types/map'
 import {
 	type ClickedMapElement,
 	type RoomData,
-	SEARCH_TYPES
+	SEARCH_TYPES,
+	type SelectMapElement
 } from '@/types/map'
 import type { NormalizedLecturer } from '@/types/utils'
 import { INGOLSTADT_CENTER, NEUBURG_CENTER } from '@/utils/map-constants'
 import { getBuildingData, getRoomData } from '@/utils/map-screen-utils'
 import type { LoadingState } from '@/utils/ui-utils'
-
-const LOCATIONS: Record<string, string> = {
-	Ingolstadt: 'Ingolstadt',
-	Neuburg: 'Neuburg'
-}
 
 interface UseMapScreenModelOptions {
 	mapLoadState: LoadingState
@@ -86,13 +81,18 @@ export function useMapScreenModel({
 		availableRooms
 	})
 
-	const handleSheetChangesModal = (): void => {
+	const handleSheetChangesModal = useCallback((): void => {
 		setClickedElement(null)
 		if (currentFloor?.manual !== true) {
 			setCurrentFloor({ floor: 'EG', manual: false })
 		}
 		restoreSearchSheet()
-	}
+	}, [
+		currentFloor?.manual,
+		restoreSearchSheet,
+		setClickedElement,
+		setCurrentFloor
+	])
 
 	const roomData: RoomData = (() => {
 		switch (clickedElement?.type) {
@@ -159,11 +159,7 @@ export function useMapScreenModel({
 		]
 	})()
 
-	const baseSections = modalSection(
-		roomData,
-		LOCATIONS,
-		userKind === USER_GUEST
-	)
+	const baseSections = modalSection(roomData, userKind === USER_GUEST)
 	const allSections = [...lecturerSection, ...baseSections]
 
 	return {
