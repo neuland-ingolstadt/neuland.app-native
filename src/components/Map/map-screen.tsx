@@ -1,75 +1,65 @@
 import { LocationManager } from '@maplibre/maplibre-react-native'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useWindowDimensions, View } from 'react-native'
-import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
-import { useCSSVariable, useUniwind } from 'uniwind'
+import { useCallback, useEffect, useState } from 'react'
+import { View } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
 import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-modal'
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import NativeMapCanvas from '@/components/Map/map-canvas.native'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
-import {
-	DETAIL_HIDDEN,
-	DETAIL_OPEN,
-	detentHeight,
-	getMapDetailDetents,
-	getMapSearchDetents,
-	SEARCH_HALF,
-	SEARCH_HIDDEN
-} from '@/components/Map/sheet-detents'
-import { useMapDetailSheet } from '@/hooks/useMapDetailSheet'
-import { useMapScreenModel } from '@/hooks/useMapScreenModel'
-import { useOsmAttributionFade } from '@/hooks/useOsmAttributionFade'
+import { DETAIL_HIDDEN } from '@/components/Map/sheet-detents'
+import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
 import { LoadingState } from '@/utils/ui-utils'
-import { toColor } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 
 const MapScreen = (): React.JSX.Element => {
-	const { t } = useTranslation('common')
-	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
 	const [mapKey, setMapKey] = useState(0)
-	const { theme: activeTheme } = useUniwind()
-	const isDark = activeTheme === 'dark'
-	const primaryColor = String(
-		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
-	)
-	const selectionColor = String(
-		toColor(useCSSVariable('--color-text')) ?? '#1c1c1e'
-	)
-	const notificationColor = String(
-		toColor(useCSSVariable('--color-notification')) ?? '#ff3b30'
-	)
-	const labelColor = String(
-		toColor(useCSSVariable('--color-label')) ?? '#606062'
-	)
-	const backgroundColor = String(
-		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
-	)
-	const { height: windowHeight } = useWindowDimensions()
-	const searchDetents = useMemo(
-		() => getMapSearchDetents(windowHeight),
-		[windowHeight]
-	)
-	const detailDetents = useMemo(
-		() => getMapDetailDetents(windowHeight),
-		[windowHeight]
-	)
-	const [searchIndex, setSearchIndex] = useState(SEARCH_HALF)
-	const currentPosition = useSharedValue(
-		detentHeight(searchDetents[SEARCH_HALF])
-	)
-	const currentPositionModal = useSharedValue(0)
 	const [disableFollowUser, setDisableFollowUser] = useState(false)
-	const [showAllFloors, setShowAllFloors] = useState(false)
 	const [locationPermissionGranted, setLocationPermissionGranted] =
 		useState(false)
 	const [locationRequestId, setLocationRequestId] = useState(0)
-	const { opacity, onRegionChange } = useOsmAttributionFade(
-		mapLoadState === LoadingState.LOADED
-	)
+
+	const handleTabPress = useCallback(() => {
+		setDisableFollowUser(true)
+	}, [])
+
+	const {
+		t,
+		mapLoadState,
+		setMapLoadState,
+		mapMode,
+		primaryColor,
+		selectionColor,
+		labelColor,
+		backgroundColor,
+		searchDetents,
+		detailDetents,
+		searchIndex,
+		setSearchIndex,
+		currentPosition,
+		currentPositionModal,
+		showAllFloors,
+		toggleShowAllFloors,
+		onRegionChange,
+		animatedStyles,
+		mapCenter,
+		overlayError,
+		allRooms,
+		buildingGeoJSON,
+		uniqueEtages,
+		filteredGeoJSON,
+		availableFilteredGeoJSON,
+		clickedElement,
+		currentFloor,
+		selectMapElement,
+		roomData,
+		allSections,
+		detailIndex,
+		handleDetailIndexChange,
+		cameraResetRequestId,
+		focusPaddingBottom
+	} = useMapScreenChrome({ onTabPress: handleTabPress })
 
 	useEffect(() => {
 		let cancelled = false
@@ -90,81 +80,11 @@ const MapScreen = (): React.JSX.Element => {
 		}
 	}, [])
 
-	const toggleShowAllFloors = (): void => {
-		setShowAllFloors(!showAllFloors)
-	}
-	const hideSearchSheet = useCallback(() => {
-		setSearchIndex(SEARCH_HIDDEN)
-	}, [])
-	const restoreSearchSheet = useCallback(() => {
-		setSearchIndex(SEARCH_HALF)
-	}, [])
-	const presentDetailSheetRef = useRef<() => void>(() => {})
-	const handlePresentModalPress = useCallback(() => {
-		setSearchIndex(SEARCH_HIDDEN)
-		presentDetailSheetRef.current()
-	}, [])
-
-	const {
-		mapCenter,
-		overlayError,
-		allRooms,
-		buildingGeoJSON,
-		uniqueEtages,
-		filteredGeoJSON,
-		availableFilteredGeoJSON,
-		clickedElement,
-		currentFloor,
-		selectMapElement,
-		roomData,
-		allSections,
-		handleSheetChangesModal
-	} = useMapScreenModel({
-		mapLoadState,
-		hideSearchSheet,
-		restoreSearchSheet,
-		handlePresentModalPress,
-		notificationColor
-	})
-
-	const handleTabPress = useCallback(() => {
-		setDisableFollowUser(true)
-	}, [])
-
-	const {
-		detailIndex,
-		handleDetailIndexChange,
-		presentDetailSheet,
-		cameraResetRequestId
-	} = useMapDetailSheet({
-		clickedElement,
-		currentFloor,
-		handleSheetChangesModal,
-		onTabPress: handleTabPress
-	})
-	presentDetailSheetRef.current = presentDetailSheet
-
 	useEffect(() => {
 		if (clickedElement !== null) {
 			setDisableFollowUser(true)
 		}
 	}, [clickedElement])
-
-	const focusPaddingBottom =
-		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0
-
-	const animatedStyles = useAnimatedStyle(() => {
-		const sheetFromBottom =
-			clickedElement != null
-				? currentPositionModal.get()
-				: currentPosition.get()
-
-		return {
-			bottom: sheetFromBottom,
-			height: opacity.get() === 0 ? 0 : 'auto',
-			opacity: opacity.get()
-		}
-	})
 
 	const handleLocate = useCallback(() => {
 		if (!locationPermissionGranted) {
@@ -178,7 +98,7 @@ const MapScreen = (): React.JSX.Element => {
 	const handleRefresh = useCallback(() => {
 		setMapLoadState(LoadingState.LOADING)
 		setMapKey((prev) => prev + 1)
-	}, [])
+	}, [setMapLoadState])
 
 	return (
 		<View testID="map-screen" className="flex-1">
@@ -214,7 +134,7 @@ const MapScreen = (): React.JSX.Element => {
 					buildingGeoJSON={buildingGeoJSON}
 					clickedElement={clickedElement}
 					selectMapElement={selectMapElement}
-					mapMode={isDark ? 'dark' : 'light'}
+					mapMode={mapMode}
 					primaryColor={primaryColor}
 					selectionColor={selectionColor}
 					labelColor={labelColor}

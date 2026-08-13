@@ -16,12 +16,8 @@ export const MAP_IDS = {
 	sources: {
 		allRooms: 'allRoomsSource',
 		allRoomsOutgoing: 'allRoomsOutgoingSource',
-		allRoomsOutline: 'allRoomsOutlineSource',
-		allRoomsOutgoingOutline: 'allRoomsOutgoingOutlineSource',
 		availableRooms: 'availableRoomsSource',
 		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
-		availableRoomsOutline: 'availableRoomsOutlineSource',
-		availableRoomsOutgoingOutline: 'availableRoomsOutgoingOutlineSource',
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
 		selectedOverlay: 'selectedOverlaySource'
