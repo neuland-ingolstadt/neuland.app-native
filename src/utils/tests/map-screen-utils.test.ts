@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { FeatureCollection } from 'geojson'
+import type { Feature, FeatureCollection } from 'geojson'
 import type { i18n, TFunction } from 'i18next'
 import { SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
@@ -451,8 +451,9 @@ describe('map-screen-utils', () => {
 						Raum: 'G101',
 						rtype: SEARCH_TYPES.ROOM,
 						center: [11.4328, 48.7663]
-					}
-				},
+					},
+					geometry: null
+				} as unknown as Feature,
 				{
 					type: 'Feature',
 					properties: {
