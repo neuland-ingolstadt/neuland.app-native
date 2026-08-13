@@ -1,17 +1,7 @@
-import { describe, expect, it, mock } from 'bun:test'
+import { beforeEach, describe, expect, it, mock } from 'bun:test'
+import { reactNativeOpenURLMock } from './react-native-mock'
 
-const openURLMock = mock(async () => {})
 const trackEventMock = mock(() => {})
-
-mock.module('react-native', () => ({
-	__esModule: true,
-	default: {
-		Linking: { openURL: openURLMock },
-		Platform: { OS: 'web' }
-	},
-	Linking: { openURL: openURLMock },
-	Platform: { OS: 'web' }
-}))
 
 mock.module('@aptabase/react-native', () => ({
 	trackEvent: trackEventMock
@@ -20,26 +10,31 @@ mock.module('@aptabase/react-native', () => ({
 const { pressLink } = await import('../linking')
 
 describe('linking', () => {
+	beforeEach(() => {
+		reactNativeOpenURLMock.mockReset()
+		trackEventMock.mockReset()
+	})
+
 	it('pressLink - Should be a no-op for nullish URLs', () => {
 		pressLink(null)
 		pressLink(undefined)
 
-		expect(openURLMock).not.toHaveBeenCalled()
+		expect(reactNativeOpenURLMock).not.toHaveBeenCalled()
 		expect(trackEventMock).not.toHaveBeenCalled()
 	})
 
 	it('pressLink - Should open the URL without analytics when no tag is provided', () => {
-		openURLMock.mockReset()
+		reactNativeOpenURLMock.mockReset()
 		trackEventMock.mockReset()
 
 		pressLink('https://thi.de')
 
-		expect(openURLMock).toHaveBeenCalledWith('https://thi.de')
+		expect(reactNativeOpenURLMock).toHaveBeenCalledWith('https://thi.de')
 		expect(trackEventMock).not.toHaveBeenCalled()
 	})
 
 	it('pressLink - Should track EventLink analytics when a tag is provided', () => {
-		openURLMock.mockReset()
+		reactNativeOpenURLMock.mockReset()
 		trackEventMock.mockReset()
 
 		pressLink('https://thi.de/events/1', 'campus-life')
@@ -47,6 +42,8 @@ describe('linking', () => {
 		expect(trackEventMock).toHaveBeenCalledWith('EventLink', {
 			link: 'campus-life'
 		})
-		expect(openURLMock).toHaveBeenCalledWith('https://thi.de/events/1')
+		expect(reactNativeOpenURLMock).toHaveBeenCalledWith(
+			'https://thi.de/events/1'
+		)
 	})
 })
