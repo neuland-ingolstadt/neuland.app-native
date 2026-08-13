@@ -395,6 +395,88 @@ describe('map-screen-utils', () => {
 		).toBeUndefined()
 	})
 
+	it('getRoomSelectionFromFeatures - Should ignore polygons with a non-room search type', () => {
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G101',
+						rtype: SEARCH_TYPES.BUILDING,
+						center: [11.4328, 48.7663]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 0],
+								[1, 1],
+								[0, 1],
+								[0, 0]
+							]
+						]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G102',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [11.4329, 48.7664]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 0],
+								[1, 1],
+								[0, 1],
+								[0, 0]
+							]
+						]
+					}
+				}
+			])
+		).toEqual({ room: 'G102', center: [11.4329, 48.7664] })
+	})
+
+	it('getRoomSelectionFromFeatures - Should ignore room features without polygon geometry', () => {
+		expect(
+			getRoomSelectionFromFeatures([
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G101',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [11.4328, 48.7663]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: {
+						Raum: 'G102',
+						rtype: SEARCH_TYPES.ROOM,
+						center: [11.4329, 48.7664]
+					},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 0],
+								[1, 1],
+								[0, 1],
+								[0, 0]
+							]
+						]
+					}
+				}
+			])
+		).toEqual({ room: 'G102', center: [11.4329, 48.7664] })
+	})
+
 	it('filterAvailableRooms - Should return only features for rooms that are available', () => {
 		expect(
 			filterAvailableRooms(featureCollection, [{ room: 'G101' }]).map(

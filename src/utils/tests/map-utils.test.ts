@@ -138,6 +138,12 @@ describe('map-utils', () => {
 		expect(openings.Alle[0].capacity).toBe(999)
 	})
 
+	it('getRoomOpenings - Should return an empty object when rooms is not an array', () => {
+		expect(
+			mapUtils.getRoomOpenings(null as never, new Date('2026-04-07'))
+		).toEqual({})
+	})
+
 	it('getRoomOpenings - Should skip malformed room slots instead of throwing', () => {
 		const data = [
 			{
@@ -416,6 +422,17 @@ describe('map-utils', () => {
 		).toBe(4)
 		expect(mapUtils.getPolygonArea(undefined)).toBe(0)
 		expect(mapUtils.getPolygonArea([[]])).toBe(0)
+		expect(
+			mapUtils.getPolygonArea([
+				[
+					[0, 0],
+					['1', 0],
+					[2, 2],
+					[0, 2],
+					[0, 0]
+				]
+			] as never)
+		).toBe(0)
 	})
 
 	it('getFloorLevel - Should map EG and numeric floor labels', () => {
@@ -518,6 +535,16 @@ describe('map-utils', () => {
 		).toEqual({ ios: 'studentdesk', android: 'school' })
 	})
 
+	it('getIcon - Should return the lecture icon for seminar rooms', () => {
+		expect(
+			mapUtils.getIcon(SEARCH_TYPES.ROOM, {
+				result: {
+					item: { properties: { Funktion_en: 'Seminar room', Raum: 'G002' } }
+				}
+			})
+		).toEqual({ ios: 'studentdesk', android: 'school' })
+	})
+
 	it('getIcon - Should return the corridor icon for corridor rooms', () => {
 		expect(
 			mapUtils.getIcon(SEARCH_TYPES.ROOM, {
@@ -578,6 +605,17 @@ describe('map-utils', () => {
 		})
 	})
 
+	it('getNextValidDate - Should move weekday evenings to the next morning', () => {
+		withMockedCurrentDate(new Date('2026-06-18T21:30:00'), () => {
+			const result = mapUtils.getNextValidDate()
+
+			expect(result.wasModified).toBe(true)
+			expect(result.startDate.getDate()).toBe(19)
+			expect(result.startDate.getHours()).toBe(8)
+			expect(result.startDate.getMinutes()).toBe(15)
+		})
+	})
+
 	it('handleShareModal - Should copy the room link on web', () => {
 		reactNativePlatform.OS = 'web'
 		trackEventMock.mockReset()
@@ -601,6 +639,19 @@ describe('map-utils', () => {
 
 		expect(reactNativeShareMock).toHaveBeenCalledWith({
 			url: 'https://web.neuland.app/map/?room=H201'
+		})
+
+		reactNativePlatform.OS = 'web'
+	})
+
+	it('handleShareModal - Should share via message on Android', () => {
+		reactNativePlatform.OS = 'android'
+		reactNativeShareMock.mockReset()
+
+		mapUtils.handleShareModal('A101')
+
+		expect(reactNativeShareMock).toHaveBeenCalledWith({
+			message: 'https://web.neuland.app/map/?room=A101'
 		})
 
 		reactNativePlatform.OS = 'web'

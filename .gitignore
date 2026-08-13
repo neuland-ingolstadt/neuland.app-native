@@ -69,3 +69,4 @@ public/maplibre-gl-worker.mjs
 public/maplibre-gl-shared.mjs
 .cursor/hooks/state/
 .understand-anything
+tmp/
