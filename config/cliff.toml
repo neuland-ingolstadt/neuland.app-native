@@ -7,7 +7,7 @@
 
 [remote.github]
 owner = "neuland-ingolstadt"
-repo = "neuland-app.native"
+repo = "neuland.app-native"
 # token = ""
 
 [changelog]

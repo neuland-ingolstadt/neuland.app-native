@@ -8,7 +8,6 @@
 		"dev": "EXPO_UNSTABLE_MCP_SERVER=1 EXPO_USE_FAST_RESOLVER=1 expo start",
 		"start": "EXPO_UNSTABLE_MCP_SERVER=1 EXPO_USE_FAST_RESOLVER=1 expo start --no-dev --clear --port 3000",
 		"atlas": "EXPO_UNSTABLE_ATLAS=true npx expo export --platform all",
-		"web": "EXPO_UNSTABLE_MCP_SERVER=1 expo start --web --port 3000",
 		"android": "expo run:android --device",
 		"ios": "expo run:ios --device",
 		"prebuild:ios": "expo prebuild -p ios",

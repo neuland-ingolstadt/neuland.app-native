@@ -1,12 +1,14 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { TFunction } from 'i18next'
 import type { Meal } from '@/types/neuland-api'
+import {
+	reactNativeOpenURLMock,
+	reactNativePlatform,
+	reactNativeShareMock
+} from './react-native-mock'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-const platform = { OS: 'web' as 'web' | 'ios' | 'android' }
-const shareMock = mock(async () => {})
-const openUrlMock = mock(async () => {})
 const clipboardSetStringAsyncMock = mock(async () => {})
 const trackEventMock = mock(() => {})
 const mockGetFoodPlan = mock(
@@ -24,38 +26,6 @@ mock.module('expo-localization', () => ({
 
 mock.module('react-i18next', () => ({
 	initReactI18next: {}
-}))
-
-mock.module('react-native', () => ({
-	__esModule: true,
-	default: {
-		Platform: platform,
-		Share: { share: shareMock },
-		Linking: { openURL: openUrlMock },
-		NativeEventEmitter: class {
-			addListener() {
-				return { remove: () => {} }
-			}
-			removeAllListeners() {}
-		},
-		TurboModuleRegistry: {
-			get: () => null,
-			getEnforcing: () => null
-		}
-	},
-	Platform: platform,
-	Share: { share: shareMock },
-	Linking: { openURL: openUrlMock },
-	NativeEventEmitter: class {
-		addListener() {
-			return { remove: () => {} }
-		}
-		removeAllListeners() {}
-	},
-	TurboModuleRegistry: {
-		get: () => null,
-		getEnforcing: () => null
-	}
 }))
 
 mock.module('@aptabase/react-native', () => ({
@@ -276,16 +246,16 @@ describe('meal-detail-sections', () => {
 		sourceItem?.onPress?.()
 
 		expect(onNavigateToRestaurant).toHaveBeenCalled()
-		expect(openUrlMock).toHaveBeenCalledWith(
+		expect(reactNativeOpenURLMock).toHaveBeenCalledWith(
 			'https://www.werkswelt.de/?id=ingo'
 		)
 	})
 
 	it('buildVariantsSection - Should copy variant share message on web', () => {
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 		trackEventMock.mockReset()
 		clipboardSetStringAsyncMock.mockReset()
-		shareMock.mockReset()
+		reactNativeShareMock.mockReset()
 
 		const sections = mealDetailSections.buildVariantsSection(
 			makeMeal(),
@@ -303,16 +273,16 @@ describe('meal-detail-sections', () => {
 		expect(clipboardSetStringAsyncMock).toHaveBeenCalledWith(
 			'share:Groß:1.00 €:IngolstadtMensa:variant-1'
 		)
-		expect(shareMock).not.toHaveBeenCalled()
+		expect(reactNativeShareMock).not.toHaveBeenCalled()
 
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 
 	it('buildVariantsSection - Should use native share sheet off web', () => {
-		platform.OS = 'ios'
+		reactNativePlatform.OS = 'ios'
 		trackEventMock.mockReset()
 		clipboardSetStringAsyncMock.mockReset()
-		shareMock.mockReset()
+		reactNativeShareMock.mockReset()
 
 		const sections = mealDetailSections.buildVariantsSection(
 			makeMeal(),
@@ -324,11 +294,11 @@ describe('meal-detail-sections', () => {
 
 		sections[0]?.items?.[0]?.onPress?.()
 
-		expect(shareMock).toHaveBeenCalledWith({
+		expect(reactNativeShareMock).toHaveBeenCalledWith({
 			message: 'share:Groß:1.00 €:IngolstadtMensa:variant-1'
 		})
 		expect(clipboardSetStringAsyncMock).not.toHaveBeenCalled()
 
-		platform.OS = 'web'
+		reactNativePlatform.OS = 'web'
 	})
 })
