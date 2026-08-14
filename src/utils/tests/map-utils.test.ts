@@ -435,14 +435,6 @@ describe('map-utils', () => {
 		).toBe(0)
 	})
 
-	it('getFloorLevel - Should map EG and numeric floor labels', () => {
-		expect(mapUtils.getFloorLevel('EG')).toBe(0)
-		expect(mapUtils.getFloorLevel('1')).toBe(1)
-		expect(mapUtils.getFloorLevel('1.5')).toBe(1.5)
-		expect(mapUtils.getFloorLevel('-1')).toBe(-1)
-		expect(Number.isNaN(mapUtils.getFloorLevel('Dach'))).toBe(true)
-	})
-
 	it('getFloorSlideDirection - Should treat higher floors as an upward elevator', () => {
 		expect(mapUtils.getFloorSlideDirection('1', '2')).toBe(1)
 		expect(mapUtils.getFloorSlideDirection('2', '1')).toBe(-1)

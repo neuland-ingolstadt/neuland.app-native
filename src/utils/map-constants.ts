@@ -77,7 +77,7 @@ export const FLOOR_SUBSTITUTES: Record<string, string> = {
 	4: '4'
 }
 
-export function getFloorLevel(floor: string): number {
+function getFloorLevel(floor: string): number {
 	if (floor === 'EG') {
 		return 0
 	}

@@ -111,7 +111,9 @@ const FloorPicker = ({
 	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const contrastColor = getContrastColor(primaryColor)
-	const xIconColor = isDark ? '#b6b6b6ff' : '#4a4a4aff'
+	const xIconColor = String(
+		toColor(useCSSVariable('--color-label-secondary')) ?? '#777778'
+	)
 	const shadow = isDark
 		? '0 4 14 0 rgba(0, 0, 0, 0.45)'
 		: '0 4 14 0 rgba(0, 0, 0, 0.12)'

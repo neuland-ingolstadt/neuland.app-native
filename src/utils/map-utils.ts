@@ -6,7 +6,6 @@ export {
 	FLOOR_SUBSTITUTES,
 	formatCampusLocation,
 	getBuildingCodes,
-	getFloorLevel,
 	getFloorSlideDirection,
 	INGOLSTADT_CENTER,
 	NEUBURG_CENTER,
