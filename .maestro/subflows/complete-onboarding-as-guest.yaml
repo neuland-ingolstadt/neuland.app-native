@@ -1,0 +1,66 @@
+appId: ${APP_ID}
+---
+- openLink: "neuland://onboarding"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: Android
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+      - waitForAnimationToEnd:
+          timeout: 3000
+- runFlow:
+    when:
+      platform: iOS
+      visible: ".*Development Build.*"
+    commands:
+      - runFlow:
+          file: "reconnect-development-client.yaml"
+      - openLink: "neuland://onboarding"
+      - waitForAnimationToEnd:
+          timeout: 3000
+- runFlow:
+    when:
+      visible:
+        id: "onboarding-continue"
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "onboarding-continue"
+            enabled: true
+          timeout: 30000
+      - assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
+      - assertVisible: ".*(Von Studierenden für Studierende|By students for students).*"
+      - assertVisible: ".*(Weit verbreitet und vertrauenswürdig|Widely used and trustworthy).*"
+      - tapOn:
+          id: "onboarding-continue"
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - runFlow:
+          when:
+            visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+          commands:
+            - tapOn: "OK"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 120000
+- runFlow:
+    when:
+      visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+    commands:
+      - tapOn: "OK"
+- tapOn:
+    id: "login-guest"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 60000

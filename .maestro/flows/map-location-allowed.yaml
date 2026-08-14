@@ -1,0 +1,41 @@
+appId: ${APP_ID}
+name: map-location-allowed
+tags:
+  - regression
+  - guest
+  - map
+  - permissions
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: inuse
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    when:
+      platform: iOS
+      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+    commands:
+      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- runFlow:
+    file: "../subflows/open-map-tab-location-allowed.yaml"
+- tapOn:
+    id: "map-current-location"
+- waitForAnimationToEnd:
+    timeout: 3000
+- assertVisible:
+    id: "map-screen"
+- tapOn: "Home"
+- runFlow:
+    file: "../subflows/open-map-tab-location-allowed.yaml"
+- tapOn:
+    id: "map-current-location"
+- assertVisible:
+    id: "map-screen"

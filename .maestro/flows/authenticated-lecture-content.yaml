@@ -1,0 +1,64 @@
+appId: ${APP_ID}
+name: authenticated-lecture-content
+tags:
+  - authenticated
+  - seeded-data
+  - native-module
+---
+# Credentials are supplied to the reusable login sub-flow at runtime.
+- launchApp:
+    clearState: true
+    stopApp: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/login-as-test-account.yaml"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable-preferences"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-preferences-screen"
+    timeout: 10000
+- tapOn:
+    id: "radio-option-timeline-3"
+- tapOn:
+    id: "timetable-list-mode"
+- runFlow:
+    file: "../subflows/open-deep-link.yaml"
+    env:
+      LINK: "neuland://timetable"
+- runFlow:
+    when:
+      visible: ".*(Stundenplan nicht konfiguriert|Timetable not configured).*"
+    commands:
+      - assertVisible: ".*(Stundenplan nicht konfiguriert|Timetable not configured).*"
+      - assertVisible: ".*(Aktualisieren|Refresh).*"
+- runFlow:
+    when:
+      notVisible: ".*(Stundenplan nicht konfiguriert|Timetable not configured).*"
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "timetable-lecture-entry"
+          timeout: 20000
+      - tapOn:
+          id: "timetable-lecture-entry"
+          index: 0
+      - extendedWaitUntil:
+          visible:
+            id: "lecture-details-screen"
+          timeout: 10000
+      - scrollUntilVisible:
+          element: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+      - extendedWaitUntil:
+          visible:
+            id: "lecture-webview-screen"
+          timeout: 10000
+      - scroll

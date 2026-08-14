@@ -1,0 +1,111 @@
+appId: ${APP_ID}
+name: quick-actions
+tags:
+  - regression
+  - guest
+  - navigation
+  - quick-actions
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "84%, 27%"
+          end: "84%, 27%"
+          duration: 650
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+          start: "50%, 90%"
+          end: "50%, 15%"
+          duration: 800
+      - runFlow:
+          when:
+            notVisible: "Neuland Next"
+          commands:
+            - swipe:
+                start: "50%, 90%"
+                end: "50%, 15%"
+                duration: 800
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - extendedWaitUntil:
+          visible: "Neuland Next"
+          timeout: 10000
+      - longPressOn: "Neuland Next"
+      - runFlow:
+          when:
+            visible: "Shortcuts"
+          commands:
+            - tapOn: "Shortcuts"
+- assertVisible: "(Calendar|Kalender)"
+- assertVisible: "(Food|Essen)"
+- assertVisible: "(Quick Links)"
+- assertVisible: "(Sign in|Anmelden)"
+- tapOn: "(Quick Links)"
+- extendedWaitUntil:
+    visible:
+      id: "quick-links-screen"
+    timeout: 15000
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "84%, 27%"
+          end: "84%, 27%"
+          duration: 650
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+          start: "50%, 90%"
+          end: "50%, 15%"
+          duration: 800
+      - runFlow:
+          when:
+            notVisible: "Neuland Next"
+          commands:
+            - swipe:
+                start: "50%, 90%"
+                end: "50%, 15%"
+                duration: 800
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - extendedWaitUntil:
+          visible: "Neuland Next"
+          timeout: 10000
+      - longPressOn: "Neuland Next"
+      - runFlow:
+          when:
+            visible: "Shortcuts"
+          commands:
+            - tapOn: "Shortcuts"
+- tapOn: "(Food|Essen)"
+- extendedWaitUntil:
+    visible:
+      id: "food-screen"
+    timeout: 20000
