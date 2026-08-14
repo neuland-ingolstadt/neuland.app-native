@@ -28,6 +28,26 @@ export function formatCampusLocation(standort: unknown): string | undefined {
 	return CAMPUS_LABELS[standort] ?? standort
 }
 export const BUILDINGS_ALL = 'Alle'
+export const BUILDINGS_IN = [
+	'A',
+	'B',
+	'C',
+	'D',
+	'E',
+	'F',
+	'G',
+	'H',
+	'I',
+	'J',
+	'K',
+	'M',
+	'P',
+	'X',
+	'W',
+	'Z'
+] as const
+export const BUILDINGS_ND = ['BN', 'CN'] as const
+export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 export const ROOM_SEARCH_DURATIONS = [

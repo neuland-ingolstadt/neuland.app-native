@@ -7,6 +7,7 @@ import { useRefreshByUser } from '@/hooks/useRefreshByUser'
 import type { AvailableRoom } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
+	BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
 	getBuildingCodes
@@ -51,10 +52,12 @@ export function useRoomSearch(): RoomSearchState {
 	const { data: mapOverlay } = useMapOverlayQuery()
 	const buildings = useMemo(
 		() =>
-			getBuildingCodes(
-				mapOverlay?.features.map((feature) => feature.properties?.Gebaeude) ??
-					[]
-			),
+			getBuildingCodes([
+				...BUILDINGS,
+				...(mapOverlay?.features.map(
+					(feature) => feature.properties?.Gebaeude
+				) ?? [])
+			]),
 		[mapOverlay]
 	)
 

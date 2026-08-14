@@ -5,9 +5,10 @@
  * https://www.maplibre.org/maplibre-gl-js/docs/guides/v5-to-v6-migration-guide/
  */
 import { copyFileSync, mkdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-const projectRoot = join(import.meta.dir, '..')
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
 const distDir = join(projectRoot, 'node_modules', 'maplibre-gl', 'dist')
 const publicDir = join(projectRoot, 'public')
 
