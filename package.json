@@ -1,5 +1,5 @@
 {
-	"version": "0.16.1",
+	"version": "0.17.0",
 	"name": "neuland",
 	"main": "expo-router/entry",
 	"homepage": "https://github.com/neuland-ingolstadt/neuland.app-native",

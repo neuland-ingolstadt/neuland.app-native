@@ -191,6 +191,38 @@
 					"web": "Sparkles"
 				}
 			}
+		],
+		"0.17": [
+			{
+				"title": {
+					"de": "Interaktive Karte",
+					"en": "Powerful Map Interactions"
+				},
+				"description": {
+					"de": "Erkunde den Campus mit noch leistungsfähigeren Karteninteraktionen und mehr hilfreichen Details.",
+					"en": "Explore campus with more powerful map interactions and helpful new details."
+				},
+				"icon": {
+					"ios": "map",
+					"android": "map",
+					"web": "Map"
+				}
+			},
+			{
+				"title": {
+					"de": "Performance und Stabilität",
+					"en": "Performance and Stability"
+				},
+				"description": {
+					"de": "Die App ist deutlich schneller und stabiler. Viele Details wurden für ein flüssigeres Erlebnis optimiert.",
+					"en": "The app is significantly faster and more stable. Many details were optimized for a smoother experience."
+				},
+				"icon": {
+					"ios": "bolt",
+					"android": "bolt",
+					"web": "CircleGauge"
+				}
+			}
 		]
 	}
 }
