@@ -4,6 +4,7 @@ set -euo pipefail
 output_file="${1:-bundle-size.json}"
 
 bun run licences:bundle
+bun maplibre:worker
 EXPO_UNSTABLE_ATLAS=true npx expo export -p web -c
 
 js_bytes=0

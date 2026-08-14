@@ -1,14 +1,11 @@
-import { trackEvent } from '@aptabase/react-native'
-import type { Position } from 'geojson'
 import type React from 'react'
-import { memo, use } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { StyledBottomSheetTouchableOpacity } from '@/components/Universal/styled'
-import { MapContext } from '@/contexts/map'
-import type { SEARCH_TYPES, SearchResult } from '@/types/map'
+import type { SEARCH_TYPES, SearchResult, SelectMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
+import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -16,16 +13,17 @@ import PlatformIcon from '../Universal/icon'
 
 interface ResultRowProps {
 	result: SearchResult
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
 	updateSearchHistory: (result: SearchResult) => void
+	onClearSearch?: () => void
 }
 
 const ResultRow = ({
 	result,
-	handlePresentModalPress,
-	updateSearchHistory
+	selectMapElement,
+	updateSearchHistory,
+	onClearSearch
 }: ResultRowProps): React.JSX.Element => {
-	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
 	const { i18n } = useTranslation()
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
@@ -33,28 +31,24 @@ const ResultRow = ({
 	const iconColor = getContrastColor(primaryColor)
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
-		<StyledBottomSheetTouchableOpacity
+		<Pressable
 			testID={`map-search-result-${result.title}`}
 			className="items-center flex-row py-2.5"
 			onPress={() => {
-				const center = result.item.properties?.center as Position | undefined
+				const center = parseMapCoordinate(result.item.properties?.center)
 				updateSearchHistory(result)
-				setClickedElement({
-					data: result.title,
+				selectMapElement({
+					room: result.title,
 					type: result.item.properties?.rtype as SEARCH_TYPES,
 					center,
-					manual: false
+					origin: 'Search',
+					manual: false,
+					floor:
+						typeof result.item.properties?.Ebene === 'string'
+							? result.item.properties.Ebene
+							: 'EG'
 				})
-				setCurrentFloor({
-					floor: (result.item.properties?.Ebene as string) ?? 'EG',
-					manual: false
-				})
-				trackEvent('Room', {
-					room: result.title,
-					origin: 'Search'
-				})
-				handlePresentModalPress()
-				setLocalSearch('')
+				onClearSearch?.()
 			}}
 		>
 			<View
@@ -87,7 +81,7 @@ const ResultRow = ({
 					{result.item.properties?.[roomTypeKey] ?? result.subtitle}
 				</Text>
 			</View>
-		</StyledBottomSheetTouchableOpacity>
+		</Pressable>
 	)
 }
 

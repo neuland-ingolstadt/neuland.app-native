@@ -1,6 +1,8 @@
-import type { Feature, GeoJsonProperties, Position } from 'geojson'
+import type { Feature, GeoJsonProperties } from 'geojson'
 
 import type { AvailableRoom } from './utils'
+
+export type MapCoordinate = [number, number]
 
 export enum SEARCH_TYPES {
 	BUILDING = 0,
@@ -23,9 +25,27 @@ export interface BuildingOccupancy {
 export interface ClickedMapElement {
 	type: SEARCH_TYPES
 	data: string
-	center?: Position
+	center?: MapCoordinate
 	manual?: boolean
 }
+
+export type MapSelectionOrigin =
+	| 'MapClick'
+	| 'InAppLink'
+	| 'Search'
+	| 'AvailableRoomsSuggestion'
+	| 'NextLecture'
+
+export interface SelectMapElementOptions {
+	room: string
+	type: SEARCH_TYPES
+	center?: MapCoordinate
+	origin: MapSelectionOrigin
+	manual: boolean
+	floor?: string
+}
+
+export type SelectMapElement = (options: SelectMapElementOptions) => void
 
 export interface SearchResult {
 	title: string

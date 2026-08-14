@@ -41,7 +41,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Analytics         | `@aptabase/react-native` — privacy-first, opt-in, self-hosted at `analytics.neuland.app` |
 | Maps              | `@maplibre/maplibre-react-native` (native) + `maplibre-gl` / `@vis.gl/react-maplibre` (web) |
 | Toasts / dialogs  | `burnt` for toasts / inline alerts (`Toaster` registered globally in `provider.tsx`) |
-| Tabs / sheets     | Expo Router native tabs (iOS), `@bottom-tabs/react-navigation` (Android), Expo Router tabs (web), `@gorhom/bottom-sheet` + `@th3rdwave/react-navigation-bottom-sheet` |
+| Tabs / sheets     | Expo Router native tabs (iOS), `@bottom-tabs/react-navigation` (Android), Expo Router tabs (web), `@swmansion/react-native-bottom-sheet` (web fallback in `src/components/Universal/bottom-sheet.web.tsx`) |
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
@@ -167,7 +167,7 @@ src/
 ├── components/           # Reusable UI grouped by feature
 │   ├── Cards/                  # Dashboard cards
 │   ├── Universal/              # Cross-feature primitives (Icon, FormList, …)
-│   ├── Layout/                 # Navigators (native-bottom-tabs.tsx, bottom-sheet.tsx, tab-bar.tsx)
+│   ├── Layout/                 # Navigators (native-bottom-tabs.tsx, tab-bar.tsx)
 │   ├── Timetable/, Food/, Map/, Settings/, Member/, Calendar/, …
 │   ├── contexts.ts             # React Contexts (UserKind, Dashboard)
 │   └── provider.tsx            # Global Provider tree
@@ -238,15 +238,24 @@ Generated and binary files:
   intentionally platform-specific. Native tab options differ between these runtimes; copy
   the closest existing tab instead of mixing option shapes.
 
-#### Bottom sheet routes
+#### Bottom sheets
 
-- `@gorhom/bottom-sheet` powers ad-hoc bottom sheets within a screen
-  (`<BottomSheetModal>`). `BottomSheetModalProvider` is registered in
-  `src/components/provider.tsx`.
-- For sheets that should be a *route* (back button, deep-linkable, etc.), use the
-  `BottomSheet` navigator from `src/components/Layout/bottom-sheet.tsx` (built on
-  `@th3rdwave/react-navigation-bottom-sheet`). Register the screen in `_layout.tsx`
-  exactly like a stack screen.
+- `@swmansion/react-native-bottom-sheet` powers inline (`BottomSheet`) and modal
+  (`ModalBottomSheet`) sheets. Gestures and snapping run in native code. Sheets are
+  **controlled**: pass `index` + `onIndexChange`. Detents are pixel heights or
+  `'content'` — not percentage strings.
+- Prefer **inline** `BottomSheet` for in-screen sheets (e.g. the map). They live in
+  the current screen and stay behind native tab bars. `ModalBottomSheet` portals
+  above the navigator and covers the tab bar — only use it when that is wanted.
+  `BottomSheetProvider` is required for modal sheets unless you pass `nativeOverlay`.
+- The library is iOS/Android only. Always import from
+  `@/components/Universal/bottom-sheet` so web uses the JS fallback in
+  `bottom-sheet.web.tsx`.
+- Track sheet height with `useSheetPosition` from
+  `@/components/Universal/use-sheet-position` (Reanimated UI-thread on native).
+  Position is **points from the bottom**.
+- For route-level sheets (back button, deep links), use Expo Router / stack
+  `presentation` rather than a dedicated sheet navigator.
 
 ### State management
 
@@ -346,7 +355,7 @@ The app uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on 
 - `src/styles/theme-colors.ts` — accent color map for theme sync
 - `src/utils/uniwind-utils.ts` — `hairlineBorder`, `toColor` helpers for RN edge cases
 - `src/uniwind-types.d.ts` — generated class-name typings (`bun uniwind:types`)
-- `@/components/Universal/styled` — `withUniwind` wrappers for FlashList, BottomSheet, expo-image
+- `@/components/Universal/styled` — `withUniwind` wrappers for FlashList, expo-image
 
 #### Conventions
 
@@ -381,9 +390,10 @@ Docs: https://docs.uniwind.dev
 - Icons go through `@/components/Universal/Icon` (`PlatformIcon`), which renders SF
   Symbols on iOS, Material Symbols (custom font) on Android, and Lucide on Web. Always
   pass all three variants when adding a new icon.
-- For large, simple lists, prefer `@shopify/flash-list` (`FlashList` /
-  `MasonryFlashList`) and provide `estimatedItemSize`. `FlatList` / `SectionList` are
-  acceptable when grouping, APIs, or the surrounding code make them the better fit.
+- For large, simple lists, prefer `@shopify/flash-list` (`FlashList`). Use the
+  `masonry` prop for masonry grids — `MasonryFlashList` and `estimatedItemSize` are
+  gone in v2. `FlatList` / `SectionList` are acceptable when grouping, APIs, or the
+  surrounding code make them the better fit.
 - **Maps are dual-runtime**: native uses `@maplibre/maplibre-react-native`, web uses
   `maplibre-gl` + `@vis.gl/react-maplibre`. The two render trees are completely
   different, so most map screens have a `*.web.tsx` counterpart (e.g.

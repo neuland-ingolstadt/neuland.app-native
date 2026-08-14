@@ -144,7 +144,6 @@ const ItemsPickerScreen = ({
 				testID={`${type}-picker`}
 				data={filteredEntries}
 				renderItem={renderItem}
-				estimatedItemSize={60}
 				contentContainerStyle={{
 					paddingHorizontal: lightTheme.margins.page,
 					paddingTop: 10,
@@ -152,7 +151,6 @@ const ItemsPickerScreen = ({
 				}}
 				showsVerticalScrollIndicator={false}
 				scrollEventThrottle={16}
-				disableAutoLayout
 			/>
 		)
 	}

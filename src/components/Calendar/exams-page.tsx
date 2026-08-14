@@ -95,7 +95,6 @@ export default function ExamsPage({
 						<FlashList
 							data={exams}
 							renderItem={renderExamItem}
-							estimatedItemSize={80}
 							contentContainerClassName="px-page"
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}
