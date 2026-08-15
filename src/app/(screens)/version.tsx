@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/react-native'
+import { toast } from 'burnt'
 import * as Application from 'expo-application'
 import Constants from 'expo-constants'
 import type React from 'react'
@@ -112,6 +114,27 @@ export default function Version(): React.JSX.Element {
 		].join('\n')
 
 		copyToClipboard(info, '')
+	}
+
+	const handleBugsinkTest = async () => {
+		if (!process.env.EXPO_PUBLIC_SENTRY_DSN) {
+			toast({
+				title: t('version.bugsinkMissingDsn'),
+				preset: 'error',
+				duration: 2.5
+			})
+			return
+		}
+
+		Sentry.captureException(
+			new Error('Bugsink test from Neuland Next version screenwerwet')
+		)
+		await Sentry.flush()
+		toast({
+			title: t('version.bugsinkToast'),
+			preset: 'done',
+			duration: 2.5
+		})
 	}
 
 	const sections: FormListSections[] = [
@@ -266,6 +289,33 @@ export default function Version(): React.JSX.Element {
 				/>
 				<Text className="text-primary text-base">
 					{t('version.copyButton')}
+				</Text>
+			</Pressable>
+			<Pressable
+				testID="version-bugsink-test"
+				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center min-w-copy-button-min px-10 py-3"
+				style={hairlineBorder}
+				onPress={() => {
+					void handleBugsinkTest()
+				}}
+			>
+				<PlatformIcon
+					ios={{
+						name: 'ladybug',
+						size: 18
+					}}
+					android={{
+						name: 'bug_report',
+						size: 22,
+						variant: 'outlined'
+					}}
+					web={{
+						name: 'Bug',
+						size: 22
+					}}
+				/>
+				<Text className="text-primary text-base">
+					{t('version.bugsinkButton')}
 				</Text>
 			</Pressable>
 		</ScrollView>

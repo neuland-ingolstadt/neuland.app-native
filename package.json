@@ -15,7 +15,7 @@
 		"prebuild:android": "expo prebuild -p android",
 		"build:android": "bun licences && bun run prebuild:android && eas build --platform android --local",
 		"build:android:dev": "bun licences && bun run prebuild:android && eas build --platform android --local --profile development",
-		"build:ios": "bun run prebuild:ios && xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext -configuration Release -archivePath ios/build/NeulandNext.xcarchive",
+		"build:ios": "bun run prebuild:ios && bash config/ci/archive-ios.sh",
 		"export:ios": "xcodebuild -exportArchive -archivePath ios/build/NeulandNext.xcarchive -exportPath ios/build/NeulandNext.ipa -exportOptionsPlist ios/exportOptions.plist && xcrun altool --upload-app -f ios/build/NeulandNext.ipa/NeulandNext.ipa -t ios -u $(security find-generic-password -s 'AppleAppStoreUpload' -g 2>&1 | grep -E 'acct' | awk -F= '{print $2}' | tr -d '\"') -p $(security find-generic-password -w -s 'AppleAppStoreUpload')",
 		"ship:ios": "bun licences:bundle && bun build:ios && bun export:ios",
 		"build:all": "bun licences:bundle && bun build:ios && bun build:android",
@@ -37,7 +37,8 @@
 		"i18n:check": "i18n-check -l src/localization -s en -f i18next -u src -o missingKeys invalidKeys undefined",
 		"changelog:check": "bun config/check-changelog-version.ts",
 		"uniwind:types": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts",
-		"react:doctor": "bunx react-doctor@latest"
+		"react:doctor": "bunx react-doctor@latest",
+		"sourcemaps:upload": "bash config/ci/upload-sourcemaps.sh"
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.5.0",
@@ -56,6 +57,7 @@
 		"@react-navigation/native": "^7.1.8",
 		"@react-navigation/native-stack": "^7.3.16",
 		"@react-navigation/stack": "^7.6.13",
+		"@sentry/react-native": "^8.22.0",
 		"@shopify/flash-list": "2.0.2",
 		"@swmansion/react-native-bottom-sheet": "0.16.2",
 		"@tanstack/query-sync-storage-persister": "5.101.4",

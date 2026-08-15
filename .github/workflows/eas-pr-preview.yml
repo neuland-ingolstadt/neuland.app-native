@@ -17,6 +17,8 @@ env:
   EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
   EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
   EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha }}
+  EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.EXPO_PUBLIC_SENTRY_DSN }}
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 jobs:
   preview:
@@ -40,12 +42,15 @@ jobs:
       - name: Bundle licenses
         run: bun run licences:bundle
 
+      - name: Export update and upload sourcemaps
+        run: bash config/ci/export-eas-update.sh
+
       - name: Create preview
         # Publishes to an EAS branch named after the PR — isolated from production.
         # Requires a dev client build; does not OTA-update App Store / Play Store users.
         uses: expo/expo-github-action/preview@eab7a230208c952974db8c3245cfd78402c7b385 # v9
         with:
-          command: eas update --auto --branch ${{ github.event.pull_request.head.ref }}
+          command: eas update --skip-bundler --input-dir dist --auto --branch ${{ github.event.pull_request.head.ref }}
 
   web-preview:
     name: Deploy web preview
@@ -70,7 +75,8 @@ jobs:
           source config/ci/web-export-env.sh
           bun run licences:bundle
           bun maplibre:worker
-          bunx expo export -p web -c
+          bunx expo export -p web -c --source-maps
+          bun sourcemaps:upload dist --strip
 
       - name: Deploy to EAS Hosting
         id: deploy

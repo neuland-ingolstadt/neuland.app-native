@@ -117,6 +117,14 @@ export default {
 			}
 		],
 		[
+			'@sentry/react-native/expo',
+			{
+				url: 'https://neuland.bugsink.com',
+				project: 'neuland-next',
+				organization: 'neuland'
+			}
+		],
+		[
 			'expo-alternate-app-icons',
 			[
 				{

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react-native'
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/splash'
@@ -21,6 +22,34 @@ import { AppState, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
+
+const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
+
+Sentry.init({
+	dsn: sentryDsn,
+	enabled: Boolean(sentryDsn),
+	sendDefaultPii: false,
+	beforeSend(event) {
+		// No user identity
+		delete event.user
+
+		// Potentially sensitive request data
+		delete event.request
+
+		// Can contain URLs, API responses, navigation data, etc.
+		delete event.breadcrumbs
+
+		// Device fingerprint-ish information
+		if (event.contexts) {
+			delete event.contexts.device
+		}
+
+		return event
+	},
+	tracesSampleRate: 0,
+	enableAutoSessionTracking: false,
+	environment: __DEV__ ? 'development' : 'production'
+})
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -547,4 +576,4 @@ const ProviderComponent = (): React.JSX.Element => {
 	)
 }
 
-export default ProviderComponent
+export default Sentry.wrap(ProviderComponent)

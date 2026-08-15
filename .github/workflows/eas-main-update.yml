@@ -16,6 +16,8 @@ env:
   EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
   EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
   EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
+  EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.EXPO_PUBLIC_SENTRY_DSN }}
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 jobs:
   changes:
@@ -56,6 +58,10 @@ jobs:
       - name: Bundle licenses
         run: bun run licences:bundle
 
+      - name: Export update and upload sourcemaps
+        run: bash config/ci/export-eas-update.sh
+
       - name: Publish update
         # Publishes to the main EAS branch — link it to your production channel in the Expo dashboard.
-        run: eas update --auto --branch main --non-interactive --message "${{ github.sha }}"
+        # Bundles were already exported (with debug IDs) so Bugsink maps match the shipped JS.
+        run: eas update --skip-bundler --input-dir dist --auto --branch main --non-interactive --message "${{ github.sha }}"
