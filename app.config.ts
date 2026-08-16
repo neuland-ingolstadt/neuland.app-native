@@ -119,9 +119,9 @@ export default {
 		[
 			'@sentry/react-native/expo',
 			{
-				url: 'https://bugs.neuland.app',
+				url: 'https://rustrak.neuland.app',
 				project: 'neuland-next',
-				organization: 'neuland'
+				organization: 'bugsinkhasnoorgs'
 			}
 		],
 		[

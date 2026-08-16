@@ -63,5 +63,5 @@ jobs:
 
       - name: Publish update
         # Publishes to the main EAS branch — link it to your production channel in the Expo dashboard.
-        # Bundles were already exported (with debug IDs) so Bugsink maps match the shipped JS.
+        # Bundles were already exported (with debug IDs) so RustRak maps match the shipped JS.
         run: eas update --skip-bundler --input-dir dist --auto --branch main --non-interactive --message "${{ github.sha }}"

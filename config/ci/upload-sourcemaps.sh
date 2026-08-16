@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Upload JS bundles + sourcemaps to Bugsink via sentry-cli (same artifact-bundle
-# endpoints as Sentry). See https://www.bugsink.com/docs/sourcemaps/
+# Upload JS bundles + sourcemaps to RustRak via @sentry/expo-upload-sourcemaps
+# (debug-id artifact bundles — the same flow Sentry uses for Expo exports).
 #
 # Usage: bash config/ci/upload-sourcemaps.sh [dir] [--strip] [--required]
 # Skips when SENTRY_AUTH_TOKEN is unset unless --required is passed.
@@ -48,14 +48,10 @@ if [[ "$map_count" == "0" ]]; then
 	fail_or_skip "Sourcemap upload skipped: no .map files in $dir"
 fi
 
-export SENTRY_URL="${SENTRY_URL:-https://bugs.neuland.app/}"
-export SENTRY_ORG="${SENTRY_ORG:-neuland}"
-export SENTRY_PROJECT="${SENTRY_PROJECT:-neuland-next}"
+export SENTRY_URL="${SENTRY_URL:-https://rustrak.neuland.app/}"
 
-sentry_cli="$(node -e "process.stdout.write(require.resolve('@sentry/cli/bin/sentry-cli'))")"
-
-"$sentry_cli" sourcemaps inject "$dir"
-npx sentry-expo-upload-sourcemaps "$dir"
+upload_cli="$(node -e "process.stdout.write(require.resolve('@sentry/expo-upload-sourcemaps/cli.js'))")"
+node "$upload_cli" "$dir"
 
 if [[ -n "$strip" ]]; then
 	find "$dir" -type f -name '*.map' -delete

@@ -43,7 +43,6 @@ Sentry.init({
 		if (event.contexts) {
 			delete event.contexts.device
 		}
-
 		return event
 	},
 	tracesSampleRate: 0,
