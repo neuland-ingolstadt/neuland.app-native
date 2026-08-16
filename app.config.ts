@@ -119,7 +119,7 @@ export default {
 		[
 			'@sentry/react-native/expo',
 			{
-				url: 'https://bugs.neuland.ing',
+				url: 'https://bugs.neuland.app',
 				project: 'neuland-next',
 				organization: 'neuland'
 			}

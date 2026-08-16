@@ -48,7 +48,7 @@ if [[ "$map_count" == "0" ]]; then
 	fail_or_skip "Sourcemap upload skipped: no .map files in $dir"
 fi
 
-export SENTRY_URL="${SENTRY_URL:-https://neuland.bugsink.com/}"
+export SENTRY_URL="${SENTRY_URL:-https://bugs.neuland.app/}"
 export SENTRY_ORG="${SENTRY_ORG:-neuland}"
 export SENTRY_PROJECT="${SENTRY_PROJECT:-neuland-next}"
 
