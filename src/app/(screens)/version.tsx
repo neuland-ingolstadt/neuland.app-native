@@ -127,7 +127,7 @@ export default function Version(): React.JSX.Element {
 		}
 
 		Sentry.captureException(
-			new Error('Bugsink test from Neuland Next version screenwerwet')
+			new Error('Bugsink test from Neuland Next version - test')
 		)
 		await Sentry.flush()
 		toast({
