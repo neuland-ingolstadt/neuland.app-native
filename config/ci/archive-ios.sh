@@ -18,6 +18,7 @@ fi
 export SENTRY_URL="${SENTRY_URL:-https://rustrak.neuland.app/}"
 export SENTRY_ORG="${SENTRY_ORG:-neuland}"
 export SENTRY_PROJECT="${SENTRY_PROJECT:-neuland-next}"
+export SENTRY_DISABLE_XCODE_DEBUG_UPLOAD=true
 
 xcodebuild archive \
 	-workspace ios/NeulandNext.xcworkspace \

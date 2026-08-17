@@ -16,6 +16,7 @@ fi
 export SENTRY_URL="${SENTRY_URL:-https://rustrak.neuland.app/}"
 export SENTRY_ORG="${SENTRY_ORG:-neuland}"
 export SENTRY_PROJECT="${SENTRY_PROJECT:-neuland-next}"
+export SENTRY_DISABLE_XCODE_DEBUG_UPLOAD=true
 
 if [[ -z "${SENTRY_AUTH_TOKEN:-}" ]]; then
 	echo "warning: SENTRY_AUTH_TOKEN unset; RustRak sourcemap upload will be skipped" >&2
@@ -27,4 +28,5 @@ SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 SENTRY_URL=${SENTRY_URL}
 SENTRY_ORG=${SENTRY_ORG}
 SENTRY_PROJECT=${SENTRY_PROJECT}
+SENTRY_DISABLE_XCODE_DEBUG_UPLOAD=true
 EOF
