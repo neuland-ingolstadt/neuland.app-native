@@ -16,8 +16,11 @@ env:
   EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
   EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
   EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
-  EXPO_PUBLIC_SENTRY_DSN: ${{ secrets.EXPO_PUBLIC_SENTRY_DSN }}
+  EXPO_PUBLIC_SENTRY_DSN: ${{ vars.EXPO_PUBLIC_SENTRY_DSN }}
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_URL: ${{ vars.SENTRY_URL }}
+  SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+  SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
 jobs:
   changes:

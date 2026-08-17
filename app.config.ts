@@ -121,7 +121,7 @@ export default {
 			{
 				url: 'https://rustrak.neuland.app',
 				project: 'neuland-next',
-				organization: 'bugsinkhasnoorgs'
+				organization: 'neuland'
 			}
 		],
 		[

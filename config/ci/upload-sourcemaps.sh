@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Upload JS bundles + sourcemaps to RustRak via @sentry/expo-upload-sourcemaps
-# (debug-id artifact bundles — the same flow Sentry uses for Expo exports).
-#
 # Usage: bash config/ci/upload-sourcemaps.sh [dir] [--strip] [--required]
-# Skips when SENTRY_AUTH_TOKEN is unset unless --required is passed.
 
 dir="dist"
 strip=""
