@@ -71,6 +71,13 @@ export const useMemberStore = create<MemberStore>()(
 				}
 			},
 			logout: async () => {
+				const { refreshToken, idToken } = get()
+				try {
+					await MemberAPI.revokeSession({ refreshToken, idToken })
+				} catch (error) {
+					console.error('Failed to revoke Authentik tokens:', error)
+				}
+
 				set({ idToken: null, refreshToken: null, info: null })
 				setOfficeTogglePending(false)
 				// Only reset accent color to blue on logout
