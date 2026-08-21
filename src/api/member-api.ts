@@ -3,11 +3,13 @@ import { appHomepage, appVersion } from '@/data/app-version'
 
 const ID_API_BASE = 'https://id.neuland-ingolstadt.de/api'
 const AUTH_TOKEN_ENDPOINT = 'https://auth.neuland.ing/application/o/token/'
+const AUTH_REVOKE_ENDPOINT = 'https://auth.neuland.ing/application/o/revoke/'
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 
 export const AUTH_DISCOVERY = {
 	authorizationEndpoint: 'https://auth.neuland.ing/application/o/authorize/',
 	tokenEndpoint: AUTH_TOKEN_ENDPOINT,
+	revocationEndpoint: AUTH_REVOKE_ENDPOINT,
 	userInfoEndpoint: 'https://auth.neuland.ing/application/o/userinfo/'
 } as const
 
@@ -29,15 +31,20 @@ class MemberAPIClient {
 		return process.env.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID ?? ''
 	}
 
-	private async postTokenRequest(
-		body: URLSearchParams
-	): Promise<MemberTokenResponse> {
+	private getFormHeaders(): Record<string, string> {
 		const headers: Record<string, string> = {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 		if (Platform.OS !== 'web') {
 			headers['User-Agent'] = USER_AGENT
 		}
+		return headers
+	}
+
+	private async postTokenRequest(
+		body: URLSearchParams
+	): Promise<MemberTokenResponse> {
+		const headers = this.getFormHeaders()
 
 		const response = await fetch(AUTH_TOKEN_ENDPOINT, {
 			method: 'POST',
@@ -132,6 +139,55 @@ class MemberAPIClient {
 				refresh_token: refreshToken
 			})
 		)
+	}
+
+	async revokeToken(
+		token: string,
+		tokenTypeHint?: 'refresh_token' | 'access_token'
+	): Promise<void> {
+		const body = new URLSearchParams({
+			token,
+			client_id: this.getClientId()
+		})
+		if (tokenTypeHint) {
+			body.set('token_type_hint', tokenTypeHint)
+		}
+
+		const response = await fetch(AUTH_REVOKE_ENDPOINT, {
+			method: 'POST',
+			headers: this.getFormHeaders(),
+			body: body.toString()
+		})
+
+		if (!response.ok) {
+			throw new Error(`Token revocation failed (${response.status})`)
+		}
+	}
+
+	async revokeSession(params: {
+		refreshToken?: string | null
+		idToken?: string | null
+	}): Promise<void> {
+		const requests: Promise<void>[] = []
+
+		if (params.refreshToken) {
+			requests.push(this.revokeToken(params.refreshToken, 'refresh_token'))
+		}
+		if (params.idToken) {
+			requests.push(this.revokeToken(params.idToken, 'access_token'))
+		}
+
+		if (requests.length === 0) {
+			return
+		}
+
+		const results = await Promise.allSettled(requests)
+		const failures = results.filter(
+			(result): result is PromiseRejectedResult => result.status === 'rejected'
+		)
+		if (failures.length === results.length) {
+			throw failures[0].reason
+		}
 	}
 }
 
