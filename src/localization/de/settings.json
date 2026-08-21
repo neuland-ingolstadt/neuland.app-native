@@ -265,6 +265,11 @@
 			}
 		},
 		"copyButton": "Alles kopieren",
+		"bugsinkButton": "Testfehler senden",
+		"bugsinkToast": "Testfehler an Bugsink gesendet",
+		"bugsinkMissingDsn": "EXPO_PUBLIC_SENTRY_DSN ist nicht gesetzt",
+		"crashViewButton": "Crash-Bildschirm anzeigen",
+		"nativeCrashButton": "Nativer Absturz",
 		"copyLabels": {
 			"appHeader": "App-Informationen:",
 			"systemHeader": "System-Informationen:",

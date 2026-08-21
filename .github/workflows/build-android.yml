@@ -29,7 +29,12 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
-        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+          EXPO_PUBLIC_SENTRY_DSN: ${{ vars.EXPO_PUBLIC_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: ${{ vars.SENTRY_URL }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: bash config/ci/build-android.sh --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Determine submission profile
         run: |

@@ -1,4 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
+import * as Sentry from '@sentry/react-native'
 import { type ErrorBoundaryProps, usePathname } from 'expo-router'
 import type React from 'react'
 import { useEffect } from 'react'
@@ -42,6 +43,10 @@ export default function CrashView({
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
+
+	useEffect(() => {
+		Sentry.captureException(error, { extra: { path, crash: true } })
+	}, [error, path])
 
 	useEffect(() => {
 		if (!analyticsInitialized) return

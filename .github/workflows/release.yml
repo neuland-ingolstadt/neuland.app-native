@@ -124,6 +124,11 @@ jobs:
             EXPO_PUBLIC_FLIPT_URL=https://flipt.neuland.ing
             EXPO_PUBLIC_FLIPT_NAMESPACE=neuland-app
             EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
+            EXPO_PUBLIC_SENTRY_DSN=${{ vars.EXPO_PUBLIC_SENTRY_DSN }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+            SENTRY_URL=${{ vars.SENTRY_URL }}
+            SENTRY_ORG=${{ vars.SENTRY_ORG }}
+            SENTRY_PROJECT=${{ vars.SENTRY_PROJECT }}
 
   build-android:
     name: Build Android app
@@ -146,7 +151,12 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
-        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+          EXPO_PUBLIC_SENTRY_DSN: ${{ vars.EXPO_PUBLIC_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: ${{ vars.SENTRY_URL }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: bash config/ci/build-android.sh --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Upload AAB artifact for next job
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
