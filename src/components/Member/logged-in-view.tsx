@@ -160,6 +160,15 @@ export function LoggedInView(): React.JSX.Element {
 					}
 				},
 				{
+					title: t('quickLinks.neulandConnect'),
+					onPress: () => Linking.openURL('https://connect.neuland.ing'),
+					icon: {
+						ios: 'person.2',
+						android: 'groups',
+						web: 'Users'
+					}
+				},
+				{
 					title: t('quickLinks.ssoProfile'),
 					onPress: () => Linking.openURL('https://auth.neuland.ing/'),
 					icon: {
