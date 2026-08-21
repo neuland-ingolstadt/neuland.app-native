@@ -156,7 +156,7 @@ jobs:
           SENTRY_URL: ${{ vars.SENTRY_URL }}
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
-        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+        run: bash config/ci/build-android.sh --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Upload AAB artifact for next job
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

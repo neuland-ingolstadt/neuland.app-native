@@ -11,4 +11,4 @@ bunx expo export \
 	--platform ios \
 	--platform android
 
-bash config/ci/upload-sourcemaps.sh dist --strip --required
+node "$root/config/plugins/rustrak-sourcemaps/cli.js" ota dist --required

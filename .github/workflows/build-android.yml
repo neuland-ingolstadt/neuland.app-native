@@ -34,7 +34,7 @@ jobs:
           SENTRY_URL: ${{ vars.SENTRY_URL }}
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
-        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+        run: bash config/ci/build-android.sh --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Determine submission profile
         run: |

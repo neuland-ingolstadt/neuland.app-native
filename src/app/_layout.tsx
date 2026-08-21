@@ -9,6 +9,8 @@ import { useUniversalLinkHandler } from '@/hooks/useUniversalLinkHandler'
 import i18n from '@/localization/i18n'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/global.css'
+import * as Application from 'expo-application'
+import Constants from 'expo-constants'
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { Stack } from 'expo-router'
@@ -25,10 +27,27 @@ import { toColor } from '@/utils/uniwind-utils'
 
 const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
 
+const sentryDist = Application.nativeBuildVersion ?? undefined
+const sentryAppId =
+	Application.applicationId ??
+	(Platform.OS === 'web' ? 'app.neuland.web' : undefined)
+const sentryVersion =
+	Application.nativeApplicationVersion ??
+	Constants.expoConfig?.version ??
+	undefined
+const sentryRelease =
+	sentryAppId && sentryVersion
+		? sentryDist
+			? `${sentryAppId}@${sentryVersion}+${sentryDist}`
+			: `${sentryAppId}@${sentryVersion}`
+		: undefined
+
 Sentry.init({
 	dsn: sentryDsn,
 	enabled: Boolean(sentryDsn),
 	sendDefaultPii: false,
+	release: sentryRelease,
+	dist: sentryDist,
 	beforeSend(event) {
 		// No user identity
 		delete event.user
@@ -46,7 +65,7 @@ Sentry.init({
 		return event
 	},
 	tracesSampleRate: 0,
-	enableAutoSessionTracking: false,
+	enableAutoSessionTracking: true,
 	environment: __DEV__ ? 'development' : 'production'
 })
 

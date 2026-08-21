@@ -38,7 +38,7 @@
 		"changelog:check": "bun config/check-changelog-version.ts",
 		"uniwind:types": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts",
 		"react:doctor": "bunx react-doctor@latest",
-		"sourcemaps:upload": "bash config/ci/upload-sourcemaps.sh"
+		"sourcemaps:upload": "node config/plugins/rustrak-sourcemaps/cli.js ota"
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.5.0",

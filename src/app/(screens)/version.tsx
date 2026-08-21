@@ -24,6 +24,7 @@ declare global {
 export default function Version(): React.JSX.Element {
 	const { t, i18n } = useTranslation(['settings', 'common'])
 	const notAvailable = t('misc.notAvailable', { ns: 'common' })
+	const [crashView, setCrashView] = useState(false)
 	const [systemInfo, setSystemInfo] = useState({
 		osVersion: notAvailable,
 		deviceModel: notAvailable,
@@ -116,6 +117,10 @@ export default function Version(): React.JSX.Element {
 		copyToClipboard(info, '')
 	}
 
+	if (crashView) {
+		throw new Error('Crash view test from Neuland Next version screen')
+	}
+
 	const handleBugsinkTest = async () => {
 		if (!process.env.EXPO_PUBLIC_SENTRY_DSN) {
 			toast({
@@ -127,7 +132,7 @@ export default function Version(): React.JSX.Element {
 		}
 
 		Sentry.captureException(
-			new Error('Bugsink test from Neuland Next version - test')
+			new Error('Bugsink test from Neuland Next versio test')
 		)
 		await Sentry.flush()
 		toast({
@@ -135,6 +140,18 @@ export default function Version(): React.JSX.Element {
 			preset: 'done',
 			duration: 2.5
 		})
+	}
+
+	const handleNativeCrash = () => {
+		if (!process.env.EXPO_PUBLIC_SENTRY_DSN) {
+			toast({
+				title: t('version.bugsinkMissingDsn'),
+				preset: 'error',
+				duration: 2.5
+			})
+			return
+		}
+		Sentry.nativeCrash()
 	}
 
 	const sections: FormListSections[] = [
@@ -318,6 +335,60 @@ export default function Version(): React.JSX.Element {
 					{t('version.bugsinkButton')}
 				</Text>
 			</Pressable>
+			<Pressable
+				testID="version-crash-view-test"
+				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center mt-3 min-w-copy-button-min px-10 py-3"
+				style={hairlineBorder}
+				onPress={() => {
+					setCrashView(true)
+				}}
+			>
+				<PlatformIcon
+					ios={{
+						name: 'pc',
+						size: 18
+					}}
+					android={{
+						name: 'error',
+						size: 22,
+						variant: 'outlined'
+					}}
+					web={{
+						name: 'ServerCrash',
+						size: 22
+					}}
+				/>
+				<Text className="text-primary text-base">
+					{t('version.crashViewButton')}
+				</Text>
+			</Pressable>
+			{Platform.OS !== 'web' && (
+				<Pressable
+					testID="version-native-crash-test"
+					className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center mt-3 min-w-copy-button-min px-10 py-3"
+					style={hairlineBorder}
+					onPress={handleNativeCrash}
+				>
+					<PlatformIcon
+						ios={{
+							name: 'exclamationmark.triangle',
+							size: 18
+						}}
+						android={{
+							name: 'dangerous',
+							size: 22,
+							variant: 'outlined'
+						}}
+						web={{
+							name: 'Skull',
+							size: 22
+						}}
+					/>
+					<Text className="text-primary text-base">
+						{t('version.nativeCrashButton')}
+					</Text>
+				</Pressable>
+			)}
 		</ScrollView>
 	)
 }

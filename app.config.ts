@@ -18,7 +18,7 @@ export default {
 	newArchEnabled: true,
 	ios: {
 		bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
-		buildNumber: '199',
+		buildNumber: '211',
 		supportsTablet: true,
 		appleTeamId: 'FSXB76X6V2',
 		appStoreUrl: 'https://apps.apple.com/us/app/neuland-next/id1617096811',
@@ -123,6 +123,9 @@ export default {
 				project: 'neuland-next',
 				organization: 'neuland'
 			}
+		],
+		[
+			'./config/plugins/withRustrakSourcemaps.js'
 		],
 		[
 			'expo-alternate-app-icons',
