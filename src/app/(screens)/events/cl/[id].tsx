@@ -1,10 +1,8 @@
 import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import {
 	Redirect,
 	router,
-	Stack,
 	useFocusEffect,
 	useLocalSearchParams,
 	useNavigation
@@ -21,6 +19,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import { EventErrorView } from '@/components/Error/event-error-view'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
@@ -52,7 +51,6 @@ import { copyToClipboard } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function ClEventDetail(): React.JSX.Element {
-	const textColor = toColor(useCSSVariable('--color-text'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const columnDetailsStyle = useResolveClassNames(
 		'text-text text-[16.5px] pt-0.5 text-left'
@@ -363,25 +361,7 @@ export default function ClEventDetail(): React.JSX.Element {
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View
-							className="overflow-hidden"
-							style={{
-								marginBottom: Platform.OS === 'ios' ? -10 : 0,
-								paddingRight: Platform.OS === 'ios' ? 0 : 50
-							}}
-						>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={String(textColor)}>
-									{eventTitle}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
+			<DetailStackHeader title={eventTitle} headerStyle={headerStyle} />
 
 			<View className="flex-row items-start justify-between">
 				<Text

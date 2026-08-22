@@ -12,12 +12,10 @@ import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import {
-	MealDetailStackHeader,
-	useMealDetailScroll
-} from '@/components/Food/meal-detail-header'
+import { useMealDetailScroll } from '@/components/Food/meal-detail-header'
 import { createMealPreferenceAlert } from '@/components/Food/meal-preference-alert'
 import { MealPriceRow } from '@/components/Food/meal-price-row'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
@@ -172,7 +170,7 @@ export default function FoodDetail(): React.JSX.Element {
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
-			<MealDetailStackHeader title={title} headerStyle={headerStyle} />
+			<DetailStackHeader title={title} headerStyle={headerStyle} />
 			<View className="flex-row items-start justify-between pb-1.5">
 				<Text
 					className="text-text flex-1 text-[22px] font-bold pt-4 text-left"
