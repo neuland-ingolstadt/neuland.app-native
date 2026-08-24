@@ -39,13 +39,13 @@
 		"react:doctor": "bunx react-doctor@latest"
 	},
 	"dependencies": {
-		"@aptabase/react-native": "^0.5.0",
+		"@aptabase/react-native": "^0.6.0",
 		"@babel/runtime": "^7.28.4",
 		"@bottom-tabs/react-navigation": "^0.12.0",
 		"@expo/metro-runtime": "~6.1.2",
 		"@expo/vector-icons": "^15.0.3",
 		"@flipt-io/flipt": "^1.5.0",
-		"@gorhom/bottom-sheet": "5.2.13",
+		"@gorhom/bottom-sheet": "5.2.14",
 		"@howljs/calendar-kit": "2.5.6",
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
 		"@maplibre/maplibre-react-native": "10.4.2",
@@ -103,13 +103,13 @@
 		"react-i18next": "17.0.11",
 		"react-native": "0.81.5",
 		"react-native-bottom-tabs": "^0.12.0",
-		"react-native-collapsible": "1.6.1",
+		"react-native-collapsible": "1.6.2",
 		"react-native-context-menu-view": "^1.21.0",
 		"react-native-device-info": "^15.0.0",
 		"react-native-draggable-flatlist": "^4.0.3",
 		"react-native-gesture-handler": "~2.28.0",
 		"react-native-mmkv": "^4.3.2",
-		"react-native-nitro-modules": "^0.36.1",
+		"react-native-nitro-modules": "^0.37.0",
 		"react-native-pager-view": "6.9.1",
 		"react-native-reanimated": "3.19.1",
 		"react-native-safe-area-context": "~5.6.2",
@@ -125,7 +125,7 @@
 		"swiftui-react-native": "^6.3.3",
 		"tailwindcss": "^4.3.1",
 		"uniwind": "^1.9.0",
-		"zustand": "5.0.14"
+		"zustand": "5.0.15"
 	},
 	"devDependencies": {
 		"@0no-co/graphqlsp": "^1.17.3",
