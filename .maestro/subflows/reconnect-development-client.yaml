@@ -79,9 +79,9 @@ appId: ${APP_ID}
       - runFlow:
           when:
             platform: Android
-            visible: "http://10.0.2.2:8081"
+            visible: "http://${DEV_SERVER_ADDRESS}"
           commands:
-            - tapOn: "http://10.0.2.2:8081"
+            - tapOn: "http://${DEV_SERVER_ADDRESS}"
       - runFlow:
           when:
             platform: Android
@@ -108,9 +108,9 @@ appId: ${APP_ID}
 - runFlow:
     when:
       platform: Android
-      visible: "http://10.0.2.2:8081"
+      visible: "http://${DEV_SERVER_ADDRESS}"
     commands:
-      - tapOn: "http://10.0.2.2:8081"
+      - tapOn: "http://${DEV_SERVER_ADDRESS}"
 - repeat:
     times: 2
     commands:

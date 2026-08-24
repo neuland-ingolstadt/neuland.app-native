@@ -22,6 +22,9 @@ tags:
 - pressKey: Home
 - waitForAnimationToEnd:
     timeout: 3000
+# Long-presses the Neuland Next icon on the Home Screen to open its quick
+# actions. Assumes the default icon grid position of a fresh simulator;
+# adjust the coordinates if the icon sits elsewhere.
 - runFlow:
     when:
       platform: iOS
@@ -69,6 +72,7 @@ tags:
 - pressKey: Home
 - waitForAnimationToEnd:
     timeout: 3000
+# Same long-press as above to reopen the quick actions.
 - runFlow:
     when:
       platform: iOS

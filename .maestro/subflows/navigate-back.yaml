@@ -1,5 +1,7 @@
 appId: ${APP_ID}
 ---
+# The native iOS back button exposes no accessibility identifier, so iOS
+# navigation relies on the edge swipe gesture instead.
 - runFlow:
     when:
       platform: Android
@@ -8,16 +10,6 @@ appId: ${APP_ID}
 - runFlow:
     when:
       platform: iOS
-      visible:
-        id: "BackButton"
-    commands:
-      - tapOn:
-          id: "BackButton"
-- runFlow:
-    when:
-      platform: iOS
-      notVisible:
-        id: "BackButton"
     commands:
       - swipe:
           start: "2%, 50%"

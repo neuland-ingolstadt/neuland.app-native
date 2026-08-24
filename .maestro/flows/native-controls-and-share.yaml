@@ -34,6 +34,8 @@ tags:
       - tapOn:
           point: "95%, 10%"
 - tapOn: "(Food Preferences|Essenspräferenzen)"
+# No centerElement here: the row sits near the end of the list and cannot be
+# centered, which would time out the scroll.
 - scrollUntilVisible:
     element:
       text: "(Automatically switch to next day|Automatisch zum nächsten Tag wechseln)"
@@ -61,8 +63,19 @@ tags:
     commands:
       - assertVisible: "(CANCEL|ABBRECHEN|Cancel|Abbrechen)"
       - tapOn: "(CANCEL|ABBRECHEN|Cancel|Abbrechen)"
+# The preferences screen intercepts the edge-swipe back gesture on iOS 26, so
+# the visible native back button (labeled with the previous screen title) is
+# used; Android leaves via the hardware back button.
 - runFlow:
-    file: "../subflows/navigate-back.yaml"
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
 - tapOn: "(Profile|Profil)"
 - extendedWaitUntil:
     visible:
@@ -73,6 +86,7 @@ tags:
       id: "settings-share-link"
     direction: DOWN
     timeout: 10000
+    centerElement: true
 - tapOn:
     id: "settings-share-link"
     retryTapIfNoChange: false

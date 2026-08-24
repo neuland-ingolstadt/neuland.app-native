@@ -41,24 +41,44 @@ tags:
     when:
       notVisible: ".*(Stundenplan nicht konfiguriert|Timetable not configured).*"
     commands:
+      # Timetable list entries expose no testIDs, and the iOS status-bar clock
+      # always matches an HH:mm text search, so entries cannot be located by
+      # their time label. The list is guarded by its section headers (dayjs is
+      # hardcoded to the 'de' locale) and a fixed point inside the list area is
+      # tapped. Only lectures have lecture content; exams and calendar events
+      # are recognized by their detail screen and left again without checks.
       - extendedWaitUntil:
-          visible:
-            id: "timetable-lecture-entry"
+          visible: "(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)"
           timeout: 20000
       - tapOn:
-          id: "timetable-lecture-entry"
-          index: 0
-      - extendedWaitUntil:
-          visible:
-            id: "lecture-details-screen"
-          timeout: 10000
-      - scrollUntilVisible:
-          element: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
-          direction: DOWN
-          timeout: 10000
-      - tapOn: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
-      - extendedWaitUntil:
-          visible:
-            id: "lecture-webview-screen"
-          timeout: 10000
-      - scroll
+          point: "50%, 45%"
+      - waitForAnimationToEnd:
+          timeout: 5000
+      - runFlow:
+          when:
+            visible:
+              id: "lecture-details-screen"
+          commands:
+            - scrollUntilVisible:
+                element: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+                direction: DOWN
+                timeout: 10000
+            - tapOn: "(Goal|Ziel|Content|Inhalt|Literature|Literatur)"
+            - extendedWaitUntil:
+                visible:
+                  id: "lecture-webview-screen"
+                timeout: 10000
+            - scroll
+      - runFlow:
+          when:
+            visible: "(Exam Details|Prüfungsdetails)"
+          commands:
+            - runFlow:
+                file: "../subflows/navigate-back.yaml"
+      - runFlow:
+          when:
+            visible:
+              id: "calendar-screen"
+          commands:
+            - runFlow:
+                file: "../subflows/navigate-back.yaml"

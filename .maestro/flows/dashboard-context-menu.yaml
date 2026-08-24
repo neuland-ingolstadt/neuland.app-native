@@ -45,7 +45,18 @@ tags:
     id: "dashboard-order-item-events"
 - assertVisible:
     id: "dashboard-order-list"
+# The reorder screen intercepts the edge-swipe back gesture on iOS 26, so the
+# visible native back button (labeled with the previous screen title) is used;
+# Android leaves via the hardware back button.
 - runFlow:
-    file: "../subflows/navigate-back.yaml"
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
 - assertVisible:
     id: "home-screen"

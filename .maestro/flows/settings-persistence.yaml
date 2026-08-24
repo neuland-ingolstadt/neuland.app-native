@@ -30,6 +30,7 @@ tags:
       id: "settings-theme-link"
     direction: DOWN
     timeout: 10000
+    centerElement: true
 - tapOn:
     id: "settings-theme-link"
 - extendedWaitUntil:
@@ -59,6 +60,7 @@ tags:
       id: "settings-theme-link"
     direction: DOWN
     timeout: 10000
+    centerElement: true
 - tapOn:
     id: "settings-theme-link"
 - extendedWaitUntil:

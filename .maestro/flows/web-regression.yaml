@@ -101,8 +101,7 @@ tags:
           id: "food-day-1"
       - assertVisible:
           id: "food-day-1"
-- tapOn:
-    id: "(Food Preferences|Essenspräferenzen)"
+- tapOn: "(Food Preferences|Essenspräferenzen)"
 - extendedWaitUntil:
     visible:
       id: "multi-option-Reimanns"

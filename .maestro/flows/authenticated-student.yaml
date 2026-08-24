@@ -132,28 +132,43 @@ tags:
 - swipe:
     direction: UP
     duration: 600
+# Timetable list entries expose no testIDs, and the iOS status-bar clock
+# always matches an HH:mm text search, so entries cannot be located by their
+# time label. Instead the list is guarded by its section headers (dayjs is
+# hardcoded to the 'de' locale, so weekday names render in German regardless
+# of the app language) and a fixed point inside the list area is tapped. Which
+# detail screen appears identifies the entry type (lecture / exam / calendar
+# event); exams have no screen testID and are recognized by their header
+# title.
 - runFlow:
     when:
-      visible:
-        id: "timetable-lecture-entry"
+      visible: "(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)"
     commands:
       - tapOn:
-          id: "timetable-lecture-entry"
-          index: 0
-      - assertVisible: "(Details)"
+          point: "50%, 45%"
+      - waitForAnimationToEnd:
+          timeout: 3000
       - runFlow:
-          file: "../subflows/navigate-back.yaml"
-- runFlow:
-    when:
-      visible:
-        id: "timetable-exam-entry"
-    commands:
-      - tapOn:
-          id: "timetable-exam-entry"
-          index: 0
-      - assertVisible: "(Exam Details|Prüfungsdetails)"
+          when:
+            visible:
+              id: "lecture-details-screen"
+          commands:
+            - assertVisible: "(Details)"
+            - runFlow:
+                file: "../subflows/navigate-back.yaml"
       - runFlow:
-          file: "../subflows/navigate-back.yaml"
+          when:
+            visible: "(Exam Details|Prüfungsdetails)"
+          commands:
+            - runFlow:
+                file: "../subflows/navigate-back.yaml"
+      - runFlow:
+          when:
+            visible:
+              id: "calendar-screen"
+          commands:
+            - runFlow:
+                file: "../subflows/navigate-back.yaml"
 - runFlow:
     file: "../subflows/open-deep-link.yaml"
     env:
