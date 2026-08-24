@@ -1,0 +1,54 @@
+appId: ${APP_ID}
+name: guest-navigation
+tags:
+  - smoke
+  - regression
+  - guest
+  - navigation
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- assertVisible:
+    id: "home-screen"
+- swipe:
+    direction: UP
+    duration: 500
+- tapOn: "Home"
+- assertVisible:
+    id: "home-screen"
+- tapOn: "(Calendar|Kalender)"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-screen"
+    timeout: 15000
+- assertVisible: ".*(Sign in|Anmelden).*"
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- tapOn: "(Food|Essen)"
+- extendedWaitUntil:
+    visible:
+      id: "food-screen"
+    timeout: 20000
+- tapOn: "(Profile|Profil)"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 15000
+- assertVisible:
+    id: "guest-login-banner"
+- tapOn:
+    id: "guest-login-banner"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 10000

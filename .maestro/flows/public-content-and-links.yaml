@@ -1,0 +1,138 @@
+appId: ${APP_ID}
+name: public-content-and-links
+tags:
+  - regression
+  - guest
+  - navigation
+  - public-content
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- openLink: "neuland://cl-events"
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-events-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-event-row"
+    timeout: 20000
+- tapOn:
+    id: "campus-life-event-row"
+    index: 0
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "campus-life-event-detail-screen"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 3000
+# The detail is presented as a native formSheet on iOS; dismiss it with a
+# pull-down gesture (coordinate taps on the system close button are
+# unreliable). Android leaves via the hardware back button.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: BACK
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 45%"
+          end: "50%, 95%"
+          duration: 700
+      - waitForAnimationToEnd:
+          timeout: 3000
+- assertVisible:
+    id: "campus-life-events-screen"
+# The screen intercepts the edge-swipe back gesture on iOS 26, so the visible
+# native back button (labeled with the previous screen title) is used;
+# Android leaves via the hardware back button.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 10000
+- openLink: "neuland://sports"
+- extendedWaitUntil:
+    visible:
+      id: "sports-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "sports-event-row"
+    timeout: 20000
+- tapOn:
+    id: "sports-event-row"
+    index: 0
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "sports-event-detail-screen"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: BACK
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "50%, 45%"
+          end: "50%, 95%"
+          duration: 700
+      - waitForAnimationToEnd:
+          timeout: 3000
+- assertVisible:
+    id: "sports-screen"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 10000
+- openLink: "neuland://links"
+- extendedWaitUntil:
+    visible:
+      id: "quick-links-screen"
+    timeout: 10000
+- assertVisible: "Quick Links"
+- assertVisible: ".*(Moodle).*"
+- swipe:
+    direction: UP
+    duration: 500
+- assertVisible:
+    id: "quick-links-screen"

@@ -1,0 +1,109 @@
+appId: ${APP_ID}
+name: native-controls-and-share
+tags:
+  - regression
+  - guest
+  - native-module
+  - native-share
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- tapOn: "(Food|Essen)"
+- extendedWaitUntil:
+    visible:
+      id: "food-meal-entry"
+    timeout: 20000
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - longPressOn:
+          id: "food-meal-entry"
+          index: 0
+      - assertVisible: "(Share|Teilen)"
+      - tapOn:
+          point: "95%, 10%"
+- tapOn: "(Food Preferences|Essenspräferenzen)"
+# No centerElement here: the row sits near the end of the list and cannot be
+# centered, which would time out the scroll.
+- scrollUntilVisible:
+    element:
+      text: "(Automatically switch to next day|Automatisch zum nächsten Tag wechseln)"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "food-auto-next-day-toggle"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "food-auto-next-day-time"
+    timeout: 10000
+- tapOn:
+    id: "food-auto-next-day-time"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          point: "50%, 12%"
+          retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: "(CANCEL|ABBRECHEN|Cancel|Abbrechen)"
+      - tapOn: "(CANCEL|ABBRECHEN|Cancel|Abbrechen)"
+# The preferences screen intercepts the edge-swipe back gesture on iOS 26, so
+# the visible native back button (labeled with the previous screen title) is
+# used; Android leaves via the hardware back button.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
+- tapOn: "(Profile|Profil)"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "settings-share-link"
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+- tapOn:
+    id: "settings-share-link"
+    retryTapIfNoChange: false
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: ".*(Copy|Kopieren|AirDrop).*"
+      - swipe:
+          start: "50%, 30%"
+          end: "50%, 95%"
+          duration: 500
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: ".*(Share with|Teilen mit).*"
+      - pressKey: BACK
+- assertVisible:
+    id: "settings-screen"

@@ -1,0 +1,8 @@
+appId: ${APP_ID}
+---
+- openLink: ${LINK}
+- runFlow:
+    when:
+      visible: "(Open|Öffnen)"
+    commands:
+      - tapOn: "(Open|Öffnen)"

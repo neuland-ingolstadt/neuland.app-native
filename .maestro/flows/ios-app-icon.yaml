@@ -1,0 +1,77 @@
+appId: ${APP_ID}
+name: ios-app-icon
+tags:
+  - regression
+  - guest
+  - ios
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- tapOn: "(Profile|Profil)"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      id: "settings-app-icon-link"
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+- tapOn:
+    id: "settings-app-icon-link"
+- extendedWaitUntil:
+    visible:
+      id: "app-icon-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "app-icon-modernGreen"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "app-icon-modernGreen"
+    retryTapIfNoChange: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: "OK"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "app-icon-screen"
+    timeout: 10000
+- assertVisible:
+    id: "app-icon-modernGreen"
+    selected: true
+- scrollUntilVisible:
+    element:
+      id: "app-icon-default"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    id: "app-icon-default"
+    retryTapIfNoChange: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: "OK"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: "app-icon-screen"
+    timeout: 10000
+- assertVisible:
+    id: "app-icon-default"
+    selected: true

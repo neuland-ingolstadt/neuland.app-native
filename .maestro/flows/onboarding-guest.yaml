@@ -1,0 +1,114 @@
+appId: ${APP_ID}
+name: onboarding-guest
+tags:
+  - smoke
+  - guest
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- openLink: "neuland://onboarding"
+- waitForAnimationToEnd:
+    timeout: 3000
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue"
+      enabled: true
+    timeout: 30000
+- assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
+- assertVisible: ".*(Von Studierenden für Studierende|By students for students).*"
+- assertVisible: ".*(Weit verbreitet und vertrauenswürdig|Widely used and trustworthy).*"
+- tapOn:
+    id: "onboarding-continue"
+- extendedWaitUntil:
+    visible:
+      id: "login-guest"
+    timeout: 120000
+- tapOn:
+    id: "login-username"
+- eraseText
+- inputText: "maestro-test-user"
+- runFlow:
+    when:
+      platform: Android
+      visible: "Try out your stylus"
+    commands:
+      - tapOn: "Cancel"
+- tapOn:
+    id: "login-password"
+- eraseText
+- inputText: "not-a-real-password"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Los geht's|Get started)"
+- extendedWaitUntil:
+    visible:
+      id: "login-submit"
+      enabled: true
+    timeout: 30000
+- tapOn:
+    id: "login-toggle-password"
+- tapOn:
+    id: "login-username"
+- eraseText
+- tapOn:
+    id: "login-password"
+- eraseText
+- tapOn: "(Los geht's|Get started)"
+- runFlow:
+    when:
+      visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
+    commands:
+      - tapOn: "OK"
+      - tapOn:
+          id: "login-username"
+      - eraseText
+      - tapOn:
+          id: "login-password"
+      - eraseText
+      - tapOn: "(Los geht's|Get started)"
+- assertVisible:
+    id: "login-submit"
+    enabled: false
+- tapOn:
+    id: "login-guest"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 20000
+- assertVisible: "Home"
+- assertVisible: "(Calendar|Kalender)"
+- assertVisible: "(Map|Karte)"
+- assertVisible: "(Food|Essen)"
+- assertVisible: "(Profile|Profil)"
+- stopApp
+- launchApp:
+    clearState: false
+    stopApp: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/reconnect-development-client.yaml"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 20000
