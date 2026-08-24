@@ -1,0 +1,19 @@
+appId: ${APP_ID}
+---
+# The native iOS back button exposes no accessibility identifier, so iOS
+# navigation relies on the edge swipe gesture instead.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - swipe:
+          start: "2%, 50%"
+          end: "90%, 50%"
+          duration: 500
+- waitForAnimationToEnd:
+    timeout: 3000

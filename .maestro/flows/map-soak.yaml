@@ -1,0 +1,61 @@
+appId: ${APP_ID}
+name: map-soak
+tags:
+  - map
+  - long-running
+  - performance
+---
+# Approximately ten minutes of continuous camera movement before interaction checks.
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- runFlow:
+    file: "../subflows/open-map-tab.yaml"
+- repeat:
+    times: 125
+    commands:
+      - swipe:
+          start: "75%, 30%"
+          end: "25%, 30%"
+          duration: 1200
+      - swipe:
+          start: "25%, 40%"
+          end: "75%, 40%"
+          duration: 1200
+      - swipe:
+          start: "50%, 20%"
+          end: "50%, 55%"
+          duration: 1200
+      - swipe:
+          start: "50%, 55%"
+          end: "50%, 20%"
+          duration: 1200
+- repeat:
+    times: 4
+    commands:
+      - doubleTapOn:
+          point: "45%, 32%"
+          delay: 120
+- assertVisible:
+    id: "map-screen"
+- tapOn:
+    id: "map-search-input"
+- inputText: "B106"
+- extendedWaitUntil:
+    visible: "B106"
+    timeout: 15000
+- tapOn:
+    id: "map-search-result-B106"
+- extendedWaitUntil:
+    visible:
+      id: "map-room-detail"
+    timeout: 15000

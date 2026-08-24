@@ -1,0 +1,15 @@
+flows:
+  - "flows/*"
+# WARNING: a bare `maestro test .maestro` executes EVERY flow, including the
+# opt-in ones (adds a real wallet pass, ~10 min map soak, release-only
+# universal links). Use the bun e2e / e2e:<suite> scripts or --include-tags
+# to select a subset.
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - onboarding-guest
+    - guest-navigation
+    - map-regression
+    - food-regression
+    - settings-persistence
+    - public-content-and-links
