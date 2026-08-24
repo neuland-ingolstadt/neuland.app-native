@@ -11,6 +11,8 @@ tags:
     permissions:
       notifications: deny
       location: never
+- waitForAnimationToEnd:
+    timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
 - openLink: "neuland://onboarding"
@@ -95,9 +97,17 @@ tags:
 - assertVisible: "(Food|Essen)"
 - assertVisible: "(Profile|Profil)"
 - stopApp
-- openLink: ${DEV_CLIENT_URL}
+- launchApp:
+    clearState: false
+    stopApp: false
 - waitForAnimationToEnd:
-    timeout: 10000
+    timeout: 5000
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/reconnect-development-client.yaml"
 - extendedWaitUntil:
     visible:
       id: "home-screen"

@@ -72,6 +72,8 @@ tags:
 - tapOn:
     id: "map-floor-EG"
 - tapOn:
+    id: "map-floor-picker-close"
+- tapOn:
     id: "map-search-input"
 - inputText: "B106"
 - extendedWaitUntil:

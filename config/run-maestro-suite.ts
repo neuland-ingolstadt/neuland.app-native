@@ -24,7 +24,7 @@ const flows = suite === 'ios' ? [...commonFlows, 'ios-app-icon'] : commonFlows
 const devServerHost =
 	process.env.DEV_SERVER_HOST ?? (suite === 'android' ? '10.0.2.2' : 'localhost')
 const devServerAddress = `${devServerHost}:8081`
-const DEV_CLIENT_URL = `exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081&disableOnboarding=1`
+const DEV_CLIENT_URL = `exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081`
 
 interface SimctlDevice {
 	name: string
