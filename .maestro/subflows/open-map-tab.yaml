@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+---
+- tapOn:
+    text: "(Map|Karte)"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: Android
+      visible: "(Don.t allow|Nicht zulassen)"
+    commands:
+      - tapOn: "(Don.t allow|Nicht zulassen)"
+- runFlow:
+    when:
+      platform: Android
+      visible: "(Don.t allow|Nicht zulassen)"
+    commands:
+      - tapOn: "(Don.t allow|Nicht zulassen)"
+- extendedWaitUntil:
+    visible:
+      id: "map-screen"
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      platform: Android
+      visible: "(Don.t allow|Nicht zulassen)"
+    commands:
+      - tapOn: "(Don.t allow|Nicht zulassen)"
+- extendedWaitUntil:
+    visible:
+      id: "map-search-input"
+    timeout: 20000

@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+name: universal-links
+tags:
+  - navigation
+  - universal-links
+  - release-only
+---
+# Precondition: an installed preview/release binary whose associated domains are live.
+- launchApp:
+    clearState: false
+    stopApp: true
+- stopApp
+- openLink:
+    link: "https://dev.neuland.app/map"
+    autoVerify: true
+- extendedWaitUntil:
+    visible:
+      id: "map-screen"
+    timeout: 30000
+- stopApp
+- openLink:
+    link: "https://dev.neuland.app/food"
+    autoVerify: true
+- extendedWaitUntil:
+    visible:
+      id: "food-screen"
+    timeout: 30000

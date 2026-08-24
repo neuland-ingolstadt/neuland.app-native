@@ -1,0 +1,62 @@
+appId: ${APP_ID}
+name: dashboard-context-menu
+tags:
+  - regression
+  - guest
+  - dashboard
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - longPressOn:
+          id: "dashboard-card-events"
+      - assertVisible: "(Dashboard Settings|Dashboard Einstellungen)"
+      - assertVisible: "(Reset cards|Karten zurücksetzen)"
+      - tapOn: "(Dashboard Settings|Dashboard Einstellungen)"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - runFlow:
+          file: "../subflows/open-deep-link.yaml"
+          env:
+            LINK: "neuland://dashboard"
+- extendedWaitUntil:
+    visible:
+      id: "dashboard-order-list"
+    timeout: 10000
+- assertVisible:
+    id: "dashboard-order-item-events"
+- longPressOn:
+    id: "dashboard-order-item-events"
+- assertVisible:
+    id: "dashboard-order-list"
+# The reorder screen intercepts the edge-swipe back gesture on iOS 26, so the
+# visible native back button (labeled with the previous screen title) is used;
+# Android leaves via the hardware back button.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - pressKey: Back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "(Home)"
+- assertVisible:
+    id: "home-screen"

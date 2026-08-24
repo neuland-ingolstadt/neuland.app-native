@@ -1,0 +1,84 @@
+appId: ${APP_ID}
+name: settings-persistence
+tags:
+  - smoke
+  - regression
+  - guest
+  - settings
+  - persistence
+  - native-module
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+    permissions:
+      notifications: deny
+      location: never
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- runFlow:
+    file: "../subflows/complete-onboarding-as-guest.yaml"
+- tapOn: "(Profile|Profil)"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "settings-theme-link"
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+- tapOn:
+    id: "settings-theme-link"
+- extendedWaitUntil:
+    visible:
+      id: "theme-screen"
+    timeout: 10000
+- tapOn:
+    id: "radio-option-dark"
+- assertVisible:
+    id: "radio-option-dark"
+    selected: true
+- stopApp
+- launchApp:
+    clearState: false
+    stopApp: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
+- tapOn: "(Profile|Profil)"
+- extendedWaitUntil:
+    visible:
+      id: "settings-screen"
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: "settings-theme-link"
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+- tapOn:
+    id: "settings-theme-link"
+- extendedWaitUntil:
+    visible:
+      id: "theme-screen"
+    timeout: 10000
+- assertVisible:
+    id: "radio-option-dark"
+    selected: true
+- tapOn:
+    id: "radio-option-light"
+    retryTapIfNoChange: false
+- assertVisible:
+    id: "radio-option-light"
+    selected: true
+- tapOn:
+    id: "radio-option-auto"
+    retryTapIfNoChange: false
+- assertVisible:
+    id: "radio-option-auto"
+    selected: true
