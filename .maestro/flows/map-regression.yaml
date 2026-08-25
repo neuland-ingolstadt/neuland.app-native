@@ -12,16 +12,8 @@ tags:
     stopApp: true
     permissions:
       notifications: deny
-- waitForAnimationToEnd:
-    timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
-- runFlow:
-    when:
-      platform: iOS
-      visible: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
-    commands:
-      - tapOn: "(Allow Once|Allow While Using App|Einmal erlauben|Beim Verwenden der App erlauben)"
 - runFlow:
     file: "../subflows/complete-onboarding-as-guest.yaml"
 - runFlow:
@@ -69,6 +61,14 @@ tags:
     id: "map-screen"
 - assertVisible:
     id: "map-search-input"
+- swipe:
+    start: "95%, 14%"
+    end: "95%, 19%"
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: "map-floor--1"
+    timeout: 10000
 - tapOn:
     id: "map-floor-picker"
 - extendedWaitUntil:
@@ -77,8 +77,6 @@ tags:
     timeout: 15000
 - tapOn:
     id: "map-floor-EG"
-- tapOn:
-    id: "map-floor-picker-close"
 - tapOn:
     id: "map-search-input"
 - inputText: "B106"
@@ -182,20 +180,12 @@ tags:
 - assertVisible:
     id: "map-screen"
 - pressKey: Home
-- launchApp:
-    clearState: false
-    stopApp: false
-- waitForAnimationToEnd:
-    timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
 - extendedWaitUntil:
     visible:
-      id: "map-screen"
+      id: "home-screen"
     timeout: 20000
-- tapOn: "Home"
-- assertVisible:
-    id: "home-screen"
 - runFlow:
     file: "../subflows/open-map-tab.yaml"
 - assertVisible:
