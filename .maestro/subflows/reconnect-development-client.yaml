@@ -33,3 +33,9 @@ appId: ${APP_ID}
       visible: "Close"
     commands:
       - tapOn: "Close"
+- runFlow:
+    when:
+      platform: Android
+      visible: "Go home"
+    commands:
+      - pressKey: Back
