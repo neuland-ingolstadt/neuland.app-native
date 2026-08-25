@@ -8,3 +8,10 @@ appId: ${APP_ID}
       visible: "Continue"
     commands:
       - tapOn: "Continue"
+- runFlow:
+    when:
+      visible:
+        id: "xmark"
+    commands:
+      - tapOn:
+          id: "xmark"
