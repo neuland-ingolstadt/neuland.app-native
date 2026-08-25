@@ -3,3 +3,8 @@ appId: ${APP_ID}
 - openLink: ${DEV_CLIENT_URL}
 - waitForAnimationToEnd:
     timeout: 10000
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
