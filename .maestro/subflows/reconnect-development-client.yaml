@@ -5,6 +5,18 @@ appId: ${APP_ID}
     timeout: 10000
 - runFlow:
     when:
+      platform: Android
+      visible: "http://${DEV_SERVER_ADDRESS}"
+    commands:
+      - tapOn: "http://${DEV_SERVER_ADDRESS}"
+- runFlow:
+    when:
+      platform: Android
+      visible: "Reload"
+    commands:
+      - tapOn: "Reload"
+- runFlow:
+    when:
       visible: "Continue"
     commands:
       - tapOn: "Continue"
