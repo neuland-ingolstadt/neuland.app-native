@@ -73,10 +73,16 @@ tags:
     id: "map-floor-picker"
 - extendedWaitUntil:
     visible:
-      id: "map-floor-EG"
+      id: "map-floor-2"
     timeout: 15000
 - tapOn:
-    id: "map-floor-EG"
+    id: "map-floor-2"
+- longPressOn:
+    id: "map-floor-picker"
+- extendedWaitUntil:
+    visible:
+      id: "map-floor-EG"
+    timeout: 10000
 - tapOn:
     id: "map-search-input"
 - inputText: "B106"
