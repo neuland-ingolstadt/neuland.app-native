@@ -27,3 +27,9 @@ appId: ${APP_ID}
     commands:
       - tapOn:
           id: "xmark"
+- runFlow:
+    when:
+      platform: Android
+      visible: "Close"
+    commands:
+      - tapOn: "Close"
