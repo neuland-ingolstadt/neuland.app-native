@@ -138,11 +138,17 @@ const FloorPicker = ({
 	}, [expanded, showAllFloors])
 
 	useEffect(() => {
+		// Wait until floors hydrate — otherwise we "init" at index 0 and later
+		// spring through every floor when EG's real index arrives.
+		if (floors.length === 0) {
+			return
+		}
 		const target = currentIndex * CELL
 		if (!didInit.current) {
 			didInit.current = true
 			scrollY.set(target)
 			highlightY.set(target)
+			lastTickIndex.set(currentIndex)
 			return
 		}
 		if (Math.abs(scrollY.get() - target) > 1) {
@@ -151,7 +157,7 @@ const FloorPicker = ({
 		if (Math.abs(highlightY.get() - target) > 1) {
 			highlightY.set(withSpring(target, SNAP_SPRING))
 		}
-	}, [currentIndex, highlightY, scrollY])
+	}, [currentIndex, floors.length, highlightY, lastTickIndex, scrollY])
 
 	const selectFloorByIndex = useCallback(
 		(index: number) => {
