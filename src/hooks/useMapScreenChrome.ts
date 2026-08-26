@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
 import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
@@ -110,7 +110,10 @@ export function useMapScreenChrome({
 		handleSheetChangesModal,
 		onTabPress
 	})
-	presentDetailSheetRef.current = presentDetailSheet
+
+	useLayoutEffect(() => {
+		presentDetailSheetRef.current = presentDetailSheet
+	}, [presentDetailSheet])
 
 	const focusPaddingBottom =
 		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0

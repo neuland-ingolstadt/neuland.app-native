@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { getMapLayerStyles, type MapMode } from '@/components/Map/map-config'
 import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
@@ -42,7 +42,10 @@ export function useMapCameraSync({
 	flyTo
 }: UseMapCameraSyncOptions): void {
 	const flyToRef = useRef(flyTo)
-	flyToRef.current = flyTo
+
+	useLayoutEffect(() => {
+		flyToRef.current = flyTo
+	}, [flyTo])
 
 	useEffect(() => {
 		if (mapLoadState !== LoadingState.LOADED) {

@@ -1,5 +1,5 @@
 import type { FeatureCollection } from 'geojson'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { FLOOR_OVERLAY_FADE_MS } from '@/components/Map/map-config'
 
 interface UseFloorOverlaySlideOptions {
@@ -38,10 +38,12 @@ export function useFloorOverlaySlide({
 	})
 	const [outgoing, setOutgoing] = useState<OverlaySlot | null>(null)
 
-	roomsRef.current = rooms
-	availableRoomsRef.current = availableRooms
-	incomingRoomsRef.current = incoming.rooms
-	incomingAvailableRoomsRef.current = incoming.availableRooms
+	useLayoutEffect(() => {
+		roomsRef.current = rooms
+		availableRoomsRef.current = availableRooms
+		incomingRoomsRef.current = incoming.rooms
+		incomingAvailableRoomsRef.current = incoming.availableRooms
+	}, [availableRooms, incoming.availableRooms, incoming.rooms, rooms])
 
 	useEffect(() => {
 		if (floor === floorRef.current) {
