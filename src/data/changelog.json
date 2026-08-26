@@ -195,12 +195,12 @@
 		"0.17": [
 			{
 				"title": {
-					"de": "Interaktive Karte",
-					"en": "Powerful Map Interactions"
+					"de": "Neue Kartensteuerung",
+					"en": "New Map Controls"
 				},
 				"description": {
-					"de": "Erkunde den Campus mit noch leistungsfähigeren Karteninteraktionen und mehr hilfreichen Details.",
-					"en": "Explore campus with more powerful map interactions and helpful new details."
+					"de": "Wechsle Etagen per Wischgeste, springe per langem Druck zum Erdgeschoss und erkenne ausgewählte Räume und Gebäude sofort.",
+					"en": "Swipe to change floors, long-press to return to the ground floor, and clearly see selected rooms and buildings."
 				},
 				"icon": {
 					"ios": "map",
@@ -210,12 +210,12 @@
 			},
 			{
 				"title": {
-					"de": "Performance und Stabilität",
-					"en": "Performance and Stability"
+					"de": "Schneller und flüssiger",
+					"en": "Faster and Smoother"
 				},
 				"description": {
-					"de": "Die App ist deutlich schneller und stabiler. Viele Details wurden für ein flüssigeres Erlebnis optimiert.",
-					"en": "The app is significantly faster and more stable. Many details were optimized for a smoother experience."
+					"de": "Karte, Listen und Dialoge reagieren jetzt flüssiger. Zusätzlich wurden Darstellungs- und Stabilitätsprobleme behoben.",
+					"en": "The map, lists, and dialogs now respond more smoothly, with additional display and stability fixes throughout the app."
 				},
 				"icon": {
 					"ios": "bolt",
