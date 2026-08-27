@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -131,11 +130,9 @@ function ProviderContent({ children }: ProviderProps): React.JSX.Element {
 
 	return (
 		<NavigationThemeProvider>
-			<BottomSheetModalProvider>
-				<FeatureFlagsProvider>
-					<AppContexts>{children}</AppContexts>
-				</FeatureFlagsProvider>
-			</BottomSheetModalProvider>
+			<FeatureFlagsProvider>
+				<AppContexts>{children}</AppContexts>
+			</FeatureFlagsProvider>
 		</NavigationThemeProvider>
 	)
 }

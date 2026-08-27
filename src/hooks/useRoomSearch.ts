@@ -7,11 +7,13 @@ import { useRefreshByUser } from '@/hooks/useRefreshByUser'
 import type { AvailableRoom } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
+	BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
-	filterRooms,
-	getNextValidDate
-} from '@/utils/map-utils'
+	getBuildingCodes
+} from '@/utils/map-constants'
+import { filterRooms, getNextValidDate } from '@/utils/map-room-utils'
+import { useMapOverlayQuery } from './useMapOverlayQuery'
 
 const FREE_ROOMS_STALE_TIME_MS = 1000 * 60 * 60
 const FREE_ROOMS_GC_TIME_MS = 1000 * 60 * 60 * 24 * 4
@@ -36,6 +38,7 @@ export interface RoomSearchState {
 	wasModified: boolean
 	isDateAndTimeEqualToStart: boolean
 	searchDateTime: Date
+	buildings: string[]
 }
 
 export function useRoomSearch(): RoomSearchState {
@@ -46,6 +49,17 @@ export function useRoomSearch(): RoomSearchState {
 	const [date, setDate] = useState(() => formatISODate(startDate))
 	const [time, setTime] = useState(() => formatISOTime(startDate))
 	const [duration, setDuration] = useState(DURATION_PRESET)
+	const { data: mapOverlay } = useMapOverlayQuery()
+	const buildings = useMemo(
+		() =>
+			getBuildingCodes([
+				...BUILDINGS,
+				...(mapOverlay?.features.map(
+					(feature) => feature.properties?.Gebaeude
+				) ?? [])
+			]),
+		[mapOverlay]
+	)
 
 	const searchDateTime = useMemo(
 		() => new Date(`${date}T${time}`),
@@ -112,6 +126,7 @@ export function useRoomSearch(): RoomSearchState {
 		startDate,
 		wasModified,
 		isDateAndTimeEqualToStart,
-		searchDateTime
+		searchDateTime,
+		buildings
 	}
 }

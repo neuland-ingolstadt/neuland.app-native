@@ -19,7 +19,6 @@
 	"reviewersFromCodeOwners": true,
 	"labels": ["dependencies"],
 	"ignoreDeps": [
-		"@th3rdwave/react-navigation-bottom-sheet",
 		"getenv",
 		"@types/node"
 	],

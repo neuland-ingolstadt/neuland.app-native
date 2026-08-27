@@ -1,11 +1,9 @@
 import { createContext } from 'react'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
-import type { RoomOpenings } from '@/utils/map-utils'
+import type { RoomOpenings } from '@/utils/map-room-utils'
 
 interface MapContextType {
-	localSearch: string
-	setLocalSearch: (value: string) => void
 	clickedElement: ClickedMapElement | null
 	setClickedElement: (value: ClickedMapElement | null) => void
 	availableRooms: AvailableRoom[] | null
@@ -21,11 +19,6 @@ interface MapContextType {
 }
 
 export const MapContext = createContext<MapContextType>({
-	localSearch: '',
-	setLocalSearch: () => {
-		throw new Error('setLocalSearch must be overridden')
-	},
-
 	clickedElement: null,
 	setClickedElement: () => {
 		throw new Error('setClickedElement must be overridden')

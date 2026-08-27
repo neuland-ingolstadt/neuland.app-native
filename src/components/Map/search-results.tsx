@@ -8,22 +8,26 @@ import { Alert, Platform, SectionList, Text } from 'react-native'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import type { SearchResult } from '@/types/map'
+import type { SearchResult, SelectMapElement } from '@/types/map'
 
 import Divider from '../Universal/divider'
 import ResultRow from './search-result-row'
 
 interface SearchResultsProps {
-	handlePresentModalPress: () => void
 	allRooms: FeatureCollection
+	selectMapElement: SelectMapElement
+	searchQuery: string
+	onClearSearch: () => void
 }
 
 const SearchResults = ({
-	handlePresentModalPress,
-	allRooms
+	allRooms,
+	selectMapElement,
+	searchQuery,
+	onClearSearch
 }: SearchResultsProps): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
-	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
+	const { searchHistory, updateSearchHistory } = use(MapContext)
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
 	)
@@ -35,7 +39,7 @@ const SearchResults = ({
 	)
 	useEffect(() => {
 		if (
-			localSearch.toLocaleLowerCase() === 'neuland' &&
+			searchQuery.toLocaleLowerCase() === 'neuland' &&
 			Platform.OS === 'ios'
 		) {
 			if (unlockedAppIcons.includes('retro')) {
@@ -59,7 +63,13 @@ const SearchResults = ({
 
 			addUnlockedAppIcon('retro')
 		}
-	}, [localSearch])
+	}, [
+		addUnlockedAppIcon,
+		analyticsInitialized,
+		searchQuery,
+		t,
+		unlockedAppIcons
+	])
 
 	const fuse = useMemo(
 		() =>
@@ -78,14 +88,14 @@ const SearchResults = ({
 	)
 
 	const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
-		const results = fuse.search(localSearch.trim().toUpperCase())
+		const results = fuse.search(searchQuery.trim().toUpperCase())
 		const roomResults = results.map((result) => {
 			const room = result.item.properties?.Raum as string | undefined
 			return {
 				title: room as string,
 				subtitle: result.item.properties?.Funktion_en as string,
 				isExactMatch: Boolean(
-					room?.toUpperCase().includes(localSearch.toUpperCase())
+					room?.toUpperCase().includes(searchQuery.toUpperCase())
 				),
 				item: result.item
 			}
@@ -95,31 +105,35 @@ const SearchResults = ({
 		const fuzzyMatches = roomResults.filter((result) => !result.isExactMatch)
 
 		return [exactMatches, fuzzyMatches]
-	}, [localSearch, allRooms])
+	}, [fuse, searchQuery])
 
-	function addToSearchHistory(newHistory: SearchResult): void {
-		const newSearchHistory = searchHistory.filter(
-			(history) => history.title !== newHistory.title
-		)
+	const addToSearchHistory = useCallback(
+		(newHistory: SearchResult): void => {
+			const newSearchHistory = searchHistory.filter(
+				(history) => history.title !== newHistory.title
+			)
 
-		newSearchHistory.unshift(newHistory)
+			newSearchHistory.unshift(newHistory)
 
-		if (newSearchHistory.length > 5) {
-			newSearchHistory.length = 5
-		}
+			if (newSearchHistory.length > 5) {
+				newSearchHistory.length = 5
+			}
 
-		updateSearchHistory(newSearchHistory)
-	}
+			updateSearchHistory(newSearchHistory)
+		},
+		[searchHistory, updateSearchHistory]
+	)
 
 	const renderItem = useCallback(
-		({ item }: { item: SearchResult }) => (
+		({ item }: { item: SearchResult }): React.JSX.Element => (
 			<ResultRow
 				result={item}
-				handlePresentModalPress={handlePresentModalPress}
+				selectMapElement={selectMapElement}
 				updateSearchHistory={addToSearchHistory}
+				onClearSearch={onClearSearch}
 			/>
 		),
-		[handlePresentModalPress, addToSearchHistory]
+		[addToSearchHistory, onClearSearch, selectMapElement]
 	)
 
 	const renderSectionHeader = useCallback(
@@ -168,6 +182,7 @@ const SearchResults = ({
 			]}
 			keyExtractor={(item, index) => `${item.title}${index}`}
 			renderItem={renderItem}
+			extraData={onClearSearch}
 			ItemSeparatorComponent={itemSeparator}
 			stickySectionHeadersEnabled={false}
 			renderSectionHeader={renderSectionHeader}

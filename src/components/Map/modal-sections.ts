@@ -8,20 +8,16 @@ import {
 } from '@/types/map'
 import type { AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-
-type LocationsType = Record<string, string>
+import { formatCampusLocation } from '@/utils/map-constants'
 
 /**
  * Formats the content of the room details section
  * @param {RoomData} roomData - Data for the room
- * @param {any} t - Translation function
- * @param {any} locations - Locations
- * @param {string} language - Language
+ * @param {boolean} isGuest - Whether the current user is a guest
  * @returns {FormListSections[]}
  * */
 export const modalSection = (
 	roomData: RoomData,
-	locations: LocationsType,
 	isGuest: boolean
 ): FormListSections[] => {
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
@@ -136,7 +132,7 @@ export const modalSection = (
 								{
 									title: t('labels.campus', { ns: 'common' }),
 									value:
-										locations[roomData.properties?.Standort] ??
+										formatCampusLocation(roomData.properties?.Standort) ??
 										t('misc.unknown', { ns: 'common' })
 								}
 							]
@@ -182,7 +178,9 @@ export const modalSection = (
 					},
 					{
 						title: t('labels.campus', { ns: 'common' }),
-						value: locations?.[properties.Standort]
+						value:
+							formatCampusLocation(properties.Standort) ??
+							t('misc.unknown', { ns: 'common' })
 					}
 				]
 			}
