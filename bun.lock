@@ -58,7 +58,7 @@
         "expo-updates": "~55.0.26",
         "fuse.js": "^7.4.2",
         "graphql": "^17.0.1",
-        "i18next": "26.3.6",
+        "i18next": "26.4.0",
         "idb": "^8.0.3",
         "lucide-react-native": "^1.18.0",
         "maplibre-gl": "6.3.0",
@@ -66,7 +66,7 @@
         "react": "19.2.0",
         "react-content-loader": "^7.1.1",
         "react-dom": "19.2.0",
-        "react-i18next": "17.0.11",
+        "react-i18next": "17.0.12",
         "react-native": "0.83.10",
         "react-native-bottom-tabs": "^0.12.0",
         "react-native-collapsible": "1.6.1",
@@ -804,7 +804,7 @@
 
     "@stryker-mutator/util": ["@stryker-mutator/util@10.0.0", "", {}, "sha512-LzOpHiJaCp2ABQgnPMlrQQcsK43bd5Vo/2FGL78aN62yDoeRQ+4j3tzeuXxK5OAHdC3fUz6TDoy4IsoAuLAd3w=="],
 
-    "@swmansion/argent": ["@swmansion/argent@0.22.0", "", { "dependencies": { "@fails-components/webtransport": "^1.6.3", "@fails-components/webtransport-transport-http3-quiche": "^1.6.3", "@modelcontextprotocol/sdk": "^1.20.0", "tree-sitter": "^0.21.1", "tree-sitter-typescript": "^0.23.2" }, "optionalDependencies": { "electron": "^42.5.0", "node-pty": "^1.1.0" }, "bin": { "argent": "dist/cli.js", "argent-simulator-server": "bin/argent-simulator-server.cjs" } }, "sha512-X7V5vtC0fwrDjoPkwrJ08siQXFBzjMNXyf1lhpB5iM6Izwjy8eKcHcgeIhqlW9p3U8ydaBWHBWPkH1y1RAOpTQ=="],
+    "@swmansion/argent": ["@swmansion/argent@0.22.1", "", { "dependencies": { "@fails-components/webtransport": "^1.6.3", "@fails-components/webtransport-transport-http3-quiche": "^1.6.3", "@modelcontextprotocol/sdk": "^1.20.0", "tree-sitter": "^0.21.1", "tree-sitter-typescript": "^0.23.2" }, "optionalDependencies": { "electron": "^42.5.0", "node-pty": "^1.1.0" }, "bin": { "argent": "dist/cli.js", "argent-simulator-server": "bin/argent-simulator-server.cjs" } }, "sha512-F/djWBWyqR7JLosIO0aJJTwU8h6mpd6hg+C0X/97lpC/LETg3RxDcSAuqsggJyIOGTG/T6VpY5KJ1DuytuURag=="],
 
     "@swmansion/react-native-bottom-sheet": ["@swmansion/react-native-bottom-sheet@0.16.2", "", { "peerDependencies": { "react": ">=18.0.0", "react-native": ">=0.76.0" } }, "sha512-E4PnJxM6q/L6Y5zaugGhGx+ObkbuoNmF8LLSbKAyBUkcE2Cn8/estH1GVYxJYMxQwYVz7RY4GZ9ownlAcGLJUg=="],
 
@@ -1534,7 +1534,7 @@
 
     "hyphenate-style-name": ["hyphenate-style-name@1.1.0", "", {}, "sha512-WDC/ui2VVRrz3jOVi+XtjqkDjiVjTtFaAGiW37k6b+ohyQ5wYDOGkvCZa8+H0nx3gyvv0+BST9xuOgIyGQ00gw=="],
 
-    "i18next": ["i18next@26.3.6", "", { "peerDependencies": { "typescript": "^5 || ^6 || ^7" }, "optionalPeers": ["typescript"] }, "sha512-Bu5Z2nAXgfVyM8xvW3jk9EKRIuX37PudsrBViThNFx7CR7aaYTpP01cxNB/E4c4UUzTDiAZRstEhsRfPOL/8xA=="],
+    "i18next": ["i18next@26.4.0", "", { "peerDependencies": { "typescript": "^5 || ^6 || ^7" }, "optionalPeers": ["typescript"] }, "sha512-rsmK5bFqsD1AetSFSIa43wtNR4WpvvH4p0tLEsTxkC7QTrfdFm06nbQ95bh8Og4wwaCnUEcm9DVYL2cgxitiQg=="],
 
     "iconv-lite": ["iconv-lite@0.7.3", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ=="],
 
@@ -2046,7 +2046,7 @@
 
     "react-freeze": ["react-freeze@1.0.4", "", { "peerDependencies": { "react": ">=17.0.0" } }, "sha512-r4F0Sec0BLxWicc7HEyo2x3/2icUTrRmDjaaRyzzn+7aDyFZliszMDOgLVwSnQnYENOlL1o569Ze2HZefk8clA=="],
 
-    "react-i18next": ["react-i18next@17.0.11", "", { "dependencies": { "@babel/runtime": "^7.29.2", "html-parse-stringify": "^4.0.1", "use-sync-external-store": "^1.6.0" }, "peerDependencies": { "i18next": ">= 26.2.0", "react": ">= 16.8.0", "react-dom": "*", "react-native": "*", "typescript": "^5 || ^6 || ^7" }, "optionalPeers": ["react-dom", "react-native", "typescript"] }, "sha512-cDtkXgxjuFTWUH6V+aQn1Ve5vDiUztCNPWW5GtSHDccsgRXO1nE6QFWCEmc1KAutrb3OUv87wFShJL5RhUwPXg=="],
+    "react-i18next": ["react-i18next@17.0.12", "", { "dependencies": { "@babel/runtime": "^7.29.7", "html-parse-stringify": "^4.0.1", "use-sync-external-store": "^1.6.0" }, "peerDependencies": { "i18next": ">= 26.2.0", "react": ">= 16.8.0", "react-dom": "*", "react-native": "*", "typescript": "^5 || ^6 || ^7" }, "optionalPeers": ["react-dom", "react-native", "typescript"] }, "sha512-lFWPEGkxQ6RhusdUkysFBD58VHfSSzvHBzqMgN0SvfVpdQGfwtNkStTqdy08/sJd7s807qqutgx93fRpD0DJ3Q=="],
 
     "react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
 
