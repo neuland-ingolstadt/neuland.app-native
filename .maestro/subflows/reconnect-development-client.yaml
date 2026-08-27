@@ -1,168 +1,41 @@
 appId: ${APP_ID}
 ---
-- runFlow:
-    when:
-      platform: iOS
-      visible: ".*Development Build.*"
-    commands:
-      - openLink: ${DEV_CLIENT_URL}
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - waitForAnimationToEnd:
-          timeout: 10000
-      - runFlow:
-          when:
-            visible: "http://localhost:8081"
-          commands:
-            - tapOn: "http://localhost:8081"
-      - runFlow:
-          when:
-            visible: "Enter URL manually"
-          commands:
-            - tapOn: "Enter URL manually"
-            - eraseText
-            - inputText: ${DEV_SERVER_ADDRESS}
-            - pressKey: ENTER
-            - runFlow:
-                when:
-                  visible: "Connect"
-                commands:
-                  - tapOn: "Connect"
-      - repeat:
-          times: 3
-          commands:
-            - waitForAnimationToEnd:
-                timeout: 5000
-            - runFlow:
-                when:
-                  visible: "http://localhost:8081"
-                commands:
-                  - tapOn: "http://localhost:8081"
-            - runFlow:
-                when:
-                  visible: "(Open|Öffnen)"
-                commands:
-                  - tapOn: "(Open|Öffnen)"
-            - runFlow:
-                when:
-                  visible: "Continue"
-                commands:
-                  - tapOn: "Continue"
-            - runFlow:
-                when:
-                  visible:
-                    id: "xmark"
-                commands:
-                  - tapOn:
-                      id: "xmark"
-- runFlow:
-    when:
-      platform: iOS
-      visible: "Enter URL manually"
-    commands:
-      - tapOn: "Enter URL manually"
-      - eraseText
-      - inputText: ${DEV_SERVER_ADDRESS}
-      - pressKey: ENTER
-      - runFlow:
-          when:
-            visible: "Connect"
-          commands:
-            - tapOn: "Connect"
-- repeat:
-    times: 3
-    commands:
-      - waitForAnimationToEnd:
-          timeout: 10000
-      - runFlow:
-          when:
-            platform: Android
-            visible: "http://${DEV_SERVER_ADDRESS}"
-          commands:
-            - tapOn: "http://${DEV_SERVER_ADDRESS}"
-      - runFlow:
-          when:
-            platform: Android
-            visible: "Continue"
-          commands:
-            - tapOn: "Continue"
-      - runFlow:
-          when:
-            platform: Android
-            visible: "Reload"
-          commands:
-            - tapOn: "Reload"
-- runFlow:
-    when:
-      platform: Android
-      notVisible:
-        id: "onboarding-continue|login-guest|.*-screen"
-    commands:
-      - launchApp:
-          clearState: false
-          stopApp: false
-      - waitForAnimationToEnd:
-          timeout: 5000
+- openLink: ${DEV_CLIENT_URL}
+- waitForAnimationToEnd:
+    timeout: 10000
 - runFlow:
     when:
       platform: Android
       visible: "http://${DEV_SERVER_ADDRESS}"
     commands:
       - tapOn: "http://${DEV_SERVER_ADDRESS}"
-- repeat:
-    times: 2
-    commands:
-      - waitForAnimationToEnd:
-          timeout: 10000
-      - runFlow:
-          when:
-            platform: Android
-            visible: "Continue"
-          commands:
-            - tapOn: "Continue"
-      - runFlow:
-          when:
-            platform: Android
-            visible: "Reload"
-          commands:
-            - tapOn: "Reload"
 - runFlow:
     when:
       platform: Android
-      visible: "(Connect|Verbinden)"
+      visible: "Reload"
     commands:
-      - tapOn: "http://.*:8081"
-      - eraseText
-      - inputText: ${DEV_SERVER_ADDRESS}
-      - tapOn: "(Connect|Verbinden)"
-- repeat:
-    times: 3
+      - tapOn: "Reload"
+- runFlow:
+    when:
+      visible: "Continue"
     commands:
-      - waitForAnimationToEnd:
-          timeout: 10000
-      - runFlow:
-          when:
-            platform: Android
-            visible: "Reloading..."
-          commands:
-            - launchApp:
-                clearState: false
-                stopApp: false
-            - waitForAnimationToEnd:
-                timeout: 10000
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible:
+        id: "xmark"
+    commands:
+      - tapOn:
+          id: "xmark"
 - runFlow:
     when:
       platform: Android
+      visible: "Close"
     commands:
-      - extendedWaitUntil:
-          visible:
-            id: "onboarding-continue|login-guest|.*-screen"
-          timeout: 120000
+      - tapOn: "Close"
 - runFlow:
     when:
-      platform: iOS
+      platform: Android
+      visible: "Go home"
     commands:
-      - waitForAnimationToEnd:
-          timeout: 5000
+      - pressKey: Back
