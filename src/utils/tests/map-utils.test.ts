@@ -138,6 +138,44 @@ describe('map-utils', () => {
 		expect(openings.Alle[0].capacity).toBe(999)
 	})
 
+	it('getRoomOpenings - Should return an empty object when rooms is not an array', () => {
+		expect(
+			mapUtils.getRoomOpenings(null as never, new Date('2026-04-07'))
+		).toEqual({})
+	})
+
+	it('getRoomOpenings - Should skip malformed room slots instead of throwing', () => {
+		const data = [
+			{
+				datum: '2026-04-07T00:00:00',
+				rtypes: [
+					{
+						raumtyp: 'PC-Pool',
+						stunden: [
+							{
+								von: '2026-04-07T08:00:00',
+								bis: '2026-04-07T09:00:00',
+								type: 'PC-Pool',
+								raeume: [{}, ['', ''], ['', '', 110, 20]]
+							}
+						]
+					}
+				]
+			},
+			{
+				datum: '2026-04-07T00:00:00',
+				rtypes: null
+			}
+		]
+
+		const openings = mapUtils.getRoomOpenings(
+			data as never,
+			new Date('2026-04-07')
+		)
+		expect(openings['110']).toHaveLength(1)
+		expect(openings['110'][0].capacity).toBe(20)
+	})
+
 	it('getRoomOpenings - Should keep separate openings for non-overlapping slots', () => {
 		const data = [
 			{
@@ -354,6 +392,7 @@ describe('map-utils', () => {
 			mapUtils.INGOLSTADT_CENTER
 		)
 		expect(mapUtils.getCenterSingle([])).toEqual(mapUtils.INGOLSTADT_CENTER)
+		expect(mapUtils.getCenterSingle([[]])).toEqual(mapUtils.INGOLSTADT_CENTER)
 	})
 
 	it('getCenterSingle - Should calculate the center of one polygon', () => {
@@ -367,6 +406,56 @@ describe('map-utils', () => {
 		])
 		expect(center[0]).toBe(1)
 		expect(center[1]).toBe(1)
+	})
+
+	it('getPolygonArea - Should return the shoelace area of the outer ring', () => {
+		expect(
+			mapUtils.getPolygonArea([
+				[
+					[0, 0],
+					[2, 0],
+					[2, 2],
+					[0, 2],
+					[0, 0]
+				]
+			])
+		).toBe(4)
+		expect(mapUtils.getPolygonArea(undefined)).toBe(0)
+		expect(mapUtils.getPolygonArea([[]])).toBe(0)
+		expect(
+			mapUtils.getPolygonArea([
+				[
+					[0, 0],
+					['1', 0],
+					[2, 2],
+					[0, 2],
+					[0, 0]
+				]
+			] as never)
+		).toBe(0)
+	})
+
+	it('getFloorSlideDirection - Should treat higher floors as an upward elevator', () => {
+		expect(mapUtils.getFloorSlideDirection('1', '2')).toBe(1)
+		expect(mapUtils.getFloorSlideDirection('2', '1')).toBe(-1)
+		expect(mapUtils.getFloorSlideDirection('EG', '1')).toBe(1)
+		expect(mapUtils.getFloorSlideDirection('1', 'EG')).toBe(-1)
+		expect(mapUtils.getFloorSlideDirection('1', '1')).toBe(0)
+	})
+
+	it('sortFloors - Should keep known floors ordered without mutating the input', () => {
+		const floors = ['EG', '5', '1', '4']
+		expect(mapUtils.sortFloors(floors)).toEqual(['4', '1', 'EG', '5'])
+		expect(floors).toEqual(['EG', '5', '1', '4'])
+	})
+
+	it('getBuildingCodes - Should deduplicate and sort building codes', () => {
+		expect(mapUtils.getBuildingCodes(['C', 'BN', 'A', 'C', 'S'])).toEqual([
+			'A',
+			'BN',
+			'C',
+			'S'
+		])
 	})
 
 	it('getIcon - Should return the building icon for building search types', () => {
@@ -438,6 +527,16 @@ describe('map-utils', () => {
 		).toEqual({ ios: 'studentdesk', android: 'school' })
 	})
 
+	it('getIcon - Should return the lecture icon for seminar rooms', () => {
+		expect(
+			mapUtils.getIcon(SEARCH_TYPES.ROOM, {
+				result: {
+					item: { properties: { Funktion_en: 'Seminar room', Raum: 'G002' } }
+				}
+			})
+		).toEqual({ ios: 'studentdesk', android: 'school' })
+	})
+
 	it('getIcon - Should return the corridor icon for corridor rooms', () => {
 		expect(
 			mapUtils.getIcon(SEARCH_TYPES.ROOM, {
@@ -498,6 +597,17 @@ describe('map-utils', () => {
 		})
 	})
 
+	it('getNextValidDate - Should move weekday evenings to the next morning', () => {
+		withMockedCurrentDate(new Date('2026-06-18T21:30:00'), () => {
+			const result = mapUtils.getNextValidDate()
+
+			expect(result.wasModified).toBe(true)
+			expect(result.startDate.getDate()).toBe(19)
+			expect(result.startDate.getHours()).toBe(8)
+			expect(result.startDate.getMinutes()).toBe(15)
+		})
+	})
+
 	it('handleShareModal - Should copy the room link on web', () => {
 		reactNativePlatform.OS = 'web'
 		trackEventMock.mockReset()
@@ -521,6 +631,19 @@ describe('map-utils', () => {
 
 		expect(reactNativeShareMock).toHaveBeenCalledWith({
 			url: 'https://web.neuland.app/map/?room=H201'
+		})
+
+		reactNativePlatform.OS = 'web'
+	})
+
+	it('handleShareModal - Should share via message on Android', () => {
+		reactNativePlatform.OS = 'android'
+		reactNativeShareMock.mockReset()
+
+		mapUtils.handleShareModal('A101')
+
+		expect(reactNativeShareMock).toHaveBeenCalledWith({
+			message: 'https://web.neuland.app/map/?room=A101'
 		})
 
 		reactNativePlatform.OS = 'web'

@@ -64,5 +64,9 @@ coverage/
 .stryker-incremental.json
 reports/mutation/
 src/data/licenses.json
+# MapLibre GL JS v6 worker (copied from node_modules by bun maplibre:worker)
+public/maplibre-gl-worker.mjs
+public/maplibre-gl-shared.mjs
 .cursor/hooks/state/
 .understand-anything
+tmp/

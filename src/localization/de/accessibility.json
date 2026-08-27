@@ -13,7 +13,9 @@
 		"next": "Weiter"
 	},
 	"map": {
-		"centerOnCurrentLocation": "Auf aktuellen Standort zentrieren"
+		"centerOnCurrentLocation": "Auf aktuellen Standort zentrieren",
+		"floorPicker": "Etagenauswahl",
+		"floorPickerHint": "Wische nach oben oder unten, um die Etage zu wechseln. Doppeltippen, um alle Etagen anzuzeigen. Lange drücken, um zum Erdgeschoss zurückzukehren."
 	},
 	"dashboard": {
 		"moveUp": "Nach oben verschieben",

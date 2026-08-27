@@ -12,11 +12,10 @@ import Dropdown, { DropdownButton } from '@/components/Universal/dropdown'
 import { useRoomSearch } from '@/hooks/useRoomSearch'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
-	ALL_BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
 	ROOM_SEARCH_DURATIONS
-} from '@/utils/map-utils'
+} from '@/utils/map-constants'
 import { toColor } from '@/utils/uniwind-utils'
 
 const maximumSearchDate = new Date(
@@ -182,7 +181,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.building')}
 						</Text>
 						<Dropdown
-							data={[...ALL_BUILDINGS]}
+							data={[BUILDINGS_ALL, ...roomSearch.buildings]}
 							defaultValue={BUILDINGS_ALL}
 							onSelect={roomSearch.setBuilding}
 						/>

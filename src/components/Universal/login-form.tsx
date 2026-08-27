@@ -214,7 +214,7 @@ const LoginForm = ({
 		<View className="items-center justify-center w-full">
 			<View
 				className="w-full max-w-[400px] self-center pb-[30px] px-[25px] pt-[30px] bg-card rounded-[24px] border-border"
-				style={[hairlineBorder, { elevation: 5 }]}
+				style={hairlineBorder}
 			>
 				<Text className="w-full text-text text-[28px] font-bold text-center mb-2">
 					{t('login.getStarted')}

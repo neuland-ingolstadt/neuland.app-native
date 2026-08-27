@@ -191,6 +191,38 @@
 					"web": "Sparkles"
 				}
 			}
+		],
+		"0.17": [
+			{
+				"title": {
+					"de": "Neue Kartensteuerung",
+					"en": "New Map Controls"
+				},
+				"description": {
+					"de": "Wechsle Etagen per Wischgeste, springe per langem Druck zum Erdgeschoss und erkenne ausgewählte Räume und Gebäude sofort.",
+					"en": "Swipe to change floors, long-press to return to the ground floor, and clearly see selected rooms and buildings."
+				},
+				"icon": {
+					"ios": "map",
+					"android": "map",
+					"web": "Map"
+				}
+			},
+			{
+				"title": {
+					"de": "Schneller und flüssiger",
+					"en": "Faster and Smoother"
+				},
+				"description": {
+					"de": "Karte, Listen und Dialoge reagieren jetzt flüssiger. Zusätzlich wurden Darstellungs- und Stabilitätsprobleme behoben.",
+					"en": "The map, lists, and dialogs now respond more smoothly, with additional display and stability fixes throughout the app."
+				},
+				"icon": {
+					"ios": "bolt",
+					"android": "bolt",
+					"web": "CircleGauge"
+				}
+			}
 		]
 	}
 }

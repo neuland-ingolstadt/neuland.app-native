@@ -15,7 +15,7 @@ export default {
 	orientation: 'portrait',
 	githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
 	userInterfaceStyle: 'automatic',
-	newArchEnabled: false,
+	newArchEnabled: true,
 	ios: {
 		bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
 		buildNumber: '199',

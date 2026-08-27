@@ -1,6 +1,7 @@
+import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
 import {
@@ -8,20 +9,21 @@ import {
 	SafeAreaProvider,
 	SafeAreaView
 } from 'react-native-safe-area-context'
-import MapScreen, { requestPermission } from '@/components/Map/map-screen'
+import MapScreen from '@/components/Map/map-screen'
 import { MapContext } from '@/contexts/map'
 import type { ClickedMapElement, SearchResult } from '@/types/map'
 import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
-import type { RoomOpenings } from '@/utils/map-utils'
+import type { RoomOpenings } from '@/utils/map-room-utils'
 import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'common'])
-	const [isPageOpen, setIsPageOpen] = useState(false)
-	useEffect(() => {
-		setIsPageOpen(true)
-	}, [])
-	const [localSearch, setLocalSearch] = useState<string>('')
+	const [hasOpened, setHasOpened] = useState(false)
+	useFocusEffect(
+		useCallback(() => {
+			setHasOpened(true)
+		}, [])
+	)
 	const [clickedElement, setClickedElement] =
 		useState<ClickedMapElement | null>(null)
 	const [availableRooms, setAvailableRooms] = useState<AvailableRoom[] | null>(
@@ -62,8 +64,6 @@ export default function MapRootScreen(): React.JSX.Element {
 	}, [])
 
 	const contextValue = {
-		localSearch,
-		setLocalSearch,
 		clickedElement,
 		setClickedElement,
 		availableRooms,
@@ -77,10 +77,6 @@ export default function MapRootScreen(): React.JSX.Element {
 		searchHistory,
 		setSearchHistory,
 		updateSearchHistory
-	}
-
-	if (Platform.OS === 'android') {
-		void requestPermission()
 	}
 
 	const edges =
@@ -99,7 +95,7 @@ export default function MapRootScreen(): React.JSX.Element {
 				<meta property="expo:spotlight" content="true" />
 			</Head>
 			<View className="bg-background flex-1">
-				{isPageOpen ? (
+				{hasOpened ? (
 					<MapContext.Provider value={contextValue}>
 						<SafeAreaProvider>
 							<SafeAreaView style={{ flex: 1 }} edges={edges as Edges}>

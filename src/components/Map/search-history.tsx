@@ -1,26 +1,21 @@
-import { selectionAsync } from 'expo-haptics'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LayoutAnimation, Platform, Pressable, Text, View } from 'react-native'
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
-import { useCSSVariable } from 'uniwind'
+import { Text, View } from 'react-native'
 import { MapContext } from '@/contexts/map'
-import type { SearchResult } from '@/types/map'
-import { toColor } from '@/utils/uniwind-utils'
-
+import type { SearchResult, SelectMapElement } from '@/types/map'
 import Divider from '../Universal/divider'
-import PlatformIcon from '../Universal/icon'
-import ResultRow from './search-result-row'
+import { SearchHistoryItem } from './search-history-item'
 
 interface SearchHistoryProps {
-	handlePresentModalPress: () => void
+	selectMapElement: SelectMapElement
+	onClearSearch: () => void
 }
 
 const SearchHistory = ({
-	handlePresentModalPress
+	selectMapElement,
+	onClearSearch
 }: SearchHistoryProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
-	const notificationColor = toColor(useCSSVariable('--color-notification'))
 	const { searchHistory, updateSearchHistory } = use(MapContext)
 
 	function addToSearchHistory(newHistory: SearchResult): void {
@@ -53,46 +48,13 @@ const SearchHistory = ({
 			<View className="ios:rounded-2xl android:rounded-lg web:rounded-lg overflow-hidden">
 				{searchHistory?.map((history, index) => (
 					<React.Fragment key={history.title}>
-						<Swipeable
-							renderRightActions={() => (
-								<Pressable
-									className="items-center justify-center w-[70px]"
-									onPress={() => {
-										LayoutAnimation.configureNext(
-											LayoutAnimation.Presets.easeInEaseOut
-										)
-										if (Platform.OS === 'ios') {
-											void selectionAsync()
-										}
-										deleteSearchHistoryItem(history)
-									}}
-								>
-									<PlatformIcon
-										ios={{
-											name: 'trash',
-											size: 20
-										}}
-										android={{
-											name: 'delete',
-											size: 24
-										}}
-										web={{
-											name: 'Trash',
-											size: 24
-										}}
-										style={{ color: notificationColor }}
-									/>
-								</Pressable>
-							)}
-						>
-							<View className="bg-card px-3 py-[3px] w-full">
-								<ResultRow
-									result={history}
-									handlePresentModalPress={handlePresentModalPress}
-									updateSearchHistory={addToSearchHistory}
-								/>
-							</View>
-						</Swipeable>
+						<SearchHistoryItem
+							history={history}
+							selectMapElement={selectMapElement}
+							onSelect={addToSearchHistory}
+							onDelete={deleteSearchHistoryItem}
+							onClearSearch={onClearSearch}
+						/>
 						{index !== searchHistory.length - 1 && (
 							<Divider key={`divider-${history.title}`} />
 						)}
