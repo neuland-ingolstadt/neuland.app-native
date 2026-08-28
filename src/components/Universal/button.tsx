@@ -11,7 +11,7 @@ import {
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface ButtonProps {
 	testID?: string
@@ -71,7 +71,7 @@ const Button = ({
 
 	const buttonClassName =
 		variant === 'secondary'
-			? `h-12 justify-center items-center rounded-base bg-card border-border ${isDisabled ? 'opacity-60' : ''}`
+			? `h-12 justify-center items-center rounded-base bg-card border-hairline border-border ${isDisabled ? 'opacity-60' : ''}`
 			: 'h-12 justify-center items-center rounded-base'
 
 	return (
@@ -82,7 +82,7 @@ const Button = ({
 			className={buttonClassName}
 			style={[
 				variant === 'secondary'
-					? hairlineBorder
+					? undefined
 					: { backgroundColor: isDisabled ? disabledPrimaryBg : primaryColor },
 				style
 			]}

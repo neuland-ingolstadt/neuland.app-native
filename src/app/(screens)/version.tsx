@@ -12,7 +12,6 @@ import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -245,8 +244,7 @@ export default function Version(): React.JSX.Element {
 			<FormList sections={sections} />
 			<Pressable
 				testID="version-copy-all"
-				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center my-section min-w-copy-button-min px-10 py-3"
-				style={hairlineBorder}
+				className="items-center self-center bg-card rounded-mg border-hairline border-border flex-row gap-2.5 justify-center my-section min-w-copy-button-min px-10 py-3"
 				onPress={handleCopyAll}
 			>
 				<PlatformIcon

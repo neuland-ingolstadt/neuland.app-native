@@ -31,8 +31,6 @@ import {
 	isThiDepartmentOrganizerKind
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
-import { hairlineBorder } from '@/utils/uniwind-utils'
-
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -250,12 +248,11 @@ export default function ClEventsPage({
 												contentContainerStyle={styles.clubsScrollContent}
 											>
 												<Pressable
-													className={`bg-card border-border rounded-infinite px-4 py-2.5 mr-2 ${
+													className={`bg-card border-hairline border-border rounded-infinite px-4 py-2.5 mr-2 ${
 														selectedOrganizerId == null
 															? 'bg-primary border-primary'
 															: ''
 													}`}
-													style={hairlineBorder}
 													onPress={() => {
 														onFilterPress(null)
 													}}
@@ -275,12 +272,11 @@ export default function ClEventsPage({
 												{featuredOrganizers.map((organizer) => (
 													<Pressable
 														key={organizer.id}
-														className={`bg-card border-border rounded-infinite px-4 py-2.5 mr-2 ${
+														className={`bg-card border-hairline border-border rounded-infinite px-4 py-2.5 mr-2 ${
 															selectedOrganizerId === organizer.id
 																? 'bg-primary border-primary'
 																: ''
 														}`}
-														style={hairlineBorder}
 														onPressIn={() => {
 															didLongPressRef.current = false
 														}}
@@ -318,7 +314,6 @@ export default function ClEventsPage({
 													remainingOrganizersCount > 0 && (
 														<Pressable
 															className="bg-primary border-primary rounded-infinite px-4 py-2.5"
-															style={hairlineBorder}
 															onPress={() => {
 																router.push(clubsListRoute)
 															}}

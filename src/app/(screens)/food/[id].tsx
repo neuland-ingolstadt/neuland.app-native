@@ -39,7 +39,7 @@ import {
 	getMealHumanLocation,
 	hasMealRestaurantLocation
 } from '@/utils/meal-detail-sections'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function FoodDetail(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -187,10 +187,7 @@ export default function FoodDetail(): React.JSX.Element {
 
 			<View className="flex-row gap-2 mb-4 items-center">
 				{date && (
-					<View
-						className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-border"
-						style={hairlineBorder}
-					>
+					<View className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-hairline border-border">
 						<PlatformIcon
 							ios={{
 								name: 'calendar',
@@ -213,8 +210,7 @@ export default function FoodDetail(): React.JSX.Element {
 				)}
 
 				<Pressable
-					className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-border"
-					style={hairlineBorder}
+					className="flex-row items-center gap-1.5 bg-card-sheet px-3 py-1.5 rounded-md border-hairline border-border"
 					onPress={handlePress}
 				>
 					<PlatformIcon
@@ -245,10 +241,7 @@ export default function FoodDetail(): React.JSX.Element {
 
 			<Pressable onPress={triggerWiggle}>
 				<View className="self-center mt-5 mb-bottom-safe px-1">
-					<View
-						className="flex-row items-center self-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-border"
-						style={hairlineBorder}
-					>
+					<View className="flex-row items-center self-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-hairline border-border">
 						<Animated.View style={wiggleIconAnimatedStyle}>
 							<PlatformIcon
 								ios={{

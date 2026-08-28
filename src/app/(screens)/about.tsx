@@ -37,7 +37,7 @@ import { useFlowStore } from '@/hooks/useFlowStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 function handleWebsitePress(): void {
 	void Linking.openURL('https://neuland-ingolstadt.de/')
@@ -294,11 +294,8 @@ export default function About(): React.JSX.Element {
 						}}
 					>
 						<View
-							className="bg-card border-border rounded-[18px] overflow-hidden"
-							style={[
-								hairlineBorder,
-								{ boxShadow: `4 4 10 0 ${labelTertiaryColor}` }
-							]}
+							className="bg-card border-hairline border-border rounded-[18px] overflow-hidden"
+							style={{ boxShadow: `4 4 10 0 ${labelTertiaryColor}` }}
 						>
 							<Image
 								source={require('@/assets/appIcons/default.png')}

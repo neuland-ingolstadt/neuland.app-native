@@ -7,7 +7,7 @@ import {
 	View
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface DividerProps {
 	width?: DimensionValue
@@ -41,11 +41,10 @@ const Divider = ({
 			}}
 		>
 			<View
+				className="border-b-hairline web:border-b-[0.1px]"
 				style={{
 					width: width ?? '100%',
-					borderBottomColor: color ?? toColor(defaultColor),
-					borderBottomWidth:
-						Platform.OS !== 'web' ? hairlineBorder.borderWidth : 0.1
+					borderBottomColor: color ?? toColor(defaultColor)
 				}}
 			/>
 		</View>

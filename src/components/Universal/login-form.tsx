@@ -24,7 +24,7 @@ import {
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import Button from './button'
 import PlatformIcon from './icon'
 
@@ -207,15 +207,12 @@ const LoginForm = ({
 		'flex-1 text-text text-base py-3 ml-2'
 	)
 	const inputWrapperStyle = useResolveClassNames(
-		'flex-row items-center bg-input-background rounded-sm border-border px-3'
+		'flex-row items-center bg-input-background rounded-sm border-hairline border-border px-3'
 	)
 
 	return (
 		<View className="items-center justify-center w-full">
-			<View
-				className="w-full max-w-[400px] self-center pb-[30px] px-[25px] pt-[30px] bg-card rounded-[24px] border-border"
-				style={hairlineBorder}
-			>
+			<View className="w-full max-w-[400px] self-center pb-[30px] px-[25px] pt-[30px] bg-card rounded-[24px] border-hairline border-border">
 				<Text className="w-full text-text text-[28px] font-bold text-center mb-2">
 					{t('login.getStarted')}
 				</Text>
@@ -224,7 +221,7 @@ const LoginForm = ({
 				</Text>
 
 				<View className="w-full gap-4">
-					<View style={[inputWrapperStyle, hairlineBorder]}>
+					<View style={inputWrapperStyle}>
 						<PlatformIcon
 							ios={{ name: 'person', size: 20 }}
 							android={{ name: 'person', size: 24 }}
@@ -251,7 +248,6 @@ const LoginForm = ({
 					<Animated.View
 						style={[
 							inputWrapperStyle,
-							hairlineBorder,
 							{ transform: [{ translateX: shakeAnimation }] }
 						]}
 					>
@@ -315,17 +311,15 @@ const LoginForm = ({
 
 				<View className="w-full flex-row items-center mt-[26px]">
 					<View
-						className="flex-1"
+						className="flex-1 h-hairline"
 						style={{
-							height: hairlineBorder.borderWidth,
 							backgroundColor: borderColor
 						}}
 					/>
 					<Text className="text-label mx-2.5 text-[13px]">{t('login.or')}</Text>
 					<View
-						className="flex-1"
+						className="flex-1 h-hairline"
 						style={{
-							height: hairlineBorder.borderWidth,
 							backgroundColor: borderColor
 						}}
 					/>

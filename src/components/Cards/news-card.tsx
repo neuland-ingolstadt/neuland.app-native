@@ -5,8 +5,6 @@ import { Image, Linking, Pressable, Text, View } from 'react-native'
 import API from '@/api/authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
-import { hairlineBorder } from '@/utils/uniwind-utils'
-
 import BaseCard from './base-card'
 
 const NewsCard = (): React.JSX.Element => {
@@ -40,8 +38,7 @@ const NewsCard = (): React.JSX.Element => {
 						{data.slice(0, 2).map((newsItem, index) => (
 							<React.Fragment key={index}>
 								<Pressable
-									className="flex-row p-2 rounded-md items-center bg-card-button border-border"
-									style={hairlineBorder}
+									className="flex-row p-2 rounded-md items-center bg-card-button border-hairline border-border"
 									onPress={() => {
 										void Linking.openURL(newsItem.href)
 									}}

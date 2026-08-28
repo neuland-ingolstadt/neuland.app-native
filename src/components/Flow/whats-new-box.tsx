@@ -1,8 +1,6 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
 import type { MaterialIcon } from '@/types/material-icons'
-import { hairlineBorder } from '@/utils/uniwind-utils'
-
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 
 interface WhatsNewBoxProps {
@@ -26,10 +24,7 @@ const WhatsNewBox = ({
 	icon
 }: WhatsNewBoxProps): React.JSX.Element => {
 	return (
-		<View
-			className="items-center bg-card-contrast rounded-2xl flex-row gap-4 px-5 py-4 w-full border-border"
-			style={hairlineBorder}
-		>
+		<View className="items-center bg-card-contrast rounded-2xl flex-row gap-4 px-5 py-4 w-full border-hairline border-border">
 			<View className="bg-primary-background rounded-2xl p-3 shrink-0">
 				<PlatformIcon
 					ios={{

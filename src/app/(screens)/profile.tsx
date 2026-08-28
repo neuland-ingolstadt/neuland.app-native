@@ -29,7 +29,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function Profile(): React.JSX.Element {
 	const router = useRouter()
@@ -298,8 +298,7 @@ export default function Profile(): React.JSX.Element {
 			<Pressable
 				testID="profile-logout"
 				onPress={logoutAlert}
-				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center mb-[30px] mt-2.5 min-w-copy-button-min px-10 py-3"
-				style={hairlineBorder}
+				className="items-center self-center bg-card rounded-mg border-hairline border-border flex-row gap-2.5 justify-center mb-[30px] mt-2.5 min-w-copy-button-min px-10 py-3"
 				disabled={isLoggingOut}
 			>
 				{isLoggingOut ? (

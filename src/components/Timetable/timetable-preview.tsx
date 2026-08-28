@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { TimetableMode } from '@/hooks/useTimetableStore'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface TimetablePreviewProps {
 	mode: TimetableMode
@@ -77,10 +77,7 @@ const TimetablePreviewContent = ({
 					className="h-full relative"
 					style={animatedContainerStyle}
 				>
-					<View
-						className="h-[30px] justify-center items-center border-b border-border"
-						style={hairlineBorder}
-					>
+					<View className="h-[30px] justify-center items-center border-b-hairline border-border">
 						<Text className="text-[15px] font-medium text-text">
 							{mondayLong}
 						</Text>
@@ -122,13 +119,9 @@ const TimetablePreviewContent = ({
 					{weekdaysShort.slice(0, 3).map((day, idx) => (
 						<View
 							key={`${day}-${idx}`}
-							className={`flex-1 border-r border-border ${idx === 2 ? 'border-r-0' : ''}`}
-							style={idx === 2 ? undefined : hairlineBorder}
+							className={`flex-1 border-r-hairline border-border ${idx === 2 ? 'border-r-0' : ''}`}
 						>
-							<Text
-								className="text-[13px] text-center py-2 font-medium text-text border-b border-border"
-								style={hairlineBorder}
-							>
+							<Text className="text-[13px] text-center py-2 font-medium text-text border-b-hairline border-border">
 								{day}
 							</Text>
 							<View className="flex-1 p-0.5 relative">
@@ -176,9 +169,9 @@ const TimetablePreviewContent = ({
 					{weekdaysShort.slice(0, 5).map((day, idx) => (
 						<View
 							key={`${day}-${idx}`}
-							className={`flex-1 border-r border-border ${idx === 4 ? 'border-r-0' : ''}`}
+							className={`flex-1 border-r-hairline border-border ${idx === 4 ? 'border-r-0' : ''}`}
 						>
-							<Text className="text-[13px] text-center py-2 font-medium text-text border-b border-border">
+							<Text className="text-[13px] text-center py-2 font-medium text-text border-b-hairline border-border">
 								{day}
 							</Text>
 							<View className="flex-1 p-0.5 relative">
@@ -226,9 +219,9 @@ const TimetablePreviewContent = ({
 					{weekdaysSingle.map((day, idx) => (
 						<View
 							key={`${day}-${idx}`}
-							className={`flex-1 border-r border-border ${idx === 6 ? 'border-r-0' : ''}`}
+							className={`flex-1 border-r-hairline border-border ${idx === 6 ? 'border-r-0' : ''}`}
 						>
-							<Text className="text-[13px] text-center py-2 font-medium text-text border-b border-border">
+							<Text className="text-[13px] text-center py-2 font-medium text-text border-b-hairline border-border">
 								{day}
 							</Text>
 							<View className="flex-1 p-0.5 relative">

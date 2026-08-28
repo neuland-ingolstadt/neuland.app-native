@@ -353,7 +353,7 @@ The app uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on 
   `Uniwind.setTheme` and `Uniwind.updateCSSVariables`
 - `src/styles/themes.ts` — canonical palette reference when adding tokens to `global.css`
 - `src/styles/theme-colors.ts` — accent color map for theme sync
-- `src/utils/uniwind-utils.ts` — `hairlineBorder`, `toColor` helpers for RN edge cases
+- `src/utils/uniwind-utils.ts` — `toColor` helper for RN edge cases
 - `src/uniwind-types.d.ts` — generated class-name typings (`bun uniwind:types`)
 - `@/components/Universal/styled` — `withUniwind` wrappers for FlashList, expo-image
 
@@ -366,9 +366,9 @@ The app uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className` on 
 - Platform variants: `ios:`, `android:`, `web:` (e.g. `ios:rounded-[28px] android:rounded-lg`).
 - Read runtime colors in JS with `useCSSVariable('--color-primary')` from `uniwind`.
 - Pass resolved styles to children that still expect `style` via `useResolveClassNames('…')`.
-- Keep **inline `style`** only for: Reanimated animations, dynamic widths/heights, hairline borders
-  (`hairlineBorder` from `@/utils/uniwind-utils`), per-item dynamic colors, and props that require
-  `ColorValue` strings (e.g. `Divider` `color`, `EventItem` `color`).
+- Keep **inline `style`** only for: Reanimated animations, dynamic widths/heights, per-item dynamic colors, and props that require
+  `ColorValue` strings (e.g. `Divider` `color`, `EventItem` `color`). For device hairline borders, prefer `border-hairline`,
+  `border-b-hairline`, or `h-hairline` in `className` (defined in `global.css` via `hairlineWidth()`).
 - When adding a token used in `className`, add it to **both** `@variant light` and `@variant dark`
   in `global.css`, mirroring values from `src/styles/themes.ts`. Use nested `@variant ios` (etc.)
   when `themes.ts` uses `Platform.OS` — e.g. dark `--color-card-sheet` is `rgb(6, 6, 6)` on iOS.

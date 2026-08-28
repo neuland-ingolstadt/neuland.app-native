@@ -3,7 +3,7 @@ import { type GestureResponderEvent, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface LibraryCardProps {
 	onPress: ((event: GestureResponderEvent) => void) | null | undefined
@@ -30,8 +30,7 @@ const LibraryCard = ({
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	return (
 		<Pressable
-			className="items-center bg-card border-border rounded-md flex-row gap-1.5 justify-between p-4"
-			style={hairlineBorder}
+			className="items-center bg-card border-hairline border-border rounded-md flex-row gap-1.5 justify-between p-4"
 			onPress={onPress}
 		>
 			<View className="flex-col flex-1 gap-1.5 justify-center">

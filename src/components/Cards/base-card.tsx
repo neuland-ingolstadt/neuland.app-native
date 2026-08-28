@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { USER_GUEST } from '@/data/constants'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
 import PlatformIcon from '../Universal/icon'
@@ -66,8 +66,7 @@ const BaseCard = ({
 
 	const cardContent = (
 		<View
-			className={`bg-card border-border ios:rounded-[28px] android:rounded-lg web:rounded-lg w-full ${onPressRoute == null ? 'opacity-80' : ''}`}
-			style={hairlineBorder}
+			className={`bg-card border-hairline border-border ios:rounded-[28px] android:rounded-lg web:rounded-lg w-full ${onPressRoute == null ? 'opacity-80' : ''}`}
 		>
 			<View className="p-card my-[1.5px]">
 				<View className="items-center flex-row gap-2.5">

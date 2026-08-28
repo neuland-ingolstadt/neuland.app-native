@@ -7,7 +7,6 @@ import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import type { SelectMapElement } from '@/types/map'
 import { ROOMS_ALL } from '@/utils/map-constants'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 import { UserKindContext } from '../contexts'
 import Divider from '../Universal/divider'
 import LoadingIndicator from '../Universal/loading-indicator'
@@ -53,8 +52,7 @@ const AvailableRoomsSuggestions = ({
 				)}
 			</View>
 			<Pressable
-				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-border"
-				style={hairlineBorder}
+				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-hairline border-border"
 				onPress={() => {
 					router.navigate('/login')
 				}}

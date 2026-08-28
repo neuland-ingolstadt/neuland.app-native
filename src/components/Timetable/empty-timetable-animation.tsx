@@ -4,7 +4,7 @@ import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import { TimetableAnimation } from './timetable-animation'
 
 const handleConfigurePress = () => {
@@ -154,8 +154,7 @@ export const EmptyTimetableAnimation = ({
 						</Pressable>
 
 						<Pressable
-							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px] border-border"
-							style={hairlineBorder}
+							className="flex-row items-center justify-center bg-card py-3 px-[18px] ios:rounded-ios android:rounded-md web:rounded-md gap-2 min-w-[180px] border-hairline border-border"
 							onPress={handleRefreshPress}
 						>
 							<Text
