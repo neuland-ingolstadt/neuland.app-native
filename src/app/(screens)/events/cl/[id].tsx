@@ -26,6 +26,7 @@ import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useFeatureFlagEnabled } from '@/hooks'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -134,6 +135,7 @@ export default function ClEventDetail(): React.JSX.Element {
 		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
 	const eventTitle = getLocalizedValue(eventData?.titles ?? null)
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const organizerKind = resolveEventOrganizerKind(
 		eventData,
 		orgParam,
@@ -360,6 +362,7 @@ export default function ClEventDetail(): React.JSX.Element {
 			testID="campus-life-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>

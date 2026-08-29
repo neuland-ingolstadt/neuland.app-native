@@ -12,6 +12,7 @@ import Animated, {
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -44,6 +45,7 @@ export default function LecturerDetail(): React.JSX.Element {
 			]
 		}
 	})
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 
 	if (lecturer == null) {
 		return <Redirect href="/lecturers" />
@@ -146,6 +148,7 @@ export default function LecturerDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>

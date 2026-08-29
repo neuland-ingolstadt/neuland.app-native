@@ -15,10 +15,7 @@ interface ShareButtonProps {
 const shareButtonStyle = {
 	marginEnd: Platform.select({ android: -8, web: 14, ios: -12 }),
 	padding: Platform.OS !== 'ios' ? 5 : 0,
-	width:
-		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
-			? 0
-			: 30
+	width: 30
 } as const
 
 export function ShareHeaderButton({
