@@ -264,8 +264,8 @@ export default {
 				]
 			}
 		],
-		["@react-native-community/datetimepicker"],
-    	["expo-image"]
+		['@react-native-community/datetimepicker'],
+		['expo-image']
 	],
 	extra: {
 		eas: {

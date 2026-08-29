@@ -170,23 +170,17 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/food-flags"
 					options={{
-						headerShown: false,
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.flags'),
+						...transparentHeaderStyle,
+						...Platform.select({ ios: { presentation: 'modal' } })
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/food-allergens"
 					options={{
-						headerShown: false,
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.allergens'),
+						...transparentHeaderStyle,
+						...Platform.select({ ios: { presentation: 'modal' } })
 					}}
 				/>
 				<Stack.Screen

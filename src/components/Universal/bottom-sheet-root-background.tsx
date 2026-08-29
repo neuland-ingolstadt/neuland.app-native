@@ -11,7 +11,7 @@ import { toColor } from '@/utils/uniwind-utils'
 
 function resolveActiveTheme(
 	theme: string,
-	colorScheme: 'light' | 'dark' | null | undefined
+	colorScheme: 'light' | 'dark' | 'unspecified' | null | undefined
 ): 'light' | 'dark' {
 	if (theme === 'light' || theme === 'dark') return theme
 	return colorScheme === 'dark' ? 'dark' : 'light'
