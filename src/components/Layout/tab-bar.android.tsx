@@ -5,21 +5,11 @@ import { useColorScheme } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import { Tabs } from './native-bottom-tabs'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
-
-function resolveActiveTheme(
-	theme: string,
-	colorScheme: 'light' | 'dark' | null | undefined
-): 'light' | 'dark' {
-	if (theme === 'light' || theme === 'dark') {
-		return theme
-	}
-
-	return colorScheme === 'dark' ? 'dark' : 'light'
-}
 
 export default function TabLayout(): React.JSX.Element {
 	const themePreference = usePreferencesStore((state) => state.theme)

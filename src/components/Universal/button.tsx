@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { resolveActiveTheme } from '@/utils/theme-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
 
@@ -21,17 +22,6 @@ interface ButtonProps {
 	onPress: () => void
 	children: string
 	style?: StyleProp<ViewStyle>
-}
-
-function resolveActiveTheme(
-	theme: string,
-	colorScheme: 'light' | 'dark' | null | undefined
-): 'light' | 'dark' {
-	if (theme === 'light' || theme === 'dark') {
-		return theme
-	}
-
-	return colorScheme === 'dark' ? 'dark' : 'light'
 }
 
 const Button = ({
