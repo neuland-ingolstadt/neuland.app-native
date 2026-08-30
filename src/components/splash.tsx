@@ -19,6 +19,7 @@ import Animated, {
 import Svg, { G, Path } from 'react-native-svg'
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg)
@@ -52,17 +53,6 @@ const Logo = ({ style, width, height, color, opacity }: LogoProps) => (
 )
 
 type Props = { isReady: boolean }
-
-function resolveActiveTheme(
-	theme: string,
-	colorScheme: 'light' | 'dark' | 'unspecified' | null | undefined
-): 'light' | 'dark' {
-	if (theme === 'light' || theme === 'dark') {
-		return theme
-	}
-
-	return colorScheme === 'dark' ? 'dark' : 'light'
-}
 
 export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const themePreference = usePreferencesStore((state) => state.theme)

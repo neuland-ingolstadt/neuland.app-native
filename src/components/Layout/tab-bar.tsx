@@ -5,18 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-function resolveActiveTheme(
-	theme: string,
-	colorScheme: 'light' | 'dark' | 'unspecified' | null | undefined
-): 'light' | 'dark' {
-	if (theme === 'light' || theme === 'dark') {
-		return theme
-	}
-
-	return colorScheme === 'dark' ? 'dark' : 'light'
-}
 
 const Icon = NativeTabs.Trigger.Icon
 const Label = NativeTabs.Trigger.Label
