@@ -59,6 +59,7 @@ const SportsCard = (): React.JSX.Element => {
 		<BaseCard
 			title="sports"
 			onPressRoute="/sports"
+			hasInteractiveContent
 			noDataComponent={noData}
 			noDataPredicate={() => isSuccess && sportsEvents.length === 0}
 		>

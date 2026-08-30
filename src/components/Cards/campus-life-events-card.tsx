@@ -72,6 +72,7 @@ export default function CampusLifeEventsCard({
 		<BaseCard
 			title={title}
 			onPressRoute={listRoute}
+			hasInteractiveContent
 			noDataComponent={noData}
 			noDataPredicate={() => isSuccess && events.length === 0}
 		>
