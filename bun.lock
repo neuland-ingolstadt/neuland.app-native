@@ -51,7 +51,7 @@
         "expo-splash-screen": "~55.0.23",
         "expo-symbols": "~55.0.9",
         "expo-system-ui": "~55.0.20",
-        "expo-updates": "~55.0.26",
+        "expo-updates": "~55.0.30",
         "expo-web-browser": "~55.0.20",
         "fuse.js": "^7.4.2",
         "graphql": "^17.0.1",
@@ -1354,7 +1354,7 @@
 
     "expo-system-ui": ["expo-system-ui@55.0.22", "", { "dependencies": { "@react-native/normalize-colors": "0.83.10", "debug": "^4.3.2" }, "peerDependencies": { "expo": "*", "react-native": "*", "react-native-web": "*" }, "optionalPeers": ["react-native-web"] }, "sha512-/ma8XGdwXvWkeZN++pHQt66jEQ4ZsaV9B5nP/+PAmXa4hAukPxG2bXjZaNOOOlTssWlaJRclJgGeC+Wo2uJlXQ=="],
 
-    "expo-updates": ["expo-updates@55.0.29", "", { "dependencies": { "@expo/code-signing-certificates": "^0.0.6", "@expo/plist": "^0.5.4", "@expo/spawn-async": "^1.7.2", "arg": "^4.1.0", "chalk": "^4.1.2", "debug": "^4.3.4", "expo-eas-client": "~55.0.5", "expo-manifests": "~55.0.21", "expo-structured-headers": "~55.0.2", "expo-updates-interface": "~55.1.6", "getenv": "^2.0.0", "glob": "^13.0.0", "ignore": "^5.3.1", "resolve-from": "^5.0.0" }, "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" }, "bin": { "expo-updates": "bin/cli.js" } }, "sha512-KJLDYGzMobUrFq2EeTekvFczAKJ40KtlWFhDCPlH5dJB6JKgKnUT3saZq0dykSadLpBjq5LZWVdDT/tRoJaBXQ=="],
+    "expo-updates": ["expo-updates@55.0.30", "", { "dependencies": { "@expo/code-signing-certificates": "^0.0.6", "@expo/plist": "^0.5.4", "@expo/spawn-async": "^1.7.2", "arg": "^4.1.0", "chalk": "^4.1.2", "debug": "^4.3.4", "expo-eas-client": "~55.0.5", "expo-manifests": "~55.0.21", "expo-structured-headers": "~55.0.2", "expo-updates-interface": "~55.1.6", "getenv": "^2.0.0", "glob": "^13.0.0", "ignore": "^5.3.1", "resolve-from": "^5.0.0" }, "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" }, "bin": { "expo-updates": "bin/cli.js" } }, "sha512-flqq8aDvyh7j+MmrqXCLCuRf2r03dJYRHw+kGgAFkXwlzvGHQxwnC3vXBNltUb0Q08zUCHWSNuWLWgxbtr3y/Q=="],
 
     "expo-updates-interface": ["expo-updates-interface@55.1.6", "", { "peerDependencies": { "expo": "*" } }, "sha512-evxNpagCkjT3lE6bGV570TFzRtKuIuLY8I37RYHoriXCJ+ZKCN1hbmklK29uAixya+BxGpeTI2K4FqYeJLvfrw=="],
 

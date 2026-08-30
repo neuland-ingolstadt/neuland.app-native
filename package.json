@@ -97,7 +97,7 @@
 		"expo-splash-screen": "~55.0.23",
 		"expo-symbols": "~55.0.9",
 		"expo-system-ui": "~55.0.20",
-		"expo-updates": "~55.0.26",
+		"expo-updates": "~55.0.30",
 		"expo-web-browser": "~55.0.20",
 		"fuse.js": "^7.4.2",
 		"graphql": "^17.0.1",
