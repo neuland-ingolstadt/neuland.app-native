@@ -6,18 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-function resolveActiveTheme(
-	theme: string,
-	colorScheme: 'light' | 'dark' | null | undefined
-): 'light' | 'dark' {
-	if (theme === 'light' || theme === 'dark') {
-		return theme
-	}
-
-	return colorScheme === 'dark' ? 'dark' : 'light'
-}
 
 export default function TabLayout(): React.JSX.Element {
 	const themePreference = usePreferencesStore((state) => state.theme)

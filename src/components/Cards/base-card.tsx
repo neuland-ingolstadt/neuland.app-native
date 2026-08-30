@@ -23,6 +23,7 @@ interface BaseCardProps {
 	title: string
 	testID?: string
 	onPressRoute?: Href
+	hasInteractiveContent?: boolean
 	children?: React.ReactNode
 	noDataComponent?: React.ReactNode
 	noDataPredicate?: () => boolean
@@ -32,6 +33,7 @@ const BaseCard = ({
 	title,
 	testID,
 	onPressRoute,
+	hasInteractiveContent = false,
 	children,
 	noDataComponent,
 	noDataPredicate
@@ -63,59 +65,76 @@ const BaseCard = ({
 
 	const { resetOrder } = use(DashboardContext)
 	const { userKind = USER_GUEST } = use(UserKindContext)
+	const linkHeaderOnly = Platform.OS === 'web' && hasInteractiveContent
+	const cardTestID = testID ?? `dashboard-card-${title}`
+
+	const cardHeader = (
+		<View className="items-center flex-row gap-2.5">
+			<View className="w-9 h-9 rounded-full justify-center items-center mr-1 bg-primary-background">
+				<Animated.View style={animatedIconStyle}>
+					<PlatformIcon
+						ios={{
+							name: cardIcons[title as keyof typeof cardIcons]?.ios,
+							size:
+								16.5 *
+								(cardIcons[title as keyof typeof cardIcons]?.iosScale ?? 1)
+						}}
+						android={{
+							name: cardIcons[title as keyof typeof cardIcons]?.android,
+							size: 23,
+							variant: 'outlined'
+						}}
+						web={{
+							name: cardIcons[title as keyof typeof cardIcons]?.web,
+							size: 20
+						}}
+					/>
+				</Animated.View>
+			</View>
+
+			<Text className="text-text flex-1 text-base font-semibold">
+				{t(
+					// @ts-expect-error type check
+					`cards.titles.${title}`
+				)}
+			</Text>
+			{onPressRoute != null && (
+				<PlatformIcon
+					ios={{
+						name: 'chevron.forward',
+						size: 12
+					}}
+					android={{
+						name: 'chevron_right',
+						size: 26
+					}}
+					web={{
+						name: 'ChevronRight',
+						size: 24
+					}}
+					style={{ color: labelColor, opacity: 0.6 }}
+				/>
+			)}
+		</View>
+	)
+
+	const renderedCardHeader =
+		linkHeaderOnly && onPressRoute != null ? (
+			<Link asChild href={onPressRoute as RelativePathString}>
+				<Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
+					{cardHeader}
+				</Pressable>
+			</Link>
+		) : (
+			cardHeader
+		)
 
 	const cardContent = (
 		<View
 			className={`bg-card border-hairline border-border ios:rounded-[28px] android:rounded-lg web:rounded-lg w-full ${onPressRoute == null ? 'opacity-80' : ''}`}
 		>
 			<View className="p-card my-[1.5px]">
-				<View className="items-center flex-row gap-2.5">
-					<View className="w-9 h-9 rounded-full justify-center items-center mr-1 bg-primary-background">
-						<Animated.View style={animatedIconStyle}>
-							<PlatformIcon
-								ios={{
-									name: cardIcons[title as keyof typeof cardIcons]?.ios,
-									size:
-										16.5 *
-										(cardIcons[title as keyof typeof cardIcons]?.iosScale ?? 1)
-								}}
-								android={{
-									name: cardIcons[title as keyof typeof cardIcons]?.android,
-									size: 23,
-									variant: 'outlined'
-								}}
-								web={{
-									name: cardIcons[title as keyof typeof cardIcons]?.web,
-									size: 20
-								}}
-							/>
-						</Animated.View>
-					</View>
-
-					<Text className="text-text flex-1 text-base font-semibold">
-						{t(
-							// @ts-expect-error type check
-							`cards.titles.${title}`
-						)}
-					</Text>
-					{onPressRoute != null && (
-						<PlatformIcon
-							ios={{
-								name: 'chevron.forward',
-								size: 12
-							}}
-							android={{
-								name: 'chevron_right',
-								size: 26
-							}}
-							web={{
-								name: 'ChevronRight',
-								size: 24
-							}}
-							style={{ color: labelColor, opacity: 0.6 }}
-						/>
-					)}
-				</View>
+				{renderedCardHeader}
 				{noDataPredicate?.()
 					? noDataComponent != null && (
 							<View className="mt-1.5">{noDataComponent}</View>
@@ -130,7 +149,7 @@ const BaseCard = ({
 			<CardContextMenu
 				card={
 					<Pressable
-						testID={testID ?? `dashboard-card-${title}`}
+						testID={cardTestID}
 						disabled={onPressRoute == null}
 						onPress={() => {
 							if (onPressRoute != null) {
@@ -151,6 +170,17 @@ const BaseCard = ({
 			/>
 		)
 	}
+
+	if (linkHeaderOnly) {
+		// A full-card web link would contain the event-row controls, producing invalid
+		// nested interactive HTML whose category link overrides the row navigation.
+		return (
+			<View testID={cardTestID} className="w-full">
+				{cardContent}
+			</View>
+		)
+	}
+
 	return (
 		<Link
 			asChild
@@ -158,7 +188,7 @@ const BaseCard = ({
 			disabled={onPressRoute == null}
 		>
 			<Pressable
-				testID={testID ?? `dashboard-card-${title}`}
+				testID={cardTestID}
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				className="w-full"

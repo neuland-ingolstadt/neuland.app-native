@@ -89,6 +89,7 @@ const CalendarCard = (): React.JSX.Element => {
 		<BaseCard
 			title="calendar"
 			onPressRoute="/calendar"
+			hasInteractiveContent
 			noDataComponent={noData}
 			noDataPredicate={() =>
 				(userKind === USER_STUDENT ? isSuccess : true) &&
