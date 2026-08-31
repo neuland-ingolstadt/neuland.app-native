@@ -1,8 +1,10 @@
+import Color from 'color'
+import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
@@ -17,6 +19,77 @@ const shareButtonStyle = {
 	padding: Platform.OS !== 'ios' ? 5 : 0,
 	width: 30
 } as const
+
+const iosGlassButtonStyle = {
+	alignItems: 'center',
+	borderRadius: 22,
+	height: 44,
+	justifyContent: 'center',
+	overflow: 'hidden',
+	width: 44
+} as const
+
+interface IosGlassHeaderButtonProps {
+	icon: 'close' | 'share'
+	label: string
+	onPress: () => void | Promise<void>
+}
+
+export function IosGlassHeaderButton({
+	icon,
+	label,
+	onPress
+}: IosGlassHeaderButtonProps): React.JSX.Element {
+	const labelColor = String(
+		toColor(useCSSVariable('--color-label')) ?? '#606062'
+	)
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const glassStyle = [
+		iosGlassButtonStyle,
+		{
+			borderColor: Color(labelColor).alpha(0.22).string(),
+			borderWidth: StyleSheet.hairlineWidth
+		}
+	]
+	const button = (
+		<Pressable
+			testID={`${icon}-header-button`}
+			accessible
+			accessibilityRole="button"
+			accessibilityLabel={label}
+			onPress={() => void onPress()}
+			style={iosGlassButtonStyle}
+		>
+			<PlatformIcon
+				ios={{
+					name: icon === 'share' ? 'square.and.arrow.up' : 'xmark',
+					size: icon === 'share' ? 19 : 15,
+					weight: icon === 'share' ? 'bold' : 'semibold'
+				}}
+				android={{ name: icon === 'share' ? 'share' : 'close', size: 20 }}
+				web={{ name: icon === 'share' ? 'Share' : 'X', size: 20 }}
+				style={{ color: labelColor }}
+			/>
+		</Pressable>
+	)
+
+	if (Platform.OS === 'ios' && isGlassEffectAPIAvailable()) {
+		return (
+			<GlassView
+				glassEffectStyle="regular"
+				isInteractive
+				style={glassStyle}
+				tintColor={Color(cardColor).alpha(0.45).string()}
+			>
+				{button}
+			</GlassView>
+		)
+	}
+
+	return (
+		<View style={[glassStyle, { backgroundColor: cardColor }]}>{button}</View>
+	)
+}
 
 export function ShareHeaderButton({
 	onPress,
