@@ -73,8 +73,6 @@ jobs:
 
       - name: Run Expo Doctor
         run: bun doctor
-        env:
-          EXPO_DOCTOR_SKIP_DEPENDENCY_VERSION_CHECK: '1'
 
   unit-tests:
     name: Unit tests
