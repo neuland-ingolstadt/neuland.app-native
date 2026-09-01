@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { useResolveClassNames } from 'uniwind'
 import PulsingDot from '@/components/Universal/pulsing-dot'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 
 export default function DotsExplanationScreen(): React.JSX.Element {
 	const { t } = useTranslation('timetable')
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const dotOngoingStyle = useResolveClassNames(
 		'w-3 h-3 rounded-[6px] mr-4 bg-success'
 	)
@@ -14,7 +16,10 @@ export default function DotsExplanationScreen(): React.JSX.Element {
 	)
 
 	return (
-		<View className="flex-1 px-page pt-2.5 pb-10">
+		<View
+			className="flex-1 px-page pt-2.5 pb-10"
+			style={{ paddingTop: 10 + formSheetHeaderPadding }}
+		>
 			<View className="mt-1.5 px-page">
 				<View className="flex-row items-center py-3">
 					<View className="w-3 h-3 rounded-[6px] mr-4 bg-completed-dot" />

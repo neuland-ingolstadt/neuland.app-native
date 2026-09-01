@@ -21,6 +21,7 @@ import ShareCard from '@/components/Timetable/share-card'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	diffInMinutes,
@@ -57,6 +58,7 @@ export default function TimetableDetails(): React.JSX.Element {
 			]
 		}
 	})
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	useFocusEffect(
 		useCallback(() => {
 			if (lecture === undefined) {
@@ -171,6 +173,7 @@ export default function TimetableDetails(): React.JSX.Element {
 			testID="lecture-details-screen"
 			ref={ref}
 			contentContainerClassName="flex pb-bottom-safe px-page pt-page"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 		>
 			<Stack.Screen
 				options={{

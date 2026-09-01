@@ -11,7 +11,6 @@ import '@/global.css'
 import { getLocales } from 'expo-localization'
 import { useQuickActionRouting } from 'expo-quick-actions/router'
 import { Stack } from 'expo-router'
-import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as WebBrowser from 'expo-web-browser'
 import type React from 'react'
@@ -37,6 +36,8 @@ LogBox.ignoreLogs([
 	/VirtualizedLists should never be nested inside plain ScrollViews/, // avoid nested list warnings
 	/Invalid prop `isParentDetached` supplied to .*React\.Fragment/ // ignore isParentDetached fragment prop warning
 ])
+
+export const ErrorBoundary = CrashView
 
 function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'common'])
@@ -169,23 +170,17 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/food-flags"
 					options={{
-						headerShown: false,
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.flags'),
+						...transparentHeaderStyle,
+						...Platform.select({ ios: { presentation: 'modal' } })
 					}}
 				/>
 				<Stack.Screen
 					name="(screens)/food-allergens"
 					options={{
-						headerShown: false,
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.allergens'),
+						...transparentHeaderStyle,
+						...Platform.select({ ios: { presentation: 'modal' } })
 					}}
 				/>
 				<Stack.Screen
@@ -539,11 +534,9 @@ function RootLayout(): React.JSX.Element {
 
 const ProviderComponent = (): React.JSX.Element => {
 	return (
-		<Try catch={CrashView}>
-			<Provider>
-				<RootLayout />
-			</Provider>
-		</Try>
+		<Provider>
+			<RootLayout />
+		</Provider>
 	)
 }
 

@@ -88,7 +88,6 @@ export default {
 			}
 		]
 	},
-	sdkVersion: '54.0.0',
 	experiments: {
 		autolinkingModuleResolution: true,
 		reactCompiler: true,
@@ -264,7 +263,9 @@ export default {
 					'./config/fonts/MaterialSymbolsRoundedOutline.ttf'
 				]
 			}
-		]
+		],
+		['@react-native-community/datetimepicker'],
+		['expo-image']
 	],
 	extra: {
 		eas: {

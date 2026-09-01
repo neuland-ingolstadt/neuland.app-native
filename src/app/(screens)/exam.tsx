@@ -12,6 +12,7 @@ import Animated, {
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -44,6 +45,7 @@ export default function ExamDetail(): React.JSX.Element {
 			]
 		}
 	})
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 
 	const sections: FormListSections[] = [
 		{
@@ -150,6 +152,7 @@ export default function ExamDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			ref={ref}
 		>
 			<Stack.Screen

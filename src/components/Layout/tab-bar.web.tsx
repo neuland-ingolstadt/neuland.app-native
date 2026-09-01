@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Platform } from 'react-native'
+import { Dimensions } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
@@ -78,7 +78,7 @@ const TabLayout = (): React.JSX.Element => {
 			<Tabs.Screen
 				name="timetable"
 				options={{
-					headerShown: Platform.OS === 'web',
+					headerShown: false,
 					title: t('navigation.timetable'),
 					tabBarIcon: ({ color, size, focused }) => (
 						<PlatformIcon
@@ -136,7 +136,7 @@ const TabLayout = (): React.JSX.Element => {
 				name="food"
 				options={{
 					title: t('navigation.food'),
-					headerShown: Platform.OS === 'web',
+					headerShown: false,
 					tabBarLabel: t('navigation.food'),
 					tabBarIcon: ({ color, size, focused }) => (
 						<PlatformIcon
@@ -165,7 +165,7 @@ const TabLayout = (): React.JSX.Element => {
 				name="settings"
 				options={{
 					title: t('navigation.profile'),
-					headerShown: true,
+					headerShown: false,
 					tabBarLabel: t('navigation.profile'),
 					tabBarIcon: ({ color, size, focused }) => (
 						<SettingsTabButton color={color} size={size} focused={focused} />

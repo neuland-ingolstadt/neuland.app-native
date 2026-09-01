@@ -1,5 +1,4 @@
 import Color from 'color'
-import { Icon, Label } from 'expo-router/build/native-tabs/common/elements'
 import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +7,9 @@ import { useCSSVariable } from 'uniwind'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
+
+const Icon = NativeTabs.Trigger.Icon
+const Label = NativeTabs.Trigger.Label
 
 export default function TabLayout(): React.JSX.Element {
 	const themePreference = usePreferencesStore((state) => state.theme)

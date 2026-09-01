@@ -21,7 +21,7 @@ interface PickerItem {
 }
 
 interface ItemsPickerScreenProps {
-	type: string
+	type: 'allergens' | 'flags'
 }
 
 const ItemsPickerScreen = ({
@@ -163,9 +163,7 @@ const ItemsPickerScreen = ({
 	)
 }
 
-const Screen = (params: { route: { params: { type: string } } }) => {
-	const type = params.route.params.type
-
+const Screen = ({ type }: ItemsPickerScreenProps): React.JSX.Element => {
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={{ flex: 1 }} edges={['top']}>
