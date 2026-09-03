@@ -24,6 +24,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { useMealDetail } from '@/hooks/useMealDetail'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -73,6 +74,7 @@ export default function FoodDetail(): React.JSX.Element {
 		date
 	} = useMealDetail(id)
 	const { scrollHandler, headerStyle } = useMealDetailScroll()
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const { iconAnimatedStyle: wiggleIconAnimatedStyle, triggerWiggle } =
 		useWiggleAnimation()
 
@@ -169,6 +171,7 @@ export default function FoodDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			testID="food-detail-screen"
 			contentContainerClassName="mx-page pb-bottom-safe"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>

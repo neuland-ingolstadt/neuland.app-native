@@ -26,6 +26,7 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -81,6 +82,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 			]
 		}
 	})
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const navigation = useNavigation()
 	useFocusEffect(
 		useCallback(() => {
@@ -250,6 +252,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 			testID="sports-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-bottom-safe"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>

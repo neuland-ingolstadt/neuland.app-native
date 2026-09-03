@@ -1,6 +1,7 @@
 import { Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { useCSSVariable } from 'uniwind'
+import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 import { toColor } from '@/utils/uniwind-utils'
 
 type PresentationMode = {
@@ -28,8 +29,7 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		return {}
 	}
 
-	const isIos26Plus =
-		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
+	const isIos26Plus = isIos26OrLater()
 
 	if (DeviceInfo.getDeviceType() === 'Desktop') {
 		return {

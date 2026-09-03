@@ -7,6 +7,7 @@ import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
 import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 
@@ -16,6 +17,7 @@ const LinkScreen = (): React.JSX.Element => {
 		(state) => state.addRecentQuicklink
 	)
 	const typedQuicklinks = quicklinks as Quicklink[]
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 
 	const linkPress = async (key: string, url: string): Promise<void> => {
 		addRecentQuicklink(key)
@@ -56,6 +58,7 @@ const LinkScreen = (): React.JSX.Element => {
 		<View
 			testID="quick-links-screen"
 			className="ios:mt-0 android:mt-3.5 web:mt-3 px-page"
+			style={{ paddingTop: formSheetHeaderPadding }}
 		>
 			<FormList sections={sections} sheet />
 		</View>

@@ -1,21 +1,10 @@
 import Head from 'expo-router/head'
 import type React from 'react'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
 import Settings from '@/components/Settings/settings-screen'
-import WorkaroundStack from '@/components/Universal/workaround-stack'
 
-export default function FoodRootScreen(): React.JSX.Element {
-	const [isPageOpen, setIsPageOpen] = useState(false)
+export default function SettingsRootScreen(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'common'])
-	useEffect(() => {
-		setIsPageOpen(true)
-	}, [])
-
-	if (Platform.OS === 'web') {
-		return <Settings />
-	}
 
 	return (
 		<>
@@ -28,12 +17,7 @@ export default function FoodRootScreen(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			<WorkaroundStack
-				name={'profile'}
-				titleKey={'navigation.profile'}
-				component={isPageOpen ? Settings : () => <></>}
-				androidFallback
-			/>
+			<Settings />
 		</>
 	)
 }

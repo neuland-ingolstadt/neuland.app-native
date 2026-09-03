@@ -8,6 +8,9 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { resolveActiveTheme } from '@/utils/theme-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
+const Icon = NativeTabs.Trigger.Icon
+const Label = NativeTabs.Trigger.Label
+
 export default function TabLayout(): React.JSX.Element {
 	const themePreference = usePreferencesStore((state) => state.theme)
 	const colorScheme = useColorScheme()

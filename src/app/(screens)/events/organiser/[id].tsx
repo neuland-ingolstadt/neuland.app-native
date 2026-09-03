@@ -11,6 +11,7 @@ import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useFeatureFlagEnabled } from '@/hooks'
+import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type {
 	CampusLifeEvent,
@@ -32,6 +33,7 @@ import { toColor } from '@/utils/uniwind-utils'
 export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const { t, i18n } = useTranslation('common')
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const descriptionTextStyle = useResolveClassNames(
 		'text-text text-base text-left'
 	)
@@ -225,6 +227,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		<ScrollView
 			className="flex-1 px-page"
 			contentContainerClassName="gap-3 pb-bottom-safe"
+			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 		>
 			<View className="flex-row items-start justify-between">
 				<Text
