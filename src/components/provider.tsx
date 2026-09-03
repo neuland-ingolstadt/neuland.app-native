@@ -120,7 +120,7 @@ function ProviderContent({ children }: ProviderProps): React.JSX.Element {
 
 		const isFixedTheme = theme === 'dark' || theme === 'light'
 		if (Platform.OS !== 'web') {
-			Appearance.setColorScheme(isFixedTheme ? theme : undefined)
+			Appearance.setColorScheme(isFixedTheme ? theme : 'unspecified')
 		}
 
 		return () => {

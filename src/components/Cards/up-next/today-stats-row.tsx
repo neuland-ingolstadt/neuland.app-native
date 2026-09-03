@@ -55,7 +55,7 @@ export default function TodayStatsRow({
 						) : (
 							<View
 								key={index}
-								className="w-2 h-2 rounded-sm bg-soon-dot border-label"
+								className="w-2 h-2 rounded-sm bg-soon-dot border-hairline border-label"
 							/>
 						)
 					)}

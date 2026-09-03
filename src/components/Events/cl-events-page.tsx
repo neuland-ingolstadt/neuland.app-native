@@ -313,7 +313,7 @@ export default function ClEventsPage({
 												{clubsListRoute != null &&
 													remainingOrganizersCount > 0 && (
 														<Pressable
-															className="bg-primary border-primary rounded-infinite px-4 py-2.5"
+															className="bg-primary border-hairline border-primary rounded-infinite px-4 py-2.5"
 															onPress={() => {
 																router.push(clubsListRoute)
 															}}

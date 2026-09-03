@@ -106,7 +106,7 @@ export function SecurityWarningModal({
 				className="flex-1 bg-black/70 justify-center items-center p-page"
 				onPress={handleCancel}
 			>
-				<Animated.View className="bg-card rounded-lg max-w-[400px] w-full">
+				<Animated.View className="bg-card rounded-lg max-w-[400px] w-full border-hairline border-border">
 					<Pressable accessible={false} onPress={() => {}} className="p-6">
 						<View className="items-center mb-4">
 							<PlatformIcon
