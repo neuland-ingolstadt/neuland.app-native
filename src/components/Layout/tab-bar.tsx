@@ -52,16 +52,14 @@ export default function TabLayout(): React.JSX.Element {
 			disableTransparentOnScrollEdge={!isIos26}
 		>
 			<NativeTabs.Trigger name="index">
-				<NativeTabs.Trigger.Label>
-					{t('navigation.home')}
-				</NativeTabs.Trigger.Label>
+				<Label>{t('navigation.home')}</Label>
 				{Platform.OS === 'ios' ? (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						sf={{ default: 'house', selected: 'house.fill' }}
 						selectedColor={primaryColor}
 					/>
 				) : (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						src={{
 							default: require('../../assets/tabbar/home.svg'),
 							selected: require('../../assets/tabbar/home_fill.svg')
@@ -70,16 +68,14 @@ export default function TabLayout(): React.JSX.Element {
 				)}
 			</NativeTabs.Trigger>
 			<NativeTabs.Trigger name="timetable">
-				<NativeTabs.Trigger.Label>
-					{t('navigation.timetable')}
-				</NativeTabs.Trigger.Label>
+				<Label>{t('navigation.timetable')}</Label>
 				{Platform.OS === 'ios' ? (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						sf={{ default: 'clock', selected: 'clock.fill' }}
 						selectedColor={primaryColor}
 					/>
 				) : (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						src={{
 							default: require('../../assets/tabbar/calendar_month.svg'),
 							selected: require('../../assets/tabbar/calendar_month_fill.svg')
@@ -88,16 +84,14 @@ export default function TabLayout(): React.JSX.Element {
 				)}
 			</NativeTabs.Trigger>
 			<NativeTabs.Trigger name="map">
-				<NativeTabs.Trigger.Label>
-					{t('navigation.map')}
-				</NativeTabs.Trigger.Label>
+				<Label>{t('navigation.map')}</Label>
 				{Platform.OS === 'ios' ? (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						sf={{ default: 'map', selected: 'map.fill' }}
 						selectedColor={primaryColor}
 					/>
 				) : (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						src={{
 							default: require('../../assets/tabbar/map.svg'),
 							selected: require('../../assets/tabbar/map_fill.svg')
@@ -106,16 +100,14 @@ export default function TabLayout(): React.JSX.Element {
 				)}
 			</NativeTabs.Trigger>
 			<NativeTabs.Trigger name="food">
-				<NativeTabs.Trigger.Label>
-					{t('navigation.food')}
-				</NativeTabs.Trigger.Label>
+				<Label>{t('navigation.food')}</Label>
 				{Platform.OS === 'ios' ? (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						sf={{ default: 'fork.knife', selected: 'fork.knife' }}
 						selectedColor={primaryColor}
 					/>
 				) : (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						src={{
 							default: require('../../assets/tabbar/food.svg'),
 							selected: require('../../assets/tabbar/food_fill.svg')
@@ -124,16 +116,14 @@ export default function TabLayout(): React.JSX.Element {
 				)}
 			</NativeTabs.Trigger>
 			<NativeTabs.Trigger name="settings">
-				<NativeTabs.Trigger.Label>
-					{t('navigation.profile')}
-				</NativeTabs.Trigger.Label>
+				<Label>{t('navigation.profile')}</Label>
 				{Platform.OS === 'ios' ? (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						sf={{ default: 'person', selected: 'person.fill' }}
 						selectedColor={primaryColor}
 					/>
 				) : (
-					<NativeTabs.Trigger.Icon
+					<Icon
 						src={{
 							default: require('../../assets/tabbar/account_circle.svg'),
 							selected: require('../../assets/tabbar/account_circle_fill.svg')
