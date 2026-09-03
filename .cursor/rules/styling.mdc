@@ -17,7 +17,7 @@ Neuland Next uses **Uniwind** (Tailwind CSS v4 for React Native). Use `className
 - **Metro**: `metro.config.js` — `withUniwindConfig` must be the outermost wrapper
 - **Tokens**: `@theme` + `@layer theme` / `@variant light|dark` in `global.css`; mirror `src/styles/themes.ts`
 - **Theme sync**: `useUniwindThemeSync` in `provider.tsx` — do not duplicate preference logic
-- **Helpers**: `@/utils/uniwind-utils` (`hairlineBorder`, `toColor`)
+- **Helpers**: `@/utils/uniwind-utils` (`toColor`); hairline borders via `border-hairline` / `border-b-hairline` / `h-hairline` in `global.css`
 - **Styled wrappers**: `@/components/Universal/styled` for FlashList, expo-image
 - **Types**: run `bun uniwind:types` after changing `global.css`
 
@@ -42,7 +42,7 @@ cannot target a component, fall back to React Native `StyleSheet.create` or inli
 - Third-party components that don't accept `className` (e.g. `LinearGradient`, Reanimated views)
 - Wrapped third-party components — add to `@/components/Universal/styled` via `withUniwind`, or use `style`
 - Passing resolved classes to children that only accept `style`: `useResolveClassNames('text-text text-base')`
-- Reanimated animations, dynamic dimensions, hairline borders (`hairlineBorder`), per-item dynamic colors
+- Reanimated animations, dynamic dimensions, per-item dynamic colors
 
 ```tsx
 import { StyleSheet } from 'react-native'

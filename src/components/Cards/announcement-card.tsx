@@ -24,7 +24,7 @@ import type {
 	UserKind
 } from '@/__generated__/gql/graphql'
 import i18n from '@/localization/i18n'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import { getAnnouncementPlatform } from '@/utils/web-host'
 import { DashboardContext, UserKindContext } from '../contexts'
 import PlatformIcon from '../Universal/icon'
@@ -121,8 +121,7 @@ const AnnouncementCard = ({
 			onPress={handlePressLink(url, id)}
 			onPressIn={handlePressIn}
 			onPressOut={handlePressOut}
-			className="bg-card border-border rounded-lg mx-page my-1.5 w-auto overflow-hidden"
-			style={hairlineBorder}
+			className="bg-card border-hairline border-border rounded-lg mx-page my-1.5 w-auto overflow-hidden"
 		>
 			<View className="p-card">
 				<View className="items-center flex-row gap-2.5">

@@ -16,7 +16,7 @@ import { USER_EMPLOYEE, USER_GUEST } from '@/data/constants'
 import type { PersDataDetails } from '@/types/thi-api'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import AvatarCircle from './avatar-circle'
 import NameBox from './name-box'
 
@@ -58,10 +58,7 @@ export default function SettingsHeader({
 
 	if (userKind === 'student') {
 		return (
-			<View
-				className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3"
-				style={hairlineBorder}
-			>
+			<View className="self-center bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3">
 				<Pressable
 					onPress={() => {
 						router.navigate('/profile')
@@ -172,8 +169,7 @@ export default function SettingsHeader({
 					router.navigate('/login')
 				}
 			}}
-			className="self-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3 active:opacity-90"
-			style={hairlineBorder}
+			className="self-center bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md w-full mt-3 active:opacity-90"
 		>
 			<View className="items-center flex-row justify-between">
 				{userKind === 'employee' ? (

@@ -6,7 +6,7 @@ import { useCSSVariable } from 'uniwind'
 import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { MaterialIcon } from '@/types/material-icons'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import BaseCard from './base-card'
@@ -43,8 +43,7 @@ const LinkCard = (): React.JSX.Element => {
 							onPress={() => {
 								void linkPress(link.key, link.url)
 							}}
-							className="items-center bg-card-button border-border rounded-md flex-1 justify-center pb-2 px-3 pt-3 min-h-[65px] android:gap-0.5 ios:gap-[7px]"
-							style={hairlineBorder}
+							className="items-center bg-card-button border-hairline border-border rounded-md flex-1 justify-center pb-2 px-3 pt-3 min-h-[65px] android:gap-0.5 ios:gap-[7px]"
 						>
 							<PlatformIcon
 								ios={{

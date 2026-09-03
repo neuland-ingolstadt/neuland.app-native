@@ -26,7 +26,7 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export const MealEntry = memo(({ meal }: { meal: Meal }): React.JSX.Element => {
 	const preferencesSelection = useFoodFilterStore(
@@ -99,10 +99,7 @@ export const MealEntry = memo(({ meal }: { meal: Meal }): React.JSX.Element => {
 				}}
 				className="mt-2.5"
 			>
-				<View
-					className="self-center bg-card rounded-mg border-border p-card w-full"
-					style={hairlineBorder}
-				>
+				<View className="self-center bg-card rounded-mg border-hairline border-border p-card w-full">
 					<View className="flex-row items-start justify-between w-full">
 						<Text
 							className="text-text text-base font-medium max-w-[88%]"
@@ -115,10 +112,7 @@ export const MealEntry = memo(({ meal }: { meal: Meal }): React.JSX.Element => {
 							)}
 						</Text>
 						{meal.variants?.length > 0 && (
-							<View
-								className="rounded-mg border-border bg-label-background max-w-[10%] px-1.5 py-0.5"
-								style={hairlineBorder}
-							>
+							<View className="rounded-mg border-hairline border-border bg-label-background max-w-[10%] px-1.5 py-0.5">
 								<Text className="text-text text-[11px] font-medium text-center">
 									{`+ ${meal.variants.length}`}
 								</Text>
@@ -135,8 +129,7 @@ export const MealEntry = memo(({ meal }: { meal: Meal }): React.JSX.Element => {
 									) => (
 										<View
 											key={flagIndex}
-											className="border-border bg-label-background rounded-mg flex-row items-center mb-0.5 mr-1"
-											style={hairlineBorder}
+											className="border-hairline border-border bg-label-background rounded-mg flex-row items-center mb-0.5 mr-1"
 										>
 											{flag.isVeg && (
 												<PlatformIcon

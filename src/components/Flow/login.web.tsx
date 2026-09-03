@@ -1,14 +1,13 @@
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import WhatsNewBox from '@/components/Flow/whats-new-box'
 import LoginForm from '@/components/Universal/login-form'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 import LoginAnimatedText from './login-animated-text'
 import LogoSVG from './svgs/logo'
 
@@ -65,10 +64,7 @@ export default function Login(): React.JSX.Element {
 
 	return (
 		<>
-			<View
-				className="items-start w-full absolute top-0 left-0 right-0 z-[1] bg-card px-[4%] py-2.5 border-b border-border"
-				style={{ borderBottomWidth: StyleSheet.hairlineWidth }}
-			>
+			<View className="items-start w-full absolute top-0 left-0 right-0 z-[1] bg-card px-[4%] py-2.5 border-b-hairline border-border">
 				<View className="flex-row items-center gap-3">
 					<LogoSVG size={32} />
 					<View className="flex-col">
@@ -103,10 +99,7 @@ export default function Login(): React.JSX.Element {
 							</Text>
 						</View>
 					</View>
-					<View
-						className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full border-border"
-						style={hairlineBorder}
-					>
+					<View className="items-center self-center bg-card rounded-3xl gap-4 max-w-[1000px] p-6 mt-10 w-full border-hairline border-border">
 						{data.map((item) => (
 							<WhatsNewBox
 								key={item.title}

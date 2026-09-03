@@ -4,7 +4,7 @@ import { useCSSVariable } from 'uniwind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import type { Meal } from '@/types/neuland-api'
 import { formatPrice } from '@/utils/food-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface MealPriceRowProps {
 	prices: Meal['prices']
@@ -34,16 +34,15 @@ export function MealPriceRow({
 	return (
 		<View className="flex-row gap-2 mb-4">
 			<View
-				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
-				style={[
-					hairlineBorder,
+				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-hairline border-border"
+				style={
 					userKind === USER_STUDENT
 						? {
 								backgroundColor: primaryBackgroundColor,
 								borderColor: primaryColor
 							}
 						: undefined
-				]}
+				}
 			>
 				<Text className="text-label text-xs mb-1 text-center">
 					{t('details.formlist.prices.student')}
@@ -57,16 +56,15 @@ export function MealPriceRow({
 				</Text>
 			</View>
 			<View
-				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
-				style={[
-					hairlineBorder,
+				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-hairline border-border"
+				style={
 					userKind === USER_EMPLOYEE
 						? {
 								backgroundColor: primaryBackgroundColor,
 								borderColor: primaryColor
 							}
 						: undefined
-				]}
+				}
 			>
 				<Text className="text-label text-xs mb-1 text-center">
 					{t('details.formlist.prices.employee')}
@@ -80,16 +78,15 @@ export function MealPriceRow({
 				</Text>
 			</View>
 			<View
-				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-border"
-				style={[
-					hairlineBorder,
+				className="flex-1 bg-card-sheet rounded-md p-3 items-center border-hairline border-border"
+				style={
 					userKind === USER_GUEST
 						? {
 								backgroundColor: primaryBackgroundColor,
 								borderColor: primaryColor
 							}
 						: undefined
-				]}
+				}
 			>
 				<Text className="text-label text-xs mb-1 text-center">
 					{t('details.formlist.prices.guest')}
