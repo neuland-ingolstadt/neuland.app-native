@@ -1,9 +1,8 @@
 import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
-import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Share, Text, View } from 'react-native'
+import { Pressable, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -18,6 +17,7 @@ import DetailsRow from '@/components/Timetable/details-row'
 import DetailsSymbol from '@/components/Timetable/details-symbol'
 import Separator from '@/components/Timetable/separator'
 import ShareCard from '@/components/Timetable/share-card'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
@@ -175,25 +175,7 @@ export default function TimetableDetails(): React.JSX.Element {
 			contentContainerClassName="flex pb-bottom-safe px-page pt-page"
 			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View
-							className="overflow-hidden"
-							style={{
-								marginBottom: Platform.OS === 'ios' ? -10 : 0,
-								paddingRight: Platform.OS === 'ios' ? 0 : 50
-							}}
-						>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={String(textColor)}>
-									{lecture.name}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
+			<DetailStackHeader title={lecture.name} headerStyle={headerStyle} />
 			<View>
 				<DetailsRow>
 					<DetailsSymbol>

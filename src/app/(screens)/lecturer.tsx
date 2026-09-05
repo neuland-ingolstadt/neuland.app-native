@@ -1,8 +1,7 @@
-import { HeaderTitle } from '@react-navigation/elements'
-import { Redirect, router, Stack } from 'expo-router'
+import { Redirect, router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Text, View } from 'react-native'
+import { Linking, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
@@ -10,6 +9,7 @@ import Animated, {
 	useSharedValue
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
@@ -19,7 +19,6 @@ import { toColor } from '@/utils/uniwind-utils'
 export default function LecturerDetail(): React.JSX.Element {
 	const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
 	const { t } = useTranslation('common')
-	const textColor = toColor(useCSSVariable('--color-text'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const scrollOffset = useSharedValue(0)
@@ -152,25 +151,7 @@ export default function LecturerDetail(): React.JSX.Element {
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View
-							className="overflow-hidden"
-							style={{
-								marginBottom: Platform.OS === 'ios' ? -10 : 0,
-								paddingRight: Platform.OS === 'ios' ? 0 : 50
-							}}
-						>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={String(textColor)}>
-									{lecturerName}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
+			<DetailStackHeader title={lecturerName} headerStyle={headerStyle} />
 
 			<View className="flex-row items-start justify-between">
 				<Text
