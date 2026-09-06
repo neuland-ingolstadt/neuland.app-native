@@ -4,6 +4,7 @@ import type React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	Linking,
 	Platform,
 	Pressable,
 	RefreshControl,
@@ -12,6 +13,8 @@ import {
 	View
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
+import { STATUS_URL } from '@/data/constants'
+import { useServiceStatus } from '@/hooks/useServiceStatus'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
@@ -20,7 +23,6 @@ import {
 	notLoggedInError,
 	permissionError
 } from '@/utils/api-utils'
-
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
@@ -71,8 +73,13 @@ export default function ErrorView({
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
+	const { hasOutage } = useServiceStatus()
+	const isConfirmedOutage = title === networkError && hasOutage
 
 	const getIconIos = (): string => {
+		if (isConfirmedOutage) {
+			return 'personalhotspot.slash'
+		}
 		switch (title) {
 			case networkError:
 				return 'wifi.slash'
@@ -87,6 +94,9 @@ export default function ErrorView({
 	}
 
 	const getIconAndroid = (): MaterialIcon => {
+		if (isConfirmedOutage) {
+			return 'cloud_off'
+		}
 		switch (title) {
 			case networkError:
 				return 'wifi_off'
@@ -120,6 +130,9 @@ export default function ErrorView({
 	}, [analyticsInitialized, shouldTrack, title, path])
 
 	const getTitle = (): string => {
+		if (isConfirmedOutage) {
+			return t('error.network.outageTitle')
+		}
 		switch (title) {
 			case networkError:
 				return t('error.network.title')
@@ -135,6 +148,9 @@ export default function ErrorView({
 	}
 
 	const getMessage = (): string => {
+		if (isConfirmedOutage) {
+			return t('error.network.outageDescription')
+		}
 		switch (title) {
 			case networkError:
 				return t('error.network.description')
@@ -153,9 +169,16 @@ export default function ErrorView({
 	}
 
 	const ErrorButton = (): React.JSX.Element => {
-		let buttonProps = null
+		let buttonProps: { onPress: () => void; text: string } | null = null
 
-		if (title === guestError || title === notLoggedInError) {
+		if (isConfirmedOutage) {
+			buttonProps = {
+				onPress: () => {
+					void Linking.openURL(STATUS_URL)
+				},
+				text: t('error.crash.status')
+			}
+		} else if (title === guestError || title === notLoggedInError) {
 			buttonProps = {
 				onPress: () => {
 					router.navigate('/login')
@@ -178,17 +201,14 @@ export default function ErrorView({
 			}
 		}
 
-		return (buttonProps != null ||
-			title === guestError ||
-			title === notLoggedInError) &&
-			title !== permissionError ? (
+		return buttonProps != null && title !== permissionError ? (
 			<Pressable
 				className={`mt-[30px] mb-5 self-center items-center rounded-mg ${inModal ? 'bg-background' : 'bg-card'}`}
-				onPress={buttonProps?.onPress}
+				onPress={buttonProps.onPress}
 			>
 				<View className="flex-row items-center px-10 py-2.5">
 					<Text className="text-base font-semibold text-primary">
-						{buttonProps?.text}
+						{buttonProps.text}
 					</Text>
 				</View>
 			</Pressable>
@@ -232,7 +252,9 @@ export default function ErrorView({
 							size: 64
 						}}
 						web={{
-							name: icon?.web ?? 'TriangleAlert',
+							name: isConfirmedOutage
+								? 'CloudOff'
+								: (icon?.web ?? 'TriangleAlert'),
 							size: 64
 						}}
 					/>

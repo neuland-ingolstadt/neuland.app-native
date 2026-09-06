@@ -29,7 +29,9 @@
 		"backToEventList": "Back to {{type}}",
 		"network": {
 			"title": "No internet connection",
-			"description": "Please check your internet connection."
+			"description": "Please check your internet connection.",
+			"outageTitle": "Service unavailable",
+			"outageDescription": "A required service is currently unavailable."
 		},
 		"guest": {
 			"title": "Sign in required",

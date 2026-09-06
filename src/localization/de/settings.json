@@ -192,6 +192,19 @@
 			"title": "Rückmeldung ausstehend",
 			"message": "Melde dich in Primuss zurück, um im nächsten Semester eingeschrieben zu bleiben.",
 			"link": "Primuss öffnen"
+		},
+		"serviceStatus": {
+			"title": "Eingeschränkte Verfügbarkeit",
+			"messageOne": "{{service}} ist aktuell nicht verfügbar.",
+			"messageMany": "{{services}} sind aktuell nicht verfügbar.",
+			"link": "Systemstatus anzeigen",
+			"dismiss": "Statusbanner schließen",
+			"services": {
+				"thi": "THI-API",
+				"neuland": "Neuland-API",
+				"campusLife": "Campus Life",
+				"map": "Campus-Karte"
+			}
 		}
 	},
 	"grades": {

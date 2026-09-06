@@ -1,0 +1,272 @@
+import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test'
+import { reactNativePlatform } from './react-native-mock'
+
+const {
+	buildSignature,
+	createPreviewSnapshot,
+	CRITICAL_GATUS_ENDPOINTS,
+	fetchCriticalServiceStatus,
+	isEndpointUnhealthy,
+	isStatusBannerPreview,
+	shouldClearDismissedSignature,
+	shouldShowServiceStatusBanner
+} = await import('../gatus-status')
+
+function probe(success: boolean, status = success ? 200 : 500) {
+	return {
+		status,
+		success,
+		timestamp: '2026-01-01T00:00:00Z'
+	}
+}
+
+function gatusJson(
+	key: string,
+	results: ReturnType<typeof probe>[],
+	name?: string
+) {
+	return {
+		name: name ?? key,
+		group: 'Neuland App',
+		key,
+		results
+	}
+}
+
+describe('isEndpointUnhealthy', () => {
+	it('returns false for empty results', () => {
+		expect(isEndpointUnhealthy([])).toBe(false)
+	})
+
+	it('returns false when latest probe succeeded', () => {
+		expect(isEndpointUnhealthy([probe(true), probe(false)])).toBe(false)
+	})
+
+	it('returns true for a single failed probe', () => {
+		expect(isEndpointUnhealthy([probe(false)])).toBe(true)
+	})
+
+	it('returns true when the last two probes failed', () => {
+		expect(isEndpointUnhealthy([probe(false), probe(false, 503)])).toBe(true)
+	})
+
+	it('returns false when only the latest failed (flap protection)', () => {
+		expect(isEndpointUnhealthy([probe(false), probe(true)])).toBe(false)
+	})
+})
+
+describe('buildSignature', () => {
+	it('sorts ids for a stable dismiss key', () => {
+		expect(buildSignature(['neuland', 'thi'])).toBe('neuland|thi')
+		expect(buildSignature(['thi', 'neuland'])).toBe('neuland|thi')
+	})
+
+	it('returns empty string for no outages', () => {
+		expect(buildSignature([])).toBe('')
+	})
+})
+
+describe('createPreviewSnapshot', () => {
+	it('marks requested services unhealthy', () => {
+		const snapshot = createPreviewSnapshot(['thi', 'map'])
+		expect(snapshot.signature).toBe('map|thi')
+		expect(snapshot.unhealthy.map((s) => s.id).sort()).toEqual(['map', 'thi'])
+		expect(snapshot.services.find((s) => s.id === 'neuland')?.healthy).toBe(
+			true
+		)
+	})
+
+	it('defaults to thi and neuland when no ids are passed', () => {
+		const snapshot = createPreviewSnapshot()
+		expect(snapshot.signature).toBe('neuland|thi')
+		expect(snapshot.services).toHaveLength(CRITICAL_GATUS_ENDPOINTS.length)
+	})
+})
+
+describe('shouldShowServiceStatusBanner', () => {
+	it('shows when there is an outage that was not dismissed', () => {
+		expect(shouldShowServiceStatusBanner(true, 'thi', null)).toBe(true)
+		expect(shouldShowServiceStatusBanner(true, 'thi', 'map')).toBe(true)
+	})
+
+	it('hides when dismissed for the current signature or healthy', () => {
+		expect(shouldShowServiceStatusBanner(true, 'thi', 'thi')).toBe(false)
+		expect(shouldShowServiceStatusBanner(false, '', null)).toBe(false)
+	})
+})
+
+describe('shouldClearDismissedSignature', () => {
+	it('clears only after a successful healthy fetch with a prior dismiss', () => {
+		expect(shouldClearDismissedSignature(true, false, 'thi')).toBe(true)
+		expect(shouldClearDismissedSignature(true, true, 'thi')).toBe(false)
+		expect(shouldClearDismissedSignature(false, false, 'thi')).toBe(false)
+		expect(shouldClearDismissedSignature(true, false, null)).toBe(false)
+	})
+})
+
+describe('isStatusBannerPreview', () => {
+	afterEach(() => {
+		delete process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW
+	})
+
+	it('is false by default and true when env is 1', () => {
+		delete process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW
+		expect(isStatusBannerPreview()).toBe(false)
+		process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW = '1'
+		expect(isStatusBannerPreview()).toBe(true)
+		process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW = '0'
+		expect(isStatusBannerPreview()).toBe(false)
+	})
+})
+
+describe('fetchCriticalServiceStatus', () => {
+	const originalFetch = globalThis.fetch
+
+	beforeEach(() => {
+		delete process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW
+		reactNativePlatform.OS = 'ios'
+	})
+
+	afterEach(() => {
+		globalThis.fetch = originalFetch
+		delete process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW
+		reactNativePlatform.OS = 'web'
+	})
+
+	it('returns the preview snapshot when preview mode is enabled', async () => {
+		process.env.EXPO_PUBLIC_STATUS_BANNER_PREVIEW = '1'
+		globalThis.fetch = mock(() => {
+			throw new Error('fetch should not run in preview mode')
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.signature).toBe('neuland|thi')
+		expect(snapshot.unhealthy).toHaveLength(2)
+	})
+
+	it('marks services healthy when all probes succeed', async () => {
+		globalThis.fetch = mock(async (input: RequestInfo | URL) => {
+			const url = String(input)
+			const endpoint = CRITICAL_GATUS_ENDPOINTS.find((e) => url.includes(e.key))
+			expect(endpoint).toBeDefined()
+			return new Response(
+				JSON.stringify(gatusJson(endpoint?.key ?? 'unknown', [probe(true)])),
+				{ status: 200 }
+			)
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.unhealthy).toEqual([])
+		expect(snapshot.signature).toBe('')
+		expect(snapshot.services.every((s) => s.healthy)).toBe(true)
+		expect(snapshot.services).toHaveLength(CRITICAL_GATUS_ENDPOINTS.length)
+	})
+
+	it('marks a service unhealthy after two failed probes', async () => {
+		globalThis.fetch = mock(async (input: RequestInfo | URL) => {
+			const url = String(input)
+			const endpoint = CRITICAL_GATUS_ENDPOINTS.find((e) => url.includes(e.key))
+			const unhealthy = endpoint?.id === 'thi'
+			return new Response(
+				JSON.stringify(
+					gatusJson(
+						endpoint?.key ?? 'unknown',
+						unhealthy ? [probe(false), probe(false)] : [probe(true)],
+						endpoint?.id === 'thi' ? 'THI-API' : undefined
+					)
+				),
+				{ status: 200 }
+			)
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.signature).toBe('thi')
+		expect(snapshot.unhealthy).toHaveLength(1)
+		expect(snapshot.unhealthy[0]).toMatchObject({
+			id: 'thi',
+			name: 'THI-API',
+			healthy: false
+		})
+	})
+
+	it('fails closed to healthy when Gatus returns a non-OK response', async () => {
+		globalThis.fetch = mock(async () => {
+			return new Response('nope', { status: 503 })
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.unhealthy).toEqual([])
+		expect(snapshot.services.every((s) => s.healthy)).toBe(true)
+	})
+
+	it('fails closed to healthy when fetch rejects', async () => {
+		globalThis.fetch = mock(async () => {
+			throw new Error('network down')
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.unhealthy).toEqual([])
+		expect(snapshot.services.every((s) => s.healthy)).toBe(true)
+	})
+
+	it('falls back to the endpoint id when Gatus omits a name', async () => {
+		globalThis.fetch = mock(async (input: RequestInfo | URL) => {
+			const url = String(input)
+			const endpoint = CRITICAL_GATUS_ENDPOINTS.find((e) => url.includes(e.key))
+			return new Response(
+				JSON.stringify({
+					name: '',
+					group: 'Neuland App',
+					key: endpoint?.key,
+					results: [probe(true)]
+				}),
+				{ status: 200 }
+			)
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.services.map((s) => s.name)).toEqual(
+			CRITICAL_GATUS_ENDPOINTS.map((e) => e.id)
+		)
+	})
+
+	it('sends a User-Agent on native and omits it on web', async () => {
+		const headersSeen: Array<Record<string, string> | undefined> = []
+
+		globalThis.fetch = mock(
+			async (_input: RequestInfo | URL, init?: RequestInit) => {
+				headersSeen.push(init?.headers as Record<string, string> | undefined)
+				return new Response(
+					JSON.stringify(gatusJson('x', [probe(true)], 'ok')),
+					{ status: 200 }
+				)
+			}
+		) as unknown as typeof fetch
+
+		reactNativePlatform.OS = 'ios'
+		await fetchCriticalServiceStatus()
+		expect(headersSeen[0]?.['User-Agent']).toContain('neuland.app-native/')
+
+		headersSeen.length = 0
+		reactNativePlatform.OS = 'web'
+		await fetchCriticalServiceStatus()
+		expect(headersSeen[0]?.['User-Agent']).toBeUndefined()
+		expect(headersSeen[0]?.Accept).toBe('application/json')
+	})
+
+	it('treats missing results as healthy', async () => {
+		globalThis.fetch = mock(async () => {
+			return new Response(
+				JSON.stringify({
+					name: 'THI-API',
+					group: 'Neuland App',
+					key: 'neuland-app_thi-api'
+				}),
+				{ status: 200 }
+			)
+		}) as unknown as typeof fetch
+
+		const snapshot = await fetchCriticalServiceStatus()
+		expect(snapshot.services.every((s) => s.healthy)).toBe(true)
+	})
+})

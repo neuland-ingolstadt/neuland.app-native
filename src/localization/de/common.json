@@ -29,7 +29,9 @@
 		"backToEventList": "Zurück zu {{type}}",
 		"network": {
 			"title": "Keine Internetverbindung",
-			"description": "Bitte überprüfe deine Internetverbindung."
+			"description": "Bitte überprüfe deine Internetverbindung.",
+			"outageTitle": "Dienst nicht verfügbar",
+			"outageDescription": "Ein Dienst ist aktuell nicht verfügbar."
 		},
 		"guest": {
 			"title": "Anmeldung erforderlich",

@@ -10,6 +10,7 @@ import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/announcement-card'
 import { DashboardContext } from '@/components/contexts'
 import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
+import ServiceStatusBannerContainer from '@/components/Dashboard/service-status-banner-container'
 import ErrorView from '@/components/Error/error-view'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import { HomeHeaderRight } from '@/components/Home/home-header-right'
@@ -108,6 +109,7 @@ const HomeScreen = memo(function HomeScreen() {
 	const listHeader = useMemo(
 		() => (
 			<View className={columns > 1 ? '-mx-1.5' : undefined}>
+				<ServiceStatusBannerContainer />
 				<RueWarningBannerContainer />
 				{announcementHeader}
 			</View>
