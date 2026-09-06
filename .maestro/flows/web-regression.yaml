@@ -85,8 +85,9 @@ tags:
     id: "map-search-result-B106"
 - assertVisible:
     id: "map-room-detail"
-- tapOn:
-    id: "map-room-detail-close"
+- assertVisible: "B106"
+# Room detail Close exposes accessibilityLabel ("Close"), which collides with
+# the floor-picker Close control — just leave via navigation.
 - openLink: "${WEB_URL}/food"
 - extendedWaitUntil:
     visible:
