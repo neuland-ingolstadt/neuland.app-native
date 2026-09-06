@@ -66,13 +66,15 @@ tags:
     start: "70%, 35%"
     end: "30%, 35%"
     duration: 700
-# On web, Maestro exposes accessibilityLabel as resource-id (not testID) for
-# the floor picker Pressables — "Floor picker" / floor labels like "0", "-1".
-- tapOn: "(Floor picker|Etagenauswahl)"
+# On web, Maestro maps accessibilityLabel → resource-id (not visible text).
+- tapOn:
+    id: "(Floor picker|Etagenauswahl)"
 - extendedWaitUntil:
-    visible: "-1"
+    visible:
+      id: "-1"
     timeout: 10000
-- tapOn: "-1"
+- tapOn:
+    id: "-1"
 - tapOn:
     id: "map-search-input"
 - inputText: "B106"
