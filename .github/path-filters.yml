@@ -11,6 +11,7 @@ web:
   - 'package.json'
   - 'bun.lock'
   - 'patches/**'
+  - '.maestro/**'
 
 android:
   - 'app.config.ts'
