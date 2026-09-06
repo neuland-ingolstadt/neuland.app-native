@@ -25,7 +25,8 @@ export default function HomeLayout(): React.JSX.Element {
 				options={{
 					title: t('navigation.dashboard'),
 					headerLargeTitle: Platform.OS === 'ios',
-					headerRight: () => <HomeHeaderRight />,
+					headerRight:
+						Platform.OS === 'ios' ? undefined : () => <HomeHeaderRight />,
 					headerLeft: Platform.OS === 'web' ? () => <HeaderLeft /> : undefined,
 					...transparentHeaderStyle
 				}}
