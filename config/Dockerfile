@@ -1,5 +1,5 @@
 # Base stage: Install dependencies and build the project using Bun
-FROM oven/bun:1@sha256:e10577f0db68676a7024391c6e5cb4b879ebd17188ab750cf10024a6d700e5c4 AS bun
+FROM oven/bun:1@sha256:5ff609364c049b54eb0ff560ec96319729a972078ef2c755d758f0c6ef89c2d6 AS bun
 WORKDIR /usr/src/app
 
 # Copy necessary files and install dependencies
@@ -8,7 +8,7 @@ COPY patches patches
 RUN bun install --ignore-scripts --freeze-lockfile
 
 # Build stage: Use a Node.js image for the build process
-FROM node:26@sha256:a9875b5ccb02aa527cf7f2297b16ae425a0ff3da2f7d87fce3df41f04ffa0524 AS build
+FROM node:26@sha256:f5d1cc40abc10c2843339a2134d07817cf33c405cb16bfd052b0ed790254c3a3 AS build
 WORKDIR /usr/src/app
 
 # Copy dependencies and project files
