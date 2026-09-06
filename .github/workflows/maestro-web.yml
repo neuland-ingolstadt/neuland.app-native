@@ -54,6 +54,7 @@ jobs:
         run: |
           curl -fsSL --retry 3 --retry-all-errors 'https://get.maestro.mobile.dev' | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.maestro/bin:$PATH"
           maestro --version
 
       - name: Export web bundle
