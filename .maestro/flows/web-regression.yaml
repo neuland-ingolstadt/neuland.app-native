@@ -33,18 +33,36 @@ tags:
     visible:
       id: "login-guest"
     timeout: 120000
+# Do not center: Maestro web treats the already-visible guest link as gone
+# after a centering scroll (100% visibility + centerElement).
 - scrollUntilVisible:
     element:
       id: "login-guest"
     direction: DOWN
     timeout: 15000
-    centerElement: true
+    visibilityPercentage: 40
+    centerElement: false
 - tapOn:
     id: "login-guest"
 - extendedWaitUntil:
     visible:
       id: "home-screen"
     timeout: 20000
+
+# Sidebar / tab navigation (guest)
+- tapOn: "(Calendar|Kalender)"
+- extendedWaitUntil:
+    visible:
+      id: "timetable-screen"
+    timeout: 15000
+- assertVisible: ".*(Sign in|Anmelden).*"
+- tapOn: "(Home|Startseite)"
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 10000
+
+# Map
 - openLink: "${WEB_URL}/map"
 - extendedWaitUntil:
     visible:
@@ -63,14 +81,15 @@ tags:
     start: "70%, 35%"
     end: "30%, 35%"
     duration: 700
+# On web, Maestro maps accessibilityLabel → resource-id (not visible text / testID).
 - tapOn:
-    id: "map-floor-picker"
+    id: "(Floor picker|Etagenauswahl)"
 - extendedWaitUntil:
     visible:
-      id: "map-floor-EG"
+      id: "-1"
     timeout: 10000
 - tapOn:
-    id: "map-floor-EG"
+    id: "-1"
 - tapOn:
     id: "map-search-input"
 - inputText: "B106"
@@ -81,8 +100,9 @@ tags:
     id: "map-search-result-B106"
 - assertVisible:
     id: "map-room-detail"
-- tapOn:
-    id: "map-room-detail-close"
+- assertVisible: "B106"
+
+# Food menu + meal detail
 - openLink: "${WEB_URL}/food"
 - extendedWaitUntil:
     visible:
@@ -99,11 +119,35 @@ tags:
           id: "food-day-1"
       - assertVisible:
           id: "food-day-1"
-- tapOn: "(Food Preferences|Essenspräferenzen)"
+- scrollUntilVisible:
+    element:
+      id: "food-meal-entry"
+    direction: DOWN
+    timeout: 15000
+    visibilityPercentage: 40
+    centerElement: false
+- tapOn:
+    id: "food-meal-entry"
+    index: 0
+# Animated.ScrollView testID is not exposed in Maestro's web tree.
+- extendedWaitUntil:
+    visible: ".*(Student|Guest|Gast|Employee|Mitarbeiter).*"
+    timeout: 15000
+- assertVisible:
+    id: "(Home, back|Startseite, zurück)"
+- openLink: "${WEB_URL}/food"
+- extendedWaitUntil:
+    visible:
+      id: "food-screen"
+    timeout: 15000
+- tapOn:
+    id: "(Food Preferences|Essenspräferenzen)"
 - extendedWaitUntil:
     visible:
       id: "multi-option-Reimanns"
     timeout: 10000
+
+# Settings + theme persistence (reload via openLink)
 - openLink: "${WEB_URL}/settings"
 - extendedWaitUntil:
     visible:
@@ -111,5 +155,23 @@ tags:
     timeout: 10000
 - assertVisible:
     id: "guest-login-banner"
+# FormList rows expose title as resource-id on web, not settings-theme-link.
+- openLink: "${WEB_URL}/theme"
+- extendedWaitUntil:
+    visible:
+      id: "theme-screen"
+    timeout: 10000
+- tapOn: "(Dark|Dunkel)"
+- assertVisible: "(Dark|Dunkel)"
+- openLink: "${WEB_URL}/theme"
+- extendedWaitUntil:
+    visible:
+      id: "theme-screen"
+    timeout: 10000
+- assertVisible: "(Dark|Dunkel)"
+- tapOn: "(Automatic|Automatisch)"
+- assertVisible: "(Automatic|Automatisch)"
+
+# 404
 - openLink: "${WEB_URL}/this-route-must-not-exist"
 - assertVisible: ".*(Not found|Nicht gefunden).*"
