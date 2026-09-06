@@ -33,12 +33,15 @@ tags:
     visible:
       id: "login-guest"
     timeout: 120000
+# Do not center: Maestro web treats the already-visible guest link as gone
+# after a centering scroll (100% visibility + centerElement).
 - scrollUntilVisible:
     element:
       id: "login-guest"
     direction: DOWN
     timeout: 15000
-    centerElement: true
+    visibilityPercentage: 40
+    centerElement: false
 - tapOn:
     id: "login-guest"
 - extendedWaitUntil:
