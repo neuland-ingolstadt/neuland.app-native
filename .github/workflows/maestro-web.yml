@@ -1,0 +1,100 @@
+name: Maestro web E2E
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  merge_group:
+    types: [checks_requested]
+
+concurrency:
+  group: maestro-web-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect web-related changes
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.detect.outputs.web }}
+      workflows: ${{ steps.detect.outputs.workflows }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Detect changes
+        uses: ./.github/actions/detect-changes
+        id: detect
+
+  maestro-web:
+    name: Maestro web regression
+    needs: changes
+    if: |
+      needs.changes.outputs.web == 'true' ||
+      needs.changes.outputs.workflows == 'true' ||
+      (github.event_name == 'pull_request' &&
+        contains(toJSON(github.event.pull_request.labels.*.name), '"e2e"'))
+    # macos avoids Chromium sandbox / user-namespace issues on ubuntu-latest
+    # (https://github.com/mobile-dev-inc/maestro/issues/2576). Still free for
+    # this public repository on standard GitHub-hosted runners.
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL --retry 3 --retry-all-errors 'https://get.maestro.mobile.dev' | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro --version
+
+      - name: Export web bundle
+        env:
+          EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+          EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+          EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+          EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          source config/ci/web-export-env.sh
+          bun run licences:bundle
+          bun maplibre:worker
+          npx expo export -p web -c
+
+      - name: Start static web server
+        run: |
+          bunx --bun serve dist -s -l 8081 > /tmp/maestro-web-server.log 2>&1 &
+          for _ in $(seq 1 60); do
+            if curl -fsS 'http://127.0.0.1:8081/' >/dev/null; then
+              echo 'Web server is ready'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Web server failed to become ready' >&2
+          cat /tmp/maestro-web-server.log >&2 || true
+          exit 1
+
+      - name: Run Maestro web E2E
+        run: bun e2e:web
+
+      - name: Upload Maestro artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-web-${{ github.run_id }}
+          path: |
+            ~/.maestro/tests
+            /tmp/maestro-web-server.log
+          if-no-files-found: ignore
+          retention-days: 14
+          include-hidden-files: true
