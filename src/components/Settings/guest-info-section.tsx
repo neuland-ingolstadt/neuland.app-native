@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function GuestInfoSection(): React.JSX.Element {
 	const { t } = useTranslation('settings')
@@ -13,8 +13,7 @@ export default function GuestInfoSection(): React.JSX.Element {
 	return (
 		<Pressable
 			testID="guest-login-banner"
-			className="bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md p-5 flex-row items-center justify-between gap-4 active:opacity-90"
-			style={hairlineBorder}
+			className="bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md p-5 flex-row items-center justify-between gap-4 active:opacity-90"
 			onPress={() => {
 				router.navigate('/login')
 			}}

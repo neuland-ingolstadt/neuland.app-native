@@ -109,3 +109,19 @@
 		}
 	}
 }
+
+@utility border-hairline {
+	border-width: hairlineWidth();
+}
+
+@utility border-b-hairline {
+	border-bottom-width: hairlineWidth();
+}
+
+@utility border-r-hairline {
+	border-right-width: hairlineWidth();
+}
+
+@utility h-hairline {
+	height: hairlineWidth();
+}

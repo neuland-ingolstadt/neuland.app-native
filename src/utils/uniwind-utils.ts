@@ -1,6 +1,4 @@
-import { type ColorValue, StyleSheet } from 'react-native'
-
-export const hairlineBorder = { borderWidth: StyleSheet.hairlineWidth }
+import type { ColorValue } from 'react-native'
 
 export const toColor = (
 	value: string | number | undefined

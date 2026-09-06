@@ -1,7 +1,6 @@
 import { Link, type RelativePathString } from 'expo-router'
 import type React from 'react'
 import { Pressable, Text, View } from 'react-native'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const RowEntry = ({
 	title,
@@ -25,11 +24,8 @@ const RowEntry = ({
 }): React.JSX.Element => {
 	const content = (
 		<View
-			className="rounded-mg bg-card border-border overflow-hidden px-3.5 py-4 w-full"
-			style={[
-				hairlineBorder,
-				backgroundColor ? { backgroundColor } : undefined
-			]}
+			className="rounded-mg bg-card border-hairline border-border overflow-hidden px-3.5 py-4 w-full"
+			style={backgroundColor ? { backgroundColor } : undefined}
 		>
 			<View className="flex-col rounded-md justify-center">
 				<View className="flex-row gap-1 pb-1.5">

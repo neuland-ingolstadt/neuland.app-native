@@ -5,7 +5,7 @@ import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import { primussLink } from '@/data/constants'
 import { useRueWarningStore } from '@/hooks/useRueWarningStore'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface RueWarningBannerProps {
 	eventId: string | undefined
@@ -26,8 +26,7 @@ export default function RueWarningBanner({
 
 	return (
 		<Pressable
-			className="bg-card border-border rounded-lg mx-page my-1.5 w-auto overflow-hidden"
-			style={hairlineBorder}
+			className="bg-card border-hairline border-border rounded-lg mx-page my-1.5 w-auto overflow-hidden"
 			onPress={() => Linking.openURL(primussLink)}
 		>
 			<View className="p-card">

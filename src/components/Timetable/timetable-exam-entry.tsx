@@ -8,7 +8,6 @@ import ColorBand from '@/components/Universal/color-band'
 import TimeDisplay from '@/components/Universal/time-display'
 import type { ExamEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 interface TimetableExamEntryProps {
 	exam: ExamEntry
@@ -36,10 +35,7 @@ export default function TimetableExamEntry({
 					color: Color(notificationColor).alpha(0.1).string()
 				}}
 			>
-				<View
-					className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
-					style={hairlineBorder}
-				>
+				<View className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-hairline border-border">
 					<ColorBand color={notificationColor} />
 					<View className="flex-1 p-3.5 relative">
 						<View className="flex-row justify-between items-start mb-2">

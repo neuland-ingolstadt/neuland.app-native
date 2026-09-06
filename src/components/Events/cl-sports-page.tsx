@@ -24,7 +24,6 @@ import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -155,8 +154,7 @@ export default function ClSportsPage({
 
 		return (
 			<Pressable
-				className="items-center bg-card border-border rounded-md justify-center p-2 px-4"
-				style={hairlineBorder}
+				className="items-center bg-card border-hairline border-border rounded-md justify-center p-2 px-4"
 				onPress={() => {
 					setSelectedLocation(location)
 					if (Platform.OS === 'ios') {

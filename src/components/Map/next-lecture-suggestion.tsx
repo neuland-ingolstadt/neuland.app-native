@@ -6,7 +6,7 @@ import { useCSSVariable } from 'uniwind'
 import { MapContext } from '@/contexts/map'
 import type { SelectMapElement } from '@/types/map'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import Divider from '../Universal/divider'
 import { NextLectureRow } from './next-lecture-row'
 
@@ -42,10 +42,7 @@ const NextLectureSuggestion = ({
 					{formatFriendlyDate(nextLecture[0].date)}
 				</Text>
 			</View>
-			<View
-				className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-border"
-				style={hairlineBorder}
-			>
+			<View className="bg-card ios:rounded-[18px] android:rounded-lg web:rounded-lg overflow-hidden border-hairline border-border">
 				{nextLecture.map((lecture, key) => (
 					<React.Fragment key={key}>
 						<NextLectureRow

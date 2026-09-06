@@ -16,7 +16,7 @@ import GoogleWalletDE from '@/assets/wallet/google_wallet_de.svg'
 import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
 import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface SecurityWarningModalProps {
 	visible: boolean
@@ -106,10 +106,7 @@ export function SecurityWarningModal({
 				className="flex-1 bg-black/70 justify-center items-center p-page"
 				onPress={handleCancel}
 			>
-				<Animated.View
-					className="bg-card rounded-lg max-w-[400px] w-full"
-					style={hairlineBorder}
-				>
+				<Animated.View className="bg-card rounded-lg max-w-[400px] w-full border-hairline border-border">
 					<Pressable accessible={false} onPress={() => {}} className="p-6">
 						<View className="items-center mb-4">
 							<PlatformIcon

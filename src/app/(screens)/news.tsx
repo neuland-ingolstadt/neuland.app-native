@@ -21,7 +21,7 @@ import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { breakpoints } from '@/styles/breakpoints'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 export default function NewsScreen(): React.JSX.Element {
 	const labelColor = toColor(useCSSVariable('--color-label'))
@@ -83,8 +83,7 @@ export default function NewsScreen(): React.JSX.Element {
 								{formatFriendlyDate(item.date)}
 							</Text>
 							<Pressable
-								className="self-center bg-card border-border rounded-md justify-center w-full"
-								style={hairlineBorder}
+								className="self-center bg-card border-hairline border-border rounded-md justify-center w-full"
 								onPress={() => {
 									void Linking.openURL(item.href)
 								}}

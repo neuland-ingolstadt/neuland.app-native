@@ -2,7 +2,6 @@ import * as Haptics from 'expo-haptics'
 import { memo, useCallback } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import type { Food } from '@/types/neuland-api'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 interface FoodDayButtonProps {
 	day: Food
@@ -49,10 +48,7 @@ export const FoodDayButton = memo(
 					accessibilityState={{ selected: isSelected }}
 					onPress={handlePress}
 				>
-					<View
-						className="items-center self-center bg-card rounded-md border-border h-[60px] justify-evenly py-2 w-full"
-						style={hairlineBorder}
-					>
+					<View className="items-center self-center bg-card rounded-md border-hairline border-border h-[60px] justify-evenly py-2 w-full">
 						<Text
 							className={`text-[15px] ${
 								isSelected

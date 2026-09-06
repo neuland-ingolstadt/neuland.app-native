@@ -1,7 +1,6 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const ToggleRow = ({
 	items,
@@ -36,10 +35,7 @@ const ToggleRow = ({
 								pressHandler(index)
 							}}
 						>
-							<View
-								className="items-center self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-page py-2.5 w-full"
-								style={hairlineBorder}
-							>
+							<View className="items-center self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden px-page py-2.5 w-full">
 								<Text
 									className={
 										isSelected

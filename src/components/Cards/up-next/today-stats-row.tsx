@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PulsingDot from '@/components/Universal/pulsing-dot'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import type { TodayStats } from '@/utils/up-next-utils'
 
 interface TodayStatsRowProps {
@@ -55,8 +55,7 @@ export default function TodayStatsRow({
 						) : (
 							<View
 								key={index}
-								className="w-2 h-2 rounded-sm bg-soon-dot border-label"
-								style={hairlineBorder}
+								className="w-2 h-2 rounded-sm bg-soon-dot border-hairline border-label"
 							/>
 						)
 					)}

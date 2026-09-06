@@ -8,7 +8,7 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface MapSearchBarProps {
 	value: string
@@ -29,9 +29,6 @@ export const MapSearchBar = ({
 }: MapSearchBarProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const labelColor = toColor(useCSSVariable('--color-label'))
-	const borderColor = String(
-		toColor(useCSSVariable('--color-border')) ?? '#d8d8d8'
-	)
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const cancelWidth = useSharedValue(0)
 	const cancelOpacity = useSharedValue(0)
@@ -66,10 +63,8 @@ export const MapSearchBar = ({
 			<TextInput
 				testID="map-search-input"
 				ref={inputRef}
-				className="bg-card rounded-mg flex-1 text-[17px] h-11 mb-2.5 px-2.5"
+				className="bg-card rounded-mg flex-1 text-[17px] h-11 mb-2.5 px-2.5 border-hairline border-border"
 				style={{
-					...hairlineBorder,
-					borderColor,
 					color: textColor
 				}}
 				placeholder={t('pages.map.search.hint')}

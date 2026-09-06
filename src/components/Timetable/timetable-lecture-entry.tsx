@@ -7,7 +7,6 @@ import ColorBand from '@/components/Universal/color-band'
 import TimeDisplay from '@/components/Universal/time-display'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 interface TimetableLectureEntryProps {
 	item: FriendlyTimetableEntry
@@ -39,10 +38,7 @@ export default function TimetableLectureEntry({
 					color: Color(primaryColor).alpha(0.1).string()
 				}}
 			>
-				<View
-					className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-border"
-					style={hairlineBorder}
-				>
+				<View className="flex-row bg-card rounded-md overflow-hidden min-h-[70px] border-hairline border-border">
 					<ColorBand color={primaryColor} />
 					<View className="flex-1 p-3.5 relative">
 						<View className="flex-row justify-between items-start mb-2">

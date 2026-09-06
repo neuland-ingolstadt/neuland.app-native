@@ -25,7 +25,6 @@ import {
 } from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 import { IDCard } from './id-card'
 import {
 	OfficePresenceSection,
@@ -228,8 +227,7 @@ export function LoggedInView(): React.JSX.Element {
 
 			<Pressable
 				onPress={logoutAlert}
-				className="items-center self-center bg-card rounded-mg border-border flex-row gap-2.5 justify-center my-[30px] min-w-[165px] px-10 py-3"
-				style={hairlineBorder}
+				className="items-center self-center bg-card rounded-mg border-hairline border-border flex-row gap-2.5 justify-center my-[30px] min-w-[165px] px-10 py-3"
 			>
 				<PlatformIcon
 					ios={{

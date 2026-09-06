@@ -4,7 +4,7 @@ import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 
 interface InfoBoxProps {
 	title: string
@@ -31,10 +31,7 @@ const InfoBox = ({
 
 	return (
 		<Link href={href} asChild>
-			<Pressable
-				className="w-full items-center bg-card border-border ios:rounded-ios android:rounded-md web:rounded-md justify-center p-4 min-h-20 active:opacity-90"
-				style={hairlineBorder}
-			>
+			<Pressable className="w-full items-center bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md justify-center p-4 min-h-20 active:opacity-90">
 				<View className="items-center justify-center mb-2">
 					<PlatformIcon
 						ios={{

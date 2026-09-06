@@ -5,7 +5,7 @@ import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import Divider from '@/components/Universal/divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { copyToClipboard } from '@/utils/ui-utils'
-import { hairlineBorder, toColor } from '@/utils/uniwind-utils'
+import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
 interface FormListProps {
@@ -30,13 +30,13 @@ interface RenderSectionItemProps {
 
 const blockCardClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
-		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden'
 
 const itemSectionClassName = (sheet: boolean): string =>
 	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
-		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden px-4 py-[13px]'
+		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden px-4 py-[13px]'
+		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden px-4 py-[13px]'
 
 const handlePress = (onPress?: () => Promise<void> | void): void => {
 	if (onPress != null) {
@@ -75,7 +75,7 @@ const RenderSectionItem = ({
 }: RenderSectionItemProps): React.JSX.Element => {
 	return (
 		<View key={sectionIndex} className="gap-1.5">
-			<View className={itemSectionClassName(sheet)} style={hairlineBorder}>
+			<View className={itemSectionClassName(sheet)}>
 				{typeof section.item === 'string' ? (
 					<Text className="text-text text-base pt-0.5 text-left">
 						{section.item}
@@ -177,7 +177,7 @@ const RenderSectionItems = ({
 	}
 
 	return (
-		<View className={blockCardClassName(sheet)} style={hairlineBorder}>
+		<View className={blockCardClassName(sheet)}>
 			{items.map((item, index) => {
 				const defaultLabel = getDefaultAccessibilityLabel(item)
 				const rowPressable = isRowPressable(item)

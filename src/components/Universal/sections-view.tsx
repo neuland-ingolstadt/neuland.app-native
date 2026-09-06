@@ -1,6 +1,5 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
-import { hairlineBorder } from '@/utils/uniwind-utils'
 
 const SectionView = ({
 	title,
@@ -27,9 +26,8 @@ const SectionView = ({
 					className={
 						hideBackground
 							? 'self-center justify-center mt-0.5 w-full bg-transparent border-transparent'
-							: 'self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-border overflow-hidden justify-center mt-0.5 w-full'
+							: 'self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden justify-center mt-0.5 w-full'
 					}
-					style={hideBackground ? undefined : hairlineBorder}
 				>
 					{children}
 				</View>
