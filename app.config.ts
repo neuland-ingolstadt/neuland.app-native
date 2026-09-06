@@ -254,7 +254,6 @@ export default {
 		'./config/plugins/withIosCiArtifacts.js',
 		'./config/plugins/withCiScriptsSymlink.js',
 		'./config/plugins/withGradleJvmArgs.js',
-		'./config/plugins/withXcode26FmtWorkaround.js',
 		[
 			'expo-font',
 			{
