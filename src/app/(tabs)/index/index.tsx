@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Platform, View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
@@ -13,33 +13,15 @@ import { DashboardContext } from '@/components/contexts'
 import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
 import ServiceStatusBannerContainer from '@/components/Dashboard/service-status-banner-container'
 import ErrorView from '@/components/Error/error-view'
-import LogoSVG from '@/components/Flow/svgs/logo'
-import { HomeHeaderRight } from '@/components/Home/home-header-right'
 import { FlashList } from '@/components/Universal/styled'
-import WorkaroundStack from '@/components/Universal/workaround-stack'
-
-export const unstable_settings = {
-	initialRouteName: '/'
-}
 
 const DASHBOARD_MASONRY_BREAKPOINT = 800
 
 const getDashboardColumnCount = (width: number): number =>
 	Math.floor(width < DASHBOARD_MASONRY_BREAKPOINT ? 1 : 2)
 
-const HeaderLeft = () => {
-	return (
-		<View className="pl-4 pr-2">
-			<LogoSVG size={24} />
-		</View>
-	)
-}
 export default function HomeRootScreen(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'common'])
-	const [isPageOpen, setIsPageOpen] = useState(false)
-	useEffect(() => {
-		setIsPageOpen(true)
-	}, [])
 
 	return (
 		<>
@@ -52,16 +34,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-
-			<WorkaroundStack
-				name={'index'}
-				titleKey={'navigation.dashboard'}
-				component={isPageOpen ? HomeScreen : () => <></>}
-				largeTitle={true}
-				androidFallback
-				headerRightElement={HomeHeaderRight}
-				headerLeftElement={Platform.OS === 'web' ? HeaderLeft : undefined}
-			/>
+			<HomeScreen />
 		</>
 	)
 }
@@ -144,7 +117,6 @@ function HomeScreen(): React.JSX.Element {
 			testID="home-screen"
 			key={orientation}
 			contentInsetAdjustmentBehavior="automatic"
-			contentInset={{ top: 0, bottom: 90 }}
 			contentContainerClassName={
 				columns > 1 ? 'px-1.5 pt-1.5 bg-background' : 'pt-1.5 bg-background'
 			}
