@@ -1,18 +1,14 @@
 import { Link } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
 
-export const HomeHeaderRight = (): React.JSX.Element | undefined => {
+export const HomeHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['accessibility'])
 	const textColor = toColor(useCSSVariable('--color-text'))
-
-	if (Platform.OS === 'ios') {
-		return undefined
-	}
 
 	return (
 		<Link asChild href="/dashboard">
