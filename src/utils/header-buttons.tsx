@@ -1,4 +1,3 @@
-import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 import { router } from 'expo-router'
 import { Platform } from 'react-native'
 import {
@@ -22,7 +21,7 @@ interface HeaderButtonOptions {
 export function getPlatformHeaderButtons({
 	onShare,
 	noShare = false
-}: HeaderButtonOptions): NativeStackNavigationOptions {
+}: HeaderButtonOptions) {
 	if (Platform.OS === 'ios') {
 		if (!isIos26OrLater()) {
 			return {
@@ -42,7 +41,7 @@ export function getPlatformHeaderButtons({
 				onShare && !noShare
 					? () => [
 							{
-								type: 'custom',
+								type: 'custom' as const,
 								hidesSharedBackground: true,
 								element: (
 									<IosGlassHeaderButton
@@ -56,7 +55,7 @@ export function getPlatformHeaderButtons({
 					: undefined,
 			unstable_headerRightItems: () => [
 				{
-					type: 'custom',
+					type: 'custom' as const,
 					hidesSharedBackground: true,
 					element: (
 						<IosGlassHeaderButton

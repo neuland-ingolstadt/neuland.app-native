@@ -41,7 +41,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Analytics         | `@aptabase/react-native` — privacy-first, opt-in, self-hosted at `analytics.neuland.app` |
 | Maps              | `@maplibre/maplibre-react-native` (native) + `maplibre-gl` / `@vis.gl/react-maplibre` (web) |
 | Toasts / dialogs  | `burnt` for toasts / inline alerts (`Toaster` registered globally in `provider.tsx`) |
-| Tabs / sheets     | Expo Router native tabs (iOS), `@bottom-tabs/react-navigation` (Android), Expo Router tabs (web), `@swmansion/react-native-bottom-sheet` (web fallback in `src/components/Universal/bottom-sheet.web.tsx`) |
+| Tabs / sheets     | Expo Router native tabs (iOS and Android), Expo Router tabs (web), `@swmansion/react-native-bottom-sheet` (web fallback in `src/components/Universal/bottom-sheet.web.tsx`) |
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
@@ -167,7 +167,7 @@ src/
 ├── components/           # Reusable UI grouped by feature
 │   ├── Cards/                  # Dashboard cards
 │   ├── Universal/              # Cross-feature primitives (Icon, FormList, …)
-│   ├── Layout/                 # Navigators (native-bottom-tabs.tsx, tab-bar.tsx)
+│   ├── Layout/                 # Navigators (tab-bar.tsx, tab-bar.web.tsx)
 │   ├── Timetable/, Food/, Map/, Settings/, Member/, Calendar/, …
 │   ├── contexts.ts             # React Contexts (UserKind, Dashboard)
 │   └── provider.tsx            # Global Provider tree
@@ -228,13 +228,10 @@ Generated and binary files:
 
 - The `(tabs)` group is platform-specific. Always check the file that matches the
   platform you are changing:
-  - iOS / default: `src/components/Layout/tab-bar.tsx` uses
+  - iOS and Android: `src/components/Layout/tab-bar.tsx` uses
     `expo-router/unstable-native-tabs`.
-  - Android: `src/components/Layout/tab-bar.android.tsx` uses the
-    `@bottom-tabs/react-navigation` wrapper from
-    `src/components/Layout/native-bottom-tabs.tsx`.
   - Web: `src/components/Layout/tab-bar.web.tsx` uses Expo Router's regular JS tabs.
-- When adding or removing a tab, keep all three implementations in sync unless the UX is
+- When adding or removing a tab, keep the native and web implementations in sync unless the UX is
   intentionally platform-specific. Native tab options differ between these runtimes; copy
   the closest existing tab instead of mixing option shapes.
 
@@ -606,8 +603,8 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
 - **Don't add new top-level folders** under `src/` without a strong reason — match the
   existing layout.
 - **Don't bump dependencies casually.** Native modules (`react-native-mmkv`, MapLibre,
-  `react-native-bottom-tabs`, Reanimated, etc.) are pinned because of native build
-  compatibility. Run `bun pkgs` (which calls `expo install --check`) when in doubt.
+  Reanimated, etc.) are pinned because of native build compatibility. Run `bun pkgs`
+  (which calls `expo install --check`) when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, `bun uniwind:types` for `src/uniwind-types.d.ts`,
   and `bun changelog` for `CHANGELOG.md`.
@@ -628,8 +625,8 @@ gitignored; run `bun prebuild:ios` and change `app.config.ts`, config plugins, o
 - **Don't use React Native's `ToastAndroid`.** Use `burnt`'s `toast(...)` /
   `alert(...)` for toast-like UI. Keep existing `Alert.alert` confirmation dialogs when
   they match the surrounding native flow.
-- **Don't assume tabs have one shared implementation.** Update the iOS/default,
-  Android, and web tab layouts together unless a platform-specific difference is
+- **Don't assume tabs have one shared implementation.** Update the native
+  (`tab-bar.tsx`) and web tab layouts together unless a platform-specific difference is
   intentional.
 
 ---

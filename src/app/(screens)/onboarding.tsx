@@ -374,12 +374,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 				}}
 			>
 				<View className="flex-1 justify-center items-center">
-					<Animated.View
-						style={{
-							...logoAnimatedStyle,
-							...logoFadeOutAnimatedStyle
-						}}
-					>
+					<Animated.View style={[logoAnimatedStyle, logoFadeOutAnimatedStyle]}>
 						<LogoSVG size={160} />
 					</Animated.View>
 
