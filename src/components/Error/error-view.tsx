@@ -27,6 +27,28 @@ import { matchesServiceOutage, type ServiceStatus } from '@/utils/gatus-status'
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
+interface ErrorIconProp {
+	ios: string
+	android: MaterialIcon
+	web: LucideIcon
+	multiColor?: boolean
+}
+
+interface ErrorViewProps {
+	title: string
+	message?: string
+	icon?: ErrorIconProp
+	buttonText?: string
+	onButtonPress?: () => void
+	onRefresh?: () => unknown
+	refreshing?: boolean
+	showPullLabel?: boolean
+	inModal?: boolean
+	isCritical?: boolean
+	/** Only upgrade networkError when one of these Gatus services is down. */
+	statusServices?: ServiceStatus | readonly ServiceStatus[]
+}
+
 function handleErrorButtonPress(
 	errorTitle: string,
 	onButtonPress?: () => void
@@ -39,6 +61,126 @@ function handleErrorButtonPress(
 	if (onButtonPress != null) {
 		onButtonPress()
 	}
+}
+
+function isAuthError(title: string): boolean {
+	return title === guestError || title === notLoggedInError
+}
+
+function isTrackedError(title: string, isCritical: boolean): boolean {
+	const isKnown =
+		title === networkError ||
+		title === guestError ||
+		title === notLoggedInError ||
+		title === permissionError
+	return !isKnown && isCritical
+}
+
+function getErrorIcons(
+	title: string,
+	isConfirmedOutage: boolean,
+	icon?: ErrorIconProp
+): { ios: string; android: MaterialIcon; web: LucideIcon } {
+	if (isConfirmedOutage) {
+		return {
+			ios: 'personalhotspot.slash',
+			android: 'cloud_off',
+			web: 'CloudOff'
+		}
+	}
+
+	switch (title) {
+		case networkError:
+			return {
+				ios: 'wifi.slash',
+				android: 'wifi_off',
+				web: icon?.web ?? 'TriangleAlert'
+			}
+		case guestError:
+		case notLoggedInError:
+			return {
+				ios: 'person.crop.circle.badge.questionmark',
+				android: 'person_cancel',
+				web: icon?.web ?? 'TriangleAlert'
+			}
+		case permissionError:
+			return {
+				ios: 'person.crop.circle.badge.exclamationmark',
+				android: 'person_alert',
+				web: icon?.web ?? 'TriangleAlert'
+			}
+		default:
+			return {
+				ios: icon?.ios ?? 'exclamationmark.triangle.fill',
+				android: icon?.android ?? 'error',
+				web: icon?.web ?? 'TriangleAlert'
+			}
+	}
+}
+
+interface ErrorDetailsProps {
+	title: string
+	message?: string
+	icon?: ErrorIconProp
+	isConfirmedOutage: boolean
+}
+
+function ErrorDetails({
+	title,
+	message,
+	icon,
+	isConfirmedOutage
+}: ErrorDetailsProps): React.JSX.Element {
+	const { t } = useTranslation('common')
+	const icons = getErrorIcons(title, isConfirmedOutage, icon)
+
+	let heading = title
+	let body = message ?? t('error.description')
+
+	if (isConfirmedOutage) {
+		heading = t('error.network.outageTitle')
+		body = t('error.network.outageDescription')
+	} else if (title === networkError) {
+		heading = t('error.network.title')
+		body = t('error.network.description')
+	} else if (title === guestError) {
+		heading = t('error.guest.title')
+		body = t('error.guest.description')
+	} else if (title === notLoggedInError) {
+		heading = t('error.notLoggedIn.title')
+		body = t('error.notLoggedIn.description')
+	} else if (title === permissionError) {
+		heading = t('error.permission.title')
+		body = t('error.permission.description')
+	}
+
+	return (
+		<View className="items-center gap-5">
+			<PlatformIcon
+				ios={{
+					name: icons.ios,
+					size: 50,
+					...((icon?.multiColor ?? false)
+						? { renderMode: 'multicolor', variableValue: 1 }
+						: {})
+				}}
+				android={{
+					name: icons.android,
+					size: 64
+				}}
+				web={{
+					name: icons.web,
+					size: 64
+				}}
+			/>
+			<Text className="my-2 text-center text-xl font-bold text-text" selectable>
+				{heading.slice(0, 150)}
+			</Text>
+			<Text className="mt-3 text-center text-base font-medium text-text">
+				{body}
+			</Text>
+		</View>
+	)
 }
 
 interface ErrorActionButtonProps {
@@ -67,26 +209,19 @@ function ErrorActionButton({
 			},
 			text: t('error.crash.status')
 		}
-	} else if (title === guestError || title === notLoggedInError) {
+	} else if (isAuthError(title)) {
 		buttonProps = {
 			onPress: () => {
 				router.navigate('/login')
 			},
 			text: t('error.guest.button')
 		}
-	} else if (onButtonPress != null && buttonText === undefined) {
+	} else if (onButtonPress != null) {
 		buttonProps = {
 			onPress: () => {
 				handleErrorButtonPress(title, onButtonPress)
 			},
-			text: t('error.button')
-		}
-	} else if (onButtonPress != null && buttonText !== undefined) {
-		buttonProps = {
-			onPress: () => {
-				handleErrorButtonPress(title, onButtonPress)
-			},
-			text: buttonText
+			text: buttonText ?? t('error.button')
 		}
 	}
 
@@ -120,25 +255,7 @@ export default function ErrorView({
 	inModal = false,
 	isCritical = true,
 	statusServices
-}: {
-	title: string
-	message?: string
-	icon?: {
-		ios: string
-		android: MaterialIcon
-		web: LucideIcon
-		multiColor?: boolean
-	}
-	buttonText?: string
-	onButtonPress?: () => void
-	onRefresh?: () => unknown
-	refreshing?: boolean
-	showPullLabel?: boolean
-	inModal?: boolean
-	isCritical?: boolean
-	/** Only upgrade networkError when one of these Gatus services is down. */
-	statusServices?: ServiceStatus | readonly ServiceStatus[]
-}): React.JSX.Element {
+}: ErrorViewProps): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const path = usePathname()
 	const analyticsInitialized = useSessionStore(
@@ -148,50 +265,10 @@ export default function ErrorView({
 	const isConfirmedOutage =
 		title === networkError &&
 		matchesServiceOutage(isServiceDown, statusServices)
-
-	const getIconIos = (): string => {
-		if (isConfirmedOutage) {
-			return 'personalhotspot.slash'
-		}
-		switch (title) {
-			case networkError:
-				return 'wifi.slash'
-			case guestError:
-			case notLoggedInError:
-				return 'person.crop.circle.badge.questionmark'
-			case permissionError:
-				return 'person.crop.circle.badge.exclamationmark'
-			default:
-				return icon !== undefined ? icon.ios : 'exclamationmark.triangle.fill'
-		}
-	}
-
-	const getIconAndroid = (): MaterialIcon => {
-		if (isConfirmedOutage) {
-			return 'cloud_off'
-		}
-		switch (title) {
-			case networkError:
-				return 'wifi_off'
-			case guestError:
-			case notLoggedInError:
-				return 'person_cancel'
-			case permissionError:
-				return 'person_alert'
-			default:
-				return icon !== undefined ? icon.android : 'error'
-		}
-	}
-
-	const shouldTrack =
-		!(
-			networkError === title ||
-			guestError === title ||
-			notLoggedInError === title ||
-			permissionError === title
-		) && isCritical
-
+	const shouldTrack = isTrackedError(title, isCritical)
 	const showBox = !inModal && shouldTrack
+	const showRefresh = refreshing != null && !isAuthError(title)
+	const showPullHint = showRefresh || showPullLabel === true
 
 	useEffect(() => {
 		if (!analyticsInitialized || !shouldTrack) return
@@ -202,45 +279,6 @@ export default function ErrorView({
 		})
 	}, [analyticsInitialized, shouldTrack, title, path])
 
-	const getTitle = (): string => {
-		if (isConfirmedOutage) {
-			return t('error.network.outageTitle')
-		}
-		switch (title) {
-			case networkError:
-				return t('error.network.title')
-			case guestError:
-				return t('error.guest.title')
-			case notLoggedInError:
-				return t('error.notLoggedIn.title')
-			case permissionError:
-				return t('error.permission.title')
-			default:
-				return title
-		}
-	}
-
-	const getMessage = (): string => {
-		if (isConfirmedOutage) {
-			return t('error.network.outageDescription')
-		}
-		switch (title) {
-			case networkError:
-				return t('error.network.description')
-			case guestError:
-				return t('error.guest.description')
-			case permissionError:
-				return t('error.permission.description')
-			case notLoggedInError:
-				return t('error.notLoggedIn.description')
-			default:
-				if (message != null) {
-					return message
-				}
-				return t('error.description')
-		}
-	}
-
 	const scrollContentClassName = inModal
 		? 'flex-1 px-[25px] pb-[25px] bg-card rounded-ios pt-[25px]'
 		: `flex-1 px-[25px] ${Platform.OS === 'ios' ? 'pb-[50px]' : ''}`
@@ -248,9 +286,7 @@ export default function ErrorView({
 	return (
 		<ScrollView
 			refreshControl={
-				refreshing != null &&
-				title !== guestError &&
-				title !== notLoggedInError ? (
+				showRefresh ? (
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				) : undefined
 			}
@@ -261,37 +297,12 @@ export default function ErrorView({
 				entering={FadeIn.duration(400)}
 				className="flex-1 items-center justify-evenly gap-3 p-5"
 			>
-				<View className="items-center gap-5">
-					<PlatformIcon
-						ios={{
-							name: getIconIos(),
-							size: 50,
-							...((icon?.multiColor ?? false)
-								? { renderMode: 'multicolor', variableValue: 1 }
-								: {})
-						}}
-						android={{
-							name: getIconAndroid(),
-							size: 64
-						}}
-						web={{
-							name: isConfirmedOutage
-								? 'CloudOff'
-								: (icon?.web ?? 'TriangleAlert'),
-							size: 64
-						}}
-					/>
-					<Text
-						className="my-2 text-center text-xl font-bold text-text"
-						selectable
-					>
-						{getTitle().slice(0, 150)}
-					</Text>
-					<Text className="mt-3 text-center text-base font-medium text-text">
-						{getMessage()}
-					</Text>
-				</View>
-
+				<ErrorDetails
+					title={title}
+					message={message}
+					icon={icon}
+					isConfirmedOutage={isConfirmedOutage}
+				/>
 				<ErrorActionButton
 					title={title}
 					buttonText={buttonText}
@@ -299,10 +310,7 @@ export default function ErrorView({
 					inModal={inModal}
 					isConfirmedOutage={isConfirmedOutage}
 				/>
-				{(refreshing != null &&
-					title !== guestError &&
-					title !== notLoggedInError) ||
-				showPullLabel === true ? (
+				{showPullHint ? (
 					<Text className="mt-4 text-center text-base font-semibold text-text">
 						{t('error.pull')}
 					</Text>
