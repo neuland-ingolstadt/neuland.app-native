@@ -8,15 +8,22 @@ const {
 	fetchCriticalServiceStatus,
 	isEndpointUnhealthy,
 	isStatusBannerPreview,
+	matchesServiceOutage,
+	ServiceStatus,
 	shouldClearDismissedSignature,
-	shouldShowServiceStatusBanner
+	shouldShowServiceStatusBanner,
+	sortProbesNewestFirst
 } = await import('../gatus-status')
 
-function probe(success: boolean, status = success ? 200 : 500) {
+function probe(
+	success: boolean,
+	status = success ? 200 : 500,
+	timestamp = '2026-01-01T00:00:00Z'
+) {
 	return {
 		status,
 		success,
-		timestamp: '2026-01-01T00:00:00Z'
+		timestamp
 	}
 }
 
@@ -53,12 +60,78 @@ describe('isEndpointUnhealthy', () => {
 	it('returns false when only the latest failed (flap protection)', () => {
 		expect(isEndpointUnhealthy([probe(false), probe(true)])).toBe(false)
 	})
+
+	it('uses newest probe by timestamp regardless of array order', () => {
+		// Oldest-first (as returned by live Gatus): newest failed, previous ok → flap
+		expect(
+			isEndpointUnhealthy([
+				probe(true, 200, '2026-01-01T00:00:00Z'),
+				probe(false, 500, '2026-01-01T00:01:00Z')
+			])
+		).toBe(false)
+		// Newest-first: both failed → unhealthy
+		expect(
+			isEndpointUnhealthy([
+				probe(false, 500, '2026-01-01T00:01:00Z'),
+				probe(false, 503, '2026-01-01T00:00:00Z')
+			])
+		).toBe(true)
+		// Oldest-first recovery: newest ok → healthy
+		expect(
+			isEndpointUnhealthy([
+				probe(false, 500, '2026-01-01T00:00:00Z'),
+				probe(true, 200, '2026-01-01T00:01:00Z')
+			])
+		).toBe(false)
+	})
+})
+
+describe('sortProbesNewestFirst', () => {
+	it('orders by timestamp descending', () => {
+		const sorted = sortProbesNewestFirst([
+			probe(true, 200, '2026-01-01T00:00:00Z'),
+			probe(false, 500, '2026-01-01T00:02:00Z'),
+			probe(true, 200, '2026-01-01T00:01:00Z')
+		])
+		expect(sorted.map((p) => p.timestamp)).toEqual([
+			'2026-01-01T00:02:00Z',
+			'2026-01-01T00:01:00Z',
+			'2026-01-01T00:00:00Z'
+		])
+	})
+})
+
+describe('matchesServiceOutage', () => {
+	const isDown = (id: (typeof ServiceStatus)[keyof typeof ServiceStatus]) =>
+		id === ServiceStatus.Map
+
+	it('returns false when no services are provided', () => {
+		expect(matchesServiceOutage(isDown, undefined)).toBe(false)
+	})
+
+	it('matches a single related service', () => {
+		expect(matchesServiceOutage(isDown, ServiceStatus.Map)).toBe(true)
+		expect(matchesServiceOutage(isDown, ServiceStatus.Thi)).toBe(false)
+	})
+
+	it('matches when any related service is down', () => {
+		expect(
+			matchesServiceOutage(isDown, [ServiceStatus.Thi, ServiceStatus.Map])
+		).toBe(true)
+		expect(
+			matchesServiceOutage(isDown, [ServiceStatus.Thi, ServiceStatus.Neuland])
+		).toBe(false)
+	})
 })
 
 describe('buildSignature', () => {
 	it('sorts ids for a stable dismiss key', () => {
-		expect(buildSignature(['neuland', 'thi'])).toBe('neuland|thi')
-		expect(buildSignature(['thi', 'neuland'])).toBe('neuland|thi')
+		expect(buildSignature([ServiceStatus.Neuland, ServiceStatus.Thi])).toBe(
+			'neuland|thi'
+		)
+		expect(buildSignature([ServiceStatus.Thi, ServiceStatus.Neuland])).toBe(
+			'neuland|thi'
+		)
 	})
 
 	it('returns empty string for no outages', () => {
@@ -68,12 +141,18 @@ describe('buildSignature', () => {
 
 describe('createPreviewSnapshot', () => {
 	it('marks requested services unhealthy', () => {
-		const snapshot = createPreviewSnapshot(['thi', 'map'])
+		const snapshot = createPreviewSnapshot([
+			ServiceStatus.Thi,
+			ServiceStatus.Map
+		])
 		expect(snapshot.signature).toBe('map|thi')
-		expect(snapshot.unhealthy.map((s) => s.id).sort()).toEqual(['map', 'thi'])
-		expect(snapshot.services.find((s) => s.id === 'neuland')?.healthy).toBe(
-			true
-		)
+		expect(snapshot.unhealthy.map((s) => s.id).sort()).toEqual([
+			ServiceStatus.Map,
+			ServiceStatus.Thi
+		])
+		expect(
+			snapshot.services.find((s) => s.id === ServiceStatus.Neuland)?.healthy
+		).toBe(true)
 	})
 
 	it('defaults to thi and neuland when no ids are passed', () => {
@@ -166,13 +245,13 @@ describe('fetchCriticalServiceStatus', () => {
 		globalThis.fetch = mock(async (input: RequestInfo | URL) => {
 			const url = String(input)
 			const endpoint = CRITICAL_GATUS_ENDPOINTS.find((e) => url.includes(e.key))
-			const unhealthy = endpoint?.id === 'thi'
+			const unhealthy = endpoint?.id === ServiceStatus.Thi
 			return new Response(
 				JSON.stringify(
 					gatusJson(
 						endpoint?.key ?? 'unknown',
 						unhealthy ? [probe(false), probe(false)] : [probe(true)],
-						endpoint?.id === 'thi' ? 'THI-API' : undefined
+						endpoint?.id === ServiceStatus.Thi ? 'THI-API' : undefined
 					)
 				),
 				{ status: 200 }
@@ -183,7 +262,7 @@ describe('fetchCriticalServiceStatus', () => {
 		expect(snapshot.signature).toBe('thi')
 		expect(snapshot.unhealthy).toHaveLength(1)
 		expect(snapshot.unhealthy[0]).toMatchObject({
-			id: 'thi',
+			id: ServiceStatus.Thi,
 			name: 'THI-API',
 			healthy: false
 		})

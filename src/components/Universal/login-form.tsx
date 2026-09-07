@@ -25,6 +25,7 @@ import {
 } from '@/data/constants'
 import { useServiceStatus } from '@/hooks/useServiceStatus'
 import { trimErrorMsg } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { loadSecureAsync } from '@/utils/storage'
 import { toColor } from '@/utils/uniwind-utils'
 import Button from './button'
@@ -58,7 +59,7 @@ const LoginForm = ({
 	const [showPassword, setShowPassword] = useState(false)
 	const shakeAnimation = useState(new Animated.Value(0))[0]
 	const { isServiceDown } = useServiceStatus()
-	const thiDown = isServiceDown('thi')
+	const thiDown = isServiceDown(ServiceStatus.Thi)
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 
 	const shake = () => {
@@ -121,14 +122,14 @@ const LoginForm = ({
 				msg = t('login.alert.error.wrongCredentials.message')
 				showStatus = false
 				setPassword('')
-			} else if (thiDown) {
-				title = t('login.thiOutage.title')
-				msg = t('login.thiOutage.message')
-				showStatus = true
 			} else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
 				title = t('login.alert.error.noConnection.title')
 				msg = t('login.alert.error.noConnection.message')
 				showStatus = false
+			} else if (thiDown) {
+				title = t('login.thiOutage.title')
+				msg = t('login.thiOutage.message')
+				showStatus = true
 			} else if (message.includes(ORGINAL_ERROR_MISSING)) {
 				msg = t('login.alert.error.missing')
 				showStatus = false

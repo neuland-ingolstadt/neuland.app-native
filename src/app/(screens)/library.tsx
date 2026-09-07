@@ -32,6 +32,7 @@ import {
 	networkError,
 	permissionError
 } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 
 const staticColors = {
 	white: '#ffffff'
@@ -132,6 +133,7 @@ export default function LibraryCode(): React.JSX.Element {
 			) : isPaused && !isSuccess ? (
 				<ErrorView
 					title={networkError}
+					statusServices={ServiceStatus.Thi}
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
@@ -176,19 +178,7 @@ export default function LibraryCode(): React.JSX.Element {
 						</Text>
 					</View>
 				</>
-			) : isSuccess ? null : (
-				<ErrorView
-					title={
-						// @ts-expect-error error is type never
-						error?.message
-							? // @ts-expect-error error is type never
-								((error.message as string) ?? t('error.title'))
-							: t('error.title')
-					}
-					onRefresh={refetchByUser}
-					refreshing={isRefetchingByUser}
-				/>
-			)}
+			) : null}
 			{userKind === USER_STUDENT && (
 				<View className="gap-page mt-4 w-full">
 					<LibraryCard

@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, View } from 'react-native'
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
+import type { Card } from '@/components/all-cards'
 import AnnouncementCard from '@/components/Cards/announcement-card'
 import { DashboardContext } from '@/components/contexts'
 import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
@@ -65,7 +66,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 	)
 }
 
-const HomeScreen = memo(function HomeScreen() {
+function HomeScreen(): React.JSX.Element {
 	const { shownDashboardEntries } = React.use(DashboardContext)
 	const [orientation, setOrientation] = useState(Dimensions.get('window').width)
 	const [columns, setColumns] = useState(
@@ -100,37 +101,24 @@ const HomeScreen = memo(function HomeScreen() {
 		data?.appAnnouncements
 	)
 
-	const announcementHeader = useMemo(
-		() =>
-			announcements != null ? <AnnouncementCard data={announcements} /> : null,
-		[announcements]
+	const announcementHeader =
+		announcements != null ? <AnnouncementCard data={announcements} /> : null
+
+	const listHeader = (
+		<View className={columns > 1 ? '-mx-1.5' : undefined}>
+			<ServiceStatusBannerContainer />
+			<RueWarningBannerContainer />
+			{announcementHeader}
+		</View>
 	)
 
-	const listHeader = useMemo(
-		() => (
-			<View className={columns > 1 ? '-mx-1.5' : undefined}>
-				<ServiceStatusBannerContainer />
-				<RueWarningBannerContainer />
-				{announcementHeader}
-			</View>
-		),
-		[announcementHeader, columns]
+	const renderItem = ({ item }: { item: Card }) => (
+		<View className={columns > 1 ? 'my-1.5 mx-1.5' : 'mx-page my-1.5'}>
+			{item.card()}
+		</View>
 	)
 
-	const renderItem = useCallback(
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		({ item }: { item: any }) => (
-			<View className={columns > 1 ? 'my-1.5 mx-1.5' : 'mx-page my-1.5'}>
-				{item.card()}
-			</View>
-		),
-		[columns]
-	)
-
-	const keyExtractor = useCallback(
-		(item: unknown) => (item as { key: string }).key,
-		[]
-	)
+	const keyExtractor = (item: Card) => item.key
 
 	return shownDashboardEntries === null ||
 		shownDashboardEntries.length === 0 ? (
@@ -169,4 +157,4 @@ const HomeScreen = memo(function HomeScreen() {
 			numColumns={columns}
 		/>
 	)
-})
+}

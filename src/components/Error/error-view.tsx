@@ -23,6 +23,7 @@ import {
 	notLoggedInError,
 	permissionError
 } from '@/utils/api-utils'
+import { matchesServiceOutage, type ServiceStatus } from '@/utils/gatus-status'
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
@@ -40,6 +41,73 @@ function handleErrorButtonPress(
 	}
 }
 
+interface ErrorActionButtonProps {
+	title: string
+	buttonText?: string
+	onButtonPress?: () => void
+	inModal: boolean
+	isConfirmedOutage: boolean
+}
+
+function ErrorActionButton({
+	title,
+	buttonText,
+	onButtonPress,
+	inModal,
+	isConfirmedOutage
+}: ErrorActionButtonProps): React.JSX.Element | null {
+	const { t } = useTranslation('common')
+
+	let buttonProps: { onPress: () => void; text: string } | null = null
+
+	if (isConfirmedOutage) {
+		buttonProps = {
+			onPress: () => {
+				void Linking.openURL(STATUS_URL)
+			},
+			text: t('error.crash.status')
+		}
+	} else if (title === guestError || title === notLoggedInError) {
+		buttonProps = {
+			onPress: () => {
+				router.navigate('/login')
+			},
+			text: t('error.guest.button')
+		}
+	} else if (onButtonPress != null && buttonText === undefined) {
+		buttonProps = {
+			onPress: () => {
+				handleErrorButtonPress(title, onButtonPress)
+			},
+			text: t('error.button')
+		}
+	} else if (onButtonPress != null && buttonText !== undefined) {
+		buttonProps = {
+			onPress: () => {
+				handleErrorButtonPress(title, onButtonPress)
+			},
+			text: buttonText
+		}
+	}
+
+	if (buttonProps == null || title === permissionError) {
+		return null
+	}
+
+	return (
+		<Pressable
+			className={`mt-[30px] mb-5 self-center items-center rounded-mg ${inModal ? 'bg-background' : 'bg-card'}`}
+			onPress={buttonProps.onPress}
+		>
+			<View className="flex-row items-center px-10 py-2.5">
+				<Text className="text-base font-semibold text-primary">
+					{buttonProps.text}
+				</Text>
+			</View>
+		</Pressable>
+	)
+}
+
 export default function ErrorView({
 	title,
 	message,
@@ -50,7 +118,8 @@ export default function ErrorView({
 	refreshing,
 	showPullLabel,
 	inModal = false,
-	isCritical = true
+	isCritical = true,
+	statusServices
 }: {
 	title: string
 	message?: string
@@ -67,14 +136,18 @@ export default function ErrorView({
 	showPullLabel?: boolean
 	inModal?: boolean
 	isCritical?: boolean
+	/** Only upgrade networkError when one of these Gatus services is down. */
+	statusServices?: ServiceStatus | readonly ServiceStatus[]
 }): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const path = usePathname()
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
-	const { hasOutage } = useServiceStatus()
-	const isConfirmedOutage = title === networkError && hasOutage
+	const { isServiceDown } = useServiceStatus()
+	const isConfirmedOutage =
+		title === networkError &&
+		matchesServiceOutage(isServiceDown, statusServices)
 
 	const getIconIos = (): string => {
 		if (isConfirmedOutage) {
@@ -168,56 +241,6 @@ export default function ErrorView({
 		}
 	}
 
-	const ErrorButton = (): React.JSX.Element => {
-		let buttonProps: { onPress: () => void; text: string } | null = null
-
-		if (isConfirmedOutage) {
-			buttonProps = {
-				onPress: () => {
-					void Linking.openURL(STATUS_URL)
-				},
-				text: t('error.crash.status')
-			}
-		} else if (title === guestError || title === notLoggedInError) {
-			buttonProps = {
-				onPress: () => {
-					router.navigate('/login')
-				},
-				text: t('error.guest.button')
-			}
-		} else if (onButtonPress != null && buttonText === undefined) {
-			buttonProps = {
-				onPress: () => {
-					handleErrorButtonPress(title, onButtonPress)
-				},
-				text: t('error.button')
-			}
-		} else if (onButtonPress != null && buttonText !== undefined) {
-			buttonProps = {
-				onPress: () => {
-					handleErrorButtonPress(title, onButtonPress)
-				},
-				text: buttonText
-			}
-		}
-
-		return buttonProps != null && title !== permissionError ? (
-			<Pressable
-				className={`mt-[30px] mb-5 self-center items-center rounded-mg ${inModal ? 'bg-background' : 'bg-card'}`}
-				onPress={buttonProps.onPress}
-			>
-				<View className="flex-row items-center px-10 py-2.5">
-					<Text className="text-base font-semibold text-primary">
-						{buttonProps.text}
-					</Text>
-				</View>
-			</Pressable>
-		) : (
-			// biome-ignore lint/complexity/noUselessFragments: okay here
-			<></>
-		)
-	}
-
 	const scrollContentClassName = inModal
 		? 'flex-1 px-[25px] pb-[25px] bg-card rounded-ios pt-[25px]'
 		: `flex-1 px-[25px] ${Platform.OS === 'ios' ? 'pb-[50px]' : ''}`
@@ -269,7 +292,13 @@ export default function ErrorView({
 					</Text>
 				</View>
 
-				<ErrorButton />
+				<ErrorActionButton
+					title={title}
+					buttonText={buttonText}
+					onButtonPress={onButtonPress}
+					inModal={inModal}
+					isConfirmedOutage={isConfirmedOutage}
+				/>
 				{(refreshing != null &&
 					title !== guestError &&
 					title !== notLoggedInError) ||

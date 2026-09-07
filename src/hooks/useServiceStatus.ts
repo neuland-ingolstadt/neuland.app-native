@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import {
 	fetchCriticalServiceStatus,
-	type ServiceStatusId,
+	type ServiceStatus,
 	type ServiceStatusSnapshot,
 	STATUS_BANNER_PREVIEW,
 	shouldClearDismissedSignature,
@@ -50,7 +50,7 @@ export function useServiceStatus() {
 		}
 	}, [query.isSuccess, hasOutage, dismissedSignature, resetDismissed])
 
-	const isServiceDown = (id: ServiceStatusId): boolean =>
+	const isServiceDown = (id: ServiceStatus): boolean =>
 		unhealthy.some((service) => service.id === id)
 
 	return {

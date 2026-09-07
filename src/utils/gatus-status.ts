@@ -15,20 +15,25 @@ export function isStatusBannerPreview(): boolean {
 
 export const STATUS_BANNER_PREVIEW = isStatusBannerPreview()
 
-export type ServiceStatusId = 'thi' | 'neuland' | 'campusLife' | 'map'
+export enum ServiceStatus {
+	Thi = 'thi',
+	Neuland = 'neuland',
+	CampusLife = 'campusLife',
+	Map = 'map'
+}
 
 export interface CriticalEndpoint {
-	id: ServiceStatusId
+	id: ServiceStatus
 	/** Gatus endpoint key (`group_name`) */
 	key: string
 }
 
 /** App-critical monitors only — ignore beta, landing, office presence, etc. */
 export const CRITICAL_GATUS_ENDPOINTS: readonly CriticalEndpoint[] = [
-	{ id: 'thi', key: 'neuland-app_thi-api' },
-	{ id: 'neuland', key: 'neuland-app_neuland-api' },
-	{ id: 'campusLife', key: 'neuland-app_campus-life-api' },
-	{ id: 'map', key: 'neuland-app_map-server' }
+	{ id: ServiceStatus.Thi, key: 'neuland-app_thi-api' },
+	{ id: ServiceStatus.Neuland, key: 'neuland-app_neuland-api' },
+	{ id: ServiceStatus.CampusLife, key: 'neuland-app_campus-life-api' },
+	{ id: ServiceStatus.Map, key: 'neuland-app_map-server' }
 ] as const
 
 interface GatusConditionResult {
@@ -51,7 +56,7 @@ interface GatusEndpointStatus {
 }
 
 export interface ServiceHealth {
-	id: ServiceStatusId
+	id: ServiceStatus
 	key: string
 	name: string
 	healthy: boolean
@@ -71,18 +76,42 @@ function buildStatusUrl(endpointKey: string, pageSize = 2): string {
 }
 
 /**
+ * Gatus may return probes oldest-first; always evaluate newest first.
+ */
+export function sortProbesNewestFirst(
+	results: GatusProbeResult[]
+): GatusProbeResult[] {
+	return [...results].sort((a, b) => {
+		const aTime = Date.parse(a.timestamp)
+		const bTime = Date.parse(b.timestamp)
+		if (Number.isNaN(aTime) || Number.isNaN(bTime)) return 0
+		return bTime - aTime
+	})
+}
+
+/**
  * Avoid single-probe flaps: treat as unhealthy only when the latest probe
  * failed and the previous one (if present) also failed.
  */
 export function isEndpointUnhealthy(results: GatusProbeResult[]): boolean {
 	if (results.length === 0) return false
-	const [latest, previous] = results
+	const [latest, previous] = sortProbesNewestFirst(results)
 	if (latest.success) return false
 	if (previous == null) return true
 	return !previous.success
 }
 
-export function buildSignature(unhealthyIds: ServiceStatusId[]): string {
+/** True when any of the screen's related services is currently down. */
+export function matchesServiceOutage(
+	isDown: (id: ServiceStatus) => boolean,
+	services: ServiceStatus | readonly ServiceStatus[] | undefined
+): boolean {
+	if (services == null) return false
+	const ids = typeof services === 'string' ? [services] : services
+	return ids.some((id) => isDown(id))
+}
+
+export function buildSignature(unhealthyIds: ServiceStatus[]): string {
 	return [...unhealthyIds].sort().join('|')
 }
 
@@ -103,7 +132,7 @@ export function shouldClearDismissedSignature(
 }
 
 export function createPreviewSnapshot(
-	ids: ServiceStatusId[] = ['thi', 'neuland']
+	ids: ServiceStatus[] = [ServiceStatus.Thi, ServiceStatus.Neuland]
 ): ServiceStatusSnapshot {
 	const services: ServiceHealth[] = CRITICAL_GATUS_ENDPOINTS.map((endpoint) => {
 		const unhealthy = ids.includes(endpoint.id)
