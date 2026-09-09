@@ -102,7 +102,7 @@
 		"idb": "^8.0.3",
 		"lucide-react-native": "^1.18.0",
 		"luxon": "^3.7.2",
-		"maplibre-gl": "6.3.0",
+		"maplibre-gl": "6.4.1",
 		"metro": "^0.83.3",
 		"react": "19.2.0",
 		"react-content-loader": "^7.1.1",
