@@ -1,9 +1,5 @@
-import { Platform } from 'react-native'
-import { appHomepage, appVersion } from '@/data/app-version'
-import { STATUS_URL } from '@/data/constants'
-
-const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
-const GATUS_STATUSES_PATH = '/api/v1/endpoints'
+import type { GatusProbeResult } from '@/api/gatus-api'
+import GatusAPI from '@/api/gatus-api'
 
 /**
  * Opt-in fake outage for local UI checks.
@@ -36,25 +32,6 @@ export const CRITICAL_GATUS_ENDPOINTS: readonly CriticalEndpoint[] = [
 	{ id: ServiceStatus.Map, key: 'neuland-app_map-server' }
 ] as const
 
-interface GatusConditionResult {
-	condition: string
-	success: boolean
-}
-
-interface GatusProbeResult {
-	status: number
-	success: boolean
-	timestamp: string
-	conditionResults?: GatusConditionResult[]
-}
-
-interface GatusEndpointStatus {
-	name: string
-	group: string
-	key: string
-	results: GatusProbeResult[]
-}
-
 export interface ServiceHealth {
 	id: ServiceStatus
 	key: string
@@ -68,11 +45,6 @@ export interface ServiceStatusSnapshot {
 	/** Stable id for dismiss / analytics — sorted unhealthy ids */
 	signature: string
 	fetchedAt: number
-}
-
-function buildStatusUrl(endpointKey: string, pageSize = 2): string {
-	const base = STATUS_URL.replace(/\/$/, '')
-	return `${base}${GATUS_STATUSES_PATH}/${endpointKey}/statuses?page=1&pageSize=${String(pageSize)}`
 }
 
 /**
@@ -152,24 +124,10 @@ export function createPreviewSnapshot(
 	}
 }
 
-async function fetchEndpointStatus(
+async function fetchEndpointHealth(
 	endpoint: CriticalEndpoint
 ): Promise<ServiceHealth> {
-	const headers: Record<string, string> = {
-		Accept: 'application/json'
-	}
-	if (Platform.OS !== 'web') {
-		headers['User-Agent'] = USER_AGENT
-	}
-
-	const response = await fetch(buildStatusUrl(endpoint.key), { headers })
-	if (!response.ok) {
-		throw new Error(
-			`Gatus returned ${String(response.status)} for ${endpoint.key}`
-		)
-	}
-
-	const data = (await response.json()) as GatusEndpointStatus
+	const data = await GatusAPI.getEndpointStatuses(endpoint.key)
 	const healthy = !isEndpointUnhealthy(data.results ?? [])
 
 	return {
@@ -190,7 +148,7 @@ export async function fetchCriticalServiceStatus(): Promise<ServiceStatusSnapsho
 	}
 
 	const settled = await Promise.allSettled(
-		CRITICAL_GATUS_ENDPOINTS.map((endpoint) => fetchEndpointStatus(endpoint))
+		CRITICAL_GATUS_ENDPOINTS.map((endpoint) => fetchEndpointHealth(endpoint))
 	)
 
 	const services: ServiceHealth[] = settled.map((result, index) => {

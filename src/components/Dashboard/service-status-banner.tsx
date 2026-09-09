@@ -59,7 +59,10 @@ export default function ServiceStatusBanner({
 						{t('dashboard.serviceStatus.title')}
 					</Text>
 					<Pressable
-						onPress={onDismiss}
+						onPress={(event) => {
+							event.stopPropagation()
+							onDismiss()
+						}}
 						hitSlop={10}
 						accessibilityRole="button"
 						accessibilityLabel={t('dashboard.serviceStatus.dismiss')}

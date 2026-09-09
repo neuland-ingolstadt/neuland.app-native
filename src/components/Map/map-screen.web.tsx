@@ -7,6 +7,7 @@ import FloorPicker from '@/components/Map/floor-picker'
 import WebMapCanvas from '@/components/Map/map-canvas.web'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
 import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { LoadingState } from '@/utils/ui-utils'
 import LoadingIndicator from '../Universal/loading-indicator'
 
@@ -55,7 +56,10 @@ const MapScreen = (): React.JSX.Element => {
 					className="flex-1 h-full justify-center absolute w-full z-[100]"
 					style={{ backgroundColor }}
 				>
-					<ErrorView title={t('error.map.mapLoadError')} />
+					<ErrorView
+						title={t('error.map.mapLoadError')}
+						statusServices={ServiceStatus.Map}
+					/>
 				</View>
 			)}
 			{mapLoadState === LoadingState.LOADING && (

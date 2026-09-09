@@ -45,7 +45,7 @@ interface ErrorViewProps {
 	showPullLabel?: boolean
 	inModal?: boolean
 	isCritical?: boolean
-	/** Only upgrade networkError when one of these Gatus services is down. */
+	/** Upgrade to outage UI when any of these Gatus services is down. */
 	statusServices?: ServiceStatus | readonly ServiceStatus[]
 }
 
@@ -262,9 +262,7 @@ export default function ErrorView({
 		(state) => state.analyticsInitialized
 	)
 	const { isServiceDown } = useServiceStatus()
-	const isConfirmedOutage =
-		title === networkError &&
-		matchesServiceOutage(isServiceDown, statusServices)
+	const isConfirmedOutage = matchesServiceOutage(isServiceDown, statusServices)
 	const shouldTrack = isTrackedError(title, isCritical)
 	const showBox = !inModal && shouldTrack
 	const showRefresh = refreshing != null && !isAuthError(title)
