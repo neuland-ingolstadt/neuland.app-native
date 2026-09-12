@@ -21,6 +21,7 @@ import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { breakpoints } from '@/styles/breakpoints'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function NewsScreen(): React.JSX.Element {
@@ -57,6 +58,7 @@ export default function NewsScreen(): React.JSX.Element {
 				<View className="ios:h-[90%] android:h-full android:pt-[100px]">
 					<ErrorView
 						title={networkError}
+						statusServices={ServiceStatus.Thi}
 						onRefresh={() => {
 							void refetchByUser()
 						}}

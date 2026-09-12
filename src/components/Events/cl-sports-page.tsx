@@ -24,6 +24,7 @@ import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/icon'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -210,7 +211,10 @@ export default function ClSportsPage({
 					}}
 				/>
 			) : sportsResult.isPaused && !sportsResult.isSuccess ? (
-				<ErrorView title={networkError} />
+				<ErrorView
+					title={networkError}
+					statusServices={ServiceStatus.CampusLife}
+				/>
 			) : (
 				<View>
 					<Text className="text-text text-base font-semibold">

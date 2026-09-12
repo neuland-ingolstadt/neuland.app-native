@@ -10,7 +10,7 @@ const SectionView = ({
 }: {
 	title?: string
 	footer?: string
-	children: React.JSX.Element
+	children: React.ReactNode
 	link?: { text: string; destination: () => void }
 	hideBackground?: boolean
 }): React.JSX.Element => {

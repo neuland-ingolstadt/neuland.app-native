@@ -31,6 +31,7 @@ import {
 	isThiDepartmentOrganizerKind
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -194,7 +195,10 @@ export default function ClEventsPage({
 					}}
 				/>
 			) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
-				<ErrorView title={networkError} />
+				<ErrorView
+					title={networkError}
+					statusServices={ServiceStatus.CampusLife}
+				/>
 			) : (
 				<View style={styles.contentContainer}>
 					{clEventsResult.data != null ? (

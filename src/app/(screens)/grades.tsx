@@ -28,6 +28,7 @@ import {
 	getPersonalData,
 	networkError
 } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -214,6 +215,7 @@ export default function GradesSCreen(): React.JSX.Element {
 			{isPaused && !isSuccess && (
 				<ErrorView
 					title={networkError}
+					statusServices={ServiceStatus.Thi}
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
@@ -257,27 +259,21 @@ export default function GradesSCreen(): React.JSX.Element {
 								</View>
 							</SectionView>
 							<SectionView title={t('grades.finished')} hideBackground>
-								{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
-								<>
-									{filteredGrades?.finished.map((grade) => (
-										<View key={getGradeKey(grade)} className="mb-2">
-											<GradesRow item={grade} />
-										</View>
-									))}
-								</>
+								{filteredGrades?.finished.map((grade) => (
+									<View key={getGradeKey(grade)} className="mb-2">
+										<GradesRow item={grade} />
+									</View>
+								))}
 							</SectionView>
 						</>
 					)}
 					{filteredGrades?.missing.length !== 0 && (
 						<SectionView title={t('grades.open')} hideBackground>
-							{/** biome-ignore lint/complexity/noUselessFragments: if grades are empty, we need to return something */}
-							<>
-								{filteredGrades?.missing.map((grade) => (
-									<View key={getGradeKey(grade)} className="mb-2">
-										<GradesRow item={grade} />
-									</View>
-								))}
-							</>
+							{filteredGrades?.missing.map((grade) => (
+								<View key={getGradeKey(grade)} className="mb-2">
+									<GradesRow item={grade} />
+								</View>
+							))}
 						</SectionView>
 					)}
 					<View className="self-start pb-8 px-page pt-4">

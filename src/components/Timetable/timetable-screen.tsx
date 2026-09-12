@@ -18,6 +18,7 @@ import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
 
@@ -93,6 +94,7 @@ function TimetableScreen(): React.JSX.Element {
 				) : isPaused && !isSuccess ? (
 					<ErrorView
 						title={networkError}
+						statusServices={ServiceStatus.Thi}
 						refreshing={isRefetchingByUser}
 						onRefresh={() => {
 							void refetchByUser()

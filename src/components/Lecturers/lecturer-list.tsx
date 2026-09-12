@@ -8,6 +8,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import type { NormalizedLecturer } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { lecturersStyles as styles } from './lecturers-styles'
 
 interface LecturerListProps {
@@ -34,6 +35,7 @@ export default function LecturerList({
 		<View style={[styles.viewHorizontal, styles.page]}>
 			<ErrorView
 				title={networkError}
+				statusServices={ServiceStatus.Thi}
 				refreshing={isRefetchingByUser}
 				onRefresh={() => {
 					void refetchByUser()
