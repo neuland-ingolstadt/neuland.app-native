@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { STATUS_URL } from '@/data/constants'
-import { useServiceStatus } from '@/hooks/useServiceStatus'
+import { useMatchedServiceOutage } from '@/hooks/useServiceStatus'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
@@ -23,7 +23,7 @@ import {
 	notLoggedInError,
 	permissionError
 } from '@/utils/api-utils'
-import { matchesServiceOutage, type ServiceStatus } from '@/utils/gatus-status'
+import type { ServiceHealth, ServiceStatus } from '@/utils/gatus-status'
 import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
@@ -118,20 +118,35 @@ function getErrorIcons(
 	}
 }
 
+function formatOutageServices(
+	services: readonly ServiceHealth[],
+	tSettings: (
+		key: `dashboard.serviceStatus.services.${ServiceStatus}`
+	) => string
+): string {
+	return services
+		.map((service) =>
+			tSettings(`dashboard.serviceStatus.services.${service.id}`)
+		)
+		.join(', ')
+}
+
 interface ErrorDetailsProps {
 	title: string
 	message?: string
 	icon?: ErrorIconProp
-	isConfirmedOutage: boolean
+	outageServices: readonly ServiceHealth[]
 }
 
 function ErrorDetails({
 	title,
 	message,
 	icon,
-	isConfirmedOutage
+	outageServices
 }: ErrorDetailsProps): React.JSX.Element {
 	const { t } = useTranslation('common')
+	const { t: tSettings } = useTranslation('settings')
+	const isConfirmedOutage = outageServices.length > 0
 	const icons = getErrorIcons(title, isConfirmedOutage, icon)
 
 	let heading = title
@@ -139,7 +154,11 @@ function ErrorDetails({
 
 	if (isConfirmedOutage) {
 		heading = t('error.network.outageTitle')
-		body = t('error.network.outageDescription')
+		const names = formatOutageServices(outageServices, tSettings)
+		body =
+			outageServices.length === 1
+				? t('error.network.outageDescriptionOne', { service: names })
+				: t('error.network.outageDescriptionMany', { services: names })
 	} else if (title === networkError) {
 		heading = t('error.network.title')
 		body = t('error.network.description')
@@ -261,8 +280,8 @@ export default function ErrorView({
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
-	const { isServiceDown } = useServiceStatus()
-	const isConfirmedOutage = matchesServiceOutage(isServiceDown, statusServices)
+	const outageServices = useMatchedServiceOutage(statusServices)
+	const isConfirmedOutage = outageServices.length > 0
 	const shouldTrack = isTrackedError(title, isCritical)
 	const showBox = !inModal && shouldTrack
 	const showRefresh = refreshing != null && !isAuthError(title)
@@ -299,7 +318,7 @@ export default function ErrorView({
 					title={title}
 					message={message}
 					icon={icon}
-					isConfirmedOutage={isConfirmedOutage}
+					outageServices={outageServices}
 				/>
 				<ErrorActionButton
 					title={title}

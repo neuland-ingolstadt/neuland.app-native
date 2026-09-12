@@ -3,7 +3,7 @@ import { appHomepage, appVersion } from '@/data/app-version'
 import { STATUS_URL } from '@/data/constants'
 
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
-const GATUS_STATUSES_PATH = '/api/v1/endpoints'
+const GATUS_STATUSES_PATH = '/api/v1/endpoints/statuses'
 
 export interface GatusConditionResult {
 	condition: string
@@ -24,19 +24,16 @@ export interface GatusEndpointStatus {
 	results: GatusProbeResult[]
 }
 
-function buildStatusUrl(endpointKey: string, pageSize = 2): string {
+function buildStatusesUrl(pageSize = 2): string {
 	const base = STATUS_URL.replace(/\/$/, '')
-	return `${base}${GATUS_STATUSES_PATH}/${endpointKey}/statuses?page=1&pageSize=${String(pageSize)}`
+	return `${base}${GATUS_STATUSES_PATH}?page=1&pageSize=${String(pageSize)}`
 }
 
 class GatusAPIClient {
 	/**
-	 * Latest probe results for a single Gatus endpoint (`group_name` key).
+	 * Latest probe results for all Gatus endpoints (one request).
 	 */
-	async getEndpointStatuses(
-		endpointKey: string,
-		pageSize = 2
-	): Promise<GatusEndpointStatus> {
+	async getEndpointStatuses(pageSize = 2): Promise<GatusEndpointStatus[]> {
 		const headers: Record<string, string> = {
 			Accept: 'application/json'
 		}
@@ -44,16 +41,14 @@ class GatusAPIClient {
 			headers['User-Agent'] = USER_AGENT
 		}
 
-		const response = await fetch(buildStatusUrl(endpointKey, pageSize), {
+		const response = await fetch(buildStatusesUrl(pageSize), {
 			headers
 		})
 		if (!response.ok) {
-			throw new Error(
-				`Gatus returned ${String(response.status)} for ${endpointKey}`
-			)
+			throw new Error(`Gatus returned ${String(response.status)}`)
 		}
 
-		return (await response.json()) as GatusEndpointStatus
+		return (await response.json()) as GatusEndpointStatus[]
 	}
 }
 

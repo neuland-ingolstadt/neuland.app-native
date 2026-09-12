@@ -8,7 +8,7 @@ import type { ServiceHealth } from '@/utils/gatus-status'
 import { toColor } from '@/utils/uniwind-utils'
 
 interface ServiceStatusBannerProps {
-	services: ServiceHealth[]
+	services: readonly ServiceHealth[]
 	onDismiss: () => void
 }
 
@@ -26,7 +26,6 @@ export default function ServiceStatusBanner({
 					service: t(`dashboard.serviceStatus.services.${services[0].id}`)
 				})
 			: t('dashboard.serviceStatus.messageMany', {
-					count: services.length,
 					services: services
 						.map((service) =>
 							t(`dashboard.serviceStatus.services.${service.id}`)

@@ -1,4 +1,4 @@
-import type { GatusProbeResult } from '@/api/gatus-api'
+import type { GatusEndpointStatus, GatusProbeResult } from '@/api/gatus-api'
 import GatusAPI from '@/api/gatus-api'
 
 /**
@@ -11,12 +11,14 @@ export function isStatusBannerPreview(): boolean {
 
 export const STATUS_BANNER_PREVIEW = isStatusBannerPreview()
 
-export enum ServiceStatus {
-	Thi = 'thi',
-	Neuland = 'neuland',
-	CampusLife = 'campusLife',
-	Map = 'map'
-}
+export const ServiceStatus = {
+	Thi: 'thi',
+	Neuland: 'neuland',
+	CampusLife: 'campusLife',
+	Map: 'map'
+} as const
+
+export type ServiceStatus = (typeof ServiceStatus)[keyof typeof ServiceStatus]
 
 export interface CriticalEndpoint {
 	id: ServiceStatus
@@ -47,6 +49,8 @@ export interface ServiceStatusSnapshot {
 	fetchedAt: number
 }
 
+export const EMPTY_UNHEALTHY: readonly ServiceHealth[] = []
+
 /**
  * Gatus may return probes oldest-first; always evaluate newest first.
  */
@@ -73,14 +77,29 @@ export function isEndpointUnhealthy(results: GatusProbeResult[]): boolean {
 	return !previous.success
 }
 
+function normalizeServiceIds(
+	services: ServiceStatus | readonly ServiceStatus[]
+): readonly ServiceStatus[] {
+	return typeof services === 'string' ? [services] : services
+}
+
 /** True when any of the screen's related services is currently down. */
 export function matchesServiceOutage(
 	isDown: (id: ServiceStatus) => boolean,
 	services: ServiceStatus | readonly ServiceStatus[] | undefined
 ): boolean {
 	if (services == null) return false
-	const ids = typeof services === 'string' ? [services] : services
-	return ids.some((id) => isDown(id))
+	return normalizeServiceIds(services).some((id) => isDown(id))
+}
+
+/** Unhealthy services that overlap with the screen's related set. */
+export function filterMatchingOutages(
+	unhealthy: readonly ServiceHealth[],
+	services: ServiceStatus | readonly ServiceStatus[] | undefined
+): ServiceHealth[] {
+	if (services == null || unhealthy.length === 0) return []
+	const ids = new Set(normalizeServiceIds(services))
+	return unhealthy.filter((service) => ids.has(service.id))
 }
 
 export function buildSignature(unhealthyIds: ServiceStatus[]): string {
@@ -124,22 +143,47 @@ export function createPreviewSnapshot(
 	}
 }
 
-async function fetchEndpointHealth(
-	endpoint: CriticalEndpoint
-): Promise<ServiceHealth> {
-	const data = await GatusAPI.getEndpointStatuses(endpoint.key)
-	const healthy = !isEndpointUnhealthy(data.results ?? [])
+function healthyFallbackSnapshot(): ServiceStatusSnapshot {
+	const services: ServiceHealth[] = CRITICAL_GATUS_ENDPOINTS.map(
+		(endpoint) => ({
+			id: endpoint.id,
+			key: endpoint.key,
+			name: endpoint.id,
+			healthy: true
+		})
+	)
+	return {
+		services,
+		unhealthy: [],
+		signature: '',
+		fetchedAt: Date.now()
+	}
+}
+
+function healthFromEndpoint(
+	endpoint: CriticalEndpoint,
+	data: GatusEndpointStatus | undefined
+): ServiceHealth {
+	if (data == null) {
+		// Missing from bulk response → don't claim an outage
+		return {
+			id: endpoint.id,
+			key: endpoint.key,
+			name: endpoint.id,
+			healthy: true
+		}
+	}
 
 	return {
 		id: endpoint.id,
 		key: endpoint.key,
 		name: data.name || endpoint.id,
-		healthy
+		healthy: !isEndpointUnhealthy(data.results ?? [])
 	}
 }
 
 /**
- * Fetches health for critical Gatus endpoints.
+ * Fetches health for critical Gatus endpoints via one bulk statuses request.
  * Fail-closed for the banner: if Gatus itself is unreachable, returns healthy.
  */
 export async function fetchCriticalServiceStatus(): Promise<ServiceStatusSnapshot> {
@@ -147,30 +191,22 @@ export async function fetchCriticalServiceStatus(): Promise<ServiceStatusSnapsho
 		return createPreviewSnapshot()
 	}
 
-	const settled = await Promise.allSettled(
-		CRITICAL_GATUS_ENDPOINTS.map((endpoint) => fetchEndpointHealth(endpoint))
-	)
+	try {
+		const all = await GatusAPI.getEndpointStatuses(2)
+		const byKey = new Map(all.map((endpoint) => [endpoint.key, endpoint]))
 
-	const services: ServiceHealth[] = settled.map((result, index) => {
-		const endpoint = CRITICAL_GATUS_ENDPOINTS[index]
-		if (result.status === 'fulfilled') {
-			return result.value
-		}
-		// Gatus unreachable for this probe → don't claim an outage
+		const services = CRITICAL_GATUS_ENDPOINTS.map((endpoint) =>
+			healthFromEndpoint(endpoint, byKey.get(endpoint.key))
+		)
+		const unhealthy = services.filter((service) => !service.healthy)
+
 		return {
-			id: endpoint.id,
-			key: endpoint.key,
-			name: endpoint.id,
-			healthy: true
+			services,
+			unhealthy,
+			signature: buildSignature(unhealthy.map((s) => s.id)),
+			fetchedAt: Date.now()
 		}
-	})
-
-	const unhealthy = services.filter((service) => !service.healthy)
-
-	return {
-		services,
-		unhealthy,
-		signature: buildSignature(unhealthy.map((s) => s.id)),
-		fetchedAt: Date.now()
+	} catch {
+		return healthyFallbackSnapshot()
 	}
 }

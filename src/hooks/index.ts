@@ -10,7 +10,11 @@ import { useNow } from './useNow'
 import { useOnlineManager } from './useOnlineManager'
 import { useRefreshByUser } from './useRefreshByUser'
 import { useRefreshOnFocus } from './useRefreshOnFocus'
-import { useServiceStatus } from './useServiceStatus'
+import {
+	useIsServiceDown,
+	useMatchedServiceOutage,
+	useServiceStatus
+} from './useServiceStatus'
 import { useServiceStatusStore } from './useServiceStatusStore'
 
 export {
@@ -19,6 +23,8 @@ export {
 	useFeatureFlagEnabled,
 	useInterval,
 	useIsFeatureEnabled,
+	useIsServiceDown,
+	useMatchedServiceOutage,
 	useMemberStore,
 	useNow,
 	useOnlineManager,

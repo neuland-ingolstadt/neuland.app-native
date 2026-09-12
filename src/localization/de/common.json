@@ -31,7 +31,8 @@
 			"title": "Keine Internetverbindung",
 			"description": "Bitte überprüfe deine Internetverbindung.",
 			"outageTitle": "Dienst nicht verfügbar",
-			"outageDescription": "Ein Dienst ist aktuell nicht verfügbar."
+			"outageDescriptionOne": "{{service}} ist aktuell nicht verfügbar.",
+			"outageDescriptionMany": "{{services}} sind aktuell nicht verfügbar."
 		},
 		"guest": {
 			"title": "Anmeldung erforderlich",

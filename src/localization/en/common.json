@@ -31,7 +31,8 @@
 			"title": "No internet connection",
 			"description": "Please check your internet connection.",
 			"outageTitle": "Service unavailable",
-			"outageDescription": "A required service is currently unavailable."
+			"outageDescriptionOne": "{{service}} is currently unavailable.",
+			"outageDescriptionMany": "{{services}} are currently unavailable."
 		},
 		"guest": {
 			"title": "Sign in required",

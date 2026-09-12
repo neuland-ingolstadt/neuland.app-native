@@ -23,7 +23,7 @@ import {
 	USER_GUEST,
 	USER_STUDENT
 } from '@/data/constants'
-import { useServiceStatus } from '@/hooks/useServiceStatus'
+import { useIsServiceDown } from '@/hooks/useServiceStatus'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { loadSecureAsync } from '@/utils/storage'
@@ -58,8 +58,7 @@ const LoginForm = ({
 	const { resetOrder } = use(DashboardContext)
 	const [showPassword, setShowPassword] = useState(false)
 	const shakeAnimation = useState(new Animated.Value(0))[0]
-	const { isServiceDown } = useServiceStatus()
-	const thiDown = isServiceDown(ServiceStatus.Thi)
+	const thiDown = useIsServiceDown(ServiceStatus.Thi)
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 
 	const shake = () => {
