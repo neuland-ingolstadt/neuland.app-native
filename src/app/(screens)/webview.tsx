@@ -163,7 +163,7 @@ export default function NotesDetails(): React.JSX.Element {
 			{!loaded && (
 				<View
 					className="bg-background items-center justify-center"
-					style={StyleSheet.absoluteFillObject}
+					style={StyleSheet.absoluteFill}
 				>
 					<LoadingIndicator />
 				</View>

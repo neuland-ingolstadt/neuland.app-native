@@ -1,5 +1,5 @@
-import { HeaderTitle } from '@react-navigation/elements'
 import { Stack } from 'expo-router'
+import { HeaderTitle } from 'expo-router/react-navigation'
 import type { ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
 import Animated, {
