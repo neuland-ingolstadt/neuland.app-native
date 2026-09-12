@@ -1,8 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import {
-	Stack,
 	useFocusEffect,
 	useLocalSearchParams,
 	useNavigation
@@ -23,6 +21,7 @@ import type {
 	WeekdayType
 } from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/event-error-view'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
@@ -38,7 +37,6 @@ import { copyToClipboard } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function SportsEventDetail(): React.JSX.Element {
-	const textColor = toColor(useCSSVariable('--color-text'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 	const successColor = toColor(useCSSVariable('--color-success'))
@@ -256,25 +254,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View
-							className="overflow-hidden"
-							style={{
-								marginBottom: Platform.OS === 'ios' ? -10 : 0,
-								paddingRight: Platform.OS === 'ios' ? 0 : 50
-							}}
-						>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={String(textColor)}>
-									{title}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
+			<DetailStackHeader title={title} headerStyle={headerStyle} />
 
 			<View className="flex-row items-start pl-1.5 pb-1.5 justify-between">
 				<Text

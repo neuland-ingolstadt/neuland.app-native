@@ -1,8 +1,7 @@
-import { HeaderTitle } from '@react-navigation/elements'
-import { router, Stack } from 'expo-router'
+import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -10,6 +9,7 @@ import Animated, {
 	useScrollViewOffset
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
+import { DetailStackHeader } from '@/components/Universal/detail-stack-header'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
@@ -20,7 +20,6 @@ import { toColor } from '@/utils/uniwind-utils'
 export default function ExamDetail(): React.JSX.Element {
 	const exam = useRouteParamsStore((state) => state.selectedExam)
 	const { t } = useTranslation('common')
-	const textColor = toColor(useCSSVariable('--color-text'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const typeSplit =
 		exam?.type !== undefined ? exam?.type.split('-').slice(-1)[0].trim() : ''
@@ -155,25 +154,7 @@ export default function ExamDetail(): React.JSX.Element {
 			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
 			ref={ref}
 		>
-			<Stack.Screen
-				options={{
-					headerTitle: (props) => (
-						<View
-							className="overflow-hidden"
-							style={{
-								marginBottom: Platform.OS === 'ios' ? -10 : 0,
-								paddingRight: Platform.OS === 'ios' ? 0 : 50
-							}}
-						>
-							<Animated.View style={headerStyle}>
-								<HeaderTitle {...props} tintColor={String(textColor)}>
-									{exam?.name}
-								</HeaderTitle>
-							</Animated.View>
-						</View>
-					)
-				}}
-			/>
+			<DetailStackHeader title={exam?.name ?? ''} headerStyle={headerStyle} />
 			<View className="flex-row items-start justify-between pb-1.5">
 				<Text
 					className="text-text flex-1 text-2xl font-semibold pt-4 text-left"
