@@ -2,6 +2,8 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import RelativeTimeLabel from '@/components/Universal/relative-time-label'
+import RowEntry from '@/components/Universal/row-entry'
 import type { LanguageKey } from '@/localization/i18n'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
@@ -14,8 +16,6 @@ import {
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import RelativeTimeLabel from '../Universal/relative-time-label'
-import RowEntry from '../Universal/row-entry'
 
 const CLEventRow = ({
 	event,

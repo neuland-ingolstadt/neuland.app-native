@@ -3,12 +3,11 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import { toColor } from '@/utils/uniwind-utils'
-
-import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import BaseCard from './base-card'
 
 const LinkCard = (): React.JSX.Element => {

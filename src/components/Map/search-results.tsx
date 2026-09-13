@@ -5,12 +5,11 @@ import type React from 'react'
 import { memo, use, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, SectionList, Text } from 'react-native'
+import Divider from '@/components/Universal/divider'
 import { MapContext } from '@/contexts/map'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { SearchResult, SelectMapElement } from '@/types/map'
-
-import Divider from '../Universal/divider'
 import ResultRow from './search-result-row'
 
 interface SearchResultsProps {

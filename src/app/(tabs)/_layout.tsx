@@ -7,6 +7,7 @@ import type React from 'react'
 import { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { appIcons } from '@/app/(screens)/app-icon.ios'
 import { UserKindContext } from '@/components/contexts'
 import TabLayout from '@/components/Layout/tab-bar'
 import changelog from '@/data/changelog.json'
@@ -17,7 +18,6 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
-import { appIcons } from '../(screens)/app-icon.ios'
 
 export default function HomeLayout(): React.JSX.Element {
 	const router = useRouter()

@@ -12,11 +12,11 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { cardIcons } from '@/components/icons'
+import PlatformIcon from '@/components/Universal/icon'
 import { USER_GUEST } from '@/data/constants'
 import { toColor } from '@/utils/uniwind-utils'
-import { DashboardContext, UserKindContext } from '../contexts'
-import { cardIcons } from '../icons'
-import PlatformIcon from '../Universal/icon'
 import { CardContextMenu } from './card-context-menu'
 
 interface BaseCardProps {

@@ -9,11 +9,11 @@ import type {
 	UniversitySportsFieldsFragment,
 	WeekdayType
 } from '@/__generated__/gql/graphql'
+import EventItem from '@/components/Universal/event-item'
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 function handleSportsItemPress(id: string): void {

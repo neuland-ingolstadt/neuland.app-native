@@ -210,6 +210,6 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	scrim: {
-		...StyleSheet.absoluteFillObject
+		...StyleSheet.absoluteFill
 	}
 })

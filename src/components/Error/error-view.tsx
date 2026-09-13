@@ -13,6 +13,7 @@ import {
 	View
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { STATUS_URL } from '@/data/constants'
 import { useMatchedServiceOutage } from '@/hooks/useServiceStatus'
 import { useSessionStore } from '@/hooks/useSessionStore'
@@ -24,7 +25,6 @@ import {
 	permissionError
 } from '@/utils/api-utils'
 import type { ServiceHealth, ServiceStatus } from '@/utils/gatus-status'
-import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
 interface ErrorIconProp {

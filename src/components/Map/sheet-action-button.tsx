@@ -1,9 +1,9 @@
 import type React from 'react'
 import { Platform, Pressable } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon, { type WebIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon, { type WebIcon } from '../Universal/icon'
 
 interface SheetActionButtonProps {
 	testID: string

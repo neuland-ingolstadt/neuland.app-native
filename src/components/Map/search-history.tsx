@@ -1,9 +1,9 @@
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
+import Divider from '@/components/Universal/divider'
 import { MapContext } from '@/contexts/map'
 import type { SearchResult, SelectMapElement } from '@/types/map'
-import Divider from '../Universal/divider'
 import { SearchHistoryItem } from './search-history-item'
 
 interface SearchHistoryProps {

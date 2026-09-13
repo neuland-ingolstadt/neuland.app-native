@@ -4,8 +4,8 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon from '../Universal/icon'
 
 interface RoomReportLinkProps {
 	roomTitle: string

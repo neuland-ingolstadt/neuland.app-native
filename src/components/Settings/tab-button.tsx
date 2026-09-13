@@ -15,7 +15,7 @@ import { getInitials } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 interface IndexHeaderRightProps {
-	color?: string
+	color?: ColorValue
 	size?: number
 	focused?: boolean
 }

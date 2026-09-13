@@ -3,8 +3,8 @@ import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import Divider from '@/components/Universal/divider'
+import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon from '../Universal/icon'
 
 export interface FoodLanguageElement {
 	title: string

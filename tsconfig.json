@@ -15,11 +15,5 @@
 			}
 		]
 	},
-	"include": [
-		"**/*.ts",
-		"**/*.tsx",
-		".expo/types/**/*.ts",
-		"expo-env.d.ts",
-		"babel.config.js"
-	]
+	"include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

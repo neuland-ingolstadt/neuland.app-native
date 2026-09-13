@@ -1,9 +1,9 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon from '../Universal/icon'
 
 interface AllRoomsAvailableProps {
 	title: string

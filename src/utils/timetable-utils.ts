@@ -1,3 +1,4 @@
+import API from '@/api/authenticated-api'
 import dayjs from '@/lib/dayjs'
 import type { Calendar } from '@/types/data'
 import type {
@@ -6,8 +7,6 @@ import type {
 	FriendlyTimetableEntry,
 	TimetableSections
 } from '@/types/utils'
-
-import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
 
 /**

@@ -22,10 +22,10 @@ import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/icon'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
-import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
 const sportsCampusLocations = ['Ingolstadt', 'Neuburg'] as const

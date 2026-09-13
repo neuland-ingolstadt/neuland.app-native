@@ -6,10 +6,10 @@ import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import WebMapCanvas from '@/components/Map/map-canvas.web'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { LoadingState } from '@/utils/ui-utils'
-import LoadingIndicator from '../Universal/loading-indicator'
 
 const MapScreen = (): React.JSX.Element => {
 	const {

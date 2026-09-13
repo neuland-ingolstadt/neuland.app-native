@@ -6,6 +6,7 @@ import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
+import EventItem from '@/components/Universal/event-item'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
@@ -19,7 +20,6 @@ import {
 	selectCalendarCardEvents
 } from '@/utils/calendar-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 function getCalendarCardEventKey(event: CalendarCardEvent): string {

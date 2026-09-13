@@ -198,7 +198,7 @@ export default function Settings(): React.JSX.Element {
 					{t('menu.infrastructureBy')}
 				</Text>
 				<Link
-					href="https://hetzner.com"
+					href="https://www.hetzner.com/?mtm_campaign=neuland_ingolstadt&mtm_medium=referral&mtm_content=sponsoring_link"
 					target="_blank"
 					onPress={() => {
 						trackHetznerClick()

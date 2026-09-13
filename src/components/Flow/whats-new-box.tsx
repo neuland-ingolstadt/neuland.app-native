@@ -1,7 +1,7 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
-import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 
 interface WhatsNewBoxProps {
 	title: string
