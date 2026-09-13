@@ -1,13 +1,12 @@
+import { Host, Picker } from '@expo/ui'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
-import { Picker } from 'swiftui-react-native'
 import { useCSSVariable } from 'uniwind'
 import { RoomSearchResults } from '@/components/Map/room-search-results'
 import Divider from '@/components/Universal/divider'
 import PlatformIcon from '@/components/Universal/icon'
-import { usePickerBinding } from '@/hooks/usePickerBinding.ios'
 import { useRoomSearch } from '@/hooks/useRoomSearch'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -25,9 +24,6 @@ export default function AdvancedSearch(): React.JSX.Element {
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
 	)
-
-	const building = usePickerBinding(roomSearch.building, roomSearch.setBuilding)
-	const duration = usePickerBinding(roomSearch.duration, roomSearch.setDuration)
 
 	return (
 		<ScrollView
@@ -87,16 +83,17 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.duration')}
 						</Text>
 
-						<Picker
-							selection={duration}
-							pickerStyle="menu"
-							tint={primaryColor}
-							offset={{ x: 15, y: 0 }}
-						>
-							{ROOM_SEARCH_DURATIONS.map((option) => (
-								<Text key={option}>{option}</Text>
-							))}
-						</Picker>
+						<Host matchContents seedColor={primaryColor}>
+							<Picker
+								selectedValue={roomSearch.duration}
+								onValueChange={roomSearch.setDuration}
+								appearance="menu"
+							>
+								{ROOM_SEARCH_DURATIONS.map((option) => (
+									<Picker.Item key={option} label={option} value={option} />
+								))}
+							</Picker>
+						</Host>
 					</View>
 					<Divider paddingLeft={16} />
 					<View
@@ -107,16 +104,17 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{t('pages.rooms.options.building')}
 						</Text>
 
-						<Picker
-							selection={building}
-							pickerStyle="menu"
-							tint={primaryColor}
-							offset={{ x: 20, y: 0 }}
-						>
-							{[BUILDINGS_ALL, ...roomSearch.buildings].map((option) => (
-								<Text key={option}>{option}</Text>
-							))}
-						</Picker>
+						<Host matchContents seedColor={primaryColor}>
+							<Picker
+								selectedValue={roomSearch.building}
+								onValueChange={roomSearch.setBuilding}
+								appearance="menu"
+							>
+								{[BUILDINGS_ALL, ...roomSearch.buildings].map((option) => (
+									<Picker.Item key={option} label={option} value={option} />
+								))}
+							</Picker>
+						</Host>
 					</View>
 				</View>
 				{roomSearch.wasModified && roomSearch.isDateAndTimeEqualToStart && (
