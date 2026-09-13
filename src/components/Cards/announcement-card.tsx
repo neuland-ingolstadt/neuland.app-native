@@ -23,11 +23,11 @@ import type {
 	AnnouncementFieldsFragment,
 	UserKind
 } from '@/__generated__/gql/graphql'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import PlatformIcon from '@/components/Universal/icon'
 import i18n from '@/localization/i18n'
 import { toColor } from '@/utils/uniwind-utils'
 import { getAnnouncementPlatform } from '@/utils/web-host'
-import { DashboardContext, UserKindContext } from '../contexts'
-import PlatformIcon from '../Universal/icon'
 
 interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]

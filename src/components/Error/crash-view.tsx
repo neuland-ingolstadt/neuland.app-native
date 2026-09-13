@@ -5,11 +5,10 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import LogoTextSVG from '@/components/Flow/svgs/logo-text'
+import PlatformIcon from '@/components/Universal/icon'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { toColor } from '@/utils/uniwind-utils'
-
-import LogoTextSVG from '../Flow/svgs/logo-text'
-import PlatformIcon from '../Universal/icon'
 import StatusBox from './action-box'
 
 export const ErrorButton = ({

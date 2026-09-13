@@ -2,12 +2,11 @@ import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
 import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
+import PlatformIcon from '@/components/Universal/icon'
+import RowEntry from '@/components/Universal/row-entry'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
-
-import PlatformIcon from '../Universal/icon'
-import RowEntry from '../Universal/row-entry'
 
 const SportsRow = ({
 	event

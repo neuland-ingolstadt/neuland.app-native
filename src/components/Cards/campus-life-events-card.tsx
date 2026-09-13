@@ -4,6 +4,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import EventItem from '@/components/Universal/event-item'
 import type { LanguageKey } from '@/localization/i18n'
 import type {
 	CampusLifeEvent,
@@ -15,7 +16,6 @@ import {
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import EventItem from '../Universal/event-item'
 import BaseCard from './base-card'
 
 interface CampusLifeEventsCardProps {

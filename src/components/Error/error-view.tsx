@@ -12,6 +12,7 @@ import {
 	View
 } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
@@ -20,8 +21,6 @@ import {
 	notLoggedInError,
 	permissionError
 } from '@/utils/api-utils'
-
-import PlatformIcon, { type LucideIcon } from '../Universal/icon'
 import StatusBox from './action-box'
 
 function handleErrorButtonPress(

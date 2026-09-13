@@ -3,11 +3,11 @@ import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import Divider from '@/components/Universal/divider'
 import { MapContext } from '@/contexts/map'
 import type { SelectMapElement } from '@/types/map'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import Divider from '../Universal/divider'
 import { NextLectureRow } from './next-lecture-row'
 
 interface NextLectureSuggestionsProps {

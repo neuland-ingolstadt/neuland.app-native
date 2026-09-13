@@ -9,9 +9,9 @@ import FloorPicker from '@/components/Map/floor-picker'
 import NativeMapCanvas from '@/components/Map/map-canvas.native'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
 import { DETAIL_HIDDEN } from '@/components/Map/sheet-detents'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
 import { LoadingState } from '@/utils/ui-utils'
-import LoadingIndicator from '../Universal/loading-indicator'
 
 const MapScreen = (): React.JSX.Element => {
 	const [mapKey, setMapKey] = useState(0)

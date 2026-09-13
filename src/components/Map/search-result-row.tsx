@@ -3,13 +3,12 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
 import type { SEARCH_TYPES, SearchResult, SelectMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { parseMapCoordinate } from '@/utils/map-screen-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-import PlatformIcon from '../Universal/icon'
 
 interface ResultRowProps {
 	result: SearchResult

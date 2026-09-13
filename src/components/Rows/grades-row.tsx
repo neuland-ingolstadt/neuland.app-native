@@ -1,9 +1,8 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
+import RowEntry from '@/components/Universal/row-entry'
 import type { Grade } from '@/types/thi-api'
-
-import RowEntry from '../Universal/row-entry'
 
 const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 	const { t } = useTranslation('settings')

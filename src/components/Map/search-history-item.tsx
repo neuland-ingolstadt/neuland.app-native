@@ -3,9 +3,9 @@ import type React from 'react'
 import { LayoutAnimation, Platform, Pressable, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
 import type { SearchResult, SelectMapElement } from '@/types/map'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon from '../Universal/icon'
 import ResultRow from './search-result-row'
 
 interface SearchHistoryItemProps {

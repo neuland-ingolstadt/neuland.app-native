@@ -18,6 +18,7 @@ import {
 } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
 import CLEventRow from '@/components/Rows/event-row'
+import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
@@ -31,7 +32,6 @@ import {
 	isThiDepartmentOrganizerKind
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
-import LoadingIndicator from '../Universal/loading-indicator'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
 const MemoizedEventRow = memo(CLEventRow)

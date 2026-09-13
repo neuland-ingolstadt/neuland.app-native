@@ -1,11 +1,11 @@
 import type React from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon, { type WebIcon } from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
-import PlatformIcon, { type WebIcon } from '../Universal/icon'
 
 interface MapSuggestionRowProps {
 	testID?: string
