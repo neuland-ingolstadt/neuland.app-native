@@ -53,6 +53,10 @@
 				"message": "Frühere Anmeldedaten wurden im iOS-Schlüsselbund gefunden."
 			}
 		},
+		"thiOutage": {
+			"title": "THI-Login momentan nicht verfügbar",
+			"message": "Anmeldung ist momentan nicht möglich."
+		},
 		"username": "Benutzername",
 		"password": "Passwort",
 		"usernamePlaceholder": "abc1234",

@@ -7,6 +7,7 @@ import {
 	Animated,
 	Linking,
 	Platform,
+	Pressable,
 	Text,
 	TextInput,
 	TouchableOpacity,
@@ -22,7 +23,9 @@ import {
 	USER_GUEST,
 	USER_STUDENT
 } from '@/data/constants'
+import { useIsServiceDown } from '@/hooks/useServiceStatus'
 import { trimErrorMsg } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { loadSecureAsync } from '@/utils/storage'
 import { toColor } from '@/utils/uniwind-utils'
 import Button from './button'
@@ -55,6 +58,8 @@ const LoginForm = ({
 	const { resetOrder } = use(DashboardContext)
 	const [showPassword, setShowPassword] = useState(false)
 	const shakeAnimation = useState(new Animated.Value(0))[0]
+	const thiDown = useIsServiceDown(ServiceStatus.Thi)
+	const warningColor = toColor(useCSSVariable('--color-warning'))
 
 	const shake = () => {
 		Animated.sequence([
@@ -120,6 +125,10 @@ const LoginForm = ({
 				title = t('login.alert.error.noConnection.title')
 				msg = t('login.alert.error.noConnection.message')
 				showStatus = false
+			} else if (thiDown) {
+				title = t('login.thiOutage.title')
+				msg = t('login.thiOutage.message')
+				showStatus = true
 			} else if (message.includes(ORGINAL_ERROR_MISSING)) {
 				msg = t('login.alert.error.missing')
 				showStatus = false
@@ -219,6 +228,33 @@ const LoginForm = ({
 				<Text className="w-full text-label text-base text-center mb-[30px]">
 					{t('login.title2')}
 				</Text>
+
+				{thiDown ? (
+					<Pressable
+						testID="login-thi-outage"
+						className="w-full mb-5 flex-row items-center gap-2.5 rounded-sm px-3 py-2.5"
+						style={{ backgroundColor: `${String(warningColor)}18` }}
+						onPress={() => {
+							void Linking.openURL(STATUS_URL)
+						}}
+					>
+						<PlatformIcon
+							ios={{ name: 'exclamationmark.triangle.fill', size: 16 }}
+							android={{ name: 'warning', size: 20, variant: 'filled' }}
+							web={{ name: 'TriangleAlert', size: 18 }}
+							style={{ color: warningColor }}
+						/>
+						<Text className="text-text flex-1 text-[14px] font-medium">
+							{t('login.thiOutage.title')}
+						</Text>
+						<PlatformIcon
+							ios={{ name: 'chevron.right', size: 12, weight: 'semibold' }}
+							android={{ name: 'chevron_right', size: 18 }}
+							web={{ name: 'ChevronRight', size: 16 }}
+							style={{ color: labelColor, opacity: 0.6 }}
+						/>
+					</Pressable>
+				) : null}
 
 				<View className="w-full gap-4">
 					<View style={inputWrapperStyle}>

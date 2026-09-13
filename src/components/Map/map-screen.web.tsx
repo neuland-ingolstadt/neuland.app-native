@@ -8,6 +8,7 @@ import WebMapCanvas from '@/components/Map/map-canvas.web'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { LoadingState } from '@/utils/ui-utils'
 
 const MapScreen = (): React.JSX.Element => {
@@ -55,7 +56,10 @@ const MapScreen = (): React.JSX.Element => {
 					className="flex-1 h-full justify-center absolute w-full z-[100]"
 					style={{ backgroundColor }}
 				>
-					<ErrorView title={t('error.map.mapLoadError')} />
+					<ErrorView
+						title={t('error.map.mapLoadError')}
+						statusServices={ServiceStatus.Map}
+					/>
 				</View>
 			)}
 			{mapLoadState === LoadingState.LOADING && (

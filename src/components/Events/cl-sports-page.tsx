@@ -25,6 +25,7 @@ import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
 const sportsCampusLocations = ['Ingolstadt', 'Neuburg'] as const
@@ -210,7 +211,10 @@ export default function ClSportsPage({
 					}}
 				/>
 			) : sportsResult.isPaused && !sportsResult.isSuccess ? (
-				<ErrorView title={networkError} />
+				<ErrorView
+					title={networkError}
+					statusServices={ServiceStatus.CampusLife}
+				/>
 			) : (
 				<View>
 					<Text className="text-text text-base font-semibold">
