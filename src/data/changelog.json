@@ -223,6 +223,23 @@
 					"web": "CircleGauge"
 				}
 			}
+		],
+		"0.18": [
+			{
+				"title": {
+					"de": "Verbesserungen",
+					"en": "Improvements"
+				},
+				"description": {
+					"de": "Dieses Update enthält Performance-Verbesserungen sowie Aktualisierungen für die Navigation und Detailansichten.",
+					"en": "This update includes performance improvements and updates to navigation and detail screens."
+				},
+				"icon": {
+					"ios": "sparkles",
+					"android": "auto_awesome",
+					"web": "Sparkles"
+				}
+			}
 		]
 	}
 }

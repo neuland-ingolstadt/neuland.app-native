@@ -25,7 +25,7 @@ import { toColor } from '@/utils/uniwind-utils'
 const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
 type LogoProps = {
-	style: ViewStyle | ViewStyle[]
+	style: React.ComponentProps<typeof AnimatedSvg>['style']
 	width: number
 	height: number
 	color: string
