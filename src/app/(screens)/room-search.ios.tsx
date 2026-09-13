@@ -47,7 +47,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							mode="date"
 							accentColor={primaryColor}
 							locale="de-DE"
-							onChange={(_event, selectedDate) => {
+							onValueChange={(_event, selectedDate) => {
 								roomSearch.setDate(formatISODate(selectedDate))
 							}}
 							minimumDate={new Date()}
@@ -69,7 +69,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							accentColor={primaryColor}
 							locale="de-DE"
 							minuteInterval={5}
-							onChange={(_event, selectedDate) => {
+							onValueChange={(_event, selectedDate) => {
 								roomSearch.setTime(formatISOTime(selectedDate))
 							}}
 						/>
