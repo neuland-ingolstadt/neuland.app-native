@@ -72,7 +72,32 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Run Expo Doctor
-        run: bun doctor
+        run: |
+          set -o pipefail
+
+          doctor_log="$(mktemp)"
+          set +e
+          bun doctor 2>&1 | tee "$doctor_log"
+          doctor_status="${PIPESTATUS[0]}"
+          set -e
+
+          if [ "$doctor_status" -eq 0 ]; then
+            exit 0
+          fi
+
+          # SDK 56's Hermes V1 memory regression is fixed in SDK 57. Keep this
+          # temporary allowlist narrow so every other Expo Doctor failure still
+          # blocks CI. Remove it after the SDK 57 upgrade.
+          failed_checks="$(grep -c '^✖ ' "$doctor_log" || true)"
+          hermes_check="$(grep -Fc '✖ Check for Expo SDK versions affected by Hermes V1 regressions' "$doctor_log" || true)"
+          hermes_regression="$(grep -Fc 'known memory regression' "$doctor_log" || true)"
+
+          if [ "$failed_checks" -eq 1 ] && [ "$hermes_check" -eq 1 ] && [ "$hermes_regression" -eq 1 ]; then
+            echo '::warning::Ignoring the known SDK 56 Hermes V1 memory regression; remove this allowlist after upgrading to SDK 57.'
+            exit 0
+          fi
+
+          exit "$doctor_status"
 
   unit-tests:
     name: Unit tests
