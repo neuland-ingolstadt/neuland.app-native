@@ -1,8 +1,8 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, View } from 'react-native'
+import Divider from '@/components/Universal/divider'
 import type { AvailableRoom } from '@/types/utils'
-import Divider from '../Universal/divider'
 import { FreeRoomRow } from './free-room-row'
 
 interface FreeRoomsListProps {

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
+import LogoSVG from '@/components/Flow/svgs/logo'
 import { toColor } from '@/utils/uniwind-utils'
-import LogoSVG from '../Flow/svgs/logo'
 import { BenefitCard } from './benefit-card'
 
 interface LoggedOutViewProps {

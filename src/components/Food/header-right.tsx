@@ -3,9 +3,8 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
-
-import PlatformIcon from '../Universal/icon'
 
 export const FoodHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['accessibility'])

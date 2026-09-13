@@ -2,9 +2,9 @@ import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, type SectionListData, Text, View } from 'react-native'
+import { CalendarRow } from '@/components/Rows/calendar-row'
 import type { Calendar } from '@/types/data'
 import { semesters } from '@/utils/calendar-utils'
-import { CalendarRow } from '../Rows/calendar-row'
 
 type Section = {
 	title: string
