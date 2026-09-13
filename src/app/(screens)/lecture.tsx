@@ -374,7 +374,7 @@ export default function TimetableDetails(): React.JSX.Element {
 							<DetailsBody>
 								<View className="flex-row flex-wrap">
 									{lecturerLinks.map((link, i) => (
-										<React.Fragment key={i}>
+										<React.Fragment key={link.lecturer?.id ?? link.name}>
 											<Pressable
 												onPress={() => {
 													if (link.lecturer == null) return

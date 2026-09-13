@@ -72,6 +72,22 @@ describe('lecturers-utils', () => {
 		).toBe('Beta')
 	})
 
+	it('resolveLecturerLinks - Should match plain last names without THI initial format', () => {
+		const lecturers = [{ id: '1', name: 'Muster', vorname: 'Max' }] as never
+
+		expect(resolveLecturerLinks('Muster', [], lecturers)[0]?.lecturer?.id).toBe(
+			'1'
+		)
+	})
+
+	it('resolveLecturerLinks - Should resolve lecturer by id when name does not match', () => {
+		const lecturers = [{ id: 'abc', name: 'Smith', vorname: 'John' }] as never
+
+		expect(
+			resolveLecturerLinks('Unknown Name', ['abc'], lecturers)[0]?.lecturer?.id
+		).toBe('abc')
+	})
+
 	it('normalizeLecturers - Should remove dummy entries without first name', () => {
 		const entries = [
 			{
