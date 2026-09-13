@@ -211,7 +211,7 @@ export type Hours = Record<number, Lecture[]>
 export interface Lecture {
 	von: Date
 	bis: Date
-	lvId: string
+	lvId: string | null
 	details: Details
 }
 
