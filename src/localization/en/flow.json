@@ -53,6 +53,10 @@
 				"message": "Previous login data was found in the iOS keychain."
 			}
 		},
+		"thiOutage": {
+			"title": "THI login temporarily unavailable",
+			"message": "Sign-in is currently not possible."
+		},
 		"username": "Username",
 		"password": "Password",
 		"usernamePlaceholder": "abc1234",

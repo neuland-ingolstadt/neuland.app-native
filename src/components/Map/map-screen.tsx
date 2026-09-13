@@ -11,6 +11,7 @@ import { OsmCopyright } from '@/components/Map/osm-copyright'
 import { DETAIL_HIDDEN } from '@/components/Map/sheet-detents'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useMapScreenChrome } from '@/hooks/useMapScreenChrome'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { LoadingState } from '@/utils/ui-utils'
 
 const MapScreen = (): React.JSX.Element => {
@@ -109,6 +110,7 @@ const MapScreen = (): React.JSX.Element => {
 				>
 					<ErrorView
 						title={t('error.map.mapLoadError')}
+						statusServices={ServiceStatus.Map}
 						onButtonPress={handleRefresh}
 					/>
 				</View>

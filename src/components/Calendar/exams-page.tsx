@@ -15,6 +15,7 @@ import { useRefreshByUser } from '@/hooks'
 import type { Exam } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 
 const renderExamItem = ({ item }: { item: Exam }) => (
 	<View className="mb-2">
@@ -86,7 +87,11 @@ export default function ExamsPage({
 					inModal
 				/>
 			) : isPaused && !isSuccess ? (
-				<ErrorView title={networkError} inModal />
+				<ErrorView
+					title={networkError}
+					statusServices={ServiceStatus.Thi}
+					inModal
+				/>
 			) : userKind === USER_GUEST ? (
 				<ErrorView title={guestError} />
 			) : (
