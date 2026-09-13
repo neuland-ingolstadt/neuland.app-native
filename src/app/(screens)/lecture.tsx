@@ -1,6 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
 import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import { HeaderTitle } from 'expo-router/react-navigation'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Share, Text, View } from 'react-native'
@@ -10,7 +10,7 @@ import Animated, {
 	useAnimatedStyle,
 	useScrollViewOffset
 } from 'react-native-reanimated'
-import ViewShot, { captureRef } from 'react-native-view-shot'
+import ViewShot, { captureRef, type ViewShotRef } from 'react-native-view-shot'
 import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
 import DetailsBody from '@/components/Timetable/details-body'
@@ -39,7 +39,7 @@ export default function TimetableDetails(): React.JSX.Element {
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
-	const shareRef = useRef<ViewShot>(null)
+	const shareRef = useRef<ViewShotRef>(null)
 	const lecture = useRouteParamsStore((state) => state.selectedLecture)
 	const setHtmlContent = useRouteParamsStore((state) => state.setHtmlContent)
 	const ref = useAnimatedRef<Animated.ScrollView>()

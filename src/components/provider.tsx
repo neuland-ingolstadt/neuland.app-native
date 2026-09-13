@@ -1,11 +1,7 @@
-import {
-	DarkTheme,
-	DefaultTheme,
-	ThemeProvider
-} from '@react-navigation/native'
 import { focusManager, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Toaster } from 'burnt/web'
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router'
 import type React from 'react'
 import { useEffect } from 'react'
 import {

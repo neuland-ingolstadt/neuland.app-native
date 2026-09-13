@@ -1,0 +1,324 @@
+diff --git a/ios/Button/ButtonExpoView.swift b/ios/Button/ButtonExpoView.swift
+index f73e13d28559235ec0955e97d0454cea21615c55..ae0d1d97904f16722863521cb23f706d26e51f20 100644
+--- a/ios/Button/ButtonExpoView.swift
++++ b/ios/Button/ButtonExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class ButtonExpoView: ExpoView {
++class ButtonExpoView: SwiftUIReactView {
+   let props: ButtonProps
+   let onEvent = EventDispatcher()
+   
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+diff --git a/ios/Common/ExpoView+UIHostingController.swift b/ios/Common/ExpoView+UIHostingController.swift
+index fd9ea28e74bd3587fcaf238f6a089ffb499eed65..4dba320a4ffe7c20a50e47904f78613d3ea80cce 100644
+--- a/ios/Common/ExpoView+UIHostingController.swift
++++ b/ios/Common/ExpoView+UIHostingController.swift
+@@ -1,6 +1,41 @@
+ import SwiftUI
+ import ExpoModulesCore
+ 
++class SwiftUIReactView: ExpoView {
++  private(set) var reactChildViews: [UIView] = []
++
++  override func mountChildComponentView(_ childComponentView: UIView, index: Int) {
++    super.mountChildComponentView(childComponentView, index: index)
++    if index < reactChildViews.count {
++      reactChildViews.insert(childComponentView, at: index)
++    } else {
++      reactChildViews.append(childComponentView)
++    }
++    updateReactSubviews()
++  }
++
++  override func unmountChildComponentView(_ childComponentView: UIView, index: Int) {
++    super.unmountChildComponentView(childComponentView, index: index)
++    if let childIndex = reactChildViews.firstIndex(where: { $0 === childComponentView }) {
++      reactChildViews.remove(at: childIndex)
++    }
++    updateReactSubviews()
++  }
++
++  func updateReactSubviews() {}
++
++}
++
++func swiftUIReactSubviews(_ view: UIView?) -> [UIView] {
++  guard let view else {
++    return []
++  }
++  if let view = view as? SwiftUIReactView {
++    return view.reactChildViews
++  }
++  return view.subviews
++}
++
+ extension ExpoView {
+   func setupHostingController(_ hostingController: UIHostingController<some View>) {
+     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+diff --git a/ios/Group/GroupExpoView.swift b/ios/Group/GroupExpoView.swift
+index 43f85c53f80981925832cf3b95a4d2af9c9a9271..1b7b0a31ded55c67f69ea7b943a591d70744df63 100644
+--- a/ios/Group/GroupExpoView.swift
++++ b/ios/Group/GroupExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class GroupExpoView: ExpoView {
++class GroupExpoView: SwiftUIReactView {
+   let props: GroupProps
+   let onEvent = EventDispatcher()
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+diff --git a/ios/HStack/HStackExpoView.swift b/ios/HStack/HStackExpoView.swift
+index 76dd033565fae5ac44604d56bebc343a96820c0c..463bd5dc6390a9d66d0574af7816f4c16890aa38 100644
+--- a/ios/HStack/HStackExpoView.swift
++++ b/ios/HStack/HStackExpoView.swift
+@@ -1,14 +1,14 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class HStackExpoView: ExpoView {
++class HStackExpoView: SwiftUIReactView {
+   let props: HStackProps
+   let onEvent = EventDispatcher()
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
+-    props.children = subChildren?.filter { $0 is SheetContentExpoView == false }
+-    props.sheetContent = subChildren?.filter { $0 is SheetContentExpoView == true }.first
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
++    props.children = subChildren.filter { $0 is SheetContentExpoView == false }
++    props.sheetContent = subChildren.filter { $0 is SheetContentExpoView == true }.first
+   }
+   
+   required init(appContext: AppContext? = nil) {
+diff --git a/ios/Label/LabelExpoView.swift b/ios/Label/LabelExpoView.swift
+index a69766ce9e5beb2b8c5c525c7437bdde2ff2e041..967b5d670027558eeefc0cdb08f2f85253be3010 100644
+--- a/ios/Label/LabelExpoView.swift
++++ b/ios/Label/LabelExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class LabelExpoView: ExpoView {
++class LabelExpoView: SwiftUIReactView {
+   let props: LabelProps
+   let onEvent = EventDispatcher()
+   
+-  override func didUpdateReactSubviews() {
+-    _ = self.reactSubviews()
++  override func updateReactSubviews() {
++    _ = self.reactChildViews
+   }
+ 
+   required init(appContext: AppContext? = nil) {
+diff --git a/ios/List/ListExpoView.swift b/ios/List/ListExpoView.swift
+index 828da5a08c77c69730613478d45f3d510cf59669..f769a67a9b1d056d0cc2ab61bd96fb2e245f6d83 100644
+--- a/ios/List/ListExpoView.swift
++++ b/ios/List/ListExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class ListExpoView: ExpoView {
++class ListExpoView: SwiftUIReactView {
+   let props: ListProps
+   let onEvent = EventDispatcher()
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+diff --git a/ios/List/ListView.swift b/ios/List/ListView.swift
+index 27527a55a277157b49278feefb6e4e2c67ceca8b..f57f9662112130b3a24267f70a2d0f94607870ab 100644
+--- a/ios/List/ListView.swift
++++ b/ios/List/ListView.swift
+@@ -9,8 +9,8 @@ struct ListView: View {
+     if #available(iOS 15.0, *) {
+       List {
+         ForEach(props.children?.indices ?? 0..<0, id: \.self) { index in
+-          let childSubviews = props.children?[index].reactSubviews().first?.reactSubviews()
+-          if let section = props.children?[index].reactSubviews().first as? SectionExpoView {
++          let childSubviews = swiftUIReactSubviews(swiftUIReactSubviews(props.children?[index]).first)
++          if let section = swiftUIReactSubviews(props.children?[index]).first as? SectionExpoView {
+             Section(header: Text(section.props.header.toMarkdown()), footer: Text(section.props.footer.toMarkdown())) {
+               ForEach(childSubviews ?? [], id: \.self) { v in
+                 RepresentableView(view: v)
+@@ -26,8 +26,8 @@ struct ListView: View {
+       .reactNativeViewModifiers(mods: props.modifiers, onEvent: props.onEvent)
+       .onAppear {
+         for child in props.children ?? [] {
+-          let childSubviews = child.reactSubviews().first?.reactSubviews()
+-          if let section = child.reactSubviews().first as? SectionExpoView {
++          let childSubviews = swiftUIReactSubviews(swiftUIReactSubviews(child).first)
++          if let section = swiftUIReactSubviews(child).first as? SectionExpoView {
+             section.parentList = listExpoView
+           }
+         }
+diff --git a/ios/Menu/MenuExpoView.swift b/ios/Menu/MenuExpoView.swift
+index 314182c5f6accecbee7bfe37342d31057bf9fe83..b1bfe35e40cdf809399e2c32259b05c23100102e 100644
+--- a/ios/Menu/MenuExpoView.swift
++++ b/ios/Menu/MenuExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class MenuExpoView: ExpoView {
++class MenuExpoView: SwiftUIReactView {
+   let props: MenuProps
+   let onEvent = EventDispatcher()
+   
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+diff --git a/ios/Menu/MenuView.swift b/ios/Menu/MenuView.swift
+index d401d9f2ff5602b292f80822e3b240e603ca1e10..23e07294cd4ecc540356d3d235ce088d5ce69a68 100644
+--- a/ios/Menu/MenuView.swift
++++ b/ios/Menu/MenuView.swift
+@@ -45,12 +45,12 @@ func buildMenu(_ children: [UIView]) -> some View {
+     let child = children[index]
+     if let section = child as? SectionExpoView {
+       Section(header: Text(section.props.header), footer: Text(section.props.footer)) {
+-        buildMenu(child.reactSubviews())
++      buildMenu(swiftUIReactSubviews(child))
+       }
+     } else if let subMenu = child as? MenuExpoView {
+       if #available(iOS 14.0, *) {
+         Menu(subMenu.props.title) {
+-          buildMenu(child.reactSubviews())
++          buildMenu(swiftUIReactSubviews(child))
+         }
+       }
+     } else if let button = child as? ButtonExpoView {
+diff --git a/ios/Section/SectionExpoView.swift b/ios/Section/SectionExpoView.swift
+index 546418ae3967b7506c598c9ed26c8003eacbc978..f5029f573635db7ff0aaa2c06372c17642611bc2 100644
+--- a/ios/Section/SectionExpoView.swift
++++ b/ios/Section/SectionExpoView.swift
+@@ -1,15 +1,15 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class SectionExpoView: ExpoView {
++class SectionExpoView: SwiftUIReactView {
+   let props: SectionProps
+   let onEvent = EventDispatcher()
+   var parentList: ListExpoView?
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+-    parentList?.didUpdateReactSubviews()
++    parentList?.updateReactSubviews()
+   }
+   
+   required init(appContext: AppContext? = nil) {
+diff --git a/ios/SheetContent/SheetContentExpoView.swift b/ios/SheetContent/SheetContentExpoView.swift
+index d690342aabe82cdf52b707c823912d56b67f2050..0a62433cd5f504059a7ec7b5aa9b762b65f114c8 100644
+--- a/ios/SheetContent/SheetContentExpoView.swift
++++ b/ios/SheetContent/SheetContentExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class SheetContentExpoView: ExpoView {
++class SheetContentExpoView: SwiftUIReactView {
+   let props: SheetContentProps
+   
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()    
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+ 
+diff --git a/ios/Text/TextExpoView.swift b/ios/Text/TextExpoView.swift
+index 83223d14985b8af6ea9e3f0e1feccfea8cf7fbac..89c378c1ace8e7a30156fe65bb49f510555b4f06 100644
+--- a/ios/Text/TextExpoView.swift
++++ b/ios/Text/TextExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class TextExpoView: ExpoView {
++class TextExpoView: SwiftUIReactView {
+   let props: TextProps
+   let onEvent = EventDispatcher()
+   
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+@@ -17,4 +17,3 @@ class TextExpoView: ExpoView {
+     setupHostingController(hostingController)
+   }
+ }
+-
+diff --git a/ios/VStack/VStackExpoView.swift b/ios/VStack/VStackExpoView.swift
+index 1c30bdf4c6739aa8ceaa90b6a931a9e2f025aa83..1e5171c4e571514b2e842eb0ee0e63c9b78cd206 100644
+--- a/ios/VStack/VStackExpoView.swift
++++ b/ios/VStack/VStackExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class VStackExpoView: ExpoView {
++class VStackExpoView: SwiftUIReactView {
+   let props: VStackProps
+   let onEvent = EventDispatcher()
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   
+diff --git a/ios/ZStack/ZStackExpoView.swift b/ios/ZStack/ZStackExpoView.swift
+index 827c22c2f8665ded30d90cfad9c5317c58aad059..2dd17cac6d0f86fc6263d5b099ae345687547870 100644
+--- a/ios/ZStack/ZStackExpoView.swift
++++ b/ios/ZStack/ZStackExpoView.swift
+@@ -1,12 +1,12 @@
+ import ExpoModulesCore
+ import SwiftUI
+ 
+-class ZStackExpoView: ExpoView {
++class ZStackExpoView: SwiftUIReactView {
+   let props: ZStackProps
+   let onEvent = EventDispatcher()
+ 
+-  override func didUpdateReactSubviews() {
+-    let subChildren = self.reactSubviews()
++  override func updateReactSubviews() {
++    let subChildren = self.reactChildViews
+     props.children = subChildren
+   }
+   

@@ -1,5 +1,4 @@
 import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
 import {
 	Redirect,
@@ -9,6 +8,7 @@ import {
 	useLocalSearchParams,
 	useNavigation
 } from 'expo-router'
+import { HeaderTitle } from 'expo-router/react-navigation'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
