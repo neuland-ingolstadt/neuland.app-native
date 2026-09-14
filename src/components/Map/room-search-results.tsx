@@ -6,6 +6,7 @@ import { FreeRoomsList } from '@/components/Map/free-rooms-list'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 
 interface RoomSearchResultsProps {
 	rooms: AvailableRoom[] | null
@@ -40,6 +41,7 @@ export function RoomSearchResults({
 					) : isPaused ? (
 						<ErrorView
 							title={networkError}
+							statusServices={ServiceStatus.Thi}
 							onButtonPress={() => {
 								void refetchByUser()
 							}}

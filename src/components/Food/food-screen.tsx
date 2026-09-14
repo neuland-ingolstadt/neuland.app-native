@@ -29,6 +29,7 @@ import type { Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { pausedToast } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -171,6 +172,7 @@ function FoodScreen(): React.JSX.Element {
 				) : isPaused && !isSuccess ? (
 					<ErrorView
 						title={networkError}
+						statusServices={ServiceStatus.Neuland}
 						onRefresh={refetchByUser}
 						refreshing={isRefetchingByUser}
 					/>

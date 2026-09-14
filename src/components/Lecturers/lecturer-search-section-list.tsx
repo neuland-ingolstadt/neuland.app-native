@@ -8,6 +8,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import type { NormalizedLecturer } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { lecturersStyles as styles } from './lecturers-styles'
 
 interface LecturerSearchSectionListProps {
@@ -37,6 +38,7 @@ export default function LecturerSearchSectionList({
 	) : isPaused ? (
 		<ErrorView
 			title={networkError}
+			statusServices={ServiceStatus.Thi}
 			refreshing={isRefetchingByUser}
 			onRefresh={() => {
 				void refetchByUser()

@@ -28,6 +28,7 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
+import { ServiceStatus } from '@/utils/gatus-status'
 import { copyToClipboard } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -265,6 +266,7 @@ export default function Profile(): React.JSX.Element {
 			{isPaused && (
 				<ErrorView
 					title={networkError}
+					statusServices={ServiceStatus.Thi}
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>

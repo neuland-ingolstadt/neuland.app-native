@@ -227,6 +227,19 @@
 			"title": "Re-enrolment pending",
 			"message": "Please re-enrol in Primuss to remain enrolled next semester.",
 			"link": "Open Primuss"
+		},
+		"serviceStatus": {
+			"title": "Limited availability",
+			"messageOne": "{{service}} is currently unavailable.",
+			"messageMany": "{{services}} are currently unavailable.",
+			"link": "View system status",
+			"dismiss": "Dismiss status banner",
+			"services": {
+				"thi": "THI API",
+				"neuland": "Neuland API",
+				"campusLife": "Campus Life",
+				"map": "Campus Map"
+			}
 		}
 	},
 	"grades": {
