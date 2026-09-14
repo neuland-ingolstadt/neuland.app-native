@@ -175,7 +175,7 @@ For a new dashboard widget:
   "icon": {
     "ios": "building.2",
     "android": "domain",
-    "web": "Building2"
+    "web": "Building"
   }
 }
 ```
