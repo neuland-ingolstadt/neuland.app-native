@@ -19,6 +19,11 @@ interface DividerProps {
 /**
  * A dynamic component that renders a horizontal line with customizable width and color.
  *
+ * Drawn as a 1pt filled row instead of `border-b-hairline`. Hairline strokes
+ * (~1 device pixel via `StyleSheet.hairlineWidth`) round away at fractional Y
+ * offsets in a scrolling iOS form sheet, which made FormList separators
+ * flicker while the event-details sheet moved.
+ *
  * @param {DimensionValue} [width='95%'] - The width of the line. Defaults to '95%'.
  * @param {string} [color='grey'] - The color of the line. Defaults to 'grey'.
  * @returns {React.JSX.Element} - A View component that renders a horizontal line.
@@ -41,10 +46,10 @@ const Divider = ({
 			}}
 		>
 			<View
-				className="border-b-hairline web:border-b-[0.1px]"
+				className="h-[1px]"
 				style={{
 					width: width ?? '100%',
-					borderBottomColor: color ?? toColor(defaultColor)
+					backgroundColor: color ?? toColor(defaultColor)
 				}}
 			/>
 		</View>
