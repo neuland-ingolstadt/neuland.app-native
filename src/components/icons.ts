@@ -35,7 +35,7 @@ export const cardIcons: CardIcons = {
 	thiEvents: {
 		ios: 'building.columns.fill',
 		android: 'account_balance',
-		web: 'Building2'
+		web: 'Building'
 	},
 	sports: {
 		ios: 'figure.run',
