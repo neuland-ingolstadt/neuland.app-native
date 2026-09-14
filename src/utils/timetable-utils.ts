@@ -8,6 +8,7 @@ import type {
 	TimetableSections
 } from '@/types/utils'
 import { combineDateTime } from './date-utils'
+import { parseLecturerIds } from './lecturers-utils'
 
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
@@ -77,6 +78,8 @@ export async function getFriendlyTimetable(
 					.sort()
 			}
 
+			const lecturerIds = parseLecturerIds(lecture.lvId)
+
 			return {
 				date: lecture.date,
 				startDate,
@@ -85,6 +88,7 @@ export async function getFriendlyTimetable(
 				shortName: lecture.details.veranstaltung.split(' - ')[0],
 				rooms: rooms.filter((room) => room !== ''),
 				lecturer: lecture.details.dozent,
+				lecturerIds,
 				exam: lecture.details.pruefung,
 				course: lecture.details.stg,
 				studyGroup: lecture.details.stgru,
