@@ -55,10 +55,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 			mode: 'date',
 			minimumDate: new Date(),
 			maximumDate: maximumSearchDate,
-			onChange: (event, selectedDate) => {
-				if (event.type === 'set' && selectedDate != null) {
-					roomSearch.setDate(formatISODate(selectedDate))
-				}
+			onValueChange: (_event, selectedDate) => {
+				roomSearch.setDate(formatISODate(selectedDate))
 			}
 		})
 	}
@@ -69,10 +67,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 			mode: 'time',
 			is24Hour: true,
 			minuteInterval: 5,
-			onChange: (event, selectedDate) => {
-				if (event.type === 'set' && selectedDate != null) {
-					roomSearch.setTime(formatISOTime(selectedDate))
-				}
+			onValueChange: (_event, selectedDate) => {
+				roomSearch.setTime(formatISOTime(selectedDate))
 			}
 		})
 	}
@@ -114,9 +110,12 @@ export default function AdvancedSearch(): React.JSX.Element {
 									mode="date"
 									accentColor={primaryColor}
 									locale="de-DE"
-									onChange={(_event, selectedDate) => {
+									onValueChange={(_event, selectedDate) => {
 										setShowDate(Platform.OS !== 'android')
 										roomSearch.setDate(formatISODate(selectedDate))
+									}}
+									onDismiss={() => {
+										setShowDate(false)
 									}}
 									minimumDate={new Date()}
 									maximumDate={maximumSearchDate}
@@ -156,9 +155,12 @@ export default function AdvancedSearch(): React.JSX.Element {
 									accentColor={primaryColor}
 									locale="de-DE"
 									minuteInterval={5}
-									onChange={(_event, selectedDate) => {
+									onValueChange={(_event, selectedDate) => {
 										setShowTime(Platform.OS !== 'android')
 										roomSearch.setTime(formatISOTime(selectedDate))
+									}}
+									onDismiss={() => {
+										setShowTime(false)
 									}}
 								/>
 							)

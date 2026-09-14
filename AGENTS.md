@@ -26,10 +26,10 @@ THI news, calendar, university sports, campus life events, quick links.
 
 | Area              | Tech                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| Runtime           | React Native `0.85.3`, React `19.2.3`, Expo SDK `56`                       |
-| Language          | TypeScript `5.9` (strict mode; held for the cache provider peer range)     |
+| Runtime           | React Native `0.86.3`, React `19.2.3`, Expo SDK `57`                       |
+| Language          | TypeScript `6.0` (strict mode)                                             |
 | Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
-| Routing           | **Expo Router 56** (file-based, typed routes) — *not* React Navigation directly |
+| Routing           | **Expo Router 57** (file-based, typed routes) — *not* React Navigation directly |
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
 | Storage           | `react-native-mmkv` (settings/cache), `expo-secure-store` (mobile creds), `idb` + WebCrypto (web creds) |
@@ -45,7 +45,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
-SDK 56 requires Xcode 26.4 and iOS 16.4 or newer and uses Hermes V1 by default. The build cache provider `@eggl-js/expo-github-cache@0.4.0` currently declares a TypeScript `^5.8.3` peer range, so TypeScript remains on `~5.9.2` and is excluded from Expo's SDK dependency fixer through the `expo.install.exclude` setting. Remove that exclusion when the cache provider supports TypeScript 6.
+SDK 57 requires Xcode 26.4 and iOS 16.4 or newer and uses Hermes V1 by default.
 
 ---
 
