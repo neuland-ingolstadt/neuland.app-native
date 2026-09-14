@@ -97,7 +97,7 @@ export function OfficePresenceSection(): React.JSX.Element {
 					<PlatformIcon
 						ios={{ name: 'building.2', size: 22 }}
 						android={{ name: 'apartment', size: 22 }}
-						web={{ name: 'Building2', size: 22 }}
+						web={{ name: 'Building', size: 22 }}
 						style={{ color: primaryColor }}
 					/>
 					{count > 0 && !isLoading && !isError ? (

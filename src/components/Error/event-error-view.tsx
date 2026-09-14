@@ -30,7 +30,7 @@ function getEventTypeIcon(type: string): {
 			return {
 				ios: 'building.columns.fill',
 				android: 'account_balance' satisfies MaterialIcon,
-				web: 'Building2' satisfies LucideIcon
+				web: 'Building' satisfies LucideIcon
 			}
 		case 'sports':
 			return {

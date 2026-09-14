@@ -24,7 +24,7 @@ Reuse these when the feature matches. All triplets are validated against the pro
 | Timetable | `clock.fill` | `calendar_month` | `CalendarDays` |
 | Calendar / academic | `graduationcap.fill` | `school` | `GraduationCap` |
 | Events (dashboard) | `party.popper.fill` | `celebration` | `PartyPopper` |
-| THI events | `building.columns.fill` | `account_balance` | `Building2` |
+| THI events | `building.columns.fill` | `account_balance` | `Building` |
 | Sports (dashboard) | `figure.run` | `sports_handball` | `Volleyball` |
 | News | `newspaper.fill` | `newspaper` | `Newspaper` |
 | Login / guest | `person.fill.questionmark` | `person` | `UserCheck` |
@@ -46,7 +46,7 @@ Look up each name before use. These follow the same cross-platform mapping style
 | Exams | `doc.text` | `description` | `FileText` |
 | Share | `square.and.arrow.up` | `share` | `Share2` |
 | Library | `books.vertical` | `local_library` | `Library` |
-| Campus / buildings | `building.2` | `domain` | `Building2` |
+| Campus / buildings | `building.2` | `domain` | `Building` |
 | Accessibility | `accessibility` | `accessibility` | `Accessibility` |
 
 ## Validation commands
