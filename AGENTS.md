@@ -26,10 +26,10 @@ THI news, calendar, university sports, campus life events, quick links.
 
 | Area              | Tech                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| Runtime           | React Native `0.85.3`, React `19.2.3`, Expo SDK `56`                       |
+| Runtime           | React Native `0.86.3`, React `19.2.3`, Expo SDK `57`                       |
 | Language          | TypeScript `6.0` (strict mode)                                             |
 | Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
-| Routing           | **Expo Router 56** (file-based, typed routes) — *not* React Navigation directly |
+| Routing           | **Expo Router 57** (file-based, typed routes) — *not* React Navigation directly |
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
 | Storage           | `react-native-mmkv` (settings/cache), `expo-secure-store` (mobile creds), `idb` + WebCrypto (web creds) |
