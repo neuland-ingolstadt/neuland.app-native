@@ -21,8 +21,8 @@ interface DividerProps {
  *
  * Drawn as a 1pt filled row instead of `border-b-hairline`. Hairline strokes
  * (~1 device pixel via `StyleSheet.hairlineWidth`) round away at fractional Y
- * offsets in a scrolling iOS form sheet, which made FormList separators
- * flicker while the event-details sheet moved.
+ * offsets, so FormList separators flickered in scrolling form sheets and
+ * looked broken on static grouped lists (Profile, settings, etc.).
  *
  * @param {DimensionValue} [width='95%'] - The width of the line. Defaults to '95%'.
  * @param {string} [color='grey'] - The color of the line. Defaults to 'grey'.

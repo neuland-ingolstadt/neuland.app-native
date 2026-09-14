@@ -6,6 +6,7 @@ import Divider from '@/components/Universal/divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import { copyToClipboard } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
+import GroupedCard from './grouped-card'
 import PlatformIcon from './icon'
 
 interface FormListProps {
@@ -27,16 +28,6 @@ interface RenderSectionItemProps {
 	section: FormListSections
 	sheet: boolean
 }
-
-const blockCardClassName = (sheet: boolean): string =>
-	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden'
-		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden'
-
-const itemSectionClassName = (sheet: boolean): string =>
-	sheet
-		? 'bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden px-4 py-[13px]'
-		: 'bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden px-4 py-[13px]'
 
 const handlePress = (onPress?: () => Promise<void> | void): void => {
 	if (onPress != null) {
@@ -75,7 +66,7 @@ const RenderSectionItem = ({
 }: RenderSectionItemProps): React.JSX.Element => {
 	return (
 		<View key={sectionIndex} className="gap-1.5">
-			<View className={itemSectionClassName(sheet)}>
+			<GroupedCard sheet={sheet} contentClassName="px-4 py-[13px]">
 				{typeof section.item === 'string' ? (
 					<Text className="text-text text-base pt-0.5 text-left">
 						{section.item}
@@ -83,7 +74,7 @@ const RenderSectionItem = ({
 				) : (
 					section.item
 				)}
-			</View>
+			</GroupedCard>
 		</View>
 	)
 }
@@ -177,7 +168,7 @@ const RenderSectionItems = ({
 	}
 
 	return (
-		<View className={blockCardClassName(sheet)}>
+		<GroupedCard sheet={sheet}>
 			{items.map((item, index) => {
 				const defaultLabel = getDefaultAccessibilityLabel(item)
 				const rowPressable = isRowPressable(item)
@@ -347,7 +338,7 @@ const RenderSectionItems = ({
 					</React.Fragment>
 				)
 			})}
-		</View>
+		</GroupedCard>
 	)
 }
 

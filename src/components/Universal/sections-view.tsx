@@ -1,5 +1,6 @@
 import type React from 'react'
 import { Text, View } from 'react-native'
+import GroupedCard from './grouped-card'
 
 const SectionView = ({
 	title,
@@ -22,15 +23,15 @@ const SectionView = ({
 						{title}
 					</Text>
 				)}
-				<View
-					className={
-						hideBackground
-							? 'self-center justify-center mt-0.5 w-full bg-transparent border-transparent'
-							: 'self-center bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden justify-center mt-0.5 w-full'
-					}
-				>
-					{children}
-				</View>
+				{hideBackground ? (
+					<View className="self-center justify-center mt-0.5 w-full bg-transparent border-transparent">
+						{children}
+					</View>
+				) : (
+					<GroupedCard className="self-center justify-center mt-0.5 w-full">
+						{children}
+					</GroupedCard>
+				)}
 			</View>
 			{footer != null && (
 				<Text className="mt-1.5 text-xs px-page ios:mx-4 android:mx-0 text-label-secondary">
