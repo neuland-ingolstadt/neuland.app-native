@@ -58,7 +58,7 @@ export default function About(): React.JSX.Element {
 					icon: {
 						ios: 'building.2',
 						android: 'apartment',
-						web: 'Building2'
+						web: 'Building'
 					},
 					onPress: async () =>
 						(await Linking.openURL(

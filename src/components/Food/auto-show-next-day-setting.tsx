@@ -1,5 +1,5 @@
 import DateTimePicker, {
-	type DateTimePickerEvent
+	type DateTimePickerChangeEvent
 } from '@react-native-community/datetimepicker'
 import type React from 'react'
 import { useState } from 'react'
@@ -54,17 +54,23 @@ export default function AutoShowNextDaySetting({
 	const time = new Date()
 	time.setHours(Math.floor(timeMinutes / 60), timeMinutes % 60, 0, 0)
 
-	const handleSetTime = (event: DateTimePickerEvent, selectedDate?: Date) => {
+	const handleTimeValueChange = (
+		_event: DateTimePickerChangeEvent,
+		selectedDate: Date
+	) => {
 		if (Platform.OS === 'android') {
 			setShowAndroidTimePicker(false)
-			if (event.type !== 'set') return
 		}
-
-		if (selectedDate == null) return
 
 		onTimeMinutesChange(
 			selectedDate.getHours() * 60 + selectedDate.getMinutes()
 		)
+	}
+
+	const handleTimeDismiss = () => {
+		if (Platform.OS === 'android') {
+			setShowAndroidTimePicker(false)
+		}
 	}
 
 	const handleWebTimeChange = (value: string) => {
@@ -116,7 +122,7 @@ export default function AutoShowNextDaySetting({
 								mode={'time'}
 								display={'compact'}
 								value={time}
-								onChange={handleSetTime}
+								onValueChange={handleTimeValueChange}
 							/>
 						</View>
 					) : (
@@ -141,7 +147,8 @@ export default function AutoShowNextDaySetting({
 									testID="food-auto-next-day-time-picker"
 									mode={'time'}
 									value={time}
-									onChange={handleSetTime}
+									onValueChange={handleTimeValueChange}
+									onDismiss={handleTimeDismiss}
 								/>
 							)}
 						</>

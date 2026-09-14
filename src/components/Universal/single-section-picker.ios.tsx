@@ -1,8 +1,7 @@
+import { Host, Switch } from '@expo/ui'
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { useEffect } from 'react'
 import { Platform, Text, View } from 'react-native'
-import { Toggle, useBinding } from 'swiftui-react-native'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -21,19 +20,17 @@ const SingleSectionPicker = ({
 	action,
 	disabled = false
 }: SectionPickerProps): React.JSX.Element => {
+	const primaryColor = String(
+		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
+	)
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
-	const isOn = useBinding(selectedItem)
 
-	useEffect(() => {
-		isOn.setValue(selectedItem)
-	}, [selectedItem])
-
-	const handleToggleChange = (value?: boolean) => {
+	const handleToggleChange = (value: boolean) => {
 		if (!disabled) {
 			if (Platform.OS === 'ios') void selectionAsync()
-			action(value ?? !selectedItem)
+			action(value)
 		}
 	}
 
@@ -50,20 +47,22 @@ const SingleSectionPicker = ({
 					{title}
 				</Text>
 				<View
-					testID={testID}
 					accessible={true}
 					accessibilityLabel={title}
 					accessibilityRole="switch"
 					accessibilityState={{ checked: selectedItem, disabled }}
 					onAccessibilityTap={() => {
-						handleToggleChange()
+						handleToggleChange(!selectedItem)
 					}}
 				>
-					<Toggle
-						isOn={isOn}
-						onChange={handleToggleChange}
-						style={disabled ? { opacity: 0.5 } : undefined}
-					/>
+					<Host matchContents seedColor={primaryColor}>
+						<Switch
+							testID={testID}
+							value={selectedItem}
+							onValueChange={handleToggleChange}
+							disabled={disabled}
+						/>
+					</Host>
 				</View>
 			</View>
 		</View>
