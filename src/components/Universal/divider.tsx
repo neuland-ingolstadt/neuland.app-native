@@ -19,10 +19,7 @@ interface DividerProps {
 /**
  * A dynamic component that renders a horizontal line with customizable width and color.
  *
- * Drawn as a 1pt filled row instead of `border-b-hairline`. Hairline strokes
- * (~1 device pixel via `StyleSheet.hairlineWidth`) round away at fractional Y
- * offsets, so FormList separators flickered in scrolling form sheets and
- * looked broken on static grouped lists (Profile, settings, etc.).
+ * The filled row reserves a physical pixel of layout height.
  *
  * @param {DimensionValue} [width='95%'] - The width of the line. Defaults to '95%'.
  * @param {string} [color='grey'] - The color of the line. Defaults to 'grey'.
@@ -46,7 +43,7 @@ const Divider = ({
 			}}
 		>
 			<View
-				className="h-[1px]"
+				className="h-hairline shrink-0"
 				style={{
 					width: width ?? '100%',
 					backgroundColor: color ?? toColor(defaultColor)

@@ -40,5 +40,6 @@ export const useTransparentHeaderStyle = () => {
 export const useFormSheetHeaderPadding = (): number => {
 	const headerHeight = useHeaderHeight()
 
-	return isIos26OrLater() ? headerHeight : 0
+	// Overlay form-sheet headers can report 0; 56pt is Router's iPhone modal default.
+	return isIos26OrLater() ? Math.max(headerHeight, 56) : 0
 }

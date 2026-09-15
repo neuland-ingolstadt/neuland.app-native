@@ -13,11 +13,9 @@ interface GroupedCardProps {
 /**
  * Inset grouped list/table card used by FormList and SectionView.
  *
- * Hairline (`StyleSheet.hairlineWidth`) strokes round away at fractional
- * Y offsets and get clipped when combined with `overflow-hidden` on the
- * same view — separators flicker in form sheets and look broken on static
- * pages like Profile. A 1px outer border is split from the inner clip so
- * the outline and row separators stay visible.
+ * Rasterize each card at the device scale before compositing it on iOS.
+ * Otherwise, individual hairlines can disappear at fractional scroll offsets.
+ * Keep this on the card rather than the entire scroll view to bound the bitmap size.
  */
 const GroupedCard = ({
 	children,
@@ -27,7 +25,8 @@ const GroupedCard = ({
 }: GroupedCardProps): React.JSX.Element => {
 	return (
 		<View
-			className={`${sheet ? 'bg-card-sheet' : 'bg-card'} ${RADIUS_CLASS} border border-border ${className ?? ''}`.trim()}
+			shouldRasterizeIOS
+			className={`${sheet ? 'bg-card-sheet' : 'bg-card'} ${RADIUS_CLASS} border-hairline border-border overflow-hidden ${className ?? ''}`.trim()}
 		>
 			<View
 				className={`${RADIUS_CLASS} overflow-hidden ${contentClassName ?? ''}`.trim()}
