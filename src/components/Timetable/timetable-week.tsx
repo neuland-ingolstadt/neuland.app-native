@@ -56,6 +56,7 @@ interface CalendarEvent {
 	eventType: string
 	id: string
 	allDay: boolean
+	color?: string
 	start: {
 		dateTime: Date
 	}
@@ -83,6 +84,9 @@ export default function TimetableWeek({
 	)
 	const labelBackgroundColor = String(
 		toColor(useCSSVariable('--color-label-background')) ?? '#e5dede'
+	)
+	const calendarItemColor = String(
+		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
 	)
 	const { i18n, t } = useTranslation()
 	const today = dayjs().startOf('day').toDate()
@@ -234,6 +238,7 @@ export default function TimetableWeek({
 						eventType: 'calendar',
 						id: event.id,
 						allDay: isAllDay,
+						color: calendarItemColor,
 						start: { dateTime: startDate },
 						end: { dateTime: endDate }
 					}
@@ -245,7 +250,14 @@ export default function TimetableWeek({
 			...friendlyExams,
 			...calendarEvents
 		] as unknown as PackedEvent[]
-	}, [timetable, exams, showCalendarEvents, showExams, i18n.language])
+	}, [
+		timetable,
+		exams,
+		showCalendarEvents,
+		showExams,
+		i18n.language,
+		calendarItemColor
+	])
 
 	useEffect(() => {
 		startTransition(() => {
