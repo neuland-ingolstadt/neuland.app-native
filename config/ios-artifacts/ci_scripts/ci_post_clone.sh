@@ -13,6 +13,27 @@ else
 fi
 cd "$REPO_ROOT"
 
+# Xcode Cloud exposes CI_COMMIT, but shell exports do not carry into later
+# xcodebuild / Metro phases. Persist it for Expo's EXPO_PUBLIC_* inlining.
+echo "===== Setting EXPO_PUBLIC_GIT_COMMIT_HASH ====="
+COMMIT_HASH="${CI_COMMIT:-$(git rev-parse HEAD 2>/dev/null || true)}"
+if [[ -n "$COMMIT_HASH" ]]; then
+	export EXPO_PUBLIC_GIT_COMMIT_HASH="$COMMIT_HASH"
+	# Replace any prior value so re-runs stay idempotent.
+	if [[ -f .env.local ]] && grep -q '^EXPO_PUBLIC_GIT_COMMIT_HASH=' .env.local; then
+		grep -v '^EXPO_PUBLIC_GIT_COMMIT_HASH=' .env.local > .env.local.tmp
+		mv .env.local.tmp .env.local
+	fi
+	printf 'EXPO_PUBLIC_GIT_COMMIT_HASH=%s\n' "$COMMIT_HASH" >> .env.local
+	if [[ -n "${CI_COMMIT:-}" ]]; then
+		echo "EXPO_PUBLIC_GIT_COMMIT_HASH=${COMMIT_HASH:0:7}… (from CI_COMMIT)"
+	else
+		echo "EXPO_PUBLIC_GIT_COMMIT_HASH=${COMMIT_HASH:0:7}… (from git rev-parse)"
+	fi
+else
+	echo "WARNING: CI_COMMIT and git HEAD unavailable; Version screen will show N/A for commit hash"
+fi
+
 echo "===== Installing CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
 export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
