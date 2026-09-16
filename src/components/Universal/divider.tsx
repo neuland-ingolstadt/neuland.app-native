@@ -4,6 +4,7 @@ import {
 	type DimensionValue,
 	type FlexAlignType,
 	Platform,
+	StyleSheet,
 	View
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
@@ -30,6 +31,8 @@ const Divider = ({
 	paddingLeft
 }: DividerProps): React.JSX.Element => {
 	const defaultColor = useCSSVariable('--color-label-tertiary')
+	// Prefer height + backgroundColor over borderBottomWidth: hairline border
+	// strokes vanish at subpixel Y on iOS; fills do not (RN #58054).
 
 	return (
 		<View
@@ -41,10 +44,10 @@ const Divider = ({
 			}}
 		>
 			<View
-				className="border-b-hairline web:border-b-[0.1px]"
 				style={{
 					width: width ?? '100%',
-					borderBottomColor: color ?? toColor(defaultColor)
+					height: StyleSheet.hairlineWidth,
+					backgroundColor: color ?? toColor(defaultColor)
 				}}
 			/>
 		</View>
