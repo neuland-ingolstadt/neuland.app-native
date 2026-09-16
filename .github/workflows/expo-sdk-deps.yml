@@ -35,7 +35,14 @@ jobs:
 
       - name: Apply Expo SDK dependency sync
         if: steps.check.outputs.needed == 'true'
-        run: bunx expo install --fix
+        run: |
+          # expo install --fix spawns `bun add`, which honors bunfig.toml minimumReleaseAge.
+          # Temporarily disable the age gate for this trusted Expo SDK sync (see renovate.json).
+          bunfig_backup="$(mktemp)"
+          cp bunfig.toml "$bunfig_backup"
+          trap 'mv "$bunfig_backup" bunfig.toml' EXIT
+          sed -i 's/^minimumReleaseAge = [0-9]\+/minimumReleaseAge = 0/' bunfig.toml
+          bunx expo install --fix
 
       - name: Create pull request
         if: steps.check.outputs.needed == 'true'
