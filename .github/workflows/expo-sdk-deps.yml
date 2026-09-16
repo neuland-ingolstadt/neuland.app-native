@@ -2,8 +2,8 @@ name: Expo SDK dependencies
 
 on:
   schedule:
-    # Monday 04:00 UTC — aligns with Renovate off-hours in Europe/Berlin
-    - cron: '0 4 * * 1'
+    # Daily 04:00 UTC — checks for Expo SDK-compatible dependency updates
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 permissions:
