@@ -2,7 +2,6 @@ import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
-import { printLink } from '@/data/constants'
 import InfoBox from './info-box'
 
 interface StudentInfoSectionProps {
@@ -47,7 +46,7 @@ export default function StudentInfoSection({
 				</View>
 			</View>
 			<View className="flex-row gap-2.5 mb-2.5">
-				<View className="flex-[3]">
+				{/* <View className="flex-[3]">
 					<InfoBox
 						title={t('infoBoxes.printerBalance')}
 						value={printerBalance ?? '-'}
@@ -59,7 +58,7 @@ export default function StudentInfoSection({
 						href={printLink as RelativePathString}
 						isExternalLink
 					/>
-				</View>
+				</View> */}
 				<View className="flex-[5]">
 					<InfoBox
 						value={t('infoBoxes.library')}
