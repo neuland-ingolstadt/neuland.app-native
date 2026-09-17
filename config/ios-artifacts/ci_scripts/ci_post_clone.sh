@@ -13,22 +13,24 @@ else
 fi
 cd "$REPO_ROOT"
 
-echo "===== Installing CocoaPods ====="
-export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
-brew install cocoapods
-echo "===== Installing Node.js ====="
-brew install node
-brew link node 2>/dev/null || true
+require_command() {
+	if ! command -v "$1" >/dev/null 2>&1; then
+		echo "ERROR: required command '$1' is not on PATH."
+		exit 1
+	fi
+}
+
+echo "===== Checking pre-installed tools ====="
+require_command node
+require_command bun
+require_command pod
 node -v
 npm -v
-export NODE_BINARY=$(which node)
-echo "NODE_BINARY is set to $NODE_BINARY"
-
-echo "===== Installing Bun ====="
-brew tap oven-sh/bun
-brew install bun
 bun -v
+pod --version
+
+export NODE_BINARY="$(command -v node)"
+echo "NODE_BINARY is set to $NODE_BINARY"
 
 echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
