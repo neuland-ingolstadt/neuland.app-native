@@ -8,7 +8,7 @@ import {
 } from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect } from 'react'
-import { InteractionManager, View } from 'react-native'
+import { View } from 'react-native'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { CampusLifePublicOrganizerKind } from '@/types/campus-life'
@@ -81,7 +81,7 @@ export default function CampusLifeEventsScreen({
 					organizerKind,
 					org
 				)
-				InteractionManager.runAfterInteractions(() => {
+				requestIdleCallback(() => {
 					router.setParams({ openEvent: 'false' })
 					router.navigate({
 						pathname: CAMPUS_LIFE_EVENT_DETAIL_PATH,

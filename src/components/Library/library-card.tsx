@@ -6,7 +6,7 @@ import type { MaterialIcon } from '@/types/material-icons'
 import { toColor } from '@/utils/uniwind-utils'
 
 interface LibraryCardProps {
-	onPress: ((event: GestureResponderEvent) => void) | null | undefined
+	onPress?: (event: GestureResponderEvent) => void
 	iconProps: {
 		ios: { name: string; size: number }
 		android: {

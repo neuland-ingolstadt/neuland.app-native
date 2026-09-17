@@ -114,7 +114,7 @@ export default function CalendarPage(): React.JSX.Element {
 					height: screenHeight
 				}}
 				initialPage={initialPage}
-				onPageSelected={(e) => {
+				onPageSelected={(e: { nativeEvent: { position: number } }) => {
 					const page = e.nativeEvent.position
 					setSelectedData(page)
 
