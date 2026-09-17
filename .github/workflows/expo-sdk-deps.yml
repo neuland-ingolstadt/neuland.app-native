@@ -2,8 +2,8 @@ name: Expo SDK dependencies
 
 on:
   schedule:
-    # Monday 04:00 UTC — aligns with Renovate off-hours in Europe/Berlin
-    - cron: '0 4 * * 1'
+    # Daily 04:00 UTC — checks for Expo SDK-compatible dependency updates
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Apply Expo SDK dependency sync
         if: steps.check.outputs.needed == 'true'
-        run: bunx expo install --fix
+        run: bunx expo install --fix -- --minimum-release-age 0
 
       - name: Create pull request
         if: steps.check.outputs.needed == 'true'
