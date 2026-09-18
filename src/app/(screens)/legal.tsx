@@ -23,8 +23,9 @@ export default function About(): React.JSX.Element {
 						android: 'shield_lock',
 						web: 'ShieldCheck'
 					},
-					onPress: async () =>
-						(await Linking.openURL(PRIVACY_URL)) as Promise<void>
+					onPress: async () => {
+						await Linking.openURL(PRIVACY_URL)
+					}
 				},
 				{
 					title: t('legal.formlist.legal.imprint'),
@@ -33,8 +34,9 @@ export default function About(): React.JSX.Element {
 						android: 'description',
 						web: 'FileText'
 					},
-					onPress: async () =>
-						(await Linking.openURL(IMPRINT_URL)) as Promise<void>
+					onPress: async () => {
+						await Linking.openURL(IMPRINT_URL)
+					}
 				},
 				{
 					testID: 'legal-licenses-link',
@@ -60,10 +62,9 @@ export default function About(): React.JSX.Element {
 						android: 'apartment',
 						web: 'Building'
 					},
-					onPress: async () =>
-						(await Linking.openURL(
-							'https://neuland-ingolstadt.de/'
-						)) as Promise<void>
+					onPress: async () => {
+						await Linking.openURL('https://neuland-ingolstadt.de/')
+					}
 				},
 				{
 					title: t('legal.formlist.us.source'),
@@ -72,10 +73,11 @@ export default function About(): React.JSX.Element {
 						android: 'code',
 						web: 'Code'
 					},
-					onPress: async () =>
-						(await Linking.openURL(
+					onPress: async () => {
+						await Linking.openURL(
 							'https://github.com/neuland-ingolstadt/neuland.app-native'
-						)) as Promise<void>
+						)
+					}
 				},
 				{
 					title: t('legal.formlist.us.faq'),
@@ -84,10 +86,9 @@ export default function About(): React.JSX.Element {
 						android: 'help',
 						web: 'CircleQuestionMark'
 					},
-					onPress: async () =>
-						(await Linking.openURL(
-							'https://neuland.app/docs/app/faq'
-						)) as Promise<void>
+					onPress: async () => {
+						await Linking.openURL('https://neuland.app/docs/app/faq')
+					}
 				}
 			]
 		}

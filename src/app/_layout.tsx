@@ -29,7 +29,7 @@ configureReanimatedLogger({
 
 export const unstable_settings = {
 	// Ensure any route can link back to `/`
-	initialRouteName: 'index'
+	anchor: 'index'
 }
 // Ignore common React Native warnings
 LogBox.ignoreLogs([

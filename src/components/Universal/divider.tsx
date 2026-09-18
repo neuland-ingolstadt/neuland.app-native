@@ -2,10 +2,10 @@ import type React from 'react'
 import {
 	type ColorValue,
 	type DimensionValue,
-	type FlexAlignType,
 	Platform,
 	StyleSheet,
-	View
+	View,
+	type ViewStyle
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
@@ -13,7 +13,7 @@ import { toColor } from '@/utils/uniwind-utils'
 interface DividerProps {
 	width?: DimensionValue
 	color?: ColorValue
-	position?: FlexAlignType
+	position?: NonNullable<ViewStyle['alignSelf']>
 	paddingLeft?: number
 }
 

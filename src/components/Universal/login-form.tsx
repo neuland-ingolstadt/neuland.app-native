@@ -149,8 +149,9 @@ const LoginForm = ({
 							? [
 									{
 										text: t('error.crash.status', { ns: 'common' }),
-										onPress: async () =>
-											(await Linking.openURL(STATUS_URL)) as Promise<void>
+										onPress: async () => {
+											await Linking.openURL(STATUS_URL)
+										}
 									}
 								]
 							: [])
