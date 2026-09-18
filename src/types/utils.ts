@@ -80,6 +80,7 @@ export interface FriendlyTimetableEntry {
 	shortName: string
 	rooms: string[]
 	lecturer: string
+	lecturerIds: string[]
 	exam?: string
 	course: string
 	studyGroup: string

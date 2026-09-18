@@ -125,7 +125,9 @@ describe('timetable-utils', () => {
 		expect(result).toHaveLength(2)
 		expect(result.map((entry) => entry.shortName)).toEqual(['MATH', 'PRG'])
 		expect(result[0].rooms).toEqual(['G101', 'G102'])
+		expect(result[0].lecturerIds).toEqual(['A'])
 		expect(result[1].rooms).toEqual(['H201'])
+		expect(result[1].lecturerIds).toEqual(['B'])
 		expect(formatYmd(result[0].date)).toBe(formatYmd(result[1].date))
 		expect(formatYmd(result[0].date)).toBe('2026-04-07')
 	})
@@ -140,6 +142,7 @@ describe('timetable-utils', () => {
 				shortName: 'MATH',
 				rooms: ['G101'],
 				lecturer: 'Prof. X',
+				lecturerIds: [],
 				course: 'INF',
 				studyGroup: 'INF1',
 				sws: '2',
@@ -198,6 +201,7 @@ describe('timetable-utils', () => {
 				shortName: 'MATH',
 				rooms: ['G101'],
 				lecturer: 'Prof. X',
+				lecturerIds: [],
 				course: 'INF',
 				studyGroup: 'INF1',
 				sws: '2',
