@@ -9,7 +9,7 @@ export function useMapOverlayQuery() {
 	return useQuery<FeatureCollection>({
 		queryKey: MAP_OVERLAY_QUERY_KEY,
 		queryFn: async () => await NeulandAPI.getMapOverlay(),
-		staleTime: 1000 * 60 * 60 * 24, // 24 hours
+		staleTime: 1000 * 60 * 60 * 12, // 12 hours
 		gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
 		networkMode: 'always'
 	})
