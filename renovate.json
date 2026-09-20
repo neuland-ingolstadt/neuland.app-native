@@ -23,7 +23,7 @@
 		"@types/node"
 	],
 	"prBodyNotes": [
-		"Expo / React Native SDK packages are synced by the weekly Expo SDK dependencies workflow or `bun pkgs`.",
+		"Expo / React Native SDK packages are synced by the daily Expo SDK dependencies workflow or `bun pkgs`.",
 		"Other dependencies are updated by Renovate in grouped PRs twice a week (Monday and Thursday mornings, Europe/Berlin).",
 		"Patched packages in `package.json` → `patchedDependencies` are excluded; update those together with `patches/`.",
 		"If the native fingerprint changes (`fp:changed`), rebuild dev clients manually via Actions → **Build dev client** — auto-builds on `main` were removed to save EAS quota."
@@ -57,6 +57,7 @@
 				"react-native-gesture-handler",
 				"react-native-pager-view",
 				"react-native-reanimated",
+				"react-native-worklets",
 				"react-native-safe-area-context",
 				"react-native-screens",
 				"react-native-svg",
