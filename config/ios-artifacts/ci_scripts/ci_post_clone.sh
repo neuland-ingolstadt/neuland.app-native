@@ -13,22 +13,22 @@ else
 fi
 cd "$REPO_ROOT"
 
-echo "===== Installing CocoaPods ====="
-export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
-brew install cocoapods
-echo "===== Installing Node.js ====="
-brew install node
-brew link node 2>/dev/null || true
-node -v
-npm -v
-export NODE_BINARY=$(which node)
-echo "NODE_BINARY is set to $NODE_BINARY"
+CI_TOOLS="${CI_DERIVED_DATA_PATH:-/tmp}/neuland-ci-tools"
+mkdir -p "$CI_TOOLS"
 
-echo "===== Installing Bun ====="
-brew tap oven-sh/bun
-brew install bun
-bun -v
+if ! command -v node >/dev/null; then
+	NODE_DIR=node-v22.14.0-darwin-$([[ "$(uname -m)" == arm64 ]] && echo arm64 || echo x64)
+	curl -fsSL "https://nodejs.org/dist/v22.14.0/${NODE_DIR}.tar.gz" | tar -xz -C "$CI_TOOLS"
+	export PATH="$CI_TOOLS/$NODE_DIR/bin:$PATH"
+fi
+
+if ! command -v bun >/dev/null; then
+	export BUN_INSTALL="$CI_TOOLS/bun" BUN_VERSION="$(cat .bun-version)"
+	curl -fsSL https://bun.sh/install | bash
+	export PATH="$BUN_INSTALL/bin:$PATH"
+fi
+
+export NODE_BINARY="$(command -v node)"
 
 echo "===== Running bun install ====="
 bun install --frozen-lockfile --ignore-scripts
@@ -38,6 +38,8 @@ bun run licences:bundle
 
 echo "===== Running expo prebuild ====="
 bunx expo prebuild -p ios
+
+echo "export NODE_BINARY=\"$NODE_BINARY\"" > ios/.xcode.env
 
 echo "===== Running pod install ====="
 cd ios
