@@ -1,4 +1,4 @@
-import { Redirect, router, Stack } from 'expo-router'
+import { Redirect, Stack } from 'expo-router'
 import { HeaderTitle } from 'expo-router/react-navigation'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +14,7 @@ import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
+import { openMapRoom } from '@/utils/map-actions'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function LecturerDetail(): React.JSX.Element {
@@ -99,11 +100,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					textColor: primaryColor,
 					onPress: () => {
 						if (lecturer?.room_short) {
-							router.dismiss()
-							router.push({
-								pathname: '/(tabs)/map',
-								params: { room: lecturer.room_short }
-							})
+							openMapRoom(lecturer.room_short)
 						}
 					}
 				},

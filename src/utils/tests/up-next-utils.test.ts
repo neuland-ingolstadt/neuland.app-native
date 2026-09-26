@@ -20,6 +20,7 @@ const buildEvent = (
 	shortName: name,
 	rooms: ['G101'],
 	lecturer: 'Prof. X',
+	lecturerIds: [],
 	course: 'INF',
 	studyGroup: 'INF1',
 	sws: '2',
