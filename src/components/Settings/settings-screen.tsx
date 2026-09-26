@@ -176,7 +176,6 @@ export default function Settings(): React.JSX.Element {
 					) : userKind === USER_STUDENT ? (
 						<StudentInfoSection
 							ects={ects}
-							printerBalance={data?.pcounter?.toString() ?? '0'}
 							personalLecturersCount={personalLecturers}
 						/>
 					) : userKind === USER_EMPLOYEE ? (

@@ -6,13 +6,11 @@ import InfoBox from './info-box'
 
 interface StudentInfoSectionProps {
 	ects?: number
-	printerBalance?: string
 	personalLecturersCount?: number
 }
 
 export default function StudentInfoSection({
 	ects,
-	printerBalance,
 	personalLecturersCount
 }: StudentInfoSectionProps): React.JSX.Element {
 	const { t } = useTranslation('settings')
