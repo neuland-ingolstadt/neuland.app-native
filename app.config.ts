@@ -272,8 +272,12 @@ export default {
 		description:
 			'Neuland Next ist deine App für die TH Ingolstadt, entwickelt von Studierenden für Studierende. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.',
 		lang: 'de',
+		dir: 'ltr',
+		startUrl: '.',
+		display: 'standalone',
+		backgroundColor: '#f2f2f2',
 		themeColor: '#007aff',
-		darkThemeColor: '#0e83fd',
+		barStyle: 'default',
 		preferRelatedApplications: true,
 		output: 'single',
 		bundler: 'metro'
