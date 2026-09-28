@@ -10,6 +10,9 @@ type PresentationMode = {
 	sheetInitialDetentIndex?: number
 	sheetGrabberVisible?: boolean
 	sheetCornerRadius?: number
+	scrollEdgeEffects?: {
+		top: 'hard'
+	}
 	headerStyle?: {
 		backgroundColor: string
 	}
@@ -41,6 +44,8 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		presentation: 'formSheet',
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
+		// Automatic scroll edges can leave long text visible behind sheet titles.
+		scrollEdgeEffects: isIos26Plus ? { top: 'hard' } : undefined,
 		headerStyle: {
 			backgroundColor: isIos26Plus ? 'transparent' : cardColor
 		},
