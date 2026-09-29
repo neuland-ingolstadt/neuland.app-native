@@ -24,6 +24,7 @@ ignore:
   - src/data/licenses.json
   - src/app
   - src/components
+  - src/hooks
   - src/assets
   - ios
   - android
