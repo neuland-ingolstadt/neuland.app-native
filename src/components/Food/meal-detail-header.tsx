@@ -2,50 +2,9 @@ import { Stack } from 'expo-router'
 import { HeaderTitle } from 'expo-router/react-navigation'
 import type { ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import Animated, { type useAnimatedStyle } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 import { toColor } from '@/utils/uniwind-utils'
-
-export function useMealDetailScroll(): {
-	scrollHandler: ReturnType<typeof useAnimatedScrollHandler>
-	headerStyle: ReturnType<typeof useAnimatedStyle<ViewStyle>>
-} {
-	const usesLiquidGlassHeader = isIos26OrLater()
-	const scrollOffset = useSharedValue(0)
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
-				scrollOffset.value = event.contentOffset.y
-			}
-		}
-	})
-
-	const headerStyle = useAnimatedStyle<ViewStyle>(() => {
-		return {
-			opacity: usesLiquidGlassHeader
-				? interpolate(scrollOffset.value, [65, 95], [0, 1], 'clamp')
-				: 1,
-			transform: [
-				{
-					translateY: interpolate(
-						scrollOffset.value,
-						usesLiquidGlassHeader ? [0, 65, 95] : [0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-
-	return { scrollHandler, headerStyle }
-}
 
 interface MealDetailStackHeaderProps {
 	title: string

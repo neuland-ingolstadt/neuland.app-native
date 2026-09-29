@@ -4,12 +4,7 @@ import { HeaderTitle } from 'expo-router/react-navigation'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Share, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedRef,
-	useAnimatedStyle,
-	useScrollViewOffset
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import ViewShot, { captureRef, type ViewShotRef } from 'react-native-view-shot'
 import { useCSSVariable } from 'uniwind'
 import ErrorView from '@/components/Error/error-view'
@@ -21,7 +16,7 @@ import ShareCard from '@/components/Timetable/share-card'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	diffInMinutes,
@@ -42,23 +37,8 @@ export default function TimetableDetails(): React.JSX.Element {
 	const shareRef = useRef<ViewShotRef>(null)
 	const lecture = useRouteParamsStore((state) => state.selectedLecture)
 	const setHtmlContent = useRouteParamsStore((state) => state.setHtmlContent)
-	const ref = useAnimatedRef<Animated.ScrollView>()
-	const scroll = useScrollViewOffset(ref)
-	const headerStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: interpolate(
-						scroll.value,
-						[0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	useFocusEffect(
 		useCallback(() => {
 			if (lecture === undefined) {
@@ -171,9 +151,10 @@ export default function TimetableDetails(): React.JSX.Element {
 	return (
 		<Animated.ScrollView
 			testID="lecture-details-screen"
-			ref={ref}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
 			contentContainerClassName="flex pb-bottom-safe px-page pt-page"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 		>
 			<Stack.Screen
 				options={{

@@ -12,10 +12,7 @@ import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import {
-	MealDetailStackHeader,
-	useMealDetailScroll
-} from '@/components/Food/meal-detail-header'
+import { MealDetailStackHeader } from '@/components/Food/meal-detail-header'
 import { createMealPreferenceAlert } from '@/components/Food/meal-preference-alert'
 import { MealPriceRow } from '@/components/Food/meal-price-row'
 import FormList from '@/components/Universal/form-list'
@@ -24,7 +21,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { useMealDetail } from '@/hooks/useMealDetail'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -73,8 +70,8 @@ export default function FoodDetail(): React.JSX.Element {
 		meal: foodData,
 		date
 	} = useMealDetail(id)
-	const { scrollHandler, headerStyle } = useMealDetailScroll()
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	const { iconAnimatedStyle: wiggleIconAnimatedStyle, triggerWiggle } =
 		useWiggleAnimation()
 
@@ -102,7 +99,7 @@ export default function FoodDetail(): React.JSX.Element {
 			<Animated.ScrollView
 				testID="food-detail-screen"
 				contentContainerClassName="flex-1 justify-center items-center"
-				contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			>
 				<LoadingIndicator />
 			</Animated.ScrollView>
@@ -176,7 +173,7 @@ export default function FoodDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			testID="food-detail-screen"
 			contentContainerClassName="mx-page pb-bottom-safe"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
