@@ -6,7 +6,7 @@
 	"dir": "ltr",
 	"start_url": ".",
 	"display": "standalone",
-	"theme_color": "#007aff",
+	"theme_color": "#f2f2f2",
 	"background_color": "#f2f2f2",
 	"prefer_related_applications": true,
 	"icons": [

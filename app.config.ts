@@ -284,8 +284,9 @@ export default {
 		startUrl: '.',
 		display: 'standalone',
 		backgroundColor: '#f2f2f2',
-		themeColor: '#007aff',
-		barStyle: 'default',
+		// theme-color is set in public/index.html (light/dark media queries) and
+		// updated at runtime from src/app/_layout.tsx to match the active app theme.
+		barStyle: 'black-translucent',
 		preferRelatedApplications: true,
 		output: 'single',
 		bundler: 'metro'
