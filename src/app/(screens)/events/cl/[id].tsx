@@ -1,7 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import {
-	Redirect,
 	router,
 	Stack,
 	useFocusEffect,
@@ -25,16 +24,13 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useFeatureFlagEnabled } from '@/hooks'
 import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
-import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	campusLifeEventListScreen,
 	campusLifeEventWebShareUrl,
 	campusLifeOrganiserParams,
-	isThiDepartmentOrganizerKind,
 	resolveEventOrganizerKind
 } from '@/utils/campus-life-utils'
 import {
@@ -65,8 +61,6 @@ export default function ClEventDetail(): React.JSX.Element {
 		id: string
 		org?: string | string[]
 	}>()
-	const { enabled: thiEventsVisible, isPending: thiFlagPending } =
-		useFeatureFlagEnabled(FeatureFlagKeys.thiEventsVisible)
 	const { t, i18n } = useTranslation('common')
 	const getLocalizedValue = useCallback(
 		(values?: { de?: string | null; en?: string | null } | null) => {
@@ -211,20 +205,6 @@ export default function ClEventDetail(): React.JSX.Element {
 				<LoadingIndicator />
 			</View>
 		)
-	}
-
-	if (isThiDepartmentOrganizerKind(organizerKind)) {
-		if (thiFlagPending) {
-			return (
-				<View className="flex-1 justify-center items-center">
-					<LoadingIndicator />
-				</View>
-			)
-		}
-
-		if (!thiEventsVisible) {
-			return <Redirect href="/(tabs)" />
-		}
 	}
 
 	const pressLink = (url: string | null | undefined) => {

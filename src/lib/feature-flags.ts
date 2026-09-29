@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import {
 	evaluateFliptBoolean,
 	type FeatureFlagContextAttributes
@@ -7,23 +6,23 @@ import {
 /**
  * Flipt flag keys for namespace `neuland-app`.
  * Keep in sync with `production/neuland-app/features.yaml` in the flags repo.
+ * Currently empty — former flags were phased out as always-on features.
  */
-export const FeatureFlagKeys = {
-	thiEventsVisible: 'thi-events-visible',
-	memberOfficePresenceEnabled: 'member-officepresence-enabled'
-} as const satisfies Record<string, string>
+export const FeatureFlagKeys = {} as const satisfies Record<string, string>
 
-export type FeatureFlagKey =
+type FeatureFlagKeyValues =
 	(typeof FeatureFlagKeys)[keyof typeof FeatureFlagKeys]
+
+/** Registered flag keys, or `string` while the registry is empty. */
+export type FeatureFlagKey = [FeatureFlagKeyValues] extends [never]
+	? string
+	: FeatureFlagKeyValues
 
 export type FeatureFlagState = Record<FeatureFlagKey, boolean>
 
 export function createDefaultFeatureFlagState(): FeatureFlagState {
 	return Object.fromEntries(
-		(Object.values(FeatureFlagKeys) as FeatureFlagKey[]).map((key) => [
-			key,
-			false
-		])
+		Object.values(FeatureFlagKeys).map((key) => [key, false])
 	) as FeatureFlagState
 }
 
@@ -33,22 +32,4 @@ export async function evaluateBooleanFlag(
 	attributes: FeatureFlagContextAttributes = {}
 ): Promise<boolean> {
 	return evaluateFliptBoolean(flagKey, defaultValue, attributes)
-}
-
-export function isMemberOfficePresenceVisible(flagEnabled: boolean): boolean {
-	return flagEnabled || Platform.OS === 'web'
-}
-
-export async function evaluateMemberOfficePresenceEnabled(
-	userKind: string | undefined
-): Promise<boolean> {
-	if (Platform.OS === 'web') {
-		return true
-	}
-
-	return evaluateBooleanFlag(
-		FeatureFlagKeys.memberOfficePresenceEnabled,
-		false,
-		{ userKind: userKind ?? 'guest' }
-	)
 }

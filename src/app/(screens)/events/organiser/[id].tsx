@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Redirect, router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, ScrollView, Text, View } from 'react-native'
@@ -10,9 +10,7 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useFeatureFlagEnabled } from '@/hooks'
 import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
-import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type {
 	CampusLifeEvent,
 	CampusLifePublicOrganizerKind
@@ -45,8 +43,6 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		org?: string | string[]
 	}>()
 	const paramOrganizerKind = parseCampusLifeOrganizerKindParam(orgParam)
-	const { enabled: thiEventsVisible, isPending: thiFlagPending } =
-		useFeatureFlagEnabled(FeatureFlagKeys.thiEventsVisible)
 	const organizerId = Number(id)
 
 	const isIdValid = Number.isInteger(organizerId)
@@ -83,20 +79,6 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const organizer = organizerQuery.data
 	const organizerKind: CampusLifePublicOrganizerKind =
 		organizer.organizerKind ?? paramOrganizerKind
-
-	if (isThiDepartmentOrganizerKind(organizerKind)) {
-		if (thiFlagPending) {
-			return (
-				<View className="flex-1 items-center justify-center">
-					<LoadingIndicator />
-				</View>
-			)
-		}
-
-		if (!thiEventsVisible) {
-			return <Redirect href="/(tabs)" />
-		}
-	}
 
 	const locale: 'de' | 'en' = i18n.language.startsWith('de') ? 'de' : 'en'
 	const description =
