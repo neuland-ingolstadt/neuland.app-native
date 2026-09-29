@@ -67,10 +67,14 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	}
 
 	if (organizerQuery.isLoading) {
+		// Keep the scroll view mounted so UIKit can attach native scroll edges.
 		return (
-			<View className="flex-1 items-center justify-center">
+			<ScrollView
+				contentContainerClassName="flex-1 items-center justify-center"
+				contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			>
 				<LoadingIndicator />
-			</View>
+			</ScrollView>
 		)
 	}
 
@@ -87,9 +91,12 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	if (isThiDepartmentOrganizerKind(organizerKind)) {
 		if (thiFlagPending) {
 			return (
-				<View className="flex-1 items-center justify-center">
+				<ScrollView
+					contentContainerClassName="flex-1 items-center justify-center"
+					contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+				>
 					<LoadingIndicator />
-				</View>
+				</ScrollView>
 			)
 		}
 

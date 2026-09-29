@@ -9,12 +9,14 @@ import Animated, {
 	useSharedValue
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
+import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 import { toColor } from '@/utils/uniwind-utils'
 
 export function useMealDetailScroll(): {
 	scrollHandler: ReturnType<typeof useAnimatedScrollHandler>
 	headerStyle: ReturnType<typeof useAnimatedStyle<ViewStyle>>
 } {
+	const usesLiquidGlassHeader = isIos26OrLater()
 	const scrollOffset = useSharedValue(0)
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
@@ -26,11 +28,14 @@ export function useMealDetailScroll(): {
 
 	const headerStyle = useAnimatedStyle<ViewStyle>(() => {
 		return {
+			opacity: usesLiquidGlassHeader
+				? interpolate(scrollOffset.value, [65, 95], [0, 1], 'clamp')
+				: 1,
 			transform: [
 				{
 					translateY: interpolate(
 						scrollOffset.value,
-						[0, 30, 65],
+						usesLiquidGlassHeader ? [0, 65, 95] : [0, 30, 65],
 						[25, 25, 0],
 						'clamp'
 					)

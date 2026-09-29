@@ -11,8 +11,9 @@ type PresentationMode = {
 	sheetGrabberVisible?: boolean
 	sheetCornerRadius?: number
 	scrollEdgeEffects?: {
-		top: 'hard'
+		top: 'soft'
 	}
+	headerTransparent?: boolean
 	headerStyle?: {
 		backgroundColor: string
 	}
@@ -44,8 +45,9 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		presentation: 'formSheet',
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
-		// Automatic scroll edges can leave long text visible behind sheet titles.
-		scrollEdgeEffects: isIos26Plus ? { top: 'hard' } : undefined,
+		// Let UIKit fade scrolling content behind the floating Liquid Glass header.
+		scrollEdgeEffects: isIos26Plus ? { top: 'soft' } : undefined,
+		headerTransparent: isIos26Plus ? true : undefined,
 		headerStyle: {
 			backgroundColor: isIos26Plus ? 'transparent' : cardColor
 		},

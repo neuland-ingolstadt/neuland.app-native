@@ -193,35 +193,27 @@ export default function ClEventDetail(): React.JSX.Element {
 		)
 	}
 
-	if (isLoading || !eventData) {
-		return (
-			<View className="flex-1 justify-center items-center">
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
 	if (
-		eventData.organizerKind == null &&
-		organizerId != null &&
-		organizerQuery.isLoading
+		isLoading ||
+		!eventData ||
+		(eventData.organizerKind == null &&
+			organizerId != null &&
+			organizerQuery.isLoading) ||
+		(isThiDepartmentOrganizerKind(organizerKind) && thiFlagPending)
 	) {
+		// Keep the scroll view mounted through all loading stages for UIKit's scroll edges.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="campus-life-event-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 
 	if (isThiDepartmentOrganizerKind(organizerKind)) {
-		if (thiFlagPending) {
-			return (
-				<View className="flex-1 justify-center items-center">
-					<LoadingIndicator />
-				</View>
-			)
-		}
-
 		if (!thiEventsVisible) {
 			return <Redirect href="/(tabs)" />
 		}

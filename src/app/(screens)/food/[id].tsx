@@ -97,10 +97,15 @@ export default function FoodDetail(): React.JSX.Element {
 	)
 
 	if (isLoading || !queryData) {
+		// UIKit attaches native scroll-edge effects when the sheet is presented.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="food-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 

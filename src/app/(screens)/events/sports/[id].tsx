@@ -123,10 +123,15 @@ export default function SportsEventDetail(): React.JSX.Element {
 	)
 
 	if (isLoading || !queryData) {
+		// Keep the scroll view mounted so UIKit can attach native scroll edges.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="sports-event-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 
