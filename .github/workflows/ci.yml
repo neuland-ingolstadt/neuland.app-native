@@ -121,24 +121,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Run unit tests with coverage
-        run: bun run test:coverage -- --reporter=junit --reporter-outfile=./junit.xml
-
-      - name: Upload coverage to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          files: ./coverage/lcov.info
-          fail_ci_if_error: ${{ github.event_name == 'push' }}
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          files: ./junit.xml
-          report_type: test_results
-          fail_ci_if_error: ${{ github.event_name == 'push' }}
-          token: ${{ secrets.CODECOV_TOKEN }}
+        run: bun run test:coverage
 
       - name: SonarCloud Scan
         if: ${{ !cancelled() }}
