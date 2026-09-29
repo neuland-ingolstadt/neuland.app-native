@@ -99,8 +99,8 @@ jobs:
 
           exit "$doctor_status"
 
-  unit-tests:
-    name: Unit tests
+  sonarqube-analysis:
+    name: SonarQube Analysis
     needs: changes
     if: |
       github.event_name == 'pull_request' ||
