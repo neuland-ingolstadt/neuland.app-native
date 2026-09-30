@@ -2,8 +2,11 @@ import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-const loadSecureAsyncMock = mock(async () => 'alex.muster')
-const createGuestSessionMock = mock(async () => {})
+const loadSecureAsyncMock = mock(async (_key: string) => null as string | null)
+const saveSecureAsyncMock = mock(async (_key: string, _value: string) => {})
+const deleteSecureMock = mock(async (_key: string) => {})
+const storageClearAllMock = mock(() => {})
+const logoutMock = mock(async (_session: string) => true)
 const routerNavigateMock = mock(() => {})
 const apiGetPersonalDataMock = mock(async () => ({
 	persdata: {
@@ -15,17 +18,18 @@ const apiGetPersonalDataMock = mock(async () => ({
 
 mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
 	loadSecureAsync: loadSecureAsyncMock,
-	saveSecureAsync: async () => {},
-	deleteSecure: () => {},
+	saveSecureAsync: saveSecureAsyncMock,
+	deleteSecure: deleteSecureMock,
+	storage: {
+		getString: () => undefined,
+		set: () => {},
+		clearAll: storageClearAllMock
+	},
 	appStorage: {
 		set: () => {},
 		remove: () => {},
 		getBoolean: () => false
 	}
-}))
-
-mock.module(`${SRC_ROOT}api/thi-session-handler.ts`, () => ({
-	createGuestSession: createGuestSessionMock
 }))
 
 mock.module('expo-router', () => ({
@@ -34,9 +38,17 @@ mock.module('expo-router', () => ({
 	}
 }))
 
-mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
+mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
 	default: {
 		getPersonalData: apiGetPersonalDataMock
+	}
+}))
+
+mock.module(`${SRC_ROOT}api/thi-api.ts`, () => ({
+	APIError: class APIError extends Error {},
+	default: {
+		login: async () => ({ session: 'x', isStudent: true }),
+		logout: logoutMock
 	}
 }))
 
@@ -50,6 +62,14 @@ describe('api-utils', () => {
 	beforeEach(() => {
 		loadSecureAsyncMock.mockReset()
 		loadSecureAsyncMock.mockImplementation(async () => 'alex.muster')
+		saveSecureAsyncMock.mockReset()
+		saveSecureAsyncMock.mockImplementation(async () => {})
+		deleteSecureMock.mockReset()
+		deleteSecureMock.mockImplementation(async () => {})
+		storageClearAllMock.mockReset()
+		logoutMock.mockReset()
+		logoutMock.mockImplementation(async () => true)
+		routerNavigateMock.mockReset()
 	})
 
 	it('trimErrorMsg - Should remove the wrapped message and keep the text inside quotes', () => {
@@ -122,6 +142,11 @@ describe('api-utils', () => {
 	})
 
 	it('performLogout - Should reset the session and navigate back to the tabs', async () => {
+		loadSecureAsyncMock.mockImplementation(async (key: string) => {
+			if (key === 'session') return 'old-session'
+			return null
+		})
+
 		const toggleUser = mock((_user: undefined) => {})
 		const resetDashboard = mock((_userKind: string) => {})
 		const queryClient = {
@@ -136,13 +161,14 @@ describe('api-utils', () => {
 
 		expect(toggleUser).toHaveBeenCalledWith(undefined)
 		expect(resetDashboard).toHaveBeenCalledWith('guest')
-		expect(createGuestSessionMock).toHaveBeenCalled()
+		expect(logoutMock).toHaveBeenCalledWith('old-session')
+		expect(saveSecureAsyncMock).toHaveBeenCalledWith('session', 'guest')
 		expect(queryClient.clear).toHaveBeenCalled()
 		expect(routerNavigateMock).toHaveBeenCalledWith('/(tabs)')
 	})
 
 	it('performLogout - Should swallow errors from the logout flow', async () => {
-		createGuestSessionMock.mockRejectedValueOnce(new Error('session failed'))
+		saveSecureAsyncMock.mockRejectedValueOnce(new Error('session failed'))
 		const toggleUser = mock((_user: undefined) => {})
 		const resetDashboard = mock((_userKind: string) => {})
 		const queryClient = {
