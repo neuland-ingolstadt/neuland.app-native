@@ -12,6 +12,7 @@ interface FloorRowProps {
 	cardColor: string
 	textColor: string
 	contrastColor: string
+	glassChrome?: boolean
 	onSelect: (floor: string) => void
 }
 
@@ -24,6 +25,7 @@ export const FloorRow = memo(function FloorRow({
 	cardColor,
 	textColor,
 	contrastColor,
+	glassChrome = false,
 	onSelect
 }: FloorRowProps): React.JSX.Element {
 	return (
@@ -40,7 +42,8 @@ export const FloorRow = memo(function FloorRow({
 			style={{
 				height: CELL,
 				width: '100%',
-				backgroundColor: isCurrent && interactive ? 'transparent' : cardColor,
+				backgroundColor:
+					glassChrome || (isCurrent && interactive) ? 'transparent' : cardColor,
 				borderBottomColor: borderColor,
 				borderBottomWidth: isLast || !interactive ? 0 : 1
 			}}

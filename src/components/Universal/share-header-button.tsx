@@ -1,11 +1,13 @@
-import Color from 'color'
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import {
+	IosGlassSurface,
+	iosGlassHairlineBorder
+} from '@/components/Universal/ios-glass-surface'
 import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
@@ -33,27 +35,27 @@ interface IosGlassHeaderButtonProps {
 	icon: 'close' | 'share'
 	label: string
 	onPress: () => void | Promise<void>
+	testID?: string
+	shareCopied?: boolean
 }
 
 export function IosGlassHeaderButton({
 	icon,
 	label,
-	onPress
+	onPress,
+	testID,
+	shareCopied = false
 }: IosGlassHeaderButtonProps): React.JSX.Element {
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
 	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
-	const glassStyle = [
-		iosGlassButtonStyle,
-		{
-			borderColor: Color(labelColor).alpha(0.22).string(),
-			borderWidth: StyleSheet.hairlineWidth
-		}
-	]
+	const glassStyle = [iosGlassButtonStyle, iosGlassHairlineBorder(labelColor)]
+	const shareIconName = shareCopied ? 'checkmark' : 'square.and.arrow.up'
+
 	const button = (
 		<Pressable
-			testID={`${icon}-header-button`}
+			testID={testID ?? `${icon}-header-button`}
 			accessible
 			accessibilityRole="button"
 			accessibilityLabel={label}
@@ -62,7 +64,7 @@ export function IosGlassHeaderButton({
 		>
 			<PlatformIcon
 				ios={{
-					name: icon === 'share' ? 'square.and.arrow.up' : 'xmark',
+					name: icon === 'share' ? shareIconName : 'xmark',
 					size: icon === 'share' ? 19 : 15,
 					weight: icon === 'share' ? 'bold' : 'semibold'
 				}}
@@ -73,21 +75,14 @@ export function IosGlassHeaderButton({
 		</Pressable>
 	)
 
-	if (Platform.OS === 'ios' && isGlassEffectAPIAvailable()) {
-		return (
-			<GlassView
-				glassEffectStyle="regular"
-				isInteractive
-				style={glassStyle}
-				tintColor={Color(cardColor).alpha(0.45).string()}
-			>
-				{button}
-			</GlassView>
-		)
-	}
-
 	return (
-		<View style={[glassStyle, { backgroundColor: cardColor }]}>{button}</View>
+		<IosGlassSurface
+			isInteractive
+			fallbackBackgroundColor={cardColor}
+			style={glassStyle}
+		>
+			{button}
+		</IosGlassSurface>
 	)
 }
 

@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, use, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Extrapolation,
@@ -14,6 +14,11 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import {
+	IosGlassSurface,
+	iosGlassChromeBorder,
+	iosGlassHairlineBorder
+} from '@/components/Universal/ios-glass-surface'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -22,6 +27,7 @@ import {
 	CLOSE,
 	CONTAINER_TOP,
 	EXPAND_SPRING,
+	FLOATING_CHROME_RADIUS,
 	floorLabel,
 	GAP,
 	PICKER_TOP,
@@ -110,10 +116,12 @@ const FloorPicker = ({
 	)
 	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
 	const labelColor = toColor(useCSSVariable('--color-label'))
+	const labelColorString = String(labelColor ?? '#606062')
 	const contrastColor = getContrastColor(primaryColor)
 	const xIconColor = String(
 		toColor(useCSSVariable('--color-label-secondary')) ?? '#777778'
 	)
+	const glassChrome = Platform.OS === 'ios'
 	const shadow = isDark
 		? '0 4 14 0 rgba(0, 0, 0, 0.45)'
 		: '0 4 14 0 rgba(0, 0, 0, 0.12)'
@@ -345,6 +353,14 @@ const FloorPicker = ({
 	const containerHeight =
 		PICKER_TOP + floorCount * CELL + (Platform.OS === 'web' ? 0 : GAP + CELL)
 
+	const floatingFrameStyle = {
+		borderCurve: 'continuous' as const,
+		borderRadius: FLOATING_CHROME_RADIUS,
+		boxShadow: shadow,
+		overflow: 'hidden' as const,
+		...iosGlassChromeBorder(borderColor)
+	}
+
 	const floorPicker = (
 		<Animated.View
 			testID="map-floor-picker"
@@ -373,19 +389,21 @@ const FloorPicker = ({
 				)
 				selectFloorByIndex(next)
 			}}
-			className="absolute overflow-hidden rounded-[10px] border"
+			className="absolute"
 			style={[
 				{
 					top: PICKER_TOP,
-					width: CELL,
-					borderColor,
-					backgroundColor: cardColor,
-					borderCurve: 'continuous',
-					boxShadow: shadow
+					width: CELL
 				},
+				floatingFrameStyle,
 				clipStyle
 			]}
 		>
+			<IosGlassSurface
+				pointerEvents="none"
+				fallbackBackgroundColor={cardColor}
+				style={StyleSheet.absoluteFill}
+			/>
 			<Animated.View
 				pointerEvents={showAllFloors ? 'auto' : 'none'}
 				style={listStyle}
@@ -412,6 +430,7 @@ const FloorPicker = ({
 						cardColor={cardColor}
 						textColor={textColor}
 						contrastColor={contrastColor}
+						glassChrome={glassChrome}
 						onSelect={handleSelectFloor}
 					/>
 				))}
@@ -453,21 +472,47 @@ const FloorPicker = ({
 					className="items-center justify-center"
 					style={{ height: CLOSE, width: CELL }}
 				>
-					<PlatformIcon
-						ios={{
-							name: 'xmark.circle.fill',
-							size: 26
-						}}
-						android={{
-							name: 'cancel',
-							size: 26
-						}}
-						web={{
-							name: 'X',
-							size: 26
-						}}
-						style={{ color: xIconColor }}
-					/>
+					{glassChrome ? (
+						<IosGlassSurface
+							isInteractive
+							fallbackBackgroundColor={cardColor}
+							style={[
+								{
+									borderCurve: 'continuous',
+									borderRadius: CLOSE / 2,
+									height: CLOSE,
+									overflow: 'hidden',
+									width: CELL
+								},
+								iosGlassHairlineBorder(labelColorString)
+							]}
+						>
+							<View className="flex-1 items-center justify-center">
+								<PlatformIcon
+									ios={{ name: 'xmark', size: 13, weight: 'semibold' }}
+									android={{ name: 'cancel', size: 26 }}
+									web={{ name: 'X', size: 26 }}
+									style={{ color: labelColorString }}
+								/>
+							</View>
+						</IosGlassSurface>
+					) : (
+						<PlatformIcon
+							ios={{
+								name: 'xmark.circle.fill',
+								size: 26
+							}}
+							android={{
+								name: 'cancel',
+								size: 26
+							}}
+							web={{
+								name: 'X',
+								size: 26
+							}}
+							style={{ color: xIconColor }}
+						/>
+					)}
 				</Pressable>
 			</Animated.View>
 
@@ -479,7 +524,7 @@ const FloorPicker = ({
 				</GestureDetector>
 			)}
 
-			{Platform.OS !== 'web' && (
+			{Platform.OS !== 'web' && !showAllFloors && (
 				<Animated.View className="absolute right-0" style={locateStyle}>
 					<Pressable
 						testID="map-current-location"
@@ -489,16 +534,20 @@ const FloorPicker = ({
 						accessibilityLabel={t('map.centerOnCurrentLocation')}
 					>
 						<View
-							className="items-center justify-center rounded-[10px] border"
-							style={{
-								height: CELL,
-								width: CELL,
-								borderColor,
-								backgroundColor: locateBackground,
-								borderCurve: 'continuous',
-								boxShadow: shadow
-							}}
+							className="items-center justify-center"
+							style={[
+								floatingFrameStyle,
+								{
+									height: CELL,
+									width: CELL
+								}
+							]}
 						>
+							<IosGlassSurface
+								pointerEvents="none"
+								fallbackBackgroundColor={locateBackground}
+								style={StyleSheet.absoluteFill}
+							/>
 							<PlatformIcon
 								style={{
 									color: labelColor,
