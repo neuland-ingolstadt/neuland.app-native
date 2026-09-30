@@ -63,7 +63,7 @@ describe('buildPresentationMode', () => {
 			headerTransparent: true,
 			headerStyle: { backgroundColor: 'transparent' },
 			contentStyle: { backgroundColor: 'transparent' },
-			scrollEdgeEffects: { top: 'hard' }
+			scrollEdgeEffects: { top: 'soft' }
 		})
 		// soft looked fully clear under scrolling content on iOS 27 sheets
 		expect(options.scrollEdgeEffects?.top).not.toBe('soft')

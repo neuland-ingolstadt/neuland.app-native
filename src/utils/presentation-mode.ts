@@ -5,7 +5,7 @@ export type PresentationMode = {
 	sheetGrabberVisible?: boolean
 	sheetCornerRadius?: number
 	scrollEdgeEffects?: {
-		top: 'hard'
+		top: 'hard' | 'soft'
 	}
 	headerTransparent?: boolean
 	headerStyle?: {
@@ -66,7 +66,7 @@ export const buildPresentationMode = (
 					headerTransparent: true,
 					headerStyle: { backgroundColor: 'transparent' },
 					contentStyle: { backgroundColor: 'transparent' },
-					scrollEdgeEffects: { top: 'hard' as const }
+					scrollEdgeEffects: { top: 'soft' as const }
 				}
 			: {
 					headerStyle: { backgroundColor: cardColor },
