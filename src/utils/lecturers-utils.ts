@@ -1,6 +1,10 @@
 import type { Lecturers } from '@/types/thi-api'
 import type { NormalizedLecturer } from '@/types/utils'
 
+/** Lecturer directory data changes rarely; pull-to-refresh still forces a refetch. */
+export const LECTURER_STALE_TIME_MS = 1000 * 60 * 60 * 12 // 12 hours
+export const LECTURER_GC_TIME_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
+
 export interface LecturerLink {
 	name: string
 	lecturer?: NormalizedLecturer

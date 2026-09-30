@@ -4,10 +4,11 @@ import API from '@/api/authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import type { NormalizedLecturer } from '@/types/utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
-
-const LECTURER_STALE_TIME_MS = 1000 * 60 * 30
-const LECTURER_GC_TIME_MS = 1000 * 60 * 60 * 24 * 7
+import {
+	LECTURER_GC_TIME_MS,
+	LECTURER_STALE_TIME_MS,
+	normalizeLecturers
+} from '@/utils/lecturers-utils'
 
 export function useLecturerLookupSources(): NormalizedLecturer[] {
 	const { userKind } = use(UserKindContext)
