@@ -1,55 +1,63 @@
-import type React from 'react'
-import { useEffect } from 'react'
-import { View } from 'react-native'
-import Animated, {
-	Easing,
-	useAnimatedStyle,
-	useSharedValue,
-	withRepeat,
-	withTiming
-} from 'react-native-reanimated'
+import React, { useEffect, useRef } from 'react'
+import { Animated, Easing, View } from 'react-native'
 
-export function AnimatedSecurityLine(): React.JSX.Element {
-	const translateX = useSharedValue(-90)
+interface AnimatedSecurityLineProps {
+	color: string
+}
+
+const TRACK_WIDTH = 92
+
+export const AnimatedSecurityLine = React.memo(function AnimatedSecurityLine({
+	color
+}: AnimatedSecurityLineProps): React.JSX.Element {
+	const translateX = useRef(new Animated.Value(-TRACK_WIDTH)).current
 
 	useEffect(() => {
-		translateX.value = -90
-
-		translateX.value = withRepeat(
-			withTiming(90, {
-				duration: 3000,
-				easing: Easing.inOut(Easing.ease)
-			}),
-			-1,
-			true
+		const animation = Animated.loop(
+			Animated.sequence([
+				Animated.timing(translateX, {
+					toValue: TRACK_WIDTH,
+					duration: 3000,
+					easing: Easing.inOut(Easing.ease),
+					useNativeDriver: true
+				}),
+				Animated.timing(translateX, {
+					toValue: -TRACK_WIDTH,
+					duration: 3000,
+					easing: Easing.inOut(Easing.ease),
+					useNativeDriver: true
+				})
+			])
 		)
 
-		return () => {
-			translateX.value = -90
-		}
-	}, [])
+		animation.start()
 
-	const animatedStyle = useAnimatedStyle(() => {
-		return {
-			transform: [{ translateX: translateX.value }]
+		return () => {
+			animation.stop()
+			translateX.stopAnimation()
+			translateX.setValue(-TRACK_WIDTH)
 		}
-	})
+	}, [translateX])
 
 	return (
 		<View
-			style={{ height: 2, overflow: 'hidden', marginTop: 6, width: '100%' }}
+			style={{
+				alignSelf: 'flex-end',
+				height: 2,
+				marginTop: 6,
+				overflow: 'hidden',
+				width: TRACK_WIDTH
+			}}
 		>
 			<Animated.View
-				style={[
-					{
-						height: 2,
-						width: '100%',
-						backgroundColor: '#00ff33',
-						opacity: 0.8
-					},
-					animatedStyle
-				]}
+				style={{
+					backgroundColor: color,
+					height: 2,
+					opacity: 0.85,
+					transform: [{ translateX }],
+					width: TRACK_WIDTH
+				}}
 			/>
 		</View>
 	)
-}
+})

@@ -24,6 +24,7 @@ import MemberAPI, { type ProfileQrResponse } from '@/api/member-api'
 import LogoCardSVG from '@/components/Flow/svgs/logo-card'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import type { MemberInfo } from '@/hooks/useMemberStore'
+import { filterMemberIdGroups } from '@/utils/member-id-groups'
 import { toColor } from '@/utils/uniwind-utils'
 import { AnimatedSecurityLine } from './animated-security-line'
 import { QRCodeModal } from './qr-code-modal'
@@ -47,6 +48,7 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 		info.groups?.some((group) =>
 			group.toLowerCase().includes('ehrenmitglied')
 		) ?? false
+	const visibleGroups = filterMemberIdGroups(info.groups)
 
 	useEffect(() => {
 		breathingOpacity.value = withRepeat(
@@ -116,11 +118,13 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 						</Animated.View>
 						<View style={styles.cardHeader}>
 							<View style={styles.logoContainer}>
-								<LogoTextSVG size={16} color="#00ff33" />
+								<LogoTextSVG size={16} color={String(neulandGreen)} />
 							</View>
 							<View style={styles.titleContainer}>
-								<Text style={styles.cardTitle}>{t('idCard.title')}</Text>
-								<AnimatedSecurityLine />
+								<Text style={[styles.cardTitle, { color: neulandGreen }]}>
+									{t('idCard.title')}
+								</Text>
+								<AnimatedSecurityLine color={String(neulandGreen)} />
 							</View>
 						</View>
 
@@ -175,26 +179,19 @@ export function IDCard({ info, idToken }: IDCardProps): React.JSX.Element {
 								</View>
 							)}
 
-							{info.groups && info.groups.length > 0 && (
+							{visibleGroups.length > 0 && (
 								<View style={styles.groupsSection}>
 									<Text style={[styles.fieldLabel, { color: neulandGreen }]}>
 										{t('idCard.groups')}
 									</Text>
 									<View style={styles.groupsList}>
-										{info.groups
-											.filter(
-												(group) =>
-													!group.toLowerCase().startsWith('authentik') &&
-													!group.toLowerCase().includes('ehrenmitglied')
-											)
-											.slice(0, 5)
-											.map((group) => (
-												<View key={group} style={styles.groupBadge}>
-													<Text style={styles.groupBadgeText}>
-														{group.charAt(0).toUpperCase() + group.slice(1)}
-													</Text>
-												</View>
-											))}
+										{visibleGroups.map((group) => (
+											<View key={group} style={styles.groupBadge}>
+												<Text style={styles.groupBadgeText}>
+													{group.charAt(0).toUpperCase() + group.slice(1)}
+												</Text>
+											</View>
+										))}
 									</View>
 								</View>
 							)}
@@ -267,7 +264,6 @@ const styles = StyleSheet.create({
 		position: 'relative'
 	},
 	cardTitle: {
-		color: '#00ff33',
 		fontSize: 12,
 		fontWeight: '700',
 		letterSpacing: 1.5,

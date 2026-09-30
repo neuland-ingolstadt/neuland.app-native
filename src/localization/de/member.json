@@ -49,18 +49,20 @@
 		}
 	},
 	"qrCode": {
-		"tapToClose": "Tippe irgendwo zum Schließen"
+		"tapToClose": "Tippe irgendwo zum Schließen",
+		"verifyScannerHint": "Ausweis eines anderen Mitglieds prüfen?",
+		"verifyScannerAction": "Scanner öffnen"
 	},
 	"securityWarning": {
-		"title": "Sicherheitshinweis",
-		"warningText": "Bevor du deinen Pass zum Wallet hinzufügst, beachte bitte:",
+		"title": "Dein Wallet-Pass",
+		"warningText": "Kurz zur Info, bevor du ihn hinzufügst:",
 		"points": {
-			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
-			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
-			"semester": "Der Wallet-Pass ist nur für das aktuelle Semester gültig"
+			"security": "In der App stehen dir zusätzliche Sicherheitsfunktionen zur Verfügung",
+			"qrCode": "Bei manchen Events wird der QR-Code aus der App gescannt",
+			"semester": "Der Pass gilt für das aktuelle Semester"
 		},
 		"buttons": {
-			"useAppInstead": "App verwenden",
+			"useAppInstead": "Abbrechen",
 			"addToWallet": "Zu Wallet hinzufügen"
 		}
 	},

@@ -30,12 +30,12 @@ tags:
     timeout: 10000
 - tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
 - extendedWaitUntil:
-    visible: ".*(Security Notice|Sicherheitshinweis).*"
+    visible: ".*(Your wallet pass|Dein Wallet-Pass).*"
     timeout: 10000
 - tapOn:
     id: "wallet-confirm"
 - extendedWaitUntil:
-    notVisible: ".*(Security Notice|Sicherheitshinweis).*"
+    notVisible: ".*(Your wallet pass|Dein Wallet-Pass).*"
     timeout: 60000
 - assertVisible:
     id: "member-screen"

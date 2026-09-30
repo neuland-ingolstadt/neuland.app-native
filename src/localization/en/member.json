@@ -45,22 +45,24 @@
 		}
 	},
 	"qrCode": {
-		"tapToClose": "Tap anywhere to close"
+		"tapToClose": "Tap anywhere to close",
+		"verifyScannerHint": "Verify another member's ID?",
+		"verifyScannerAction": "Open scanner"
 	},
 	"settings": {
 		"title": "Member",
 		"honoraryTitle": "Neuland Honorary Member"
 	},
 	"securityWarning": {
-		"title": "Security Notice",
-		"warningText": "Before adding your pass to the Wallet, please note:",
+		"title": "Your wallet pass",
+		"warningText": "A quick heads-up before you add it:",
 		"points": {
-			"security": "Only the app pass uses advanced security features",
-			"qrCode": "Some events require the app's QR code specifically",
-			"semester": "Wallet pass is only valid for the current semester"
+			"security": "The app offers extra security features on top of Wallet",
+			"qrCode": "Some events scan the in-app QR code only",
+			"semester": "The pass is valid for the current semester"
 		},
 		"buttons": {
-			"useAppInstead": "Use App Instead",
+			"useAppInstead": "Not now",
 			"addToWallet": "Add to Wallet"
 		}
 	},

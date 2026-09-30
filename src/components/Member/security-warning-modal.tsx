@@ -110,9 +110,10 @@ export function SecurityWarningModal({
 					<Pressable accessible={false} onPress={() => {}} className="p-6">
 						<View className="items-center mb-4">
 							<PlatformIcon
-								ios={{ name: 'exclamationmark.triangle.fill', size: 32 }}
-								android={{ name: 'warning', size: 32 }}
-								web={{ name: 'TriangleAlert', size: 32 }}
+								ios={{ name: 'wallet.pass', size: 32 }}
+								android={{ name: 'wallet', size: 32 }}
+								web={{ name: 'Wallet', size: 32 }}
+								style={{ color: primaryColor }}
 							/>
 						</View>
 

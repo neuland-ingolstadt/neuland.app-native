@@ -126,67 +126,65 @@ export function LoggedInView(): React.JSX.Element {
 		]
 	}
 
-	const quickLinksSections: FormListSections[] = [
-		{
-			header: t('quickLinks.title'),
-			items: [
-				{
-					title: t('quickLinks.neulandWebsite'),
-					onPress: () => Linking.openURL('https://neuland-ingolstadt.de'),
-					icon: {
-						ios: 'globe',
-						android: 'public',
-						web: 'Globe'
-					}
-				},
-				{
-					title: t('quickLinks.wiki'),
-					onPress: () => Linking.openURL('https://outline.neuland.ing'),
-					icon: {
-						ios: 'book.closed',
-						android: 'menu_book',
-						web: 'BookOpen'
-					}
-				},
-				{
-					title: t('quickLinks.neulandConnect'),
-					onPress: () => Linking.openURL('https://connect.neuland.ing'),
-					icon: {
-						ios: 'person.2',
-						android: 'groups',
-						web: 'Users'
-					}
-				},
-				{
-					title: t('quickLinks.ssoProfile'),
-					onPress: () => Linking.openURL('https://auth.neuland.ing/'),
-					icon: {
-						ios: 'circle.grid.3x3',
-						android: 'apps',
-						web: 'LayoutGrid'
-					}
-				}
-			]
-		},
-		...(Platform.OS !== 'web'
-			? [
-					{
-						header: t('labels.wallet', { ns: 'common' }),
-						items: [
-							{
-								title: t('securityWarning.buttons.addToWallet'),
-								onPress: handleAddToWallet,
-								icon: {
-									ios: 'wallet.pass',
-									android: 'wallet' as MaterialIcon,
-									web: 'Wallet' as LucideIcon
-								}
+	const walletSection: FormListSections | undefined =
+		Platform.OS !== 'web'
+			? {
+					header: t('labels.wallet', { ns: 'common' }),
+					items: [
+						{
+							title: t('securityWarning.buttons.addToWallet'),
+							onPress: handleAddToWallet,
+							icon: {
+								ios: 'wallet.pass',
+								android: 'wallet' as MaterialIcon,
+								web: 'Wallet' as LucideIcon
 							}
-						]
-					}
-				]
-			: [])
-	]
+						}
+					]
+				}
+			: undefined
+
+	const quickLinksSection: FormListSections = {
+		header: t('quickLinks.title'),
+		items: [
+			{
+				title: t('quickLinks.neulandWebsite'),
+				onPress: () => Linking.openURL('https://neuland-ingolstadt.de'),
+				icon: {
+					ios: 'globe',
+					android: 'public',
+					web: 'Globe'
+				}
+			},
+			{
+				title: t('quickLinks.wiki'),
+				onPress: () => Linking.openURL('https://outline.neuland.ing'),
+				icon: {
+					ios: 'book.closed',
+					android: 'menu_book',
+					web: 'BookOpen'
+				}
+			},
+			{
+				title: t('quickLinks.neulandConnect'),
+				onPress: () => Linking.openURL('https://connect.neuland.ing'),
+				icon: {
+					ios: 'person.2',
+					android: 'groups',
+					web: 'Users'
+				}
+			},
+			{
+				title: t('quickLinks.ssoProfile'),
+				onPress: () => Linking.openURL('https://auth.neuland.ing/'),
+				icon: {
+					ios: 'circle.grid.3x3',
+					android: 'apps',
+					web: 'LayoutGrid'
+				}
+			}
+		]
+	}
 
 	return (
 		<ScrollView
@@ -211,7 +209,13 @@ export function LoggedInView(): React.JSX.Element {
 
 			<OfficePresenceSection />
 
-			<FormList sections={[perksSection, ...quickLinksSections]} />
+			<FormList
+				sections={[
+					perksSection,
+					...(walletSection ? [walletSection] : []),
+					quickLinksSection
+				]}
+			/>
 
 			<Pressable
 				onPress={logoutAlert}
