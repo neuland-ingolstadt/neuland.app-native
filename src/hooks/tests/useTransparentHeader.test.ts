@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, mock } from 'bun:test'
+import { afterEach, beforeAll, describe, expect, it, mock } from 'bun:test'
 import { Platform } from 'react-native'
 
 let measuredHeaderHeight = 0
@@ -11,13 +11,20 @@ mock.module('react-native-safe-area-context', () => ({
 	useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 })
 }))
 
-const {
-	getFormSheetHeaderPadding,
-	IOS_26_FORM_SHEET_HEADER_HEIGHT,
-	isIos26OrLater,
-	useFormSheetHeaderPadding,
-	useTransparentHeaderStyle
-} = await import('@/hooks/useTransparentHeader')
+let getFormSheetHeaderPadding: typeof import('../useTransparentHeader').getFormSheetHeaderPadding
+let IOS_26_FORM_SHEET_HEADER_HEIGHT: typeof import('../useTransparentHeader').IOS_26_FORM_SHEET_HEADER_HEIGHT
+let isIos26OrLater: typeof import('../useTransparentHeader').isIos26OrLater
+let useFormSheetHeaderPadding: typeof import('../useTransparentHeader').useFormSheetHeaderPadding
+let useTransparentHeaderStyle: typeof import('../useTransparentHeader').useTransparentHeaderStyle
+
+beforeAll(async () => {
+	const module = await import('../useTransparentHeader')
+	getFormSheetHeaderPadding = module.getFormSheetHeaderPadding
+	IOS_26_FORM_SHEET_HEADER_HEIGHT = module.IOS_26_FORM_SHEET_HEADER_HEIGHT
+	isIos26OrLater = module.isIos26OrLater
+	useFormSheetHeaderPadding = module.useFormSheetHeaderPadding
+	useTransparentHeaderStyle = module.useTransparentHeaderStyle
+})
 
 const originalOS = Platform.OS
 const originalVersion = Object.getOwnPropertyDescriptor(Platform, 'Version')

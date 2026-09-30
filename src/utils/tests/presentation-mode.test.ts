@@ -1,30 +1,7 @@
-import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
+import { buildPresentationMode } from '@/utils/presentation-mode'
 
-mock.module('react-native-device-info', () => ({
-	default: {
-		getDeviceType: () => 'Handset'
-	}
-}))
-
-mock.module('uniwind', () => ({
-	useCSSVariable: () => '#ffffff'
-}))
-
-mock.module('@/utils/uniwind-utils', () => ({
-	toColor: (value: unknown) => value
-}))
-
-mock.module('@/hooks/useTransparentHeader', () => ({
-	isIos26OrLater: () => false
-}))
-
-let buildPresentationMode: typeof import('@/hooks/usePresentationMode').buildPresentationMode
-
-beforeAll(async () => {
-	;({ buildPresentationMode } = await import('@/hooks/usePresentationMode'))
-})
-
-const colors = {
+const base = {
 	cardColor: '#ffffff',
 	backgroundColor: '#f2f2f2'
 }
@@ -35,7 +12,8 @@ describe('buildPresentationMode', () => {
 			buildPresentationMode(false, {
 				platformOS: 'android',
 				ios26OrLater: true,
-				colors
+				deviceType: 'Handset',
+				...base
 			})
 		).toEqual({})
 	})
@@ -46,7 +24,7 @@ describe('buildPresentationMode', () => {
 				platformOS: 'ios',
 				ios26OrLater: true,
 				deviceType: 'Desktop',
-				colors
+				...base
 			})
 		).toEqual({
 			presentation: 'modal'
@@ -59,14 +37,14 @@ describe('buildPresentationMode', () => {
 				platformOS: 'ios',
 				ios26OrLater: false,
 				deviceType: 'Handset',
-				colors
+				...base
 			})
 		).toEqual({
 			presentation: 'formSheet',
 			sheetAllowedDetents: [0.7, 0.95],
 			sheetInitialDetentIndex: 0,
-			headerStyle: { backgroundColor: colors.cardColor },
-			contentStyle: { backgroundColor: colors.backgroundColor }
+			headerStyle: { backgroundColor: base.cardColor },
+			contentStyle: { backgroundColor: base.backgroundColor }
 		})
 	})
 
@@ -75,7 +53,7 @@ describe('buildPresentationMode', () => {
 			platformOS: 'ios',
 			ios26OrLater: true,
 			deviceType: 'Handset',
-			colors
+			...base
 		})
 
 		expect(options).toEqual({
@@ -97,7 +75,7 @@ describe('buildPresentationMode', () => {
 				platformOS: 'ios',
 				ios26OrLater: true,
 				deviceType: 'Handset',
-				colors
+				...base
 			}).sheetAllowedDetents
 		).toEqual([0.5, 0.7])
 	})
