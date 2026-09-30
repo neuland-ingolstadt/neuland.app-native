@@ -13,12 +13,7 @@ import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Share, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { useCSSVariable, useResolveClassNames } from 'uniwind'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
@@ -26,7 +21,7 @@ import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useFeatureFlagEnabled } from '@/hooks'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -106,36 +101,13 @@ export default function ClEventDetail(): React.JSX.Element {
 	const organizerName = organizerDetails?.name ?? eventData?.host.name ?? ''
 	const navigation = useNavigation()
 
-	const scrollOffset = useSharedValue(0)
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
-				scrollOffset.value = event.contentOffset.y
-			}
-		}
-	})
-
-	const headerStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: interpolate(
-						scrollOffset.value,
-						[0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	const dateRange = formatFriendlyDateTimeRange(
 		eventData?.startDateTime != null ? new Date(eventData.startDateTime) : null,
 		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
 	const eventTitle = getLocalizedValue(eventData?.titles ?? null)
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
 	const organizerKind = resolveEventOrganizerKind(
 		eventData,
 		orgParam,
@@ -193,35 +165,27 @@ export default function ClEventDetail(): React.JSX.Element {
 		)
 	}
 
-	if (isLoading || !eventData) {
-		return (
-			<View className="flex-1 justify-center items-center">
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
 	if (
-		eventData.organizerKind == null &&
-		organizerId != null &&
-		organizerQuery.isLoading
+		isLoading ||
+		!eventData ||
+		(eventData.organizerKind == null &&
+			organizerId != null &&
+			organizerQuery.isLoading) ||
+		(isThiDepartmentOrganizerKind(organizerKind) && thiFlagPending)
 	) {
+		// Keep the scroll view mounted through all loading stages for UIKit's scroll edges.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="campus-life-event-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 
 	if (isThiDepartmentOrganizerKind(organizerKind)) {
-		if (thiFlagPending) {
-			return (
-				<View className="flex-1 justify-center items-center">
-					<LoadingIndicator />
-				</View>
-			)
-		}
-
 		if (!thiEventsVisible) {
 			return <Redirect href="/(tabs)" />
 		}
@@ -362,7 +326,7 @@ export default function ClEventDetail(): React.JSX.Element {
 			testID="campus-life-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
