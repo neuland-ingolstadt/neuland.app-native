@@ -141,6 +141,12 @@
 		"librarySeat": "Bibliotheksplatz"
 	},
 	"pages": {
+		"news": {
+			"noNews": {
+				"title": "Keine Neuigkeiten gefunden",
+				"subtitle": "Schau später wieder vorbei."
+			}
+		},
 		"quicklinks": {
 			"title": "Quick Links",
 			"footer": "Die Dashboard-Karte zeigt die zuletzt besuchten Links an.",
