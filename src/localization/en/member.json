@@ -63,8 +63,11 @@
 		},
 		"buttons": {
 			"useAppInstead": "Not now",
-			"addToWallet": "Add to Wallet"
-		}
+			"addToWallet": "Add to Wallet",
+			"showInWallet": "Show in Wallet"
+		},
+		"alreadyInWallet": "Pass is already in Wallet",
+		"addFailed": "Could not add pass to Wallet"
 	},
 	"logout": {
 		"button": "Logout",
