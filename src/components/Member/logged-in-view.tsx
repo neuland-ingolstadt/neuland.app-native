@@ -65,7 +65,7 @@ export function LoggedInView(): React.JSX.Element {
 	const handleAddToWallet = () => {
 		setShowSecurityWarning(true)
 		if (Platform.OS === 'ios') {
-			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
+			void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
 		}
 	}
 
@@ -82,7 +82,7 @@ export function LoggedInView(): React.JSX.Element {
 			if (!window.confirm(t('logout.alert.message'))) {
 				return
 			}
-			logout()
+			void logout()
 			return
 		}
 		Alert.alert(t('logout.alert.title'), t('logout.alert.message'), [

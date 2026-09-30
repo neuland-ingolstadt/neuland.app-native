@@ -138,7 +138,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 		setIsClosing(true)
 
 		if (Platform.OS === 'ios') {
-			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 		}
 
 		if (pulseAnimationRef.current) {
@@ -175,7 +175,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			setIsClosing(false)
 
 			if (Platform.OS === 'ios') {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+				void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 			}
 
 			const pulseLoop = Animated.loop(

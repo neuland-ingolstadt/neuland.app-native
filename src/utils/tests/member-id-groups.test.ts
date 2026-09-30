@@ -29,4 +29,9 @@ describe('filterMemberIdGroups', () => {
 			[]
 		)
 	})
+
+	it('returns an empty list for missing or empty groups', () => {
+		expect(filterMemberIdGroups(undefined)).toEqual([])
+		expect(filterMemberIdGroups([])).toEqual([])
+	})
 })

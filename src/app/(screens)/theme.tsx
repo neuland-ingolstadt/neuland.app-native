@@ -30,7 +30,7 @@ export default function Theme(): React.JSX.Element {
 	const { t } = useTranslation(['settings', 'timetable'])
 
 	const onSelectThemeColor = (color: ThemeColor) => {
-		selectionAsync()
+		void selectionAsync()
 		setThemeColor(color)
 	}
 

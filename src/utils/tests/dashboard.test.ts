@@ -56,6 +56,14 @@ const mockCards = [
 		card: () => null
 	},
 	{
+		key: 'flaggedEarly',
+		removable: true,
+		initial: [USER_STUDENT],
+		allowed: [USER_STUDENT],
+		featureFlag: 'flagged-early',
+		card: () => null
+	},
+	{
 		key: 'events',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
@@ -110,6 +118,14 @@ const mockCards = [
 		removable: true,
 		initial: [USER_EMPLOYEE],
 		allowed: [USER_EMPLOYEE],
+		card: () => null
+	},
+	{
+		key: 'flaggedCard',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE],
+		allowed: [USER_STUDENT, USER_EMPLOYEE],
+		featureFlag: 'flagged-card',
 		card: () => null
 	}
 ]
@@ -234,6 +250,45 @@ describe('dashboard context', () => {
 		expect(merged).toEqual(customOrder)
 	})
 
+	it('mergeNewFlaggedCardsIntoDashboard - Should insert newly enabled flagged cards near neighbors', () => {
+		const flags = {
+			'flagged-card': true,
+			'flagged-early': true
+		} as FeatureFlagState
+		const customOrder = ['events', 'sports', 'news']
+
+		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
+			customOrder,
+			USER_STUDENT,
+			flags
+		)
+
+		expect(merged).toContain('flaggedEarly')
+		expect(merged).toContain('flaggedCard')
+		expect(merged.indexOf('flaggedEarly')).toBeLessThan(
+			merged.indexOf('events')
+		)
+		expect(merged.indexOf('flaggedCard')).toBeGreaterThan(
+			merged.indexOf('news')
+		)
+	})
+
+	it('mergeNewFlaggedCardsIntoDashboard - Should skip flagged cards already present or disabled', () => {
+		const flags = {
+			'flagged-card': true,
+			'flagged-early': false
+		} as FeatureFlagState
+		const customOrder = ['events', 'flaggedCard', 'news']
+
+		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
+			customOrder,
+			USER_STUDENT,
+			flags
+		)
+
+		expect(merged).toEqual(customOrder)
+	})
+
 	it('isCardEnabled - Should treat cards without flags as enabled', () => {
 		expect(
 			dashboard.isCardEnabled(
@@ -241,6 +296,19 @@ describe('dashboard context', () => {
 				createDefaultFeatureFlagState()
 			)
 		).toBe(true)
+	})
+
+	it('isCardEnabled - Should read feature flag state for flagged cards', () => {
+		expect(
+			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
+				'flagged-card': true
+			} as FeatureFlagState)
+		).toBe(true)
+		expect(
+			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
+				'flagged-card': false
+			} as FeatureFlagState)
+		).toBe(false)
 	})
 
 	it('isCardKeyEnabled - Should return false for unknown card keys', () => {
@@ -282,6 +350,21 @@ describe('dashboard context', () => {
 		)
 
 		expect(merged).toBeNull()
+	})
+
+	it('syncDashboardEntriesWithFlags - Should return a merged order when flagged cards are newly enabled', () => {
+		const flags = {
+			'flagged-card': true
+		} as FeatureFlagState
+
+		const merged = dashboard.syncDashboardEntriesWithFlags(
+			['events', 'timetable'],
+			USER_STUDENT,
+			flags
+		)
+
+		expect(merged).not.toBeNull()
+		expect(merged).toContain('flaggedCard')
 	})
 
 	it('normalizeShownDashboardEntries - Should drop unknown cards', () => {
@@ -344,6 +427,21 @@ describe('dashboard context', () => {
 			'timetable'
 		])
 		expect(shownDashboardEntriesState).toEqual(['events', 'timetable'])
+
+		unmount()
+	})
+
+	it('useDashboard - Should persist a merged order when flagged cards are newly enabled', () => {
+		shownDashboardEntriesState = ['events', 'timetable']
+		hiddenAnnouncementsState = undefined
+		userKindState = USER_STUDENT
+		featureFlagsState = {
+			'flagged-card': true
+		} as FeatureFlagState
+
+		const { unmount } = renderDashboardHookWithEffects()
+
+		expect(shownDashboardEntriesState).toContain('flaggedCard')
 
 		unmount()
 	})
