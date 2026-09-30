@@ -349,7 +349,6 @@ const FloorPicker = ({
 		}
 	})
 
-	const locateBackground = isDark ? 'rgb(18, 18, 18)' : 'rgb(255, 255, 255)'
 	const containerHeight =
 		PICKER_TOP + floorCount * CELL + (Platform.OS === 'web' ? 0 : GAP + CELL)
 
@@ -545,7 +544,7 @@ const FloorPicker = ({
 						>
 							<IosGlassSurface
 								pointerEvents="none"
-								fallbackBackgroundColor={locateBackground}
+								fallbackBackgroundColor={cardColor}
 								style={StyleSheet.absoluteFill}
 							/>
 							<PlatformIcon

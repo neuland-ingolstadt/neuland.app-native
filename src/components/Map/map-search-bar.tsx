@@ -82,7 +82,7 @@ export const MapSearchBar = ({
 			className={
 				Platform.OS === 'ios'
 					? 'flex-1 text-[17px] px-2.5 bg-transparent'
-					: 'bg-card rounded-mg flex-1 text-[17px] h-11 mb-2.5 px-2.5 border-hairline border-border'
+					: 'bg-card rounded-mg flex-1 text-[17px] h-11 px-2.5 border-hairline border-border'
 			}
 			style={[
 				{ color: textColor },
