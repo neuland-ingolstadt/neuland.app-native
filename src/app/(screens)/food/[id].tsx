@@ -94,7 +94,7 @@ export default function FoodDetail(): React.JSX.Element {
 	)
 
 	if (isLoading || !queryData) {
-		// UIKit attaches native scroll-edge effects when the sheet is presented.
+		// Keep a root ScrollView mounted so UIKit can attach the sheet header blur.
 		return (
 			<Animated.ScrollView
 				testID="food-detail-screen"
