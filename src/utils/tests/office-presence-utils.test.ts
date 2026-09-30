@@ -1,10 +1,10 @@
 import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
+import { loadSecureAsyncMock, resetSecureStores } from './thi-storage-mocks'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 const setTokensMock = mock(async () => {})
 const refreshTokensMock = mock(async () => {})
-const loadSecureAsyncMock = mock(async (_key: string) => null as string | null)
 const getOfficePresenceMock = mock(async () => ({ registered: false }))
 const checkInToOfficeMock = mock(async () => ({}))
 const checkOutOfOfficeMock = mock(async () => ({}))
@@ -24,23 +24,6 @@ let memberState: {
 mock.module(`${SRC_ROOT}hooks/useMemberStore.ts`, () => ({
 	useMemberStore: {
 		getState: () => memberState
-	}
-}))
-
-mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
-	loadSecureAsync: loadSecureAsyncMock,
-	saveSecureAsync: async () => {},
-	deleteSecure: () => {},
-	appStorage: {
-		set: () => {},
-		remove: () => {},
-		getBoolean: () => false
-	},
-	// Bun's mock.module is process-global; keep exports complete for other suites
-	storage: {
-		getString: () => undefined,
-		set: () => {},
-		clearAll: () => {}
 	}
 }))
 
@@ -68,7 +51,7 @@ describe('office-presence-utils', () => {
 		setTokensMock.mockImplementation(async () => {})
 		refreshTokensMock.mockReset()
 		refreshTokensMock.mockImplementation(async () => {})
-		loadSecureAsyncMock.mockReset()
+		resetSecureStores()
 		loadSecureAsyncMock.mockImplementation(async () => null)
 		getOfficePresenceMock.mockReset()
 		getOfficePresenceMock.mockResolvedValue({ registered: false })

@@ -1,12 +1,14 @@
 import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
+import { logoutMock, resetThiApiMocks, thiApiMock } from './thi-api-mocks'
+import {
+	loadSecureAsyncMock,
+	resetSecureStores,
+	saveSecureAsyncMock,
+	storageMock
+} from './thi-storage-mocks'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-const loadSecureAsyncMock = mock(async (_key: string) => null as string | null)
-const saveSecureAsyncMock = mock(async (_key: string, _value: string) => {})
-const deleteSecureMock = mock(async (_key: string) => {})
-const storageClearAllMock = mock(() => {})
-const logoutMock = mock(async (_session: string) => true)
 const routerNavigateMock = mock(() => {})
 const apiGetPersonalDataMock = mock(async () => ({
 	persdata: {
@@ -16,24 +18,11 @@ const apiGetPersonalDataMock = mock(async () => ({
 	pcounter: '7'
 }))
 
-const storageMock = {
-	loadSecureAsync: loadSecureAsyncMock,
-	saveSecureAsync: saveSecureAsyncMock,
-	deleteSecure: deleteSecureMock,
-	storage: {
-		getString: () => undefined,
-		set: () => {},
-		clearAll: storageClearAllMock
-	},
-	appStorage: {
-		set: () => {},
-		remove: () => {},
-		getBoolean: () => false
-	}
-}
-
 mock.module(`${SRC_ROOT}utils/storage.ts`, () => storageMock)
 mock.module('@/utils/storage', () => storageMock)
+
+mock.module(`${SRC_ROOT}api/thi-api.ts`, () => thiApiMock)
+mock.module('@/api/thi-api', () => thiApiMock)
 
 mock.module('expo-router', () => ({
 	router: {
@@ -41,19 +30,18 @@ mock.module('expo-router', () => ({
 	}
 }))
 
-mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
+const thiAuthenticatedMock = {
+	ThiAuthenticatedAPIClient: class {},
 	default: {
 		getPersonalData: apiGetPersonalDataMock
 	}
-}))
+}
 
-mock.module(`${SRC_ROOT}api/thi-api.ts`, () => ({
-	APIError: class APIError extends Error {},
-	default: {
-		login: async () => ({ session: 'x', isStudent: true }),
-		logout: logoutMock
-	}
-}))
+mock.module(
+	`${SRC_ROOT}api/thi-authenticated-api.ts`,
+	() => thiAuthenticatedMock
+)
+mock.module('@/api/thi-authenticated-api', () => thiAuthenticatedMock)
 
 let apiUtils: typeof import('../api-utils')
 
@@ -63,16 +51,12 @@ beforeAll(async () => {
 
 describe('api-utils', () => {
 	beforeEach(() => {
-		loadSecureAsyncMock.mockReset()
+		resetSecureStores()
+		resetThiApiMocks()
 		loadSecureAsyncMock.mockImplementation(async () => 'alex.muster')
-		saveSecureAsyncMock.mockReset()
 		saveSecureAsyncMock.mockImplementation(async () => {})
-		deleteSecureMock.mockReset()
-		deleteSecureMock.mockImplementation(async () => {})
-		storageClearAllMock.mockReset()
-		logoutMock.mockReset()
-		logoutMock.mockImplementation(async () => true)
 		routerNavigateMock.mockReset()
+		apiGetPersonalDataMock.mockClear()
 	})
 
 	it('trimErrorMsg - Should remove the wrapped message and keep the text inside quotes', () => {

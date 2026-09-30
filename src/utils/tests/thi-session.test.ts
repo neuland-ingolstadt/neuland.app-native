@@ -1,73 +1,25 @@
 import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
-import { mockReactNative } from './react-native-mock'
+import { mockReactNative, reactNativePlatform } from './react-native-mock'
+import {
+	logoutMock,
+	MockAPIError,
+	resetThiApiMocks,
+	thiApiMock
+} from './thi-api-mocks'
+import {
+	deleteSecureMock,
+	mmkvStore,
+	resetSecureStores,
+	secureStore,
+	storageMock
+} from './thi-storage-mocks'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 mockReactNative()
 
-class APIError extends Error {
-	public status: number
-	public data: unknown
-
-	constructor(status: number, data: unknown) {
-		super(`${JSON.stringify(data)} (${status.toString()})`)
-		this.status = status
-		this.data = data
-	}
-}
-
-const secureStore = new Map<string, string>()
-const mmkvStore = new Map<string, string>()
-
-const loginMock = mock(
-	async (
-		_username: string,
-		_password: string
-	): Promise<{ session: string; isStudent: boolean }> => ({
-		session: 'new-session',
-		isStudent: true
-	})
-)
-
-const logoutMock = mock(async (_session: string) => true)
-
-const loadSecureAsyncMock = mock(async (key: string) => {
-	return secureStore.get(key) ?? null
-})
-
-const saveSecureAsyncMock = mock(async (key: string, value: string) => {
-	secureStore.set(key, value)
-})
-
-const deleteSecureMock = mock(async (key: string) => {
-	secureStore.delete(key)
-})
-
-const storageMock = {
-	loadSecureAsync: loadSecureAsyncMock,
-	saveSecureAsync: saveSecureAsyncMock,
-	deleteSecure: deleteSecureMock,
-	storage: {
-		getString: (key: string) => mmkvStore.get(key),
-		set: (key: string, value: string) => {
-			mmkvStore.set(key, value)
-		},
-		clearAll: () => {
-			mmkvStore.clear()
-		}
-	}
-}
-
 mock.module(`${SRC_ROOT}utils/storage.ts`, () => storageMock)
 mock.module('@/utils/storage', () => storageMock)
-
-const thiApiMock = {
-	APIError,
-	default: {
-		login: loginMock,
-		logout: logoutMock
-	}
-}
 
 mock.module(`${SRC_ROOT}api/thi-api.ts`, () => thiApiMock)
 mock.module('@/api/thi-api', () => thiApiMock)
@@ -80,18 +32,9 @@ beforeAll(async () => {
 
 describe('thi-session', () => {
 	beforeEach(() => {
-		secureStore.clear()
-		mmkvStore.clear()
-		loginMock.mockReset()
-		loginMock.mockImplementation(async () => ({
-			session: 'new-session',
-			isStudent: true
-		}))
-		logoutMock.mockReset()
-		logoutMock.mockImplementation(async () => true)
-		loadSecureAsyncMock.mockClear()
-		saveSecureAsyncMock.mockClear()
-		deleteSecureMock.mockClear()
+		reactNativePlatform.OS = 'web'
+		resetSecureStores()
+		resetThiApiMocks()
 	})
 
 	it('callWithSession - Should throw NoSessionError when no session exists', async () => {
@@ -118,7 +61,7 @@ describe('thi-session', () => {
 		})
 
 		expect(result).toBe('done')
-		expect(loginMock).not.toHaveBeenCalled()
+		expect(thiApiMock.default.login).not.toHaveBeenCalled()
 	})
 
 	it('callWithSession - Concurrent expired calls should trigger exactly one login', async () => {
@@ -134,7 +77,7 @@ describe('thi-session', () => {
 			}
 		)
 
-		loginMock.mockImplementation(async () => await loginGate)
+		thiApiMock.default.login.mockImplementation(async () => await loginGate)
 
 		const calls = [
 			sessionHandler.callWithSession(async (session) => `a:${session}`),
@@ -142,16 +85,15 @@ describe('thi-session', () => {
 			sessionHandler.callWithSession(async (session) => `c:${session}`)
 		]
 
-		// Wait until the shared refresh has entered API.login
 		const started = Date.now()
-		while (loginMock.mock.calls.length === 0) {
+		while (thiApiMock.default.login.mock.calls.length === 0) {
 			if (Date.now() - started > 2000) {
 				throw new Error('Timed out waiting for API.login')
 			}
 			await Bun.sleep(10)
 		}
 
-		expect(loginMock).toHaveBeenCalledTimes(1)
+		expect(thiApiMock.default.login).toHaveBeenCalledTimes(1)
 		resolveLogin({ session: 'shared-session', isStudent: true })
 
 		await expect(Promise.all(calls)).resolves.toEqual([
@@ -159,7 +101,7 @@ describe('thi-session', () => {
 			'b:shared-session',
 			'c:shared-session'
 		])
-		expect(loginMock).toHaveBeenCalledTimes(1)
+		expect(thiApiMock.default.login).toHaveBeenCalledTimes(1)
 		expect(secureStore.get('session')).toBe('shared-session')
 	})
 
@@ -169,8 +111,8 @@ describe('thi-session', () => {
 		secureStore.set('password', 'secret')
 		mmkvStore.set('sessionCreated', '0')
 
-		loginMock.mockImplementation(async () => {
-			throw new APIError(-1, 'Wrong credentials')
+		thiApiMock.default.login.mockImplementation(async () => {
+			throw new MockAPIError(-1, 'Wrong credentials')
 		})
 
 		await expect(
@@ -184,7 +126,7 @@ describe('thi-session', () => {
 		secureStore.set('password', 'secret')
 		mmkvStore.set('sessionCreated', Date.now().toString())
 
-		loginMock.mockImplementation(async () => ({
+		thiApiMock.default.login.mockImplementation(async () => ({
 			session: 'recovered-session',
 			isStudent: true
 		}))
@@ -194,14 +136,14 @@ describe('thi-session', () => {
 			attempts += 1
 			if (attempts === 1) {
 				expect(session).toBe('stale-session')
-				throw new APIError(-1, 'No Session')
+				throw new MockAPIError(-1, 'No Session')
 			}
 			expect(session).toBe('recovered-session')
 			return 'recovered'
 		})
 
 		expect(result).toBe('recovered')
-		expect(loginMock).toHaveBeenCalledTimes(1)
+		expect(thiApiMock.default.login).toHaveBeenCalledTimes(1)
 		expect(attempts).toBe(2)
 	})
 
@@ -215,6 +157,226 @@ describe('thi-session', () => {
 			})
 		).rejects.toThrow('Lecture details unavailable')
 
-		expect(loginMock).not.toHaveBeenCalled()
+		expect(thiApiMock.default.login).not.toHaveBeenCalled()
+	})
+
+	it('callWithSession - Expired session without credentials should keep the old token', async () => {
+		secureStore.set('session', 'old-session')
+		mmkvStore.set('sessionCreated', '0')
+
+		const result = await sessionHandler.callWithSession(async (session) => {
+			expect(session).toBe('old-session')
+			return 'kept'
+		})
+
+		expect(result).toBe('kept')
+		expect(thiApiMock.default.login).not.toHaveBeenCalled()
+	})
+
+	it('callWithSession - Missing password should throw NoSessionError on session error', async () => {
+		secureStore.set('session', 'stale-session')
+		secureStore.set('username', 'alex.muster')
+		mmkvStore.set('sessionCreated', Date.now().toString())
+
+		await expect(
+			sessionHandler.callWithSession(async () => {
+				throw new MockAPIError(-1, 'Session is over')
+			})
+		).rejects.toBeInstanceOf(sessionHandler.NoSessionError)
+	})
+
+	it('callWithSession - Non-session login failures should bubble up', async () => {
+		secureStore.set('session', 'old-session')
+		secureStore.set('username', 'alex.muster')
+		secureStore.set('password', 'secret')
+		mmkvStore.set('sessionCreated', '0')
+
+		thiApiMock.default.login.mockImplementation(async () => {
+			throw new Error('network down')
+		})
+
+		await expect(
+			sessionHandler.callWithSession(async () => 'ok')
+		).rejects.toThrow('network down')
+	})
+
+	it('callWithSession - Non-string refreshed session should throw', async () => {
+		secureStore.set('session', 'old-session')
+		secureStore.set('username', 'alex.muster')
+		secureStore.set('password', 'secret')
+		mmkvStore.set('sessionCreated', '0')
+
+		thiApiMock.default.login.mockImplementation(async () => ({
+			session: 123 as unknown as string,
+			isStudent: true
+		}))
+
+		await expect(
+			sessionHandler.callWithSession(async () => 'ok')
+		).rejects.toThrow('Session is not a string')
+	})
+
+	it('createSession - Should normalize the username and persist credentials', async () => {
+		thiApiMock.default.login.mockImplementation(async (username, password) => {
+			expect(username).toBe('alex.muster')
+			expect(password).toBe('secret')
+			return { session: 'created-session', isStudent: false }
+		})
+
+		await expect(
+			sessionHandler.createSession('Alex.Muster@thi.de', 'secret')
+		).resolves.toBe(false)
+
+		expect(secureStore.get('session')).toBe('created-session')
+		expect(secureStore.get('username')).toBe('alex.muster')
+		expect(secureStore.get('password')).toBe('secret')
+		expect(mmkvStore.get('sessionCreated')).toBeDefined()
+	})
+
+	it('createSession - Should reject a non-string session token', async () => {
+		thiApiMock.default.login.mockImplementation(async () => ({
+			session: null as unknown as string,
+			isStudent: true
+		}))
+
+		await expect(
+			sessionHandler.createSession('alex', 'secret')
+		).rejects.toThrow('Session is not a string')
+	})
+
+	it('createGuestSession - Should clear the previous session by default', async () => {
+		secureStore.set('session', 'old-session')
+		secureStore.set('username', 'alex.muster')
+		secureStore.set('password', 'secret')
+		mmkvStore.set('sessionCreated', '1')
+
+		await sessionHandler.createGuestSession()
+
+		expect(logoutMock).toHaveBeenCalledWith('old-session')
+		expect(secureStore.get('session')).toBe('guest')
+		expect(secureStore.get('username')).toBeUndefined()
+		expect(secureStore.get('password')).toBeUndefined()
+		expect(mmkvStore.size).toBe(0)
+	})
+
+	it('createGuestSession - Should keep existing credentials when forget is false', async () => {
+		secureStore.set('username', 'alex.muster')
+
+		await sessionHandler.createGuestSession(false)
+
+		expect(logoutMock).not.toHaveBeenCalled()
+		expect(secureStore.get('session')).toBe('guest')
+		expect(secureStore.get('username')).toBe('alex.muster')
+	})
+
+	it('forgetSession - Should no-op when there is no session', async () => {
+		await sessionHandler.forgetSession()
+
+		expect(logoutMock).not.toHaveBeenCalled()
+		expect(deleteSecureMock).toHaveBeenCalledTimes(3)
+	})
+
+	it('forgetSession - Should swallow logout and clearAll failures', async () => {
+		secureStore.set('session', 'old-session')
+		logoutMock.mockImplementation(async () => {
+			throw new Error('logout failed')
+		})
+		const originalClearAll = storageMock.storage.clearAll
+		storageMock.storage.clearAll = () => {
+			throw new Error('clear failed')
+		}
+
+		await expect(sessionHandler.forgetSession()).resolves.toBeUndefined()
+
+		expect(secureStore.get('session')).toBeUndefined()
+		storageMock.storage.clearAll = originalClearAll
+	})
+
+	it('forgetSession - Should clean IndexedDB databases on web', async () => {
+		secureStore.set('session', 'old-session')
+		const deleted: string[] = []
+		const originalIndexedDB = globalThis.indexedDB
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: {
+				databases: async () => [
+					{ name: 'neuland-secure-storage' },
+					{ name: 'unrelated-db' }
+				],
+				deleteDatabase: (name: string) => {
+					deleted.push(name)
+				}
+			}
+		})
+		Object.defineProperty(globalThis, 'window', {
+			configurable: true,
+			value: globalThis
+		})
+
+		await sessionHandler.forgetSession()
+
+		expect(deleted).toEqual(['neuland-secure-storage'])
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: originalIndexedDB
+		})
+		Reflect.deleteProperty(globalThis, 'window')
+	})
+
+	it('forgetSession - Should fall back to known DB names without databases()', async () => {
+		secureStore.set('session', 'old-session')
+		const deleted: string[] = []
+		const originalIndexedDB = globalThis.indexedDB
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: {
+				deleteDatabase: (name: string) => {
+					deleted.push(name)
+				}
+			}
+		})
+		Object.defineProperty(globalThis, 'window', {
+			configurable: true,
+			value: globalThis
+		})
+
+		await sessionHandler.forgetSession()
+
+		expect(deleted).toEqual(['neuland-secure-storage'])
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: originalIndexedDB
+		})
+		Reflect.deleteProperty(globalThis, 'window')
+	})
+
+	it('forgetSession - Should swallow IndexedDB cleanup failures', async () => {
+		secureStore.set('session', 'old-session')
+		const originalIndexedDB = globalThis.indexedDB
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: {
+				databases: async () => {
+					throw new Error('indexeddb unavailable')
+				}
+			}
+		})
+		Object.defineProperty(globalThis, 'window', {
+			configurable: true,
+			value: globalThis
+		})
+
+		await expect(sessionHandler.forgetSession()).resolves.toBeUndefined()
+
+		Object.defineProperty(globalThis, 'indexedDB', {
+			configurable: true,
+			value: originalIndexedDB
+		})
+		Reflect.deleteProperty(globalThis, 'window')
 	})
 })
