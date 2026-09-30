@@ -5,8 +5,7 @@ import {
 } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
-import { use, useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { use, useMemo } from 'react'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { UserKindContext } from '@/components/contexts'
@@ -15,7 +14,6 @@ import { Funktion, type Lecturers } from '@/types/thi-api'
 import type { NormalizedLecturer } from '@/types/utils'
 import { extractFaculty, getPersonalData } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { pausedToast } from '@/utils/ui-utils'
 
 function generateSections(lecturers: NormalizedLecturer[] | undefined): {
 	title: string
@@ -55,7 +53,6 @@ export function useLecturersData(localSearch: string): {
 } {
 	const router = useRouter()
 	const { userKind = USER_GUEST } = use(UserKindContext)
-	const { t } = useTranslation('common')
 
 	const { data } = useQuery({
 		queryKey: ['personalData'],
@@ -156,21 +153,6 @@ export function useLecturersData(localSearch: string): {
 		() => generateSections(filteredLecturers),
 		[filteredLecturers]
 	)
-
-	useEffect(() => {
-		if (
-			(allLecturersResult.isPaused && allLecturersResult.data != null) ||
-			(personalLecturersResult.isPaused && personalLecturersResult.data != null)
-		) {
-			pausedToast()
-		}
-	}, [
-		allLecturersResult.data,
-		allLecturersResult.isPaused,
-		personalLecturersResult.data,
-		personalLecturersResult.isPaused,
-		t
-	])
 
 	return {
 		allLecturersResult,

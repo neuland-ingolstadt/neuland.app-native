@@ -1,10 +1,6 @@
 {
 	"toast": {
 		"clipboard": "in Zwischenablage kopiert",
-		"paused": {
-			"title": "Keine Internetverbindung",
-			"description": "Daten können veraltet sein"
-		},
 		"roomNotFound": "Raum nicht gefunden",
 		"mapOverlay": "Fehler beim Laden des Overlays",
 		"dashboard": "Drag & Drop zum Sortieren",
