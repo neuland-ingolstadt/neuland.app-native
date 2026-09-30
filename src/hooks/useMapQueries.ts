@@ -4,10 +4,7 @@ import type { Feature, FeatureCollection } from 'geojson'
 import { use, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import API from '@/api/thi-authenticated-api'
-import {
-	NoSessionError,
-	UnavailableSessionError
-} from '@/api/thi-session'
+import { NoSessionError, UnavailableSessionError } from '@/api/thi-session'
 import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
