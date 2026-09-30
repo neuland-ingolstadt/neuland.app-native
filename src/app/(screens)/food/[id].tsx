@@ -244,9 +244,9 @@ export default function FoodDetail(): React.JSX.Element {
 				<FormList sections={sections} sheet />
 			</View>
 
-			<Pressable onPress={triggerWiggle}>
-				<View className="self-center mt-5 mb-bottom-safe px-1">
-					<View className="flex-row items-center self-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-hairline border-border">
+			<Pressable onPress={triggerWiggle} className="w-full">
+				<View className="mt-5 mb-bottom-safe w-full">
+					<View className="flex-row items-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-hairline border-border">
 						<Animated.View style={wiggleIconAnimatedStyle}>
 							<PlatformIcon
 								ios={{
