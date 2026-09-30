@@ -37,9 +37,9 @@ tags:
 - tapOn: ".*(Add to Wallet|Zu Wallet hinzufügen).*"
 - extendedWaitUntil:
     visible:
-      text: ".*(Security Notice|Sicherheitshinweis).*"
+      text: ".*(Your wallet pass|Dein Wallet-Pass).*"
     timeout: 10000
-- assertVisible: ".*(Security Notice|Sicherheitshinweis).*"
+- assertVisible: ".*(Your wallet pass|Dein Wallet-Pass).*"
 - runFlow:
     when:
       platform: Android
@@ -50,7 +50,7 @@ tags:
     when:
       platform: iOS
     commands:
-      - tapOn: ".*(Use App Instead|App verwenden).*"
+      - tapOn: ".*(Not now|Abbrechen).*"
 - runFlow:
     when:
       platform: Android
@@ -61,6 +61,6 @@ tags:
     when:
       platform: iOS
     commands:
-      - assertNotVisible: ".*(Security Notice|Sicherheitshinweis).*"
+      - assertNotVisible: ".*(Your wallet pass|Dein Wallet-Pass).*"
 - assertVisible:
     id: "member-screen"

@@ -1,12 +1,7 @@
-import { BlurView } from 'expo-blur'
-import {
-	GlassView,
-	isGlassEffectAPIAvailable,
-	isLiquidGlassAvailable
-} from 'expo-glass-effect'
 import type React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 import { useCSSVariable, useUniwind } from 'uniwind'
+import { IosGlassSurface } from '@/components/Universal/ios-glass-surface'
 import { toColor } from '@/utils/uniwind-utils'
 import { SHEET_RADIUS } from './sheet-chrome'
 
@@ -26,25 +21,12 @@ const BottomSheetBackground = (): React.JSX.Element => {
 	)
 
 	if (Platform.OS === 'ios') {
-		const colorScheme = dark ? 'dark' : 'light'
-
-		if (isLiquidGlassAvailable() && isGlassEffectAPIAvailable()) {
-			return (
-				<GlassView
-					pointerEvents="none"
-					glassEffectStyle="regular"
-					colorScheme={colorScheme}
-					style={[StyleSheet.absoluteFill, surfaceCorners]}
-				/>
-			)
-		}
-
 		return (
-			<BlurView
+			<IosGlassSurface
 				pointerEvents="none"
-				intensity={100}
-				tint="systemChromeMaterial"
+				tinted={dark}
 				style={[StyleSheet.absoluteFill, surfaceCorners]}
+				fallbackBackgroundColor={backgroundColor}
 			/>
 		)
 	}

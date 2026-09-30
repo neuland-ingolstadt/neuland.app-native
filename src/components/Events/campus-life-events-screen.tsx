@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import {
 	type Href,
-	Redirect,
 	router,
 	useFocusEffect,
 	useLocalSearchParams
@@ -25,19 +24,13 @@ import ClEventsPage from './cl-events-page'
 interface CampusLifeEventsScreenProps {
 	organizerKind: CampusLifePublicOrganizerKind
 	clubsListRoute?: Href
-	queryEnabled?: boolean
-	redirectWhenDisabled?: Href
 	enableSportsTabRedirect?: boolean
-	featureFlagPending?: boolean
 }
 
 export default function CampusLifeEventsScreen({
 	organizerKind,
 	clubsListRoute,
-	queryEnabled = true,
-	redirectWhenDisabled,
-	enableSportsTabRedirect = false,
-	featureFlagPending = false
+	enableSportsTabRedirect = false
 }: CampusLifeEventsScreenProps): React.JSX.Element {
 	const headerPadding = useTransparentHeaderPadding()
 	const { tab, openEvent, id, org } = useLocalSearchParams<{
@@ -51,8 +44,7 @@ export default function CampusLifeEventsScreen({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS, organizerKind],
 		queryFn: () => loadCampusLifeEvents({ organizerKind }),
 		staleTime: 1000 * 60 * 60,
-		gcTime: 1000 * 60 * 60 * 24,
-		enabled: queryEnabled
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	useEffect(() => {
@@ -91,21 +83,6 @@ export default function CampusLifeEventsScreen({
 			}
 		}, [openEvent, id, org, organizerKind])
 	)
-
-	if (featureFlagPending) {
-		return (
-			<View
-				className="flex-1 justify-center items-center p-page"
-				style={{ paddingTop: headerPadding + 12 }}
-			>
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
-	if (redirectWhenDisabled != null && !queryEnabled) {
-		return <Redirect href={redirectWhenDisabled} />
-	}
 
 	return (
 		<View

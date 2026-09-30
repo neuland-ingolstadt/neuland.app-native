@@ -5,6 +5,7 @@ import { Platform, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import { BottomSheet } from '@/components/Universal/bottom-sheet'
 import FormList from '@/components/Universal/form-list'
+import { IosGlassHeaderButton } from '@/components/Universal/share-header-button'
 import { useSheetPosition } from '@/components/Universal/use-sheet-position'
 import type { FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
@@ -67,36 +68,62 @@ export const BottomSheetDetailModal = ({
 						)}
 					</View>
 					<View className="flex-row items-center gap-2 shrink-0 pt-0.5">
-						{roomData.type === SEARCH_TYPES.ROOM && (
-							<SheetActionButton
-								testID="map-room-share"
-								accessibilityLabel={t('button.share', { ns: 'accessibility' })}
-								onPress={() => {
-									if (Platform.OS === 'web') {
-										setCopied(true)
-										setTimeout(() => setCopied(false), 1000)
+						{roomData.type === SEARCH_TYPES.ROOM &&
+							(Platform.OS === 'ios' ? (
+								<IosGlassHeaderButton
+									testID="map-room-share"
+									icon="share"
+									compact
+									shareCopied={copied}
+									label={t('button.share', { ns: 'accessibility' })}
+									onPress={() => {
+										handleShareModal(roomData.title)
+									}}
+								/>
+							) : (
+								<SheetActionButton
+									testID="map-room-share"
+									accessibilityLabel={t('button.share', {
+										ns: 'accessibility'
+									})}
+									onPress={() => {
+										if (Platform.OS === 'web') {
+											setCopied(true)
+											setTimeout(() => setCopied(false), 1000)
+										}
+										handleShareModal(roomData.title)
+									}}
+									iosFilledSymbol={
+										copied
+											? 'checkmark.circle.fill'
+											: 'square.and.arrow.up.circle.fill'
 									}
-									handleShareModal(roomData.title)
+									androidName={copied ? 'check' : 'share'}
+									webName={copied ? 'Check' : 'Share'}
+								/>
+							))}
+						{Platform.OS === 'ios' ? (
+							<IosGlassHeaderButton
+								testID="map-room-detail-close"
+								icon="close"
+								compact
+								label={t('button.close', { ns: 'accessibility' })}
+								onPress={() => {
+									onIndexChange(DETAIL_HIDDEN)
 								}}
-								iosFilledSymbol={
-									copied
-										? 'checkmark.circle.fill'
-										: 'square.and.arrow.up.circle.fill'
-								}
-								androidName={copied ? 'check' : 'share'}
-								webName={copied ? 'Check' : 'Share'}
+							/>
+						) : (
+							<SheetActionButton
+								testID="map-room-detail-close"
+								accessibilityLabel={t('button.close', { ns: 'accessibility' })}
+								onPress={() => {
+									onIndexChange(DETAIL_HIDDEN)
+								}}
+								iosFilledSymbol="xmark.circle.fill"
+								androidName="close"
+								webName="X"
 							/>
 						)}
-						<SheetActionButton
-							testID="map-room-detail-close"
-							accessibilityLabel={t('button.close', { ns: 'accessibility' })}
-							onPress={() => {
-								onIndexChange(DETAIL_HIDDEN)
-							}}
-							iosFilledSymbol="xmark.circle.fill"
-							androidName="close"
-							webName="X"
-						/>
 					</View>
 				</View>
 				<View className="self-center my-4 w-full">

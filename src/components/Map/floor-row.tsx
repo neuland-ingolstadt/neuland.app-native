@@ -1,6 +1,6 @@
 import type React from 'react'
 import { memo } from 'react'
-import { Pressable, Text } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 import { CELL, floorLabel } from './floor-picker-layout'
 
 interface FloorRowProps {
@@ -12,6 +12,8 @@ interface FloorRowProps {
 	cardColor: string
 	textColor: string
 	contrastColor: string
+	glassChrome?: boolean
+	cellSize?: number
 	onSelect: (floor: string) => void
 }
 
@@ -24,6 +26,8 @@ export const FloorRow = memo(function FloorRow({
 	cardColor,
 	textColor,
 	contrastColor,
+	glassChrome = false,
+	cellSize = CELL,
 	onSelect
 }: FloorRowProps): React.JSX.Element {
 	return (
@@ -38,11 +42,12 @@ export const FloorRow = memo(function FloorRow({
 			accessibilityLabel={floorLabel(floor)}
 			className="w-full items-center justify-center"
 			style={{
-				height: CELL,
+				height: cellSize,
 				width: '100%',
-				backgroundColor: isCurrent && interactive ? 'transparent' : cardColor,
+				backgroundColor:
+					glassChrome || (isCurrent && interactive) ? 'transparent' : cardColor,
 				borderBottomColor: borderColor,
-				borderBottomWidth: isLast || !interactive ? 0 : 1
+				borderBottomWidth: isLast || !interactive ? 0 : StyleSheet.hairlineWidth
 			}}
 		>
 			<Text

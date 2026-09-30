@@ -103,7 +103,7 @@ export function filterMatchingOutages(
 }
 
 export function buildSignature(unhealthyIds: ServiceStatus[]): string {
-	return [...unhealthyIds].sort().join('|')
+	return [...unhealthyIds].sort((a, b) => a.localeCompare(b)).join('|')
 }
 
 export function shouldShowServiceStatusBanner(

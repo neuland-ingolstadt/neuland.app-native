@@ -158,6 +158,7 @@ describe('date-utils', () => {
 		expect(
 			dateUtils.convertTimeToDate('25:00:00', new Date('2026-04-07T00:00:00'))
 		).toBe(null)
+		expect(dateUtils.convertTimeToDate(null)).toBe(null)
 	})
 
 	it('formatCompactDateRange - Should return one date for a single-day range', () => {

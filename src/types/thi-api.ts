@@ -145,12 +145,13 @@ export interface Rooms {
 
 export interface Rtype {
 	raumtyp: Raumtyp
-	stunden: Stunde[]
+	/** THI returns an object keyed by slot index; some fixtures use an array. */
+	stunden: Record<string, Stunde> | Stunde[]
 }
 
 export interface Stunde {
-	type: Raumtyp
-	raeume: [string, string, number, number][]
+	type?: Raumtyp
+	raeume: [string, string, string | number, string | number][]
 	von: string
 	bis: string
 }

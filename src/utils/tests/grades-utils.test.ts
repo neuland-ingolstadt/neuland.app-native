@@ -195,6 +195,36 @@ describe('grades-utils', () => {
 		})
 	})
 
+	it('loadGradeAverage - Should count missing weights for matched modules without numeric weight', async () => {
+		mockGetGrades.mockResolvedValueOnce([
+			makeGrade({ titel: 'Optional Module', note: '1.7' })
+		])
+
+		const courseSPOs: SpoWeights = {
+			'Informatik SPO': [
+				{
+					apo_number: '1',
+					name: 'Optional Module',
+					weekly_workload: 2,
+					weight: null,
+					ects: 3
+				}
+			]
+		}
+
+		const average = await gradesUtils.loadGradeAverage(
+			courseSPOs,
+			'Informatik SPO'
+		)
+
+		expect(average.missingWeight).toBe(1)
+		expect(average.entries[0]).toMatchObject({
+			name: 'Optional Module',
+			weight: null,
+			grade: 1.7
+		})
+	})
+
 	it('loadGradeAverage - Should keep the first grade when duplicate SPO names appear', async () => {
 		mockGetGrades.mockResolvedValueOnce([
 			makeGrade({ titel: 'Mathematik I', note: '2.0' }),

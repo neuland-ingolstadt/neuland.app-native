@@ -52,10 +52,14 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 		}
 
 		for (const rtype of room.rtypes) {
-			if (!Array.isArray(rtype.stunden)) {
-				continue
-			}
-			for (const stunde of rtype.stunden) {
+			// THI returns `stunden` as an object keyed by slot index ("1","2",…),
+			// not as an array. Object.values keeps both shapes working.
+			const stunden = Array.isArray(rtype.stunden)
+				? rtype.stunden
+				: rtype.stunden != null
+					? Object.values(rtype.stunden)
+					: []
+			for (const stunde of stunden) {
 				if (!Array.isArray(stunde.raeume)) {
 					continue
 				}
@@ -64,8 +68,11 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 						continue
 					}
 					const roomNumber = slot[2]
-					const capacity = slot[3]
-					const roomName = roomNumber === 0 ? ROOMS_ALL : roomNumber.toString()
+					const capacity = Number(slot[3]) || 0
+					const roomName =
+						roomNumber === 0 || roomNumber === '0'
+							? ROOMS_ALL
+							: roomNumber.toString()
 					const type = rtype.raumtyp.replace(/ \(.*\)$/, '').trim()
 					const from = new Date(stunde.von)
 					const until = new Date(stunde.bis)

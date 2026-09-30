@@ -18,6 +18,9 @@ export function LoggedOutView({
 	promptAsync
 }: LoggedOutViewProps): React.JSX.Element {
 	const textColor = toColor(useCSSVariable('--color-text'))
+	const neulandGreenAccent = toColor(
+		useCSSVariable('--color-neuland-green-accent')
+	)
 	const { t } = useTranslation('member')
 
 	return (
@@ -87,9 +90,10 @@ export function LoggedOutView({
 					<View className="mt-8 gap-3">
 						<Pressable
 							onPress={() => Linking.openURL('https://neuland-ingolstadt.de')}
-							className="bg-primary py-3 rounded-md items-center active:opacity-80"
+							className="py-3 rounded-md items-center active:opacity-80"
+							style={{ backgroundColor: neulandGreenAccent }}
 						>
-							<Text className="text-background text-base font-bold">
+							<Text className="text-contrast text-base font-bold">
 								{t('loggedOut.buttons.learnAboutClub')}
 							</Text>
 						</Pressable>
@@ -100,7 +104,10 @@ export function LoggedOutView({
 							}}
 							className="bg-card py-3 border border-border rounded-md items-center active:opacity-80"
 						>
-							<Text className="text-primary text-base font-bold">
+							<Text
+								className="text-base font-bold"
+								style={{ color: neulandGreenAccent }}
+							>
 								{t('loggedOut.buttons.signIn')}
 							</Text>
 						</Pressable>

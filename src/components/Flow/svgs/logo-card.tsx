@@ -10,7 +10,7 @@ interface LogoCardSVGProps {
 export default function LogoCardSVG({
 	size = 310,
 	opacity = 0.17,
-	color = '#00ff33'
+	color = '#24ff88'
 }: LogoCardSVGProps): React.JSX.Element {
 	return (
 		<Svg

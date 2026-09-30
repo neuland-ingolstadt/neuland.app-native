@@ -10,19 +10,6 @@ mock.module('expo-router', () => ({
 	}
 }))
 
-mock.module('@aptabase/react-native', () => ({
-	trackEvent: mock(() => {})
-}))
-
-mock.module('react-native', () => ({
-	Platform: { OS: 'web' }
-}))
-
-mock.module('../ui-utils', () => ({
-	copyToClipboard: mock(async () => {}),
-	shareNative: mock(async () => {})
-}))
-
 let mapActions: typeof import('../map-actions')
 
 beforeAll(async () => {
