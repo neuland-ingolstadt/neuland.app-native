@@ -211,6 +211,50 @@ describe('map-utils', () => {
 		expect(openings['110'][1].from.getHours()).toBe(12)
 	})
 
+	it('getRoomOpenings - Should parse THI object-keyed stunden with string room slots', () => {
+		const data = [
+			{
+				datum: '2026-09-30T00:00:00.000000',
+				rtypes: [
+					{
+						raumtyp: 'Kleiner Hörsaal  (40-79 Plätze)',
+						stunden: {
+							'1': {
+								von: '2026-09-30T08:15:00.000000',
+								bis: '2026-09-30T09:00:00.000000',
+								raeume: [
+									['0', 'B', 'B107', '56'],
+									['0', 'D', 'D101', '72']
+								]
+							},
+							'2': {
+								von: '2026-09-30T09:00:00.000000',
+								bis: '2026-09-30T09:45:00.000000',
+								raeume: [
+									['0', 'B', 'B107', '56'],
+									['0', 'D', 'D101', '72']
+								]
+							}
+						}
+					}
+				]
+			}
+		]
+
+		const openings = mapUtils.getRoomOpenings(
+			data as never,
+			new Date(2026, 8, 30)
+		)
+		expect(openings.B107).toHaveLength(1)
+		expect(openings.B107[0].capacity).toBe(56)
+		expect(openings.B107[0].from.getHours()).toBe(8)
+		expect(openings.B107[0].from.getMinutes()).toBe(15)
+		expect(openings.B107[0].until.getHours()).toBe(9)
+		expect(openings.B107[0].until.getMinutes()).toBe(45)
+		expect(openings.D101).toHaveLength(1)
+		expect(openings.D101[0].capacity).toBe(72)
+	})
+
 	it('searchRooms - Should return all rooms when no building filter is provided', () => {
 		const data = [
 			{
