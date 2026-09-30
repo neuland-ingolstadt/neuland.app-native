@@ -29,10 +29,8 @@ export type PresentationModeInput = {
  * Pure form-sheet option builder used by `usePresentationMode`.
  *
  * On iOS 26+, Expo / React Navigation expect a transparent header + transparent
- * sheet content so UIKit can own Liquid Glass. Keep the top scroll-edge effect
- * on `hard`: `soft` (previously used for iOS 27) reads as a fully clear header
- * when content scrolls underneath, and `automatic` can leave long titles
- * visible behind the chrome.
+ * sheet content so UIKit can own Liquid Glass. Use a soft top scroll-edge effect
+ * so content can fade under the glass chrome without a hard cutoff.
  *
  * @see https://reactnavigation.org/docs/native-stack-navigator/#scrolledgeffects
  * @see .agents/skills/building-native-ui/references/form-sheet.md

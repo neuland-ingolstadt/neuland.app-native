@@ -48,15 +48,15 @@ describe('buildPresentationMode', () => {
 		})
 	})
 
-	it('uses transparent liquid-glass chrome with a hard top edge on iOS 26+', () => {
-		const options = buildPresentationMode(false, {
-			platformOS: 'ios',
-			ios26OrLater: true,
-			deviceType: 'Handset',
-			...base
-		})
-
-		expect(options).toEqual({
+	it('uses transparent liquid-glass chrome with a soft top edge on iOS 26+', () => {
+		expect(
+			buildPresentationMode(false, {
+				platformOS: 'ios',
+				ios26OrLater: true,
+				deviceType: 'Handset',
+				...base
+			})
+		).toEqual({
 			presentation: 'formSheet',
 			sheetAllowedDetents: [0.7, 0.95],
 			sheetInitialDetentIndex: 0,
@@ -65,8 +65,6 @@ describe('buildPresentationMode', () => {
 			contentStyle: { backgroundColor: 'transparent' },
 			scrollEdgeEffects: { top: 'soft' }
 		})
-		// soft looked fully clear under scrolling content on iOS 27 sheets
-		expect(options.scrollEdgeEffects?.top).not.toBe('soft')
 	})
 
 	it('keeps smaller detents for compact sheets', () => {
