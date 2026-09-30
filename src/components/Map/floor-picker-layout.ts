@@ -1,5 +1,7 @@
 export const CELL = 38
 export const FLOATING_CHROME_RADIUS = 10
+/** Pill-like corners for liquid glass floating chrome (picker + locate). */
+export const FLOATING_CHROME_RADIUS_GLASS = CELL / 2
 export const GAP = 5
 export const CLOSE = 38
 export const PICKER_TOP = CLOSE + GAP

@@ -35,7 +35,7 @@ interface IosGlassSurfaceProps extends Pick<ViewProps, 'pointerEvents'> {
 export function IosGlassSurface({
 	children,
 	style,
-	pointerEvents = 'none',
+	pointerEvents,
 	isInteractive = false,
 	fallbackBackgroundColor
 }: IosGlassSurfaceProps): React.JSX.Element {
@@ -46,11 +46,15 @@ export function IosGlassSurface({
 	const tintColor = dark
 		? 'rgba(0, 0, 0, 0.40)'
 		: Color(cardColor).alpha(0.45).string()
+	// Decorative chrome defaults to none; interactive surfaces must allow children
+	// (Pressable / TextInput) to receive hits — otherwise GlassView swallows them.
+	const resolvedPointerEvents =
+		pointerEvents ?? (isInteractive ? 'auto' : 'none')
 
 	if (Platform.OS !== 'ios') {
 		return (
 			<View
-				pointerEvents={pointerEvents}
+				pointerEvents={resolvedPointerEvents}
 				style={[style, { backgroundColor: fallbackBackgroundColor }]}
 			>
 				{children}
@@ -61,7 +65,7 @@ export function IosGlassSurface({
 	if (isIosLiquidGlassActive()) {
 		return (
 			<GlassView
-				pointerEvents={pointerEvents}
+				pointerEvents={resolvedPointerEvents}
 				isInteractive={isInteractive}
 				glassEffectStyle="regular"
 				colorScheme={colorScheme}
@@ -75,7 +79,7 @@ export function IosGlassSurface({
 
 	return (
 		<BlurView
-			pointerEvents={pointerEvents}
+			pointerEvents={resolvedPointerEvents}
 			intensity={100}
 			tint="systemChromeMaterial"
 			style={style}

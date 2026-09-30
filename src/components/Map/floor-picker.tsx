@@ -17,7 +17,8 @@ import PlatformIcon from '@/components/Universal/icon'
 import {
 	IosGlassSurface,
 	iosGlassChromeBorder,
-	iosGlassHairlineBorder
+	iosGlassHairlineBorder,
+	isIosLiquidGlassActive
 } from '@/components/Universal/ios-glass-surface'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -28,6 +29,7 @@ import {
 	CONTAINER_TOP,
 	EXPAND_SPRING,
 	FLOATING_CHROME_RADIUS,
+	FLOATING_CHROME_RADIUS_GLASS,
 	floorLabel,
 	GAP,
 	PICKER_TOP,
@@ -354,7 +356,9 @@ const FloorPicker = ({
 
 	const floatingFrameStyle = {
 		borderCurve: 'continuous' as const,
-		borderRadius: FLOATING_CHROME_RADIUS,
+		borderRadius: isIosLiquidGlassActive()
+			? FLOATING_CHROME_RADIUS_GLASS
+			: FLOATING_CHROME_RADIUS,
 		boxShadow: shadow,
 		overflow: 'hidden' as const,
 		...iosGlassChromeBorder(borderColor)
@@ -469,7 +473,7 @@ const FloorPicker = ({
 					accessibilityRole="button"
 					accessibilityLabel={t('button.close')}
 					className="items-center justify-center"
-					style={{ height: CLOSE, width: CELL }}
+					style={{ height: CLOSE, width: CLOSE }}
 				>
 					{glassChrome ? (
 						<IosGlassSurface
@@ -477,23 +481,22 @@ const FloorPicker = ({
 							fallbackBackgroundColor={cardColor}
 							style={[
 								{
-									borderCurve: 'continuous',
+									alignItems: 'center',
 									borderRadius: CLOSE / 2,
 									height: CLOSE,
+									justifyContent: 'center',
 									overflow: 'hidden',
-									width: CELL
+									width: CLOSE
 								},
 								iosGlassHairlineBorder(labelColorString)
 							]}
 						>
-							<View className="flex-1 items-center justify-center">
-								<PlatformIcon
-									ios={{ name: 'xmark', size: 13, weight: 'semibold' }}
-									android={{ name: 'cancel', size: 26 }}
-									web={{ name: 'X', size: 26 }}
-									style={{ color: labelColorString }}
-								/>
-							</View>
+							<PlatformIcon
+								ios={{ name: 'xmark', size: 13, weight: 'semibold' }}
+								android={{ name: 'cancel', size: 26 }}
+								web={{ name: 'X', size: 26 }}
+								style={{ color: labelColorString }}
+							/>
 						</IosGlassSurface>
 					) : (
 						<PlatformIcon
