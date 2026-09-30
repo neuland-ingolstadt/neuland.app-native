@@ -24,7 +24,7 @@ const BottomSheetBackground = (): React.JSX.Element => {
 		return (
 			<IosGlassSurface
 				pointerEvents="none"
-				tinted
+				tinted={dark}
 				style={[StyleSheet.absoluteFill, surfaceCorners]}
 				fallbackBackgroundColor={backgroundColor}
 			/>
