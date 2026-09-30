@@ -18,7 +18,13 @@ mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
 	appStorage: appStorageMock,
 	loadSecureAsync: async () => null,
 	saveSecureAsync: async () => {},
-	deleteSecure: () => {}
+	deleteSecure: () => {},
+	// Bun's mock.module is process-global; keep exports complete for other suites
+	storage: {
+		getString: () => undefined,
+		set: () => {},
+		clearAll: () => {}
+	}
 }))
 
 let officeTogglePending: typeof import('../office-toggle-pending')

@@ -35,6 +35,12 @@ mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
 		set: () => {},
 		remove: () => {},
 		getBoolean: () => false
+	},
+	// Bun's mock.module is process-global; keep exports complete for other suites
+	storage: {
+		getString: () => undefined,
+		set: () => {},
+		clearAll: () => {}
 	}
 }))
 

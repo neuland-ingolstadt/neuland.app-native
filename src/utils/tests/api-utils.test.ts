@@ -16,7 +16,7 @@ const apiGetPersonalDataMock = mock(async () => ({
 	pcounter: '7'
 }))
 
-mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
+const storageMock = {
 	loadSecureAsync: loadSecureAsyncMock,
 	saveSecureAsync: saveSecureAsyncMock,
 	deleteSecure: deleteSecureMock,
@@ -30,7 +30,10 @@ mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
 		remove: () => {},
 		getBoolean: () => false
 	}
-}))
+}
+
+mock.module(`${SRC_ROOT}utils/storage.ts`, () => storageMock)
+mock.module('@/utils/storage', () => storageMock)
 
 mock.module('expo-router', () => ({
 	router: {
