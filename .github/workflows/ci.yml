@@ -100,7 +100,7 @@ jobs:
           exit "$doctor_status"
 
   sonarqube-analysis:
-    name: SonarQube Analysis
+    name: Tests and Quality Analysis
     needs: changes
     if: |
       github.event_name == 'pull_request' ||
