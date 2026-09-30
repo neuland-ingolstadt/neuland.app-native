@@ -8,10 +8,8 @@ import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import { officePresenceQueryKey } from '@/components/Member/office-presence-section'
-import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import { evaluateMemberOfficePresenceEnabled } from '@/lib/feature-flags'
 import {
 	ensureMemberTokensLoaded,
 	setOfficeTogglePending,
@@ -23,7 +21,6 @@ export default function OfficeToggle(): React.JSX.Element {
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const { t } = useTranslation('member')
 	const memberSub = useMemberStore((s) => s.info?.sub as string | undefined)
-	const { userKind } = useUserKind()
 	const queryClient = useQueryClient()
 	const [authReady, setAuthReady] = useState(false)
 	const handledRef = useRef(false)
@@ -43,20 +40,6 @@ export default function OfficeToggle(): React.JSX.Element {
 		handledRef.current = true
 
 		void (async () => {
-			const enabled = await evaluateMemberOfficePresenceEnabled(userKind)
-
-			if (!enabled) {
-				toast({
-					title: t('office.toggleDisabled'),
-					preset: 'error',
-					haptic: 'error',
-					duration: 2.5,
-					from: 'top'
-				})
-				router.replace('/member')
-				return
-			}
-
 			const currentIdToken = useMemberStore.getState().idToken
 			if (!currentIdToken) {
 				setOfficeTogglePending(true)
@@ -97,7 +80,7 @@ export default function OfficeToggle(): React.JSX.Element {
 
 			router.replace('/member')
 		})()
-	}, [analyticsInitialized, authReady, memberSub, queryClient, t, userKind])
+	}, [analyticsInitialized, authReady, memberSub, queryClient, t])
 
 	return (
 		<View className="flex-1 items-center justify-center bg-background">

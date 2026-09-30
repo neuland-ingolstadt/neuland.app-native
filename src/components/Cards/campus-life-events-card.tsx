@@ -22,14 +22,12 @@ interface CampusLifeEventsCardProps {
 	title: 'events' | 'thiEvents'
 	organizerKind: CampusLifePublicOrganizerKind
 	listRoute: RelativePathString
-	queryEnabled?: boolean
 }
 
 export default function CampusLifeEventsCard({
 	title,
 	organizerKind,
-	listRoute,
-	queryEnabled = true
+	listRoute
 }: CampusLifeEventsCardProps): React.JSX.Element {
 	const primaryColor = String(toColor(useCSSVariable('--color-primary')) ?? '')
 	const { i18n } = useTranslation('navigation')
@@ -38,8 +36,7 @@ export default function CampusLifeEventsCard({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS, organizerKind],
 		queryFn: () => loadCampusLifeEvents({ organizerKind }),
 		staleTime: 1000 * 60 * 5,
-		gcTime: 1000 * 60 * 60 * 24,
-		enabled: queryEnabled
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	const handleEventItemPress = (id: string) => {

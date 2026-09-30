@@ -1,7 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import {
-	Redirect,
 	router,
 	Stack,
 	useFocusEffect,
@@ -20,16 +19,13 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useFeatureFlagEnabled } from '@/hooks'
 import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
-import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { CampusLifeOrganizer } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	campusLifeEventListScreen,
 	campusLifeEventWebShareUrl,
 	campusLifeOrganiserParams,
-	isThiDepartmentOrganizerKind,
 	resolveEventOrganizerKind
 } from '@/utils/campus-life-utils'
 import {
@@ -60,8 +56,6 @@ export default function ClEventDetail(): React.JSX.Element {
 		id: string
 		org?: string | string[]
 	}>()
-	const { enabled: thiEventsVisible, isPending: thiFlagPending } =
-		useFeatureFlagEnabled(FeatureFlagKeys.thiEventsVisible)
 	const { t, i18n } = useTranslation('common')
 	const getLocalizedValue = useCallback(
 		(values?: { de?: string | null; en?: string | null } | null) => {
@@ -170,8 +164,7 @@ export default function ClEventDetail(): React.JSX.Element {
 		!eventData ||
 		(eventData.organizerKind == null &&
 			organizerId != null &&
-			organizerQuery.isLoading) ||
-		(isThiDepartmentOrganizerKind(organizerKind) && thiFlagPending)
+			organizerQuery.isLoading)
 	) {
 		// Keep the scroll view mounted through all loading stages for UIKit's scroll edges.
 		return (
@@ -183,12 +176,6 @@ export default function ClEventDetail(): React.JSX.Element {
 				<LoadingIndicator />
 			</Animated.ScrollView>
 		)
-	}
-
-	if (isThiDepartmentOrganizerKind(organizerKind)) {
-		if (!thiEventsVisible) {
-			return <Redirect href="/(tabs)" />
-		}
 	}
 
 	const pressLink = (url: string | null | undefined) => {
