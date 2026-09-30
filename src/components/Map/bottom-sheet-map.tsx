@@ -102,7 +102,7 @@ const MapBottomSheet = ({
 				)}
 
 				{searchFocused && searchQuery === '' && (
-					<Text className="text-label text-base pt-[60px] py-[30px] text-center">
+					<Text className="text-label text-base pt-[60px] pb-[30px] text-center">
 						{t('pages.map.search.placeholder')}
 					</Text>
 				)}
