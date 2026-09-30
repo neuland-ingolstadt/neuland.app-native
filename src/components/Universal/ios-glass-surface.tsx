@@ -29,6 +29,8 @@ interface IosGlassSurfaceProps extends Pick<ViewProps, 'pointerEvents'> {
 	children?: React.ReactNode
 	style?: StyleProp<ViewStyle>
 	isInteractive?: boolean
+	/** When true, apply a card-based tint. Default glass uses the system tint. */
+	tinted?: boolean
 	fallbackBackgroundColor: string
 }
 
@@ -37,15 +39,18 @@ export function IosGlassSurface({
 	style,
 	pointerEvents,
 	isInteractive = false,
+	tinted = false,
 	fallbackBackgroundColor
 }: IosGlassSurfaceProps): React.JSX.Element {
 	const { theme } = useUniwind()
 	const dark = theme === 'dark'
 	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
 	const colorScheme = dark ? 'dark' : 'light'
-	const tintColor = dark
-		? 'rgba(0, 0, 0, 0.40)'
-		: Color(cardColor).alpha(0.45).string()
+	const tintColor = tinted
+		? dark
+			? 'rgba(0, 0, 0, 0.40)'
+			: Color(cardColor).alpha(0.45).string()
+		: undefined
 	// Decorative chrome defaults to none; interactive surfaces must allow children
 	// (Pressable / TextInput) to receive hits — otherwise GlassView swallows them.
 	const resolvedPointerEvents =

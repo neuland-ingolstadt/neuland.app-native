@@ -13,6 +13,7 @@ interface FloorRowProps {
 	textColor: string
 	contrastColor: string
 	glassChrome?: boolean
+	cellSize?: number
 	onSelect: (floor: string) => void
 }
 
@@ -26,6 +27,7 @@ export const FloorRow = memo(function FloorRow({
 	textColor,
 	contrastColor,
 	glassChrome = false,
+	cellSize = CELL,
 	onSelect
 }: FloorRowProps): React.JSX.Element {
 	return (
@@ -40,7 +42,7 @@ export const FloorRow = memo(function FloorRow({
 			accessibilityLabel={floorLabel(floor)}
 			className="w-full items-center justify-center"
 			style={{
-				height: CELL,
+				height: cellSize,
 				width: '100%',
 				backgroundColor:
 					glassChrome || (isCurrent && interactive) ? 'transparent' : cardColor,

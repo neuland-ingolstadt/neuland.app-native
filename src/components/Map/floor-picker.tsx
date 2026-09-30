@@ -25,14 +25,17 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import {
 	CELL,
+	CELL_GLASS,
 	CLOSE,
+	CLOSE_GLASS,
 	CONTAINER_TOP,
+	CONTAINER_TOP_GLASS,
 	EXPAND_SPRING,
-	FLOATING_CHROME_RADIUS,
-	FLOATING_CHROME_RADIUS_GLASS,
+	floatingChromeRadius,
 	floorLabel,
 	GAP,
 	PICKER_TOP,
+	PICKER_TOP_GLASS,
 	SNAP_SPRING
 } from './floor-picker-layout'
 import { FloorRow } from './floor-row'
@@ -123,7 +126,12 @@ const FloorPicker = ({
 	const xIconColor = String(
 		toColor(useCSSVariable('--color-label-secondary')) ?? '#777778'
 	)
-	const glassChrome = Platform.OS === 'ios'
+	const iosChrome = Platform.OS === 'ios'
+	const liquidGlass = isIosLiquidGlassActive()
+	const cell = liquidGlass ? CELL_GLASS : CELL
+	const close = liquidGlass ? CLOSE_GLASS : CLOSE
+	const pickerTop = liquidGlass ? PICKER_TOP_GLASS : PICKER_TOP
+	const containerTop = liquidGlass ? CONTAINER_TOP_GLASS : CONTAINER_TOP
 	const shadow = isDark
 		? '0 4 14 0 rgba(0, 0, 0, 0.45)'
 		: '0 4 14 0 rgba(0, 0, 0, 0.12)'
@@ -133,15 +141,20 @@ const FloorPicker = ({
 	const didInit = useRef(false)
 
 	const expanded = useSharedValue(showAllFloors ? 1 : 0)
-	const scrollY = useSharedValue(currentIndex * CELL)
-	const highlightY = useSharedValue(currentIndex * CELL)
-	const startY = useSharedValue(currentIndex * CELL)
+	const scrollY = useSharedValue(currentIndex * cell)
+	const highlightY = useSharedValue(currentIndex * cell)
+	const startY = useSharedValue(currentIndex * cell)
 	const lastTickIndex = useSharedValue(currentIndex)
 	const floorCountSV = useSharedValue(floorCount)
+	const cellSV = useSharedValue(cell)
 
 	useEffect(() => {
 		floorCountSV.set(floorCount)
 	}, [floorCount, floorCountSV])
+
+	useEffect(() => {
+		cellSV.set(cell)
+	}, [cell, cellSV])
 
 	useEffect(() => {
 		expanded.set(withSpring(showAllFloors ? 1 : 0, EXPAND_SPRING))
@@ -153,7 +166,7 @@ const FloorPicker = ({
 		if (floors.length === 0) {
 			return
 		}
-		const target = currentIndex * CELL
+		const target = currentIndex * cell
 		if (!didInit.current) {
 			didInit.current = true
 			scrollY.set(target)
@@ -167,7 +180,7 @@ const FloorPicker = ({
 		if (Math.abs(highlightY.get() - target) > 1) {
 			highlightY.set(withSpring(target, SNAP_SPRING))
 		}
-	}, [currentIndex, floors.length, highlightY, lastTickIndex, scrollY])
+	}, [cell, currentIndex, floors.length, highlightY, lastTickIndex, scrollY])
 
 	const selectFloorByIndex = useCallback(
 		(index: number) => {
@@ -190,12 +203,13 @@ const FloorPicker = ({
 			return
 		}
 		const egIndex = Math.max(0, floors.indexOf('EG'))
-		const target = egIndex * CELL
+		const target = egIndex * cell
 		scrollY.set(target)
 		highlightY.set(target)
 		lastTickIndex.set(egIndex)
 		setCurrentFloor({ floor: 'EG', manual: true })
 	}, [
+		cell,
 		currentFloor?.floor,
 		floors,
 		highlightY,
@@ -232,14 +246,15 @@ const FloorPicker = ({
 		.maxPointers(1)
 		.onBegin(() => {
 			startY.set(scrollY.get())
-			lastTickIndex.set(Math.round(scrollY.get() / CELL))
+			lastTickIndex.set(Math.round(scrollY.get() / cellSV.get()))
 		})
 		.onUpdate((event) => {
-			const maxScroll = Math.max(floorCountSV.get() - 1, 0) * CELL
+			const cellSize = cellSV.get()
+			const maxScroll = Math.max(floorCountSV.get() - 1, 0) * cellSize
 			scrollY.set(
-				rubberClamp(startY.get() + event.translationY, 0, maxScroll, CELL)
+				rubberClamp(startY.get() + event.translationY, 0, maxScroll, cellSize)
 			)
-			const index = Math.round(scrollY.get() / CELL)
+			const index = Math.round(scrollY.get() / cellSize)
 			if (
 				index !== lastTickIndex.get() &&
 				index >= 0 &&
@@ -250,10 +265,11 @@ const FloorPicker = ({
 			}
 		})
 		.onEnd((event) => {
+			const cellSize = cellSV.get()
 			const maxIndex = Math.max(floorCountSV.get() - 1, 0)
 			const projected = scrollY.get() + event.velocityY * 0.14
-			const next = clamp(Math.round(projected / CELL), 0, maxIndex)
-			scrollY.set(withSpring(next * CELL, SNAP_SPRING))
+			const next = clamp(Math.round(projected / cellSize), 0, maxIndex)
+			scrollY.set(withSpring(next * cellSize, SNAP_SPRING))
 			if (next !== lastTickIndex.get()) {
 				lastTickIndex.set(next)
 				scheduleOnRN(triggerTickHaptic)
@@ -283,8 +299,8 @@ const FloorPicker = ({
 	const collapsedGestures = Gesture.Exclusive(Gesture.Race(pan, longPress), tap)
 
 	const closeStyle = useAnimatedStyle(() => ({
-		width: CELL,
-		height: CLOSE,
+		width: cellSV.get(),
+		height: close,
 		opacity: expanded.get(),
 		transform: [
 			{
@@ -299,13 +315,14 @@ const FloorPicker = ({
 	}))
 
 	const clipStyle = useAnimatedStyle(() => {
-		const listHeight = Math.max(floorCountSV.get(), 1) * CELL
+		const cellSize = cellSV.get()
+		const listHeight = Math.max(floorCountSV.get(), 1) * cellSize
 		return {
-			width: CELL,
+			width: cellSize,
 			height: interpolate(
 				expanded.get(),
 				[0, 1],
-				[CELL, listHeight],
+				[cellSize, listHeight],
 				Extrapolation.CLAMP
 			)
 		}
@@ -327,7 +344,7 @@ const FloorPicker = ({
 
 	const pillStyle = useAnimatedStyle(() => ({
 		width: '100%',
-		height: CELL,
+		height: cellSV.get(),
 		opacity: interpolate(
 			expanded.get(),
 			[0.15, 0.7],
@@ -338,27 +355,26 @@ const FloorPicker = ({
 	}))
 
 	const locateStyle = useAnimatedStyle(() => {
+		const cellSize = cellSV.get()
 		const pickerHeight = interpolate(
 			expanded.get(),
 			[0, 1],
-			[CELL, Math.max(floorCountSV.get(), 1) * CELL],
+			[cellSize, Math.max(floorCountSV.get(), 1) * cellSize],
 			Extrapolation.CLAMP
 		)
 		return {
-			width: CELL,
-			height: CELL,
-			top: PICKER_TOP + pickerHeight + GAP
+			width: cellSize,
+			height: cellSize,
+			top: pickerTop + pickerHeight + GAP
 		}
 	})
 
 	const containerHeight =
-		PICKER_TOP + floorCount * CELL + (Platform.OS === 'web' ? 0 : GAP + CELL)
+		pickerTop + floorCount * cell + (Platform.OS === 'web' ? 0 : GAP + cell)
 
 	const floatingFrameStyle = {
 		borderCurve: 'continuous' as const,
-		borderRadius: isIosLiquidGlassActive()
-			? FLOATING_CHROME_RADIUS_GLASS
-			: FLOATING_CHROME_RADIUS,
+		borderRadius: floatingChromeRadius(cell, liquidGlass),
 		boxShadow: shadow,
 		overflow: 'hidden' as const,
 		...iosGlassChromeBorder(borderColor)
@@ -395,8 +411,8 @@ const FloorPicker = ({
 			className="absolute"
 			style={[
 				{
-					top: PICKER_TOP,
-					width: CELL
+					top: pickerTop,
+					width: cell
 				},
 				floatingFrameStyle,
 				clipStyle
@@ -416,7 +432,7 @@ const FloorPicker = ({
 					className="absolute left-0 right-0"
 					style={[
 						{
-							height: CELL,
+							height: cell,
 							backgroundColor: primaryColor
 						},
 						pillStyle
@@ -433,7 +449,8 @@ const FloorPicker = ({
 						cardColor={cardColor}
 						textColor={textColor}
 						contrastColor={contrastColor}
-						glassChrome={glassChrome}
+						glassChrome={iosChrome}
+						cellSize={cell}
 						onSelect={handleSelectFloor}
 					/>
 				))}
@@ -456,8 +473,8 @@ const FloorPicker = ({
 			className="absolute right-0 z-20 mx-2"
 			pointerEvents="box-none"
 			style={{
-				top: CONTAINER_TOP,
-				width: CELL,
+				top: containerTop,
+				width: cell,
 				height: containerHeight,
 				overflow: 'visible'
 			}}
@@ -473,20 +490,20 @@ const FloorPicker = ({
 					accessibilityRole="button"
 					accessibilityLabel={t('button.close')}
 					className="items-center justify-center"
-					style={{ height: CLOSE, width: CLOSE }}
+					style={{ height: close, width: close }}
 				>
-					{glassChrome ? (
+					{iosChrome ? (
 						<IosGlassSurface
 							isInteractive
 							fallbackBackgroundColor={cardColor}
 							style={[
 								{
 									alignItems: 'center',
-									borderRadius: CLOSE / 2,
-									height: CLOSE,
+									borderRadius: close / 2,
+									height: close,
 									justifyContent: 'center',
 									overflow: 'hidden',
-									width: CLOSE
+									width: close
 								},
 								iosGlassHairlineBorder(labelColorString)
 							]}
@@ -540,8 +557,8 @@ const FloorPicker = ({
 							style={[
 								floatingFrameStyle,
 								{
-									height: CELL,
-									width: CELL
+									height: cell,
+									width: cell
 								}
 							]}
 						>

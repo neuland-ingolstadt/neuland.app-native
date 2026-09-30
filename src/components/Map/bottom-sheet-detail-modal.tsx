@@ -50,7 +50,7 @@ export const BottomSheetDetailModal = ({
 		>
 			<View testID="map-room-detail" className="flex-1 px-page">
 				<MapSheetHandle />
-				<View className="flex-row items-start gap-3 mt-1">
+				<View className="flex-row items-start gap-3 px-2 mt-1">
 					<View className="flex-1 shrink">
 						<Text
 							className="text-text ios:text-[28px] ios:leading-8.5 ios:font-bold android:text-2xl android:leading-8 android:font-semibold web:text-[28px] web:leading-8.5 web:font-bold"
@@ -73,6 +73,7 @@ export const BottomSheetDetailModal = ({
 								<IosGlassHeaderButton
 									testID="map-room-share"
 									icon="share"
+									compact
 									shareCopied={copied}
 									label={t('button.share', { ns: 'accessibility' })}
 									onPress={() => {
@@ -105,6 +106,7 @@ export const BottomSheetDetailModal = ({
 							<IosGlassHeaderButton
 								testID="map-room-detail-close"
 								icon="close"
+								compact
 								label={t('button.close', { ns: 'accessibility' })}
 								onPress={() => {
 									onIndexChange(DETAIL_HIDDEN)

@@ -31,12 +31,23 @@ const iosGlassButtonStyle = {
 	width: 44
 } as const
 
+const iosGlassButtonCompactStyle = {
+	alignItems: 'center',
+	borderRadius: 20,
+	height: 40,
+	justifyContent: 'center',
+	overflow: 'hidden',
+	width: 40
+} as const
+
 interface IosGlassHeaderButtonProps {
 	icon: 'close' | 'share'
 	label: string
 	onPress: () => void | Promise<void>
 	testID?: string
 	shareCopied?: boolean
+	/** Smaller glass chrome for dense sheet headers. */
+	compact?: boolean
 }
 
 export function IosGlassHeaderButton({
@@ -44,14 +55,18 @@ export function IosGlassHeaderButton({
 	label,
 	onPress,
 	testID,
-	shareCopied = false
+	shareCopied = false,
+	compact = false
 }: IosGlassHeaderButtonProps): React.JSX.Element {
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
 	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
-	const glassStyle = [iosGlassButtonStyle, iosGlassHairlineBorder(labelColor)]
+	const buttonStyle = compact ? iosGlassButtonCompactStyle : iosGlassButtonStyle
+	const glassStyle = [buttonStyle, iosGlassHairlineBorder(labelColor)]
 	const shareIconName = shareCopied ? 'checkmark' : 'square.and.arrow.up'
+	const shareIconSize = compact ? 16 : 19
+	const closeIconSize = compact ? 13 : 15
 
 	const button = (
 		<Pressable
@@ -60,12 +75,12 @@ export function IosGlassHeaderButton({
 			accessibilityRole="button"
 			accessibilityLabel={label}
 			onPress={() => void onPress()}
-			style={iosGlassButtonStyle}
+			style={buttonStyle}
 		>
 			<PlatformIcon
 				ios={{
 					name: icon === 'share' ? shareIconName : 'xmark',
-					size: icon === 'share' ? 19 : 15,
+					size: icon === 'share' ? shareIconSize : closeIconSize,
 					weight: icon === 'share' ? 'bold' : 'semibold'
 				}}
 				android={{ name: icon === 'share' ? 'share' : 'close', size: 20 }}
