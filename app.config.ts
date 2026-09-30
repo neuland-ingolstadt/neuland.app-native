@@ -102,6 +102,14 @@ export default {
 	},
 	plugins: [
 		[
+			'expo-build-properties',
+			{
+				ios: {
+					enableSceneSupport: true
+				}
+			}
+		],
+		[
 			'expo-router',
 			{
 				headOrigin: 'https://web.neuland.app',

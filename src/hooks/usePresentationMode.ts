@@ -10,6 +10,10 @@ type PresentationMode = {
 	sheetInitialDetentIndex?: number
 	sheetGrabberVisible?: boolean
 	sheetCornerRadius?: number
+	scrollEdgeEffects?: {
+		top: 'soft' | 'hard'
+	}
+	headerTransparent?: boolean
 	headerStyle?: {
 		backgroundColor: string
 	}
@@ -30,6 +34,7 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 	}
 
 	const isIos26Plus = isIos26OrLater()
+	const isIos27Plus = Number.parseInt(Platform.Version, 10) >= 27
 
 	if (DeviceInfo.getDeviceType() === 'Desktop') {
 		return {
@@ -41,6 +46,11 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		presentation: 'formSheet',
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
+		// iOS 26 needs the stronger native edge effect to obscure text behind the glass header.
+		scrollEdgeEffects: isIos26Plus
+			? { top: isIos27Plus ? 'soft' : 'hard' }
+			: undefined,
+		headerTransparent: isIos26Plus ? true : undefined,
 		headerStyle: {
 			backgroundColor: isIos26Plus ? 'transparent' : cardColor
 		},

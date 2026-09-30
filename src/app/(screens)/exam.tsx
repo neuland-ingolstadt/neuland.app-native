@@ -3,16 +3,11 @@ import { HeaderTitle } from 'expo-router/react-navigation'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedRef,
-	useAnimatedStyle,
-	useScrollViewOffset
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -29,24 +24,8 @@ export default function ExamDetail(): React.JSX.Element {
 			? `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
 			: exam?.type
 	const examAids = exam?.aids ?? []
-	const ref = useAnimatedRef<Animated.ScrollView>()
-	const scroll = useScrollViewOffset(ref)
-	const headerStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: interpolate(
-						scroll.value,
-						[0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
-
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	const sections: FormListSections[] = [
 		{
 			header: t('labels.details'),
@@ -152,8 +131,9 @@ export default function ExamDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
-			ref={ref}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{

@@ -10,7 +10,7 @@ import FormList from '@/components/Universal/form-list'
 import { linkIcon } from '@/components/Universal/icon'
 import LinkText from '@/components/Universal/link-text'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 import type {
 	CampusLifeEvent,
 	CampusLifePublicOrganizerKind
@@ -31,7 +31,9 @@ import { toColor } from '@/utils/uniwind-utils'
 export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	const { t, i18n } = useTranslation('common')
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
+	const contentInsetAdjustmentBehavior = isIos26OrLater()
+		? 'automatic'
+		: undefined
 	const descriptionTextStyle = useResolveClassNames(
 		'text-text text-base text-left'
 	)
@@ -63,10 +65,14 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	}
 
 	if (organizerQuery.isLoading) {
+		// Keep the scroll view mounted so UIKit can attach native scroll edges.
 		return (
-			<View className="flex-1 items-center justify-center">
+			<ScrollView
+				contentContainerClassName="flex-1 items-center justify-center"
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			>
 				<LoadingIndicator />
-			</View>
+			</ScrollView>
 		)
 	}
 
@@ -209,7 +215,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 		<ScrollView
 			className="flex-1 px-page"
 			contentContainerClassName="gap-3 pb-bottom-safe"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 		>
 			<View className="flex-row items-start justify-between">
 				<Text
