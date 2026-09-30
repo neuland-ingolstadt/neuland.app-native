@@ -4,10 +4,8 @@ import { toast } from 'burnt'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { officePresenceQueryKey } from '@/components/Member/office-presence-section'
-import { useUserKind } from '@/contexts/userKind'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
-import { evaluateMemberOfficePresenceEnabled } from '@/lib/feature-flags'
 import {
 	consumeOfficeTogglePending,
 	isOfficeTogglePending,
@@ -17,7 +15,6 @@ import {
 export function useOfficeToggleAfterLogin(): void {
 	const idToken = useMemberStore((s) => s.idToken)
 	const memberSub = useMemberStore((s) => s.info?.sub as string | undefined)
-	const { userKind } = useUserKind()
 	const queryClient = useQueryClient()
 	const { t } = useTranslation('member')
 	const analyticsInitialized = useSessionStore((s) => s.analyticsInitialized)
@@ -29,19 +26,6 @@ export function useOfficeToggleAfterLogin(): void {
 
 		void (async () => {
 			if (!isOfficeTogglePending()) {
-				return
-			}
-
-			const enabled = await evaluateMemberOfficePresenceEnabled(userKind)
-
-			if (!enabled) {
-				toast({
-					title: t('office.toggleDisabled'),
-					preset: 'error',
-					haptic: 'error',
-					duration: 2.5,
-					from: 'top'
-				})
 				return
 			}
 
@@ -78,5 +62,5 @@ export function useOfficeToggleAfterLogin(): void {
 				})
 			}
 		})()
-	}, [analyticsInitialized, idToken, memberSub, queryClient, t, userKind])
+	}, [analyticsInitialized, idToken, memberSub, queryClient, t])
 }

@@ -34,6 +34,7 @@ const BottomSheetBackground = (): React.JSX.Element => {
 					pointerEvents="none"
 					glassEffectStyle="regular"
 					colorScheme={colorScheme}
+					tintColor={dark ? 'rgba(0, 0, 0, 0.52)' : undefined}
 					style={[StyleSheet.absoluteFill, surfaceCorners]}
 				/>
 			)

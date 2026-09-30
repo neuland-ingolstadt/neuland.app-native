@@ -17,12 +17,8 @@ import {
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
-import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
+import { useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import {
-	FeatureFlagKeys,
-	isMemberOfficePresenceVisible
-} from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { IDCard } from './id-card'
@@ -40,17 +36,11 @@ export function LoggedInView(): React.JSX.Element {
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
 	const queryClient = useQueryClient()
-	const officePresenceEnabled = useIsFeatureEnabled(
-		FeatureFlagKeys.memberOfficePresenceEnabled
-	)
-	const showOfficePresence = isMemberOfficePresenceVisible(
-		officePresenceEnabled
-	)
 
 	const memberSub = info?.sub as string | undefined
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
-		if (!showOfficePresence || !memberSub) {
+		if (!memberSub) {
 			return
 		}
 		await queryClient.invalidateQueries({
@@ -205,14 +195,12 @@ export function LoggedInView(): React.JSX.Element {
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
-				showOfficePresence ? (
-					<RefreshControl
-						refreshing={isRefetchingByUser}
-						onRefresh={() => {
-							void refetchByUser()
-						}}
-					/>
-				) : undefined
+				<RefreshControl
+					refreshing={isRefetchingByUser}
+					onRefresh={() => {
+						void refetchByUser()
+					}}
+				/>
 			}
 		>
 			{info && (
@@ -221,7 +209,7 @@ export function LoggedInView(): React.JSX.Element {
 				</View>
 			)}
 
-			{showOfficePresence ? <OfficePresenceSection /> : null}
+			<OfficePresenceSection />
 
 			<FormList sections={[perksSection, ...quickLinksSections]} />
 

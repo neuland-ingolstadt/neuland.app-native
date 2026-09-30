@@ -7,13 +7,9 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import type { FeatureFlagState } from '@/lib/feature-flags'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
-const THI_EVENTS_VISIBLE = 'thi-events-visible'
 
 function createDefaultFeatureFlagState(): FeatureFlagState {
-	return {
-		'thi-events-visible': false,
-		'member-officepresence-enabled': false
-	}
+	return {}
 }
 
 let shownDashboardEntriesState: string[] | undefined
@@ -71,7 +67,6 @@ const mockCards = [
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		featureFlag: THI_EVENTS_VISIBLE,
 		card: () => null
 	},
 	{
@@ -200,15 +195,12 @@ afterAll(() => {
 })
 
 describe('dashboard context', () => {
-	it('getDefaultDashboardOrder - Should omit feature-flagged cards when disabled', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: false
-		}
+	it('getDefaultDashboardOrder - Should include always-on cards for students', () => {
+		const flags = createDefaultFeatureFlagState()
 
 		const { shown } = dashboard.getDefaultDashboardOrder(USER_STUDENT, flags)
 
-		expect(shown).not.toContain('thiEvents')
+		expect(shown).toContain('thiEvents')
 		expect(shown).toContain('timetable')
 		expect(shown).toContain('events')
 	})
@@ -222,12 +214,9 @@ describe('dashboard context', () => {
 		expect(guestOrder.unavailable).not.toContain('login')
 	})
 
-	it('mergeNewFlaggedCardsIntoDashboard - Should insert newly enabled cards in catalog order', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-		const withoutThiEvents = [
+	it('mergeNewFlaggedCardsIntoDashboard - Should leave order unchanged when no flagged cards exist', () => {
+		const flags = createDefaultFeatureFlagState()
+		const customOrder = [
 			'timetable',
 			'events',
 			'sports',
@@ -235,30 +224,6 @@ describe('dashboard context', () => {
 			'links',
 			'news'
 		]
-
-		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
-			withoutThiEvents,
-			USER_STUDENT,
-			flags
-		)
-
-		expect(merged).toEqual([
-			'timetable',
-			'events',
-			'thiEvents',
-			'sports',
-			'calendar',
-			'links',
-			'news'
-		])
-	})
-
-	it('mergeNewFlaggedCardsIntoDashboard - Should leave order unchanged when card is already shown', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-		const customOrder = ['events', 'timetable', 'thiEvents', 'links']
 
 		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
 			customOrder,
@@ -278,15 +243,6 @@ describe('dashboard context', () => {
 		).toBe(true)
 	})
 
-	it('isCardEnabled - Should return false when feature flag is disabled', () => {
-		expect(
-			dashboard.isCardEnabled(
-				{ featureFlag: THI_EVENTS_VISIBLE },
-				createDefaultFeatureFlagState()
-			)
-		).toBe(false)
-	})
-
 	it('isCardKeyEnabled - Should return false for unknown card keys', () => {
 		expect(
 			dashboard.isCardKeyEnabled(
@@ -296,16 +252,13 @@ describe('dashboard context', () => {
 		).toBe(false)
 	})
 
-	it('isCardKeyEnabled - Should respect feature flags for known cards', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-
-		expect(dashboard.isCardKeyEnabled('thiEvents', flags)).toBe(true)
+	it('isCardKeyEnabled - Should enable known cards without feature flags', () => {
 		expect(
 			dashboard.isCardKeyEnabled('thiEvents', createDefaultFeatureFlagState())
-		).toBe(false)
+		).toBe(true)
+		expect(
+			dashboard.isCardKeyEnabled('timetable', createDefaultFeatureFlagState())
+		).toBe(true)
 	})
 
 	it('getDefaultDashboardOrder - Should list disallowed cards in unavailable when still visible', () => {
@@ -319,56 +272,8 @@ describe('dashboard context', () => {
 		expect(unavailable).toContain('employeeOnly')
 	})
 
-	it('mergeNewFlaggedCardsIntoDashboard - Should anchor insertion using a later visible card', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-
-		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
-			['sports'],
-			USER_STUDENT,
-			flags
-		)
-
-		expect(merged).toEqual(['thiEvents', 'sports'])
-	})
-
-	it('mergeNewFlaggedCardsIntoDashboard - Should prepend flagged cards when no anchors exist', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-
-		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
-			[],
-			USER_STUDENT,
-			flags
-		)
-
-		expect(merged).toEqual(['thiEvents'])
-	})
-
-	it('syncDashboardEntriesWithFlags - Should return merged order when a flagged card is missing', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
-
-		const merged = dashboard.syncDashboardEntriesWithFlags(
-			['events', 'timetable'],
-			USER_STUDENT,
-			flags
-		)
-
-		expect(merged).toEqual(['events', 'thiEvents', 'timetable'])
-	})
-
 	it('syncDashboardEntriesWithFlags - Should return null when order is already up to date', () => {
-		const flags = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
+		const flags = createDefaultFeatureFlagState()
 
 		const merged = dashboard.syncDashboardEntriesWithFlags(
 			['events', 'timetable', 'thiEvents'],
@@ -379,14 +284,14 @@ describe('dashboard context', () => {
 		expect(merged).toBeNull()
 	})
 
-	it('normalizeShownDashboardEntries - Should drop unknown and disabled cards', () => {
+	it('normalizeShownDashboardEntries - Should drop unknown cards', () => {
 		const flags = createDefaultFeatureFlagState()
 		const normalized = dashboard.normalizeShownDashboardEntries(
 			['unknown-card', 'thiEvents', 'timetable'],
 			flags
 		)
 
-		expect(normalized).toEqual(['timetable'])
+		expect(normalized).toEqual(['thiEvents', 'timetable'])
 	})
 
 	it('resolveDashboardCards - Should map keys to cards and ignore unknown keys', () => {
@@ -404,7 +309,8 @@ describe('dashboard context', () => {
 		const value = renderDashboardHook()
 
 		expect(value.shownDashboardEntries.map((card) => card.key)).toEqual([
-			'events'
+			'events',
+			'thiEvents'
 		])
 		expect(value.hiddenAnnouncements).toEqual([])
 	})
@@ -425,27 +331,19 @@ describe('dashboard context', () => {
 		unmount()
 	})
 
-	it('useDashboard - Should merge newly enabled flagged cards into stored order', () => {
+	it('useDashboard - Should leave stored order unchanged when no flagged cards are missing', () => {
 		shownDashboardEntriesState = ['events', 'timetable']
 		hiddenAnnouncementsState = undefined
 		userKindState = USER_STUDENT
-		featureFlagsState = {
-			...createDefaultFeatureFlagState(),
-			[THI_EVENTS_VISIBLE]: true
-		}
+		featureFlagsState = createDefaultFeatureFlagState()
 
 		const { value, unmount } = renderDashboardHookWithEffects()
 
 		expect(value.shownDashboardEntries.map((card) => card.key)).toEqual([
 			'events',
-			'thiEvents',
 			'timetable'
 		])
-		expect(shownDashboardEntriesState).toEqual([
-			'events',
-			'thiEvents',
-			'timetable'
-		])
+		expect(shownDashboardEntriesState).toEqual(['events', 'timetable'])
 
 		unmount()
 	})
