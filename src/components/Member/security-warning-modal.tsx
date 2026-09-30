@@ -1,3 +1,5 @@
+import { trackEvent } from '@aptabase/react-native'
+import { toast } from 'burnt'
 import { Image } from 'expo-image'
 import type React from 'react'
 import { useState } from 'react'
@@ -17,6 +19,10 @@ import GoogleWalletEN from '@/assets/wallet/google_wallet_en.svg'
 import PlatformIcon from '@/components/Universal/icon'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import { toColor } from '@/utils/uniwind-utils'
+import {
+	getWalletErrorCode,
+	viewMemberPassInWallet
+} from '@/utils/wallet-utils'
 
 interface SecurityWarningModalProps {
 	visible: boolean
@@ -49,6 +55,12 @@ export function SecurityWarningModal({
 			const canAdd = await WalletManager.canAddPasses()
 			if (!canAdd) {
 				console.error('Device does not support adding passes')
+				toast({
+					title: t('securityWarning.addFailed'),
+					preset: 'error',
+					haptic: 'error',
+					duration: 2.5
+				})
 				onConfirm()
 				return
 			}
@@ -76,16 +88,45 @@ export function SecurityWarningModal({
 			if (Platform.OS === 'android') {
 				const jwtData = await MemberAPI.getGoogleWalletPassJwt(currentToken)
 				await WalletManager.addPassToGoogleWallet(jwtData)
+				trackEvent('Wallet', { action: 'add', platform: 'android' })
 			} else {
 				await WalletManager.addPassFromUrl(
 					MemberAPI.getAppleWalletPassUrl(currentToken)
 				)
+				trackEvent('Wallet', { action: 'add', platform: 'ios' })
 			}
+			onConfirm()
 		} catch (error) {
+			const code = getWalletErrorCode(error)
+
+			if (code === 'PASS_ALREADY_EXISTS') {
+				trackEvent('Wallet', { action: 'alreadyExists' })
+				toast({
+					title: t('securityWarning.alreadyInWallet'),
+					preset: 'done',
+					haptic: 'success',
+					duration: 2
+				})
+				await viewMemberPassInWallet()
+				onConfirm()
+				return
+			}
+
+			if (code === 'USER_CANCELLED') {
+				onConfirm()
+				return
+			}
+
 			console.error('Failed to add pass to wallet:', error)
+			toast({
+				title: t('securityWarning.addFailed'),
+				preset: 'error',
+				haptic: 'error',
+				duration: 2.5
+			})
+			onConfirm()
 		} finally {
 			setIsAddingToWallet(false)
-			onConfirm()
 		}
 	}
 
@@ -166,7 +207,9 @@ export function SecurityWarningModal({
 						<View className="items-center mb-[18px]">
 							<Pressable
 								testID="wallet-confirm"
-								onPress={handleConfirm}
+								onPress={() => {
+									void handleConfirm()
+								}}
 								disabled={isAddingToWallet}
 								className="active:opacity-70"
 							>
