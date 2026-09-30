@@ -4,7 +4,6 @@ import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
 import AutoShowNextDaySetting from '@/components/Food/auto-show-next-day-setting'
 import MultiSectionRadio, {
@@ -23,7 +22,6 @@ import { toColor } from '@/utils/uniwind-utils'
 
 export default function FoodPreferences(): React.JSX.Element {
 	const { t } = useTranslation('food')
-	const insets = useSafeAreaInsets()
 	const warningColor = toColor(useCSSVariable('--color-warning'))
 	const elemtents = [
 		{
@@ -120,9 +118,7 @@ export default function FoodPreferences(): React.JSX.Element {
 
 	return (
 		<ScrollView
-			style={{
-				paddingBottom: insets.bottom + 32
-			}}
+			contentContainerClassName="pb-bottom-safe"
 			contentInsetAdjustmentBehavior="automatic"
 			showsVerticalScrollIndicator={false}
 		>
@@ -164,7 +160,7 @@ export default function FoodPreferences(): React.JSX.Element {
 			</View>
 			<View className="self-center mt-4 px-page w-full">
 				<Pressable onPress={triggerWiggle}>
-					<View className="items-center self-center bg-card rounded-md flex-row gap-4 px-3.5 py-2 w-full">
+					<View className="flex-row items-center self-center w-full gap-4 bg-card ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border px-3.5 py-2">
 						<Animated.View style={iconAnimatedStyle}>
 							<PlatformIcon
 								ios={{
