@@ -36,7 +36,7 @@
 		},
 		"guest": {
 			"title": "Anmeldung erforderlich",
-			"description": "Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.",
+			"description": "Um diese Funktion zu nutzen, musst du dich mit deinem THI-Account anmelden.",
 			"button": "Anmelden"
 		},
 		"permission": {
@@ -143,7 +143,7 @@
 	"pages": {
 		"quicklinks": {
 			"title": "Quick Links",
-			"footer": "Die Dashboard Karte zeigt die zuletzt besuchten Links an.",
+			"footer": "Die Dashboard-Karte zeigt die zuletzt besuchten Links an.",
 			"links": {
 				"primuss": "Primuss",
 				"moodle": "Moodle",
@@ -299,7 +299,7 @@
 					"nextLecture": "Nächste Vorlesung",
 					"availableRoomsTitle": "Verfügbare Räume",
 					"history": "Zuletzt gesucht",
-					"signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
+					"signIn": "Melde dich an, um verfügbare Räume anzuzeigen",
 					"equipment": "Ausstattung",
 					"lecturers": "Dozenten",
 					"report": "Fehler melden",
@@ -310,12 +310,12 @@
 					"total": "Räume insgesamt",
 					"floors": "Etagen"
 				},
-				"osm": "Karten Daten von OpenStreetMap"
+				"osm": "Kartendaten von OpenStreetMap"
 			}
 		},
 		"rooms": {
 			"options": {
-				"title": "Such Optionen",
+				"title": "Suchoptionen",
 				"building": "Gebäude",
 				"date": "Datum",
 				"time": "Zeit",
@@ -341,11 +341,11 @@
 				},
 				"description": {
 					"title": "Beschreibung",
-					"placeholder": "Problem beschreibung..."
+					"placeholder": "Problembeschreibung..."
 				},
 				"category": {
 					"title": "Kategorie",
-					"placeholder": "Problem Kategorie wählen...",
+					"placeholder": "Problemkategorie wählen...",
 					"type": {
 						"WRONG_DESCRIPTION": "Falsche Beschreibung",
 						"WRONG_LOCATION": "Falscher Ort",
@@ -354,7 +354,7 @@
 						"OTHER": "Anderer"
 					}
 				},
-				"footerText": "Wir sammeln keine persönlichen Daten. Nur der Raum, die Kategorie und die Beschreibung, die Du angibst, werden gespeichert."
+				"footerText": "Wir sammeln keine persönlichen Daten. Nur der Raum, die Kategorie und die Beschreibung, die du angibst, werden gespeichert."
 			}
 		},
 		"library": {
