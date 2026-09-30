@@ -1,8 +1,9 @@
+import { trackEvent } from '@aptabase/react-native'
 import { useQueryClient } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -21,6 +22,10 @@ import { useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import {
+	hasMemberPassInWallet,
+	viewMemberPassInWallet
+} from '@/utils/wallet-utils'
 import { IDCard } from './id-card'
 import {
 	OfficePresenceSection,
@@ -35,17 +40,29 @@ export function LoggedInView(): React.JSX.Element {
 	const { t } = useTranslation('member')
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
+	const [passInWallet, setPassInWallet] = useState(false)
 	const queryClient = useQueryClient()
 
 	const memberSub = info?.sub as string | undefined
 
+	const refreshPassInWallet = useCallback(async () => {
+		const exists = await hasMemberPassInWallet()
+		setPassInWallet(exists)
+	}, [])
+
+	useFocusEffect(
+		useCallback(() => {
+			void refreshPassInWallet()
+		}, [refreshPassInWallet])
+	)
+
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
-		if (!memberSub) {
-			return
+		if (memberSub) {
+			await queryClient.invalidateQueries({
+				queryKey: officePresenceQueryKey(memberSub)
+			})
 		}
-		await queryClient.invalidateQueries({
-			queryKey: officePresenceQueryKey(memberSub)
-		})
+		await refreshPassInWallet()
 	})
 
 	useEffect(() => {
@@ -62,6 +79,11 @@ export function LoggedInView(): React.JSX.Element {
 		}
 	}, [info, refreshTokens])
 
+	const handleShowInWallet = () => {
+		trackEvent('Wallet', { action: 'view' })
+		void viewMemberPassInWallet()
+	}
+
 	const handleAddToWallet = () => {
 		setShowSecurityWarning(true)
 		if (Platform.OS === 'ios') {
@@ -69,8 +91,9 @@ export function LoggedInView(): React.JSX.Element {
 		}
 	}
 
-	const handleConfirmAddToWallet = async () => {
+	const handleConfirmAddToWallet = () => {
 		setShowSecurityWarning(false)
+		void refreshPassInWallet()
 	}
 
 	const handleCancelAddToWallet = () => {
@@ -132,8 +155,14 @@ export function LoggedInView(): React.JSX.Element {
 					header: t('labels.wallet', { ns: 'common' }),
 					items: [
 						{
-							title: t('securityWarning.buttons.addToWallet'),
-							onPress: handleAddToWallet,
+							title:
+								Platform.OS === 'ios' && passInWallet
+									? t('securityWarning.buttons.showInWallet')
+									: t('securityWarning.buttons.addToWallet'),
+							onPress:
+								Platform.OS === 'ios' && passInWallet
+									? handleShowInWallet
+									: handleAddToWallet,
 							icon: {
 								ios: 'wallet.pass',
 								android: 'wallet' as MaterialIcon,

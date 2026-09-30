@@ -63,8 +63,11 @@
 		},
 		"buttons": {
 			"useAppInstead": "Abbrechen",
-			"addToWallet": "Zu Wallet hinzufügen"
-		}
+			"addToWallet": "Zu Wallet hinzufügen",
+			"showInWallet": "In Wallet anzeigen"
+		},
+		"alreadyInWallet": "Pass ist bereits in Wallet",
+		"addFailed": "Pass konnte nicht zu Wallet hinzugefügt werden"
 	},
 	"logout": {
 		"button": "Abmelden",
