@@ -1,6 +1,6 @@
 import type React from 'react'
 import { memo } from 'react'
-import { Pressable, Text } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 import { CELL, floorLabel } from './floor-picker-layout'
 
 interface FloorRowProps {
@@ -45,7 +45,7 @@ export const FloorRow = memo(function FloorRow({
 				backgroundColor:
 					glassChrome || (isCurrent && interactive) ? 'transparent' : cardColor,
 				borderBottomColor: borderColor,
-				borderBottomWidth: isLast || !interactive ? 0 : 1
+				borderBottomWidth: isLast || !interactive ? 0 : StyleSheet.hairlineWidth
 			}}
 		>
 			<Text
