@@ -8,6 +8,13 @@ import {
 } from 'react-native-reanimated'
 import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 
+/**
+ * Scroll + collapsing title helpers for iOS form-sheet detail screens.
+ *
+ * Keep the screen's root as this ScrollView with
+ * `contentInsetAdjustmentBehavior="automatic"` so UIKit can attach the
+ * Liquid Glass scroll-edge blur under the transparent sheet header.
+ */
 export function useSheetDetailScroll() {
 	const usesLiquidGlassHeader = isIos26OrLater()
 	const headerHeight = useHeaderHeight()

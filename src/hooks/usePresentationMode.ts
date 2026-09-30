@@ -4,14 +4,14 @@ import { useCSSVariable } from 'uniwind'
 import { isIos26OrLater } from '@/hooks/useTransparentHeader'
 import { toColor } from '@/utils/uniwind-utils'
 
-type PresentationMode = {
+export type PresentationMode = {
 	presentation?: 'formSheet' | 'modal'
 	sheetAllowedDetents?: number[]
 	sheetInitialDetentIndex?: number
 	sheetGrabberVisible?: boolean
 	sheetCornerRadius?: number
 	scrollEdgeEffects?: {
-		top: 'soft' | 'hard'
+		top: 'hard'
 	}
 	headerTransparent?: boolean
 	headerStyle?: {
@@ -23,20 +23,42 @@ type PresentationMode = {
 	}
 }
 
-export const usePresentationMode = (smallSheet = false): PresentationMode => {
-	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
-	const backgroundColor = String(
-		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
-	)
+export type PresentationModeColors = {
+	cardColor: string
+	backgroundColor: string
+}
 
-	if (Platform.OS !== 'ios') {
+/**
+ * Pure form-sheet option builder used by `usePresentationMode`.
+ *
+ * On iOS 26+, Expo / React Navigation expect a transparent header + transparent
+ * sheet content so UIKit can own Liquid Glass. Keep the top scroll-edge effect
+ * on `hard`: `soft` (previously used for iOS 27) reads as a fully clear header
+ * when content scrolls underneath, and `automatic` can leave long titles
+ * visible behind the chrome.
+ *
+ * @see https://reactnavigation.org/docs/native-stack-navigator/#scrolledgeffects
+ * @see .agents/skills/building-native-ui/references/form-sheet.md
+ */
+export const buildPresentationMode = (
+	smallSheet: boolean,
+	{
+		platformOS = Platform.OS,
+		ios26OrLater = isIos26OrLater(),
+		deviceType = platformOS === 'ios' ? DeviceInfo.getDeviceType() : 'Handset',
+		colors
+	}: {
+		platformOS?: typeof Platform.OS
+		ios26OrLater?: boolean
+		deviceType?: string
+		colors: PresentationModeColors
+	}
+): PresentationMode => {
+	if (platformOS !== 'ios') {
 		return {}
 	}
 
-	const isIos26Plus = isIos26OrLater()
-	const isIos27Plus = Number.parseInt(Platform.Version, 10) >= 27
-
-	if (DeviceInfo.getDeviceType() === 'Desktop') {
+	if (deviceType === 'Desktop') {
 		return {
 			presentation: 'modal'
 		}
@@ -46,16 +68,27 @@ export const usePresentationMode = (smallSheet = false): PresentationMode => {
 		presentation: 'formSheet',
 		sheetAllowedDetents: smallSheet ? [0.5, 0.7] : [0.7, 0.95],
 		sheetInitialDetentIndex: 0,
-		// iOS 26 needs the stronger native edge effect to obscure text behind the glass header.
-		scrollEdgeEffects: isIos26Plus
-			? { top: isIos27Plus ? 'soft' : 'hard' }
-			: undefined,
-		headerTransparent: isIos26Plus ? true : undefined,
-		headerStyle: {
-			backgroundColor: isIos26Plus ? 'transparent' : cardColor
-		},
-		contentStyle: {
-			backgroundColor: isIos26Plus ? 'transparent' : backgroundColor
-		}
+		...(ios26OrLater
+			? {
+					headerTransparent: true,
+					headerStyle: { backgroundColor: 'transparent' },
+					contentStyle: { backgroundColor: 'transparent' },
+					scrollEdgeEffects: { top: 'hard' as const }
+				}
+			: {
+					headerStyle: { backgroundColor: colors.cardColor },
+					contentStyle: { backgroundColor: colors.backgroundColor }
+				})
 	}
+}
+
+export const usePresentationMode = (smallSheet = false): PresentationMode => {
+	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
+	const backgroundColor = String(
+		toColor(useCSSVariable('--color-background')) ?? '#f2f2f2'
+	)
+
+	return buildPresentationMode(smallSheet, {
+		colors: { cardColor, backgroundColor }
+	})
 }
