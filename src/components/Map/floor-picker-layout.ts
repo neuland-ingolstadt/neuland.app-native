@@ -1,4 +1,5 @@
 export const CELL = 38
+export const FLOATING_CHROME_RADIUS = 10
 export const GAP = 5
 export const CLOSE = 38
 export const PICKER_TOP = CLOSE + GAP
