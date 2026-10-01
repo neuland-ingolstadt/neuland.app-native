@@ -3,10 +3,9 @@
 # TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-ios`),
 # matching maestro-web.yml.
 #
-# Build cache: @eggl-js/expo-github-cache → neuland-ingolstadt/neuland.app-build-cache
-# Requires repo secret BUILD_CACHE_GITHUB_TOKEN (fine-grained PAT with Contents
-# read+write on neuland.app-build-cache only). On fingerprint hit, expo run:ios
-# downloads the Simulator .app; on miss it builds and uploads a new release.
+# Two stages: build compiles a Simulator .app and uploads it as a GHA artifact;
+# test downloads that .app, installs it on a simulator, and runs Maestro.
+# No remote Expo build-cache / BUILD_CACHE_GITHUB_TOKEN involved.
 name: Maestro iOS E2E
 
 on:
@@ -28,26 +27,15 @@ env:
   EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
-  maestro-ios:
-    name: Maestro iOS suite
+  build-ios:
+    name: Build iOS Simulator app
     runs-on: macos-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: ./.github/actions/setup
-
-      - name: Require build-cache token
-        env:
-          BUILD_CACHE_GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
-        run: |
-          if [ -z "$BUILD_CACHE_GITHUB_TOKEN" ]; then
-            echo 'Missing secret BUILD_CACHE_GITHUB_TOKEN.' >&2
-            echo 'Create a fine-grained PAT with Contents read+write on neuland.app-build-cache only,' >&2
-            echo 'then add it as a repository secret named BUILD_CACHE_GITHUB_TOKEN.' >&2
-            exit 1
-          fi
 
       - name: Set up Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
@@ -60,11 +48,65 @@ jobs:
           bun run licences:bundle
           bun run prebuild:ios
 
-      - name: Log native fingerprint
+      - name: Build Simulator debug app
         run: |
-          HASH="$(bunx --bun @expo/fingerprint fingerprint:generate --platform ios | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).hash)')"
-          echo "ios fingerprint=$HASH"
-          echo "cache tag=fingerprint.${HASH}.dev-client.ios"
+          set -euo pipefail
+          # --device generic: build only (no install/launch).
+          # --no-build-cache: skip remote Expo build-cache resolve/upload for this PoC.
+          OUT="${RUNNER_TEMP}/neuland-ios-app"
+          rm -rf "$OUT"
+          npx expo run:ios --device generic --no-bundler --no-build-cache -o "$OUT"
+
+          APP="$(find "$OUT" -name '*.app' -type d | head -1)"
+          if [ -z "$APP" ]; then
+            echo "No .app found under $OUT" >&2
+            find "$OUT" -maxdepth 3 >&2 || true
+            exit 1
+          fi
+
+          mkdir -p artifacts
+          # Zip keeps the .app bundle intact across artifact upload/download.
+          ditto -c -k --sequesterRsrc --keepParent "$APP" artifacts/neuland-ios-app.zip
+          ls -lh artifacts/neuland-ios-app.zip
+
+      - name: Upload Simulator app
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-ios-app
+          path: artifacts/neuland-ios-app.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  test-ios:
+    name: Maestro iOS suite
+    needs: build-ios
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Download Simulator app
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: maestro-ios-app
+          path: artifacts
+
+      - name: Unpack Simulator app
+        id: app
+        run: |
+          set -euo pipefail
+          unzip -q artifacts/neuland-ios-app.zip -d artifacts/app
+          APP="$(find artifacts/app -name '*.app' -type d | head -1)"
+          if [ -z "$APP" ]; then
+            echo 'No .app found in downloaded artifact' >&2
+            find artifacts -maxdepth 4 >&2 || true
+            exit 1
+          fi
+          echo "path=$APP" >> "$GITHUB_OUTPUT"
+          echo "Using app: $APP"
 
       - name: Resolve and boot iOS Simulator
         id: simulator
@@ -97,36 +139,14 @@ jobs:
           echo "Using simulator: $SIM_NAME"
           echo "name=$SIM_NAME" >> "$GITHUB_OUTPUT"
 
-          # Boot via simctl only — avoid `open -a Simulator` before xcodebuild
-          # (GUI launch has contributed to hung Pods resource phases on GHA).
           xcrun simctl boot "$SIM_NAME" 2>/dev/null || true
           xcrun simctl bootstatus "$SIM_NAME" -b
 
-      - name: Resolve cache or build Simulator debug app
-        env:
-          # Override Actions' default GITHUB_TOKEN so @eggl-js/expo-github-cache
-          # can read+write releases on the private neuland.app-build-cache repo.
-          GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
+      - name: Install app on simulator
         run: |
           set -euo pipefail
-          # --device generic: resolve/build only (no install/launch). Launching after
-          # cache install opens the deep link while Metro is still down and times out.
-          # On fingerprint hit: download from GitHub Releases cache.
-          # On miss: compile locally, then upload .app to the cache (write).
-          OUT="${RUNNER_TEMP}/neuland-ios-app"
-          rm -rf "$OUT"
-          npx expo run:ios --device generic --no-bundler -o "$OUT"
-
-          APP="$(find "$OUT" -name '*.app' -type d | head -1)"
-          if [ -z "$APP" ]; then
-            echo "No .app found under $OUT" >&2
-            find "$OUT" -maxdepth 3 >&2 || true
-            exit 1
-          fi
-
-          echo "Installing $APP on booted simulator (${{ steps.simulator.outputs.name }})"
-          xcrun simctl install booted "$APP"
+          echo "Installing ${{ steps.app.outputs.path }} on ${{ steps.simulator.outputs.name }}"
+          xcrun simctl install booted "${{ steps.app.outputs.path }}"
 
       - name: Install Maestro CLI
         run: |
