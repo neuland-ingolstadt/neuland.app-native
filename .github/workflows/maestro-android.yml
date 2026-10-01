@@ -1,7 +1,12 @@
 # PoC: Android Maestro E2E on GitHub Actions.
 # Temporary trigger: every pull_request (so this PR actually runs).
 # TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-android`),
-# matching maestro-web.yml. Cache pull from neuland.app-build-cache is deferred.
+# matching maestro-web.yml.
+#
+# Build cache: @eggl-js/expo-github-cache → neuland-ingolstadt/neuland.app-build-cache
+# Requires repo secret BUILD_CACHE_GITHUB_TOKEN (fine-grained PAT with Contents
+# read+write on neuland.app-build-cache only). On fingerprint hit, expo run:android
+# downloads the debug APK; on miss it builds and uploads a new release.
 name: Maestro Android E2E
 
 on:
@@ -26,12 +31,23 @@ jobs:
   maestro-android:
     name: Maestro Android suite
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: ./.github/actions/setup
+
+      - name: Require build-cache token
+        env:
+          BUILD_CACHE_GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$BUILD_CACHE_GITHUB_TOKEN" ]; then
+            echo 'Missing secret BUILD_CACHE_GITHUB_TOKEN.' >&2
+            echo 'Create a fine-grained PAT with Contents read+write on neuland.app-build-cache only,' >&2
+            echo 'then add it as a repository secret named BUILD_CACHE_GITHUB_TOKEN.' >&2
+            exit 1
+          fi
 
       - name: Enable KVM
         run: |
@@ -41,9 +57,11 @@ jobs:
 
       - uses: ./.github/actions/android-prepare
 
-      - name: Compile debug APK
-        working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+      - name: Log native fingerprint
+        run: |
+          HASH="$(bunx --bun @expo/fingerprint fingerprint:generate --platform android | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).hash)')"
+          echo "android fingerprint=$HASH"
+          echo "cache tag=fingerprint.${HASH}.dev-client.android"
 
       - name: Install Maestro CLI
         run: |
@@ -54,6 +72,11 @@ jobs:
 
       - name: Run Maestro on emulator
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        env:
+          # Override Actions' default GITHUB_TOKEN so @eggl-js/expo-github-cache
+          # can read+write releases on the private neuland.app-build-cache repo.
+          GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
         with:
           api-level: 34
           target: google_apis

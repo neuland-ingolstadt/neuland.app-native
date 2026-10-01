@@ -3,14 +3,21 @@
 # (that action splits multiline `script:` inputs and runs each line via `sh -c`).
 set -euo pipefail
 
-APK='android/app/build/outputs/apk/debug/app-debug.apk'
-if [[ ! -f "$APK" ]]; then
-	echo "Missing debug APK at $APK" >&2
+if [[ -z "${GITHUB_TOKEN:-}" && -z "${GH_TOKEN:-}" ]]; then
+	echo 'Missing GITHUB_TOKEN/GH_TOKEN for neuland.app-build-cache access.' >&2
 	exit 1
 fi
 
 adb wait-for-device
-adb install -r "$APK"
+
+# On fingerprint hit: download + install from GitHub Releases cache.
+# On miss: compile locally, upload APK to the cache (write), then install.
+# --no-bundler: Metro is started separately for Maestro below.
+device_args=()
+if [[ -n "${ANDROID_SERIAL:-}" ]]; then
+	device_args=(--device "$ANDROID_SERIAL")
+fi
+npx expo run:android "${device_args[@]}" --no-bundler
 
 bun start:e2e >/tmp/maestro-android-metro.log 2>&1 &
 for _ in $(seq 1 90); do
