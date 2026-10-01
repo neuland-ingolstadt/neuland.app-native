@@ -110,10 +110,23 @@ jobs:
           GH_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          # On fingerprint hit: download + install from GitHub Releases cache.
+          # --device generic: resolve/build only (no install/launch). Launching after
+          # cache install opens the deep link while Metro is still down and times out.
+          # On fingerprint hit: download from GitHub Releases cache.
           # On miss: compile locally, then upload .app to the cache (write).
-          # --no-bundler: Metro is started separately for Maestro.
-          npx expo run:ios --device '${{ steps.simulator.outputs.name }}' --no-bundler
+          OUT="${RUNNER_TEMP}/neuland-ios-app"
+          rm -rf "$OUT"
+          npx expo run:ios --device generic --no-bundler -o "$OUT"
+
+          APP="$(find "$OUT" -name '*.app' -type d | head -1)"
+          if [ -z "$APP" ]; then
+            echo "No .app found under $OUT" >&2
+            find "$OUT" -maxdepth 3 >&2 || true
+            exit 1
+          fi
+
+          echo "Installing $APP on booted simulator (${{ steps.simulator.outputs.name }})"
+          xcrun simctl install booted "$APP"
 
       - name: Install Maestro CLI
         run: |
