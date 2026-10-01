@@ -9,15 +9,15 @@ if [[ -z "${GITHUB_TOKEN:-}" && -z "${GH_TOKEN:-}" ]]; then
 fi
 
 adb wait-for-device
+adb devices -l
 
 # On fingerprint hit: download + install from GitHub Releases cache.
 # On miss: compile locally, upload APK to the cache (write), then install.
+# Do NOT pass ANDROID_SERIAL to --device: Expo matches by device *name*
+# (e.g. sdk_gphone64_x86_64), not the adb serial (emulator-5554).
+# With a single booted emulator, omit --device and let Expo pick it.
 # --no-bundler: Metro is started separately for Maestro below.
-device_args=()
-if [[ -n "${ANDROID_SERIAL:-}" ]]; then
-	device_args=(--device "$ANDROID_SERIAL")
-fi
-npx expo run:android "${device_args[@]}" --no-bundler
+npx expo run:android --no-bundler
 
 bun start:e2e >/tmp/maestro-android-metro.log 2>&1 &
 for _ in $(seq 1 90); do
