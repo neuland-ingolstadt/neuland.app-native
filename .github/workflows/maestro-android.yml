@@ -62,35 +62,9 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          # android-emulator-runner runs the script with /usr/bin/sh (dash on
-          # ubuntu-latest). dash rejects `set -o pipefail`, so use POSIX flags only.
-          script: |
-            set -eu
-
-            APK='android/app/build/outputs/apk/debug/app-debug.apk'
-            if [ ! -f "$APK" ]; then
-              echo "Missing debug APK at $APK" >&2
-              exit 1
-            fi
-
-            adb wait-for-device
-            adb install -r "$APK"
-
-            bun start:e2e > /tmp/maestro-android-metro.log 2>&1 &
-            for _ in $(seq 1 90); do
-              if curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 || curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
-                echo 'Metro is ready'
-                break
-              fi
-              sleep 2
-            done
-            if ! curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 && ! curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
-              echo 'Metro failed to become ready' >&2
-              cat /tmp/maestro-android-metro.log >&2 || true
-              exit 1
-            fi
-
-            bun e2e:android
+          # Must be a single line: the action splits multiline scripts and runs
+          # each line as its own `sh -c` (breaks if/for/fi).
+          script: bash config/ci/run-maestro-android-emulator.sh
 
       - name: Upload Maestro artifacts
         if: ${{ !cancelled() }}
