@@ -1,0 +1,126 @@
+# PoC: iOS Maestro E2E on GitHub Actions.
+# Temporary trigger: every pull_request (so this PR actually runs).
+# TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-ios`),
+# matching maestro-web.yml. Cache pull from neuland.app-build-cache is deferred.
+name: Maestro iOS E2E
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: maestro-ios-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  maestro-ios:
+    name: Maestro iOS suite
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Set up Java
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Bundle licenses and prebuild iOS
+        run: |
+          bun run licences:bundle
+          bun run prebuild:ios
+
+      - name: Resolve and boot iOS Simulator
+        id: simulator
+        run: |
+          set -euo pipefail
+
+          SIM_NAME=''
+          for candidate in 'iPhone 16' 'iPhone 16 Pro' 'iPhone 15' 'iPhone 15 Pro'; do
+            if xcrun simctl list devices available | grep -F "$candidate (" >/dev/null; then
+              SIM_NAME="$candidate"
+              break
+            fi
+          done
+
+          if [ -z "$SIM_NAME" ]; then
+            SIM_NAME="$(
+              xcrun simctl list devices available |
+                sed -nE 's/^[[:space:]]+(iPhone[^()]*) \(([0-9A-F-]+)\).*/\1/p' |
+                head -1 |
+                sed 's/[[:space:]]*$//'
+            )"
+          fi
+
+          if [ -z "$SIM_NAME" ]; then
+            echo 'No available iPhone simulator found' >&2
+            xcrun simctl list devices available >&2 || true
+            exit 1
+          fi
+
+          echo "Using simulator: $SIM_NAME"
+          echo "name=$SIM_NAME" >> "$GITHUB_OUTPUT"
+
+          xcrun simctl boot "$SIM_NAME" 2>/dev/null || true
+          xcrun simctl bootstatus "$SIM_NAME" -b
+          open -a Simulator
+
+      - name: Build and install Simulator debug app
+        run: |
+          set -euo pipefail
+          # Local Simulator Debug build only (build-cache pull deferred for this PoC).
+          # --no-bundler: Metro is started separately for Maestro.
+          npx expo run:ios --device '${{ steps.simulator.outputs.name }}' --no-bundler
+
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL --retry 3 --retry-all-errors 'https://get.maestro.mobile.dev' | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro --version
+
+      - name: Start Metro and run Maestro
+        run: |
+          set -euo pipefail
+
+          bun start:e2e > /tmp/maestro-ios-metro.log 2>&1 &
+          for _ in $(seq 1 90); do
+            if curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 || curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+              echo 'Metro is ready'
+              break
+            fi
+            sleep 2
+          done
+          if ! curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 && ! curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+            echo 'Metro failed to become ready' >&2
+            cat /tmp/maestro-ios-metro.log >&2 || true
+            exit 1
+          fi
+
+          bun e2e:ios
+
+      - name: Upload Maestro artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-ios-${{ github.run_id }}
+          path: |
+            ~/.maestro/tests
+            /tmp/maestro-ios-metro.log
+          if-no-files-found: ignore
+          retention-days: 14
+          include-hidden-files: true
