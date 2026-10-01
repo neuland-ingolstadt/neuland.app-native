@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { reactNativePlatform } from './react-native-mock'
 
 const clipboardSetStringAsyncMock = mock(async () => {})
 const toastMock = mock(() => {})
@@ -87,6 +88,21 @@ describe('ui-utils', () => {
 
 		expect(clipboardSetStringAsyncMock).not.toHaveBeenCalled()
 		expect(toastMock).not.toHaveBeenCalled()
+	})
+
+	it('copyToClipboard - Should skip the toast on Android', async () => {
+		clipboardSetStringAsyncMock.mockReset()
+		toastMock.mockReset()
+		reactNativePlatform.OS = 'android'
+
+		try {
+			await uiUtils.copyToClipboard('THI')
+
+			expect(clipboardSetStringAsyncMock).toHaveBeenCalledWith('THI')
+			expect(toastMock).not.toHaveBeenCalled()
+		} finally {
+			reactNativePlatform.OS = 'web'
+		}
 	})
 
 	it('roomNotFoundToast - Should track analytics and show a custom toast', () => {

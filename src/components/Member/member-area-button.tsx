@@ -11,6 +11,7 @@ import { toColor } from '@/utils/uniwind-utils'
 export function MemberAreaButton(): React.JSX.Element | null {
 	const router = useRouter()
 	const whiteColor = toColor(useCSSVariable('--color-white'))
+	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
 	const { t } = useTranslation('settings')
 
 	return (
@@ -26,13 +27,17 @@ export function MemberAreaButton(): React.JSX.Element | null {
 				className="ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden w-full border-hairline border-border active:opacity-90"
 			>
 				<LinearGradient
-					colors={['#000', '#015916']}
+					colors={['#000', '#014428']}
 					start={{ x: -0.5, y: 0.5 }}
 					end={{ x: 1, y: 0.5 }}
 					style={{ overflow: 'hidden', position: 'relative', width: '100%' }}
 				>
 					<View className="absolute right-[25px] -top-[5px] pointer-events-none z-0">
-						<LogoCardSVG size={70} opacity={0.35} color="#00ff3c" />
+						<LogoCardSVG
+							size={70}
+							opacity={0.35}
+							color={String(neulandGreen)}
+						/>
 					</View>
 					<View className="flex-row items-center min-h-[50px] py-[15px] z-[1]">
 						<View className="w-7 items-center justify-center ml-4">

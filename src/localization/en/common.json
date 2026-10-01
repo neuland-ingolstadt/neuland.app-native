@@ -141,6 +141,12 @@
 		"librarySeat": "Library Seat"
 	},
 	"pages": {
+		"news": {
+			"noNews": {
+				"title": "No news found",
+				"subtitle": "Check back later."
+			}
+		},
 		"quicklinks": {
 			"title": "Quick Links",
 			"footer": "The dashboard card shows the most recently visited links.",

@@ -34,17 +34,21 @@ const NeulandBox = (): React.JSX.Element | null => {
 				className="ios:rounded-ios android:rounded-md web:rounded-md overflow-hidden w-full active:opacity-90 border-hairline border-border"
 			>
 				<LinearGradient
-					colors={['#000', '#015916']}
+					colors={['#000', '#014428']}
 					start={{ x: -0.5, y: 0.5 }}
 					end={{ x: 1, y: 0.5 }}
 					style={{ overflow: 'hidden', position: 'relative', width: '100%' }}
 				>
 					<View className="absolute right-[18px] -top-2.5 pointer-events-none z-0">
-						<LogoCardSVG size={110} opacity={0.35} color="#00ff3c" />
+						<LogoCardSVG
+							size={110}
+							opacity={0.35}
+							color={String(neulandGreen)}
+						/>
 					</View>
 					<View className="flex-row items-center p-4 z-[1]">
 						<AvatarCircle
-							background="rgba(0, 255, 60, 0.12)"
+							background="rgba(36, 255, 136, 0.12)"
 							size={50}
 							style={{ paddingRight: 3 }}
 						>

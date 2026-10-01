@@ -11,12 +11,7 @@ import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Share, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import type {
 	UniversitySportsFieldsFragment,
@@ -26,7 +21,7 @@ import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -59,30 +54,8 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const sportsEvent: UniversitySportsFieldsFragment | null | undefined =
 		queryData?.flatMap((group) => group.data).find((event) => event.id === id)
 
-	const scrollOffset = useSharedValue(0)
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
-				scrollOffset.value = event.contentOffset.y
-			}
-		}
-	})
-
-	const headerStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: interpolate(
-						scrollOffset.value,
-						[0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	const navigation = useNavigation()
 	useFocusEffect(
 		useCallback(() => {
@@ -123,10 +96,15 @@ export default function SportsEventDetail(): React.JSX.Element {
 	)
 
 	if (isLoading || !queryData) {
+		// Keep the scroll view mounted so UIKit can attach native scroll edges.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="sports-event-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 
@@ -252,7 +230,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 			testID="sports-event-detail-screen"
 			className="px-page"
 			contentContainerClassName="gap-3 pb-bottom-safe"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>

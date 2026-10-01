@@ -1,8 +1,9 @@
+import { trackEvent } from '@aptabase/react-native'
 import { useQueryClient } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -17,14 +18,14 @@ import {
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/icon'
-import { useIsFeatureEnabled, useRefreshByUser } from '@/hooks'
+import { useRefreshByUser } from '@/hooks'
 import { useMemberStore } from '@/hooks/useMemberStore'
-import {
-	FeatureFlagKeys,
-	isMemberOfficePresenceVisible
-} from '@/lib/feature-flags'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import {
+	hasMemberPassInWallet,
+	viewMemberPassInWallet
+} from '@/utils/wallet-utils'
 import { IDCard } from './id-card'
 import {
 	OfficePresenceSection,
@@ -39,23 +40,29 @@ export function LoggedInView(): React.JSX.Element {
 	const { t } = useTranslation('member')
 	const { info, logout, refreshTokens, idToken } = useMemberStore()
 	const [showSecurityWarning, setShowSecurityWarning] = useState(false)
+	const [passInWallet, setPassInWallet] = useState(false)
 	const queryClient = useQueryClient()
-	const officePresenceEnabled = useIsFeatureEnabled(
-		FeatureFlagKeys.memberOfficePresenceEnabled
-	)
-	const showOfficePresence = isMemberOfficePresenceVisible(
-		officePresenceEnabled
-	)
 
 	const memberSub = info?.sub as string | undefined
 
+	const refreshPassInWallet = useCallback(async () => {
+		const exists = await hasMemberPassInWallet()
+		setPassInWallet(exists)
+	}, [])
+
+	useFocusEffect(
+		useCallback(() => {
+			void refreshPassInWallet()
+		}, [refreshPassInWallet])
+	)
+
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(async () => {
-		if (!showOfficePresence || !memberSub) {
-			return
+		if (memberSub) {
+			await queryClient.invalidateQueries({
+				queryKey: officePresenceQueryKey(memberSub)
+			})
 		}
-		await queryClient.invalidateQueries({
-			queryKey: officePresenceQueryKey(memberSub)
-		})
+		await refreshPassInWallet()
 	})
 
 	useEffect(() => {
@@ -72,15 +79,21 @@ export function LoggedInView(): React.JSX.Element {
 		}
 	}, [info, refreshTokens])
 
+	const handleShowInWallet = () => {
+		trackEvent('Wallet', { action: 'view' })
+		void viewMemberPassInWallet()
+	}
+
 	const handleAddToWallet = () => {
 		setShowSecurityWarning(true)
 		if (Platform.OS === 'ios') {
-			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
+			void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
 		}
 	}
 
-	const handleConfirmAddToWallet = async () => {
+	const handleConfirmAddToWallet = () => {
 		setShowSecurityWarning(false)
+		void refreshPassInWallet()
 	}
 
 	const handleCancelAddToWallet = () => {
@@ -92,7 +105,7 @@ export function LoggedInView(): React.JSX.Element {
 			if (!window.confirm(t('logout.alert.message'))) {
 				return
 			}
-			logout()
+			void logout()
 			return
 		}
 		Alert.alert(t('logout.alert.title'), t('logout.alert.message'), [
@@ -136,67 +149,71 @@ export function LoggedInView(): React.JSX.Element {
 		]
 	}
 
-	const quickLinksSections: FormListSections[] = [
-		{
-			header: t('quickLinks.title'),
-			items: [
-				{
-					title: t('quickLinks.neulandWebsite'),
-					onPress: () => Linking.openURL('https://neuland-ingolstadt.de'),
-					icon: {
-						ios: 'globe',
-						android: 'public',
-						web: 'Globe'
-					}
-				},
-				{
-					title: t('quickLinks.wiki'),
-					onPress: () => Linking.openURL('https://outline.neuland.ing'),
-					icon: {
-						ios: 'book.closed',
-						android: 'menu_book',
-						web: 'BookOpen'
-					}
-				},
-				{
-					title: t('quickLinks.neulandConnect'),
-					onPress: () => Linking.openURL('https://connect.neuland.ing'),
-					icon: {
-						ios: 'person.2',
-						android: 'groups',
-						web: 'Users'
-					}
-				},
-				{
-					title: t('quickLinks.ssoProfile'),
-					onPress: () => Linking.openURL('https://auth.neuland.ing/'),
-					icon: {
-						ios: 'circle.grid.3x3',
-						android: 'apps',
-						web: 'LayoutGrid'
-					}
-				}
-			]
-		},
-		...(Platform.OS !== 'web'
-			? [
-					{
-						header: t('labels.wallet', { ns: 'common' }),
-						items: [
-							{
-								title: t('securityWarning.buttons.addToWallet'),
-								onPress: handleAddToWallet,
-								icon: {
-									ios: 'wallet.pass',
-									android: 'wallet' as MaterialIcon,
-									web: 'Wallet' as LucideIcon
-								}
+	const walletSection: FormListSections | undefined =
+		Platform.OS !== 'web'
+			? {
+					header: t('labels.wallet', { ns: 'common' }),
+					items: [
+						{
+							title:
+								Platform.OS === 'ios' && passInWallet
+									? t('securityWarning.buttons.showInWallet')
+									: t('securityWarning.buttons.addToWallet'),
+							onPress:
+								Platform.OS === 'ios' && passInWallet
+									? handleShowInWallet
+									: handleAddToWallet,
+							icon: {
+								ios: 'wallet.pass',
+								android: 'wallet' as MaterialIcon,
+								web: 'Wallet' as LucideIcon
 							}
-						]
-					}
-				]
-			: [])
-	]
+						}
+					]
+				}
+			: undefined
+
+	const quickLinksSection: FormListSections = {
+		header: t('quickLinks.title'),
+		items: [
+			{
+				title: t('quickLinks.neulandWebsite'),
+				onPress: () => Linking.openURL('https://neuland-ingolstadt.de'),
+				icon: {
+					ios: 'globe',
+					android: 'public',
+					web: 'Globe'
+				}
+			},
+			{
+				title: t('quickLinks.wiki'),
+				onPress: () => Linking.openURL('https://outline.neuland.ing'),
+				icon: {
+					ios: 'book.closed',
+					android: 'menu_book',
+					web: 'BookOpen'
+				}
+			},
+			{
+				title: t('quickLinks.neulandConnect'),
+				onPress: () => Linking.openURL('https://connect.neuland.ing'),
+				icon: {
+					ios: 'person.2',
+					android: 'groups',
+					web: 'Users'
+				}
+			},
+			{
+				title: t('quickLinks.ssoProfile'),
+				onPress: () => Linking.openURL('https://auth.neuland.ing/'),
+				icon: {
+					ios: 'circle.grid.3x3',
+					android: 'apps',
+					web: 'LayoutGrid'
+				}
+			}
+		]
+	}
 
 	return (
 		<ScrollView
@@ -205,14 +222,12 @@ export function LoggedInView(): React.JSX.Element {
 			showsVerticalScrollIndicator={false}
 			contentInsetAdjustmentBehavior="automatic"
 			refreshControl={
-				showOfficePresence ? (
-					<RefreshControl
-						refreshing={isRefetchingByUser}
-						onRefresh={() => {
-							void refetchByUser()
-						}}
-					/>
-				) : undefined
+				<RefreshControl
+					refreshing={isRefetchingByUser}
+					onRefresh={() => {
+						void refetchByUser()
+					}}
+				/>
 			}
 		>
 			{info && (
@@ -221,9 +236,15 @@ export function LoggedInView(): React.JSX.Element {
 				</View>
 			)}
 
-			{showOfficePresence ? <OfficePresenceSection /> : null}
+			<OfficePresenceSection />
 
-			<FormList sections={[perksSection, ...quickLinksSections]} />
+			<FormList
+				sections={[
+					perksSection,
+					...(walletSection ? [walletSection] : []),
+					quickLinksSection
+				]}
+			/>
 
 			<Pressable
 				onPress={logoutAlert}

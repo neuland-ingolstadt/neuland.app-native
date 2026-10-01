@@ -120,7 +120,7 @@ export default function TimetableList({
 						)
 
 						if (todayIndex !== -1 && listRef.current) {
-							listRef.current.scrollToIndex({
+							void listRef.current.scrollToIndex({
 								index: todayIndex,
 								animated: true,
 								viewPosition: 0

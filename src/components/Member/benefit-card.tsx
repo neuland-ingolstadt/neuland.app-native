@@ -21,10 +21,16 @@ export function BenefitCard({
 	icon
 }: BenefitCardProps): React.JSX.Element {
 	const contrastColor = toColor(useCSSVariable('--color-contrast'))
+	const neulandGreenAccent = toColor(
+		useCSSVariable('--color-neuland-green-accent')
+	)
 
 	return (
 		<View className="bg-card rounded-lg p-3 flex-row items-center mb-3">
-			<View className="bg-primary w-11 h-11 rounded-full justify-center items-center mr-3">
+			<View
+				className="w-11 h-11 rounded-full justify-center items-center mr-3"
+				style={{ backgroundColor: neulandGreenAccent }}
+			>
 				<PlatformIcon
 					ios={icon.ios}
 					android={icon.android}

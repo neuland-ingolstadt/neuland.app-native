@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, use, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	Extrapolation,
@@ -14,17 +14,28 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import PlatformIcon from '@/components/Universal/icon'
+import {
+	IosGlassSurface,
+	iosGlassChromeBorder,
+	iosGlassHairlineBorder,
+	isIosLiquidGlassActive
+} from '@/components/Universal/ios-glass-surface'
 import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import {
 	CELL,
+	CELL_GLASS,
 	CLOSE,
+	CLOSE_GLASS,
 	CONTAINER_TOP,
+	CONTAINER_TOP_GLASS,
 	EXPAND_SPRING,
+	floatingChromeRadius,
 	floorLabel,
 	GAP,
 	PICKER_TOP,
+	PICKER_TOP_GLASS,
 	SNAP_SPRING
 } from './floor-picker-layout'
 import { FloorRow } from './floor-row'
@@ -110,10 +121,17 @@ const FloorPicker = ({
 	)
 	const textColor = String(toColor(useCSSVariable('--color-text')) ?? '#1c1c30')
 	const labelColor = toColor(useCSSVariable('--color-label'))
+	const labelColorString = String(labelColor ?? '#606062')
 	const contrastColor = getContrastColor(primaryColor)
 	const xIconColor = String(
 		toColor(useCSSVariable('--color-label-secondary')) ?? '#777778'
 	)
+	const iosChrome = Platform.OS === 'ios'
+	const liquidGlass = isIosLiquidGlassActive()
+	const cell = liquidGlass ? CELL_GLASS : CELL
+	const close = liquidGlass ? CLOSE_GLASS : CLOSE
+	const pickerTop = liquidGlass ? PICKER_TOP_GLASS : PICKER_TOP
+	const containerTop = liquidGlass ? CONTAINER_TOP_GLASS : CONTAINER_TOP
 	const shadow = isDark
 		? '0 4 14 0 rgba(0, 0, 0, 0.45)'
 		: '0 4 14 0 rgba(0, 0, 0, 0.12)'
@@ -123,15 +141,20 @@ const FloorPicker = ({
 	const didInit = useRef(false)
 
 	const expanded = useSharedValue(showAllFloors ? 1 : 0)
-	const scrollY = useSharedValue(currentIndex * CELL)
-	const highlightY = useSharedValue(currentIndex * CELL)
-	const startY = useSharedValue(currentIndex * CELL)
+	const scrollY = useSharedValue(currentIndex * cell)
+	const highlightY = useSharedValue(currentIndex * cell)
+	const startY = useSharedValue(currentIndex * cell)
 	const lastTickIndex = useSharedValue(currentIndex)
 	const floorCountSV = useSharedValue(floorCount)
+	const cellSV = useSharedValue(cell)
 
 	useEffect(() => {
 		floorCountSV.set(floorCount)
 	}, [floorCount, floorCountSV])
+
+	useEffect(() => {
+		cellSV.set(cell)
+	}, [cell, cellSV])
 
 	useEffect(() => {
 		expanded.set(withSpring(showAllFloors ? 1 : 0, EXPAND_SPRING))
@@ -143,7 +166,7 @@ const FloorPicker = ({
 		if (floors.length === 0) {
 			return
 		}
-		const target = currentIndex * CELL
+		const target = currentIndex * cell
 		if (!didInit.current) {
 			didInit.current = true
 			scrollY.set(target)
@@ -157,7 +180,7 @@ const FloorPicker = ({
 		if (Math.abs(highlightY.get() - target) > 1) {
 			highlightY.set(withSpring(target, SNAP_SPRING))
 		}
-	}, [currentIndex, floors.length, highlightY, lastTickIndex, scrollY])
+	}, [cell, currentIndex, floors.length, highlightY, lastTickIndex, scrollY])
 
 	const selectFloorByIndex = useCallback(
 		(index: number) => {
@@ -180,12 +203,13 @@ const FloorPicker = ({
 			return
 		}
 		const egIndex = Math.max(0, floors.indexOf('EG'))
-		const target = egIndex * CELL
+		const target = egIndex * cell
 		scrollY.set(target)
 		highlightY.set(target)
 		lastTickIndex.set(egIndex)
 		setCurrentFloor({ floor: 'EG', manual: true })
 	}, [
+		cell,
 		currentFloor?.floor,
 		floors,
 		highlightY,
@@ -222,14 +246,15 @@ const FloorPicker = ({
 		.maxPointers(1)
 		.onBegin(() => {
 			startY.set(scrollY.get())
-			lastTickIndex.set(Math.round(scrollY.get() / CELL))
+			lastTickIndex.set(Math.round(scrollY.get() / cellSV.get()))
 		})
 		.onUpdate((event) => {
-			const maxScroll = Math.max(floorCountSV.get() - 1, 0) * CELL
+			const cellSize = cellSV.get()
+			const maxScroll = Math.max(floorCountSV.get() - 1, 0) * cellSize
 			scrollY.set(
-				rubberClamp(startY.get() + event.translationY, 0, maxScroll, CELL)
+				rubberClamp(startY.get() + event.translationY, 0, maxScroll, cellSize)
 			)
-			const index = Math.round(scrollY.get() / CELL)
+			const index = Math.round(scrollY.get() / cellSize)
 			if (
 				index !== lastTickIndex.get() &&
 				index >= 0 &&
@@ -240,10 +265,11 @@ const FloorPicker = ({
 			}
 		})
 		.onEnd((event) => {
+			const cellSize = cellSV.get()
 			const maxIndex = Math.max(floorCountSV.get() - 1, 0)
 			const projected = scrollY.get() + event.velocityY * 0.14
-			const next = clamp(Math.round(projected / CELL), 0, maxIndex)
-			scrollY.set(withSpring(next * CELL, SNAP_SPRING))
+			const next = clamp(Math.round(projected / cellSize), 0, maxIndex)
+			scrollY.set(withSpring(next * cellSize, SNAP_SPRING))
 			if (next !== lastTickIndex.get()) {
 				lastTickIndex.set(next)
 				scheduleOnRN(triggerTickHaptic)
@@ -273,8 +299,8 @@ const FloorPicker = ({
 	const collapsedGestures = Gesture.Exclusive(Gesture.Race(pan, longPress), tap)
 
 	const closeStyle = useAnimatedStyle(() => ({
-		width: CELL,
-		height: CLOSE,
+		width: cellSV.get(),
+		height: close,
 		opacity: expanded.get(),
 		transform: [
 			{
@@ -289,13 +315,14 @@ const FloorPicker = ({
 	}))
 
 	const clipStyle = useAnimatedStyle(() => {
-		const listHeight = Math.max(floorCountSV.get(), 1) * CELL
+		const cellSize = cellSV.get()
+		const listHeight = Math.max(floorCountSV.get(), 1) * cellSize
 		return {
-			width: CELL,
+			width: cellSize,
 			height: interpolate(
 				expanded.get(),
 				[0, 1],
-				[CELL, listHeight],
+				[cellSize, listHeight],
 				Extrapolation.CLAMP
 			)
 		}
@@ -317,7 +344,7 @@ const FloorPicker = ({
 
 	const pillStyle = useAnimatedStyle(() => ({
 		width: '100%',
-		height: CELL,
+		height: cellSV.get(),
 		opacity: interpolate(
 			expanded.get(),
 			[0.15, 0.7],
@@ -328,22 +355,30 @@ const FloorPicker = ({
 	}))
 
 	const locateStyle = useAnimatedStyle(() => {
+		const cellSize = cellSV.get()
 		const pickerHeight = interpolate(
 			expanded.get(),
 			[0, 1],
-			[CELL, Math.max(floorCountSV.get(), 1) * CELL],
+			[cellSize, Math.max(floorCountSV.get(), 1) * cellSize],
 			Extrapolation.CLAMP
 		)
 		return {
-			width: CELL,
-			height: CELL,
-			top: PICKER_TOP + pickerHeight + GAP
+			width: cellSize,
+			height: cellSize,
+			top: pickerTop + pickerHeight + GAP
 		}
 	})
 
-	const locateBackground = isDark ? 'rgb(18, 18, 18)' : 'rgb(255, 255, 255)'
 	const containerHeight =
-		PICKER_TOP + floorCount * CELL + (Platform.OS === 'web' ? 0 : GAP + CELL)
+		pickerTop + floorCount * cell + (Platform.OS === 'web' ? 0 : GAP + cell)
+
+	const floatingFrameStyle = {
+		borderCurve: 'continuous' as const,
+		borderRadius: floatingChromeRadius(cell, liquidGlass),
+		boxShadow: shadow,
+		overflow: 'hidden' as const,
+		...iosGlassChromeBorder(borderColor)
+	}
 
 	const floorPicker = (
 		<Animated.View
@@ -373,19 +408,21 @@ const FloorPicker = ({
 				)
 				selectFloorByIndex(next)
 			}}
-			className="absolute overflow-hidden rounded-[10px] border"
+			className="absolute"
 			style={[
 				{
-					top: PICKER_TOP,
-					width: CELL,
-					borderColor,
-					backgroundColor: cardColor,
-					borderCurve: 'continuous',
-					boxShadow: shadow
+					top: pickerTop,
+					width: cell
 				},
+				floatingFrameStyle,
 				clipStyle
 			]}
 		>
+			<IosGlassSurface
+				pointerEvents="none"
+				fallbackBackgroundColor={cardColor}
+				style={StyleSheet.absoluteFill}
+			/>
 			<Animated.View
 				pointerEvents={showAllFloors ? 'auto' : 'none'}
 				style={listStyle}
@@ -395,7 +432,7 @@ const FloorPicker = ({
 					className="absolute left-0 right-0"
 					style={[
 						{
-							height: CELL,
+							height: cell,
 							backgroundColor: primaryColor
 						},
 						pillStyle
@@ -412,6 +449,8 @@ const FloorPicker = ({
 						cardColor={cardColor}
 						textColor={textColor}
 						contrastColor={contrastColor}
+						glassChrome={iosChrome}
+						cellSize={cell}
 						onSelect={handleSelectFloor}
 					/>
 				))}
@@ -434,8 +473,8 @@ const FloorPicker = ({
 			className="absolute right-0 z-20 mx-2"
 			pointerEvents="box-none"
 			style={{
-				top: CONTAINER_TOP,
-				width: CELL,
+				top: containerTop,
+				width: cell,
 				height: containerHeight,
 				overflow: 'visible'
 			}}
@@ -451,23 +490,48 @@ const FloorPicker = ({
 					accessibilityRole="button"
 					accessibilityLabel={t('button.close')}
 					className="items-center justify-center"
-					style={{ height: CLOSE, width: CELL }}
+					style={{ height: close, width: close }}
 				>
-					<PlatformIcon
-						ios={{
-							name: 'xmark.circle.fill',
-							size: 26
-						}}
-						android={{
-							name: 'cancel',
-							size: 26
-						}}
-						web={{
-							name: 'X',
-							size: 26
-						}}
-						style={{ color: xIconColor }}
-					/>
+					{iosChrome ? (
+						<IosGlassSurface
+							isInteractive
+							fallbackBackgroundColor={cardColor}
+							style={[
+								{
+									alignItems: 'center',
+									borderRadius: close / 2,
+									height: close,
+									justifyContent: 'center',
+									overflow: 'hidden',
+									width: close
+								},
+								iosGlassHairlineBorder(labelColorString)
+							]}
+						>
+							<PlatformIcon
+								ios={{ name: 'xmark', size: 13, weight: 'semibold' }}
+								android={{ name: 'cancel', size: 26 }}
+								web={{ name: 'X', size: 26 }}
+								style={{ color: labelColorString }}
+							/>
+						</IosGlassSurface>
+					) : (
+						<PlatformIcon
+							ios={{
+								name: 'xmark.circle.fill',
+								size: 26
+							}}
+							android={{
+								name: 'cancel',
+								size: 26
+							}}
+							web={{
+								name: 'X',
+								size: 26
+							}}
+							style={{ color: xIconColor }}
+						/>
+					)}
 				</Pressable>
 			</Animated.View>
 
@@ -479,7 +543,7 @@ const FloorPicker = ({
 				</GestureDetector>
 			)}
 
-			{Platform.OS !== 'web' && (
+			{Platform.OS !== 'web' && !showAllFloors && (
 				<Animated.View className="absolute right-0" style={locateStyle}>
 					<Pressable
 						testID="map-current-location"
@@ -489,16 +553,20 @@ const FloorPicker = ({
 						accessibilityLabel={t('map.centerOnCurrentLocation')}
 					>
 						<View
-							className="items-center justify-center rounded-[10px] border"
-							style={{
-								height: CELL,
-								width: CELL,
-								borderColor,
-								backgroundColor: locateBackground,
-								borderCurve: 'continuous',
-								boxShadow: shadow
-							}}
+							className="items-center justify-center"
+							style={[
+								floatingFrameStyle,
+								{
+									height: cell,
+									width: cell
+								}
+							]}
 						>
+							<IosGlassSurface
+								pointerEvents="none"
+								fallbackBackgroundColor={cardColor}
+								style={StyleSheet.absoluteFill}
+							/>
 							<PlatformIcon
 								style={{
 									color: labelColor,

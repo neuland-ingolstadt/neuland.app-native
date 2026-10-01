@@ -74,7 +74,7 @@ export async function getFriendlyTimetable(
 				rooms = lecture.details.raum
 					.split(', ')
 					.map((room) => room.trim().toUpperCase())
-					.sort()
+					.sort((a, b) => a.localeCompare(b))
 			}
 
 			return {

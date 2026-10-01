@@ -40,7 +40,8 @@
 			--color-label-background: #e5dede;
 			--color-tabbar-inactive: #999999;
 			--color-success: #21bc21;
-			--color-neuland-green: #00ff3c;
+			--color-neuland-green: #24ff88;
+			--color-neuland-green-accent: #0a9a52;
 			--color-warning: #f48e00;
 			--color-notification: rgb(255, 59, 48);
 			--color-input-background: #e9e9e9;
@@ -80,7 +81,8 @@
 			--color-label-background: #444444;
 			--color-tabbar-inactive: #757575;
 			--color-success: #37d837;
-			--color-neuland-green: #00ff3c;
+			--color-neuland-green: #24ff88;
+			--color-neuland-green-accent: #24ff88;
 			--color-warning: #ff9900;
 			--color-notification: rgb(255, 69, 58);
 			--color-input-background: #383838;

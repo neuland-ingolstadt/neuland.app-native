@@ -14,7 +14,14 @@ const apiGetPersonalDataMock = mock(async () => ({
 }))
 
 mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
-	loadSecureAsync: loadSecureAsyncMock
+	loadSecureAsync: loadSecureAsyncMock,
+	saveSecureAsync: async () => {},
+	deleteSecure: () => {},
+	appStorage: {
+		set: () => {},
+		remove: () => {},
+		getBoolean: () => false
+	}
 }))
 
 mock.module(`${SRC_ROOT}api/thi-session-handler.ts`, () => ({
@@ -132,5 +139,18 @@ describe('api-utils', () => {
 		expect(createGuestSessionMock).toHaveBeenCalled()
 		expect(queryClient.clear).toHaveBeenCalled()
 		expect(routerNavigateMock).toHaveBeenCalledWith('/(tabs)')
+	})
+
+	it('performLogout - Should swallow errors from the logout flow', async () => {
+		createGuestSessionMock.mockRejectedValueOnce(new Error('session failed'))
+		const toggleUser = mock((_user: undefined) => {})
+		const resetDashboard = mock((_userKind: string) => {})
+		const queryClient = {
+			clear: mock(() => {})
+		}
+
+		await expect(
+			apiUtils.performLogout(toggleUser, resetDashboard, queryClient as never)
+		).resolves.toBeUndefined()
 	})
 })

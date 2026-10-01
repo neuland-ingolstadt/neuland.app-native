@@ -123,7 +123,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 
 	useEffect(() => {
 		if (isReady && loaded) {
-			SplashScreen.hideAsync()
+			void SplashScreen.hideAsync()
 			if (showSplashScreen) {
 				animateSplashWithTransformation()
 			} else {

@@ -12,10 +12,7 @@ import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
-import {
-	MealDetailStackHeader,
-	useMealDetailScroll
-} from '@/components/Food/meal-detail-header'
+import { MealDetailStackHeader } from '@/components/Food/meal-detail-header'
 import { createMealPreferenceAlert } from '@/components/Food/meal-preference-alert'
 import { MealPriceRow } from '@/components/Food/meal-price-row'
 import FormList from '@/components/Universal/form-list'
@@ -24,7 +21,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { useMealDetail } from '@/hooks/useMealDetail'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import { useWiggleAnimation } from '@/hooks/useWiggleAnimation'
 import type { LanguageKey } from '@/localization/i18n'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -73,8 +70,8 @@ export default function FoodDetail(): React.JSX.Element {
 		meal: foodData,
 		date
 	} = useMealDetail(id)
-	const { scrollHandler, headerStyle } = useMealDetailScroll()
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	const { iconAnimatedStyle: wiggleIconAnimatedStyle, triggerWiggle } =
 		useWiggleAnimation()
 
@@ -97,10 +94,15 @@ export default function FoodDetail(): React.JSX.Element {
 	)
 
 	if (isLoading || !queryData) {
+		// Keep a root ScrollView mounted so UIKit can attach the sheet header blur.
 		return (
-			<View className="flex-1 justify-center items-center">
+			<Animated.ScrollView
+				testID="food-detail-screen"
+				contentContainerClassName="flex-1 justify-center items-center"
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			>
 				<LoadingIndicator />
-			</View>
+			</Animated.ScrollView>
 		)
 	}
 
@@ -171,7 +173,7 @@ export default function FoodDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			testID="food-detail-screen"
 			contentContainerClassName="mx-page pb-bottom-safe"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
@@ -242,9 +244,9 @@ export default function FoodDetail(): React.JSX.Element {
 				<FormList sections={sections} sheet />
 			</View>
 
-			<Pressable onPress={triggerWiggle}>
-				<View className="self-center mt-5 mb-bottom-safe px-1">
-					<View className="flex-row items-center self-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-hairline border-border">
+			<Pressable onPress={triggerWiggle} className="w-full">
+				<View className="mt-5 mb-bottom-safe w-full">
+					<View className="flex-row items-center bg-card-sheet rounded-md gap-4 px-3.5 py-2 w-full border-hairline border-border">
 						<Animated.View style={wiggleIconAnimatedStyle}>
 							<PlatformIcon
 								ios={{
