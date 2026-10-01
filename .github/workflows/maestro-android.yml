@@ -62,8 +62,10 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          # android-emulator-runner runs the script with /usr/bin/sh (dash on
+          # ubuntu-latest). dash rejects `set -o pipefail`, so use POSIX flags only.
           script: |
-            set -euo pipefail
+            set -eu
 
             APK='android/app/build/outputs/apk/debug/app-debug.apk'
             if [ ! -f "$APK" ]; then
