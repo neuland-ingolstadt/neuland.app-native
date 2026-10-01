@@ -1,7 +1,12 @@
 # PoC: iOS Maestro E2E on GitHub Actions.
 # Temporary trigger: every pull_request (so this PR actually runs).
 # TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-ios`),
-# matching maestro-web.yml. Cache pull from neuland.app-build-cache is deferred.
+# matching maestro-web.yml.
+#
+# Build cache: @eggl-js/expo-github-cache → neuland-ingolstadt/neuland.app-build-cache
+# Requires repo secret BUILD_CACHE_GITHUB_TOKEN (fine-grained PAT with Contents
+# read+write on neuland.app-build-cache only). On fingerprint hit, expo run:ios
+# downloads the Simulator .app; on miss it builds and uploads a new release.
 name: Maestro iOS E2E
 
 on:
@@ -33,6 +38,17 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - name: Require build-cache token
+        env:
+          BUILD_CACHE_GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$BUILD_CACHE_GITHUB_TOKEN" ]; then
+            echo 'Missing secret BUILD_CACHE_GITHUB_TOKEN.' >&2
+            echo 'Create a fine-grained PAT with Contents read+write on neuland.app-build-cache only,' >&2
+            echo 'then add it as a repository secret named BUILD_CACHE_GITHUB_TOKEN.' >&2
+            exit 1
+          fi
+
       - name: Set up Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
@@ -43,6 +59,12 @@ jobs:
         run: |
           bun run licences:bundle
           bun run prebuild:ios
+
+      - name: Log native fingerprint
+        run: |
+          HASH="$(bunx --bun @expo/fingerprint fingerprint:generate --platform ios | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).hash)')"
+          echo "ios fingerprint=$HASH"
+          echo "cache tag=fingerprint.${HASH}.dev-client.ios"
 
       - name: Resolve and boot iOS Simulator
         id: simulator
@@ -75,14 +97,21 @@ jobs:
           echo "Using simulator: $SIM_NAME"
           echo "name=$SIM_NAME" >> "$GITHUB_OUTPUT"
 
+          # Boot via simctl only — avoid `open -a Simulator` before xcodebuild
+          # (GUI launch has contributed to hung Pods resource phases on GHA).
           xcrun simctl boot "$SIM_NAME" 2>/dev/null || true
           xcrun simctl bootstatus "$SIM_NAME" -b
-          open -a Simulator
 
-      - name: Build and install Simulator debug app
+      - name: Resolve cache or build Simulator debug app
+        env:
+          # Override Actions' default GITHUB_TOKEN so @eggl-js/expo-github-cache
+          # can read+write releases on the private neuland.app-build-cache repo.
+          GITHUB_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BUILD_CACHE_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          # Local Simulator Debug build only (build-cache pull deferred for this PoC).
+          # On fingerprint hit: download + install from GitHub Releases cache.
+          # On miss: compile locally, then upload .app to the cache (write).
           # --no-bundler: Metro is started separately for Maestro.
           npx expo run:ios --device '${{ steps.simulator.outputs.name }}' --no-bundler
 
