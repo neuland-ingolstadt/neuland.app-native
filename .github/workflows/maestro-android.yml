@@ -1,0 +1,103 @@
+# PoC: Android Maestro E2E on GitHub Actions.
+# Temporary trigger: every pull_request (so this PR actually runs).
+# TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-android`),
+# matching maestro-web.yml. Cache pull from neuland.app-build-cache is deferred.
+name: Maestro Android E2E
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: maestro-android-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  maestro-android:
+    name: Maestro Android suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - uses: ./.github/actions/android-prepare
+
+      - name: Compile debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL --retry 3 --retry-all-errors 'https://get.maestro.mobile.dev' | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro --version
+
+      - name: Run Maestro on emulator
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            set -euo pipefail
+
+            APK='android/app/build/outputs/apk/debug/app-debug.apk'
+            if [ ! -f "$APK" ]; then
+              echo "Missing debug APK at $APK" >&2
+              exit 1
+            fi
+
+            adb wait-for-device
+            adb install -r "$APK"
+
+            bun start:e2e > /tmp/maestro-android-metro.log 2>&1 &
+            for _ in $(seq 1 90); do
+              if curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 || curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+                echo 'Metro is ready'
+                break
+              fi
+              sleep 2
+            done
+            if ! curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 && ! curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+              echo 'Metro failed to become ready' >&2
+              cat /tmp/maestro-android-metro.log >&2 || true
+              exit 1
+            fi
+
+            bun e2e:android
+
+      - name: Upload Maestro artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-android-${{ github.run_id }}
+          path: |
+            ~/.maestro/tests
+            /tmp/maestro-android-metro.log
+          if-no-files-found: ignore
+          retention-days: 14
+          include-hidden-files: true
