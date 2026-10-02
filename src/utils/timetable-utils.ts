@@ -78,7 +78,7 @@ export async function getFriendlyTimetable(
 					.sort((a, b) => a.localeCompare(b))
 			}
 
-			const lecturerIds = parseLecturerIds(lecture.lvId)
+			const lecturerIds = parseLecturerIds(lecture.details.dozent_id)
 
 			return {
 				date: lecture.date,
@@ -249,8 +249,8 @@ export const isValidRoom = (room: string): boolean => {
 	return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room)
 }
 
-/** Lectures rarely change mid-semester; pull-to-refresh still forces a refetch. */
-export const TIMETABLE_STALE_TIME_MS = 1000 * 60 * 60 * 6 // 6 hours
+/** Keep cancellations / room changes visible without relying on pull-to-refresh. */
+export const TIMETABLE_STALE_TIME_MS = 1000 * 60 * 5 // 5 minutes
 export const TIMETABLE_GC_TIME_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
 
 /**

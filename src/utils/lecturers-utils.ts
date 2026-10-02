@@ -11,10 +11,10 @@ export interface LecturerLink {
 }
 
 export function parseLecturerIds(
-	lvId: string | number | null | undefined
+	rawIds: string | number | null | undefined
 ): string[] {
-	if (lvId == null) return []
-	const normalized = String(lvId).trim()
+	if (rawIds == null) return []
+	const normalized = String(rawIds).trim()
 	if (normalized === '') return []
 	return normalized
 		.split(/,\s*/)
@@ -73,7 +73,10 @@ function findLecturerByTimetableLabel(
 						firstInitial.toLocaleUpperCase('de')
 				)
 			})
+			// Require the initial to match — never fall back to a unique last
+			// name alone (e.g. "Müller, K." must not link to Müller, Hans).
 			if (withMatchingInitial.length === 1) return withMatchingInitial[0]
+			continue
 		}
 
 		if (sameLastName.length === 1) return sameLastName[0]
@@ -100,14 +103,17 @@ function pairLecturerNamesAndIds(
 	const trimmedName = lecturerNames.trim()
 	if (trimmedName === '') return []
 
-	if (lecturerIds.length <= 1) {
-		return [{ name: trimmedName, id: lecturerIds[0] }]
-	}
-
+	// THI formats names as "Lastname, F." — only split on commas that follow a
+	// period so "Meier, M., Müller, K." stays two labels, not four.
 	const names = trimmedName
-		.split(/,\s*/)
+		.split(/(?<=\.),\s*/)
 		.map((name) => name.trim())
 		.filter(Boolean)
+
+	if (names.length === 1) {
+		return [{ name: names[0], id: lecturerIds[0] }]
+	}
+
 	return names.map((name, index) => ({
 		name,
 		id: lecturerIds[index]

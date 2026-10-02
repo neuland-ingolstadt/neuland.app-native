@@ -221,6 +221,8 @@ export interface Details {
 	fach: string
 	veranstaltung: string
 	dozent: string
+	/** Comma-separated lecturer IDs matching `dozent` order; may be absent. */
+	dozent_id?: string | null
 	stg: string
 	stgru: string
 	teilgruppe: string

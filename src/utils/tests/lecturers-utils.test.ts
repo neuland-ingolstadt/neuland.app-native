@@ -35,17 +35,17 @@ describe('lecturers-utils', () => {
 		])
 	})
 
-	it('resolveLecturerLinks - Should pair multiple lecturers by index', () => {
+	it('resolveLecturerLinks - Should pair multiple THI-format lecturers by index', () => {
 		const lecturers = [
-			{ id: 'id1', name: 'X', vorname: 'A' },
-			{ id: 'id2', name: 'Y', vorname: 'B' }
+			{ id: 'id1', name: 'Meier', vorname: 'Max' },
+			{ id: 'id2', name: 'Müller', vorname: 'Klaus' }
 		] as never
 
 		expect(
-			resolveLecturerLinks('Prof. X, Prof. Y', ['id1', 'id2'], lecturers)
+			resolveLecturerLinks('Meier, M., Müller, K.', ['id1', 'id2'], lecturers)
 		).toEqual([
-			{ name: 'Prof. X', lecturer: lecturers[0] },
-			{ name: 'Prof. Y', lecturer: lecturers[1] }
+			{ name: 'Meier, M.', lecturer: lecturers[0] },
+			{ name: 'Müller, K.', lecturer: lecturers[1] }
 		])
 	})
 
@@ -63,14 +63,14 @@ describe('lecturers-utils', () => {
 		).toBeUndefined()
 	})
 
-	it('resolveLecturerLinks - Should match unique last name when initial mismatches', () => {
+	it('resolveLecturerLinks - Should not fall back to unique last name when initial mismatches', () => {
 		const lecturers = [
 			{ id: '9', name: 'Georges', vorname: 'Alexandra' }
 		] as never
 
 		expect(
-			resolveLecturerLinks('Georges, M.', [], lecturers)[0]?.lecturer?.id
-		).toBe('9')
+			resolveLecturerLinks('Georges, M.', [], lecturers)[0]?.lecturer
+		).toBeUndefined()
 	})
 
 	it('resolveLecturerLinks - Should search fallback sources in order', () => {

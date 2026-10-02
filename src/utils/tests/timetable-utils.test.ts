@@ -58,12 +58,13 @@ describe('timetable-utils', () => {
 								{
 									von: new Date('2026-04-07T08:15:00'),
 									bis: new Date('2026-04-07T09:45:00'),
-									lvId: 'A',
+									lvId: 'lv-a',
 									details: {
 										raum: 'g101, g102',
 										fach: 'Mathematik',
 										veranstaltung: 'MATH - Mathematik 1',
 										dozent: 'Prof. X',
+										dozent_id: 'A',
 										stg: 'INF',
 										stgru: 'INF1',
 										teilgruppe: '',
@@ -91,12 +92,13 @@ describe('timetable-utils', () => {
 								{
 									von: new Date('2026-04-07T10:00:00'),
 									bis: new Date('2026-04-07T11:30:00'),
-									lvId: 'B',
+									lvId: 'lv-b',
 									details: {
 										raum: 'h201',
 										fach: 'Programmierung',
 										veranstaltung: 'PRG - Programmierung 2',
 										dozent: 'Prof. Y',
+										dozent_id: 'B',
 										stg: 'INF',
 										stgru: 'INF1',
 										teilgruppe: '',
