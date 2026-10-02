@@ -27,16 +27,17 @@ export default function TabLayout(): React.JSX.Element {
 		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 	const isAndroid = Platform.OS === 'android'
 	const androidIndicatorColor = isDark
-		? Color(cardColor)
-				.mix(Color(primaryColor), 0.06)
-				.lighten(1.4)
-				.saturate(1)
-				.hex()
+		? Color(cardColor).mix(Color(primaryColor), 0.22).hex()
 		: Color(cardColor)
 				.mix(Color(primaryColor), 0.3)
 				.darken(0.05)
 				.saturate(0.1)
 				.hex()
+	// Unset ripple falls back to Material dynamic primary (often light blue).
+	const androidRippleColor = Color(primaryColor)
+		.alpha(isDark ? 0.14 : 0.12)
+		.rgb()
+		.string()
 	const androidBackgroundColor = isDark
 		? Color(cardColor).mix(Color(primaryColor), 0.04).hex()
 		: Color(cardColor).mix(Color(primaryColor), 0.1).hex()
@@ -47,6 +48,7 @@ export default function TabLayout(): React.JSX.Element {
 			iconColor={tabbarInactiveColor}
 			tintColor={primaryColor}
 			indicatorColor={isAndroid ? androidIndicatorColor : undefined}
+			rippleColor={isAndroid ? androidRippleColor : undefined}
 			labelVisibilityMode="labeled"
 			backgroundColor={isAndroid ? androidBackgroundColor : cardColor}
 			disableTransparentOnScrollEdge={!isIos26}
