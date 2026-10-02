@@ -3,14 +3,7 @@ appId: ${APP_ID}
 - openLink: "neuland://onboarding"
 - waitForAnimationToEnd:
     timeout: 3000
-- runFlow:
-    when:
-      platform: Android
-      visible: "Continue"
-    commands:
-      - tapOn: "Continue"
-      - waitForAnimationToEnd:
-          timeout: 3000
+# If Metro never attached, iOS may still show the bare Development Build shell.
 - runFlow:
     when:
       platform: iOS
