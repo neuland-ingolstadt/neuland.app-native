@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	FlatList,
 	Image,
@@ -13,6 +14,7 @@ import {
 import { useCSSVariable } from 'uniwind'
 import API from '@/api/authenticated-api'
 import ErrorView from '@/components/Error/error-view'
+import { EmptyEventsAnimation } from '@/components/Events/empty-events-animation'
 import Divider from '@/components/Universal/divider'
 import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
@@ -25,6 +27,7 @@ import { ServiceStatus } from '@/utils/gatus-status'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function NewsScreen(): React.JSX.Element {
+	const { t } = useTranslation('common')
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const { width } = useWindowDimensions()
 	const headerPadding = useTransparentHeaderPadding() + 12
@@ -37,6 +40,7 @@ export default function NewsScreen(): React.JSX.Element {
 			gcTime: 1000 * 60 * 60 * 24
 		})
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+	const hasNews = data != null && data.length > 0
 
 	return (
 		<View testID="news-screen" className="flex-1 web:h-full">
@@ -65,7 +69,12 @@ export default function NewsScreen(): React.JSX.Element {
 						refreshing={false}
 					/>
 				</View>
-			) : isSuccess && data !== null ? (
+			) : isSuccess && !hasNews ? (
+				<EmptyEventsAnimation
+					title={t('pages.news.noNews.title')}
+					subtitle={t('pages.news.noNews.subtitle')}
+				/>
+			) : isSuccess && hasNews ? (
 				<FlatList
 					data={data}
 					refreshControl={

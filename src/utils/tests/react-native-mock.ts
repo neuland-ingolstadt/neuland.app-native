@@ -52,5 +52,5 @@ export function buildReactNativeMock() {
 }
 
 export function mockReactNative() {
-	mock.module('react-native', () => buildReactNativeMock())
+	void mock.module('react-native', () => buildReactNativeMock())
 }

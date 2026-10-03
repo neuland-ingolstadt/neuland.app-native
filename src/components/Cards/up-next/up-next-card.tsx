@@ -9,7 +9,11 @@ import Divider from '@/components/Universal/divider'
 import { USER_GUEST } from '@/data/constants'
 import { useNow } from '@/hooks/useNow'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { loadTimetable } from '@/utils/timetable-utils'
+import {
+	loadTimetable,
+	TIMETABLE_GC_TIME_MS,
+	TIMETABLE_STALE_TIME_MS
+} from '@/utils/timetable-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import {
 	getEventStatus,
@@ -37,8 +41,8 @@ export default function UpNextCard(): React.JSX.Element {
 	} = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
-		staleTime: 10 * 60 * 1000,
-		gcTime: 24 * 60 * 60 * 1000,
+		staleTime: TIMETABLE_STALE_TIME_MS,
+		gcTime: TIMETABLE_GC_TIME_MS,
 		enabled: userKind !== USER_GUEST,
 		retry(failureCount, queryError) {
 			return (

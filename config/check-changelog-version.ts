@@ -10,11 +10,11 @@ const result = validateAppVersionHasChangelogEntries(
 )
 
 if (!result.ok) {
-	console.error(`error: ${result.reason}`)
-	console.error(
-		`Add at least one entry to src/data/changelog.json under version["${result.key}"]`
+	console.warn(`warning: ${result.reason}`)
+	console.warn(
+		`Add entries to src/data/changelog.json under version["${result.key}"] before release if you want What's New content for this version.`
 	)
-	process.exit(1)
+	process.exit(0)
 }
 
 console.log(

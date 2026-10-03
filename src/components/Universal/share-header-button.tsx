@@ -1,11 +1,13 @@
-import Color from 'color'
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+import {
+	IosGlassSurface,
+	iosGlassHairlineBorder
+} from '@/components/Universal/ios-glass-surface'
 import { toColor } from '@/utils/uniwind-utils'
 import PlatformIcon from './icon'
 
@@ -29,41 +31,56 @@ const iosGlassButtonStyle = {
 	width: 44
 } as const
 
+const iosGlassButtonCompactStyle = {
+	alignItems: 'center',
+	borderRadius: 20,
+	height: 40,
+	justifyContent: 'center',
+	overflow: 'hidden',
+	width: 40
+} as const
+
 interface IosGlassHeaderButtonProps {
 	icon: 'close' | 'share'
 	label: string
 	onPress: () => void | Promise<void>
+	testID?: string
+	shareCopied?: boolean
+	/** Smaller glass chrome for dense sheet headers. */
+	compact?: boolean
 }
 
 export function IosGlassHeaderButton({
 	icon,
 	label,
-	onPress
+	onPress,
+	testID,
+	shareCopied = false,
+	compact = false
 }: IosGlassHeaderButtonProps): React.JSX.Element {
 	const labelColor = String(
 		toColor(useCSSVariable('--color-label')) ?? '#606062'
 	)
 	const cardColor = String(toColor(useCSSVariable('--color-card')) ?? '#ffffff')
-	const glassStyle = [
-		iosGlassButtonStyle,
-		{
-			borderColor: Color(labelColor).alpha(0.22).string(),
-			borderWidth: StyleSheet.hairlineWidth
-		}
-	]
+	const buttonStyle = compact ? iosGlassButtonCompactStyle : iosGlassButtonStyle
+	const glassStyle = [buttonStyle, iosGlassHairlineBorder(labelColor)]
+	const shareIconName = shareCopied ? 'checkmark' : 'square.and.arrow.up'
+	const shareIconSize = compact ? 16 : 19
+	const closeIconSize = compact ? 13 : 15
+
 	const button = (
 		<Pressable
-			testID={`${icon}-header-button`}
+			testID={testID ?? `${icon}-header-button`}
 			accessible
 			accessibilityRole="button"
 			accessibilityLabel={label}
 			onPress={() => void onPress()}
-			style={iosGlassButtonStyle}
+			style={buttonStyle}
 		>
 			<PlatformIcon
 				ios={{
-					name: icon === 'share' ? 'square.and.arrow.up' : 'xmark',
-					size: icon === 'share' ? 19 : 15,
+					name: icon === 'share' ? shareIconName : 'xmark',
+					size: icon === 'share' ? shareIconSize : closeIconSize,
 					weight: icon === 'share' ? 'bold' : 'semibold'
 				}}
 				android={{ name: icon === 'share' ? 'share' : 'close', size: 20 }}
@@ -73,21 +90,14 @@ export function IosGlassHeaderButton({
 		</Pressable>
 	)
 
-	if (Platform.OS === 'ios' && isGlassEffectAPIAvailable()) {
-		return (
-			<GlassView
-				glassEffectStyle="regular"
-				isInteractive
-				style={glassStyle}
-				tintColor={Color(cardColor).alpha(0.45).string()}
-			>
-				{button}
-			</GlassView>
-		)
-	}
-
 	return (
-		<View style={[glassStyle, { backgroundColor: cardColor }]}>{button}</View>
+		<IosGlassSurface
+			isInteractive
+			fallbackBackgroundColor={cardColor}
+			style={glassStyle}
+		>
+			{button}
+		</IosGlassSurface>
 	)
 }
 

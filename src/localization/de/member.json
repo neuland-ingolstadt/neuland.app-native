@@ -49,20 +49,25 @@
 		}
 	},
 	"qrCode": {
-		"tapToClose": "Tippe irgendwo zum Schließen"
+		"tapToClose": "Tippe irgendwo zum Schließen",
+		"verifyScannerHint": "Ausweis eines anderen Mitglieds prüfen?",
+		"verifyScannerAction": "Scanner öffnen"
 	},
 	"securityWarning": {
-		"title": "Sicherheitshinweis",
-		"warningText": "Bevor du deinen Pass zum Wallet hinzufügst, beachte bitte:",
+		"title": "Dein Wallet-Pass",
+		"warningText": "Kurz zur Info, bevor du ihn hinzufügst:",
 		"points": {
-			"security": "Nur die App verwendet erweiterte Sicherheitsfunktionen",
-			"qrCode": "Einige Events erfordern speziell den QR-Code der App",
-			"semester": "Der Wallet-Pass ist nur für das aktuelle Semester gültig"
+			"security": "In der App stehen dir zusätzliche Sicherheitsfunktionen zur Verfügung",
+			"qrCode": "Bei manchen Events wird der QR-Code aus der App gescannt",
+			"semester": "Der Pass gilt für das aktuelle Semester"
 		},
 		"buttons": {
-			"useAppInstead": "App verwenden",
-			"addToWallet": "Zu Wallet hinzufügen"
-		}
+			"useAppInstead": "Abbrechen",
+			"addToWallet": "Zu Wallet hinzufügen",
+			"showInWallet": "In Wallet anzeigen"
+		},
+		"alreadyInWallet": "Pass ist bereits in Wallet",
+		"addFailed": "Pass konnte nicht zu Wallet hinzugefügt werden"
 	},
 	"logout": {
 		"button": "Abmelden",
@@ -94,7 +99,6 @@
 		"checkOutError": "Auschecken fehlgeschlagen",
 		"checkInSuccess": "Im Büro eingecheckt",
 		"checkOutSuccess": "Büro verlassen",
-		"toggleDisabled": "Büro-Check-in ist nicht verfügbar",
 		"toggleError": "Bürostatus konnte nicht aktualisiert werden",
 		"disclaimer": "Angaben basieren auf freiwilligen Einträgen und können von der tatsächlichen Belegung abweichen."
 	}

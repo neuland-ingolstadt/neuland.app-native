@@ -59,11 +59,11 @@ export const MapSearchBar = ({
 	const width = t('misc.cancel').length * 11
 
 	return (
-		<View className="flex-row h-10 mb-2.5 mt-1">
+		<View className="flex-row items-center mb-2.5 mt-1 min-h-11">
 			<TextInput
 				testID="map-search-input"
 				ref={inputRef}
-				className="bg-card rounded-mg flex-1 text-[17px] h-11 mb-2.5 px-2.5 border-hairline border-border"
+				className="bg-card rounded-mg flex-1 text-[17px] h-11 px-2.5 border-hairline border-border"
 				style={{
 					color: textColor
 				}}

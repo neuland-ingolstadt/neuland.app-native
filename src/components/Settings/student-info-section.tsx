@@ -12,6 +12,7 @@ interface StudentInfoSectionProps {
 
 export default function StudentInfoSection({
 	ects,
+	// biome-ignore lint: temporary disabled
 	printerBalance,
 	personalLecturersCount
 }: StudentInfoSectionProps): React.JSX.Element {

@@ -102,6 +102,23 @@ export default {
 	},
 	plugins: [
 		[
+			'expo-build-properties',
+			{
+				ios: {
+					enableSceneSupport: true
+				}
+			}
+		],
+		[
+			// Hide floating Dev Tools FAB / onboarding overlays that block Maestro taps.
+			'expo-dev-client',
+			{
+				toolsButton: false,
+				skipOnboarding: true,
+				showMenuAtLaunch: false
+			}
+		],
+		[
 			'expo-router',
 			{
 				headOrigin: 'https://web.neuland.app',
@@ -272,8 +289,13 @@ export default {
 		description:
 			'Neuland Next ist deine App für die TH Ingolstadt, entwickelt von Studierenden für Studierende. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.',
 		lang: 'de',
-		themeColor: '#007aff',
-		darkThemeColor: '#0e83fd',
+		dir: 'ltr',
+		startUrl: '.',
+		display: 'standalone',
+		backgroundColor: '#f2f2f2',
+		// theme-color is set in public/index.html (light/dark media queries) and
+		// updated at runtime from src/app/_layout.tsx to match the active app theme.
+		barStyle: 'black-translucent',
 		preferRelatedApplications: true,
 		output: 'single',
 		bundler: 'metro'

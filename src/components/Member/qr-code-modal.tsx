@@ -13,8 +13,9 @@ import {
 } from 'react-native'
 import QRCode from 'react-qr-code'
 import { useCSSVariable } from 'uniwind'
-import PlatformIcon from '@/components/Universal/icon'
 import { toColor } from '@/utils/uniwind-utils'
+
+const MEMBER_ID_SCANNER_URL = 'https://connect.neuland.ing/scanner'
 
 interface QRCodeModalProps {
 	visible: boolean
@@ -41,6 +42,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 }: QRCodeModalProps): React.JSX.Element {
 	const { t } = useTranslation('member')
 	const textColor = toColor(useCSSVariable('--color-text'))
+	const neulandGreen = toColor(useCSSVariable('--color-neuland-green'))
 	const [isClosing, setIsClosing] = useState(false)
 	const scaleAnim = useRef(new Animated.Value(0)).current
 	const pulseAnim = useRef(new Animated.Value(0)).current
@@ -82,14 +84,14 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 				height: 400,
 				borderRadius: 200,
 				borderWidth: 2,
-				borderColor: '#00ff33'
+				borderColor: neulandGreen
 			},
 			{
 				transform: [{ scale: pulseScale }],
 				opacity: pulseOpacity
 			}
 		],
-		[pulseScale, pulseOpacity]
+		[pulseScale, pulseOpacity, neulandGreen]
 	)
 
 	const outerRingStyle = useMemo(
@@ -100,14 +102,14 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 				height: 500,
 				borderRadius: 250,
 				borderWidth: 1,
-				borderColor: '#00ff33'
+				borderColor: neulandGreen
 			},
 			{
 				transform: [{ scale: pulseScale }],
 				opacity: outerPulseOpacity
 			}
 		],
-		[pulseScale, outerPulseOpacity]
+		[pulseScale, outerPulseOpacity, neulandGreen]
 	)
 
 	const modalContentStyle = useMemo(
@@ -136,7 +138,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 		setIsClosing(true)
 
 		if (Platform.OS === 'ios') {
-			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 		}
 
 		if (pulseAnimationRef.current) {
@@ -173,7 +175,7 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 			setIsClosing(false)
 
 			if (Platform.OS === 'ios') {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+				void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 			}
 
 			const pulseLoop = Animated.loop(
@@ -268,30 +270,21 @@ export const QRCodeModal = React.memo(function QRCodeModal({
 				</Animated.View>
 
 				<Pressable
-					className="absolute top-[70px] right-[15px] z-10"
-					hitSlop={15}
+					className="absolute bottom-12 z-10 max-w-[340px] px-8 items-center active:opacity-70"
+					hitSlop={12}
+					accessibilityRole="link"
+					accessibilityHint={t('qrCode.verifyScannerAction')}
 					onPress={(e) => {
 						e.stopPropagation()
-						void Linking.openURL('http://id.neuland-ingolstadt.de/learn-more')
+						void Linking.openURL(MEMBER_ID_SCANNER_URL)
 					}}
 				>
-					<PlatformIcon
-						style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-						ios={{
-							name: 'questionmark.circle',
-							size: 20,
-							variableValue: 1
-						}}
-						android={{
-							name: 'help',
-							size: 25,
-							variant: 'outlined'
-						}}
-						web={{
-							name: 'CircleQuestionMark',
-							size: 25
-						}}
-					/>
+					<Text className="text-white/65 text-[15px] text-center leading-5">
+						{t('qrCode.verifyScannerHint')}
+					</Text>
+					<Text className="mt-1.5 text-white text-[15px] font-semibold text-center">
+						{t('qrCode.verifyScannerAction')}
+					</Text>
 				</Pressable>
 			</Pressable>
 		</Modal>

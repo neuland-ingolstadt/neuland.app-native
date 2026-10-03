@@ -8,6 +8,17 @@ export const isIos26OrLater = (): boolean => {
 }
 
 /**
+ * Compact navigation-bar height for iOS form sheets.
+ * Matches expo-router's `getDefaultHeaderHeight` for iPhone modal presentation.
+ *
+ * Native `useHeaderHeight()` often reports 0 here: expo-router defaults
+ * iOS 26 form sheets to an absolutely positioned overlay header, then the
+ * native height event overwrites the default with 0. Without a fallback,
+ * share/title/close covers the first content rows on every bottom card.
+ */
+export const IOS_26_FORM_SHEET_HEADER_HEIGHT = 56
+
+/**
  * Hook that provides the appropriate header padding for transparent headers on iOS 26+
  * Returns 0 padding for non-iOS or iOS < 26, and proper safe area + header padding for iOS 26+
  */
@@ -37,8 +48,19 @@ export const useTransparentHeaderStyle = () => {
 	}
 }
 
+export const getFormSheetHeaderPadding = (
+	headerHeight: number,
+	ios26OrLater = isIos26OrLater()
+): number => {
+	if (!ios26OrLater) {
+		return 0
+	}
+
+	return Math.max(headerHeight, IOS_26_FORM_SHEET_HEADER_HEIGHT)
+}
+
 export const useFormSheetHeaderPadding = (): number => {
 	const headerHeight = useHeaderHeight()
 
-	return isIos26OrLater() ? headerHeight : 0
+	return getFormSheetHeaderPadding(headerHeight)
 }

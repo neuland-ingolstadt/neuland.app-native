@@ -110,7 +110,7 @@ export default function Version(): React.JSX.Element {
 					])
 		].join('\n')
 
-		copyToClipboard(info, '')
+		void copyToClipboard(info, '')
 	}
 
 	const sections: FormListSections[] = [

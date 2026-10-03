@@ -213,9 +213,25 @@ const LoginForm = ({
 	const signInDisabled =
 		username.trim() === '' || password.trim() === '' || loading
 
-	const textInputStyle = useResolveClassNames(
-		'flex-1 text-text text-base py-3 ml-2'
-	)
+	const textInputStyle = useResolveClassNames('flex-1 text-text text-base ml-2')
+	const textInputPlatformStyle = Platform.select({
+		ios: {
+			height: 44,
+			lineHeight: 20,
+			paddingTop: 11,
+			paddingBottom: 11
+		},
+		android: {
+			height: 44,
+			paddingVertical: 0,
+			textAlignVertical: 'center' as const,
+			includeFontPadding: false
+		},
+		default: {
+			height: 44,
+			paddingVertical: 0
+		}
+	})
 	const inputWrapperStyle = useResolveClassNames(
 		'flex-row items-center bg-input-background rounded-sm border-hairline border-border px-3'
 	)
@@ -267,7 +283,7 @@ const LoginForm = ({
 						/>
 						<TextInput
 							testID="login-username"
-							style={textInputStyle}
+							style={[textInputStyle, textInputPlatformStyle]}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
 							defaultValue={username}
@@ -296,7 +312,7 @@ const LoginForm = ({
 						/>
 						<TextInput
 							testID="login-password"
-							style={textInputStyle}
+							style={[textInputStyle, textInputPlatformStyle]}
 							selectionColor={primaryColor}
 							placeholderTextColor={labelColor}
 							placeholder={t('login.password')}

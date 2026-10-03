@@ -1,19 +1,15 @@
-import { Redirect, router, Stack } from 'expo-router'
+import { Redirect, Stack } from 'expo-router'
 import { HeaderTitle } from 'expo-router/react-navigation'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Text, View } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import FormList from '@/components/Universal/form-list'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { useFormSheetHeaderPadding } from '@/hooks/useTransparentHeader'
+import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { FormListSections } from '@/types/components'
+import { openMapRoom } from '@/utils/map-actions'
 import { toColor } from '@/utils/uniwind-utils'
 
 export default function LecturerDetail(): React.JSX.Element {
@@ -22,31 +18,8 @@ export default function LecturerDetail(): React.JSX.Element {
 	const textColor = toColor(useCSSVariable('--color-text'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
-	const scrollOffset = useSharedValue(0)
-	const scrollHandler = useAnimatedScrollHandler({
-		onScroll: (event) => {
-			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
-				scrollOffset.value = event.contentOffset.y
-			}
-		}
-	})
-
-	const headerStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: interpolate(
-						scrollOffset.value,
-						[0, 30, 65],
-						[25, 25, 0],
-						'clamp'
-					)
-				}
-			]
-		}
-	})
-	const formSheetHeaderPadding = useFormSheetHeaderPadding()
-
+	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
+		useSheetDetailScroll()
 	if (lecturer == null) {
 		return <Redirect href="/lecturers" />
 	}
@@ -99,11 +72,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					textColor: primaryColor,
 					onPress: () => {
 						if (lecturer?.room_short) {
-							router.dismiss()
-							router.push({
-								pathname: '/(tabs)/map',
-								params: { room: lecturer.room_short }
-							})
+							openMapRoom(lecturer.room_short)
 						}
 					}
 				},
@@ -148,7 +117,7 @@ export default function LecturerDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			className="px-page"
 			contentContainerClassName="gap-3 pb-modal-bottom"
-			contentContainerStyle={{ paddingTop: formSheetHeaderPadding }}
+			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 			onScroll={scrollHandler}
 			scrollEventThrottle={16}
 		>
