@@ -29,9 +29,9 @@ export const storageMock = {
 		}
 	},
 	appStorage: {
-		set: () => {},
-		remove: () => {},
-		getBoolean: () => false
+		set: (_key: string, _value: boolean) => {},
+		remove: (_key: string) => {},
+		getBoolean: (_key: string): boolean | undefined => false
 	}
 }
 
