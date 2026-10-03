@@ -14,10 +14,25 @@ const PADDING = 16
 const LOADING_TIMEOUT = 100
 const BOTTOM_PADDING = 80
 
-const decodeHtmlEntities = (html: string): string => {
-	const textarea = document.createElement('textarea')
-	textarea.innerHTML = html
-	return textarea.value
+const htmlToPlainText = (html: string): string => {
+	const doc = new DOMParser().parseFromString(html, 'text/html')
+
+	for (const el of doc.querySelectorAll('br')) {
+		el.replaceWith(doc.createTextNode('\n'))
+	}
+	for (const el of doc.querySelectorAll('li')) {
+		el.prepend(doc.createTextNode('\n• '))
+	}
+	for (const el of doc.querySelectorAll('h1, h2, h3')) {
+		el.prepend(doc.createTextNode('\n\n'))
+		el.append(doc.createTextNode('\n'))
+	}
+	for (const el of doc.querySelectorAll('p')) {
+		el.prepend(doc.createTextNode('\n'))
+		el.append(doc.createTextNode('\n'))
+	}
+
+	return (doc.body.textContent ?? '').replace(/\n\s*\n\s*\n/g, '\n\n').trim()
 }
 
 export default function NotesDetails(): React.JSX.Element {
@@ -113,23 +128,7 @@ export default function NotesDetails(): React.JSX.Element {
 	}, [timeoutId])
 
 	if (Platform.OS === 'web') {
-		const plainTextContent = sanitizedHtml
-			.replace(
-				/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gi,
-				(_match, content) => `\n\n${decodeHtmlEntities(content)}\n`
-			)
-			.replace(
-				/<p[^>]*>(.*?)<\/p>/gi,
-				(_match, content) => `\n${decodeHtmlEntities(content)}\n`
-			)
-			.replace(/<br\s*\/?>/gi, '\n')
-			.replace(
-				/<li[^>]*>(.*?)<\/li>/gi,
-				(_match, content) => `\n• ${decodeHtmlEntities(content)}`
-			)
-			.replace(/<[^>]*>/g, '')
-			.replace(/\n\s*\n\s*\n/g, '\n\n')
-			.trim()
+		const plainTextContent = htmlToPlainText(sanitizedHtml)
 
 		return (
 			<ScrollView
