@@ -12,13 +12,21 @@ import type { FeatureProperties } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
 import type { NormalizedLecturer } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
+import {
+	LECTURER_GC_TIME_MS,
+	LECTURER_STALE_TIME_MS,
+	normalizeLecturers
+} from '@/utils/lecturers-utils'
 import { getIcon } from '@/utils/map-actions'
 import { FLOOR_SUBSTITUTES, getBuildingCodes } from '@/utils/map-constants'
 import { getCenter, getCenterSingle } from '@/utils/map-geometry-utils'
 import { filterRooms, getRoomOpenings } from '@/utils/map-room-utils'
 import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
-import { loadTimetable } from '@/utils/timetable-utils'
+import {
+	loadTimetable,
+	TIMETABLE_GC_TIME_MS,
+	TIMETABLE_STALE_TIME_MS
+} from '@/utils/timetable-utils'
 import { useMapOverlayQuery } from './useMapOverlayQuery'
 
 export function useMapQueries(): {
@@ -50,8 +58,8 @@ export function useMapQueries(): {
 	const { data: timetable } = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+		staleTime: TIMETABLE_STALE_TIME_MS,
+		gcTime: TIMETABLE_GC_TIME_MS,
 		retry(failureCount, error) {
 			const ignoreErrors = [
 				'"Time table does not exist" (-202)',
@@ -71,8 +79,8 @@ export function useMapQueries(): {
 			const rawData = await API.getLecturers('0', 'z')
 			return normalizeLecturers(rawData)
 		},
-		staleTime: 1000 * 60 * 30, // 30 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+		staleTime: LECTURER_STALE_TIME_MS,
+		gcTime: LECTURER_GC_TIME_MS,
 		enabled: userKind !== USER_GUEST
 	})
 
