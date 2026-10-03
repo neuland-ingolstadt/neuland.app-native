@@ -127,7 +127,7 @@ export default function NotesDetails(): React.JSX.Element {
 				/<li[^>]*>(.*?)<\/li>/gi,
 				(_match, content) => `\n• ${decodeHtmlEntities(content)}`
 			)
-			.replace(/<(?:.|\n)*?>/gm, '')
+			.replace(/<[^>]*>/g, '')
 			.replace(/\n\s*\n\s*\n/g, '\n\n')
 			.trim()
 
