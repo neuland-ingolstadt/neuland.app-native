@@ -28,8 +28,9 @@ export const modalSection = (
 			(roomData.properties !== null && roomData.properties !== undefined))
 	) {
 		const occupancies = roomData.occupancies as AvailableRoom
+		const showAvailability = !isGuest && roomData.availabilityTracked === true
 		return [
-			...(!isGuest
+			...(showAvailability
 				? [
 						{
 							header: t('pages.map.details.room.availability', {

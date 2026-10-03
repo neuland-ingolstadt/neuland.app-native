@@ -269,6 +269,10 @@ export function getRoomData(
 	const openings = roomOpenings?.[room]
 	const now = new Date()
 	const nextAvailable = openings?.find((o) => o.from > now) ?? null
+	// THI only reports bookable rooms (Hörsäle, Seminaräume, PC-Pools, …).
+	// Toilets, offices, corridors, etc. never appear — hide Verfügbarkeit for those.
+	const availabilityTracked =
+		occupancies != null || (openings != null && openings.length > 0)
 
 	return {
 		title: room,
@@ -281,6 +285,7 @@ export function getRoomData(
 		properties,
 		occupancies,
 		nextAvailable,
+		availabilityTracked,
 		type: SEARCH_TYPES.ROOM
 	} as RoomData
 }

@@ -603,8 +603,36 @@ describe('map-screen-utils', () => {
 		const occupancies = result.occupancies as { room?: string } | null
 		expect(occupancies?.room).toBe('G101')
 		expect(result.nextAvailable?.from).toEqual(roomOpenings.G101[1].from)
+		expect(result.availabilityTracked).toBe(true)
 		expect(result.type).toBe(SEARCH_TYPES.ROOM)
 		expect(result.properties?.Raum).toBe('G101')
+	})
+
+	it('getRoomData - Should not track availability for rooms outside THI free-room data', () => {
+		const result = getRoomData('G001', null, featureCollection, i18nEn, t, {})
+
+		expect(result.title).toBe('G001')
+		expect(result.occupancies).toBeUndefined()
+		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(false)
+	})
+
+	it('getRoomData - Should track availability when openings exist but room is occupied', () => {
+		const now = new Date()
+		const result = getRoomData('G101', null, featureCollection, i18nEn, t, {
+			G101: [
+				{
+					type: 'Lecture hall',
+					from: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+					until: new Date(now.getTime() - 60 * 60 * 1000),
+					capacity: 120
+				}
+			]
+		})
+
+		expect(result.occupancies).toBeUndefined()
+		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(true)
 	})
 
 	it('getRoomData - Should skip openings that have already started', () => {
@@ -650,6 +678,7 @@ describe('map-screen-utils', () => {
 		expect(result.subtitle).toBe('fallback:misc.unknown')
 		expect(result.occupancies).toBeUndefined()
 		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(false)
 	})
 
 	it('getBuildingData - Should count total and available rooms for a building', () => {
