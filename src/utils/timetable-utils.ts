@@ -8,6 +8,7 @@ import type {
 	TimetableSections
 } from '@/types/utils'
 import { combineDateTime } from './date-utils'
+import { parseLecturerIds } from './lecturers-utils'
 
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
@@ -77,6 +78,8 @@ export async function getFriendlyTimetable(
 					.sort((a, b) => a.localeCompare(b))
 			}
 
+			const lecturerIds = parseLecturerIds(lecture.details.dozent_id)
+
 			return {
 				date: lecture.date,
 				startDate,
@@ -85,6 +88,7 @@ export async function getFriendlyTimetable(
 				shortName: lecture.details.veranstaltung.split(' - ')[0],
 				rooms: rooms.filter((room) => room !== ''),
 				lecturer: lecture.details.dozent,
+				lecturerIds,
 				exam: lecture.details.pruefung,
 				course: lecture.details.stg,
 				studyGroup: lecture.details.stgru,
@@ -244,6 +248,10 @@ export function generateKey(
 export const isValidRoom = (room: string): boolean => {
 	return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room)
 }
+
+/** Keep cancellations / room changes visible without relying on pull-to-refresh. */
+export const TIMETABLE_STALE_TIME_MS = 1000 * 60 * 5 // 5 minutes
+export const TIMETABLE_GC_TIME_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
 
 /**
  * Load the timetable
