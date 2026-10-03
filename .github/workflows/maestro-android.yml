@@ -94,6 +94,10 @@ jobs:
     needs: build-android
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: read
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -144,6 +148,12 @@ jobs:
           # each line as its own `sh -c` (breaks if/for/fi).
           script: bash config/ci/run-maestro-android-emulator.sh
 
+      - name: Publish Maestro report
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/maestro-report
+        with:
+          check-name: Maestro Android Results
+
       - name: Upload Maestro artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -151,6 +161,7 @@ jobs:
           name: maestro-android-${{ github.run_id }}
           path: |
             ~/.maestro/tests
+            maestro-results
             /tmp/maestro-android-metro.log
           if-no-files-found: ignore
           retention-days: 14

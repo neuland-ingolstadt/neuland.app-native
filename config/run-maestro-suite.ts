@@ -1,3 +1,6 @@
+import { mkdirSync } from 'node:fs'
+import { join } from 'node:path'
+
 const commonFlows = [
 	'onboarding-guest',
 	'guest-navigation',
@@ -25,6 +28,7 @@ const devServerHost =
 	process.env.DEV_SERVER_HOST ?? (suite === 'android' ? '10.0.2.2' : 'localhost')
 const devServerAddress = `${devServerHost}:8081`
 const DEV_CLIENT_URL = `exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081&disableOnboarding=1`
+const resultsDir = process.env.MAESTRO_JUNIT_DIR ?? join('maestro-results', suite)
 
 interface SimctlDevice {
 	name: string
@@ -107,6 +111,10 @@ function runFlow(flow: string, deviceId: string, retry = false): boolean {
 			'--device',
 			deviceId,
 			'--config=.maestro/config.yaml',
+			'--format',
+			'junit',
+			'--output',
+			join(resultsDir, `${flow}.xml`),
 			'-e',
 			`APP_ID=${appId}`,
 			'-e',
@@ -126,6 +134,37 @@ function runFlow(flow: string, deviceId: string, retry = false): boolean {
 	return result.success
 }
 
+async function writeJobSummary(failedFlows: readonly string[]): Promise<void> {
+	const summaryPath = process.env.GITHUB_STEP_SUMMARY
+	if (summaryPath == null) {
+		return
+	}
+
+	const passed = flows.length - failedFlows.length
+	const status = failedFlows.length === 0 ? 'passed' : 'failed'
+	const lines = [
+		`## Maestro ${suite} suite`,
+		'',
+		`**Result:** ${status} · ${passed}/${flows.length} passed`,
+		'',
+		'| Flow | Status |',
+		'| --- | --- |',
+		...flows.map((flow) => `| \`${flow}\` | ${failedFlows.includes(flow) ? '❌ failed' : '✅ passed'} |`),
+		''
+	]
+
+	if (failedFlows.length > 0) {
+		lines.push('### Failures', '', ...failedFlows.map((flow) => `- \`${flow}\``), '')
+	}
+
+	const existing = (await Bun.file(summaryPath).exists())
+		? await Bun.file(summaryPath).text()
+		: ''
+	await Bun.write(summaryPath, `${existing}${lines.join('\n')}`)
+}
+
+mkdirSync(resultsDir, { recursive: true })
+
 const skipIosSimulatorRestart = process.env.MAESTRO_SKIP_SIMULATOR_RESTART === '1'
 let deviceId = process.env.MAESTRO_DEVICE_ID
 
@@ -136,7 +175,7 @@ if (deviceId == null) {
 			: skipIosSimulatorRestart
 				? getBootedIosSimulator()?.udid
 				: restartBootedIosSimulator()?.udid
-	} else if (suite !== 'android' && !skipIosSimulatorRestart) {
+} else if (suite !== 'android' && !skipIosSimulatorRestart) {
 	restartBootedIosSimulator()
 }
 
@@ -156,6 +195,8 @@ if (
 	console.log(`\nRetrying ${failures.length} failed iOS flow(s) with a fresh XCTest service.`)
 	failures = failures.filter((flow) => !runFlow(flow, deviceId, true))
 }
+
+await writeJobSummary(failures)
 
 if (failures.length > 0) {
 	console.error(`\n${failures.length}/${flows.length} Maestro flows failed:`)
