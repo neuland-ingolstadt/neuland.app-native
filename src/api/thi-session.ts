@@ -6,26 +6,20 @@ import {
 	storage
 } from '@/utils/storage'
 
-import API from './anonymous-api'
+import API, { APIError } from './thi-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
-// List of known session-related error messages for more precise detection
-const SESSION_ERROR_PATTERNS = [
-	/session/i,
-	/login/i,
-	/authentication/i,
-	/not authorized/i,
-	/unauthorized/i,
-	/wrong credentials/i
-]
+/** Known THI / app messages that mean the session token is dead or credentials failed. */
+const SESSION_ERROR_MARKERS = [
+	'no session',
+	'session is over',
+	'wrong credentials',
+	'not authenticated',
+	'not authorized'
+] as const
 
-/**
- * Checks if an error is related to session issues
- */
-const isSessionError = (error: Error): boolean => {
-	return SESSION_ERROR_PATTERNS.some((pattern) => pattern.test(error.message))
-}
+let refreshInFlight: Promise<string> | null = null
 
 /**
  * Thrown when the user is not logged in.
@@ -42,6 +36,95 @@ export class NoSessionError extends Error {
 export class UnavailableSessionError extends Error {
 	constructor() {
 		super('User is logged in as guest')
+	}
+}
+
+function errorText(error: Error): string {
+	if (error instanceof APIError) {
+		const data =
+			typeof error.data === 'string' ? error.data : JSON.stringify(error.data)
+		return `${data} ${error.message}`.toLowerCase()
+	}
+	return error.message.toLowerCase()
+}
+
+/**
+ * Checks if an error is related to session issues
+ */
+const isSessionError = (error: Error): boolean => {
+	const text = errorText(error)
+	return SESSION_ERROR_MARKERS.some((marker) => text.includes(marker))
+}
+
+function normalizeUsername(username: string): string {
+	return username.replace(/@thi\.de$/i, '').replace(/\s/g, '')
+}
+
+async function loadCredentials(): Promise<{
+	username: string
+	password: string
+} | null> {
+	const [rawUsername, password] = await Promise.all([
+		loadSecureAsync('username'),
+		loadSecureAsync('password')
+	])
+
+	if (rawUsername == null || rawUsername === '') {
+		return null
+	}
+	if (password == null || password === '') {
+		return null
+	}
+
+	return {
+		username: normalizeUsername(rawUsername),
+		password
+	}
+}
+
+/**
+ * Logs in once and persists the new session. Concurrent callers share the same promise.
+ */
+async function refreshSession(
+	username: string,
+	password: string
+): Promise<string> {
+	if (refreshInFlight != null) {
+		return refreshInFlight
+	}
+
+	refreshInFlight = (async () => {
+		console.debug('Refreshing THI session...')
+		const { session, isStudent } = await API.login(username, password)
+
+		if (typeof session !== 'string') {
+			throw new Error('Session is not a string')
+		}
+
+		await saveSecureAsync('session', session)
+		storage.set('sessionCreated', Date.now().toString())
+		storage.set('isStudent', isStudent.toString())
+		return session
+	})().finally(() => {
+		refreshInFlight = null
+	})
+
+	return refreshInFlight
+}
+
+async function refreshOrThrow(): Promise<string> {
+	const credentials = await loadCredentials()
+	if (credentials == null) {
+		throw new NoSessionError()
+	}
+
+	try {
+		return await refreshSession(credentials.username, credentials.password)
+	} catch (loginError) {
+		if (loginError instanceof Error && isSessionError(loginError)) {
+			throw new NoSessionError()
+		}
+		throw loginError
 	}
 }
 
@@ -88,6 +171,8 @@ export async function createGuestSession(forget = true): Promise<void> {
  * Calls a method with a session. If the session turns out to be invalid,
  * it attempts to fetch a new session and calls the method again.
  *
+ * Concurrent refreshes share a single in-flight login (single-flight).
+ *
  * If a session cannot be obtained, a NoSessionError is thrown.
  *
  * @param {object} method Method which will receive the session token
@@ -97,10 +182,6 @@ export async function callWithSession<T>(
 	method: (session: string) => Promise<T>
 ): Promise<T> {
 	const session = await loadSecureAsync('session')
-	const sessionCreated = Number.parseInt(
-		storage.getString('sessionCreated') ?? '0',
-		10
-	)
 
 	if (session == null) {
 		throw new NoSessionError()
@@ -109,88 +190,32 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	let [username, password] = await Promise.all([
-		loadSecureAsync('username'),
-		loadSecureAsync('password')
-	])
+	const sessionCreated = Number.parseInt(
+		storage.getString('sessionCreated') ?? '0',
+		10
+	)
+	const isExpired = sessionCreated + SESSION_EXPIRES < Date.now()
 
-	if (Platform.OS === 'web') {
-		if (session === 'guest' || session == null) {
-			throw new NoSessionError()
-		}
-	} else {
-		if (username === null || username === '') {
-			throw new UnavailableSessionError()
-		}
-
-		if (password === null || password === '') {
-			throw new UnavailableSessionError()
-		}
-	}
-
-	// adresses prior bug where username is an email address
-	username = username?.replace(/@thi\.de$/, '') ?? null
-	username = username?.replace(/\s/g, '') ?? null
-
-	if (
-		sessionCreated + SESSION_EXPIRES < Date.now() &&
-		username != null &&
-		password != null
-	) {
-		try {
+	if (isExpired) {
+		const credentials = await loadCredentials()
+		if (credentials != null) {
 			console.debug('Old session expired, logging in again...')
-			const { session: newSession, isStudent } = await API.login(
-				username,
-				password
-			)
-			const updatedSession = newSession
-
-			await saveSecureAsync('session', updatedSession)
-			storage.set('sessionCreated', Date.now().toString())
-			storage.set('isStudent', isStudent.toString())
-
-			return await method(updatedSession)
-		} catch (loginError) {
-			if (loginError instanceof Error && isSessionError(loginError)) {
-				throw new NoSessionError()
-			}
-			throw loginError // Re-throw the original error
+			const newSession = await refreshOrThrow()
+			return await method(newSession)
 		}
 	}
 
-	// otherwise attempt to call the method and see if it throws a session error
 	try {
-		if (session !== null) {
-			return await method(session)
-		}
+		return await method(session)
 	} catch (e: unknown) {
-		// the backend can throw different errors such as 'No Session' or 'Session Is Over'
-		if (e instanceof Error && isSessionError(e)) {
-			if (username != null && password != null) {
-				console.debug('Received a session error, trying to get a new session!')
-				try {
-					const { session: newSession, isStudent } = await API.login(
-						username,
-						password
-					)
-					const updatedSession = newSession
-					await saveSecureAsync('session', updatedSession)
-					storage.set('sessionCreated', Date.now().toString())
-					storage.set('isStudent', isStudent.toString())
-
-					return await method(updatedSession)
-				} catch (loginError) {
-					if (loginError instanceof Error && isSessionError(loginError)) {
-						throw new NoSessionError()
-					}
-					throw loginError
-				}
-			}
-			throw new NoSessionError()
+		if (!(e instanceof Error) || !isSessionError(e)) {
+			throw e
 		}
-		throw e
+
+		console.debug('Received a session error, trying to get a new session!')
+		const newSession = await refreshOrThrow()
+		return await method(newSession)
 	}
-	return undefined as never
 }
 
 /**

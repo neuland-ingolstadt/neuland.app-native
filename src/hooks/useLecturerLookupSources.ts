@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { use } from 'react'
-import API from '@/api/authenticated-api'
+import API from '@/api/thi-authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import type { NormalizedLecturer } from '@/types/utils'

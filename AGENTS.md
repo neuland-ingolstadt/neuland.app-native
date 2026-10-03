@@ -156,11 +156,11 @@ unless you are explicitly updating the script itself.
 src/
 ├── __generated__/        # GraphQL codegen output — NEVER edit by hand
 ├── api/                  # API clients (fetch + GraphQL)
-│   ├── anonymous-api.ts        # THI REST API, no auth
-│   ├── authenticated-api.ts    # THI REST API, with session
-│   ├── neuland-api.ts          # Neuland GraphQL + Campus Life REST
-│   ├── thi-session-handler.ts  # Session lifecycle
-│   └── gql-documents.ts        # GraphQL query strings
+│   ├── thi-api.ts                  # THI REST API, no auth
+│   ├── thi-authenticated-api.ts    # THI REST API, with session
+│   ├── thi-session.ts              # THI session lifecycle
+│   ├── neuland-api.ts              # Neuland GraphQL + Campus Life REST
+│   └── gql-documents.ts            # GraphQL query strings
 ├── app/                  # expo-router file-based routes
 │   ├── _layout.tsx             # Root <Stack> with all screen registrations
 │   ├── (tabs)/                 # Bottom-tab routes (index, timetable, food, map, settings)
@@ -294,8 +294,8 @@ Generated and binary files:
 ### API layer
 
 - Three clients live in `src/api/`. Pick one:
-  - `AnonymousAPIClient` — public THI REST endpoints, no login.
-  - `AuthenticatedAPIClient` — extends the anonymous client, wraps requests with
+  - `ThiAPIClient` — public THI REST endpoints, no login.
+  - `ThiAuthenticatedAPIClient` — extends the public THI client, wraps requests with
     `callWithSession`, throws `NoSessionError` / `UnavailableSessionError` /
     `APIError` with a status code. Always handle these in the caller.
   - `NeulandAPI` — our own GraphQL endpoint (Queries for Food Data and Announcements, Mutation to create Room Reports) plus Campus Life REST and asset endpoints.
