@@ -1,7 +1,7 @@
 import { trackEvent } from '@aptabase/react-native'
 import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import { HeaderTitle } from 'expo-router/react-navigation'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Share, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
@@ -15,6 +15,7 @@ import Separator from '@/components/Timetable/separator'
 import ShareCard from '@/components/Timetable/share-card'
 import FormList from '@/components/Universal/form-list'
 import PlatformIcon from '@/components/Universal/icon'
+import { useLecturerLookupSources } from '@/hooks/useLecturerLookupSources'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -24,6 +25,8 @@ import {
 	formatFriendlyTime
 } from '@/utils/date-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
+import { resolveLecturerLinks } from '@/utils/lecturers-utils'
+import { openMapRoom } from '@/utils/map-actions'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -37,6 +40,18 @@ export default function TimetableDetails(): React.JSX.Element {
 	const shareRef = useRef<ViewShotRef>(null)
 	const lecture = useRouteParamsStore((state) => state.selectedLecture)
 	const setHtmlContent = useRouteParamsStore((state) => state.setHtmlContent)
+	const setSelectedLecturer = useRouteParamsStore(
+		(state) => state.setSelectedLecturer
+	)
+	const allLecturers = useLecturerLookupSources()
+	const lecturerLinks = useMemo(() => {
+		if (lecture == null) return []
+		return resolveLecturerLinks(
+			lecture.lecturer,
+			lecture.lecturerIds ?? [],
+			allLecturers
+		)
+	}, [lecture, allLecturers])
 	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
 		useSheetDetailScroll()
 	useFocusEffect(
@@ -289,12 +304,7 @@ export default function TimetableDetails(): React.JSX.Element {
 											<React.Fragment key={i}>
 												<Pressable
 													onPress={() => {
-														router.dismissTo({
-															pathname: '/(tabs)/map',
-															params: {
-																room
-															}
-														})
+														openMapRoom(room)
 													}}
 													disabled={!isValid}
 												>
@@ -343,7 +353,35 @@ export default function TimetableDetails(): React.JSX.Element {
 							</DetailsSymbol>
 
 							<DetailsBody>
-								<Text className="text-text text-lg">{lecture.lecturer}</Text>
+								<View className="flex-row flex-wrap">
+									{lecturerLinks.map((link, i) => (
+										<React.Fragment key={link.lecturer?.id ?? link.name}>
+											<Pressable
+												onPress={() => {
+													if (link.lecturer == null) return
+													setSelectedLecturer(link.lecturer)
+													// Replace the lecture sheet instead of stacking another form sheet.
+													router.dismiss()
+													router.push('/lecturer')
+												}}
+												disabled={link.lecturer == null}
+											>
+												<Text
+													className="text-lg"
+													style={{
+														color:
+															link.lecturer != null ? primaryColor : textColor
+													}}
+												>
+													{link.name}
+												</Text>
+											</Pressable>
+											{i < lecturerLinks.length - 1 && (
+												<Text className="text-text text-lg">{', '}</Text>
+											)}
+										</React.Fragment>
+									))}
+								</View>
 							</DetailsBody>
 						</DetailsRow>
 					</>
