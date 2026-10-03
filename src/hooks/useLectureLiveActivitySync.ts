@@ -114,7 +114,8 @@ async function syncLectureLiveActivity(
 		}
 
 		const props = buildLectureLiveActivityProps(event, now, t)
-		const staleDate = new Date(event.endDate)
+		// Reminder is stale once the lecture starts.
+		const staleDate = new Date(event.startDate)
 
 		if (instances.length === 0) {
 			LectureLiveActivity.start(props, DEEP_LINK, staleDate)

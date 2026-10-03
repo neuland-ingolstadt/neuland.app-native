@@ -82,11 +82,11 @@ const t = ((key: string, options?: Record<string, unknown>) => {
 }) as (key: string, options?: Record<string, unknown>) => string
 
 describe('lecture-live-activity-utils', () => {
-	it('shouldPresentLectureLiveActivity - accepts ongoing lectures', () => {
+	it('shouldPresentLectureLiveActivity - rejects ongoing lectures (reminder only)', () => {
 		const now = new Date('2026-05-12T10:00:00.000Z')
 		const event = makeEvent(now, -15, 45)
 
-		expect(shouldPresentLectureLiveActivity(event, now)).toBe(true)
+		expect(shouldPresentLectureLiveActivity(event, now)).toBe(false)
 	})
 
 	it('shouldPresentLectureLiveActivity - accepts lectures within the lead window', () => {
@@ -105,16 +105,16 @@ describe('lecture-live-activity-utils', () => {
 		expect(shouldPresentLectureLiveActivity(event, now)).toBe(false)
 	})
 
-	it('buildLectureLiveActivityProps - marks ongoing lectures and formats room', () => {
+	it('buildLectureLiveActivityProps - formats upcoming reminder props', () => {
 		const now = new Date('2026-05-12T10:00:00.000Z')
-		const event = makeEvent(now, -10, 50, { rooms: ['A123', 'B001'] })
+		const event = makeEvent(now, 10, 100, { rooms: ['A123', 'B001'] })
 
 		const props = buildLectureLiveActivityProps(event, now, t)
 
-		expect(props.phase).toBe('ongoing')
+		expect(props.phase).toBe('upcoming')
 		expect(props.room).toBe('A123, B001')
 		expect(props.title).toBe('Mathematics')
-		expect(props.countdownLabel).toBe('left')
+		expect(props.countdownLabel).toBe('until start')
 		expect(props.syncEpochMs).toBe(now.getTime())
 	})
 
@@ -123,5 +123,15 @@ describe('lecture-live-activity-utils', () => {
 		const event = makeEvent(now, 5 * 60, 5 * 60 + 90)
 
 		expect(getLectureLiveActivityEvent([event], now)).toBeNull()
+	})
+
+	it('getLectureLiveActivityEvent - prefers the next lecture in the lead window over an ongoing one', () => {
+		const now = new Date('2026-05-12T10:00:00.000Z')
+		const ongoing = makeEvent(now, -60, 10, { name: 'Lecture A' })
+		const next = makeEvent(now, 10, 100, { name: 'Lecture B', rooms: ['G215'] })
+
+		const event = getLectureLiveActivityEvent([ongoing, next], now)
+
+		expect(event?.name).toBe('Lecture B')
 	})
 })

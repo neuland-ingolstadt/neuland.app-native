@@ -1,11 +1,11 @@
 import type { LectureLiveActivityProps } from '@/types/lecture-live-activity'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { getEventStatus, getUpNextCardData } from '@/utils/up-next-utils'
+import { getEventStatus, getTodayEvents } from '@/utils/up-next-utils'
 
 type Translate = (key: string, options?: Record<string, unknown>) => string
 
-/** Start a Live Activity at most this long before the lecture begins. */
+/** Show the Live Activity this long before a lecture starts (reminder window). */
 export const LECTURE_LIVE_ACTIVITY_LEAD_MS = 15 * 60 * 1000
 
 export function getLectureEventId(event: FriendlyTimetableEntry): string {
@@ -16,6 +16,9 @@ export function getLectureEventId(event: FriendlyTimetableEntry): string {
 	].join('|')
 }
 
+/**
+ * Reminder-only: true when the lecture has not started yet and is within the lead window.
+ */
 export function shouldPresentLectureLiveActivity(
 	event: FriendlyTimetableEntry | null,
 	now: Date
@@ -25,15 +28,10 @@ export function shouldPresentLectureLiveActivity(
 	}
 
 	const start = new Date(event.startDate).getTime()
-	const end = new Date(event.endDate).getTime()
 	const nowMs = now.getTime()
 
-	if (end <= nowMs) {
-		return false
-	}
-
 	if (start <= nowMs) {
-		return true
+		return false
 	}
 
 	return start - nowMs <= LECTURE_LIVE_ACTIVITY_LEAD_MS
@@ -98,14 +96,24 @@ export function buildLectureLiveActivityProps(
 }
 
 /**
- * Picks the lecture that should drive the Live Activity, if any.
+ * Picks the soonest upcoming lecture in the reminder window.
+ * Back-to-back: last 15 min of lecture A surface lecture B's reminder.
  */
 export function getLectureLiveActivityEvent(
 	timetable: FriendlyTimetableEntry[],
 	now: Date
 ): FriendlyTimetableEntry | null {
-	const { currentEvent } = getUpNextCardData(timetable, now)
-	return shouldPresentLectureLiveActivity(currentEvent, now)
-		? currentEvent
-		: null
+	const nowMs = now.getTime()
+	const upcomingToday = getTodayEvents(timetable, now)
+		.filter((event) => new Date(event.startDate).getTime() > nowMs)
+		.sort(
+			(a, b) =>
+				new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+		)
+
+	const inLeadWindow = upcomingToday.find((event) =>
+		shouldPresentLectureLiveActivity(event, now)
+	)
+
+	return inLeadWindow ?? null
 }

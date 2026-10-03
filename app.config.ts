@@ -29,7 +29,9 @@ export default {
 			'activitycontinuation:web.neuland.app',
 			'activitycontinuation:dev.neuland.app',
 			'applinks:web.neuland.app',
-			'applinks:dev.neuland.app'
+			'applinks:dev.neuland.app',
+			'appclips:web.neuland.app',
+			'appclips:dev.neuland.app'
 		],
 		entitlements: {
 			'com.apple.developer.pass-type-identifiers': [
@@ -101,6 +103,7 @@ export default {
 		}
 	},
 	plugins: [
+		'@bacons/apple-targets',
 		[
 			'expo-build-properties',
 			{
