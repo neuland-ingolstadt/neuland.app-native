@@ -1,12 +1,16 @@
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const commonFlows = [
+const smokeFlows = [
 	'onboarding-guest',
 	'guest-navigation',
 	'map-regression',
 	'food-regression',
-	'settings-persistence',
+	'settings-persistence'
+] as const
+
+const regressionFlows = [
+	...smokeFlows,
 	'public-content-and-links',
 	'map-location-denied',
 	'map-location-allowed',
@@ -16,14 +20,21 @@ const commonFlows = [
 ] as const
 
 const suite = process.argv[2]
+const suiteSize = process.env.MAESTRO_SUITE ?? 'full'
 
 if (suite !== 'default' && suite !== 'ios' && suite !== 'android') {
 	console.error('Usage: bun config/run-maestro-suite.ts <default|ios|android>')
 	process.exit(2)
 }
 
+if (suiteSize !== 'smoke' && suiteSize !== 'full') {
+	console.error('MAESTRO_SUITE must be "smoke" or "full".')
+	process.exit(2)
+}
+
 const appId = suite === 'android' ? 'app.neuland' : 'de.neuland-ingolstadt.neuland-app'
-const flows = suite === 'ios' ? [...commonFlows, 'ios-app-icon'] : commonFlows
+const baseFlows = suiteSize === 'smoke' ? smokeFlows : regressionFlows
+const flows = suite === 'ios' && suiteSize === 'full' ? [...baseFlows, 'ios-app-icon'] : [...baseFlows]
 const devServerHost =
 	process.env.DEV_SERVER_HOST ?? (suite === 'android' ? '10.0.2.2' : 'localhost')
 const devServerAddress = `${devServerHost}:8081`
@@ -143,7 +154,7 @@ async function writeJobSummary(failedFlows: readonly string[]): Promise<void> {
 	const passed = flows.length - failedFlows.length
 	const status = failedFlows.length === 0 ? 'passed' : 'failed'
 	const lines = [
-		`## Maestro ${suite} suite`,
+		`## Maestro ${suite} (${suiteSize})`,
 		'',
 		`**Result:** ${status} · ${passed}/${flows.length} passed`,
 		'',
@@ -164,6 +175,7 @@ async function writeJobSummary(failedFlows: readonly string[]): Promise<void> {
 }
 
 mkdirSync(resultsDir, { recursive: true })
+console.log(`Running Maestro ${suite} suite (${suiteSize}): ${flows.join(', ')}`)
 
 const skipIosSimulatorRestart = process.env.MAESTRO_SKIP_SIMULATOR_RESTART === '1'
 let deviceId = process.env.MAESTRO_DEVICE_ID

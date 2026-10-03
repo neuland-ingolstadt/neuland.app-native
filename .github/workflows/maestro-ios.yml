@@ -1,7 +1,6 @@
 # PoC: iOS Maestro E2E on GitHub Actions.
-# Temporary trigger: every pull_request (so this PR actually runs).
-# TODO: tighten to opt-in only (workflow_dispatch + label `e2e` / `e2e-ios`),
-# matching maestro-web.yml.
+# PRs run the smoke suite by default. Full guest regression runs with label
+# `e2e` / `e2e-ios`, or via workflow_dispatch.
 #
 # Two stages: build restores or compiles a Simulator .app (fingerprint-keyed
 # actions/cache), uploads it as a GHA artifact; test installs it and runs Maestro.
@@ -9,8 +8,14 @@ name: Maestro iOS E2E
 
 on:
   workflow_dispatch:
+    inputs:
+      suite:
+        description: Flow set to run
+        type: choice
+        options: [smoke, full]
+        default: full
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled]
 
 concurrency:
   group: maestro-ios-${{ github.event.pull_request.number || github.ref }}
@@ -24,10 +29,16 @@ env:
   EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
   EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
   EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+  MAESTRO_SUITE: ${{ github.event.inputs.suite || (github.event_name == 'pull_request' && (contains(toJSON(github.event.pull_request.labels.*.name), '"e2e"') || contains(toJSON(github.event.pull_request.labels.*.name), '"e2e-ios"')) && 'full') || 'smoke' }}
 
 jobs:
   build-ios:
     name: Build iOS Simulator app
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.action != 'labeled' ||
+      contains(toJSON(github.event.pull_request.labels.*.name), '"e2e"') ||
+      contains(toJSON(github.event.pull_request.labels.*.name), '"e2e-ios"')
     runs-on: macos-latest
     timeout-minutes: 90
     steps:
@@ -210,13 +221,13 @@ jobs:
               'http://127.0.0.1:8081/index.bundle?platform=ios&dev=false&minify=true' \
               -o /dev/null
 
-          bun e2e:ios
+          MAESTRO_SUITE="${MAESTRO_SUITE}" bun e2e:ios
 
       - name: Publish Maestro report
         if: ${{ !cancelled() }}
         uses: ./.github/actions/maestro-report
         with:
-          check-name: Maestro iOS Results
+          check-name: Maestro iOS Results (${{ env.MAESTRO_SUITE }})
 
       - name: Upload Maestro artifacts
         if: ${{ !cancelled() }}
