@@ -15,6 +15,8 @@ export interface RoomData {
 	properties: GeoJsonProperties | undefined
 	occupancies: AvailableRoom | BuildingOccupancy | null
 	nextAvailable?: AvailableRoom | null
+	/** True when THI free-room data covers this room (lecture halls, seminar rooms, …). */
+	availabilityTracked?: boolean
 	type: SEARCH_TYPES
 }
 
