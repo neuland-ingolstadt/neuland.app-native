@@ -38,6 +38,10 @@ jobs:
     # this public repository on standard GitHub-hosted runners.
     runs-on: macos-latest
     timeout-minutes: 45
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: read
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -87,6 +91,12 @@ jobs:
       - name: Run Maestro web E2E
         run: bun e2e:web
 
+      - name: Publish Maestro report
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/maestro-report
+        with:
+          check-name: Maestro Web Results
+
       - name: Upload Maestro artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -94,6 +104,7 @@ jobs:
           name: maestro-web-${{ github.run_id }}
           path: |
             ~/.maestro/tests
+            maestro-results
             /tmp/maestro-web-server.log
           if-no-files-found: ignore
           retention-days: 14

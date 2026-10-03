@@ -1,0 +1,23 @@
+name: Publish Maestro report
+description: Publish Maestro JUnit results as a GitHub check and job summary
+inputs:
+  check-name:
+    description: Name of the GitHub check run
+    required: true
+  report-paths:
+    description: Glob for JUnit XML reports
+    required: false
+    default: 'maestro-results/**/*.xml'
+runs:
+  using: composite
+  steps:
+    - name: Publish JUnit report
+      uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6.5.0
+      with:
+        report_paths: ${{ inputs.report-paths }}
+        check_name: ${{ inputs.check-name }}
+        require_tests: false
+        fail_on_failure: false
+        detailed_summary: true
+        include_passed: true
+        annotate_only: false

@@ -1,9 +1,16 @@
-const commonFlows = [
+import { mkdirSync } from 'node:fs'
+import { join } from 'node:path'
+
+const smokeFlows = [
 	'onboarding-guest',
 	'guest-navigation',
 	'map-regression',
 	'food-regression',
-	'settings-persistence',
+	'settings-persistence'
+] as const
+
+const regressionFlows = [
+	...smokeFlows,
 	'public-content-and-links',
 	'map-location-denied',
 	'map-location-allowed',
@@ -13,18 +20,26 @@ const commonFlows = [
 ] as const
 
 const suite = process.argv[2]
+const suiteSize = process.env.MAESTRO_SUITE ?? 'full'
 
 if (suite !== 'default' && suite !== 'ios' && suite !== 'android') {
 	console.error('Usage: bun config/run-maestro-suite.ts <default|ios|android>')
 	process.exit(2)
 }
 
+if (suiteSize !== 'smoke' && suiteSize !== 'full') {
+	console.error('MAESTRO_SUITE must be "smoke" or "full".')
+	process.exit(2)
+}
+
 const appId = suite === 'android' ? 'app.neuland' : 'de.neuland-ingolstadt.neuland-app'
-const flows = suite === 'ios' ? [...commonFlows, 'ios-app-icon'] : commonFlows
+const baseFlows = suiteSize === 'smoke' ? smokeFlows : regressionFlows
+const flows = suite === 'ios' && suiteSize === 'full' ? [...baseFlows, 'ios-app-icon'] : [...baseFlows]
 const devServerHost =
 	process.env.DEV_SERVER_HOST ?? (suite === 'android' ? '10.0.2.2' : 'localhost')
 const devServerAddress = `${devServerHost}:8081`
 const DEV_CLIENT_URL = `exp+neuland-app-native://expo-development-client/?url=http%3A%2F%2F${devServerHost}%3A8081&disableOnboarding=1`
+const resultsDir = process.env.MAESTRO_JUNIT_DIR ?? join('maestro-results', suite)
 
 interface SimctlDevice {
 	name: string
@@ -107,6 +122,10 @@ function runFlow(flow: string, deviceId: string, retry = false): boolean {
 			'--device',
 			deviceId,
 			'--config=.maestro/config.yaml',
+			'--format',
+			'junit',
+			'--output',
+			join(resultsDir, `${flow}.xml`),
 			'-e',
 			`APP_ID=${appId}`,
 			'-e',
@@ -126,6 +145,38 @@ function runFlow(flow: string, deviceId: string, retry = false): boolean {
 	return result.success
 }
 
+async function writeJobSummary(failedFlows: readonly string[]): Promise<void> {
+	const summaryPath = process.env.GITHUB_STEP_SUMMARY
+	if (summaryPath == null) {
+		return
+	}
+
+	const passed = flows.length - failedFlows.length
+	const status = failedFlows.length === 0 ? 'passed' : 'failed'
+	const lines = [
+		`## Maestro ${suite} (${suiteSize})`,
+		'',
+		`**Result:** ${status} · ${passed}/${flows.length} passed`,
+		'',
+		'| Flow | Status |',
+		'| --- | --- |',
+		...flows.map((flow) => `| \`${flow}\` | ${failedFlows.includes(flow) ? '❌ failed' : '✅ passed'} |`),
+		''
+	]
+
+	if (failedFlows.length > 0) {
+		lines.push('### Failures', '', ...failedFlows.map((flow) => `- \`${flow}\``), '')
+	}
+
+	const existing = (await Bun.file(summaryPath).exists())
+		? await Bun.file(summaryPath).text()
+		: ''
+	await Bun.write(summaryPath, `${existing}${lines.join('\n')}`)
+}
+
+mkdirSync(resultsDir, { recursive: true })
+console.log(`Running Maestro ${suite} suite (${suiteSize}): ${flows.join(', ')}`)
+
 const skipIosSimulatorRestart = process.env.MAESTRO_SKIP_SIMULATOR_RESTART === '1'
 let deviceId = process.env.MAESTRO_DEVICE_ID
 
@@ -136,7 +187,7 @@ if (deviceId == null) {
 			: skipIosSimulatorRestart
 				? getBootedIosSimulator()?.udid
 				: restartBootedIosSimulator()?.udid
-	} else if (suite !== 'android' && !skipIosSimulatorRestart) {
+} else if (suite !== 'android' && !skipIosSimulatorRestart) {
 	restartBootedIosSimulator()
 }
 
@@ -156,6 +207,8 @@ if (
 	console.log(`\nRetrying ${failures.length} failed iOS flow(s) with a fresh XCTest service.`)
 	failures = failures.filter((flow) => !runFlow(flow, deviceId, true))
 }
+
+await writeJobSummary(failures)
 
 if (failures.length > 0) {
 	console.error(`\n${failures.length}/${flows.length} Maestro flows failed:`)

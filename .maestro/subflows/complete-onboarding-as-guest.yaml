@@ -3,17 +3,20 @@ appId: ${APP_ID}
 - openLink: "neuland://onboarding"
 - waitForAnimationToEnd:
     timeout: 3000
-# If Metro never attached, iOS may still show the bare Development Build shell.
+# Deep links are swallowed while still on the Expo Development Build launcher.
 - runFlow:
     when:
-      platform: iOS
-      visible: ".*Development Build.*"
+      visible: "Fetch development servers"
     commands:
       - runFlow:
           file: "reconnect-development-client.yaml"
       - openLink: "neuland://onboarding"
       - waitForAnimationToEnd:
           timeout: 3000
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|login-guest"
+    timeout: 180000
 - runFlow:
     when:
       visible:
@@ -39,7 +42,7 @@ appId: ${APP_ID}
 - extendedWaitUntil:
     visible:
       id: "login-guest"
-    timeout: 120000
+    timeout: 60000
 - runFlow:
     when:
       visible: ".*(Anmeldedaten wiederhergestellt|Credentials restored).*"
