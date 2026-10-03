@@ -499,6 +499,14 @@ describe('map-screen-utils', () => {
 		expect(filterAvailableRooms(featureCollection, null)).toEqual([])
 	})
 
+	it('filterAvailableRooms - Should ignore rooms whose free slot has already ended', () => {
+		expect(
+			filterAvailableRooms(featureCollection, [
+				{ room: 'G101', until: new Date(Date.now() - 60_000) }
+			])
+		).toEqual([])
+	})
+
 	it('filterEtage - Should return only features on the requested floor', () => {
 		expect(
 			filterEtage('EG', featureCollection).map(
@@ -608,11 +616,30 @@ describe('map-screen-utils', () => {
 		expect(result.properties?.Raum).toBe('G101')
 	})
 
+	it('getRoomData - Should treat expired free slots as not currently available', () => {
+		const result = getRoomData(
+			'G101',
+			[
+				{
+					room: 'G101',
+					until: new Date(Date.now() - 3 * 60 * 60 * 1000)
+				}
+			],
+			featureCollection,
+			i18nEn,
+			t,
+			{}
+		)
+
+		expect(result.occupancies).toBeNull()
+		expect(result.availabilityTracked).toBe(true)
+	})
+
 	it('getRoomData - Should not track availability for rooms outside THI free-room data', () => {
 		const result = getRoomData('G001', null, featureCollection, i18nEn, t, {})
 
 		expect(result.title).toBe('G001')
-		expect(result.occupancies).toBeUndefined()
+		expect(result.occupancies).toBeNull()
 		expect(result.nextAvailable).toBeNull()
 		expect(result.availabilityTracked).toBe(false)
 	})
@@ -630,7 +657,7 @@ describe('map-screen-utils', () => {
 			]
 		})
 
-		expect(result.occupancies).toBeUndefined()
+		expect(result.occupancies).toBeNull()
 		expect(result.nextAvailable).toBeNull()
 		expect(result.availabilityTracked).toBe(true)
 	})
@@ -676,7 +703,7 @@ describe('map-screen-utils', () => {
 		)
 
 		expect(result.subtitle).toBe('fallback:misc.unknown')
-		expect(result.occupancies).toBeUndefined()
+		expect(result.occupancies).toBeNull()
 		expect(result.nextAvailable).toBeNull()
 		expect(result.availabilityTracked).toBe(false)
 	})

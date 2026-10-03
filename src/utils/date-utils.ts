@@ -72,6 +72,31 @@ export function diffInMinutes(
 }
 
 /**
+ * Formats remaining time until a deadline as "H:MMh".
+ * Returns null when the deadline is missing, invalid, or already past.
+ */
+export function formatRemainingDuration(
+	until?: Date | string | null,
+	now: Date = new Date()
+): string | null {
+	if (until == null) {
+		return null
+	}
+	const untilMs = new Date(until).getTime()
+	if (Number.isNaN(untilMs)) {
+		return null
+	}
+	const remainingMs = untilMs - now.getTime()
+	if (remainingMs <= 0) {
+		return null
+	}
+	const totalMinutes = Math.floor(remainingMs / (1000 * 60))
+	const hours = Math.floor(totalMinutes / 60)
+	const minutes = totalMinutes % 60
+	return `${hours.toString()}:${minutes.toString().padStart(2, '0')}h`
+}
+
+/**
  * Basic time formatting like "08:00" which expects a string like "08:00:00"
  * @param {string} time
  * @returns {string}
