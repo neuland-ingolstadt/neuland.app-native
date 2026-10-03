@@ -13,7 +13,11 @@ import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { Funktion, type Lecturers } from '@/types/thi-api'
 import type { NormalizedLecturer } from '@/types/utils'
 import { extractFaculty, getPersonalData } from '@/utils/api-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
+import {
+	LECTURER_GC_TIME_MS,
+	LECTURER_STALE_TIME_MS,
+	normalizeLecturers
+} from '@/utils/lecturers-utils'
 
 function generateSections(lecturers: NormalizedLecturer[] | undefined): {
 	title: string
@@ -71,8 +75,8 @@ export function useLecturersData(localSearch: string): {
 					const data = normalizeLecturers(rawData)
 					return data
 				},
-				staleTime: 1000 * 60 * 30, // 30 minutes
-				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+				staleTime: LECTURER_STALE_TIME_MS,
+				gcTime: LECTURER_GC_TIME_MS,
 				retry(failureCount: number, error: Error) {
 					if (error instanceof NoSessionError) {
 						router.navigate('/login')
@@ -89,8 +93,8 @@ export function useLecturersData(localSearch: string): {
 					const data = normalizeLecturers(rawData)
 					return data
 				},
-				staleTime: 1000 * 60 * 30, // 30 minutes
-				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+				staleTime: LECTURER_STALE_TIME_MS,
+				gcTime: LECTURER_GC_TIME_MS,
 				retry(failureCount: number, error: Error) {
 					if (error instanceof NoSessionError) {
 						router.navigate('/login')

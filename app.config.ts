@@ -110,6 +110,15 @@ export default {
 			}
 		],
 		[
+			// Hide floating Dev Tools FAB / onboarding overlays that block Maestro taps.
+			'expo-dev-client',
+			{
+				toolsButton: false,
+				skipOnboarding: true,
+				showMenuAtLaunch: false
+			}
+		],
+		[
 			'expo-router',
 			{
 				headOrigin: 'https://web.neuland.app',

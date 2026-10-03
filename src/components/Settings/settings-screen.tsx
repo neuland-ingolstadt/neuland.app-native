@@ -23,7 +23,11 @@ import { useMemberStore } from '@/hooks/useMemberStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { calculateECTS } from '@/utils/grades-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
+import {
+	LECTURER_GC_TIME_MS,
+	LECTURER_STALE_TIME_MS,
+	normalizeLecturers
+} from '@/utils/lecturers-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import EmployeeInfoSection from './employee-info-section'
 import GuestInfoSection from './guest-info-section'
@@ -109,8 +113,8 @@ export default function Settings(): React.JSX.Element {
 			const normalizedData = normalizeLecturers(rawData)
 			return normalizedData
 		},
-		staleTime: 1000 * 60 * 30, // 30 minutes
-		gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+		staleTime: LECTURER_STALE_TIME_MS,
+		gcTime: LECTURER_GC_TIME_MS,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.replace('/login')

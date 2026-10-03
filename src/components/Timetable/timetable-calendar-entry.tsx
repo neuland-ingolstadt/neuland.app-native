@@ -86,9 +86,9 @@ export default function TimetableCalendarEntry({
 						</View>
 						<View className="flex-row justify-between items-center mt-1">
 							<View className="flex-row items-center gap-2.5">
-								{infoText && (
+								{infoText ? (
 									<Text className="text-sm text-label">{infoText}</Text>
-								)}
+								) : null}
 								<Badge text="THI" type="calendar" />
 							</View>
 							{timeElement}
