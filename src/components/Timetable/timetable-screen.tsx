@@ -19,7 +19,11 @@ import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
-import { getFriendlyTimetable } from '@/utils/timetable-utils'
+import {
+	getFriendlyTimetable,
+	TIMETABLE_GC_TIME_MS,
+	TIMETABLE_STALE_TIME_MS
+} from '@/utils/timetable-utils'
 import { TIMETABLE_IGNORED_ERRORS } from '@/utils/up-next-utils'
 import { EmptyTimetableAnimation } from './empty-timetable-animation'
 
@@ -52,8 +56,8 @@ function TimetableScreen(): React.JSX.Element {
 	} = useQuery({
 		queryKey: ['timetableV2', userKind],
 		queryFn: loadTimetable,
-		staleTime: 1000 * 60 * 10,
-		gcTime: 1000 * 60 * 60 * 24 * 7,
+		staleTime: TIMETABLE_STALE_TIME_MS,
+		gcTime: TIMETABLE_GC_TIME_MS,
 		retry(failureCount, error) {
 			return (
 				!TIMETABLE_IGNORED_ERRORS.includes(

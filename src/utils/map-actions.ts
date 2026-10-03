@@ -1,9 +1,19 @@
 import { trackEvent } from '@aptabase/react-native'
+import { router } from 'expo-router'
 import type { GeoJsonProperties } from 'geojson'
 import { Platform } from 'react-native'
 import { SEARCH_TYPES } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import { copyToClipboard, shareNative } from './ui-utils'
+
+export function openMapRoom(room: string): void {
+	// Dismiss stacked form sheets first; dismissTo leaves ghost sheet chrome on the map.
+	router.dismissAll()
+	router.push({
+		pathname: '/(tabs)/map',
+		params: { room }
+	})
+}
 
 export const handleShareModal = (room: string): void => {
 	const payload = `https://web.neuland.app/map/?room=${room}`
