@@ -11,16 +11,27 @@ tags:
     permissions:
       notifications: deny
       location: never
+- waitForAnimationToEnd:
+    timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
 - openLink: "neuland://onboarding"
 - waitForAnimationToEnd:
     timeout: 3000
+- runFlow:
+    when:
+      visible: "Fetch development servers"
+    commands:
+      - runFlow:
+          file: "../subflows/reconnect-development-client.yaml"
+      - openLink: "neuland://onboarding"
+      - waitForAnimationToEnd:
+          timeout: 3000
 - extendedWaitUntil:
     visible:
       id: "onboarding-continue"
       enabled: true
-    timeout: 30000
+    timeout: 180000
 - assertVisible: ".*(Alles an einem Ort|Everything in one place).*"
 - assertVisible: ".*(Von Studierenden für Studierende|By students for students).*"
 - assertVisible: ".*(Weit verbreitet und vertrauenswürdig|Widely used and trustworthy).*"
@@ -95,10 +106,9 @@ tags:
 - assertVisible: "(Food|Essen)"
 - assertVisible: "(Profile|Profil)"
 - stopApp
-- openLink: ${DEV_CLIENT_URL}
-- waitForAnimationToEnd:
-    timeout: 10000
+- runFlow:
+    file: "../subflows/reconnect-development-client.yaml"
 - extendedWaitUntil:
     visible:
       id: "home-screen"
-    timeout: 20000
+    timeout: 60000

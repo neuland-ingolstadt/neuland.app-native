@@ -30,4 +30,13 @@ if ! curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 && ! curl -fsS 'ht
 	exit 1
 fi
 
+# Cold first-bundle in CI was ~50s; pre-warm so the first Maestro reconnect does not race it.
+echo 'Pre-warming Android Metro bundle...'
+curl -fsS \
+	'http://127.0.0.1:8081/node_modules/expo-router/entry.bundle?platform=android&dev=false&minify=true' \
+	-o /dev/null \
+	|| curl -fsS \
+		'http://127.0.0.1:8081/index.bundle?platform=android&dev=false&minify=true' \
+		-o /dev/null
+
 bun e2e:android

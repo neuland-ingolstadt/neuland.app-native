@@ -1,7 +1,7 @@
 appId: ${APP_ID}
 ---
-# With expo-dev-client { skipOnboarding, showMenuAtLaunch: false }, the launcher
-# bottom sheet no longer appears. The deep link already carries the Metro URL.
+# clearState wipes the remembered Metro URL, so we land on the Expo launcher.
+# waitForAnimationToEnd alone is not enough — cold CI bundles can take ~60s.
 - openLink: ${DEV_CLIENT_URL}
 - waitForAnimationToEnd:
     timeout: 10000
@@ -18,3 +18,40 @@ appId: ${APP_ID}
       visible: "Reload"
     commands:
       - tapOn: "Reload"
+# Still on the native launcher? Retry the deep link once.
+- runFlow:
+    when:
+      visible: "Fetch development servers"
+    commands:
+      - openLink: ${DEV_CLIENT_URL}
+      - waitForAnimationToEnd:
+          timeout: 10000
+      - runFlow:
+          when:
+            platform: Android
+            visible: "http://${DEV_SERVER_ADDRESS}"
+          commands:
+            - tapOn: "http://${DEV_SERVER_ADDRESS}"
+      - runFlow:
+          when:
+            platform: Android
+            visible: "Reload"
+          commands:
+            - tapOn: "Reload"
+# Android fallback: type the Metro URL into the launcher Connect field.
+- runFlow:
+    when:
+      platform: Android
+      visible: "Fetch development servers"
+    commands:
+      - tapOn: "http://"
+      - eraseText
+      - inputText: "http://${DEV_SERVER_ADDRESS}"
+      - tapOn: "Connect"
+      - waitForAnimationToEnd:
+          timeout: 10000
+# Block until the JS app mounts. Fail here instead of swallowing later deep links.
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
+    timeout: 180000

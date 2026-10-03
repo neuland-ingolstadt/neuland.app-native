@@ -197,6 +197,15 @@ jobs:
             exit 1
           fi
 
+          # Cold first-bundle in CI was ~50s; pre-warm so the first Maestro reconnect does not race it.
+          echo 'Pre-warming iOS Metro bundle...'
+          curl -fsS \
+            'http://127.0.0.1:8081/node_modules/expo-router/entry.bundle?platform=ios&dev=false&minify=true' \
+            -o /dev/null \
+            || curl -fsS \
+              'http://127.0.0.1:8081/index.bundle?platform=ios&dev=false&minify=true' \
+              -o /dev/null
+
           bun e2e:ios
 
       - name: Upload Maestro artifacts
