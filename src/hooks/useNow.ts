@@ -10,7 +10,7 @@ export function useNow(enabled: boolean): Date {
 	const [now, setNow] = useState(() => new Date())
 	const [isFocused, setIsFocused] = useState(false)
 	const [appState, setAppState] = useState<AppStateStatus>(
-		() => AppState.currentState
+		() => (AppState.currentState as AppStateStatus | null) ?? 'active'
 	)
 
 	const refresh = useCallback(() => {

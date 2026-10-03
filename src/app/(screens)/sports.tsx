@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useCallback, useEffect } from 'react'
-import { InteractionManager, View } from 'react-native'
+import { View } from 'react-native'
 import ClSportsPage from '@/components/Events/cl-sports-page'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
@@ -31,7 +31,7 @@ export default function SportsScreen(): React.JSX.Element {
 	useFocusEffect(
 		useCallback(() => {
 			if (openEvent === 'true' && id) {
-				InteractionManager.runAfterInteractions(() => {
+				requestIdleCallback(() => {
 					router.setParams({ openEvent: 'false' })
 					router.navigate({
 						pathname: '/events/sports/[id]',

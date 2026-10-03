@@ -26,10 +26,10 @@ THI news, calendar, university sports, campus life events, quick links.
 
 | Area              | Tech                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| Runtime           | React Native `0.86.3`, React `19.2.3`, Expo SDK `57`                       |
+| Runtime           | React Native `0.88.0-rc.0`, React `19.2.3`, Expo SDK `58` (beta)           |
 | Language          | TypeScript `6.0` (strict mode)                                             |
 | Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
-| Routing           | **Expo Router 57** (file-based, typed routes) — *not* React Navigation directly |
+| Routing           | **Expo Router 58** (file-based, typed routes) — *not* React Navigation directly |
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
 | Storage           | `react-native-mmkv` (settings/cache), `expo-secure-store` (mobile creds), `idb` + WebCrypto (web creds) |
@@ -45,7 +45,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
-SDK 57 requires Xcode 26.4 and iOS 16.4 or newer and uses Hermes V1 by default.
+SDK 58 requires Xcode 27 for iOS 27 support (UIScene life cycle). Hermes V1 remains the default. The project uses Continuous Native Generation — `npx expo prebuild` generates `SceneDelegate.swift` and `UIApplicationSceneManifest`.
 
 ---
 
@@ -228,11 +228,11 @@ Generated and binary files:
 - Use the typed `router` (`import { router } from 'expo-router'`) — typed routes are enabled.
 - Import `ThemeProvider`, `DarkTheme`, and `DefaultTheme` from `expo-router`.
   Their exports from `expo-router/react-navigation` are deprecated aliases.
-- `HeaderTitle` and `useHeaderHeight` still use the SDK 56 compatibility exports
-  from `expo-router/react-navigation` to preserve the existing headers and form-sheet
-  padding. These exports are deprecated; revisit them during the next SDK upgrade.
-  The installed Router guidance recommends local implementations. Preserve access
-  to the navigator's header-height context when replacing the hook.
+- `HeaderTitle` and `useHeaderHeight` still use the deprecated
+  `expo-router/react-navigation` compatibility exports to preserve the existing
+  headers and form-sheet padding. Copy them into the app before a future SDK
+  removes those exports. Preserve access to the navigator's header-height
+  context when replacing the hook.
 - Web builds use `output: 'single'` (SPA). Some screens have a `*.web.tsx` variant
   (e.g. `map-screen.web.tsx`) for layout differences.
 

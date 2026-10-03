@@ -127,7 +127,7 @@ export const inverseColor = (color: ColorValue): string => {
 		inverseColor = color === '#ffffff' ? '#c3edff' : '#4c8eaa'
 	} else {
 		// Otherwise, invert the color
-		inverseColor = Color(color).negate().string()
+		inverseColor = Color(String(color)).negate().string()
 	}
 	return inverseColor
 }

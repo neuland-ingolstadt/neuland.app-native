@@ -29,7 +29,9 @@ export default {
 			'activitycontinuation:web.neuland.app',
 			'activitycontinuation:dev.neuland.app',
 			'applinks:web.neuland.app',
-			'applinks:dev.neuland.app'
+			'applinks:dev.neuland.app',
+			'appclips:web.neuland.app',
+			'appclips:dev.neuland.app'
 		],
 		entitlements: {
 			'com.apple.developer.pass-type-identifiers': [
@@ -101,6 +103,7 @@ export default {
 		}
 	},
 	plugins: [
+		'@bacons/apple-targets',
 		[
 			'expo-build-properties',
 			{
@@ -275,7 +278,52 @@ export default {
 			}
 		],
 		['@react-native-community/datetimepicker'],
-		['expo-image']
+		['expo-image'],
+		[
+			'expo-widgets',
+			{
+				bundleIdentifier: 'de.neuland-ingolstadt.neuland-app.widgets',
+				groupIdentifier: 'group.de.neuland-ingolstadt.neuland-app',
+				widgets: [
+					{
+						name: 'CanteenWidget',
+						displayName: 'Canteen',
+						description: "Today's THI canteen menu",
+						ios: {
+							supportedFamilies: ['systemSmall', 'systemMedium', 'systemLarge'],
+							contentMarginsDisabled: true,
+							initialLayout: './src/widgets/canteen-widget.tsx',
+							configuration: {
+								title: 'Canteen',
+								description: 'Choose which canteen to show',
+								parameters: {
+									restaurant: {
+										title: 'Restaurant',
+										type: 'enum',
+										default: 'IngolstadtMensa',
+										values: [
+											{
+												name: 'Mensa Ingolstadt',
+												value: 'IngolstadtMensa'
+											},
+											{
+												name: 'Mensa Neuburg',
+												value: 'NeuburgMensa'
+											},
+											{ name: 'Reimanns', value: 'Reimanns' },
+											{
+												name: 'Canisius Konvikt',
+												value: 'Canisius'
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				]
+			}
+		]
 	],
 	extra: {
 		eas: {

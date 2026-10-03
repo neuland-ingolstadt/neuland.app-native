@@ -211,7 +211,7 @@ function FoodScreen(): React.JSX.Element {
 							ref={pagerViewRef}
 							style={styles.page}
 							initialPage={initialPageRef.current}
-							onPageSelected={(e) => {
+							onPageSelected={(e: { nativeEvent: { position: number } }) => {
 								const page = e.nativeEvent.position
 								setSelectedDay(page)
 							}}

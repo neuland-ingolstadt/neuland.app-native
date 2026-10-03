@@ -10,7 +10,7 @@ import type { LucideIcon } from '@/components/Universal/icon'
 import PlatformIcon from '@/components/Universal/icon'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
-import { formatFriendlyDate } from '@/utils/date-utils'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { copyToClipboard } from '@/utils/ui-utils'
 
 declare global {
@@ -111,6 +111,44 @@ export default function Version(): React.JSX.Element {
 		].join('\n')
 
 		void copyToClipboard(info, '')
+	}
+
+	const handlePreviewLectureLiveActivity = async (): Promise<void> => {
+		if (Platform.OS !== 'ios') {
+			return
+		}
+
+		try {
+			const { default: LectureLiveActivity } = await import(
+				'@/widgets/lecture-live-activity'
+			)
+			const now = Date.now()
+			const start = new Date(now + 10 * 60_000)
+			const end = new Date(now + 100 * 60_000)
+
+			for (const instance of LectureLiveActivity.getInstances()) {
+				await instance.end('immediate')
+			}
+
+			LectureLiveActivity.start(
+				{
+					eventId: `preview-${String(now)}`,
+					title: 'Mathematics I',
+					room: 'G215',
+					phase: 'upcoming',
+					startEpochMs: start.getTime(),
+					endEpochMs: end.getTime(),
+					syncEpochMs: now,
+					statusLabel: 'starts in 10 min',
+					timeLabel: `${formatFriendlyTime(start)} – ${formatFriendlyTime(end)}`,
+					countdownLabel: 'until start'
+				},
+				'neuland://timetable',
+				end
+			)
+		} catch (error) {
+			console.warn('Failed to preview lecture Live Activity', error)
+		}
 	}
 
 	const sections: FormListSections[] = [
@@ -232,7 +270,27 @@ export default function Version(): React.JSX.Element {
 								}
 							}
 						]
-		}
+		},
+		...(typeof __DEV__ !== 'undefined' && __DEV__ && Platform.OS === 'ios'
+			? [
+					{
+						header: 'Debug',
+						items: [
+							{
+								title: 'Preview lecture Live Activity',
+								icon: {
+									ios: 'book.fill' as const,
+									android: 'menu_book' as MaterialIcon,
+									web: 'BookOpen' as LucideIcon
+								},
+								onPress: () => {
+									void handlePreviewLectureLiveActivity()
+								}
+							}
+						]
+					}
+				]
+			: [])
 	]
 
 	return (

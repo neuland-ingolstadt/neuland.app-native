@@ -1,3 +1,4 @@
+import MensaAppClip from '@/components/AppClip/mensa-app-clip'
 import CrashView from '@/components/Error/crash-view'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/splash'
@@ -6,6 +7,7 @@ import { usePresentationMode } from '@/hooks/usePresentationMode'
 import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
 import { useUniversalLinkHandler } from '@/hooks/useUniversalLinkHandler'
 import i18n from '@/localization/i18n'
+import { isAppClip } from '@/utils/app-clip'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
 import '@/global.css'
 import { getLocales } from 'expo-localization'
@@ -18,6 +20,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, LogBox, Platform } from 'react-native'
 import { configureReanimatedLogger } from 'react-native-reanimated'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -29,7 +32,7 @@ configureReanimatedLogger({
 
 export const unstable_settings = {
 	// Ensure any route can link back to `/`
-	initialRouteName: 'index'
+	anchor: 'index'
 }
 // Ignore common React Native warnings
 LogBox.ignoreLogs([
@@ -139,6 +142,13 @@ function RootLayout(): React.JSX.Element {
 						headerShown: false,
 						animation: 'none',
 						gestureEnabled: false
+					}}
+				/>
+				<Stack.Screen
+					name="mensa"
+					options={{
+						title: 'Mensa',
+						headerShown: false
 					}}
 				/>
 
@@ -533,6 +543,14 @@ function RootLayout(): React.JSX.Element {
 }
 
 const ProviderComponent = (): React.JSX.Element => {
+	if (isAppClip()) {
+		return (
+			<SafeAreaProvider>
+				<MensaAppClip />
+			</SafeAreaProvider>
+		)
+	}
+
 	return (
 		<Provider>
 			<RootLayout />
