@@ -116,7 +116,7 @@ jobs:
     name: Maestro iOS suite
     needs: build-ios
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     permissions:
       contents: read
       checks: write
@@ -224,13 +224,13 @@ jobs:
           MAESTRO_SUITE="${MAESTRO_SUITE}" bun e2e:ios
 
       - name: Publish Maestro report
-        if: ${{ !cancelled() }}
+        if: ${{ always() }}
         uses: ./.github/actions/maestro-report
         with:
           check-name: Maestro iOS Results (${{ env.MAESTRO_SUITE }})
 
       - name: Upload Maestro artifacts
-        if: ${{ !cancelled() }}
+        if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: maestro-ios-${{ github.run_id }}

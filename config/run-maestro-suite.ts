@@ -180,15 +180,11 @@ console.log(`Running Maestro ${suite} suite (${suiteSize}): ${flows.join(', ')}`
 const skipIosSimulatorRestart = process.env.MAESTRO_SKIP_SIMULATOR_RESTART === '1'
 let deviceId = process.env.MAESTRO_DEVICE_ID
 
+// Prefer an already-booted simulator (CI boots + installs before e2e).
+// A full restart is reserved for the post-failure retry below.
 if (deviceId == null) {
 	deviceId =
-		suite === 'android'
-			? getConnectedAndroidDeviceId()
-			: skipIosSimulatorRestart
-				? getBootedIosSimulator()?.udid
-				: restartBootedIosSimulator()?.udid
-} else if (suite !== 'android' && !skipIosSimulatorRestart) {
-	restartBootedIosSimulator()
+		suite === 'android' ? getConnectedAndroidDeviceId() : getBootedIosSimulator()?.udid
 }
 
 if (deviceId == null) {

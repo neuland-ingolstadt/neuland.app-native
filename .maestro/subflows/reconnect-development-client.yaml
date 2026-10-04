@@ -12,6 +12,13 @@ appId: ${APP_ID}
       - openLink: ${DEV_CLIENT_URL}
       - waitForAnimationToEnd:
           timeout: 10000
+      # iOS may show a one-shot "Open in …" confirmation for custom schemes.
+      - runFlow:
+          when:
+            platform: iOS
+            visible: '(Open|Öffnen|Open in)'
+          commands:
+            - tapOn: '(Open|Öffnen)'
       # Optional: if the packager list still flashes on Android, pick the server.
       - runFlow:
           when:
@@ -25,14 +32,20 @@ appId: ${APP_ID}
             visible: "Reload"
           commands:
             - tapOn: "Reload"
-      # Still on the Expo launcher? Re-send the deep link, then type the URL.
+      # Still on the Expo launcher? Re-send the deep link / type the URL.
       - runFlow:
           when:
-            visible: "Fetch development servers"
+            visible: ".*(Fetch development servers|DEVELOPMENT SERVERS).*"
           commands:
             - openLink: ${DEV_CLIENT_URL}
             - waitForAnimationToEnd:
                 timeout: 10000
+            - runFlow:
+                when:
+                  platform: iOS
+                  visible: '(Open|Öffnen|Open in)'
+                commands:
+                  - tapOn: '(Open|Öffnen)'
       - runFlow:
           when:
             platform: Android
@@ -42,6 +55,15 @@ appId: ${APP_ID}
             - eraseText
             - inputText: "http://${DEV_SERVER_ADDRESS}"
             - tapOn: "Connect"
+            - waitForAnimationToEnd:
+                timeout: 10000
+      # iOS launcher: tap the Metro URL if it appears in the list.
+      - runFlow:
+          when:
+            platform: iOS
+            visible: "http://${DEV_SERVER_ADDRESS}"
+          commands:
+            - tapOn: "http://${DEV_SERVER_ADDRESS}"
             - waitForAnimationToEnd:
                 timeout: 10000
       # Still no JS app (native splash / blank)? Wait before the next deep link.
