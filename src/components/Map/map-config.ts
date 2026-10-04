@@ -20,7 +20,9 @@ export const MAP_IDS = {
 		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
-		selectedOverlay: 'selectedOverlaySource'
+		selectedOverlay: 'selectedOverlaySource',
+		buildingEntrances: 'buildingEntrancesSource',
+		buildingEntrancesMuted: 'buildingEntrancesMutedSource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -34,7 +36,11 @@ export const MAP_IDS = {
 		buildingLabels: 'buildingLettersLayer',
 		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
-		selectedOutline: 'selectedRoomOutline'
+		selectedOutline: 'selectedRoomOutline',
+		buildingEntrancesBadge: 'buildingEntrancesBadge',
+		buildingEntrancesBadgeMuted: 'buildingEntrancesBadgeMuted',
+		buildingEntrancesMarker: 'buildingEntrancesMarker',
+		buildingEntrancesMarkerMuted: 'buildingEntrancesMarkerMuted'
 	}
 } as const
 
@@ -45,6 +51,13 @@ export const ROOM_PRESS_HITBOX = {
 	right: 2,
 	bottom: 2,
 	left: 2
+} as const
+
+export const ENTRANCE_PRESS_HITBOX = {
+	top: 16,
+	right: 16,
+	bottom: 16,
+	left: 16
 } as const
 
 export const GEOJSON_TOLERANCE = 0
@@ -70,7 +83,11 @@ export const MAP_COLORS = {
 	selectedFillOpacity: 0.38,
 	selectedFillOpacityPop: 0.58,
 	selectedOutlineWidth: 2.8,
-	selectedOutlineWidthPop: 3.4
+	selectedOutlineWidthPop: 3.4,
+	entranceBadgeRadius: 11,
+	entranceBadgeStrokeWidth: 2,
+	entranceMarkerSize: 0.2,
+	entranceMuted: '#8e8e93'
 } as const
 
 export const SELECTED_POP_HOLD_MS = 80
@@ -160,6 +177,32 @@ export function getMapLayerStyles(
 				? MAP_COLORS.selectedOutlineWidthPop
 				: MAP_COLORS.selectedOutlineWidth,
 			'line-width-transition': SELECTED_POP_TRANSITION
+		},
+		buildingEntrancesBadge: {
+			'circle-radius': MAP_COLORS.entranceBadgeRadius,
+			'circle-color': primaryColor,
+			'circle-stroke-width': MAP_COLORS.entranceBadgeStrokeWidth,
+			'circle-stroke-color': backgroundColor,
+			'circle-opacity': 0.95
+		},
+		buildingEntrancesBadgeMuted: {
+			'circle-radius': MAP_COLORS.entranceBadgeRadius,
+			'circle-color': MAP_COLORS.entranceMuted,
+			'circle-stroke-width': MAP_COLORS.entranceBadgeStrokeWidth,
+			'circle-stroke-color': backgroundColor,
+			'circle-opacity': 0.95
+		},
+		buildingEntrancesMarker: {
+			layout: {
+				'icon-image': 'map-entrance',
+				'icon-size': MAP_COLORS.entranceMarkerSize,
+				'icon-allow-overlap': true,
+				'icon-ignore-placement': true,
+				'icon-anchor': 'center' as const
+			},
+			paint: {
+				'icon-color': '#ffffff'
+			}
 		}
 	}
 }
