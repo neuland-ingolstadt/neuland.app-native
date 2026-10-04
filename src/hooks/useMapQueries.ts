@@ -30,10 +30,12 @@ import {
 	TIMETABLE_GC_TIME_MS,
 	TIMETABLE_STALE_TIME_MS
 } from '@/utils/timetable-utils'
+import { useMapEntrancesQuery } from './useMapEntrancesQuery'
 import { useMapOverlayQuery } from './useMapOverlayQuery'
 
 export function useMapQueries(): {
 	mapOverlay: FeatureCollection | undefined
+	mapEntrances: FeatureCollection | undefined
 	overlayError: Error | null
 	timetable: Awaited<ReturnType<typeof loadTimetable>> | undefined
 	lecturers: NormalizedLecturer[] | undefined
@@ -46,6 +48,7 @@ export function useMapQueries(): {
 	const currentDate = new Date()
 
 	const { data: mapOverlay, error: overlayError } = useMapOverlayQuery()
+	const { data: mapEntrances } = useMapEntrancesQuery()
 
 	useEffect(() => {
 		if (overlayError != null) {
@@ -240,6 +243,7 @@ export function useMapQueries(): {
 
 	return {
 		mapOverlay,
+		mapEntrances,
 		overlayError,
 		timetable,
 		lecturers,

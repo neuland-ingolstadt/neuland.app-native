@@ -51,7 +51,11 @@ export function useMapRoomSelection({
 				center,
 				manual
 			})
-			trackEvent('Room', { room, origin })
+			if (type === SEARCH_TYPES.ENTRANCE) {
+				trackEvent('Entrance', { id: room, origin })
+			} else {
+				trackEvent('Room', { room, origin })
+			}
 			if (floor != null) {
 				setCurrentFloor({ floor, manual: false })
 			}
