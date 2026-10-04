@@ -13,6 +13,13 @@ fi
 adb wait-for-device
 adb devices -l
 
+# Suppress system crash/ANR dialogs (e.g. "Pixel Launcher isn't responding") that
+# sit above the app and hide Maestro testIDs on GHA emulators.
+adb shell settings put global hide_error_dialogs 1 || true
+adb shell settings put global window_animation_scale 0 || true
+adb shell settings put global transition_animation_scale 0 || true
+adb shell settings put global animator_duration_scale 0 || true
+
 echo "Installing $APK"
 adb install -r "$APK"
 

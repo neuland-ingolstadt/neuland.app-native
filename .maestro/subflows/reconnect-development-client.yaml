@@ -9,9 +9,21 @@ appId: ${APP_ID}
       notVisible:
         id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
     commands:
+      # Emulator ANR dialogs (e.g. Pixel Launcher) sit above the app and hide
+      # testIDs, so the while-condition keeps retrying forever. Dismiss first.
+      - runFlow:
+          when:
+            visible: ".*(isn't responding|reagiert nicht).*"
+          commands:
+            - tapOn: "(Wait|Warten)"
       - openLink: ${DEV_CLIENT_URL}
       - waitForAnimationToEnd:
           timeout: 10000
+      - runFlow:
+          when:
+            visible: ".*(isn't responding|reagiert nicht).*"
+          commands:
+            - tapOn: "(Wait|Warten)"
       # iOS may show a one-shot "Open in …" confirmation for custom schemes.
       - runFlow:
           when:
@@ -74,6 +86,12 @@ appId: ${APP_ID}
           commands:
             - waitForAnimationToEnd:
                 timeout: 25000
+# One more ANR dismiss before the hard wait (dialog can appear after Metro attaches).
+- runFlow:
+    when:
+      visible: ".*(isn't responding|reagiert nicht).*"
+    commands:
+      - tapOn: "(Wait|Warten)"
 # Hard fail with a clear signal if JS never mounted.
 - extendedWaitUntil:
     visible:

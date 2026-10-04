@@ -13,6 +13,12 @@ appId: ${APP_ID}
       - openLink: "neuland://onboarding"
       - waitForAnimationToEnd:
           timeout: 3000
+# Pixel Launcher ANRs on GHA emulators can cover the onboarding screen.
+- runFlow:
+    when:
+      visible: ".*(isn't responding|reagiert nicht).*"
+    commands:
+      - tapOn: "(Wait|Warten)"
 - extendedWaitUntil:
     visible:
       id: "onboarding-continue|login-guest"
