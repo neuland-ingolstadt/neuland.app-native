@@ -6,7 +6,7 @@ const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 const mockGetGrades = mock(async (): Promise<Grade[]> => [])
 
-mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
+mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
 	default: {
 		getGrades: mockGetGrades
 	}

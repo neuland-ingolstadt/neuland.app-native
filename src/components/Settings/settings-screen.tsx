@@ -12,8 +12,8 @@ import {
 	View
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import API from '@/api/authenticated-api'
-import { NoSessionError } from '@/api/thi-session-handler'
+import API from '@/api/thi-authenticated-api'
+import { NoSessionError } from '@/api/thi-session'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import type { UserKindContextType } from '@/contexts/userKind'

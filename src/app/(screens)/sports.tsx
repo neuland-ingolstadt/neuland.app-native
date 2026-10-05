@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { InteractionManager, View } from 'react-native'
 import ClSportsPage from '@/components/Events/cl-sports-page'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
-import { pausedToast } from '@/utils/ui-utils'
 
 export default function SportsScreen(): React.JSX.Element {
 	const headerPadding = useTransparentHeaderPadding()
@@ -21,12 +20,6 @@ export default function SportsScreen(): React.JSX.Element {
 		staleTime: 1000 * 60 * 60,
 		gcTime: 1000 * 60 * 60 * 24
 	})
-
-	useEffect(() => {
-		if (sportsResult.isPaused && sportsResult.data != null) {
-			pausedToast()
-		}
-	}, [sportsResult.isPaused, sportsResult.data])
 
 	useFocusEffect(
 		useCallback(() => {

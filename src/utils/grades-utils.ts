@@ -1,4 +1,4 @@
-import API from '@/api/authenticated-api'
+import API from '@/api/thi-authenticated-api'
 import type { SpoWeights } from '@/types/asset-api'
 import type { Grade } from '@/types/thi-api'
 import type { GradeAverage } from '@/types/utils'
