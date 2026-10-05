@@ -110,10 +110,4 @@ describe('ui-utils', () => {
 
 		expect(toastMock).toHaveBeenCalled()
 	})
-
-	it('pausedToast - Should show the paused network toast', () => {
-		uiUtils.pausedToast()
-
-		expect(toastMock).toHaveBeenCalled()
-	})
 })

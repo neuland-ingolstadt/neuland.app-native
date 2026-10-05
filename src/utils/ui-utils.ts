@@ -89,21 +89,6 @@ export const roomNotFoundToast = (room: string, color: string): void => {
 		}
 	})
 }
-export const pausedToast = (): void => {
-	toast({
-		title: t('toast.paused.title', { ns: 'common' }),
-		message: t('toast.paused.description', { ns: 'common' }),
-		preset: 'custom',
-		duration: 2,
-		from: 'top',
-		icon: {
-			ios: {
-				name: 'wifi.slash',
-				color: '#ed8422'
-			}
-		}
-	})
-}
 export const getStatusBarStyle = (
 	theme: 'light' | 'dark' | 'auto',
 	isAndroid: boolean,
