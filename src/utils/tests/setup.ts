@@ -10,15 +10,29 @@ if (globalWithDev.__DEV__ === undefined) {
 	globalWithDev.__DEV__ = false
 }
 
-const globalWithExpo = globalThis as typeof globalThis & {
+type ExpoGlobalStub = {
 	expo?: {
-		EventEmitter: new () => { addListener: () => { remove: () => void } }
+		EventEmitter: new () => {
+			addListener: () => { remove: () => void }
+			removeListener: () => void
+			removeAllListeners: () => void
+			emit: () => void
+			listenerCount: () => number
+		}
 	}
 }
+
+const globalWithExpo = globalThis as unknown as ExpoGlobalStub
 if (globalWithExpo.expo == null) {
 	class ExpoTestEventEmitter {
 		addListener() {
 			return { remove: () => {} }
+		}
+		removeListener() {}
+		removeAllListeners() {}
+		emit() {}
+		listenerCount() {
+			return 0
 		}
 	}
 	globalWithExpo.expo = { EventEmitter: ExpoTestEventEmitter }
