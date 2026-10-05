@@ -106,6 +106,11 @@ export default {
 			{
 				ios: {
 					enableSceneSupport: true
+				},
+				android: {
+					// R8 minify/obfuscation for Play Console DEX optimization (≥25% obfuscation).
+					// Resource shrinking left off until release builds are validated with minify alone.
+					enableMinifyInReleaseBuilds: true
 				}
 			}
 		],
