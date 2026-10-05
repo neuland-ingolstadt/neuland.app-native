@@ -54,7 +54,6 @@ const MapScreen = (): React.JSX.Element => {
 		navCameraCommand,
 		onNavCameraIdle,
 		navShowGhostCutaway,
-		navAllowStairMaxZoom,
 		navFloorPlanDimmed,
 		suppressSelectionCameraFocus
 	} = useMapScreenChrome()
@@ -103,7 +102,6 @@ const MapScreen = (): React.JSX.Element => {
 				cameraNavCommand={navCameraCommand}
 				onNavCameraIdle={onNavCameraIdle}
 				navShowGhostCutaway={navShowGhostCutaway}
-				navAllowStairMaxZoom={navAllowStairMaxZoom}
 				floorPlanDimmed={navFloorPlanDimmed}
 				suppressSelectionCameraFocus={suppressSelectionCameraFocus}
 				indoorNavActive={navMode != null}

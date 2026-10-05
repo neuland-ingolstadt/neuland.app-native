@@ -38,9 +38,7 @@ import {
 	legBoundsCameraOptions,
 	NAV_FLAT_CAMERA_EASING,
 	type NavCameraCommand,
-	STAIR_MOMENT_CAMERA,
-	stairEnterCameraStop,
-	stairExitFlatEaseStop
+	stairEnterCameraStop
 } from '@/utils/indoor-nav'
 import { runAfterDuration } from '@/utils/indoor-nav/run-after-map-camera'
 import {
@@ -48,6 +46,19 @@ import {
 	getSelectionFocusZoom
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
+
+function runAfterNativeCameraStop(
+	result: unknown,
+	durationMs: number,
+	onComplete: () => void
+): void {
+	const promise = result as Promise<void> | undefined
+	if (promise != null && typeof promise.then === 'function') {
+		void promise.then(onComplete).catch(onComplete)
+		return
+	}
+	runAfterDuration(durationMs, onComplete)
+}
 
 interface NativeMapCanvasProps {
 	mapKey: number
@@ -76,7 +87,6 @@ interface NativeMapCanvasProps {
 	cameraNavCommand: NavCameraCommand | null
 	onNavCameraIdle?: () => void
 	navShowGhostCutaway?: boolean
-	navAllowStairMaxZoom?: boolean
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
@@ -137,7 +147,6 @@ export default function NativeMapCanvas({
 	cameraNavCommand,
 	onNavCameraIdle,
 	navShowGhostCutaway = false,
-	navAllowStairMaxZoom = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
 	indoorNavActive = false
@@ -146,9 +155,6 @@ export default function NativeMapCanvas({
 	const currentZoomRef = useRef<number | undefined>(undefined)
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
-	const mapMaxZoom = navAllowStairMaxZoom
-		? STAIR_MOMENT_CAMERA.maxZoom
-		: MAP_CAMERA.maxZoom
 	const {
 		incoming,
 		outgoing,
@@ -179,7 +185,7 @@ export default function NativeMapCanvas({
 			const compact = isCompactMapViewport(windowWidth)
 			if (command.kind === 'stair-enter') {
 				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
-				cameraRef.current?.easeTo({
+				const promise = cameraRef.current?.easeTo({
 					center: stop.center,
 					zoom: stop.zoom,
 					pitch: stop.pitch,
@@ -187,32 +193,36 @@ export default function NativeMapCanvas({
 					duration: stop.duration,
 					padding: pad
 				})
-				runAfterDuration(stop.duration, done)
+				runAfterNativeCameraStop(promise, stop.duration, done)
 				return
 			}
 			if (command.resetFromStairs) {
-				const stop = stairExitFlatEaseStop(command.bounds, reducedMotion)
-				cameraRef.current?.easeTo({
-					center: stop.center,
-					zoom: stop.zoom,
-					pitch: stop.pitch,
-					bearing: stop.bearing,
-					duration: stop.duration,
-					padding: pad,
-					easing: NAV_FLAT_CAMERA_EASING
-				})
-				runAfterDuration(stop.duration, done)
+				const duration = legBoundsCameraOptions(reducedMotion).duration
+				const promise = cameraRef.current?.fitBounds(
+					fitBoundsNeSw(command.bounds),
+					{
+						padding: pad,
+						duration,
+						pitch: 0,
+						bearing: 0,
+						easing: NAV_FLAT_CAMERA_EASING
+					}
+				)
+				runAfterNativeCameraStop(promise, duration, done)
 				return
 			}
 			const duration = legBoundsCameraOptions(reducedMotion).duration
-			cameraRef.current?.fitBounds(fitBoundsNeSw(command.bounds), {
-				padding: pad,
-				duration,
-				pitch: 0,
-				bearing: 0,
-				easing: NAV_FLAT_CAMERA_EASING
-			})
-			runAfterDuration(duration, done)
+			const promise = cameraRef.current?.fitBounds(
+				fitBoundsNeSw(command.bounds),
+				{
+					padding: pad,
+					duration,
+					pitch: 0,
+					bearing: 0,
+					easing: NAV_FLAT_CAMERA_EASING
+				}
+			)
+			runAfterNativeCameraStop(promise, duration, done)
 		},
 		[reducedMotion, windowWidth]
 	)
@@ -275,7 +285,7 @@ export default function NativeMapCanvas({
 					bearing: 0
 				}}
 				minZoom={MAP_CAMERA.minZoom}
-				maxZoom={mapMaxZoom}
+				maxZoom={MAP_CAMERA.maxZoom}
 				trackUserLocation={
 					locationRequestId !== 0 &&
 					clickedElement == null &&

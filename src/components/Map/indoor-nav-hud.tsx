@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -18,6 +19,8 @@ interface IndoorNavHudProps {
 	canGoBack: boolean
 	backLabel: string
 	endLabel: string
+	/** iOS haptic when Continue is pressed (default selection). */
+	nextHaptic?: 'selection' | 'success'
 	onBack: () => void
 	onNext: () => void
 	onCancel: () => void
@@ -36,6 +39,7 @@ export const IndoorNavHud = ({
 	canGoBack,
 	backLabel,
 	endLabel,
+	nextHaptic = 'selection',
 	onBack,
 	onNext,
 	onCancel
@@ -98,7 +102,18 @@ export const IndoorNavHud = ({
 			{showPrimaryAction && (
 				<Pressable
 					testID="map-indoor-nav-next"
-					onPress={onNext}
+					onPress={() => {
+						if (Platform.OS === 'ios') {
+							if (nextHaptic === 'success') {
+								void Haptics.notificationAsync(
+									Haptics.NotificationFeedbackType.Success
+								)
+							} else {
+								void Haptics.selectionAsync()
+							}
+						}
+						onNext()
+					}}
 					accessibilityRole="button"
 					className="mt-3 flex-row items-center rounded-xl px-4 py-3"
 					style={{ backgroundColor: primaryColor }}

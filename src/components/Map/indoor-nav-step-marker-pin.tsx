@@ -54,9 +54,7 @@ function markerIconColor(
 		return MAP_COLORS.indoorEntranceColor
 	}
 	if (kind === 'destination') {
-		return state === 'current'
-			? primaryColor
-			: MAP_COLORS.indoorDestinationColor
+		return primaryColor
 	}
 	return MAP_COLORS.indoorStairsMono[mapMode]
 }

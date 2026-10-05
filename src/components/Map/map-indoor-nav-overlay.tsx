@@ -27,6 +27,9 @@ export function MapIndoorNavOverlay({
 			canGoBack={navMode.stepIndex > 0}
 			backLabel={navMode.backLabel}
 			endLabel={navMode.endLabel}
+			nextHaptic={
+				navMode.stepIndex + 1 >= navMode.stepTotal - 1 ? 'success' : 'selection'
+			}
 			onBack={() => {
 				navMode.selectStep(navMode.stepIndex - 1)
 			}}

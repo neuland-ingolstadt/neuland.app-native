@@ -2,7 +2,7 @@ import type { JourneyStep } from '@/utils/indoor-nav'
 import { bboxOfCoords } from '@/utils/indoor-nav'
 import type { IndoorNavModel } from './useIndoorNavigation'
 
-const STEP_FIT_MARGIN_M = 8
+export const STEP_FIT_MARGIN_M = 8
 
 export function stepFloor(step: JourneyStep): string {
 	if (step.kind === 'stairs') {

@@ -109,7 +109,6 @@ export function useMapScreenChrome({
 		handleDetailIndexChange,
 		hideDetailSheet,
 		presentDetailSheet,
-		requestCameraReset,
 		cameraResetRequestId
 	} = useMapDetailSheet({
 		clickedElement,
@@ -125,7 +124,6 @@ export function useMapScreenChrome({
 		navCameraCommand,
 		onNavCameraIdle,
 		navShowGhostCutaway,
-		navAllowStairMaxZoom,
 		navFloorPlanDimmed,
 		suppressSelectionCameraFocus,
 		mergedSections
@@ -134,7 +132,6 @@ export function useMapScreenChrome({
 		overlayFloor: currentFloor?.floor ?? 'EG',
 		allSections,
 		hideDetailSheet,
-		requestCameraReset,
 		setSearchIndex,
 		searchHiddenIndex: SEARCH_HIDDEN,
 		searchHalfIndex: SEARCH_HALF
@@ -213,7 +210,6 @@ export function useMapScreenChrome({
 		navCameraCommand,
 		onNavCameraIdle,
 		navShowGhostCutaway,
-		navAllowStairMaxZoom,
 		navFloorPlanDimmed,
 		suppressSelectionCameraFocus,
 		detailIndex,

@@ -5,15 +5,15 @@ export const STAIR_MOMENT_CAMERA = {
 	pitch: 56,
 	pitchCompact: 52,
 	bearing: -28,
-	zoom: 20,
-	zoomCompact: 20,
-	maxZoom: 20,
+	zoom: MAP_CAMERA.maxZoom,
+	zoomCompact: MAP_CAMERA.maxZoom,
+	maxZoom: MAP_CAMERA.maxZoom,
 	/** Pitched fly-in at a stairs step. */
 	durationMs: 1050,
 	/** Flat leg fitBounds / fly-out after stairs. */
 	legDurationMs: 720,
-	/** Closer than focusZoom — stay nearer after pitched stair view (POC ~19.35). */
-	exitLegZoom: 19.1,
+	/** Match MAP_CAMERA.maxZoom so native Camera maxZoom can drop after the stair moment. */
+	exitLegZoom: MAP_CAMERA.maxZoom,
 	flyCurve: 1.38,
 	cutawayRevealDelayMs: 300,
 	cutawayHideDelayMs: 220,

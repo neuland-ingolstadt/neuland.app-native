@@ -38,7 +38,6 @@ import {
 	isCompactMapViewport,
 	legBoundsCameraOptions,
 	type NavCameraCommand,
-	STAIR_MOMENT_CAMERA,
 	stairEnterCameraStop,
 	stairExitFlatEaseStop
 } from '@/utils/indoor-nav'
@@ -87,7 +86,6 @@ interface WebMapCanvasProps {
 	cameraNavCommand: NavCameraCommand | null
 	onNavCameraIdle?: () => void
 	navShowGhostCutaway?: boolean
-	navAllowStairMaxZoom?: boolean
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
@@ -146,7 +144,6 @@ export default function WebMapCanvas({
 	cameraNavCommand,
 	onNavCameraIdle,
 	navShowGhostCutaway = false,
-	navAllowStairMaxZoom = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
 	indoorNavActive = false
@@ -154,17 +151,14 @@ export default function WebMapCanvas({
 	const mapRef = useRef<MapRef | null>(null)
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
-	const mapMaxZoom = navAllowStairMaxZoom
-		? STAIR_MOMENT_CAMERA.maxZoom
-		: MAP_CAMERA.maxZoom
 
 	useEffect(() => {
 		const map = mapRef.current?.getMap()
 		if (map == null) {
 			return
 		}
-		map.setMaxZoom(mapMaxZoom)
-	}, [mapMaxZoom])
+		map.setMaxZoom(MAP_CAMERA.maxZoom)
+	}, [])
 
 	const {
 		incoming,
@@ -201,7 +195,6 @@ export default function WebMapCanvas({
 			const compact = isCompactMapViewport(windowWidth)
 			map.stop()
 			if (command.kind === 'stair-enter') {
-				map.setMaxZoom(STAIR_MOMENT_CAMERA.maxZoom)
 				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
 				map.flyTo({
 					center: stop.center,
@@ -231,14 +224,14 @@ export default function WebMapCanvas({
 			const duration = legBoundsCameraOptions(reducedMotion).duration
 			map.fitBounds(fitBoundsLngLatPair(command.bounds), {
 				padding: pad,
-				maxZoom: mapMaxZoom,
+				maxZoom: MAP_CAMERA.maxZoom,
 				duration,
 				pitch: 0,
 				bearing: 0
 			})
 			runAfterMapCamera(map, duration, done)
 		},
-		[mapMaxZoom, reducedMotion, windowWidth]
+		[reducedMotion, windowWidth]
 	)
 
 	useMapCameraSync({
@@ -283,7 +276,7 @@ export default function WebMapCanvas({
 					zoom: MAP_CAMERA.initialZoom
 				}}
 				mapStyle={MAP_STYLE_URLS[mapMode]}
-				maxZoom={mapMaxZoom}
+				maxZoom={MAP_CAMERA.maxZoom}
 				ref={mapRef}
 				onLoad={() => {
 					runAfterMapCommit(() => setMapLoadState(LoadingState.LOADED))

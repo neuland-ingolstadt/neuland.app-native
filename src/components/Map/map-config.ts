@@ -112,8 +112,8 @@ export const MAP_COLORS = {
 		dark: '#3d4552'
 	},
 	roomOutlineWidth: {
-		light: 1.5,
-		dark: 1.5
+		light: 2,
+		dark: 2
 	},
 	availableRoomFillOpacity: 0.12,
 	buildingLabelSize: 14,
@@ -139,7 +139,6 @@ export const MAP_COLORS = {
 	},
 	indoorStepMarkerSize: 30,
 	indoorStepMarkerIconSize: 16,
-	indoorDestinationColor: '#ff3b30',
 	indoorEntranceColor: '#18b91e',
 	indoorStairsColor: '#990eda',
 	indoorStairsMono: {
