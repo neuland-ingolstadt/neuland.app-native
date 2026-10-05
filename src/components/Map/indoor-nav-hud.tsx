@@ -46,7 +46,9 @@ export const IndoorNavHud = ({
 	)
 	const contrastOnPrimary = getContrastColor(primaryColor)
 	const bottom = Platform.OS === 'web' ? 12 : insets.bottom + 12
-	const showSubline = subline !== '' && subline !== headline
+	const showPrimaryAction = !arrived && nextLabel != null
+	const showSubline =
+		!showPrimaryAction && subline !== '' && subline !== headline
 
 	return (
 		<View
@@ -60,16 +62,26 @@ export const IndoorNavHud = ({
 			<Text className="text-[13px] font-semibold text-label" numberOfLines={1}>
 				{kicker}
 			</Text>
-			<View className="mt-0.5 flex-row items-baseline gap-2">
-				<Text className="flex-1 text-xl font-bold text-text" numberOfLines={2}>
-					{headline}
-				</Text>
-				{!arrived && floorBadge !== '' && (
-					<Text className="shrink-0 text-[15px] font-semibold text-primary">
-						{floorBadge}
+			{!showPrimaryAction && (
+				<View className="mt-0.5 flex-row items-baseline gap-2">
+					<Text
+						className="flex-1 text-xl font-bold text-text"
+						numberOfLines={2}
+					>
+						{headline}
 					</Text>
-				)}
-			</View>
+					{!arrived && floorBadge !== '' && (
+						<Text className="shrink-0 text-[15px] font-semibold text-primary">
+							{floorBadge}
+						</Text>
+					)}
+				</View>
+			)}
+			{showPrimaryAction && floorBadge !== '' && (
+				<Text className="mt-0.5 text-[15px] font-semibold text-primary">
+					{floorBadge}
+				</Text>
+			)}
 			{showSubline && (
 				<Text
 					className="mt-1 text-[15px] leading-5 text-text"
@@ -83,7 +95,7 @@ export const IndoorNavHud = ({
 					{meta}
 				</Text>
 			)}
-			{!arrived && nextLabel != null && (
+			{showPrimaryAction && (
 				<Pressable
 					testID="map-indoor-nav-next"
 					onPress={onNext}
@@ -91,16 +103,19 @@ export const IndoorNavHud = ({
 					className="mt-3 flex-row items-center rounded-xl px-4 py-3"
 					style={{ backgroundColor: primaryColor }}
 				>
-					<Text
-						className="mr-2 text-lg font-bold"
-						style={{ color: contrastOnPrimary }}
-					>
-						{nextDir === 'down' ? '↓' : '↑'}
-					</Text>
+					{nextDir != null && (
+						<Text
+							className="mr-2 text-lg font-bold"
+							style={{ color: contrastOnPrimary }}
+						>
+							{nextDir === 'down' ? '↓' : '↑'}
+						</Text>
+					)}
 					<View className="flex-1">
 						<Text
-							className="text-base font-semibold leading-5"
+							className="text-lg font-bold leading-6"
 							style={{ color: contrastOnPrimary }}
+							numberOfLines={2}
 						>
 							{nextLabel}
 						</Text>

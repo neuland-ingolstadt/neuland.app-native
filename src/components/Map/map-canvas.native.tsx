@@ -5,6 +5,7 @@ import {
 	Images,
 	Layer,
 	Map as MapLibreMap,
+	Marker,
 	NativeUserLocation
 } from '@maplibre/maplibre-react-native'
 import type React from 'react'
@@ -20,10 +21,12 @@ import {
 	type MapMode,
 	ROOM_PRESS_HITBOX
 } from '@/components/Map/map-config'
+import { MapSelectionMarker } from '@/components/Map/map-selection-marker'
 import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import type { ClickedMapElement } from '@/types/map'
+import { SEARCH_TYPES } from '@/types/map'
 import type { FitBounds } from '@/utils/indoor-nav'
 import {
 	getMapFocusPadding,
@@ -220,32 +223,22 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			<GeoJSONSource
-				id={MAP_IDS.sources.selectedRoom}
-				data={{
-					type: 'FeatureCollection',
-					features:
-						selectedRoomCenter == null
-							? []
-							: [
-									{
-										type: 'Feature',
-										geometry: {
-											type: 'Point',
-											coordinates: selectedRoomCenter
-										},
-										properties: {}
-									}
-								]
-				}}
-			>
-				<Layer
-					id={MAP_IDS.layers.selectedRoomMarker}
-					type="symbol"
-					layout={layerStyles.selectedRoomMarker.layout}
-					paint={layerStyles.selectedRoomMarker.paint}
-				/>
-			</GeoJSONSource>
+			{selectedRoomCenter != null && clickedElement != null && (
+				<Marker
+					id="map-selection-marker"
+					lngLat={selectedRoomCenter}
+					anchor={
+						clickedElement.type === SEARCH_TYPES.BUILDING ? 'center' : 'bottom'
+					}
+				>
+					<MapSelectionMarker
+						type={clickedElement.type}
+						selectionColor={selectionColor}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+					/>
+				</Marker>
+			)}
 			<GeoJSONSource
 				id={MAP_IDS.sources.selectedOverlay}
 				data={{
@@ -258,14 +251,12 @@ export default function NativeMapCanvas({
 					id={MAP_IDS.layers.selectedFill}
 					type="fill"
 					paint={layerStyles.selectedFill}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 				<Layer
 					id={MAP_IDS.layers.selectedOutline}
 					type="line"
 					layout={layerStyles.selectedOutline.layout}
 					paint={layerStyles.selectedOutline.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
 			<GeoJSONSource id={MAP_IDS.sources.buildingLabels} data={buildingGeoJSON}>
@@ -274,7 +265,6 @@ export default function NativeMapCanvas({
 					type="symbol"
 					layout={layerStyles.buildingLabels.layout}
 					paint={layerStyles.buildingLabels.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
 			{outgoingStyles != null && outgoing != null && (

@@ -24,8 +24,8 @@
 	},
 	"guidance": {
 		"followPath": "Follow the path",
-		"followBlue": "Follow the blue path",
-		"followBlueLine": "Follow the blue line",
+		"followMarkedPath": "Follow the marked path",
+		"routeLineOnMap": "The marked route on the map",
 		"headCorridor": "Head into the corridor",
 		"continueDest": "Continue to destination",
 		"continueFloor": "Continue on this floor",

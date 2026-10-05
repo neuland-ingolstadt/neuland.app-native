@@ -24,8 +24,8 @@
 	},
 	"guidance": {
 		"followPath": "Dem Weg folgen",
-		"followBlue": "Dem blauen Weg folgen",
-		"followBlueLine": "Der blaue Strich auf der Karte",
+		"followMarkedPath": "Dem markierten Weg folgen",
+		"routeLineOnMap": "Der markierte Weg auf der Karte",
 		"headCorridor": "Richtung Flur",
 		"continueDest": "Weiter zum Ziel",
 		"continueFloor": "Weiter auf dieser Etage",

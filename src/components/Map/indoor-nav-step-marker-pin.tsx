@@ -4,8 +4,7 @@ import {
 	Check,
 	DoorOpen,
 	Flag,
-	type LucideIcon,
-	MapPin
+	type LucideIcon
 } from 'lucide-react-native'
 import type React from 'react'
 import { Platform, View } from 'react-native'
@@ -29,17 +28,16 @@ interface IndoorNavStepMarkerPinProps {
 function markerIconForKind(kind: string): LucideIcon {
 	switch (kind) {
 		case 'entry':
-			return MapPin
+		case 'entrance':
+			return DoorOpen
 		case 'destination':
 			return Flag
 		case 'stairs_up':
 			return ArrowUp
 		case 'stairs_arrive':
 			return ArrowDown
-		case 'entrance':
-			return DoorOpen
 		default:
-			return MapPin
+			return DoorOpen
 	}
 }
 

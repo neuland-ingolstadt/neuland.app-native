@@ -200,6 +200,9 @@ export function useMapCanvasState({
 		if (selection == null) {
 			return false
 		}
+		if (suppressRoomSelection) {
+			return true
+		}
 		if (clickedElement?.data === selection.room) {
 			triggerSelectionPop()
 		}

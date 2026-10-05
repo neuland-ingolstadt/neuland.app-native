@@ -116,10 +116,10 @@ export const MAP_COLORS = {
 	buildingLabelSize: 14,
 	buildingLabelHaloWidth: 1,
 	selectedRoomMarkerSize: 0.17,
-	selectedFillOpacity: 0.38,
-	selectedFillOpacityPop: 0.58,
-	selectedOutlineWidth: 2.8,
-	selectedOutlineWidthPop: 3.4,
+	selectedFillOpacity: 0.14,
+	selectedFillOpacityPop: 0.22,
+	selectedOutlineWidth: 1,
+	selectedOutlineWidthPop: 1.25,
 	indoorRouteHaloColor: '#ffffff',
 	indoorRouteLineWidth: 4.25,
 	indoorProgressDoneColor: '#8e8e8e',
@@ -271,6 +271,7 @@ export function getMapLayerStyles(
 				'line-width': selectionPop
 					? MAP_COLORS.selectedOutlineWidthPop
 					: MAP_COLORS.selectedOutlineWidth,
+				'line-opacity': 0.88,
 				'line-width-transition': SELECTED_POP_TRANSITION
 			}
 		}

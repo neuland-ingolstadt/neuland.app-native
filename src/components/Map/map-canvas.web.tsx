@@ -21,10 +21,12 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
+import { MapSelectionMarker } from '@/components/Map/map-selection-marker'
 import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import type { ClickedMapElement } from '@/types/map'
+import { SEARCH_TYPES } from '@/types/map'
 import type { FitBounds } from '@/utils/indoor-nav'
 import {
 	getMapFocusPadding,
@@ -335,12 +337,23 @@ export default function WebMapCanvas({
 						/>
 					</Source>
 				)}
-				{selectedRoomCenter != null && (
+				{selectedRoomCenter != null && clickedElement != null && (
 					<Marker
 						longitude={selectedRoomCenter[0]}
 						latitude={selectedRoomCenter[1]}
-						color={selectionColor}
-					/>
+						anchor={
+							clickedElement.type === SEARCH_TYPES.BUILDING
+								? 'center'
+								: 'bottom'
+						}
+					>
+						<MapSelectionMarker
+							type={clickedElement.type}
+							selectionColor={selectionColor}
+							primaryColor={primaryColor}
+							mapMode={mapMode}
+						/>
+					</Marker>
 				)}
 				{mapLoadState === LoadingState.LOADED && (
 					<IndoorNavMapLayers

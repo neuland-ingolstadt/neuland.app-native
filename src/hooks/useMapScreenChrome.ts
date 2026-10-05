@@ -15,6 +15,7 @@ import { useMapDetailSheet } from '@/hooks/useMapDetailSheet'
 import { useMapIndoorNav } from '@/hooks/useMapIndoorNav'
 import { useMapScreenModel } from '@/hooks/useMapScreenModel'
 import { useOsmAttributionFade } from '@/hooks/useOsmAttributionFade'
+import type { SelectMapElement } from '@/types/map'
 import { LoadingState } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -139,6 +140,16 @@ export function useMapScreenChrome({
 		presentDetailSheetRef.current = presentDetailSheet
 	}, [presentDetailSheet])
 
+	const selectMapElementGuarded: SelectMapElement = useCallback(
+		(options) => {
+			if (navMode != null) {
+				return
+			}
+			selectMapElement(options)
+		},
+		[navMode, selectMapElement]
+	)
+
 	const focusPaddingBottom = suppressSelectionCameraFocus
 		? NAV_HUD_FOCUS_PADDING_BASE
 		: clickedElement != null
@@ -189,7 +200,7 @@ export function useMapScreenChrome({
 		availableFilteredGeoJSON,
 		clickedElement,
 		currentFloor,
-		selectMapElement,
+		selectMapElement: selectMapElementGuarded,
 		roomData,
 		allSections: mergedSections,
 		indoorMapLayers,

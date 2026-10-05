@@ -64,7 +64,7 @@ export type JourneyStep =
 export type JourneyNextAction = {
 	label: string
 	hint: string
-	dir: 'up' | 'down'
+	dir?: 'up' | 'down'
 }
 
 export type JourneyStepCopy = {
@@ -95,37 +95,26 @@ function stairDir(fromFloor: string, toFloor: string): 'up' | 'down' {
 		: 'down'
 }
 
-function nextStepCopy(
+/** Primary HUD button: current step only (tap to advance). */
+function primaryActionCopy(
+	step: JourneyStep,
+	headline: string,
+	subline: string,
 	steps: JourneyStep[],
-	fromIndex: number,
-	t: TFunction<'indoor-nav'>
+	stepIndex: number
 ): JourneyNextAction | undefined {
-	const next = steps[fromIndex + 1]
-	if (!next || fromIndex >= steps.length - 1) return undefined
-
-	const cur = steps[fromIndex]
-	let hint = t('guidance.nextGeneric')
-	let dir: 'up' | 'down' = 'up'
-
-	if (next.kind === 'arrival') {
-		hint = t('guidance.arrivedNextHint')
-	} else if (next.kind === 'stairs') {
-		dir = stairDir(next.fromFloor, next.toFloor)
-		hint = t('guidance.stairsNextHint')
-	} else if (cur) {
-		// Note: arrival steps are always last, so `next` is undefined and this
-		// branch is unreachable for them — the narrowing only satisfies tsc
-		// (the POC reads `cur.fromFloor` here, which Vite never type-checked).
-		dir = stairDir(
-			cur.kind === 'walk' || cur.kind === 'arrival' ? cur.floor : cur.fromFloor,
-			next.floor
-		)
+	if (stepIndex >= steps.length - 1 || step.kind === 'arrival') {
+		return undefined
 	}
 
+	const hint = subline !== '' && subline !== headline ? subline : ''
+	const dir =
+		step.kind === 'stairs' ? stairDir(step.fromFloor, step.toFloor) : undefined
+
 	return {
-		label: t('guidance.nextPrefix'),
+		label: headline,
 		hint,
-		dir
+		...(dir != null ? { dir } : {})
 	}
 }
 
@@ -483,7 +472,7 @@ function phasedStepManeuver(
 		case 'follow':
 			return {
 				headline: t('guidance.followPath'),
-				subline: t('guidance.followBlueLine')
+				subline: t('guidance.routeLineOnMap')
 			}
 		case 'enterRoom':
 			return {
@@ -493,7 +482,7 @@ function phasedStepManeuver(
 		case 'toStairs':
 			return {
 				headline: t('guidance.enterStaircase'),
-				subline: t('guidance.followBlue')
+				subline: t('guidance.followMarkedPath')
 			}
 		case 'fromStairs':
 			return {
@@ -501,7 +490,7 @@ function phasedStepManeuver(
 				subline:
 					floor != null
 						? indoorNavFloorLabel(t, floor)
-						: t('guidance.followBlue')
+						: t('guidance.followMarkedPath')
 			}
 		case 'leaveRoom': {
 			const code = fromId.startsWith('room:')
@@ -540,7 +529,7 @@ export function journeyStepCopy(
 		return {
 			kicker: '—',
 			headline: t('guidance.followPath'),
-			subline: t('guidance.followBlueLine'),
+			subline: t('guidance.routeLineOnMap'),
 			meta: '',
 			arrived: false,
 			wrongFloor: false
@@ -587,7 +576,7 @@ export function journeyStepCopy(
 			meta,
 			arrived: false,
 			wrongFloor: false,
-			next: nextStepCopy(steps, safe, t)
+			next: primaryActionCopy(step, stair.headline, stair.subline, steps, safe)
 		}
 	}
 
@@ -631,15 +620,16 @@ export function journeyStepCopy(
 		step.durationSec,
 		locale
 	)
+	const subline = walk.subline ?? t('guidance.followMarkedPath')
 	const meta = `${duration} ${isFinalWalk ? t('guidance.remaining') : t('guidance.onThisLevel')}`
 	return {
 		kicker: `${stepPos} · ${indoorNavFloorLabel(t, stepFloor)}`,
 		headline: walk.headline,
-		subline: walk.subline ?? t('guidance.followBlue'),
+		subline,
 		meta,
 		arrived: false,
 		wrongFloor: false,
-		next: nextStepCopy(steps, safe, t)
+		next: primaryActionCopy(step, walk.headline, subline, steps, safe)
 	}
 }
 

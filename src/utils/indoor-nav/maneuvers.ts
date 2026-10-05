@@ -74,7 +74,7 @@ export function walkStepManeuver(
 	if (!seg) {
 		return {
 			headline: t('guidance.followPath'),
-			subline: t('guidance.followBlueLine')
+			subline: t('guidance.routeLineOnMap')
 		}
 	}
 
@@ -142,7 +142,7 @@ export function walkStepManeuver(
 		}
 		return {
 			headline: t('guidance.walkCorridor'),
-			subline: t('guidance.followBlue')
+			subline: t('guidance.followMarkedPath')
 		}
 	}
 
@@ -161,7 +161,7 @@ export function walkStepManeuver(
 		}
 		return {
 			headline: t('guidance.continueDest'),
-			subline: t('guidance.followBlue')
+			subline: t('guidance.followMarkedPath')
 		}
 	}
 
@@ -169,12 +169,12 @@ export function walkStepManeuver(
 		if (endId && isStairRoomId(graph, endId)) {
 			return {
 				headline: t('guidance.enterStaircase'),
-				subline: t('guidance.followBlue')
+				subline: t('guidance.followMarkedPath')
 			}
 		}
 		return {
 			headline: t('guidance.walkStairs'),
-			subline: t('guidance.followBlue')
+			subline: t('guidance.followMarkedPath')
 		}
 	}
 
@@ -194,7 +194,7 @@ export function walkStepManeuver(
 
 	return {
 		headline: t('guidance.continueFloor'),
-		subline: t('guidance.followBlue')
+		subline: t('guidance.followMarkedPath')
 	}
 }
 
