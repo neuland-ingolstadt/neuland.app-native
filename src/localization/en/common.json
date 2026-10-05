@@ -1,10 +1,6 @@
 {
 	"toast": {
 		"clipboard": "copied to clipboard",
-		"paused": {
-			"title": "No internet connection",
-			"description": "Data may be outdated"
-		},
 		"roomNotFound": "Room not found",
 		"mapOverlay": "Error while loading overlay",
 		"dashboard": "Drag & drop to reorder",
