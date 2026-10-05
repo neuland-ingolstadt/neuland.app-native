@@ -58,7 +58,7 @@ export function pickLegForFloor(
 	return legs.find((i) => i >= preferFromLeg) ?? legs[legs.length - 1]
 }
 
-/** Destination room polygon when the user is on the arrival step. */
+/** Destination room polygon while navigating on the destination floor. */
 export function destinationRoomGeoJsonForFloor(
 	data: IndoorData,
 	floor: string,

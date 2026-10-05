@@ -43,6 +43,7 @@ export const MAP_IDS = {
 		selectedFill: 'selectedRoomFill',
 		selectedOutline: 'selectedRoomOutline',
 		indoorProgressLine: 'indoorProgressLine',
+		indoorProgressLineTodo: 'indoorProgressLineTodo',
 		indoorStepMarkers: 'indoorStepMarkers',
 		indoorEntrances: 'indoorEntrances',
 		indoorStairsFill: 'indoorStairsFill',
@@ -125,21 +126,25 @@ export const MAP_COLORS = {
 	indoorProgressDoneOpacity: 0.55,
 	indoorProgressCurrentOpacity: 1,
 	indoorProgressCurrentWidth: 6,
-	indoorProgressTodoOpacity: 0.35,
-	indoorStepMarkerDoneOpacity: 0.4,
-	indoorStepMarkerCurrentOpacity: 1,
-	indoorStepMarkerTodoOpacity: 0.85,
-	indoorStepMarkerRadius: 7,
+	indoorProgressTodoOpacity: 0.72,
+	indoorProgressTodoDash: [2, 1.75] as const,
+	indoorStepMarkerBorderWidth: 2.5,
+	indoorStepMarkerDoneIconOpacity: 0.85,
+	indoorStepMarkerDoneSurface: {
+		light: '#ececee',
+		dark: '#3a3a3c'
+	},
+	indoorStepMarkerSize: 30,
+	indoorStepMarkerIconSize: 16,
 	indoorDestinationColor: '#ff3b30',
 	indoorEntranceColor: '#18b91e',
-	indoorEntranceRadius: 6,
 	indoorStairsColor: '#990eda',
 	indoorStairsMono: {
 		light: '#000000',
 		dark: '#ffffff'
 	},
 	indoorStairsFillOpacity: 0.35,
-	indoorStairsOutlineWidth: 2.5,
+	indoorStairsOutlineWidth: 1.25,
 	indoorDestinationRoomFillOpacity: 0.38,
 	indoorDestinationRoomOutlineWidth: 2.8
 } as const

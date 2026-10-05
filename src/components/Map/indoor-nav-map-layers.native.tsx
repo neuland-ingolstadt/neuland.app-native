@@ -2,6 +2,10 @@ import { GeoJSONSource, Layer } from '@maplibre/maplibre-react-native'
 import type React from 'react'
 import { getIndoorNavLayerPaints } from '@/components/Map/indoor-nav-layer-styles'
 import {
+	IndoorNavEntranceMarkers,
+	IndoorNavStepMarkers
+} from '@/components/Map/indoor-nav-step-markers.native'
+import {
 	GEOJSON_TOLERANCE,
 	MAP_IDS,
 	type MapMode
@@ -50,8 +54,21 @@ export function IndoorNavMapLayers({
 				tolerance={GEOJSON_TOLERANCE}
 			>
 				<Layer
+					id={MAP_IDS.layers.indoorProgressLineTodo}
+					type="line"
+					filter={['==', ['get', 'state'], 'todo']}
+					layout={paints.progressLineTodoLayout}
+					paint={paints.progressLineTodo}
+				/>
+				<Layer
 					id={MAP_IDS.layers.indoorProgressLine}
 					type="line"
+					filter={[
+						'any',
+						['==', ['get', 'state'], 'done'],
+						['==', ['get', 'state'], 'current']
+					]}
+					layout={paints.progressLineLayout}
 					// biome-ignore lint/suspicious/noExplicitAny: MapLibre data-driven paint expressions
 					paint={paints.progressLine as any}
 				/>
@@ -72,30 +89,17 @@ export function IndoorNavMapLayers({
 					paint={paints.destinationRoomOutline}
 				/>
 			</GeoJSONSource>
-			<GeoJSONSource
-				id={MAP_IDS.sources.indoorStepMarkers}
-				data={layers.stepMarkersGeoJSON}
-				tolerance={GEOJSON_TOLERANCE}
-			>
-				<Layer
-					id={MAP_IDS.layers.indoorStepMarkers}
-					type="circle"
-					// biome-ignore lint/suspicious/noExplicitAny: MapLibre data-driven paint expressions
-					paint={paints.stepMarkers as any}
-				/>
-			</GeoJSONSource>
+			<IndoorNavStepMarkers
+				stepMarkersGeoJSON={layers.stepMarkersGeoJSON}
+				primaryColor={primaryColor}
+				mapMode={mapMode}
+			/>
 			{overlayFloor === 'EG' && (
-				<GeoJSONSource
-					id={MAP_IDS.sources.indoorEntrances}
-					data={layers.entrancesGeoJSON}
-					tolerance={GEOJSON_TOLERANCE}
-				>
-					<Layer
-						id={MAP_IDS.layers.indoorEntrances}
-						type="circle"
-						paint={paints.entrances}
-					/>
-				</GeoJSONSource>
+				<IndoorNavEntranceMarkers
+					entrancesGeoJSON={layers.entrancesGeoJSON}
+					primaryColor={primaryColor}
+					mapMode={mapMode}
+				/>
 			)}
 		</>
 	)

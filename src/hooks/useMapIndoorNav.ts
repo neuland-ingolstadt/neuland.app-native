@@ -145,8 +145,7 @@ export function useMapIndoorNav({
 			return EMPTY_INDOOR_MAP_LAYERS
 		}
 		const activeStep = indoorSteps.steps[indoorSteps.stepIndex]
-		const arriving =
-			activeStep?.kind === 'arrival' && activeStep.floor === floor
+		const highlightDestinationRoom = floor === indoorNav.destinationFloor
 		const stairCodes = activeStairCodesForStep(
 			routeResult,
 			activeStep,
@@ -177,7 +176,7 @@ export function useMapIndoorNav({
 				data,
 				floor,
 				indoorNav.destinationCode,
-				arriving
+				highlightDestinationRoom
 			)
 		}
 	}, [
