@@ -11,7 +11,7 @@ import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
 import {
 	EMPTY_MAP_FEATURES,
@@ -41,6 +41,10 @@ setWorkerUrl('/maplibre-gl-worker.mjs')
 const mapContainerStyle = {
 	height: '100%',
 	width: '100%'
+}
+
+function runAfterMapCommit(fn: () => void): void {
+	setTimeout(fn, 0)
 }
 
 interface WebMapCanvasProps {
@@ -177,6 +181,10 @@ export default function WebMapCanvas({
 		}
 	})
 
+	const handleMapDragStart = useCallback(() => {
+		runAfterMapCommit(() => onRegionChange(true))
+	}, [onRegionChange])
+
 	const handleMapClick = (event: MapMouseEvent): void => {
 		if (!filteredGeoJSON || !mapRef.current) {
 			return
@@ -200,10 +208,14 @@ export default function WebMapCanvas({
 				}}
 				mapStyle={MAP_STYLE_URLS[mapMode]}
 				ref={mapRef}
-				onLoad={() => setMapLoadState(LoadingState.LOADED)}
-				onError={() => setMapLoadState(LoadingState.ERROR)}
+				onLoad={() => {
+					runAfterMapCommit(() => setMapLoadState(LoadingState.LOADED))
+				}}
+				onError={() => {
+					runAfterMapCommit(() => setMapLoadState(LoadingState.ERROR))
+				}}
 				onClick={handleMapClick}
-				onMoveStart={() => onRegionChange(true)}
+				onDragStart={handleMapDragStart}
 				attributionControl={false}
 			>
 				<NavigationControl position="top-left" />
@@ -223,7 +235,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.selectedOutline}
 						type="line"
-						paint={layerStyles.selectedOutline}
+						layout={layerStyles.selectedOutline.layout}
+						paint={layerStyles.selectedOutline.paint}
 					/>
 				</Source>
 				<Source
@@ -253,7 +266,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.allRoomsOutline}
 						type="line"
-						paint={layerStyles.allRoomsOutline}
+						layout={layerStyles.allRoomsOutline.layout}
+						paint={layerStyles.allRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -273,7 +287,8 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.allRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.allRoomsOutline}
+							layout={outgoingStyles.allRoomsOutline.layout}
+							paint={outgoingStyles.allRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>
@@ -293,7 +308,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.availableRoomsOutline}
 						type="line"
-						paint={layerStyles.availableRoomsOutline}
+						layout={layerStyles.availableRoomsOutline.layout}
+						paint={layerStyles.availableRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -313,7 +329,8 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.availableRoomsOutline}
+							layout={outgoingStyles.availableRoomsOutline.layout}
+							paint={outgoingStyles.availableRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>

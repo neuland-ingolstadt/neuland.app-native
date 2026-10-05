@@ -263,7 +263,8 @@ export default function NativeMapCanvas({
 				<Layer
 					id={MAP_IDS.layers.selectedOutline}
 					type="line"
-					paint={layerStyles.selectedOutline}
+					layout={layerStyles.selectedOutline.layout}
+					paint={layerStyles.selectedOutline.paint}
 					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
@@ -292,7 +293,8 @@ export default function NativeMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.allRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.allRoomsOutline}
+							layout={outgoingStyles.allRoomsOutline.layout}
+							paint={outgoingStyles.allRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</GeoJSONSource>
@@ -310,7 +312,8 @@ export default function NativeMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.availableRoomsOutline}
+							layout={outgoingStyles.availableRoomsOutline.layout}
+							paint={outgoingStyles.availableRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</GeoJSONSource>
@@ -335,7 +338,8 @@ export default function NativeMapCanvas({
 				<Layer
 					id={MAP_IDS.layers.allRoomsOutline}
 					type="line"
-					paint={layerStyles.allRoomsOutline}
+					layout={layerStyles.allRoomsOutline.layout}
+					paint={layerStyles.allRoomsOutline.paint}
 					beforeId={MAP_IDS.layers.selectedFill}
 				/>
 			</GeoJSONSource>
@@ -353,7 +357,8 @@ export default function NativeMapCanvas({
 				<Layer
 					id={MAP_IDS.layers.availableRoomsOutline}
 					type="line"
-					paint={layerStyles.availableRoomsOutline}
+					layout={layerStyles.availableRoomsOutline.layout}
+					paint={layerStyles.availableRoomsOutline.paint}
 					beforeId={MAP_IDS.layers.selectedFill}
 				/>
 			</GeoJSONSource>
