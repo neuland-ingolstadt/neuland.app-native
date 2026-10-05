@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import { SEARCH_TYPES } from '@/types/map'
+import { i18nextModuleWithStubT } from './i18next-mock-helpers'
 import { reactNativePlatform, reactNativeShareMock } from './react-native-mock'
 
 const UTILS_ROOT = new URL('../', import.meta.url).pathname
@@ -31,9 +32,7 @@ mock.module('burnt', () => ({
 	toast: () => {}
 }))
 
-mock.module('i18next', () => ({
-	t: (key: string) => key
-}))
+mock.module('i18next', i18nextModuleWithStubT)
 
 let mapUtils: typeof import('../map-utils')
 

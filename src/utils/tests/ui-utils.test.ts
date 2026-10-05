@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
+import { i18nextModuleWithStubT } from './i18next-mock-helpers'
 import { reactNativePlatform } from './react-native-mock'
 
 const clipboardSetStringAsyncMock = mock(async () => {})
@@ -13,9 +14,7 @@ mock.module('burnt', () => ({
 	toast: toastMock
 }))
 
-mock.module('i18next', () => ({
-	t: (key: string) => key
-}))
+mock.module('i18next', i18nextModuleWithStubT)
 
 mock.module('@aptabase/react-native', () => ({
 	trackEvent: trackEventMock

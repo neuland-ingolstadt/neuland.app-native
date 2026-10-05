@@ -18,7 +18,10 @@ import {
 	stepMarkersGeoJsonForFloor
 } from '@/utils/indoor-nav/journey-visualization'
 import { splitSegmentAtRoomEntry } from '@/utils/indoor-nav/maneuvers'
-import { stairShaftsGeoJsonForFloor } from '@/utils/indoor-nav/route-geojson'
+import {
+	pickLegForFloor,
+	stairShaftsGeoJsonForFloor
+} from '@/utils/indoor-nav/route-geojson'
 import { route } from '@/utils/indoor-nav/routing'
 
 function routeTo(code: string, floor: string) {
@@ -275,6 +278,9 @@ describe('indoor-nav journey (POC parity)', () => {
 		// Floors without a change stay empty.
 		expect(stairShaftsGeoJsonForFloor(data, result, '2').features).toEqual([])
 		expect(stairShaftsGeoJsonForFloor(data, null, 'EG').features).toEqual([])
+
+		const legIndex = pickLegForFloor(result, change.fromFloor)
+		expect(result.segments[legIndex]?.floor).toBe(change.fromFloor)
 	})
 
 	it('exposes stair hop markers on the active step floor', () => {

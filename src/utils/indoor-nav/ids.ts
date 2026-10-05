@@ -14,7 +14,7 @@ export function entranceNodeId(id: string): string {
 }
 
 export function portalNodeId(floor: string, a: string, b: string): string {
-	const [x, y] = [a, b].sort()
+	const [x, y] = [a, b].sort((left, right) => left.localeCompare(right))
 	return `portal:${floor}:${x}-${y}`
 }
 

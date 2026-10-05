@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it, mock, spyOn } from 'bun:test'
+import { i18nextModuleWithStubT } from './i18next-mock-helpers'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -14,9 +15,7 @@ mock.module(`${SRC_ROOT}localization/i18n.ts`, () => ({
 	default: { language: 'de' }
 }))
 
-mock.module('i18next', () => ({
-	t: (key: string) => key
-}))
+mock.module('i18next', i18nextModuleWithStubT)
 
 let dateUtils: typeof import('../date-utils')
 
