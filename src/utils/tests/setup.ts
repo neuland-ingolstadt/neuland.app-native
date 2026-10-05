@@ -26,12 +26,12 @@ if (globalWithExpo.expo == null) {
 
 mockReactNative()
 
-mock.module('expo-application', () => ({
+void mock.module('expo-application', () => ({
 	nativeApplicationVersion: '0.0.0-test'
 }))
 
 // Register shared mocks first so sticky Bun mock.module always has complete exports.
-mock.module(`${SRC_ROOT}utils/storage.ts`, () => storageMock)
-mock.module('@/utils/storage', () => storageMock)
-mock.module(`${SRC_ROOT}api/thi-api.ts`, () => thiApiMock)
-mock.module('@/api/thi-api', () => thiApiMock)
+void mock.module(`${SRC_ROOT}utils/storage.ts`, () => storageMock)
+void mock.module('@/utils/storage', () => storageMock)
+void mock.module(`${SRC_ROOT}api/thi-api.ts`, () => thiApiMock)
+void mock.module('@/api/thi-api', () => thiApiMock)

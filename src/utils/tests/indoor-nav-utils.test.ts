@@ -28,7 +28,11 @@ import {
 	indoorNavLocaleFromLanguage,
 	indoorNavPlaceForFunction
 } from '@/utils/indoor-nav/indoor-nav-i18n'
-import { placeLabel } from '@/utils/indoor-nav/maneuvers'
+import {
+	placeLabel,
+	stairStepManeuver,
+	walkStepManeuver
+} from '@/utils/indoor-nav/maneuvers'
 import {
 	destinationRoomGeoJsonForFloor,
 	entrancesGeoJsonForFloor,
@@ -181,6 +185,78 @@ describe('indoor-nav utils', () => {
 		)
 		expect(filtered.features).toEqual([])
 		expect(allOnFloor.features.length).toBeGreaterThan(0)
+	})
+
+	it('builds walk and stair maneuver copy from real routes', () => {
+		const data = getIndoorData()
+		const graph = buildIndoorGraph(data)
+		const enT = getFixedT('en', 'indoor-nav')
+
+		const sameFloor = route(graph, 'entrance:IN-G-E01', 'room:EG:G011')
+		expect(sameFloor).not.toBeNull()
+		if (sameFloor == null) {
+			return
+		}
+		const enter = walkStepManeuver(
+			graph,
+			'entrance:IN-G-E01',
+			'room:EG:G011',
+			sameFloor,
+			0,
+			enT,
+			{ isFirstWalkStep: true, isLastJourneyStep: false }
+		)
+		expect(enter.headline).toBe('Enter the building')
+
+		const roomHop = route(graph, 'room:EG:G001', 'room:EG:G011')
+		expect(roomHop).not.toBeNull()
+		if (roomHop == null) {
+			return
+		}
+		const goRoom = walkStepManeuver(
+			graph,
+			'room:EG:G001',
+			'room:EG:G011',
+			roomHop,
+			0,
+			enT,
+			{ isFirstWalkStep: true, isLastJourneyStep: true }
+		)
+		expect(goRoom.headline).toContain('G011')
+
+		const multi = route(graph, 'entrance:IN-G-E01', 'room:3:G301')
+		expect(multi).not.toBeNull()
+		if (multi == null || multi.floorChanges[0] == null) {
+			return
+		}
+		const stairs = stairStepManeuver(multi.floorChanges[0], enT)
+		expect(stairs.headline).toBe('Take the stairs up')
+		expect(stairs.subline).toBe('Ground → 3rd')
+
+		const exitRoute = route(graph, 'room:EG:G001', 'entrance:IN-G-E02')
+		expect(exitRoute).not.toBeNull()
+		if (exitRoute != null) {
+			const leave = walkStepManeuver(
+				graph,
+				'room:EG:G001',
+				'entrance:IN-G-E02',
+				exitRoute,
+				0,
+				enT,
+				{ isFirstWalkStep: true, isLastJourneyStep: true }
+			)
+			expect(leave.headline).toBe('Leave the building')
+		}
+
+		const missingLeg = walkStepManeuver(
+			graph,
+			'entrance:IN-G-E01',
+			'room:3:G301',
+			multi,
+			99,
+			enT
+		)
+		expect(missingLeg.headline).toBe('Follow the path')
 	})
 
 	it('labels circulation rooms for maneuver copy', () => {
