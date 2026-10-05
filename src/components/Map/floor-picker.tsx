@@ -46,6 +46,8 @@ interface FloorPickerProps {
 	toggleShowAllFloors: () => void
 	locationPermissionGranted?: boolean
 	onLocate?: () => void
+	/** Overrides plain floor switching — used by indoor navigation to jump steps. */
+	onSelectFloor?: (floor: string) => void
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -106,7 +108,8 @@ const FloorPicker = ({
 	showAllFloors,
 	toggleShowAllFloors,
 	locationPermissionGranted = false,
-	onLocate = () => {}
+	onLocate = () => {},
+	onSelectFloor
 }: FloorPickerProps): React.JSX.Element => {
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation(['accessibility'])
@@ -188,9 +191,13 @@ const FloorPicker = ({
 			if (floor == null || floor === currentFloor?.floor) {
 				return
 			}
+			if (onSelectFloor != null) {
+				onSelectFloor(floor)
+				return
+			}
 			setCurrentFloor({ floor, manual: true })
 		},
-		[currentFloor?.floor, floors, setCurrentFloor]
+		[currentFloor?.floor, floors, onSelectFloor, setCurrentFloor]
 	)
 
 	const handleToggle = useCallback(() => {
@@ -207,6 +214,10 @@ const FloorPicker = ({
 		scrollY.set(target)
 		highlightY.set(target)
 		lastTickIndex.set(egIndex)
+		if (onSelectFloor != null) {
+			onSelectFloor('EG')
+			return
+		}
 		setCurrentFloor({ floor: 'EG', manual: true })
 	}, [
 		cell,
@@ -214,6 +225,7 @@ const FloorPicker = ({
 		floors,
 		highlightY,
 		lastTickIndex,
+		onSelectFloor,
 		scrollY,
 		setCurrentFloor
 	])
@@ -225,7 +237,11 @@ const FloorPicker = ({
 				return
 			}
 			triggerSelectionHaptic()
-			setCurrentFloor({ floor, manual: true })
+			if (onSelectFloor != null) {
+				onSelectFloor(floor)
+			} else {
+				setCurrentFloor({ floor, manual: true })
+			}
 			if (showAllFloors) {
 				toggleShowAllFloors()
 			}
@@ -233,6 +249,7 @@ const FloorPicker = ({
 		[
 			currentFloor?.floor,
 			handleToggle,
+			onSelectFloor,
 			setCurrentFloor,
 			showAllFloors,
 			toggleShowAllFloors

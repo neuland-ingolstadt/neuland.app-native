@@ -250,14 +250,16 @@ const RenderSectionItems = ({
 											: 'flex-1 flex-row justify-between items-center pl-4 pr-2'
 									}
 								>
-									{item.title != null && (
-										<Text
-											className="text-text text-base pr-2"
-											accessible={!hasCopyableValue}
-										>
-											{item.title}
-										</Text>
-									)}
+									{item.titleContent != null
+										? item.titleContent
+										: item.title != null && (
+												<Text
+													className="text-text text-base pr-2"
+													accessible={!hasCopyableValue}
+												>
+													{item.title}
+												</Text>
+											)}
 
 									{item.value != null &&
 										!privacyHidden &&

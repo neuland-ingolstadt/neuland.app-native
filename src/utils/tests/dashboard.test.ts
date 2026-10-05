@@ -3,13 +3,17 @@ import { Window as HappyDomWindow } from 'happy-dom'
 import React, { act } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { renderToString } from 'react-dom/server'
+import type { Card } from '@/components/all-cards'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import type { FeatureFlagState } from '@/lib/feature-flags'
+import {
+	createDefaultFeatureFlagState,
+	type FeatureFlagState
+} from '@/lib/feature-flags'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-function createDefaultFeatureFlagState(): FeatureFlagState {
-	return {}
+function mockFeatureFlags(flags: Record<string, boolean>): FeatureFlagState {
+	return { ...createDefaultFeatureFlagState(), ...flags } as FeatureFlagState
 }
 
 let shownDashboardEntriesState: string[] | undefined
@@ -251,10 +255,10 @@ describe('dashboard context', () => {
 	})
 
 	it('mergeNewFlaggedCardsIntoDashboard - Should insert newly enabled flagged cards near neighbors', () => {
-		const flags = {
+		const flags = mockFeatureFlags({
 			'flagged-card': true,
 			'flagged-early': true
-		} as FeatureFlagState
+		})
 		const customOrder = ['events', 'sports', 'news']
 
 		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
@@ -274,10 +278,10 @@ describe('dashboard context', () => {
 	})
 
 	it('mergeNewFlaggedCardsIntoDashboard - Should skip flagged cards already present or disabled', () => {
-		const flags = {
+		const flags = mockFeatureFlags({
 			'flagged-card': true,
 			'flagged-early': false
-		} as FeatureFlagState
+		})
 		const customOrder = ['events', 'flaggedCard', 'news']
 
 		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
@@ -300,14 +304,16 @@ describe('dashboard context', () => {
 
 	it('isCardEnabled - Should read feature flag state for flagged cards', () => {
 		expect(
-			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
-				'flagged-card': true
-			} as FeatureFlagState)
+			dashboard.isCardEnabled(
+				{ featureFlag: 'flagged-card' } as unknown as Pick<Card, 'featureFlag'>,
+				mockFeatureFlags({ 'flagged-card': true })
+			)
 		).toBe(true)
 		expect(
-			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
-				'flagged-card': false
-			} as FeatureFlagState)
+			dashboard.isCardEnabled(
+				{ featureFlag: 'flagged-card' } as unknown as Pick<Card, 'featureFlag'>,
+				mockFeatureFlags({ 'flagged-card': false })
+			)
 		).toBe(false)
 	})
 
@@ -353,9 +359,7 @@ describe('dashboard context', () => {
 	})
 
 	it('syncDashboardEntriesWithFlags - Should return a merged order when flagged cards are newly enabled', () => {
-		const flags = {
-			'flagged-card': true
-		} as FeatureFlagState
+		const flags = mockFeatureFlags({ 'flagged-card': true })
 
 		const merged = dashboard.syncDashboardEntriesWithFlags(
 			['events', 'timetable'],
@@ -435,9 +439,7 @@ describe('dashboard context', () => {
 		shownDashboardEntriesState = ['events', 'timetable']
 		hiddenAnnouncementsState = undefined
 		userKindState = USER_STUDENT
-		featureFlagsState = {
-			'flagged-card': true
-		} as FeatureFlagState
+		featureFlagsState = mockFeatureFlags({ 'flagged-card': true })
 
 		const { unmount } = renderDashboardHookWithEffects()
 

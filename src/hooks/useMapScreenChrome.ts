@@ -12,6 +12,7 @@ import {
 	SEARCH_HIDDEN
 } from '@/components/Map/sheet-detents'
 import { useMapDetailSheet } from '@/hooks/useMapDetailSheet'
+import { useMapIndoorNav } from '@/hooks/useMapIndoorNav'
 import { useMapScreenModel } from '@/hooks/useMapScreenModel'
 import { useOsmAttributionFade } from '@/hooks/useOsmAttributionFade'
 import { LoadingState } from '@/utils/ui-utils'
@@ -20,6 +21,9 @@ import { toColor } from '@/utils/uniwind-utils'
 interface UseMapScreenChromeOptions {
 	onTabPress?: () => void
 }
+
+/** Base camera padding above the indoor nav HUD (excluding tab bar). */
+const NAV_HUD_FOCUS_PADDING_BASE = 200
 
 export function useMapScreenChrome({
 	onTabPress
@@ -102,7 +106,9 @@ export function useMapScreenChrome({
 	const {
 		detailIndex,
 		handleDetailIndexChange,
+		hideDetailSheet,
 		presentDetailSheet,
+		requestCameraReset,
 		cameraResetRequestId
 	} = useMapDetailSheet({
 		clickedElement,
@@ -111,12 +117,33 @@ export function useMapScreenChrome({
 		onTabPress
 	})
 
+	const {
+		indoorMapLayers,
+		navMode,
+		navFitRequestId,
+		navFitBounds,
+		suppressSelectionCameraFocus,
+		mergedSections
+	} = useMapIndoorNav({
+		clickedElement,
+		overlayFloor: currentFloor?.floor ?? 'EG',
+		allSections,
+		hideDetailSheet,
+		requestCameraReset,
+		setSearchIndex,
+		searchHiddenIndex: SEARCH_HIDDEN,
+		searchHalfIndex: SEARCH_HALF
+	})
+
 	useLayoutEffect(() => {
 		presentDetailSheetRef.current = presentDetailSheet
 	}, [presentDetailSheet])
 
-	const focusPaddingBottom =
-		clickedElement != null ? detentHeight(detailDetents[DETAIL_OPEN]) : 0
+	const focusPaddingBottom = suppressSelectionCameraFocus
+		? NAV_HUD_FOCUS_PADDING_BASE
+		: clickedElement != null
+			? detentHeight(detailDetents[DETAIL_OPEN])
+			: 0
 
 	const animatedStyles = useAnimatedStyle(() => {
 		const sheetFromBottom =
@@ -164,7 +191,12 @@ export function useMapScreenChrome({
 		currentFloor,
 		selectMapElement,
 		roomData,
-		allSections,
+		allSections: mergedSections,
+		indoorMapLayers,
+		navMode,
+		navFitRequestId,
+		navFitBounds,
+		suppressSelectionCameraFocus,
 		detailIndex,
 		handleDetailIndexChange,
 		cameraResetRequestId,

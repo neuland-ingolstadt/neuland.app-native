@@ -8,7 +8,9 @@ import {
  * Keep in sync with `production/neuland-app/features.yaml` in the flags repo.
  * Currently empty — former flags were phased out as always-on features.
  */
-export const FeatureFlagKeys = {} as const satisfies Record<string, string>
+export const FeatureFlagKeys = {
+	indoorNavigation: 'indoor-navigation'
+} as const satisfies Record<string, string>
 
 type FeatureFlagKeyValues =
 	(typeof FeatureFlagKeys)[keyof typeof FeatureFlagKeys]

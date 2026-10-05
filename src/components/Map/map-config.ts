@@ -20,7 +20,12 @@ export const MAP_IDS = {
 		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
-		selectedOverlay: 'selectedOverlaySource'
+		selectedOverlay: 'selectedOverlaySource',
+		indoorProgress: 'indoorProgressSource',
+		indoorStepMarkers: 'indoorStepMarkersSource',
+		indoorEntrances: 'indoorEntrancesSource',
+		indoorStairs: 'indoorStairsSource',
+		indoorDestinationRoom: 'indoorDestinationRoomSource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -34,7 +39,14 @@ export const MAP_IDS = {
 		buildingLabels: 'buildingLettersLayer',
 		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
-		selectedOutline: 'selectedRoomOutline'
+		selectedOutline: 'selectedRoomOutline',
+		indoorProgressLine: 'indoorProgressLine',
+		indoorStepMarkers: 'indoorStepMarkers',
+		indoorEntrances: 'indoorEntrances',
+		indoorStairsFill: 'indoorStairsFill',
+		indoorStairsOutline: 'indoorStairsOutline',
+		indoorDestinationRoomFill: 'indoorDestinationRoomFill',
+		indoorDestinationRoomOutline: 'indoorDestinationRoomOutline'
 	}
 } as const
 
@@ -70,7 +82,30 @@ export const MAP_COLORS = {
 	selectedFillOpacity: 0.38,
 	selectedFillOpacityPop: 0.58,
 	selectedOutlineWidth: 2.8,
-	selectedOutlineWidthPop: 3.4
+	selectedOutlineWidthPop: 3.4,
+	indoorRouteHaloColor: '#ffffff',
+	indoorRouteLineWidth: 4.25,
+	indoorProgressDoneColor: '#8e8e8e',
+	indoorProgressDoneOpacity: 0.55,
+	indoorProgressCurrentOpacity: 1,
+	indoorProgressCurrentWidth: 6,
+	indoorProgressTodoOpacity: 0.35,
+	indoorStepMarkerDoneOpacity: 0.4,
+	indoorStepMarkerCurrentOpacity: 1,
+	indoorStepMarkerTodoOpacity: 0.85,
+	indoorStepMarkerRadius: 7,
+	indoorDestinationColor: '#ff3b30',
+	indoorEntranceColor: '#18b91e',
+	indoorEntranceRadius: 6,
+	indoorStairsColor: '#990eda',
+	indoorStairsMono: {
+		light: '#000000',
+		dark: '#ffffff'
+	},
+	indoorStairsFillOpacity: 0.35,
+	indoorStairsOutlineWidth: 2.5,
+	indoorDestinationRoomFillOpacity: 0.38,
+	indoorDestinationRoomOutlineWidth: 2.8
 } as const
 
 export const SELECTED_POP_HOLD_MS = 80

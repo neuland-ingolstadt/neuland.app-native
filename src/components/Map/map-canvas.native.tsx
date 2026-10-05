@@ -10,6 +10,7 @@ import {
 import type React from 'react'
 import { useRef } from 'react'
 import { Platform } from 'react-native'
+import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.native'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
@@ -19,9 +20,11 @@ import {
 	type MapMode,
 	ROOM_PRESS_HITBOX
 } from '@/components/Map/map-config'
+import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import type { ClickedMapElement } from '@/types/map'
+import type { FitBounds } from '@/utils/indoor-nav'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom
@@ -50,6 +53,11 @@ interface NativeMapCanvasProps {
 	onRegionChange: (changing: boolean) => void
 	focusPaddingBottom: number
 	overlayFloor: string
+	indoorMapLayers: IndoorNavMapLayersData | null
+	cameraFitRequestId: number
+	cameraFitBounds: FitBounds | null
+	suppressSelectionCameraFocus?: boolean
+	indoorNavActive?: boolean
 }
 
 function setNativeMapView(
@@ -100,7 +108,12 @@ export default function NativeMapCanvas({
 	disableFollowUser,
 	onRegionChange,
 	focusPaddingBottom,
-	overlayFloor
+	overlayFloor,
+	indoorMapLayers,
+	cameraFitRequestId,
+	cameraFitBounds,
+	suppressSelectionCameraFocus = false,
+	indoorNavActive = false
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
 	const currentZoomRef = useRef<number | undefined>(undefined)
@@ -122,12 +135,17 @@ export default function NativeMapCanvas({
 		primaryColor,
 		selectionColor,
 		labelColor,
-		backgroundColor
+		backgroundColor,
+		suppressRoomSelection: indoorNavActive,
+		hideAvailableRooms: indoorNavActive
 	})
 
 	useMapCameraSync({
 		mapLoadState,
 		cameraResetRequestId,
+		cameraFitRequestId,
+		cameraFitBounds,
+		suppressSelectionFocus: suppressSelectionCameraFocus,
 		mapCenter,
 		clickedElement,
 		focusPaddingBottom,
@@ -138,6 +156,20 @@ export default function NativeMapCanvas({
 				element,
 				padding,
 				currentZoomRef.current
+			)
+		},
+		fitTo: (bounds, padding) => {
+			cameraRef.current?.fitBounds(
+				[
+					bounds.southWest[0],
+					bounds.southWest[1],
+					bounds.northEast[0],
+					bounds.northEast[1]
+				],
+				{
+					padding: getMapFocusPadding(padding),
+					duration: MAP_CAMERA.focusDuration
+				}
 			)
 		}
 	})
@@ -325,6 +357,12 @@ export default function NativeMapCanvas({
 					beforeId={MAP_IDS.layers.selectedFill}
 				/>
 			</GeoJSONSource>
+			<IndoorNavMapLayers
+				layers={indoorMapLayers}
+				overlayFloor={overlayFloor}
+				primaryColor={primaryColor}
+				mapMode={mapMode}
+			/>
 		</MapLibreMap>
 	)
 }

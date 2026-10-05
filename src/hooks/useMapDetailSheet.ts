@@ -19,7 +19,10 @@ export function useMapDetailSheet({
 }: UseMapDetailSheetOptions): {
 	detailIndex: number
 	handleDetailIndexChange: (next: number) => void
+	/** Hides the sheet without running the close callback (keeps selection). */
+	hideDetailSheet: () => void
 	presentDetailSheet: () => void
+	requestCameraReset: () => void
 	cameraResetRequestId: number
 } {
 	const navigation = useNavigation()
@@ -47,6 +50,15 @@ export function useMapDetailSheet({
 		setDetailIndex(DETAIL_OPEN)
 	}, [])
 
+	const hideDetailSheet = useCallback(() => {
+		detailIndexRef.current = DETAIL_HIDDEN
+		setDetailIndex(DETAIL_HIDDEN)
+	}, [])
+
+	const requestCameraReset = useCallback(() => {
+		setCameraResetRequestId((previous) => previous + 1)
+	}, [])
+
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
 			handleDetailIndexChange(DETAIL_HIDDEN)
@@ -62,11 +74,11 @@ export function useMapDetailSheet({
 		const unsubscribe = navigation.addListener('tabPress', () => {
 			onTabPress?.()
 			handleDetailIndexChange(DETAIL_HIDDEN)
-			setCameraResetRequestId((previous) => previous + 1)
+			requestCameraReset()
 		})
 
 		return unsubscribe
-	}, [handleDetailIndexChange, navigation, onTabPress])
+	}, [handleDetailIndexChange, navigation, onTabPress, requestCameraReset])
 
 	useEffect(() => {
 		if (clickedElement == null || currentFloor?.manual !== true) {
@@ -80,7 +92,9 @@ export function useMapDetailSheet({
 	return {
 		detailIndex,
 		handleDetailIndexChange,
+		hideDetailSheet,
 		presentDetailSheet,
+		requestCameraReset,
 		cameraResetRequestId
 	}
 }

@@ -7,6 +7,7 @@ import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-mod
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import NativeMapCanvas from '@/components/Map/map-canvas.native'
+import { MapIndoorNavOverlay } from '@/components/Map/map-indoor-nav-overlay'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
 import { DETAIL_HIDDEN } from '@/components/Map/sheet-detents'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
@@ -59,7 +60,12 @@ const MapScreen = (): React.JSX.Element => {
 		detailIndex,
 		handleDetailIndexChange,
 		cameraResetRequestId,
-		focusPaddingBottom
+		focusPaddingBottom,
+		indoorMapLayers,
+		navMode,
+		navFitRequestId,
+		navFitBounds,
+		suppressSelectionCameraFocus
 	} = useMapScreenChrome({ onTabPress: handleTabPress })
 
 	useEffect(() => {
@@ -147,6 +153,11 @@ const MapScreen = (): React.JSX.Element => {
 					onRegionChange={onRegionChange}
 					focusPaddingBottom={focusPaddingBottom}
 					overlayFloor={currentFloor?.floor ?? 'EG'}
+					indoorMapLayers={indoorMapLayers}
+					cameraFitRequestId={navFitRequestId}
+					cameraFitBounds={navFitBounds}
+					suppressSelectionCameraFocus={suppressSelectionCameraFocus}
+					indoorNavActive={navMode != null}
 				/>
 				{overlayError === null && (
 					<FloorPicker
@@ -155,9 +166,12 @@ const MapScreen = (): React.JSX.Element => {
 						toggleShowAllFloors={toggleShowAllFloors}
 						locationPermissionGranted={locationPermissionGranted}
 						onLocate={handleLocate}
+						onSelectFloor={navMode?.selectFloor}
 					/>
 				)}
 			</View>
+
+			<MapIndoorNavOverlay navMode={navMode} />
 
 			{mapLoadState === LoadingState.LOADED && (
 				<OsmCopyright style={animatedStyles} />

@@ -12,6 +12,7 @@ import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
 import { useRef } from 'react'
+import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
@@ -20,9 +21,11 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
+import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import type { ClickedMapElement } from '@/types/map'
+import type { FitBounds } from '@/utils/indoor-nav'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom,
@@ -58,6 +61,11 @@ interface WebMapCanvasProps {
 	onRegionChange: (changing: boolean) => void
 	focusPaddingBottom: number
 	overlayFloor: string
+	indoorMapLayers: IndoorNavMapLayersData | null
+	cameraFitRequestId: number
+	cameraFitBounds: FitBounds | null
+	suppressSelectionCameraFocus?: boolean
+	indoorNavActive?: boolean
 }
 
 function setWebMapView(
@@ -107,7 +115,12 @@ export default function WebMapCanvas({
 	backgroundColor,
 	onRegionChange,
 	focusPaddingBottom,
-	overlayFloor
+	overlayFloor,
+	indoorMapLayers,
+	cameraFitRequestId,
+	cameraFitBounds,
+	suppressSelectionCameraFocus = false,
+	indoorNavActive = false
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
 	const {
@@ -128,17 +141,39 @@ export default function WebMapCanvas({
 		primaryColor,
 		selectionColor,
 		labelColor,
-		backgroundColor
+		backgroundColor,
+		suppressRoomSelection: indoorNavActive,
+		hideAvailableRooms: indoorNavActive
 	})
 
 	useMapCameraSync({
 		mapLoadState,
 		cameraResetRequestId,
+		cameraFitRequestId,
+		cameraFitBounds,
+		suppressSelectionFocus: suppressSelectionCameraFocus,
 		mapCenter,
 		clickedElement,
 		focusPaddingBottom,
 		flyTo: (element, padding) => {
 			setWebMapView(mapRef, mapCenter, element, padding)
+		},
+		fitTo: (bounds, padding) => {
+			const map = mapRef.current?.getMap()
+			if (map == null) {
+				return
+			}
+			map.fitBounds(
+				[
+					[bounds.southWest[0], bounds.southWest[1]],
+					[bounds.northEast[0], bounds.northEast[1]]
+				],
+				{
+					padding: getMapFocusPadding(padding),
+					maxZoom: MAP_CAMERA.maxZoom,
+					duration: MAP_CAMERA.focusDuration
+				}
+			)
 		}
 	})
 
@@ -288,6 +323,14 @@ export default function WebMapCanvas({
 						longitude={selectedRoomCenter[0]}
 						latitude={selectedRoomCenter[1]}
 						color={selectionColor}
+					/>
+				)}
+				{mapLoadState === LoadingState.LOADED && (
+					<IndoorNavMapLayers
+						layers={indoorMapLayers}
+						overlayFloor={overlayFloor}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
 					/>
 				)}
 			</Map>
