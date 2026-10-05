@@ -147,6 +147,31 @@ describe('thi-session', () => {
 		expect(attempts).toBe(2)
 	})
 
+	it('callWithSession - Should reuse a fresher stored session instead of logging in again', async () => {
+		secureStore.set('session', 'stale-session')
+		secureStore.set('username', 'alex.muster')
+		secureStore.set('password', 'secret')
+		mmkvStore.set('sessionCreated', Date.now().toString())
+
+		let attempts = 0
+		const result = await sessionHandler.callWithSession(async (session) => {
+			attempts += 1
+			if (attempts === 1) {
+				expect(session).toBe('stale-session')
+				// Simulate another concurrent call finishing a refresh first.
+				secureStore.set('session', 'already-refreshed')
+				mmkvStore.set('sessionCreated', Date.now().toString())
+				throw new MockAPIError(-1, 'No Session')
+			}
+			expect(session).toBe('already-refreshed')
+			return 'reused'
+		})
+
+		expect(result).toBe('reused')
+		expect(thiApiMock.default.login).not.toHaveBeenCalled()
+		expect(attempts).toBe(2)
+	})
+
 	it('callWithSession - Unrelated method errors should not trigger a refresh', async () => {
 		secureStore.set('session', 'fresh-session')
 		mmkvStore.set('sessionCreated', Date.now().toString())

@@ -212,6 +212,20 @@ export async function callWithSession<T>(
 			throw e
 		}
 
+		// Another concurrent call may have already refreshed while we were
+		// in flight with the old token. Prefer that session over a second login.
+		const storedSession = await loadSecureAsync('session')
+		if (
+			storedSession != null &&
+			storedSession !== 'guest' &&
+			storedSession !== session
+		) {
+			console.debug(
+				'Session was refreshed by another call, retrying with the new token'
+			)
+			return await method(storedSession)
+		}
+
 		console.debug('Received a session error, trying to get a new session!')
 		const newSession = await refreshOrThrow()
 		return await method(newSession)
