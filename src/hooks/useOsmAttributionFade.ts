@@ -81,7 +81,11 @@ export function useOsmAttributionFade(mapReady: boolean): {
 		if (!changing || !panFadeArmed.current) {
 			return
 		}
-		setRegionChange(true)
+		// react-maplibre calls map.addLayer during <Layer> render; move events must not
+		// synchronously update ancestors (setState-in-render).
+		setTimeout(() => {
+			setRegionChange(true)
+		}, 0)
 	}, [])
 
 	return { opacity, onRegionChange }
