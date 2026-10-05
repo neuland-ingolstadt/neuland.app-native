@@ -18,6 +18,7 @@ import {
 import { useFeatureFlagEnabled } from '@/hooks/useFeatureFlag'
 import { useIndoorNavDataQuery } from '@/hooks/useIndoorNavDataQuery'
 import { useIndoorNavigation } from '@/hooks/useIndoorNavigation'
+import { boundsForJourneyStep } from '@/hooks/useIndoorNavStepFocus'
 import { useIndoorNavSteps } from '@/hooks/useIndoorNavSteps'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import {
@@ -28,20 +29,21 @@ import type { ClickedMapElement } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
 	activeStairCodesForStep,
-	bboxOfCoords,
 	destinationRoomGeoJsonForFloor,
 	entrancesGeoJsonForFloor,
-	type FitBounds,
 	getIndoorData,
+	ghostFloorsGeoJson,
 	indoorNavLocaleFromLanguage,
+	type JourneyStep,
 	type LonLat,
+	type NavCameraCommand,
+	type NavStairsPhase,
 	routeProgressGeoJsonForFloor,
+	type StairMoment,
+	stairMomentFromStep,
 	stairShaftsGeoJsonForFloor,
 	stepMarkersGeoJsonForFloor
 } from '@/utils/indoor-nav'
-
-/** Breathing room around the framed leg so close-ups don't feel cramped. */
-const STEP_FIT_MARGIN_M = 8
 
 interface UseMapIndoorNavOptions {
 	clickedElement: ClickedMapElement | null
@@ -82,11 +84,31 @@ export function useMapIndoorNav({
 
 	const [navActive, setNavActive] = useState(false)
 	const navDestRef = useRef<string | null>(null)
-	const [navFit, setNavFit] = useState<{
-		id: number
-		bounds: FitBounds | null
-	}>({ id: 0, bounds: null })
 	const [navStepIndex, setNavStepIndex] = useState(0)
+
+	const [stairsPhase, setStairsPhase] = useState<NavStairsPhase>('idle')
+	const stairsPhaseRef = useRef<NavStairsPhase>('idle')
+	const syncStairsPhase = useCallback((phase: NavStairsPhase) => {
+		stairsPhaseRef.current = phase
+		setStairsPhase(phase)
+	}, [])
+
+	const [cutawayMoment, setCutawayMoment] = useState<StairMoment | null>(null)
+	const [navCamera, setNavCamera] = useState<{
+		id: number
+		command: NavCameraCommand | null
+	}>({ id: 0, command: null })
+	const stepsSnapshotRef = useRef<{ steps: JourneyStep[]; stepIndex: number }>({
+		steps: [],
+		stepIndex: 0
+	})
+
+	const bumpNavCamera = useCallback((command: NavCameraCommand) => {
+		setNavCamera((previous) => ({
+			id: previous.id + 1,
+			command
+		}))
+	}, [])
 
 	const indoorNav = useIndoorNavigation({
 		clickedElement,
@@ -98,20 +120,57 @@ export function useMapIndoorNav({
 		locale: indoorNavLocaleFromLanguage(i18n.language)
 	})
 
+	const routeResultRef = useRef(indoorNav?.routeResult)
+	routeResultRef.current = indoorNav?.routeResult
+
+	const onFocusStep = useCallback(
+		(step: JourneyStep, ctx?: { leftStairsAt?: LonLat }) => {
+			const routeResult = routeResultRef.current
+			if (step.kind === 'stairs') {
+				syncStairsPhase('entering')
+				setCutawayMoment(null)
+				bumpNavCamera({ kind: 'stair-enter', at: step.change.at })
+				return
+			}
+			syncStairsPhase('flat')
+			setCutawayMoment(null)
+			const bounds = boundsForJourneyStep(step, routeResult ?? null)
+			if (bounds == null) {
+				return
+			}
+			bumpNavCamera({
+				kind: 'leg-bounds',
+				bounds,
+				resetFromStairs: ctx?.leftStairsAt != null
+			})
+		},
+		[bumpNavCamera, syncStairsPhase]
+	)
+
 	const indoorSteps = useIndoorNavSteps({
 		indoorNav,
 		viewFloor: overlayFloor,
 		stepIndex: navStepIndex,
 		setStepIndex: setNavStepIndex,
 		navActive,
-		onFocusStep: (coords: LonLat[]) => {
-			const bounds = bboxOfCoords(coords, STEP_FIT_MARGIN_M)
-			if (bounds == null) {
-				return
-			}
-			setNavFit((previous) => ({ id: previous.id + 1, bounds }))
-		}
+		onFocusStep
 	})
+
+	stepsSnapshotRef.current = {
+		steps: indoorSteps.steps,
+		stepIndex: indoorSteps.stepIndex
+	}
+
+	const onNavCameraIdle = useCallback(() => {
+		const phase = stairsPhaseRef.current
+		if (phase === 'entering') {
+			syncStairsPhase('cutaway')
+			const { steps, stepIndex } = stepsSnapshotRef.current
+			const step = steps[stepIndex]
+			setCutawayMoment(stairMomentFromStep(step))
+			return
+		}
+	}, [syncStairsPhase])
 
 	const selectStepRef = useRef(indoorSteps.selectStep)
 	selectStepRef.current = indoorSteps.selectStep
@@ -127,6 +186,8 @@ export function useMapIndoorNav({
 		}
 		selectStepRef.current(0)
 	}, [routeFrameKey])
+
+	const onStairsCutaway = navActive && stairsPhase === 'cutaway'
 
 	const indoorMapLayers = useMemo((): IndoorNavMapLayersData | null => {
 		if (!indoorNavEnabled || !indoorDataReady || indoorNav == null) {
@@ -145,6 +206,7 @@ export function useMapIndoorNav({
 			return EMPTY_INDOOR_MAP_LAYERS
 		}
 		const activeStep = indoorSteps.steps[indoorSteps.stepIndex]
+		const stairMoment = cutawayMoment ?? stairMomentFromStep(activeStep)
 		const highlightDestinationRoom = floor === indoorNav.destinationFloor
 		const stairCodes = activeStairCodesForStep(
 			routeResult,
@@ -153,19 +215,19 @@ export function useMapIndoorNav({
 			indoorSteps.steps,
 			indoorSteps.stepIndex
 		)
+		const emptyFc = EMPTY_INDOOR_MAP_LAYERS.routeProgressGeoJSON
 		return {
-			stairsGeoJSON: stairShaftsGeoJsonForFloor(
-				data,
-				routeResult,
-				floor,
-				stairCodes
-			),
+			stairsGeoJSON: onStairsCutaway
+				? EMPTY_INDOOR_MAP_LAYERS.stairsGeoJSON
+				: stairShaftsGeoJsonForFloor(data, routeResult, floor, stairCodes),
 			entrancesGeoJSON: EMPTY_INDOOR_MAP_LAYERS.entrancesGeoJSON,
-			routeProgressGeoJSON: routeProgressGeoJsonForFloor(
-				indoorSteps.steps,
-				indoorSteps.stepIndex,
-				floor
-			),
+			routeProgressGeoJSON: onStairsCutaway
+				? emptyFc
+				: routeProgressGeoJsonForFloor(
+						indoorSteps.steps,
+						indoorSteps.stepIndex,
+						floor
+					),
 			stepMarkersGeoJSON: stepMarkersGeoJsonForFloor(
 				routeResult,
 				indoorSteps.steps,
@@ -177,15 +239,19 @@ export function useMapIndoorNav({
 				floor,
 				indoorNav.destinationCode,
 				highlightDestinationRoom
-			)
+			),
+			ghostFloorsGeoJSON: ghostFloorsGeoJson(data, stairMoment, floor),
+			stairMoment
 		}
 	}, [
+		cutawayMoment,
 		indoorDataReady,
 		indoorNav,
 		indoorNavEnabled,
 		indoorSteps.stepIndex,
 		indoorSteps.steps,
 		navActive,
+		onStairsCutaway,
 		overlayFloor
 	])
 
@@ -200,9 +266,11 @@ export function useMapIndoorNav({
 	}, [hideDetailSheet, indoorNav, searchHiddenIndex, setSearchIndex])
 
 	const restoreDefaultMapView = useCallback(() => {
-		setNavFit({ id: 0, bounds: null })
+		syncStairsPhase('idle')
+		setCutawayMoment(null)
+		setNavCamera({ id: 0, command: null })
 		requestCameraReset()
-	}, [requestCameraReset])
+	}, [requestCameraReset, syncStairsPhase])
 
 	const cancelIndoorNav = useCallback(() => {
 		navDestRef.current = null
@@ -300,12 +368,20 @@ export function useMapIndoorNav({
 		t
 	])
 
+	const navShowGhostCutaway = navActive && stairsPhase === 'cutaway'
+	const navAllowStairMaxZoom =
+		navActive && (stairsPhase === 'entering' || stairsPhase === 'cutaway')
+
 	return {
 		indoorNav: indoorNavEnabled ? indoorNav : null,
 		indoorMapLayers,
 		navMode,
-		navFitRequestId: navActive ? navFit.id : 0,
-		navFitBounds: navActive ? navFit.bounds : null,
+		navCameraRequestId: navActive ? navCamera.id : 0,
+		navCameraCommand: navActive ? navCamera.command : null,
+		onNavCameraIdle,
+		navShowGhostCutaway,
+		navAllowStairMaxZoom,
+		navFloorPlanDimmed: navShowGhostCutaway,
 		suppressSelectionCameraFocus: navActive,
 		mergedSections
 	}

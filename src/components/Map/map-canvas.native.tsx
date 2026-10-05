@@ -9,8 +9,8 @@ import {
 	NativeUserLocation
 } from '@maplibre/maplibre-react-native'
 import type React from 'react'
-import { useRef } from 'react'
-import { Platform } from 'react-native'
+import { useCallback, useRef } from 'react'
+import { Platform, useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.native'
 import {
 	EMPTY_MAP_FEATURES,
@@ -23,11 +23,26 @@ import {
 } from '@/components/Map/map-config'
 import { MapSelectionMarker } from '@/components/Map/map-selection-marker'
 import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
-import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
+import {
+	type RunNavCamera,
+	useMapCameraSync,
+	useMapCanvasState
+} from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import type { ClickedMapElement } from '@/types/map'
 import { SEARCH_TYPES } from '@/types/map'
-import type { FitBounds } from '@/utils/indoor-nav'
+import {
+	fitBoundsNeSw,
+	isCompactMapViewport,
+	legBoundsCameraOptions,
+	NAV_FLAT_CAMERA_EASING,
+	type NavCameraCommand,
+	STAIR_MOMENT_CAMERA,
+	stairEnterCameraStop,
+	stairExitFlatEaseStop
+} from '@/utils/indoor-nav'
+import { runAfterDuration } from '@/utils/indoor-nav/run-after-map-camera'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom
@@ -57,8 +72,12 @@ interface NativeMapCanvasProps {
 	focusPaddingBottom: number
 	overlayFloor: string
 	indoorMapLayers: IndoorNavMapLayersData | null
-	cameraFitRequestId: number
-	cameraFitBounds: FitBounds | null
+	cameraNavRequestId: number
+	cameraNavCommand: NavCameraCommand | null
+	onNavCameraIdle?: () => void
+	navShowGhostCutaway?: boolean
+	navAllowStairMaxZoom?: boolean
+	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
 }
@@ -76,6 +95,7 @@ function setNativeMapView(
 			zoom: MAP_CAMERA.initialZoom,
 			duration: MAP_CAMERA.resetDuration,
 			bearing: 0,
+			pitch: 0,
 			padding: getMapFocusPadding(0)
 		})
 		return
@@ -113,13 +133,22 @@ export default function NativeMapCanvas({
 	focusPaddingBottom,
 	overlayFloor,
 	indoorMapLayers,
-	cameraFitRequestId,
-	cameraFitBounds,
+	cameraNavRequestId,
+	cameraNavCommand,
+	onNavCameraIdle,
+	navShowGhostCutaway = false,
+	navAllowStairMaxZoom = false,
+	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
 	indoorNavActive = false
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
 	const currentZoomRef = useRef<number | undefined>(undefined)
+	const { width: windowWidth } = useWindowDimensions()
+	const reducedMotion = usePrefersReducedMotion()
+	const mapMaxZoom = navAllowStairMaxZoom
+		? STAIR_MOMENT_CAMERA.maxZoom
+		: MAP_CAMERA.maxZoom
 	const {
 		incoming,
 		outgoing,
@@ -140,14 +169,61 @@ export default function NativeMapCanvas({
 		labelColor,
 		backgroundColor,
 		suppressRoomSelection: indoorNavActive,
-		hideAvailableRooms: indoorNavActive
+		hideAvailableRooms: indoorNavActive,
+		floorPlanDimmed
 	})
+
+	const runNavCamera = useCallback<RunNavCamera>(
+		(command, padding, done) => {
+			const pad = getMapFocusPadding(padding)
+			const compact = isCompactMapViewport(windowWidth)
+			if (command.kind === 'stair-enter') {
+				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
+				cameraRef.current?.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					padding: pad
+				})
+				runAfterDuration(stop.duration, done)
+				return
+			}
+			if (command.resetFromStairs) {
+				const stop = stairExitFlatEaseStop(command.bounds, reducedMotion)
+				cameraRef.current?.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					padding: pad,
+					easing: NAV_FLAT_CAMERA_EASING
+				})
+				runAfterDuration(stop.duration, done)
+				return
+			}
+			const duration = legBoundsCameraOptions(reducedMotion).duration
+			cameraRef.current?.fitBounds(fitBoundsNeSw(command.bounds), {
+				padding: pad,
+				duration,
+				pitch: 0,
+				bearing: 0,
+				easing: NAV_FLAT_CAMERA_EASING
+			})
+			runAfterDuration(duration, done)
+		},
+		[reducedMotion, windowWidth]
+	)
 
 	useMapCameraSync({
 		mapLoadState,
 		cameraResetRequestId,
-		cameraFitRequestId,
-		cameraFitBounds,
+		cameraNavRequestId,
+		cameraNavCommand,
+		onNavCameraIdle,
+		runNavCamera,
 		suppressSelectionFocus: suppressSelectionCameraFocus,
 		mapCenter,
 		clickedElement,
@@ -159,20 +235,6 @@ export default function NativeMapCanvas({
 				element,
 				padding,
 				currentZoomRef.current
-			)
-		},
-		fitTo: (bounds, padding) => {
-			cameraRef.current?.fitBounds(
-				[
-					bounds.southWest[0],
-					bounds.southWest[1],
-					bounds.northEast[0],
-					bounds.northEast[1]
-				],
-				{
-					padding: getMapFocusPadding(padding),
-					duration: MAP_CAMERA.focusDuration
-				}
 			)
 		}
 	})
@@ -213,7 +275,7 @@ export default function NativeMapCanvas({
 					bearing: 0
 				}}
 				minZoom={MAP_CAMERA.minZoom}
-				maxZoom={MAP_CAMERA.maxZoom}
+				maxZoom={mapMaxZoom}
 				trackUserLocation={
 					locationRequestId !== 0 &&
 					clickedElement == null &&
@@ -357,6 +419,8 @@ export default function NativeMapCanvas({
 				overlayFloor={overlayFloor}
 				primaryColor={primaryColor}
 				mapMode={mapMode}
+				showGhostCutaway={navShowGhostCutaway}
+				stackCutawayLayers={indoorNavActive}
 			/>
 		</MapLibreMap>
 	)

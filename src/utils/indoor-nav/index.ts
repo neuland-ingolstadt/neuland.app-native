@@ -37,6 +37,11 @@ export {
 	pointInPolygonGeom,
 	polygonCentroid
 } from './geometry'
+export {
+	ghostFloorsGeoJson,
+	type StairMoment,
+	stairMomentFromStep
+} from './ghost-floors'
 export { buildIndoorGraph, listRoutableRooms } from './graph-build'
 export { isStairRoomId } from './graph-room-utils'
 export {
@@ -75,12 +80,30 @@ export {
 	walkStepManeuver
 } from './maneuvers'
 export {
+	fitBoundsLngLatPair,
+	fitBoundsNeSw,
+	legBoundsCameraOptions,
+	type NavCameraCommand,
+	type NavStairsPhase,
+	stairEnterCameraStop,
+	stairExitFlatEaseStop
+} from './nav-camera'
+export {
 	destinationRoomGeoJsonForFloor,
 	entrancesGeoJsonForFloor,
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor
 } from './route-geojson'
 export { route, routePreview } from './routing'
+export {
+	boundsCenter,
+	flatMapCameraDuration,
+	isCompactMapViewport,
+	NAV_FLAT_CAMERA_EASING,
+	navMapCameraDuration,
+	STAIR_MOMENT_CAMERA,
+	stairMomentCameraStop
+} from './stair-moment-camera'
 export type {
 	DoorFeature,
 	DoorProps,

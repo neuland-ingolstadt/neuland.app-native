@@ -6,6 +6,7 @@ import {
 	IndoorNavStepMarkers
 } from '@/components/Map/indoor-nav-step-markers.native'
 import {
+	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
 	MAP_IDS,
 	type MapMode
@@ -17,21 +18,52 @@ interface IndoorNavMapLayersProps {
 	overlayFloor: string
 	primaryColor: string
 	mapMode: MapMode
+	showGhostCutaway?: boolean
+	stackCutawayLayers?: boolean
 }
 
 export function IndoorNavMapLayers({
 	layers,
 	overlayFloor,
 	primaryColor,
-	mapMode
+	mapMode,
+	showGhostCutaway = false,
+	stackCutawayLayers = false
 }: IndoorNavMapLayersProps): React.JSX.Element | null {
 	if (layers == null) {
 		return null
 	}
 	const paints = getIndoorNavLayerPaints(primaryColor, mapMode)
+	const showGhost = showGhostCutaway && layers.stairMoment != null
+	const ghostVisibility = showGhost ? 'visible' : 'none'
+	const ghostData = showGhost ? layers.ghostFloorsGeoJSON : EMPTY_MAP_FEATURES
 
 	return (
 		<>
+			{stackCutawayLayers && (
+				<GeoJSONSource
+					id={MAP_IDS.sources.indoorGhostFloors}
+					data={ghostData}
+					tolerance={GEOJSON_TOLERANCE}
+				>
+					<Layer
+						id={MAP_IDS.layers.indoorGhostRoomsExtrusion}
+						type="fill-extrusion"
+						filter={['==', ['get', 'ghostKind'], 'room']}
+						layout={{ visibility: ghostVisibility }}
+						// biome-ignore lint/suspicious/noExplicitAny: MapLibre data-driven extrusion paint
+						paint={paints.ghostRoomExtrusion as any}
+					/>
+					<Layer
+						id={MAP_IDS.layers.indoorGhostStairsExtrusion}
+						type="fill-extrusion"
+						filter={['==', ['get', 'ghostKind'], 'stair']}
+						layout={{ visibility: ghostVisibility }}
+						// biome-ignore lint/suspicious/noExplicitAny: MapLibre data-driven extrusion paint
+						paint={paints.ghostStairExtrusion as any}
+					/>
+				</GeoJSONSource>
+			)}
 			<GeoJSONSource
 				id={MAP_IDS.sources.indoorStairs}
 				data={layers.stairsGeoJSON}

@@ -11,7 +11,8 @@ import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import { useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
 import {
 	EMPTY_MAP_FEATURES,
@@ -23,11 +24,25 @@ import {
 } from '@/components/Map/map-config'
 import { MapSelectionMarker } from '@/components/Map/map-selection-marker'
 import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
-import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
+import {
+	type RunNavCamera,
+	useMapCameraSync,
+	useMapCanvasState
+} from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import type { ClickedMapElement } from '@/types/map'
 import { SEARCH_TYPES } from '@/types/map'
-import type { FitBounds } from '@/utils/indoor-nav'
+import {
+	fitBoundsLngLatPair,
+	isCompactMapViewport,
+	legBoundsCameraOptions,
+	type NavCameraCommand,
+	STAIR_MOMENT_CAMERA,
+	stairEnterCameraStop,
+	stairExitFlatEaseStop
+} from '@/utils/indoor-nav'
+import { runAfterMapCamera } from '@/utils/indoor-nav/run-after-map-camera'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom,
@@ -68,8 +83,12 @@ interface WebMapCanvasProps {
 	focusPaddingBottom: number
 	overlayFloor: string
 	indoorMapLayers: IndoorNavMapLayersData | null
-	cameraFitRequestId: number
-	cameraFitBounds: FitBounds | null
+	cameraNavRequestId: number
+	cameraNavCommand: NavCameraCommand | null
+	onNavCameraIdle?: () => void
+	navShowGhostCutaway?: boolean
+	navAllowStairMaxZoom?: boolean
+	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
 }
@@ -97,7 +116,7 @@ function setWebMapView(
 			element == null
 				? MAP_CAMERA.initialZoom
 				: getSelectionFocusZoom(map.getZoom()),
-		...(element == null ? { bearing: 0 } : {}),
+		...(element == null ? { bearing: 0, pitch: 0 } : {}),
 		duration:
 			element == null ? MAP_CAMERA.resetDuration : MAP_CAMERA.focusDuration,
 		padding: getMapFocusPadding(element == null ? 0 : focusPaddingBottom)
@@ -123,12 +142,30 @@ export default function WebMapCanvas({
 	focusPaddingBottom,
 	overlayFloor,
 	indoorMapLayers,
-	cameraFitRequestId,
-	cameraFitBounds,
+	cameraNavRequestId,
+	cameraNavCommand,
+	onNavCameraIdle,
+	navShowGhostCutaway = false,
+	navAllowStairMaxZoom = false,
+	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
 	indoorNavActive = false
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
+	const { width: windowWidth } = useWindowDimensions()
+	const reducedMotion = usePrefersReducedMotion()
+	const mapMaxZoom = navAllowStairMaxZoom
+		? STAIR_MOMENT_CAMERA.maxZoom
+		: MAP_CAMERA.maxZoom
+
+	useEffect(() => {
+		const map = mapRef.current?.getMap()
+		if (map == null) {
+			return
+		}
+		map.setMaxZoom(mapMaxZoom)
+	}, [mapMaxZoom])
+
 	const {
 		incoming,
 		outgoing,
@@ -149,37 +186,74 @@ export default function WebMapCanvas({
 		labelColor,
 		backgroundColor,
 		suppressRoomSelection: indoorNavActive,
-		hideAvailableRooms: indoorNavActive
+		hideAvailableRooms: indoorNavActive,
+		floorPlanDimmed
 	})
+
+	const runNavCamera = useCallback<RunNavCamera>(
+		(command, padding, done) => {
+			const map = mapRef.current?.getMap()
+			if (map == null) {
+				done()
+				return
+			}
+			const pad = getMapFocusPadding(padding)
+			const compact = isCompactMapViewport(windowWidth)
+			map.stop()
+			if (command.kind === 'stair-enter') {
+				map.setMaxZoom(STAIR_MOMENT_CAMERA.maxZoom)
+				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
+				map.flyTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					curve: stop.curve,
+					padding: pad
+				})
+				runAfterMapCamera(map, stop.duration, done)
+				return
+			}
+			if (command.resetFromStairs) {
+				const stop = stairExitFlatEaseStop(command.bounds, reducedMotion)
+				map.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					padding: pad
+				})
+				runAfterMapCamera(map, stop.duration, done)
+				return
+			}
+			const duration = legBoundsCameraOptions(reducedMotion).duration
+			map.fitBounds(fitBoundsLngLatPair(command.bounds), {
+				padding: pad,
+				maxZoom: mapMaxZoom,
+				duration,
+				pitch: 0,
+				bearing: 0
+			})
+			runAfterMapCamera(map, duration, done)
+		},
+		[mapMaxZoom, reducedMotion, windowWidth]
+	)
 
 	useMapCameraSync({
 		mapLoadState,
 		cameraResetRequestId,
-		cameraFitRequestId,
-		cameraFitBounds,
+		cameraNavRequestId,
+		cameraNavCommand,
+		onNavCameraIdle,
+		runNavCamera,
 		suppressSelectionFocus: suppressSelectionCameraFocus,
 		mapCenter,
 		clickedElement,
 		focusPaddingBottom,
 		flyTo: (element, padding) => {
 			setWebMapView(mapRef, mapCenter, element, padding)
-		},
-		fitTo: (bounds, padding) => {
-			const map = mapRef.current?.getMap()
-			if (map == null) {
-				return
-			}
-			map.fitBounds(
-				[
-					[bounds.southWest[0], bounds.southWest[1]],
-					[bounds.northEast[0], bounds.northEast[1]]
-				],
-				{
-					padding: getMapFocusPadding(padding),
-					maxZoom: MAP_CAMERA.maxZoom,
-					duration: MAP_CAMERA.focusDuration
-				}
-			)
 		}
 	})
 
@@ -209,12 +283,17 @@ export default function WebMapCanvas({
 					zoom: MAP_CAMERA.initialZoom
 				}}
 				mapStyle={MAP_STYLE_URLS[mapMode]}
+				maxZoom={mapMaxZoom}
 				ref={mapRef}
 				onLoad={() => {
 					runAfterMapCommit(() => setMapLoadState(LoadingState.LOADED))
 				}}
 				onError={() => {
-					runAfterMapCommit(() => setMapLoadState(LoadingState.ERROR))
+					runAfterMapCommit(() => {
+						setMapLoadState((state) =>
+							state === LoadingState.LOADED ? state : LoadingState.ERROR
+						)
+					})
 				}}
 				onClick={handleMapClick}
 				onDragStart={handleMapDragStart}
@@ -361,6 +440,8 @@ export default function WebMapCanvas({
 						overlayFloor={overlayFloor}
 						primaryColor={primaryColor}
 						mapMode={mapMode}
+						showGhostCutaway={navShowGhostCutaway}
+						stackCutawayLayers={indoorNavActive}
 					/>
 				)}
 			</Map>

@@ -8,7 +8,7 @@ import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
-import type { FitBounds } from '@/utils/indoor-nav'
+import type { NavCameraCommand } from '@/utils/indoor-nav'
 import {
 	getRoomSelectionFromFeatures,
 	getSelectedMapFeatures,
@@ -31,43 +31,63 @@ interface UseMapCanvasStateOptions {
 	suppressRoomSelection?: boolean
 	/** Hide primary-colored free-room overlay (e.g. during indoor nav). */
 	hideAvailableRooms?: boolean
+	/** Dim the flat floor plan during the stairs cutaway moment. */
+	floorPlanDimmed?: boolean
 }
+
+export type RunNavCamera = (
+	command: NavCameraCommand,
+	focusPaddingBottom: number,
+	onComplete: () => void
+) => void
 
 interface UseMapCameraSyncOptions {
 	mapLoadState: LoadingState
 	cameraResetRequestId: number
-	cameraFitRequestId?: number
-	cameraFitBounds?: FitBounds | null
+	cameraNavRequestId?: number
+	cameraNavCommand?: NavCameraCommand | null
+	onNavCameraIdle?: () => void
+	runNavCamera?: RunNavCamera
 	suppressSelectionFocus?: boolean
 	mapCenter: MapScreenModel['mapCenter']
 	clickedElement: MapScreenModel['clickedElement']
 	focusPaddingBottom: number
 	flyTo: (element: ClickedMapElement | null, focusPaddingBottom: number) => void
-	fitTo?: (bounds: FitBounds, focusPaddingBottom: number) => void
 }
 
 export function useMapCameraSync({
 	mapLoadState,
 	cameraResetRequestId,
-	cameraFitRequestId = 0,
-	cameraFitBounds = null,
+	cameraNavRequestId = 0,
+	cameraNavCommand = null,
+	onNavCameraIdle,
+	runNavCamera,
 	suppressSelectionFocus = false,
 	mapCenter,
 	clickedElement,
 	focusPaddingBottom,
-	flyTo,
-	fitTo
+	flyTo
 }: UseMapCameraSyncOptions): void {
 	const flyToRef = useRef(flyTo)
-	const fitToRef = useRef(fitTo)
+	const runNavCameraRef = useRef(runNavCamera)
+	const onNavCameraIdleRef = useRef(onNavCameraIdle)
+	const navCameraCommandRef = useRef(cameraNavCommand)
+	const focusPaddingRef = useRef(focusPaddingBottom)
+
+	navCameraCommandRef.current = cameraNavCommand
+	focusPaddingRef.current = focusPaddingBottom
 
 	useLayoutEffect(() => {
 		flyToRef.current = flyTo
 	}, [flyTo])
 
 	useLayoutEffect(() => {
-		fitToRef.current = fitTo
-	}, [fitTo])
+		runNavCameraRef.current = runNavCamera
+	}, [runNavCamera])
+
+	useLayoutEffect(() => {
+		onNavCameraIdleRef.current = onNavCameraIdle
+	}, [onNavCameraIdle])
 
 	useEffect(() => {
 		if (
@@ -94,14 +114,20 @@ export function useMapCameraSync({
 
 	useEffect(() => {
 		if (
-			cameraFitRequestId > 0 &&
-			cameraFitBounds != null &&
-			fitToRef.current != null &&
-			mapLoadState === LoadingState.LOADED
+			cameraNavRequestId <= 0 ||
+			mapLoadState !== LoadingState.LOADED ||
+			runNavCameraRef.current == null
 		) {
-			fitToRef.current(cameraFitBounds, focusPaddingBottom)
+			return
 		}
-	}, [cameraFitBounds, cameraFitRequestId, focusPaddingBottom, mapLoadState])
+		const command = navCameraCommandRef.current
+		if (command == null) {
+			return
+		}
+		runNavCameraRef.current(command, focusPaddingRef.current, () => {
+			onNavCameraIdleRef.current?.()
+		})
+	}, [cameraNavRequestId, mapLoadState])
 }
 
 export function useMapCanvasState({
@@ -116,7 +142,8 @@ export function useMapCanvasState({
 	labelColor,
 	backgroundColor,
 	suppressRoomSelection = false,
-	hideAvailableRooms = false
+	hideAvailableRooms = false,
+	floorPlanDimmed = false
 }: UseMapCanvasStateOptions): {
 	incoming: ReturnType<typeof useFloorOverlaySlide>['incoming']
 	outgoing: ReturnType<typeof useFloorOverlaySlide>['outgoing']
@@ -151,7 +178,8 @@ export function useMapCanvasState({
 				incoming.opacity,
 				incoming.fadeDuration,
 				selectionPop,
-				selectionColor
+				selectionColor,
+				floorPlanDimmed
 			),
 		[
 			isDark,
@@ -161,7 +189,8 @@ export function useMapCanvasState({
 			incoming.opacity,
 			incoming.fadeDuration,
 			selectionPop,
-			selectionColor
+			selectionColor,
+			floorPlanDimmed
 		]
 	)
 	const outgoingStyles = useMemo(
@@ -174,18 +203,23 @@ export function useMapCanvasState({
 						labelColor,
 						backgroundColor,
 						outgoing.opacity,
-						outgoing.fadeDuration
+						outgoing.fadeDuration,
+						selectionPop,
+						selectionColor,
+						floorPlanDimmed
 					),
 		[
 			isDark,
 			primaryColor,
 			labelColor,
 			backgroundColor,
-			outgoing?.opacity,
-			outgoing?.fadeDuration,
-			outgoing
+			outgoing,
+			selectionPop,
+			selectionColor,
+			floorPlanDimmed
 		]
 	)
+
 	const selectedRoomCenter = suppressRoomSelection
 		? undefined
 		: parseMapCoordinate(clickedElement?.center)

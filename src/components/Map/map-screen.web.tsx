@@ -50,8 +50,12 @@ const MapScreen = (): React.JSX.Element => {
 		focusPaddingBottom,
 		indoorMapLayers,
 		navMode,
-		navFitRequestId,
-		navFitBounds,
+		navCameraRequestId,
+		navCameraCommand,
+		onNavCameraIdle,
+		navShowGhostCutaway,
+		navAllowStairMaxZoom,
+		navFloorPlanDimmed,
 		suppressSelectionCameraFocus
 	} = useMapScreenChrome()
 
@@ -95,8 +99,12 @@ const MapScreen = (): React.JSX.Element => {
 				focusPaddingBottom={focusPaddingBottom}
 				overlayFloor={currentFloor?.floor ?? 'EG'}
 				indoorMapLayers={indoorMapLayers}
-				cameraFitRequestId={navFitRequestId}
-				cameraFitBounds={navFitBounds}
+				cameraNavRequestId={navCameraRequestId}
+				cameraNavCommand={navCameraCommand}
+				onNavCameraIdle={onNavCameraIdle}
+				navShowGhostCutaway={navShowGhostCutaway}
+				navAllowStairMaxZoom={navAllowStairMaxZoom}
+				floorPlanDimmed={navFloorPlanDimmed}
 				suppressSelectionCameraFocus={suppressSelectionCameraFocus}
 				indoorNavActive={navMode != null}
 			/>

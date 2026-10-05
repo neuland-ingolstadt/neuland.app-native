@@ -1,6 +1,8 @@
 import { use, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MapContext } from '@/contexts/map'
+import { stepFloor } from '@/hooks/useIndoorNavStepFocus'
+import type { LonLat } from '@/utils/indoor-nav'
 import {
 	buildJourneySteps,
 	getIndoorGraph,
@@ -8,7 +10,6 @@ import {
 	type JourneyStep,
 	type JourneyStepCopy,
 	journeyStepCopy,
-	type LonLat,
 	mapLegForStep,
 	pickLegForFloor
 } from '@/utils/indoor-nav'
@@ -30,18 +31,7 @@ interface UseIndoorNavStepsOptions {
 	stepIndex: number
 	setStepIndex: (index: number) => void
 	navActive: boolean
-	/** Called with the leg coords to frame whenever the step changes. */
-	onFocusStep?: (coords: LonLat[]) => void
-}
-
-function stepFloor(step: JourneyStep): string {
-	if (step.kind === 'stairs') {
-		return step.fromFloor
-	}
-	if (step.kind === 'arrival') {
-		return step.floor
-	}
-	return step.segment.floor
+	onFocusStep?: (step: JourneyStep, ctx?: { leftStairsAt?: LonLat }) => void
 }
 
 /** Step-by-step journey state — mirrors indoor-nav/g route page logic. */
@@ -79,7 +69,7 @@ export function useIndoorNavSteps({
 	const mapLeg = mapLegForStep(currentStep)
 
 	const applyStepView = useCallback(
-		(s: JourneyStep) => {
+		(s: JourneyStep, ctx?: { leftStairsAt?: LonLat }) => {
 			if (routeResult == null) {
 				return
 			}
@@ -87,15 +77,7 @@ export function useIndoorNavSteps({
 			if (currentFloor?.floor !== floor) {
 				setCurrentFloor({ floor, manual: true })
 			}
-			if (s.kind === 'stairs') {
-				onFocusStep?.([s.change.at])
-				return
-			}
-			if (s.kind === 'walk' && s.phase != null) {
-				onFocusStep?.(s.segment.coords)
-				return
-			}
-			onFocusStep?.(routeResult.segments[s.legIndex]?.coords ?? [])
+			onFocusStep?.(s, ctx)
 		},
 		[currentFloor?.floor, onFocusStep, routeResult, setCurrentFloor]
 	)
@@ -113,12 +95,17 @@ export function useIndoorNavSteps({
 				}
 				return
 			}
-			setStepIndex(i)
+			const prev = steps[safeStep]
 			const s = steps[i]
 			if (s == null) {
 				return
 			}
-			applyStepView(s)
+			setStepIndex(i)
+			const ctx =
+				prev?.kind === 'stairs' && s.kind !== 'stairs'
+					? { leftStairsAt: prev.change.at }
+					: undefined
+			applyStepView(s, ctx)
 		},
 		[applyStepView, safeStep, setStepIndex, steps]
 	)

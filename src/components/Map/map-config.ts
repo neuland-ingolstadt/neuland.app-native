@@ -27,7 +27,8 @@ export const MAP_IDS = {
 		indoorStepMarkers: 'indoorStepMarkersSource',
 		indoorEntrances: 'indoorEntrancesSource',
 		indoorStairs: 'indoorStairsSource',
-		indoorDestinationRoom: 'indoorDestinationRoomSource'
+		indoorDestinationRoom: 'indoorDestinationRoomSource',
+		indoorGhostFloors: 'indoorGhostFloorsSource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -49,7 +50,9 @@ export const MAP_IDS = {
 		indoorStairsFill: 'indoorStairsFill',
 		indoorStairsOutline: 'indoorStairsOutline',
 		indoorDestinationRoomFill: 'indoorDestinationRoomFill',
-		indoorDestinationRoomOutline: 'indoorDestinationRoomOutline'
+		indoorDestinationRoomOutline: 'indoorDestinationRoomOutline',
+		indoorGhostRoomsExtrusion: 'indoorGhostRoomsExtrusion',
+		indoorGhostStairsExtrusion: 'indoorGhostStairsExtrusion'
 	}
 } as const
 
@@ -146,7 +149,15 @@ export const MAP_COLORS = {
 	indoorStairsFillOpacity: 0.35,
 	indoorStairsOutlineWidth: 1.25,
 	indoorDestinationRoomFillOpacity: 0.38,
-	indoorDestinationRoomOutlineWidth: 2.8
+	indoorDestinationRoomOutlineWidth: 2.8,
+	indoorGhostRoomExtrusion: {
+		light: '#b8c4d4',
+		dark: '#5a6575'
+	},
+	indoorGhostRoomExtrusionOpacity: 0.28,
+	indoorGhostStairExtrusionOpacity: 0.7,
+	indoorFloorPlanDimFillFactor: 0.4,
+	indoorFloorPlanDimLineFactor: 0.35
 } as const
 
 export const SELECTED_POP_HOLD_MS = 80
@@ -165,8 +176,15 @@ export function getMapLayerStyles(
 	overlayOpacity = 1,
 	overlayFadeDuration = FLOOR_OVERLAY_FADE_MS,
 	selectionPop = false,
-	selectionColor = primaryColor
+	selectionColor = primaryColor,
+	floorPlanDimmed = false
 ) {
+	const planDimFill = floorPlanDimmed
+		? MAP_COLORS.indoorFloorPlanDimFillFactor
+		: 1
+	const planDimLine = floorPlanDimmed
+		? MAP_COLORS.indoorFloorPlanDimLineFactor
+		: 1
 	const overlayFadeTransition = {
 		duration: overlayFadeDuration,
 		delay: 0
@@ -202,6 +220,7 @@ export function getMapLayerStyles(
 		'fill-opacity': [
 			'*',
 			overlayOpacity,
+			planDimFill,
 			['case', MAP_CORRIDOR_MATCH, corridorFillOpacity, roomFillOpacity]
 		] as ExpressionSpecification,
 		'fill-opacity-transition': overlayFadeTransition
@@ -212,7 +231,11 @@ export function getMapLayerStyles(
 		paint: {
 			'line-color': outlineColor,
 			'line-width': outlineWidth,
-			'line-opacity': overlayOpacity,
+			'line-opacity': [
+				'*',
+				overlayOpacity,
+				planDimLine
+			] as ExpressionSpecification,
 			'line-opacity-transition': overlayFadeTransition
 		}
 	}

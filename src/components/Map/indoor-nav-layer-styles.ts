@@ -62,6 +62,20 @@ export function getIndoorNavLayerPaints(
 				MAP_COLORS.indoorRouteLineWidth
 			]
 		},
-		progressLineLayout: ROUTE_LINE_LAYOUT
+		progressLineLayout: ROUTE_LINE_LAYOUT,
+		ghostRoomExtrusion: {
+			'fill-extrusion-color': MAP_COLORS.indoorGhostRoomExtrusion[mapMode],
+			'fill-extrusion-height': ['coalesce', ['get', 'ghostHeight'], 1],
+			'fill-extrusion-base': ['coalesce', ['get', 'ghostBase'], 0],
+			'fill-extrusion-opacity': MAP_COLORS.indoorGhostRoomExtrusionOpacity,
+			'fill-extrusion-vertical-gradient': true
+		},
+		ghostStairExtrusion: {
+			'fill-extrusion-color': stairsColor,
+			'fill-extrusion-height': ['coalesce', ['get', 'ghostHeight'], 5],
+			'fill-extrusion-base': ['coalesce', ['get', 'ghostBase'], 0],
+			'fill-extrusion-opacity': MAP_COLORS.indoorGhostStairExtrusionOpacity,
+			'fill-extrusion-vertical-gradient': true
+		}
 	}
 }
