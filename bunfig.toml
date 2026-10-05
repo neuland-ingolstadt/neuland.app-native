@@ -14,6 +14,8 @@ coveragePathIgnorePatterns = [
 	"src/hooks/**",
 	"src/assets/**",
 	"src/utils/tests/**",
+	"src/api/thi-api.ts",
+	"src/api/thi-authenticated-api.ts",
 	"ios/**",
 	"android/**"
 ]

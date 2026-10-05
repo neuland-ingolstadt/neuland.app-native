@@ -1,6 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test'
-
-const SRC_ROOT = new URL('../../', import.meta.url).pathname
+import { storageMock } from './thi-storage-mocks'
 
 const storageState = new Map<string, boolean>()
 
@@ -14,12 +13,7 @@ const appStorageMock = {
 	getBoolean: mock((key: string) => storageState.get(key))
 }
 
-mock.module(`${SRC_ROOT}utils/storage.ts`, () => ({
-	appStorage: appStorageMock,
-	loadSecureAsync: async () => null,
-	saveSecureAsync: async () => {},
-	deleteSecure: () => {}
-}))
+storageMock.appStorage = appStorageMock
 
 let officeTogglePending: typeof import('../office-toggle-pending')
 

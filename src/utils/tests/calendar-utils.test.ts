@@ -24,7 +24,7 @@ mock.module('i18next', () => ({
 	t: (key: string) => key
 }))
 
-mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
+mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
 	default: {
 		getExams: mockGetExams
 	}
