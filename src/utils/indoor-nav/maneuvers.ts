@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next'
-import { FLOOR_ORDER } from './floors'
+import { finiteFloorLevel } from './floors'
 import { haversineM } from './geometry'
 import { isCirculation, isStairRoomId } from './graph-room-utils'
 import {
@@ -203,7 +203,7 @@ export function stairStepManeuver(
 	t: TFunction<'indoor-nav'>
 ): { headline: string; subline: string } {
 	const up =
-		(FLOOR_ORDER[change.toFloor] ?? 0) > (FLOOR_ORDER[change.fromFloor] ?? 0)
+		finiteFloorLevel(change.toFloor) > finiteFloorLevel(change.fromFloor)
 	return {
 		headline: t(`guidance.${up ? 'stairsUp' : 'stairsDown'}`),
 		subline: t('guidance.stairsSub', {

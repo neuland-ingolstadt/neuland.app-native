@@ -4,6 +4,7 @@ import { SEARCH_TYPES } from '@/types/map'
 import {
 	applyIndoorData,
 	formatDistanceDuration,
+	getIndoorDefaultStartIdForCode,
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	INDOOR_DEFAULT_START_ID,
@@ -48,7 +49,7 @@ export function useIndoorNavigation({
 	enabled = true,
 	fullRoute = false,
 	indoorData = null,
-	fromId = INDOOR_DEFAULT_START_ID,
+	fromId,
 	locale = 'de'
 }: UseIndoorNavigationOptions): IndoorNavModel | null {
 	return useMemo(() => {
@@ -66,6 +67,10 @@ export function useIndoorNavigation({
 		if (floors.length === 0) {
 			return null
 		}
+		// Default start is the destination building's lowest-numbered
+		// entrance, so new buildings route from their own front door.
+		const effectiveFromId =
+			fromId ?? getIndoorDefaultStartIdForCode(code) ?? INDOOR_DEFAULT_START_ID
 		const graph = getIndoorGraph()
 		let toId: string
 		let floor: string
@@ -84,28 +89,28 @@ export function useIndoorNavigation({
 		let distanceM: number
 		let durationSec: number
 		if (fullRoute) {
-			routeResult = route(graph, fromId, toId)
+			routeResult = route(graph, effectiveFromId, toId)
 			if (routeResult == null) {
 				return null
 			}
 			distanceM = routeResult.distanceM
 			durationSec = routeResult.durationSec
 		} else {
-			const preview = routePreview(graph, fromId, toId)
+			const preview = routePreview(graph, effectiveFromId, toId)
 			if (preview == null) {
 				return null
 			}
 			distanceM = preview.distanceM
 			durationSec = preview.durationSec
 		}
-		const startNode = graph.nodes.get(fromId)
+		const startNode = graph.nodes.get(effectiveFromId)
 		return {
 			destinationFloor: floor,
 			destinationCode: code,
-			fromId,
+			fromId: effectiveFromId,
 			toId,
 			toLabel: code,
-			startLabel: startNode?.label ?? fromId,
+			startLabel: startNode?.label ?? effectiveFromId,
 			routeResult,
 			summary: formatDistanceDuration(distanceM, durationSec, locale)
 		}

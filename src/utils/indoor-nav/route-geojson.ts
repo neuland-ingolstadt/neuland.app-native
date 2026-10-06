@@ -1,3 +1,6 @@
+import type { ClickedMapElement } from '@/types/map'
+import { SEARCH_TYPES } from '@/types/map'
+import { getIndoorBuildingForCode } from './data'
 import type { IndoorData, RouteResult } from './types'
 
 /** Staircase shaft polygons on a floor that belong to the active route. */
@@ -87,5 +90,41 @@ export function entrancesGeoJsonForFloor(
 	return {
 		type: 'FeatureCollection',
 		features: data.entrances
+	}
+}
+
+/**
+ * Entrances for the currently selected building on the ground floor.
+ * Outside navigation the map only marks the selected room's building —
+ * nothing when there is no selection — so other buildings stay uncluttered.
+ */
+export function entrancesGeoJsonForSelection(
+	data: IndoorData,
+	floor: string,
+	clicked: ClickedMapElement | null
+): GeoJSON.FeatureCollection {
+	if (floor !== 'EG' || clicked == null) {
+		return { type: 'FeatureCollection', features: [] }
+	}
+	let standort: string | null = null
+	let gebaeude: string | null = null
+	if (clicked.type === SEARCH_TYPES.BUILDING) {
+		gebaeude = clicked.data
+	} else if (clicked.type === SEARCH_TYPES.ROOM) {
+		const building = getIndoorBuildingForCode(clicked.data)
+		standort = building?.standort ?? null
+		gebaeude = building?.gebaeude ?? null
+	}
+	if (gebaeude == null) {
+		return { type: 'FeatureCollection', features: [] }
+	}
+	return {
+		type: 'FeatureCollection',
+		features: data.entrances.filter(
+			(feature) =>
+				feature.geometry?.type === 'Point' &&
+				feature.properties?.Gebaeude === gebaeude &&
+				(standort == null || feature.properties?.Standort === standort)
+		)
 	}
 }

@@ -1,3 +1,4 @@
+import { MAP_CAMERA } from '@/utils/map-constants'
 import {
 	navMapCameraDuration,
 	STAIR_MOMENT_CAMERA
@@ -14,6 +15,7 @@ export type NavCameraCommand =
 			/** POC-style fly-out after leaving a stairs step (native: easeTo flat). */
 			resetFromStairs?: boolean
 	  }
+	| { kind: 'exit-focus'; at: LonLat }
 
 export const NAV_FLAT_CAMERA_EASING = 'ease' as const
 
@@ -83,6 +85,23 @@ export function stairExitFlatEaseStop(
 	return {
 		center: boundsCenter(bounds),
 		zoom: STAIR_MOMENT_CAMERA.exitLegZoom,
+		pitch: 0,
+		bearing: 0,
+		duration: navMapCameraDuration(
+			reducedMotion,
+			STAIR_MOMENT_CAMERA.legDurationMs
+		)
+	}
+}
+
+/**
+ * Ease back out to the default room-selection depth when navigation ends
+ * (instead of staying at the close-up step framing).
+ */
+export function navExitFocusStop(at: LonLat, reducedMotion: boolean) {
+	return {
+		center: at,
+		zoom: MAP_CAMERA.focusZoom,
 		pitch: 0,
 		bearing: 0,
 		duration: navMapCameraDuration(

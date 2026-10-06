@@ -1,7 +1,8 @@
-# Indoor navigation (building G, Ingolstadt)
+# Indoor navigation (multi-building)
 
-Routing and turn-by-turn UI for **Standort IN / Gebäude G**. Static GeoJSON is
-loaded from [assets.neuland.app](https://assets.neuland.app):
+Routing and turn-by-turn UI for every building with indoor coverage in the
+assets (currently **IN/G** and **IN/J**). Static GeoJSON is loaded from
+[assets.neuland.app](https://assets.neuland.app):
 
 | Asset | URL |
 | --- | --- |
@@ -9,6 +10,24 @@ loaded from [assets.neuland.app](https://assets.neuland.app):
 | Doors | `doors_neuland.geojson` |
 | Entrances | `entrances_neuland.geojson` |
 | Corridors | `corridors_neuland.geojson` |
+
+## Adding a new building: no code change needed
+
+Coverage is discovered from the assets at load time
+(`coveredBuildingsFromAssets` in `data.ts`): any `Standort`/`Gebäude` pair
+that shows up in the door or corridor GeoJSON gets rooms, doors, entrances,
+corridors, floors (union of its `Etage` values, ordered bottom-up) and graph
+edges automatically. Entrances snap to rooms of their own building and floor.
+
+Two conventions keep new buildings working out of the box:
+
+- **Default start** — routing starts at the destination building's
+  lowest-numbered entrance (`getIndoorDefaultStartIdForCode`, numeric-aware so
+  `E2` beats `E10`). Name entrances `…-E01`, `…-E02`, … and the front door wins
+  automatically. `INDOOR_DEFAULT_START_ID` (G, `IN-G-E01`) remains as fallback.
+- **Function labels** — room `Funktion_de` values are canonicalized on load
+  (`normalizeFunktion` in `data.ts`): `TRH` → `Treppenhaus`, `Flur …` →
+  `Flur`, etc. If a new building ships another alias, add it there.
 
 Behaviour is kept in sync with
 [neuland-map-data `indoor-nav/g`](https://github.com/neuland-ingolstadt/neuland-map-data/tree/main/indoor-nav/g).

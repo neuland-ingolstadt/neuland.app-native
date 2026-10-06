@@ -104,7 +104,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			'Angekommen bei G011'
 		])
 		expect(copies[0].subline).toBe('Über Eingang G 1')
-		expect(copies[1].subline).toBe('Der blaue Strich auf der Karte')
+		expect(copies[1].subline).toBe('Der markierte Weg auf der Karte')
 		expect(copies[2].subline).toBe('Bis zur Tür dem Weg folgen')
 		expect(copies[3].arrived).toBe(true)
 		// Sub-steps partition the whole leg without gaps.

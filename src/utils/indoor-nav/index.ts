@@ -8,18 +8,30 @@ export {
 export {
 	applyIndoorData,
 	buildIndoorDataFromGeoJson,
+	coveredBuildingsFromAssets,
+	getIndoorBuildingForCode,
 	getIndoorData,
+	getIndoorDefaultStartIdForBuilding,
+	getIndoorDefaultStartIdForCode,
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	INDOOR_BUILDING,
 	INDOOR_STANDORT,
+	indoorBuildings,
 	indoorFloors,
 	isIndoorDataLoaded,
 	isIndoorFeature,
 	loadIndoorDataFromAssets,
+	normalizeFunktion,
 	resetIndoorDataCache
 } from './data'
-export { FLOOR_ORDER, FLOORS } from './floors'
+export {
+	activeFloors,
+	FLOORS,
+	finiteFloorLevel,
+	floorLevel,
+	orderFloors
+} from './floors'
 export {
 	formatDistanceDuration,
 	formatDistanceM,
@@ -45,10 +57,12 @@ export {
 export { buildIndoorGraph, listRoutableRooms } from './graph-build'
 export { isStairRoomId } from './graph-room-utils'
 export {
+	compareAssetIds,
 	doorNodeId,
 	entranceNodeId,
 	INDOOR_DEFAULT_ENTRANCE_RAW_ID,
 	INDOOR_DEFAULT_START_ID,
+	lowestAssetId,
 	portalNodeId,
 	roomNodeId
 } from './ids'
@@ -85,12 +99,14 @@ export {
 	legBoundsCameraOptions,
 	type NavCameraCommand,
 	type NavStairsPhase,
+	navExitFocusStop,
 	stairEnterCameraStop,
 	stairExitFlatEaseStop
 } from './nav-camera'
 export {
 	destinationRoomGeoJsonForFloor,
 	entrancesGeoJsonForFloor,
+	entrancesGeoJsonForSelection,
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor
 } from './route-geojson'
@@ -116,6 +132,7 @@ export type {
 	GraphEdge,
 	GraphNode,
 	GraphNodeKind,
+	IndoorBuilding,
 	IndoorData,
 	IndoorGraph,
 	LonLat,

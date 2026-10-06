@@ -10,7 +10,17 @@ export type RoomFeature = GeoJSON.Feature<
 export type DoorFeature = GeoJSON.Feature<GeoJSON.Point, DoorProps>
 export type EntranceFeature = GeoJSON.Feature<GeoJSON.Point, EntranceProps>
 
+/** A campus building with indoor routing coverage (door + path assets). */
+export interface IndoorBuilding {
+	standort: string
+	gebaeude: string
+}
+
 export interface IndoorData {
+	/** Covered buildings, sorted by building code (numeric-aware). */
+	buildings: IndoorBuilding[]
+	/** Union of room floors across covered buildings, ordered bottom-up. */
+	floors: string[]
 	roomsByFloor: Record<string, RoomFeature[]>
 	doors: DoorFeature[]
 	entrances: EntranceFeature[]

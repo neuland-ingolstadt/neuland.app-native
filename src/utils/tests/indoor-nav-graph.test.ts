@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import {
 	getIndoorData,
+	getIndoorDefaultStartIdForCode,
 	loadIndoorDataFromAssets,
 	resetIndoorDataCache
 } from '@/utils/indoor-nav/data'
@@ -15,7 +16,7 @@ import {
 } from '@/utils/indoor-nav/graph-build'
 import { route } from '@/utils/indoor-nav/routing'
 
-describe('indoor-nav graph (building G)', () => {
+describe('indoor-nav graph (covered buildings)', () => {
 	let data: ReturnType<typeof getIndoorData>
 	let graph: ReturnType<typeof buildIndoorGraph>
 
@@ -69,13 +70,14 @@ describe('indoor-nav graph (building G)', () => {
 		}
 	})
 
-	it('routes every routable room with a mapped door from the main entrance', () => {
+	it('routes every routable room with a mapped door from its building entrance', () => {
 		const rooms = listRoutableRooms(data)
 		expect(rooms.length).toBeGreaterThan(50)
 		// Rooms without a mapped door in doors.json cannot be reached via the
 		// door-only graph — the web demo (turf implementation) fails these too.
 		const knownDoorless = new Set([
 			'EG:G066',
+			'EG:J082',
 			'1:G166',
 			'2:G266',
 			'2:G276',
@@ -83,11 +85,11 @@ describe('indoor-nav graph (building G)', () => {
 		])
 		const failures: string[] = []
 		for (const room of rooms) {
-			const r = route(
-				graph,
-				'entrance:IN-G-E01',
-				`room:${room.floor}:${room.code}`
-			)
+			// Each building routes from its own lowest-numbered entrance —
+			// G rooms from IN-G-E01, J rooms from IN-J-E01, and so on.
+			const start =
+				getIndoorDefaultStartIdForCode(room.code) ?? 'entrance:IN-G-E01'
+			const r = route(graph, start, `room:${room.floor}:${room.code}`)
 			if (r == null) {
 				failures.push(`${room.floor}:${room.code}`)
 			}

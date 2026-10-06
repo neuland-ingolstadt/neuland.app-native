@@ -33,7 +33,7 @@ import type { MaterialIcon } from '@/types/material-icons'
 import {
 	activeStairCodesForStep,
 	bboxOfCoords,
-	entrancesGeoJsonForFloor,
+	entrancesGeoJsonForSelection,
 	getIndoorData,
 	ghostFloorsGeoJson,
 	indoorNavLocaleFromLanguage,
@@ -73,7 +73,7 @@ export function useMapIndoorNav({
 }: UseMapIndoorNavOptions) {
 	const { t } = useTranslation('indoor-nav')
 	const { i18n } = useTranslation()
-	const { setClickedElement, setCurrentFloor } = use(MapContext)
+	const { setClickedElement, setCurrentFloor, currentFloor } = use(MapContext)
 	const preview = isIndoorNavPreviewEnabled()
 	const { enabled: flagEnabled } = useFeatureFlagEnabled(
 		INDOOR_NAV_FLAG_KEY,
@@ -180,7 +180,41 @@ export function useMapIndoorNav({
 		stepIndex: indoorSteps.stepIndex
 	}
 
+	const restoreDefaultMapView = useCallback(() => {
+		exitStairsCameraPendingRef.current = false
+		syncStairsPhase('idle')
+		setCutawayMoment(null)
+		setNavCamera({ id: 0, command: null })
+	}, [syncStairsPhase])
+
+	const finalizeCancelIndoorNav = useCallback(() => {
+		navDestRef.current = null
+		setNavActive(false)
+		setNavStepIndex(0)
+		setClickedElement(null)
+		// Like dismissing the info sheet: keep a manually chosen floor. Nav
+		// steps set the floor explicitly, so finishing stays on the end floor
+		// instead of jumping back to EG.
+		if (currentFloor?.manual !== true) {
+			setCurrentFloor({ floor: 'EG', manual: false })
+		}
+		setSearchIndex(searchHalfIndex)
+		restoreDefaultMapView()
+	}, [
+		currentFloor?.manual,
+		restoreDefaultMapView,
+		searchHalfIndex,
+		setClickedElement,
+		setCurrentFloor,
+		setSearchIndex
+	])
+
 	const onNavCameraIdle = useCallback(() => {
+		// The exit glide is the pending camera command itself — no extra flag.
+		if (navCamera.command?.kind === 'exit-focus') {
+			finalizeCancelIndoorNav()
+			return
+		}
 		const phase = stairsPhaseRef.current
 		if (phase === 'entering') {
 			syncStairsPhase('cutaway')
@@ -194,7 +228,7 @@ export function useMapIndoorNav({
 			syncStairsPhase('flat')
 			setCutawayMoment(null)
 		}
-	}, [syncStairsPhase])
+	}, [finalizeCancelIndoorNav, navCamera.command, syncStairsPhase])
 
 	const selectStepRef = useRef(indoorSteps.selectStep)
 	selectStepRef.current = indoorSteps.selectStep
@@ -222,7 +256,11 @@ export function useMapIndoorNav({
 		if (!navActive) {
 			return {
 				...EMPTY_INDOOR_MAP_LAYERS,
-				entrancesGeoJSON: entrancesGeoJsonForFloor(data, floor)
+				entrancesGeoJSON: entrancesGeoJsonForSelection(
+					data,
+					floor,
+					clickedElement
+				)
 			}
 		}
 		const routeResult = indoorNav.routeResult
@@ -262,6 +300,7 @@ export function useMapIndoorNav({
 			stairMoment
 		}
 	}, [
+		clickedElement,
 		cutawayMoment,
 		indoorDataReady,
 		indoorNav,
@@ -283,27 +322,31 @@ export function useMapIndoorNav({
 		setNavActive(true)
 	}, [hideDetailSheet, indoorNav, searchHiddenIndex, setSearchIndex])
 
-	const restoreDefaultMapView = useCallback(() => {
-		exitStairsCameraPendingRef.current = false
-		syncStairsPhase('idle')
-		setCutawayMoment(null)
-		setNavCamera({ id: 0, command: null })
-	}, [syncStairsPhase])
-
 	const cancelIndoorNav = useCallback(() => {
-		navDestRef.current = null
-		setNavActive(false)
-		setNavStepIndex(0)
-		setClickedElement(null)
-		setCurrentFloor({ floor: 'EG', manual: false })
-		setSearchIndex(searchHalfIndex)
-		restoreDefaultMapView()
+		if (navCamera.command?.kind === 'exit-focus') {
+			// Second press while gliding out: finish immediately.
+			finalizeCancelIndoorNav()
+			return
+		}
+		const coords = routeResultRef.current?.coords
+		const dest =
+			coords != null && coords.length > 0
+				? coords[coords.length - 1]
+				: undefined
+		if (dest == null) {
+			finalizeCancelIndoorNav()
+			return
+		}
+		// Glide back out to the default room-selection depth first; the
+		// actual teardown runs when the camera goes idle.
+		syncStairsPhase('flat')
+		setCutawayMoment(null)
+		bumpNavCamera({ kind: 'exit-focus', at: dest })
 	}, [
-		restoreDefaultMapView,
-		searchHalfIndex,
-		setClickedElement,
-		setCurrentFloor,
-		setSearchIndex
+		bumpNavCamera,
+		finalizeCancelIndoorNav,
+		navCamera.command,
+		syncStairsPhase
 	])
 
 	useEffect(() => {

@@ -5,7 +5,7 @@
 
 import type { TFunction } from 'i18next'
 import { getIndoorGraph } from './data'
-import { FLOOR_ORDER } from './floors'
+import { finiteFloorLevel } from './floors'
 import { formatDistanceDuration, walkDurationSec } from './format'
 import { haversineM } from './geometry'
 import { type IndoorNavLocale, indoorNavFloorLabel } from './indoor-nav-i18n'
@@ -90,7 +90,7 @@ function walkManeuverOpts(
 }
 
 function stairDir(fromFloor: string, toFloor: string): 'up' | 'down' {
-	return (FLOOR_ORDER[toFloor] ?? 0) >= (FLOOR_ORDER[fromFloor] ?? 0)
+	return finiteFloorLevel(toFloor) >= finiteFloorLevel(fromFloor)
 		? 'up'
 		: 'down'
 }

@@ -1,4 +1,4 @@
-import { FLOORS } from './floors'
+import { FLOORS, finiteFloorLevel, orderFloors } from './floors'
 import { distM, type PolygonGeom, polygonCentroid } from './geometry'
 import type { JourneyStep } from './journey-copy'
 import type { IndoorData, LonLat } from './types'
@@ -23,12 +23,14 @@ export interface StairMoment {
 function floorsBetween(fromFloor: string, toFloor: string): string[] {
 	const a = FLOORS.indexOf(fromFloor as (typeof FLOORS)[number])
 	const b = FLOORS.indexOf(toFloor as (typeof FLOORS)[number])
-	if (a < 0 || b < 0) {
-		return [fromFloor, toFloor]
+	if (a >= 0 && b >= 0) {
+		const lo = Math.min(a, b)
+		const hi = Math.max(a, b)
+		return FLOORS.slice(lo, hi + 1)
 	}
-	const lo = Math.min(a, b)
-	const hi = Math.max(a, b)
-	return FLOORS.slice(lo, hi + 1)
+	// Floors of newly covered buildings (or future labels) are ordered
+	// bottom-up instead of degrading to an unordered pair.
+	return orderFloors([fromFloor, toFloor])
 }
 
 function roomCentroid(room: GeoJSON.Feature): LonLat | null {
@@ -85,9 +87,10 @@ export function ghostFloorsGeoJson(
 	}
 	const hop = moment.at
 	const range = floorsBetween(moment.fromFloor, moment.toFloor)
-	const fromIdx = FLOORS.indexOf(moment.fromFloor as (typeof FLOORS)[number])
-	const toIdx = FLOORS.indexOf(moment.toFloor as (typeof FLOORS)[number])
-	const climbing = toIdx >= fromIdx
+	// Unknown (future) floor labels compare at ground level, matching the
+	// previous `?? 0` fallback for known labels.
+	const climbing =
+		finiteFloorLevel(moment.toFloor) >= finiteFloorLevel(moment.fromFloor)
 	const ordered = (climbing ? range : [...range].reverse()).filter(
 		(fl) => fl !== viewFloor
 	)

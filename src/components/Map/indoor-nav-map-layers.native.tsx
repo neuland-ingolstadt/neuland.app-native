@@ -20,6 +20,8 @@ interface IndoorNavMapLayersProps {
 	mapMode: MapMode
 	showGhostCutaway?: boolean
 	stackCutawayLayers?: boolean
+	/** Hide entrance markers when zoomed out (overview). Defaults to visible. */
+	entrancesVisible?: boolean
 }
 
 export function IndoorNavMapLayers({
@@ -28,7 +30,8 @@ export function IndoorNavMapLayers({
 	primaryColor,
 	mapMode,
 	showGhostCutaway = false,
-	stackCutawayLayers = false
+	stackCutawayLayers = false,
+	entrancesVisible = true
 }: IndoorNavMapLayersProps): React.JSX.Element | null {
 	if (layers == null) {
 		return null
@@ -126,7 +129,7 @@ export function IndoorNavMapLayers({
 				primaryColor={primaryColor}
 				mapMode={mapMode}
 			/>
-			{overlayFloor === 'EG' && (
+			{overlayFloor === 'EG' && entrancesVisible && (
 				<IndoorNavEntranceMarkers
 					entrancesGeoJSON={layers.entrancesGeoJSON}
 					primaryColor={primaryColor}

@@ -58,6 +58,9 @@ export const MAP_IDS = {
 
 export { MAP_CAMERA }
 
+/** Entrance markers only render at selection depth and closer (not overview). */
+export const INDOOR_ENTRANCES_MIN_ZOOM = MAP_CAMERA.focusZoom
+
 export const ROOM_PRESS_HITBOX = {
 	top: 2,
 	right: 2,

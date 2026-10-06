@@ -9,12 +9,13 @@ import {
 	NativeUserLocation
 } from '@maplibre/maplibre-react-native'
 import type React from 'react'
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Platform, useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.native'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
+	INDOOR_ENTRANCES_MIN_ZOOM,
 	MAP_CAMERA,
 	MAP_IDS,
 	MAP_STYLE_URLS,
@@ -38,6 +39,7 @@ import {
 	legBoundsCameraOptions,
 	NAV_FLAT_CAMERA_EASING,
 	type NavCameraCommand,
+	navExitFocusStop,
 	stairEnterCameraStop
 } from '@/utils/indoor-nav'
 import { runAfterDuration } from '@/utils/indoor-nav/run-after-map-camera'
@@ -153,6 +155,9 @@ export default function NativeMapCanvas({
 }: NativeMapCanvasProps): React.JSX.Element {
 	const cameraRef = useRef<CameraRef>(null)
 	const currentZoomRef = useRef<number | undefined>(undefined)
+	// Entrance markers only render when zoomed in. Tracked on gesture end
+	// (not per frame) to avoid re-rendering the canvas mid-pinch.
+	const [zoom, setZoom] = useState<number>(MAP_CAMERA.initialZoom)
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
 	const {
@@ -185,6 +190,19 @@ export default function NativeMapCanvas({
 			const compact = isCompactMapViewport(windowWidth)
 			if (command.kind === 'stair-enter') {
 				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
+				const promise = cameraRef.current?.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					padding: pad
+				})
+				runAfterNativeCameraStop(promise, stop.duration, done)
+				return
+			}
+			if (command.kind === 'exit-focus') {
+				const stop = navExitFocusStop(command.at, reducedMotion)
 				const promise = cameraRef.current?.easeTo({
 					center: stop.center,
 					zoom: stop.zoom,
@@ -266,6 +284,7 @@ export default function NativeMapCanvas({
 			}}
 			onRegionDidChange={(event) => {
 				currentZoomRef.current = event.nativeEvent.zoom
+				setZoom(event.nativeEvent.zoom)
 			}}
 			compass={Platform.OS === 'ios'}
 			compassPosition={{ top: 8, left: 8 }}
@@ -431,6 +450,7 @@ export default function NativeMapCanvas({
 				mapMode={mapMode}
 				showGhostCutaway={navShowGhostCutaway}
 				stackCutawayLayers={indoorNavActive}
+				entrancesVisible={zoom >= INDOOR_ENTRANCES_MIN_ZOOM}
 			/>
 		</MapLibreMap>
 	)

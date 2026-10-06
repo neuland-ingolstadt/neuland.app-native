@@ -1,5 +1,5 @@
 import { buildCorridorNet, type CorridorNet } from './corridor'
-import { FLOORS } from './floors'
+import { activeFloors } from './floors'
 import { haversineM } from './geometry'
 import {
 	addDirected,
@@ -36,8 +36,12 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 	const roomsIndex = new Map<string, RoomFeature>()
 	const circulation: Record<string, WalkMask[]> = {}
 	const corridors: Record<string, CorridorNet | null> = {}
+	// Floors come from the loaded dataset (union across covered buildings),
+	// so buildings with fewer — or future buildings with more — floors work
+	// without code changes. Falls back to the legacy G stack when empty.
+	const floors = activeFloors(data.floors)
 
-	for (const floor of FLOORS) {
+	for (const floor of floors) {
 		circulation[floor] = []
 		corridors[floor] = buildCorridorNet(
 			floor,
@@ -108,7 +112,7 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 		}
 	}
 
-	for (const floor of FLOORS) {
+	for (const floor of floors) {
 		const rooms = data.roomsByFloor[floor] ?? []
 		for (let i = 0; i < rooms.length; i++) {
 			for (let j = i + 1; j < rooms.length; j++) {
@@ -152,7 +156,7 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 
 	const stairsByFloor: Record<string, RoomFeature[]> = {}
 	const elevatorsByFloor: Record<string, RoomFeature[]> = {}
-	for (const floor of FLOORS) {
+	for (const floor of floors) {
 		stairsByFloor[floor] = (data.roomsByFloor[floor] ?? []).filter((r) =>
 			isStair(r.properties.Funktion_de)
 		)
@@ -160,19 +164,36 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 			isElevator(r.properties.Funktion_de)
 		)
 	}
-	const egRooms = data.roomsByFloor.EG ?? []
+	const roomsByFloorAndBuilding = new Map<string, RoomFeature[]>()
+	for (const [floor, rooms] of Object.entries(data.roomsByFloor)) {
+		for (const room of rooms) {
+			const key = `${floor}/${room.properties.Standort}/${room.properties.Gebaeude}`
+			const bucket = roomsByFloorAndBuilding.get(key)
+			if (bucket == null) {
+				roomsByFloorAndBuilding.set(key, [room])
+			} else {
+				bucket.push(room)
+			}
+		}
+	}
 	const entranceSnaps: Array<{
 		entrance: EntranceFeature
 		room: RoomFeature
+		floor: string
 		d: number
 	}> = []
 	const stairsWithEntrance = new Set<string>()
 	for (const entrance of data.entrances) {
 		const coord = entrance.geometry.coordinates as LonLat
+		const entranceFloor = String(entrance.properties.Etage || 'EG')
+		const candidates =
+			roomsByFloorAndBuilding.get(
+				`${entranceFloor}/${entrance.properties.Standort}/${entrance.properties.Gebaeude}`
+			) ?? []
 		let best: RoomFeature | null = null
 		let bestScore = Number.POSITIVE_INFINITY
 		let bestD = Number.POSITIVE_INFINITY
-		for (const room of egRooms) {
+		for (const room of candidates) {
 			const d = distanceToRoomM(coord, room)
 			if (d > ENTRANCE_SNAP_M) {
 				continue
@@ -187,15 +208,15 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 		if (best == null) {
 			continue
 		}
-		entranceSnaps.push({ entrance, room: best, d: bestD })
+		entranceSnaps.push({ entrance, room: best, floor: entranceFloor, d: bestD })
 		if (isStair(best.properties.Funktion_de)) {
-			stairsWithEntrance.add(best.properties.Raum)
+			stairsWithEntrance.add(`${entranceFloor}:${best.properties.Raum}`)
 		}
 	}
 
-	for (let fi = 0; fi < FLOORS.length - 1; fi++) {
-		const lower = FLOORS[fi]
-		const upper = FLOORS[fi + 1]
+	for (let fi = 0; fi < floors.length - 1; fi++) {
+		const lower = floors[fi]
+		const upper = floors[fi + 1]
 		for (const { a, b, d } of matchStairShafts(
 			stairsByFloor[lower],
 			stairsByFloor[upper]
@@ -205,7 +226,7 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 			const weight = 3.5 + d
 			const lowerOpen =
 				stairHasDoorOnFloor(doorPairKeys, lower, a.properties.Raum) ||
-				(lower === 'EG' && stairsWithEntrance.has(a.properties.Raum))
+				stairsWithEntrance.has(`${lower}:${a.properties.Raum}`)
 			if (lowerOpen) {
 				addUndirected(edges, { from: aId, to: bId, weight, kind: 'vertical' })
 			} else {
@@ -227,7 +248,7 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 		}
 	}
 
-	for (const { entrance, room, d } of entranceSnaps) {
+	for (const { entrance, room, floor, d } of entranceSnaps) {
 		const eId = entranceNodeId(entrance.properties.id)
 		ensureNode(nodes, {
 			id: eId,
@@ -236,7 +257,7 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 			coord: entrance.geometry.coordinates as LonLat,
 			label: entrance.properties.name_de || entrance.properties.id
 		})
-		const rId = roomNodeId('EG', room.properties.Raum)
+		const rId = roomNodeId(floor, room.properties.Raum)
 		addUndirected(edges, {
 			from: eId,
 			to: rId,
@@ -257,7 +278,7 @@ export function listRoutableRooms(
 		label: string
 		funktion?: string
 	}> = []
-	for (const floor of FLOORS) {
+	for (const floor of activeFloors(data.floors)) {
 		for (const room of data.roomsByFloor[floor] ?? []) {
 			const code = room.properties.Raum
 			const funktion = room.properties.Funktion_de

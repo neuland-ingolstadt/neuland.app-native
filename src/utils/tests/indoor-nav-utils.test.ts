@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import { getFixedT } from '@/localization/i18n-fixed-t'
+import { SEARCH_TYPES } from '@/types/map'
 import {
 	getIndoorData,
 	loadIndoorDataFromAssets,
@@ -33,9 +34,11 @@ import {
 	stairStepManeuver,
 	walkStepManeuver
 } from '@/utils/indoor-nav/maneuvers'
+import { navExitFocusStop } from '@/utils/indoor-nav/nav-camera'
 import {
 	destinationRoomGeoJsonForFloor,
 	entrancesGeoJsonForFloor,
+	entrancesGeoJsonForSelection,
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor
 } from '@/utils/indoor-nav/route-geojson'
@@ -46,6 +49,7 @@ import {
 	stringPull,
 	type WalkMask
 } from '@/utils/indoor-nav/walkable'
+import { MAP_CAMERA } from '@/utils/map-constants'
 
 describe('indoor-nav utils', () => {
 	const deT = getFixedT('de', 'indoor-nav')
@@ -53,6 +57,15 @@ describe('indoor-nav utils', () => {
 	beforeAll(async () => {
 		resetIndoorDataCache()
 		await loadIndoorDataFromAssets()
+	})
+
+	it('eases back to room-selection depth when navigation ends', () => {
+		const stop = navExitFocusStop([11.43, 48.76], false)
+		expect(stop.center).toEqual([11.43, 48.76])
+		expect(stop.zoom).toBe(MAP_CAMERA.focusZoom)
+		expect(stop.pitch).toBe(0)
+		expect(stop.bearing).toBe(0)
+		expect(stop.duration).toBeGreaterThan(0)
 	})
 
 	it('builds stable graph node ids', () => {
@@ -137,6 +150,51 @@ describe('indoor-nav utils', () => {
 		expect(pickLegForFloor(result, 'EG', 0)).toBe(egLegs[0])
 		expect(pickLegForFloor(result, 'EG', egLegs[1])).toBe(egLegs[1])
 		expect(pickLegForFloor(result, 'missing')).toBe(0)
+	})
+
+	it('shows only the selected building entrances on the ground floor', () => {
+		const data = getIndoorData()
+		const ids = (fc: { features: Array<{ properties?: unknown }> }) =>
+			fc.features.map((f) => (f.properties as { id?: string } | undefined)?.id)
+
+		const gRoom = entrancesGeoJsonForSelection(data, 'EG', {
+			type: SEARCH_TYPES.ROOM,
+			data: 'G001'
+		})
+		expect(gRoom.features.length).toBe(5)
+		expect(ids(gRoom).every((id) => id?.startsWith('IN-G-E'))).toBe(true)
+
+		const jRoom = entrancesGeoJsonForSelection(data, 'EG', {
+			type: SEARCH_TYPES.ROOM,
+			data: 'J101'
+		})
+		expect(ids(jRoom)).toEqual(['IN-J-E01'])
+
+		const jBuilding = entrancesGeoJsonForSelection(data, 'EG', {
+			type: SEARCH_TYPES.BUILDING,
+			data: 'J'
+		})
+		expect(ids(jBuilding)).toEqual(['IN-J-E01'])
+
+		expect(entrancesGeoJsonForSelection(data, 'EG', null).features).toEqual([])
+		expect(
+			entrancesGeoJsonForSelection(data, '1', {
+				type: SEARCH_TYPES.ROOM,
+				data: 'G001'
+			}).features
+		).toEqual([])
+		expect(
+			entrancesGeoJsonForSelection(data, 'EG', {
+				type: SEARCH_TYPES.ROOM,
+				data: 'NO-SUCH-ROOM'
+			}).features
+		).toEqual([])
+		expect(
+			entrancesGeoJsonForSelection(data, 'EG', {
+				type: SEARCH_TYPES.LECTURE,
+				data: 'whatever'
+			}).features
+		).toEqual([])
 	})
 
 	it('builds entrance and destination room overlays', () => {

@@ -11,12 +11,13 @@ import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
+	INDOOR_ENTRANCES_MIN_ZOOM,
 	MAP_CAMERA,
 	MAP_IDS,
 	MAP_STYLE_URLS,
@@ -38,6 +39,7 @@ import {
 	isCompactMapViewport,
 	legBoundsCameraOptions,
 	type NavCameraCommand,
+	navExitFocusStop,
 	stairEnterCameraStop,
 	stairExitFlatEaseStop
 } from '@/utils/indoor-nav'
@@ -149,6 +151,15 @@ export default function WebMapCanvas({
 	indoorNavActive = false
 }: WebMapCanvasProps): React.JSX.Element {
 	const mapRef = useRef<MapRef | null>(null)
+	// Entrance markers only render when zoomed in. Updated on move end
+	// (not per frame) to avoid re-rendering the canvas mid-gesture.
+	const [zoom, setZoom] = useState<number>(MAP_CAMERA.initialZoom)
+	const handleMoveEnd = useCallback(() => {
+		const nextZoom = mapRef.current?.getMap().getZoom()
+		if (nextZoom != null) {
+			setZoom(nextZoom)
+		}
+	}, [])
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
 
@@ -203,6 +214,19 @@ export default function WebMapCanvas({
 					bearing: stop.bearing,
 					duration: stop.duration,
 					curve: stop.curve,
+					padding: pad
+				})
+				runAfterMapCamera(map, stop.duration, done)
+				return
+			}
+			if (command.kind === 'exit-focus') {
+				const stop = navExitFocusStop(command.at, reducedMotion)
+				map.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
 					padding: pad
 				})
 				runAfterMapCamera(map, stop.duration, done)
@@ -290,6 +314,7 @@ export default function WebMapCanvas({
 				}}
 				onClick={handleMapClick}
 				onDragStart={handleMapDragStart}
+				onMoveEnd={handleMoveEnd}
 				attributionControl={false}
 			>
 				<NavigationControl position="top-left" />
@@ -435,6 +460,7 @@ export default function WebMapCanvas({
 						mapMode={mapMode}
 						showGhostCutaway={navShowGhostCutaway}
 						stackCutawayLayers={indoorNavActive}
+						entrancesVisible={zoom >= INDOOR_ENTRANCES_MIN_ZOOM}
 					/>
 				)}
 			</Map>
