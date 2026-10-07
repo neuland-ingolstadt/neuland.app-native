@@ -10,7 +10,10 @@ import {
 	type PolygonGeom,
 	pointInPolygonGeom
 } from '@/utils/indoor-nav/geometry'
-import { buildIndoorGraph, listRoutableRooms } from '@/utils/indoor-nav/graph-build'
+import {
+	buildIndoorGraph,
+	listRoutableRooms
+} from '@/utils/indoor-nav/graph-build'
 import { addDirected, addUndirected } from '@/utils/indoor-nav/graph-room-utils'
 import { route } from '@/utils/indoor-nav/routing'
 import type { LonLat } from '@/utils/indoor-nav/types'

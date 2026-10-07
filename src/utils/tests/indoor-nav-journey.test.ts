@@ -415,9 +415,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			durationSec: 2,
 			floors: ['EG', '1']
 		}
-		expect(activeStairCodesForStep(result, undefined, 'EG')).toEqual(
-			new Set()
-		)
+		expect(activeStairCodesForStep(result, undefined, 'EG')).toEqual(new Set())
 		const stairs: JourneyStep = {
 			kind: 'stairs',
 			floor: 'EG',
@@ -488,7 +486,13 @@ describe('indoor-nav journey (POC parity)', () => {
 			change: { ...change, toFloor: '2', toStairCode: 'X' }
 		}
 		expect(
-			activeStairCodesForStep(result, walkAfter, '1', [otherStairs, walkAfter], 1)
+			activeStairCodesForStep(
+				result,
+				walkAfter,
+				'1',
+				[otherStairs, walkAfter],
+				1
+			)
 		).toEqual(new Set())
 
 		// Single-coord walk chunks are skipped in progress overlays.

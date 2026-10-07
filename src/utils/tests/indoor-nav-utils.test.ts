@@ -16,12 +16,12 @@ import {
 } from '@/utils/indoor-nav/format'
 import { buildIndoorGraph } from '@/utils/indoor-nav/graph-build'
 import {
+	defaultStartForBuilding,
 	doorNodeId,
 	entranceNodeId,
 	INDOOR_DEFAULT_ENTRANCE_RAW_ID,
 	INDOOR_DEFAULT_ENTRANCES,
 	INDOOR_DEFAULT_START_ID,
-	defaultStartForBuilding,
 	isMainEntranceNodeId,
 	isMainEntranceRawId,
 	portalNodeId,
@@ -205,9 +205,7 @@ describe('indoor-nav utils', () => {
 
 	it('covers stair-shaft null, arrival floor and leg fallback branches', () => {
 		const data = getIndoorData()
-		expect(stairShaftsGeoJsonForFloor(data, null, 'EG').features).toEqual(
-			[]
-		)
+		expect(stairShaftsGeoJsonForFloor(data, null, 'EG').features).toEqual([])
 
 		const graph = buildIndoorGraph(data)
 		const result = route(graph, 'entrance:IN-G-E01', 'room:3:G301')
@@ -357,11 +355,7 @@ describe('indoor-nav utils', () => {
 	})
 
 	it('covers walkable snap and grid-path edge cases', () => {
-		const square = (
-			lon: number,
-			lat: number,
-			size: number
-		): WalkMask =>
+		const square = (lon: number, lat: number, size: number): WalkMask =>
 			({
 				type: 'Feature',
 				properties: {},
@@ -390,9 +384,13 @@ describe('indoor-nav utils', () => {
 		expect(gridPath(inside, [11.43015, 48.76015], masks)).toHaveLength(2)
 		// Disconnected islands cannot route.
 		const islands = [square(11.43, 48.76, 0.0001), square(11.44, 48.77, 0.0001)]
-		expect(gridPath([11.43005, 48.76005], [11.44005, 48.77005], islands)).toBeNull()
+		expect(
+			gridPath([11.43005, 48.76005], [11.44005, 48.77005], islands)
+		).toBeNull()
 		// A degenerate mask holds no walkable cell, so nothing can route.
 		const sliver = [square(11.43, 48.76, 1e-9)]
-		expect(gridPath([11.43005, 48.76005], [11.43006, 48.76006], sliver)).toBeNull()
+		expect(
+			gridPath([11.43005, 48.76005], [11.43006, 48.76006], sliver)
+		).toBeNull()
 	})
 })
