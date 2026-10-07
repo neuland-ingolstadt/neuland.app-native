@@ -88,6 +88,8 @@ export interface GraphEdge {
 	viaDoorId?: string
 }
 
+export type RouteHopKind = GraphEdge['kind'] | 'outdoor'
+
 export interface FloorSegment {
 	floor: string
 	coords: LonLat[]
@@ -116,7 +118,8 @@ export interface RouteResult {
 	floors: string[]
 	distanceM: number
 	durationSec: number
-	hops: Array<{ from: string; to: string; kind: GraphEdge['kind'] }>
+	hops: Array<{ from: string; to: string; kind: RouteHopKind }>
 	segments: FloorSegment[]
-	floorChanges: FloorChange[]
+	/** Parallel to `segments` — floor change after leg `i`, if any. */
+	floorChanges: Array<FloorChange | undefined>
 }

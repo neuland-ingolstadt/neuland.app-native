@@ -2,18 +2,13 @@ import { useNavigation } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Appearance } from 'react-native'
 import { DETAIL_HIDDEN, DETAIL_OPEN } from '@/components/Map/sheet-detents'
-import type { ClickedMapElement } from '@/types/map'
 
 interface UseMapDetailSheetOptions {
-	clickedElement: ClickedMapElement | null
-	currentFloor: { floor: string; manual: boolean } | null
 	handleSheetChangesModal: () => void
 	onTabPress?: () => void
 }
 
 export function useMapDetailSheet({
-	clickedElement,
-	currentFloor,
 	handleSheetChangesModal,
 	onTabPress
 }: UseMapDetailSheetOptions): {
@@ -21,7 +16,7 @@ export function useMapDetailSheet({
 	handleDetailIndexChange: (next: number) => void
 	/** Hides the sheet without running the close callback (keeps selection). */
 	hideDetailSheet: () => void
-	presentDetailSheet: () => void
+	presentDetailSheet: (index?: number) => void
 	requestCameraReset: () => void
 	cameraResetRequestId: number
 } {
@@ -46,8 +41,9 @@ export function useMapDetailSheet({
 		[handleSheetChangesModal]
 	)
 
-	const presentDetailSheet = useCallback(() => {
-		setDetailIndex(DETAIL_OPEN)
+	const presentDetailSheet = useCallback((index: number = DETAIL_OPEN) => {
+		detailIndexRef.current = index
+		setDetailIndex(index)
 	}, [])
 
 	const hideDetailSheet = useCallback(() => {
@@ -79,15 +75,6 @@ export function useMapDetailSheet({
 
 		return unsubscribe
 	}, [handleDetailIndexChange, navigation, onTabPress, requestCameraReset])
-
-	useEffect(() => {
-		if (clickedElement == null || currentFloor?.manual !== true) {
-			return
-		}
-		handleDetailIndexChange(DETAIL_HIDDEN)
-		// clickedElement is read from this render on purpose: a room tap must
-		// not re-run this when the floor was already chosen manually.
-	}, [currentFloor, handleDetailIndexChange])
 
 	return {
 		detailIndex,

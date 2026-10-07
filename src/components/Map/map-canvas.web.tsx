@@ -14,6 +14,7 @@ import type React from 'react'
 import { useCallback, useEffect, useRef } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
+import { IndoorNavStepMarkerPin } from '@/components/Map/indoor-nav-step-marker-pin'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
@@ -72,6 +73,7 @@ interface WebMapCanvasProps {
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
+	pickStartSelection?: ClickedMapElement | null
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
@@ -89,6 +91,8 @@ interface WebMapCanvasProps {
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
+	suppressRoomSelection?: boolean
+	onEntrancePress?: (entranceRawId: string) => void
 }
 
 function setWebMapView(
@@ -130,6 +134,7 @@ export default function WebMapCanvas({
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
 	clickedElement,
+	pickStartSelection,
 	selectMapElement,
 	mapMode,
 	primaryColor,
@@ -146,8 +151,11 @@ export default function WebMapCanvas({
 	navShowGhostCutaway = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
-	indoorNavActive = false
+	indoorNavActive = false,
+	suppressRoomSelection,
+	onEntrancePress
 }: WebMapCanvasProps): React.JSX.Element {
+	const blockRoomSelection = suppressRoomSelection ?? indoorNavActive
 	const mapRef = useRef<MapRef | null>(null)
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
@@ -167,20 +175,24 @@ export default function WebMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
+		pickStartRoomCenter,
+		pickStartFeatures,
+		selectionElement,
 		handleRoomSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
 		clickedElement,
+		pickStartSelection,
 		selectMapElement,
 		mapMode,
 		primaryColor,
 		selectionColor,
 		labelColor,
 		backgroundColor,
-		suppressRoomSelection: indoorNavActive,
-		hideAvailableRooms: indoorNavActive,
+		suppressRoomSelection: blockRoomSelection,
+		hideAvailableRooms: blockRoomSelection,
 		floorPlanDimmed
 	})
 
@@ -313,6 +325,28 @@ export default function WebMapCanvas({
 						paint={layerStyles.selectedOutline.paint}
 					/>
 				</Source>
+				{pickStartFeatures.length > 0 && (
+					<Source
+						id={MAP_IDS.sources.pickStartOverlay}
+						type="geojson"
+						data={{
+							type: 'FeatureCollection',
+							features: pickStartFeatures
+						}}
+					>
+						<Layer
+							id={MAP_IDS.layers.pickStartFill}
+							type="fill"
+							paint={layerStyles.pickStartFill}
+						/>
+						<Layer
+							id={MAP_IDS.layers.pickStartOutline}
+							type="line"
+							layout={layerStyles.pickStartOutline.layout}
+							paint={layerStyles.pickStartOutline.paint}
+						/>
+					</Source>
+				)}
 				<Source
 					id={MAP_IDS.sources.buildingLabels}
 					type="geojson"
@@ -409,19 +443,33 @@ export default function WebMapCanvas({
 						/>
 					</Source>
 				)}
-				{selectedRoomCenter != null && clickedElement != null && (
+				{selectedRoomCenter != null && selectionElement != null && (
 					<Marker
 						longitude={selectedRoomCenter[0]}
 						latitude={selectedRoomCenter[1]}
 						anchor={
-							clickedElement.type === SEARCH_TYPES.BUILDING
+							selectionElement.type === SEARCH_TYPES.BUILDING
 								? 'center'
 								: 'bottom'
 						}
 					>
 						<MapSelectionMarker
-							type={clickedElement.type}
+							type={selectionElement.type}
 							selectionColor={selectionColor}
+							primaryColor={primaryColor}
+							mapMode={mapMode}
+						/>
+					</Marker>
+				)}
+				{pickStartRoomCenter != null && (
+					<Marker
+						longitude={pickStartRoomCenter[0]}
+						latitude={pickStartRoomCenter[1]}
+						anchor="center"
+					>
+						<IndoorNavStepMarkerPin
+							kind="entry"
+							state="current"
 							primaryColor={primaryColor}
 							mapMode={mapMode}
 						/>
@@ -435,6 +483,7 @@ export default function WebMapCanvas({
 						mapMode={mapMode}
 						showGhostCutaway={navShowGhostCutaway}
 						stackCutawayLayers={indoorNavActive}
+						onEntrancePress={onEntrancePress}
 					/>
 				)}
 			</Map>

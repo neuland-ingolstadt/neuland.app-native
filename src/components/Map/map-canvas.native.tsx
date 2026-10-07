@@ -12,6 +12,7 @@ import type React from 'react'
 import { useCallback, useRef } from 'react'
 import { Platform, useWindowDimensions } from 'react-native'
 import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.native'
+import { IndoorNavStepMarkerPin } from '@/components/Map/indoor-nav-step-marker-pin'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
@@ -70,6 +71,7 @@ interface NativeMapCanvasProps {
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
+	pickStartSelection?: ClickedMapElement | null
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
@@ -90,6 +92,8 @@ interface NativeMapCanvasProps {
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
 	indoorNavActive?: boolean
+	suppressRoomSelection?: boolean
+	onEntrancePress?: (entranceRawId: string) => void
 }
 
 function setNativeMapView(
@@ -130,6 +134,7 @@ export default function NativeMapCanvas({
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
 	clickedElement,
+	pickStartSelection,
 	selectMapElement,
 	mapMode,
 	primaryColor,
@@ -149,8 +154,11 @@ export default function NativeMapCanvas({
 	navShowGhostCutaway = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
-	indoorNavActive = false
+	indoorNavActive = false,
+	suppressRoomSelection,
+	onEntrancePress
 }: NativeMapCanvasProps): React.JSX.Element {
+	const blockRoomSelection = suppressRoomSelection ?? indoorNavActive
 	const cameraRef = useRef<CameraRef>(null)
 	const currentZoomRef = useRef<number | undefined>(undefined)
 	const { width: windowWidth } = useWindowDimensions()
@@ -162,20 +170,24 @@ export default function NativeMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
+		pickStartRoomCenter,
+		pickStartFeatures,
+		selectionElement,
 		handleRoomSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
 		clickedElement,
+		pickStartSelection,
 		selectMapElement,
 		mapMode,
 		primaryColor,
 		selectionColor,
 		labelColor,
 		backgroundColor,
-		suppressRoomSelection: indoorNavActive,
-		hideAvailableRooms: indoorNavActive,
+		suppressRoomSelection: blockRoomSelection,
+		hideAvailableRooms: blockRoomSelection,
 		floorPlanDimmed
 	})
 
@@ -295,17 +307,33 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			{selectedRoomCenter != null && clickedElement != null && (
+			{selectedRoomCenter != null && selectionElement != null && (
 				<Marker
 					id="map-selection-marker"
 					lngLat={selectedRoomCenter}
 					anchor={
-						clickedElement.type === SEARCH_TYPES.BUILDING ? 'center' : 'bottom'
+						selectionElement.type === SEARCH_TYPES.BUILDING
+							? 'center'
+							: 'bottom'
 					}
 				>
 					<MapSelectionMarker
-						type={clickedElement.type}
+						type={selectionElement.type}
 						selectionColor={selectionColor}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+					/>
+				</Marker>
+			)}
+			{pickStartRoomCenter != null && (
+				<Marker
+					id="map-pick-start-marker"
+					lngLat={pickStartRoomCenter}
+					anchor="center"
+				>
+					<IndoorNavStepMarkerPin
+						kind="entry"
+						state="current"
 						primaryColor={primaryColor}
 						mapMode={mapMode}
 					/>
@@ -331,6 +359,28 @@ export default function NativeMapCanvas({
 					paint={layerStyles.selectedOutline.paint}
 				/>
 			</GeoJSONSource>
+			{pickStartFeatures.length > 0 && (
+				<GeoJSONSource
+					id={MAP_IDS.sources.pickStartOverlay}
+					data={{
+						type: 'FeatureCollection',
+						features: pickStartFeatures
+					}}
+					tolerance={GEOJSON_TOLERANCE}
+				>
+					<Layer
+						id={MAP_IDS.layers.pickStartFill}
+						type="fill"
+						paint={layerStyles.pickStartFill}
+					/>
+					<Layer
+						id={MAP_IDS.layers.pickStartOutline}
+						type="line"
+						layout={layerStyles.pickStartOutline.layout}
+						paint={layerStyles.pickStartOutline.paint}
+					/>
+				</GeoJSONSource>
+			)}
 			<GeoJSONSource id={MAP_IDS.sources.buildingLabels} data={buildingGeoJSON}>
 				<Layer
 					id={MAP_IDS.layers.buildingLabels}
@@ -431,6 +481,7 @@ export default function NativeMapCanvas({
 				mapMode={mapMode}
 				showGhostCutaway={navShowGhostCutaway}
 				stackCutawayLayers={indoorNavActive}
+				onEntrancePress={onEntrancePress}
 			/>
 		</MapLibreMap>
 	)

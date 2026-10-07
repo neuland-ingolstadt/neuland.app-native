@@ -3,8 +3,8 @@ import type { FeatureCollection } from 'geojson'
 import { MAP_CAMERA } from '@/utils/map-constants'
 
 export const MAP_STYLE_URLS = {
-	light: 'https://tile.neuland.app/styles/light/style.json',
-	dark: 'https://tile.neuland.app/styles/dark/style.json'
+	light: 'https://tile.neuland.app/styles/light-3d/style.json',
+	dark: 'https://tile.neuland.app/styles/dark-3d/style.json'
 } as const
 
 export const EMPTY_MAP_FEATURES: FeatureCollection = {
@@ -23,12 +23,14 @@ export const MAP_IDS = {
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
 		selectedOverlay: 'selectedOverlaySource',
+		pickStartOverlay: 'pickStartOverlaySource',
 		indoorProgress: 'indoorProgressSource',
 		indoorStepMarkers: 'indoorStepMarkersSource',
 		indoorEntrances: 'indoorEntrancesSource',
 		indoorStairs: 'indoorStairsSource',
 		indoorDestinationRoom: 'indoorDestinationRoomSource',
-		indoorGhostFloors: 'indoorGhostFloorsSource'
+		indoorGhostFloors: 'indoorGhostFloorsSource',
+		indoorFootpaths: 'indoorFootpathsSource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -43,6 +45,8 @@ export const MAP_IDS = {
 		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
 		selectedOutline: 'selectedRoomOutline',
+		pickStartFill: 'pickStartRoomFill',
+		pickStartOutline: 'pickStartRoomOutline',
 		indoorProgressLine: 'indoorProgressLine',
 		indoorProgressLineTodo: 'indoorProgressLineTodo',
 		indoorStepMarkers: 'indoorStepMarkers',
@@ -52,7 +56,8 @@ export const MAP_IDS = {
 		indoorDestinationRoomFill: 'indoorDestinationRoomFill',
 		indoorDestinationRoomOutline: 'indoorDestinationRoomOutline',
 		indoorGhostRoomsExtrusion: 'indoorGhostRoomsExtrusion',
-		indoorGhostStairsExtrusion: 'indoorGhostStairsExtrusion'
+		indoorGhostStairsExtrusion: 'indoorGhostStairsExtrusion',
+		indoorFootpathsLine: 'indoorFootpathsLine'
 	}
 } as const
 
@@ -295,6 +300,19 @@ export function getMapLayerStyles(
 					: MAP_COLORS.selectedOutlineWidth,
 				'line-opacity': 0.88,
 				'line-width-transition': SELECTED_POP_TRANSITION
+			}
+		},
+		pickStartFill: {
+			'fill-antialias': true,
+			'fill-color': MAP_COLORS.indoorEntranceColor,
+			'fill-opacity': MAP_COLORS.selectedFillOpacity
+		},
+		pickStartOutline: {
+			layout: MAP_LINE_OUTLINE_LAYOUT,
+			paint: {
+				'line-color': MAP_COLORS.indoorEntranceColor,
+				'line-width': MAP_COLORS.selectedOutlineWidth,
+				'line-opacity': 0.9
 			}
 		}
 	}

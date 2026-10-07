@@ -12,14 +12,25 @@ import {
 } from '@/utils/indoor-nav/data'
 import type { IndoorData } from '@/utils/indoor-nav/types'
 
-export const INDOOR_NAV_DATA_QUERY_KEY = ['indoorNavData', appVersion] as const
+/** Bust persisted React Query cache when indoor room scope changes (e.g. G-only → G/J/K/W). */
+const INDOOR_NAV_DATA_REVISION = 'gjkw'
+
+export const INDOOR_NAV_DATA_QUERY_KEY = [
+	'indoorNavData',
+	appVersion,
+	INDOOR_NAV_DATA_REVISION
+] as const
 
 export function useIndoorNavDataQuery(enabled: boolean) {
 	const queryClient = useQueryClient()
-	const { data: mapOverlay } = useMapOverlayQuery()
+	const {
+		data: mapOverlay,
+		isSuccess: overlayReady,
+		dataUpdatedAt: overlayUpdatedAt
+	} = useMapOverlayQuery()
 
 	return useQuery({
-		queryKey: INDOOR_NAV_DATA_QUERY_KEY,
+		queryKey: [...INDOOR_NAV_DATA_QUERY_KEY, overlayUpdatedAt],
 		queryFn: async () => {
 			const rooms =
 				mapOverlay ??
@@ -30,7 +41,7 @@ export function useIndoorNavDataQuery(enabled: boolean) {
 		staleTime: 1000 * 60 * 60 * 12,
 		gcTime: 1000 * 60 * 60 * 24 * 60,
 		networkMode: 'always',
-		enabled,
+		enabled: enabled && overlayReady,
 		/** Keep module cache in sync when React Query serves persisted data (no queryFn). */
 		select: (data: IndoorData) => {
 			applyIndoorData(data)

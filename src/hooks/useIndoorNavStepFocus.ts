@@ -1,5 +1,6 @@
 import type { JourneyStep } from '@/utils/indoor-nav'
 import { bboxOfCoords } from '@/utils/indoor-nav'
+import { OUTDOOR_FLOOR } from '@/utils/indoor-nav/campus-route'
 import type { IndoorNavModel } from './useIndoorNavigation'
 
 export const STEP_FIT_MARGIN_M = 8
@@ -24,5 +25,9 @@ export function boundsForJourneyStep(
 			: step.kind === 'walk' || step.kind === 'arrival'
 				? (routeResult?.segments[step.legIndex]?.coords ?? [])
 				: []
-	return bboxOfCoords(coords, STEP_FIT_MARGIN_M)
+	const margin =
+		step.kind === 'walk' && step.floor === OUTDOOR_FLOOR
+			? 28
+			: STEP_FIT_MARGIN_M
+	return bboxOfCoords(coords, margin)
 }

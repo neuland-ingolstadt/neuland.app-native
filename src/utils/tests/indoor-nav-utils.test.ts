@@ -166,6 +166,9 @@ describe('indoor-nav utils', () => {
 		}
 		const change = result.floorChanges[0]
 		expect(change?.fromStairCode).toBeDefined()
+		if (change == null) {
+			return
+		}
 
 		expect(
 			stairShaftsGeoJsonForFloor(data, result, change.fromFloor, new Set())
@@ -270,7 +273,7 @@ describe('indoor-nav utils', () => {
 			return
 		}
 		expect(placeLabel(graph, stair[0], deT)).toBe('Treppenhaus')
-		expect(placeLabel(graph, 'entrance:IN-G-E01', deT)).toContain('Eingang')
+		expect(placeLabel(graph, 'entrance:IN-G-E01', deT)).toBe('Haupteingang')
 	})
 
 	it('string-pulls and grid-paths inside walkable masks', () => {

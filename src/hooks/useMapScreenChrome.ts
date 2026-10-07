@@ -1,10 +1,20 @@
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
 import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import {
+	DETAIL_HIDDEN,
 	DETAIL_OPEN,
+	DETAIL_PICK_START,
+	DETAIL_PICK_START_SEARCH,
 	detentHeight,
 	getMapDetailDetents,
 	getMapSearchDetents,
@@ -111,8 +121,6 @@ export function useMapScreenChrome({
 		presentDetailSheet,
 		cameraResetRequestId
 	} = useMapDetailSheet({
-		clickedElement,
-		currentFloor,
 		handleSheetChangesModal,
 		onTabPress
 	})
@@ -120,28 +128,35 @@ export function useMapScreenChrome({
 	const {
 		indoorMapLayers,
 		navMode,
+		navFloors,
 		navCameraRequestId,
 		navCameraCommand,
 		onNavCameraIdle,
 		navShowGhostCutaway,
 		navFloorPlanDimmed,
 		suppressSelectionCameraFocus,
+		pickStartActive,
+		pickStartMapPin,
+		detailPickStart,
+		onPickStartEntrancePress,
+		tryPickStartFromMapRoom,
+		clearPickStart,
 		mergedSections
 	} = useMapIndoorNav({
 		clickedElement,
 		overlayFloor: currentFloor?.floor ?? 'EG',
 		allSections,
 		hideDetailSheet,
-		setSearchIndex,
-		searchHiddenIndex: SEARCH_HIDDEN,
-		searchHalfIndex: SEARCH_HALF
+		presentDetailSheet,
+		hideSearchSheet,
+		restoreSearchSheet
 	})
 
 	useLayoutEffect(() => {
 		presentDetailSheetRef.current = presentDetailSheet
 	}, [presentDetailSheet])
 
-	const selectMapElementGuarded: SelectMapElement = useCallback(
+	const selectMapElementForSearch: SelectMapElement = useCallback(
 		(options) => {
 			if (navMode != null) {
 				return
@@ -151,10 +166,77 @@ export function useMapScreenChrome({
 		[navMode, selectMapElement]
 	)
 
+	const selectMapElementForMap: SelectMapElement = useCallback(
+		(options) => {
+			if (pickStartActive) {
+				tryPickStartFromMapRoom(
+					options.room,
+					options.floor ?? currentFloor?.floor ?? 'EG',
+					options.center
+				)
+				return
+			}
+			if (navMode != null) {
+				return
+			}
+			selectMapElement(options)
+		},
+		[
+			currentFloor?.floor,
+			navMode,
+			pickStartActive,
+			selectMapElement,
+			tryPickStartFromMapRoom
+		]
+	)
+
+	useEffect(() => {
+		if (pickStartActive) {
+			return
+		}
+		if (clickedElement == null) {
+			return
+		}
+		if (
+			detailIndex !== DETAIL_PICK_START &&
+			detailIndex !== DETAIL_PICK_START_SEARCH
+		) {
+			return
+		}
+		presentDetailSheet(DETAIL_OPEN)
+	}, [clickedElement, detailIndex, pickStartActive, presentDetailSheet])
+
+	useEffect(() => {
+		if (navMode != null || clickedElement != null) {
+			return
+		}
+		if (searchIndex === SEARCH_HIDDEN) {
+			restoreSearchSheet()
+		}
+	}, [clickedElement, navMode, restoreSearchSheet, searchIndex])
+
+	const handleDetailIndexChangeWithNav = useCallback(
+		(next: number) => {
+			if (next === DETAIL_HIDDEN) {
+				clearPickStart()
+			}
+			handleDetailIndexChange(next)
+		},
+		[clearPickStart, handleDetailIndexChange]
+	)
+
 	const focusPaddingBottom = suppressSelectionCameraFocus
 		? NAV_HUD_FOCUS_PADDING_BASE
 		: clickedElement != null
-			? detentHeight(detailDetents[DETAIL_OPEN])
+			? detentHeight(
+					detailDetents[
+						detailPickStart.active
+							? detailPickStart.searching
+								? DETAIL_PICK_START_SEARCH
+								: DETAIL_PICK_START
+							: DETAIL_OPEN
+					]
+				)
 			: 0
 
 	const animatedStyles = useAnimatedStyle(() => {
@@ -197,15 +279,20 @@ export function useMapScreenChrome({
 		allRooms,
 		buildingGeoJSON,
 		uniqueEtages,
+		floorPickerFloors: navFloors ?? uniqueEtages,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
 		clickedElement,
 		currentFloor,
-		selectMapElement: selectMapElementGuarded,
+		selectMapElement: selectMapElementForMap,
+		selectMapElementForSearch,
 		roomData,
 		allSections: mergedSections,
 		indoorMapLayers,
 		navMode,
+		detailPickStart,
+		onPickStartEntrancePress,
+		pickStartMapPin,
 		navCameraRequestId,
 		navCameraCommand,
 		onNavCameraIdle,
@@ -213,7 +300,7 @@ export function useMapScreenChrome({
 		navFloorPlanDimmed,
 		suppressSelectionCameraFocus,
 		detailIndex,
-		handleDetailIndexChange,
+		handleDetailIndexChange: handleDetailIndexChangeWithNav,
 		cameraResetRequestId,
 		focusPaddingBottom
 	}

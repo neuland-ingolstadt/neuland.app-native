@@ -6,7 +6,7 @@ import {
 	xyAt
 } from './geometry'
 import type { LonLat } from './types'
-import type { WalkMask } from './walkable'
+import { stringPull, type WalkMask } from './walkable'
 
 const M_PER_DEG_LAT = 111_320
 const LAT0 = 48.7662
@@ -561,7 +561,10 @@ export function routeOnCorridor(
 	append(snapA.stub)
 	append(netPath)
 	append([...snapB.stub].reverse())
-	return out.length >= 2 ? out : null
+	if (out.length < 2) {
+		return null
+	}
+	return masks.length > 0 ? stringPull(out, masks) : out
 }
 
 /** Flatten FeatureCollection corridors for a floor. */

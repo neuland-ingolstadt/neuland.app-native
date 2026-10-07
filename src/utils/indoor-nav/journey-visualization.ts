@@ -13,7 +13,10 @@ export function activeStairCodesForStep(
 		return new Set()
 	}
 	if (step.kind === 'stairs') {
-		const { change } = step
+		const change = step.change
+		if (change == null) {
+			return new Set()
+		}
 		if (step.fromFloor === floor && change.fromStairCode != null) {
 			return new Set([change.fromStairCode])
 		}
@@ -84,10 +87,15 @@ export function routeProgressGeoJsonForFloor(
 		if (step.segment.coords.length < 2) {
 			return
 		}
+		const state = stepProgressState(i, safe)
+		// Only draw where you've been and the active leg — not the full future path.
+		if (state === 'todo') {
+			return
+		}
 		features.push({
 			type: 'Feature',
 			properties: {
-				state: stepProgressState(i, safe),
+				state,
 				floor,
 				legIndex: step.legIndex,
 				phase: step.phase ?? 'walk',
@@ -146,6 +154,9 @@ export function stepMarkersGeoJsonForFloor(
 	}
 
 	result.floorChanges.forEach((change, j) => {
+		if (change == null) {
+			return
+		}
 		const markerIndex = stairsStepIndex.get(j) ?? -1
 		const state =
 			markerIndex < 0 ? 'todo' : stepProgressState(markerIndex, safe)

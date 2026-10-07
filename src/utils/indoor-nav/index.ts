@@ -1,4 +1,18 @@
 export {
+	buildingForEndpoint,
+	buildOutdoorRouter,
+	FOOTPATHS_URL,
+	OUTDOOR_FLOOR,
+	type OutdoorRouter,
+	routeCampus,
+	routeCampusPreview
+} from './campus-route'
+export {
+	campusRouteCacheKey,
+	clearCampusRouteCache,
+	getCachedCampusRoute
+} from './campus-route-cache'
+export {
 	buildCorridorNet,
 	type CorridorFeature,
 	type CorridorNet,
@@ -6,12 +20,19 @@ export {
 	routeOnCorridor
 } from './corridor'
 export {
+	isCrossBuildingRoute,
+	resolveIndoorNavEndpoints,
+	roomRouteNeedsOutdoorRouter
+} from './cross-building'
+export {
 	applyIndoorData,
 	buildIndoorDataFromGeoJson,
+	getIndoorBuildingForCode,
 	getIndoorData,
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	INDOOR_BUILDING,
+	INDOOR_BUILDINGS,
 	INDOOR_STANDORT,
 	indoorFloors,
 	isIndoorDataLoaded,
@@ -45,9 +66,11 @@ export {
 export { buildIndoorGraph, listRoutableRooms } from './graph-build'
 export { isStairRoomId } from './graph-room-utils'
 export {
+	defaultStartForBuilding,
 	doorNodeId,
 	entranceNodeId,
 	INDOOR_DEFAULT_ENTRANCE_RAW_ID,
+	INDOOR_DEFAULT_ENTRANCES,
 	INDOOR_DEFAULT_START_ID,
 	portalNodeId,
 	roomNodeId
@@ -94,6 +117,11 @@ export {
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor
 } from './route-geojson'
+export {
+	alignFloorChangesWithSegments,
+	finalizeRouteResult,
+	floorChangeAfterLeg
+} from './route-result'
 export { route, routePreview } from './routing'
 export {
 	boundsCenter,
@@ -104,6 +132,12 @@ export {
 	STAIR_MOMENT_CAMERA,
 	stairMomentCameraStop
 } from './stair-moment-camera'
+export {
+	filterStartOptions,
+	formatEndpointLabel,
+	listStartEndpointOptions,
+	type StartEndpointOption
+} from './start-endpoints'
 export type {
 	DoorFeature,
 	DoorProps,
@@ -121,6 +155,7 @@ export type {
 	LonLat,
 	RoomFeature,
 	RoomProps,
+	RouteHopKind,
 	RouteResult
 } from './types'
 export { gridPath, snapToWalkable, stringPull, type WalkMask } from './walkable'

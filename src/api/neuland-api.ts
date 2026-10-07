@@ -32,6 +32,7 @@ export const MAP_ROOMS_GEOJSON_URL = `${ASSET_ENDPOINT}/rooms_neuland_v2.7.geojs
 export const INDOOR_DOORS_GEOJSON_URL = `${ASSET_ENDPOINT}/doors_neuland.geojson`
 export const INDOOR_ENTRANCES_GEOJSON_URL = `${ASSET_ENDPOINT}/entrances_neuland.geojson`
 export const INDOOR_CORRIDORS_GEOJSON_URL = `${ASSET_ENDPOINT}/corridors_neuland.geojson`
+export const INDOOR_FOOTPATHS_GEOJSON_URL = `${ASSET_ENDPOINT}/footpaths_neuland.geojson`
 const CAMPUS_LIFE_API_ENDPOINT = 'https://cl.neuland-ingolstadt.de'
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 
@@ -212,6 +213,12 @@ class NeulandAPIClient {
 	async getIndoorCorridors(): Promise<FeatureCollection> {
 		return (await this.performRequest(
 			INDOOR_CORRIDORS_GEOJSON_URL
+		)) as FeatureCollection
+	}
+
+	async getIndoorFootpaths(): Promise<FeatureCollection> {
+		return (await this.performRequest(
+			INDOOR_FOOTPATHS_GEOJSON_URL
 		)) as FeatureCollection
 	}
 

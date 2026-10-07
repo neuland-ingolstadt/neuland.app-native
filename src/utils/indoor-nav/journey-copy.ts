@@ -4,6 +4,7 @@
 // follow → enter room across floors); everything else stays in sync.
 
 import type { TFunction } from 'i18next'
+import { OUTDOOR_FLOOR } from './campus-route'
 import { getIndoorGraph } from './data'
 import { FLOOR_ORDER } from './floors'
 import { formatDistanceDuration, walkDurationSec } from './format'
@@ -31,6 +32,7 @@ export type WalkPhase =
 	| 'toStairs'
 	| 'fromStairs'
 	| 'leaveRoom'
+	| 'leaveBuilding'
 
 export type JourneyStep =
 	| {
@@ -173,6 +175,52 @@ function isShortStartPhase(phase: WalkPhase): boolean {
 	return phase === 'enter' || phase === 'leaveRoom'
 }
 
+function isShortEndPhase(phase: WalkPhase): boolean {
+	return phase === 'enterRoom' || phase === 'leaveBuilding'
+}
+
+function crossesCampus(result: RouteResult): boolean {
+	return result.segments.some((s) => s.floor === OUTDOOR_FLOOR)
+}
+
+/** Phased indoor legs before/after the outdoor campus walk. */
+function walkPhasesForCampusLeg(
+	result: RouteResult,
+	legIndex: number,
+	startsAtEntrance: boolean,
+	endsAtRoom: boolean
+): WalkPhase[] | null {
+	const seg = result.segments[legIndex]
+	if (seg == null || seg.floor === OUTDOOR_FLOOR) {
+		return null
+	}
+	const isFirst = legIndex === 0
+	const isLast = legIndex === result.segments.length - 1
+	const nextOutdoor = result.segments[legIndex + 1]?.floor === OUTDOOR_FLOOR
+	const prevOutdoor =
+		legIndex > 0 && result.segments[legIndex - 1]?.floor === OUTDOOR_FLOOR
+
+	if (nextOutdoor) {
+		if (startsAtEntrance && isFirst) {
+			return ['enter', 'follow', 'leaveBuilding']
+		}
+		if (
+			seg.startNodeId?.startsWith('room:') ||
+			(isFirst && !startsAtEntrance)
+		) {
+			return ['leaveRoom', 'follow', 'leaveBuilding']
+		}
+		return ['follow', 'leaveBuilding']
+	}
+	if (prevOutdoor && isLast && endsAtRoom) {
+		return ['enter', 'follow', 'enterRoom']
+	}
+	if (prevOutdoor && isLast) {
+		return ['enter', 'follow']
+	}
+	return null
+}
+
 function phaseChunkLengths(
 	total: number,
 	phases: WalkPhase[]
@@ -189,7 +237,7 @@ function phaseChunkLengths(
 			const start = Math.min(cap, total - minFollow)
 			return [start, total - start]
 		}
-		if (a === 'follow' && b === 'enterRoom') {
+		if (a === 'follow' && isShortEndPhase(b)) {
 			const end = Math.min(cap, total - minFollow)
 			return [total - end, end]
 		}
@@ -199,7 +247,7 @@ function phaseChunkLengths(
 		phases.length === 3 &&
 		isShortStartPhase(phases[0]) &&
 		phases[1] === 'follow' &&
-		phases[2] === 'enterRoom'
+		isShortEndPhase(phases[2])
 	) {
 		const start = Math.min(cap, total * SHORT_PHASE_MAX_RATIO)
 		const end = Math.min(cap, total * SHORT_PHASE_MAX_RATIO)
@@ -385,7 +433,13 @@ function splitWalkLegs(
 	const startsAtEntrance = result.nodeIds[0]?.startsWith('entrance:') ?? false
 	const endsAtRoom =
 		result.nodeIds[result.nodeIds.length - 1]?.startsWith('room:') ?? false
-	if (!startsAtEntrance && !endsAtRoom && result.floorChanges.length === 0) {
+	const campus = crossesCampus(result)
+	if (
+		!campus &&
+		!startsAtEntrance &&
+		!endsAtRoom &&
+		result.floorChanges.length === 0
+	) {
 		return steps
 	}
 	const out: JourneyStep[] = []
@@ -394,23 +448,49 @@ function splitWalkLegs(
 			out.push(step)
 			continue
 		}
+		if (step.floor === OUTDOOR_FLOOR) {
+			if (step.distanceM >= 6) {
+				out.push({ ...step, phase: 'follow' })
+			} else {
+				out.push(step)
+			}
+			continue
+		}
 		const isFirst = step.legIndex === 0
 		const isLast = step.legIndex === result.segments.length - 1
 		const hasNextStairs = result.floorChanges[step.legIndex] != null
 		const hasPrevStairs =
 			step.legIndex > 0 && result.floorChanges[step.legIndex - 1] != null
 
-		let phases: WalkPhase[] | null = null
-		if (result.segments.length === 1 && startsAtEntrance && endsAtRoom) {
+		let phases: WalkPhase[] | null = campus
+			? walkPhasesForCampusLeg(
+					result,
+					step.legIndex,
+					startsAtEntrance,
+					endsAtRoom
+				)
+			: null
+		if (
+			phases == null &&
+			result.segments.length === 1 &&
+			startsAtEntrance &&
+			endsAtRoom
+		) {
 			phases = ['enter', 'follow', 'enterRoom']
-		} else if (isFirst && hasNextStairs) {
+		} else if (phases == null && isFirst && hasNextStairs) {
 			phases = startsAtEntrance ? ['enter', 'follow'] : ['leaveRoom', 'follow']
-		} else if (!isFirst && !isLast && hasPrevStairs && hasNextStairs) {
+		} else if (
+			phases == null &&
+			!isFirst &&
+			!isLast &&
+			hasPrevStairs &&
+			hasNextStairs
+		) {
 			out.push({ ...step, phase: 'follow' })
 			continue
-		} else if (isLast && hasPrevStairs && endsAtRoom) {
+		} else if (phases == null && isLast && hasPrevStairs && endsAtRoom) {
 			phases = ['follow', 'enterRoom']
-		} else {
+		} else if (phases == null) {
 			out.push(step)
 			continue
 		}
@@ -430,7 +510,9 @@ function splitWalkLegs(
 			const fallbackPhases: WalkPhase[] =
 				phases.length === 2 && phases[1] === 'enterRoom'
 					? ['follow', 'enterRoom']
-					: [phases[0], 'follow']
+					: phases.length === 2 && phases[1] === 'leaveBuilding'
+						? ['follow', 'leaveBuilding']
+						: [phases[0], 'follow']
 			out.push(...makePhaseSubs(step, fallbackPhases, fallback))
 			continue
 		}
@@ -470,6 +552,12 @@ function phasedStepManeuver(
 				})
 			}
 		case 'follow':
+			if (floor === OUTDOOR_FLOOR) {
+				return {
+					headline: t('guidance.walkCampus'),
+					subline: t('guidance.followMarkedPath')
+				}
+			}
 			return {
 				headline: t('guidance.followPath'),
 				subline: t('guidance.routeLineOnMap')
@@ -501,6 +589,11 @@ function phasedStepManeuver(
 				subline: t('guidance.headCorridor')
 			}
 		}
+		case 'leaveBuilding':
+			return {
+				headline: t('guidance.leaveBuilding'),
+				subline: t('guidance.followMarkedPath')
+			}
 	}
 }
 

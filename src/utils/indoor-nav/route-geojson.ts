@@ -1,5 +1,15 @@
 import type { IndoorData, RouteResult } from './types'
 
+const EMPTY_FC: GeoJSON.FeatureCollection = {
+	type: 'FeatureCollection',
+	features: []
+}
+
+let entrancesEgCache: {
+	data: IndoorData
+	fc: GeoJSON.FeatureCollection
+} | null = null
+
 /** Staircase shaft polygons on a floor that belong to the active route. */
 export function stairShaftsGeoJsonForFloor(
 	data: IndoorData,
@@ -12,6 +22,9 @@ export function stairShaftsGeoJsonForFloor(
 	}
 	const codes = new Set<string>()
 	for (const change of result.floorChanges) {
+		if (change == null) {
+			continue
+		}
 		if (change.fromFloor === floor && change.fromStairCode != null) {
 			codes.add(change.fromStairCode)
 		}
@@ -82,10 +95,15 @@ export function entrancesGeoJsonForFloor(
 	floor: string
 ): GeoJSON.FeatureCollection {
 	if (floor !== 'EG') {
-		return { type: 'FeatureCollection', features: [] }
+		return EMPTY_FC
 	}
-	return {
+	if (entrancesEgCache?.data === data) {
+		return entrancesEgCache.fc
+	}
+	const fc: GeoJSON.FeatureCollection = {
 		type: 'FeatureCollection',
 		features: data.entrances
 	}
+	entrancesEgCache = { data, fc }
+	return fc
 }

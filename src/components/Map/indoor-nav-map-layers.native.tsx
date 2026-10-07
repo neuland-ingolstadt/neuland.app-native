@@ -1,5 +1,6 @@
 import { GeoJSONSource, Layer } from '@maplibre/maplibre-react-native'
 import type React from 'react'
+import { memo, useMemo } from 'react'
 import { getIndoorNavLayerPaints } from '@/components/Map/indoor-nav-layer-styles'
 import {
 	IndoorNavEntranceMarkers,
@@ -11,7 +12,12 @@ import {
 	MAP_IDS,
 	type MapMode
 } from '@/components/Map/map-config'
-import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
+import {
+	EMPTY_INDOOR_MAP_LAYERS,
+	type IndoorNavMapLayersData
+} from '@/hooks/indoor-nav-map-layers'
+import { useAnimatedRouteProgressGeoJson } from '@/hooks/useAnimatedRouteProgressGeoJson'
+import { routeDrawAnimationKey } from '@/utils/indoor-nav/route-line-draw'
 
 interface IndoorNavMapLayersProps {
 	layers: IndoorNavMapLayersData | null
@@ -20,20 +26,37 @@ interface IndoorNavMapLayersProps {
 	mapMode: MapMode
 	showGhostCutaway?: boolean
 	stackCutawayLayers?: boolean
+	onEntrancePress?: (entranceId: string) => void
 }
 
-export function IndoorNavMapLayers({
+function IndoorNavMapLayersInner({
 	layers,
 	overlayFloor,
 	primaryColor,
 	mapMode,
 	showGhostCutaway = false,
-	stackCutawayLayers = false
+	stackCutawayLayers = false,
+	onEntrancePress
 }: IndoorNavMapLayersProps): React.JSX.Element | null {
+	const paints = useMemo(
+		() => getIndoorNavLayerPaints(primaryColor, mapMode),
+		[mapMode, primaryColor]
+	)
+	const routeDrawKey = useMemo(
+		() =>
+			layers != null
+				? routeDrawAnimationKey(layers.routeProgressGeoJSON)
+				: null,
+		[layers?.routeProgressGeoJSON]
+	)
+	const routeProgressGeoJSON = useAnimatedRouteProgressGeoJson(
+		layers?.routeProgressGeoJSON ??
+			EMPTY_INDOOR_MAP_LAYERS.routeProgressGeoJSON,
+		routeDrawKey
+	)
 	if (layers == null) {
 		return null
 	}
-	const paints = getIndoorNavLayerPaints(primaryColor, mapMode)
 	const showGhost = showGhostCutaway && layers.stairMoment != null
 	const ghostVisibility = showGhost ? 'visible' : 'none'
 	const ghostData = showGhost ? layers.ghostFloorsGeoJSON : EMPTY_MAP_FEATURES
@@ -80,9 +103,23 @@ export function IndoorNavMapLayers({
 					paint={paints.stairsOutline}
 				/>
 			</GeoJSONSource>
+			{layers.footpathsGeoJSON.features.length > 0 && (
+				<GeoJSONSource
+					id={MAP_IDS.sources.indoorFootpaths}
+					data={layers.footpathsGeoJSON}
+					tolerance={GEOJSON_TOLERANCE}
+				>
+					<Layer
+						id={MAP_IDS.layers.indoorFootpathsLine}
+						type="line"
+						layout={paints.footpathsLineLayout}
+						paint={paints.footpathsLine}
+					/>
+				</GeoJSONSource>
+			)}
 			<GeoJSONSource
 				id={MAP_IDS.sources.indoorProgress}
-				data={layers.routeProgressGeoJSON}
+				data={routeProgressGeoJSON}
 				tolerance={GEOJSON_TOLERANCE}
 			>
 				<Layer
@@ -126,13 +163,17 @@ export function IndoorNavMapLayers({
 				primaryColor={primaryColor}
 				mapMode={mapMode}
 			/>
-			{overlayFloor === 'EG' && (
-				<IndoorNavEntranceMarkers
-					entrancesGeoJSON={layers.entrancesGeoJSON}
-					primaryColor={primaryColor}
-					mapMode={mapMode}
-				/>
-			)}
+			{(overlayFloor === 'EG' || overlayFloor === 'OUT') &&
+				layers.entrancesGeoJSON.features.length > 0 && (
+					<IndoorNavEntranceMarkers
+						entrancesGeoJSON={layers.entrancesGeoJSON}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+						onEntrancePress={onEntrancePress}
+					/>
+				)}
 		</>
 	)
 }
+
+export const IndoorNavMapLayers = memo(IndoorNavMapLayersInner)

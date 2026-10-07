@@ -65,6 +65,9 @@ export function stairMomentFromStep(
 		return null
 	}
 	const ch = step.change
+	if (ch == null) {
+		return null
+	}
 	return {
 		fromFloor: ch.fromFloor,
 		toFloor: ch.toFloor,
@@ -108,7 +111,7 @@ export function ghostFloorsGeoJson(
 
 	for (const room of data.roomsByFloor[viewFloor] ?? []) {
 		const fn = String(room.properties.Funktion_de ?? '')
-		if (fn !== 'Treppenhaus') {
+		if (fn !== 'Treppenhaus' && fn !== 'Fluchtreppe') {
 			continue
 		}
 		const code = String(room.properties.Raum ?? '')
@@ -126,7 +129,7 @@ export function ghostFloorsGeoJson(
 		for (const room of data.roomsByFloor[fl] ?? []) {
 			const fn = String(room.properties.Funktion_de ?? '')
 			const code = String(room.properties.Raum ?? '')
-			const isStair = fn === 'Treppenhaus'
+			const isStair = fn === 'Treppenhaus' || fn === 'Fluchtreppe'
 			const isRouteStair =
 				code === moment.fromStairCode || code === moment.toStairCode
 			if (!nearHop(room as GeoJSON.Feature, hop, isRouteStair)) {

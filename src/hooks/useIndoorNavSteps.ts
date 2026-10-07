@@ -101,9 +101,10 @@ export function useIndoorNavSteps({
 				return
 			}
 			setStepIndex(i)
+			const leftStairsAt = prev?.kind === 'stairs' ? prev.change?.at : undefined
 			const ctx =
-				prev?.kind === 'stairs' && s.kind !== 'stairs'
-					? { leftStairsAt: prev.change.at }
+				leftStairsAt != null && s.kind !== 'stairs'
+					? { leftStairsAt }
 					: undefined
 			applyStepView(s, ctx)
 		},

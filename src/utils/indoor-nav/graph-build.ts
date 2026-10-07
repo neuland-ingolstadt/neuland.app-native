@@ -169,10 +169,14 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 	const stairsWithEntrance = new Set<string>()
 	for (const entrance of data.entrances) {
 		const coord = entrance.geometry.coordinates as LonLat
+		const building = entrance.properties.Gebaeude
 		let best: RoomFeature | null = null
 		let bestScore = Number.POSITIVE_INFINITY
 		let bestD = Number.POSITIVE_INFINITY
 		for (const room of egRooms) {
+			if (room.properties.Gebaeude !== building) {
+				continue
+			}
 			const d = distanceToRoomM(coord, room)
 			if (d > ENTRANCE_SNAP_M) {
 				continue
@@ -196,34 +200,52 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 	for (let fi = 0; fi < FLOORS.length - 1; fi++) {
 		const lower = FLOORS[fi]
 		const upper = FLOORS[fi + 1]
-		for (const { a, b, d } of matchStairShafts(
-			stairsByFloor[lower],
-			stairsByFloor[upper]
-		)) {
-			const aId = roomNodeId(lower, a.properties.Raum)
-			const bId = roomNodeId(upper, b.properties.Raum)
-			const weight = 3.5 + d
-			const lowerOpen =
-				stairHasDoorOnFloor(doorPairKeys, lower, a.properties.Raum) ||
-				(lower === 'EG' && stairsWithEntrance.has(a.properties.Raum))
-			if (lowerOpen) {
-				addUndirected(edges, { from: aId, to: bId, weight, kind: 'vertical' })
-			} else {
-				addDirected(edges, { from: bId, to: aId, weight, kind: 'vertical' })
+		// Stair shafts are matched per building — buildings are disconnected
+		// graphs and must never share vertical edges.
+		const lowerStairs = stairsByFloor[lower] ?? []
+		const upperStairs = stairsByFloor[upper] ?? []
+		const lowerElevators = elevatorsByFloor[lower] ?? []
+		const upperElevators = elevatorsByFloor[upper] ?? []
+		const buildings = new Set([
+			...lowerStairs.map((r) => r.properties.Gebaeude),
+			...upperStairs.map((r) => r.properties.Gebaeude)
+		])
+		for (const building of buildings) {
+			for (const { a, b, d } of matchStairShafts(
+				lowerStairs.filter((r) => r.properties.Gebaeude === building),
+				upperStairs.filter((r) => r.properties.Gebaeude === building)
+			)) {
+				const aId = roomNodeId(lower, a.properties.Raum)
+				const bId = roomNodeId(upper, b.properties.Raum)
+				const weight = 3.5 + d
+				const lowerOpen =
+					stairHasDoorOnFloor(doorPairKeys, lower, a.properties.Raum) ||
+					(lower === 'EG' && stairsWithEntrance.has(a.properties.Raum))
+				if (lowerOpen) {
+					addUndirected(edges, { from: aId, to: bId, weight, kind: 'vertical' })
+				} else {
+					addDirected(edges, { from: bId, to: aId, weight, kind: 'vertical' })
+				}
 			}
 		}
-		for (const { a, b, d } of matchStairShafts(
-			elevatorsByFloor[lower],
-			elevatorsByFloor[upper]
-		)) {
-			const aId = roomNodeId(lower, a.properties.Raum)
-			const bId = roomNodeId(upper, b.properties.Raum)
-			addUndirected(edges, {
-				from: aId,
-				to: bId,
-				weight: 2.5 + d,
-				kind: 'vertical'
-			})
+		const elevatorBuildings = new Set([
+			...lowerElevators.map((r) => r.properties.Gebaeude),
+			...upperElevators.map((r) => r.properties.Gebaeude)
+		])
+		for (const building of elevatorBuildings) {
+			for (const { a, b, d } of matchStairShafts(
+				lowerElevators.filter((r) => r.properties.Gebaeude === building),
+				upperElevators.filter((r) => r.properties.Gebaeude === building)
+			)) {
+				const aId = roomNodeId(lower, a.properties.Raum)
+				const bId = roomNodeId(upper, b.properties.Raum)
+				addUndirected(edges, {
+					from: aId,
+					to: bId,
+					weight: 2.5 + d,
+					kind: 'vertical'
+				})
+			}
 		}
 	}
 

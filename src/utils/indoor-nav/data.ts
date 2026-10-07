@@ -12,38 +12,59 @@ import type {
 	RoomFeature
 } from './types'
 
-/** Building G (Ingolstadt) indoor data from assets.neuland.app. */
+/** Buildings with indoor navigation data (Ingolstadt). */
+export const INDOOR_BUILDINGS = ['G', 'J', 'K', 'W'] as const
+export type IndoorBuilding = (typeof INDOOR_BUILDINGS)[number]
+/** Legacy single-building export — G was the first mapped building. */
 export const INDOOR_BUILDING = 'G' as const
 export const INDOOR_STANDORT = 'IN' as const
 
 const INDOOR_ETAGEN = new Set<FloorId>(FLOORS)
+const INDOOR_GEBAEUDE = new Set<string>(INDOOR_BUILDINGS)
 
-function isBuildingG(
+function isIndoorBuilding(
 	props:
 		| { Standort?: unknown; Gebaeude?: unknown; Etage?: unknown }
 		| null
 		| undefined
 ): boolean {
 	return (
-		props?.Standort === INDOOR_STANDORT && props?.Gebaeude === INDOOR_BUILDING
+		props?.Standort === INDOOR_STANDORT &&
+		typeof props?.Gebaeude === 'string' &&
+		INDOOR_GEBAEUDE.has(props.Gebaeude)
 	)
 }
 
 function roomFeaturesFromOverlay(overlay: FeatureCollection): RoomFeature[] {
-	return overlay.features.filter((feature): feature is RoomFeature => {
-		if (feature.geometry?.type !== 'Polygon') {
-			return false
-		}
+	const out: RoomFeature[] = []
+	for (const feature of overlay.features) {
 		const props = feature.properties as RoomFeature['properties'] | null
-		return (
-			isBuildingG(props) &&
-			typeof props?.Etage === 'string' &&
-			INDOOR_ETAGEN.has(props.Etage as FloorId)
-		)
-	})
+		if (
+			!isIndoorBuilding(props) ||
+			typeof props?.Etage !== 'string' ||
+			!INDOOR_ETAGEN.has(props.Etage as FloorId)
+		) {
+			continue
+		}
+		if (feature.geometry?.type === 'Polygon') {
+			out.push(feature as RoomFeature)
+		} else if (feature.geometry?.type === 'MultiPolygon') {
+			out.push(feature as RoomFeature)
+		} else if (feature.geometry?.type === 'GeometryCollection') {
+			// e.g. J001 ships a Polygon plus a LineString member — keep the polygon.
+			const polygon = feature.geometry.geometries.find(
+				(g): g is GeoJSON.Polygon | GeoJSON.MultiPolygon =>
+					g.type === 'Polygon' || g.type === 'MultiPolygon'
+			)
+			if (polygon != null) {
+				out.push({ ...feature, geometry: polygon } as RoomFeature)
+			}
+		}
+	}
+	return out
 }
 
-/** True when the given feature belongs to building G (IN/G). */
+/** True when the given feature belongs to a mapped building (IN/G,J,K,W). */
 export function isIndoorFeature(
 	feature:
 		| {
@@ -52,7 +73,7 @@ export function isIndoorFeature(
 		| null
 		| undefined
 ): boolean {
-	return isBuildingG(feature?.properties)
+	return isIndoorBuilding(feature?.properties)
 }
 
 export function buildIndoorDataFromGeoJson(
@@ -72,12 +93,12 @@ export function buildIndoorDataFromGeoJson(
 
 	const doors = doorsFc.features.filter(
 		(feature): feature is DoorFeature =>
-			feature.geometry?.type === 'Point' && isBuildingG(feature.properties)
+			feature.geometry?.type === 'Point' && isIndoorBuilding(feature.properties)
 	)
 
 	const entrances = entrancesFc.features.filter(
 		(feature): feature is EntranceFeature =>
-			feature.geometry?.type === 'Point' && isBuildingG(feature.properties)
+			feature.geometry?.type === 'Point' && isIndoorBuilding(feature.properties)
 	)
 
 	const corridorsByFloor = Object.fromEntries(
@@ -88,7 +109,7 @@ export function buildIndoorDataFromGeoJson(
 				features: corridorsFc.features.filter(
 					(feature) =>
 						feature.geometry?.type === 'LineString' &&
-						isBuildingG(feature.properties) &&
+						isIndoorBuilding(feature.properties) &&
 						String(feature.properties?.Etage) === floor
 				)
 			})
@@ -123,11 +144,22 @@ export function indoorFloors(): string[] {
 
 let cachedData: IndoorData | null = null
 let cachedGraph: IndoorGraph | null = null
-/** Room code → floors where that code exists in building G. */
+/** Room code → floors where that code exists in a mapped building. */
 let cachedRoomFloorsByCode: Map<string, string[]> | null = null
+/** Room code → building (e.g. `G001` → `G`). Codes are unique across buildings. */
+let cachedBuildingByCode: Map<string, string> | null = null
+
+function buildingFromRoomCode(code: string): IndoorBuilding | null {
+	const letter = code[0]?.toUpperCase()
+	if (letter != null && INDOOR_GEBAEUDE.has(letter)) {
+		return letter as IndoorBuilding
+	}
+	return null
+}
 
 function rebuildRoomFloorsByCode(data: IndoorData): Map<string, string[]> {
 	const index = new Map<string, string[]>()
+	const buildings = new Map<string, string>()
 	for (const floor of FLOORS) {
 		for (const room of data.roomsByFloor[floor] ?? []) {
 			const code = room.properties.Raum
@@ -137,8 +169,12 @@ function rebuildRoomFloorsByCode(data: IndoorData): Map<string, string[]> {
 			} else if (!floors.includes(floor)) {
 				floors.push(floor)
 			}
+			if (!buildings.has(code)) {
+				buildings.set(code, room.properties.Gebaeude)
+			}
 		}
 	}
+	cachedBuildingByCode = buildings
 	return index
 }
 
@@ -153,9 +189,23 @@ function ensureRoomFloorsByCodeIndex(): Map<string, string[]> | null {
 	return cachedRoomFloorsByCode
 }
 
-/** Floors that contain `code` in building G (empty when data is not loaded). */
+/** Floors that contain `code` in a mapped building (empty when data is not loaded). */
 export function getIndoorRoomFloorsForCode(code: string): string[] {
 	return ensureRoomFloorsByCodeIndex()?.get(code) ?? []
+}
+
+/** Building (`G`, `J`, `K`, `W`) that contains `code`, if loaded. */
+export function getIndoorBuildingForCode(code: string): string | null {
+	ensureRoomFloorsByCodeIndex()
+	const mapped = cachedBuildingByCode?.get(code)
+	if (mapped != null) {
+		return mapped
+	}
+	const floors = cachedRoomFloorsByCode?.get(code) ?? []
+	if (floors.length === 0) {
+		return null
+	}
+	return buildingFromRoomCode(code)
 }
 
 export function isIndoorDataLoaded(): boolean {
@@ -165,6 +215,9 @@ export function isIndoorDataLoaded(): boolean {
 export function applyIndoorData(data: IndoorData): void {
 	if (cachedData === data) {
 		ensureRoomFloorsByCodeIndex()
+		if (cachedBuildingByCode == null && cachedData != null) {
+			cachedRoomFloorsByCode = rebuildRoomFloorsByCode(cachedData)
+		}
 		return
 	}
 	cachedData = data
@@ -176,6 +229,7 @@ export function resetIndoorDataCache(): void {
 	cachedData = null
 	cachedGraph = null
 	cachedRoomFloorsByCode = null
+	cachedBuildingByCode = null
 }
 
 export function getIndoorData(): IndoorData {

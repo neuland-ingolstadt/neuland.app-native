@@ -1,14 +1,16 @@
 import { MAP_COLORS, type MapMode } from '@/components/Map/map-config'
 
+const paintCache = new Map<
+	string,
+	ReturnType<typeof buildIndoorNavLayerPaints>
+>()
+
 const ROUTE_LINE_LAYOUT = {
 	'line-join': 'round' as const,
 	'line-cap': 'round' as const
 }
 
-export function getIndoorNavLayerPaints(
-	primaryColor: string,
-	mapMode: MapMode
-) {
+function buildIndoorNavLayerPaints(primaryColor: string, mapMode: MapMode) {
 	const stairsColor = MAP_COLORS.indoorStairsMono[mapMode]
 
 	return {
@@ -63,6 +65,12 @@ export function getIndoorNavLayerPaints(
 			]
 		},
 		progressLineLayout: ROUTE_LINE_LAYOUT,
+		footpathsLine: {
+			'line-color': MAP_COLORS.indoorProgressDoneColor,
+			'line-opacity': 0.45,
+			'line-width': 2
+		},
+		footpathsLineLayout: ROUTE_LINE_LAYOUT,
 		ghostRoomExtrusion: {
 			'fill-extrusion-color': MAP_COLORS.indoorGhostRoomExtrusion[mapMode],
 			'fill-extrusion-height': ['coalesce', ['get', 'ghostHeight'], 1],
@@ -78,4 +86,18 @@ export function getIndoorNavLayerPaints(
 			'fill-extrusion-vertical-gradient': true
 		}
 	}
+}
+
+export function getIndoorNavLayerPaints(
+	primaryColor: string,
+	mapMode: MapMode
+) {
+	const key = `${mapMode}:${primaryColor}`
+	const cached = paintCache.get(key)
+	if (cached != null) {
+		return cached
+	}
+	const paints = buildIndoorNavLayerPaints(primaryColor, mapMode)
+	paintCache.set(key, paints)
+	return paints
 }

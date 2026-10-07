@@ -1,7 +1,9 @@
 import type { TFunction } from 'i18next'
+import { OUTDOOR_FLOOR } from './campus-route'
 import { FLOOR_ORDER } from './floors'
 import { haversineM } from './geometry'
 import { isCirculation, isStairRoomId } from './graph-room-utils'
+import { isMainEntranceNodeId } from './ids'
 import {
 	indoorNavFloorLabel,
 	indoorNavPlaceForFunction
@@ -25,6 +27,9 @@ export function placeLabel(
 		return nodeId
 	}
 	if (n.kind === 'entrance') {
+		if (isMainEntranceNodeId(nodeId)) {
+			return t('place.mainEntrance')
+		}
 		return n.label || t('place.entranceFallback')
 	}
 	if (n.roomCode != null) {
@@ -88,6 +93,20 @@ export function walkStepManeuver(
 	const startId = seg.startNodeId
 	const endId = seg.endNodeId
 
+	if (seg.floor === OUTDOOR_FLOOR) {
+		return {
+			headline: t('guidance.walkCampus'),
+			subline: t('guidance.followMarkedPath')
+		}
+	}
+
+	if (result.segments[legIndex + 1]?.floor === OUTDOOR_FLOOR) {
+		return {
+			headline: t('guidance.leaveBuilding'),
+			subline: t('guidance.followMarkedPath')
+		}
+	}
+
 	const fromRoom = isRoutableRoom(graph, fromId)
 	const toRoom = isRoutableRoom(graph, toId)
 	const fromCode = fromRoom ? graph.nodes.get(fromId)?.roomCode : undefined
@@ -127,6 +146,17 @@ export function walkStepManeuver(
 
 	if (firstWalk && !lastWalk) {
 		if (fromId.startsWith('entrance:')) {
+			const crossesCampus = result.segments.some(
+				(s) => s.floor === OUTDOOR_FLOOR
+			)
+			if (crossesCampus) {
+				return {
+					headline: t('guidance.leaveBuilding'),
+					subline: t('guidance.fromEntrance', {
+						name: entranceName(fromId)
+					})
+				}
+			}
 			return {
 				headline: t('guidance.enterBuilding'),
 				subline: t('guidance.viaEntrance', {
@@ -142,6 +172,17 @@ export function walkStepManeuver(
 		}
 		return {
 			headline: t('guidance.walkCorridor'),
+			subline: t('guidance.followMarkedPath')
+		}
+	}
+
+	if (
+		lastWalk &&
+		!firstWalk &&
+		result.segments[legIndex - 1]?.floor === OUTDOOR_FLOOR
+	) {
+		return {
+			headline: t('guidance.enterBuilding'),
 			subline: t('guidance.followMarkedPath')
 		}
 	}

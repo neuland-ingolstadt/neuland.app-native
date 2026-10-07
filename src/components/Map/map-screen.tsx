@@ -49,12 +49,16 @@ const MapScreen = (): React.JSX.Element => {
 		overlayError,
 		allRooms,
 		buildingGeoJSON,
-		uniqueEtages,
+		floorPickerFloors,
+		detailPickStart,
+		onPickStartEntrancePress,
+		pickStartMapPin,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
 		clickedElement,
 		currentFloor,
 		selectMapElement,
+		selectMapElementForSearch,
 		roomData,
 		allSections,
 		detailIndex,
@@ -144,6 +148,7 @@ const MapScreen = (): React.JSX.Element => {
 					availableFilteredGeoJSON={availableFilteredGeoJSON}
 					buildingGeoJSON={buildingGeoJSON}
 					clickedElement={clickedElement}
+					pickStartSelection={pickStartMapPin}
 					selectMapElement={selectMapElement}
 					mapMode={mapMode}
 					primaryColor={primaryColor}
@@ -164,10 +169,12 @@ const MapScreen = (): React.JSX.Element => {
 					floorPlanDimmed={navFloorPlanDimmed}
 					suppressSelectionCameraFocus={suppressSelectionCameraFocus}
 					indoorNavActive={navMode != null}
+					onEntrancePress={onPickStartEntrancePress}
+					suppressRoomSelection={navMode != null}
 				/>
 				{overlayError === null && (
 					<FloorPicker
-						floors={uniqueEtages}
+						floors={floorPickerFloors}
 						showAllFloors={showAllFloors}
 						toggleShowAllFloors={toggleShowAllFloors}
 						locationPermissionGranted={locationPermissionGranted}
@@ -188,7 +195,7 @@ const MapScreen = (): React.JSX.Element => {
 				detents={searchDetents}
 				currentPosition={currentPosition}
 				allRooms={allRooms}
-				selectMapElement={selectMapElement}
+				selectMapElement={selectMapElementForSearch}
 			/>
 
 			<BottomSheetDetailModal
@@ -198,6 +205,7 @@ const MapScreen = (): React.JSX.Element => {
 				currentPositionModal={currentPositionModal}
 				roomData={roomData}
 				modalSection={allSections}
+				pickStart={detailPickStart}
 			/>
 		</View>
 	)

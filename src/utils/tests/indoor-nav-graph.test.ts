@@ -6,6 +6,7 @@ import {
 } from '@/utils/indoor-nav/data'
 import {
 	distanceToPolygonM,
+	haversineM,
 	type PolygonGeom,
 	pointInPolygonGeom
 } from '@/utils/indoor-nav/geometry'
@@ -14,8 +15,9 @@ import {
 	listRoutableRooms
 } from '@/utils/indoor-nav/graph-build'
 import { route } from '@/utils/indoor-nav/routing'
+import type { LonLat } from '@/utils/indoor-nav/types'
 
-describe('indoor-nav graph (building G)', () => {
+describe('indoor-nav graph (buildings G, J, K, W)', () => {
 	let data: ReturnType<typeof getIndoorData>
 	let graph: ReturnType<typeof buildIndoorGraph>
 
@@ -69,8 +71,8 @@ describe('indoor-nav graph (building G)', () => {
 		}
 	})
 
-	it('routes every routable room with a mapped door from the main entrance', () => {
-		const rooms = listRoutableRooms(data)
+	it('routes every routable G room with a mapped door from the main entrance', () => {
+		const rooms = listRoutableRooms(data).filter((r) => r.code.startsWith('G'))
 		expect(rooms.length).toBeGreaterThan(50)
 		// Rooms without a mapped door in doors.json cannot be reached via the
 		// door-only graph — the web demo (turf implementation) fails these too.
@@ -93,6 +95,31 @@ describe('indoor-nav graph (building G)', () => {
 			}
 		}
 		expect(failures.sort()).toEqual([...knownDoorless].sort())
+	})
+
+	it('routes every routable J/K/W room from its own building entrance', () => {
+		const starts: Record<string, string> = {
+			J: 'entrance:IN-J-E01',
+			K: 'entrance:IN-K-E01',
+			W: 'entrance:IN-W-E01'
+		}
+		for (const [building, start] of Object.entries(starts)) {
+			const rooms = listRoutableRooms(data).filter((r) =>
+				r.code.startsWith(building)
+			)
+			expect(rooms.length).toBeGreaterThan(10)
+			const failures: string[] = []
+			for (const room of rooms) {
+				const r = route(graph, start, `room:${room.floor}:${room.code}`)
+				if (r == null) {
+					failures.push(`${room.floor}:${room.code}`)
+				} else {
+					expect(r.distanceM).toBeGreaterThan(0)
+					expect(r.segments.length).toBeGreaterThan(0)
+				}
+			}
+			expect(failures, `building ${building}`).toEqual([])
+		}
 	})
 
 	it('keeps EG route geometry inside walkable rooms', () => {
@@ -121,6 +148,32 @@ describe('indoor-nav graph (building G)', () => {
 			}
 			const gap = Math.min(...masks.map((m) => distanceToPolygonM(end, m)))
 			expect(gap).toBeLessThan(3)
+		}
+	})
+
+	it('keeps K building corridor polylines from overshooting the walked path', () => {
+		const kRooms = listRoutableRooms(data)
+			.filter((r) => r.code.startsWith('K') && r.floor === 'EG')
+			.slice(0, 2)
+		expect(kRooms.length).toBeGreaterThanOrEqual(2)
+		const pairs = [
+			['entrance:IN-K-E01', `room:EG:${kRooms[0].code}`],
+			[`room:EG:${kRooms[0].code}`, `room:EG:${kRooms[1].code}`]
+		] as const
+		const lineLen = (coords: LonLat[]): number => {
+			let d = 0
+			for (let i = 1; i < coords.length; i++) {
+				d += haversineM(coords[i - 1], coords[i])
+			}
+			return d
+		}
+		for (const [from, to] of pairs) {
+			const r = route(graph, from, to)
+			expect(r).not.toBeNull()
+			const seg = r?.segments.find((s) => s.floor === 'EG')
+			expect(seg).toBeDefined()
+			const drawn = lineLen(seg?.coords ?? [])
+			expect(drawn).toBeLessThan((seg?.distanceM ?? 0) * 1.25 + 3)
 		}
 	})
 

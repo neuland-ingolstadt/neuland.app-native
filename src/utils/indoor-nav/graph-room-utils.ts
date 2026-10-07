@@ -22,11 +22,11 @@ export const VERTICAL_MATCH_M = 8
 export const ENTRANCE_SNAP_M = 25
 
 export function isCorridor(fn?: string): boolean {
-	return fn === 'Flur' || fn === 'Atrium'
+	return fn === 'Flur' || fn === 'Flur Entrepreneur' || fn === 'Atrium'
 }
 
 export function isStair(fn?: string): boolean {
-	return fn === 'Treppenhaus'
+	return fn === 'Treppenhaus' || fn === 'Fluchtreppe'
 }
 
 export function isStairRoomId(graph: IndoorGraph, id: string): boolean {

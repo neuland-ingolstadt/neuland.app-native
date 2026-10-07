@@ -11,6 +11,10 @@ import {
 	lineLen
 } from './graph-room-utils'
 import { placeLabel } from './maneuvers'
+import {
+	finalizeRouteResult,
+	segmentFloorChangesForMerge
+} from './route-result'
 import type {
 	FloorChange,
 	FloorSegment,
@@ -312,6 +316,10 @@ function expandFloorSegment(graph: IndoorGraph, nodeIds: string[]): LonLat[] {
 	}
 
 	if (net != null) {
+		const circulation = graph.circulation[floor] ?? []
+		if (circulation.length > 0 && coords.length > 2) {
+			return stringPull(coords, circulation)
+		}
 		return coords
 	}
 	const maskSet = new Set<WalkMask>()
@@ -379,7 +387,7 @@ export function route(
 		if (n == null) {
 			return null
 		}
-		return {
+		return finalizeRouteResult({
 			nodeIds: topo.nodeIds,
 			coords: [n.coord],
 			floors: [String(n.floor)],
@@ -395,7 +403,7 @@ export function route(
 				}
 			],
 			floorChanges: []
-		}
+		})
 	}
 
 	const segments: FloorSegment[] = []
@@ -456,14 +464,23 @@ export function route(
 		})
 	}
 
-	const merged = mergeShaftHops(segments, floorChanges)
+	const merged = mergeShaftHops(
+		segments,
+		segmentFloorChangesForMerge(segments, floorChanges)
+	)
 
 	const walkM = merged.segments.reduce((a, s) => a + s.distanceM, 0)
-	const stairM = merged.floorChanges.reduce((a, c) => a + c.distanceM, 0)
+	const stairM = merged.floorChanges.reduce(
+		(a, c) => a + (c?.distanceM ?? 0),
+		0
+	)
 	const walkSec = merged.segments.reduce((a, s) => a + s.durationSec, 0)
-	const stairSec = merged.floorChanges.reduce((a, c) => a + c.durationSec, 0)
+	const stairSec = merged.floorChanges.reduce(
+		(a, c) => a + (c?.durationSec ?? 0),
+		0
+	)
 
-	return {
+	return finalizeRouteResult({
 		nodeIds: topo.nodeIds,
 		coords: merged.segments.flatMap((s) => s.coords),
 		floors: [...new Set(merged.segments.map((s) => s.floor))],
@@ -472,7 +489,7 @@ export function route(
 		hops: topo.hops,
 		segments: merged.segments,
 		floorChanges: merged.floorChanges
-	}
+	})
 }
 
 /** Middle-floor walk below this length counts as "staying in the staircase". */
@@ -480,10 +497,13 @@ const SHAFT_MERGE_WALK_M = 1.0
 
 function mergeShaftHops(
 	segments: FloorSegment[],
-	floorChanges: FloorChange[]
-): { segments: FloorSegment[]; floorChanges: FloorChange[] } {
+	floorChanges: Array<FloorChange | undefined>
+): {
+	segments: FloorSegment[]
+	floorChanges: Array<FloorChange | undefined>
+} {
 	const segs: FloorSegment[] = []
-	const changes: FloorChange[] = []
+	const changes: Array<FloorChange | undefined> = []
 	let i = 0
 	while (i < segments.length) {
 		let seg = segments[i]
@@ -525,9 +545,7 @@ function mergeShaftHops(
 			i += 1
 		}
 		segs.push(seg)
-		if (change != null) {
-			changes.push(change)
-		}
+		changes.push(change)
 		i += 1
 	}
 	return { segments: segs, floorChanges: changes }

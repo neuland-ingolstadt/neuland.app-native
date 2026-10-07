@@ -21,6 +21,8 @@ interface UseMapCanvasStateOptions {
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
+	/** Secondary start pin / room tint while picking a route start (destination unchanged). */
+	pickStartSelection?: MapScreenModel['clickedElement'] | null
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
@@ -135,6 +137,7 @@ export function useMapCanvasState({
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
 	clickedElement,
+	pickStartSelection = null,
 	selectMapElement,
 	mapMode,
 	primaryColor,
@@ -153,6 +156,10 @@ export function useMapCanvasState({
 	outgoingStyles: ReturnType<typeof getMapLayerStyles> | null
 	selectedRoomCenter: ReturnType<typeof parseMapCoordinate>
 	selectedFeatures: ReturnType<typeof getSelectedMapFeatures>
+	pickStartRoomCenter: ReturnType<typeof parseMapCoordinate>
+	pickStartFeatures: ReturnType<typeof getSelectedMapFeatures>
+	pickStartElement: ClickedMapElement | null
+	selectionElement: ClickedMapElement | null
 	isDark: boolean
 	handleRoomSelection: (
 		features: Parameters<typeof getRoomSelectionFromFeatures>[0]
@@ -167,6 +174,23 @@ export function useMapCanvasState({
 			: availableFilteredGeoJSON
 	})
 	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
+	const selectionElement = suppressRoomSelection ? null : clickedElement
+	const pickStartElement =
+		suppressRoomSelection || pickStartSelection == null
+			? null
+			: pickStartSelection
+	const prevDisplaySelectionRef = useRef(selectionElement?.data)
+
+	useEffect(() => {
+		if (suppressRoomSelection) {
+			return
+		}
+		const nextKey = selectionElement?.data
+		if (nextKey != null && nextKey !== prevDisplaySelectionRef.current) {
+			triggerSelectionPop()
+		}
+		prevDisplaySelectionRef.current = nextKey
+	}, [selectionElement?.data, suppressRoomSelection, triggerSelectionPop])
 
 	const layerStyles = useMemo(
 		() =>
@@ -222,10 +246,15 @@ export function useMapCanvasState({
 
 	const selectedRoomCenter = suppressRoomSelection
 		? undefined
-		: parseMapCoordinate(clickedElement?.center)
+		: parseMapCoordinate(selectionElement?.center)
 	const selectedFeatures = suppressRoomSelection
 		? []
-		: getSelectedMapFeatures(clickedElement, filteredGeoJSON)
+		: getSelectedMapFeatures(selectionElement, filteredGeoJSON)
+	const pickStartRoomCenter = parseMapCoordinate(pickStartElement?.center)
+	const pickStartFeatures =
+		pickStartElement == null
+			? []
+			: getSelectedMapFeatures(pickStartElement, filteredGeoJSON)
 
 	const handleRoomSelection = (
 		features: Parameters<typeof getRoomSelectionFromFeatures>[0]
@@ -259,6 +288,10 @@ export function useMapCanvasState({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
+		pickStartRoomCenter,
+		pickStartFeatures,
+		pickStartElement,
+		selectionElement,
 		isDark,
 		handleRoomSelection
 	}

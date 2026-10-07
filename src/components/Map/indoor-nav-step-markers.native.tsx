@@ -69,23 +69,44 @@ interface IndoorNavEntranceMarkersProps {
 	entrancesGeoJSON: FeatureCollection
 	primaryColor: string
 	mapMode: MapMode
+	onEntrancePress?: (entranceRawId: string) => void
 }
 
 export function IndoorNavEntranceMarkers({
 	entrancesGeoJSON,
 	primaryColor,
-	mapMode
+	mapMode,
+	onEntrancePress
 }: IndoorNavEntranceMarkersProps): React.JSX.Element {
 	return (
 		<>
-			{renderMarkerFeatures(
-				entrancesGeoJSON.features,
-				'indoor-entrance',
-				primaryColor,
-				mapMode,
-				'entrance',
-				'todo'
-			)}
+			{entrancesGeoJSON.features
+				.filter((feature) => feature.geometry.type === 'Point')
+				.map((feature, index) => {
+					const geometry = feature.geometry as Point
+					const [longitude, latitude] = geometry.coordinates
+					const rawId = String(feature.properties?.id ?? '')
+					return (
+						<Marker
+							key={`indoor-entrance-${rawId}-${index}`}
+							id={`indoor-entrance-${index}`}
+							lngLat={[longitude, latitude]}
+							anchor="center"
+							onPress={
+								onEntrancePress != null && rawId !== ''
+									? () => onEntrancePress(rawId)
+									: undefined
+							}
+						>
+							<IndoorNavStepMarkerPin
+								kind="entrance"
+								state="todo"
+								primaryColor={primaryColor}
+								mapMode={mapMode}
+							/>
+						</Marker>
+					)
+				})}
 		</>
 	)
 }

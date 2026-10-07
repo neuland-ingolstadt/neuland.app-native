@@ -103,8 +103,8 @@ describe('indoor-nav journey (POC parity)', () => {
 			'Raum G011 betreten',
 			'Angekommen bei G011'
 		])
-		expect(copies[0].subline).toBe('Über Eingang G 1')
-		expect(copies[1].subline).toBe('Der blaue Strich auf der Karte')
+		expect(copies[0].subline).toBe('Über Haupteingang')
+		expect(copies[1].subline).toBe('Der markierte Weg auf der Karte')
 		expect(copies[2].subline).toBe('Bis zur Tür dem Weg folgen')
 		expect(copies[3].arrived).toBe(true)
 		// Sub-steps partition the whole leg without gaps.
@@ -264,6 +264,9 @@ describe('indoor-nav journey (POC parity)', () => {
 		const { result } = routeTo('G301', '3')
 		const change = result.floorChanges[0]
 		expect(change).toBeDefined()
+		if (change == null) {
+			return
+		}
 
 		const departure = stairShaftsGeoJsonForFloor(data, result, change.fromFloor)
 		expect(departure.features.map((f) => f.properties?.Raum)).toContain(
@@ -297,6 +300,9 @@ describe('indoor-nav journey (POC parity)', () => {
 		const steps = buildJourneySteps(result)
 		const change = result.floorChanges[0]
 		expect(change).toBeDefined()
+		if (change == null) {
+			return
+		}
 
 		const enterStep = steps[0]
 		expect(enterStep?.kind).toBe('walk')
@@ -333,13 +339,9 @@ describe('indoor-nav journey (POC parity)', () => {
 		// Steps: 0 enter, 1 follow, 2 stairs, 3 follow, 4 enterRoom, 5 arrival.
 		const egFirst = routeProgressGeoJsonForFloor(steps, 0, 'EG')
 		expect(egFirst.features.map((f) => f.properties?.state)).toEqual([
-			'current',
-			'todo'
+			'current'
 		])
-		expect(egFirst.features.map((f) => f.properties?.phase)).toEqual([
-			'enter',
-			'follow'
-		])
+		expect(egFirst.features.map((f) => f.properties?.phase)).toEqual(['enter'])
 
 		const egStairs = routeProgressGeoJsonForFloor(steps, 2, 'EG')
 		expect(egStairs.features.map((f) => f.properties?.state)).toEqual([

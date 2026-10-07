@@ -20,10 +20,12 @@ export function indoorNavPlaceForFunction(
 ): string | undefined {
 	switch (funktionDe) {
 		case 'Treppenhaus':
+		case 'Fluchtreppe':
 			return t('place.stairs')
 		case 'Fahrstuhl':
 			return t('place.elevator')
 		case 'Flur':
+		case 'Flur Entrepreneur':
 			return t('place.corridor')
 		case 'Atrium':
 			return 'Atrium'

@@ -4,16 +4,26 @@ import { SEARCH_TYPES } from '@/types/map'
 import {
 	applyIndoorData,
 	formatDistanceDuration,
+	getIndoorBuildingForCode,
+	getIndoorData,
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	INDOOR_DEFAULT_START_ID,
 	type IndoorNavLocale,
 	isIndoorDataLoaded,
+	type OutdoorRouter,
 	type RouteResult,
 	roomNodeId,
 	route,
+	routeCampus,
 	routePreview
 } from '@/utils/indoor-nav'
+import {
+	campusRouteCacheKey,
+	getCachedCampusRoute
+} from '@/utils/indoor-nav/campus-route-cache'
+import { isCrossBuildingRoute } from '@/utils/indoor-nav/cross-building'
+import { defaultStartForBuilding } from '@/utils/indoor-nav/ids'
 import type { IndoorData } from '@/utils/indoor-nav/types'
 
 export interface IndoorNavModel {
@@ -25,6 +35,8 @@ export interface IndoorNavModel {
 	startLabel: string
 	/** Full geometry; null until navigation is active. */
 	routeResult: RouteResult | null
+	/** Whether a walkable route exists for the current start/end pair. */
+	routeReady: boolean
 	summary: string
 }
 
@@ -39,6 +51,7 @@ interface UseIndoorNavigationOptions {
 	indoorData?: IndoorData | null
 	fromId?: string
 	locale?: IndoorNavLocale
+	outdoorRouter?: OutdoorRouter | null
 }
 
 export function useIndoorNavigation({
@@ -49,8 +62,13 @@ export function useIndoorNavigation({
 	fullRoute = false,
 	indoorData = null,
 	fromId = INDOOR_DEFAULT_START_ID,
-	locale = 'de'
+	locale = 'de',
+	outdoorRouter = null
 }: UseIndoorNavigationOptions): IndoorNavModel | null {
+	const roomCode =
+		clickedElement?.type === SEARCH_TYPES.ROOM ? clickedElement.data : null
+	const overlayFloorForRoute = lockedToId == null ? overlayFloor : null
+
 	return useMemo(() => {
 		if (indoorData != null) {
 			applyIndoorData(indoorData)
@@ -58,10 +76,10 @@ export function useIndoorNavigation({
 		if (!enabled || !isIndoorDataLoaded()) {
 			return null
 		}
-		if (clickedElement?.type !== SEARCH_TYPES.ROOM) {
+		if (roomCode == null) {
 			return null
 		}
-		const code = clickedElement.data
+		const code = roomCode
 		const floors = getIndoorRoomFloorsForCode(code)
 		if (floors.length === 0) {
 			return null
@@ -73,50 +91,90 @@ export function useIndoorNavigation({
 			toId = lockedToId
 			floor = graph.nodes.get(toId)?.floor ?? overlayFloor
 		} else {
-			floor =
-				floors.find((f) => f === overlayFloor) ?? floors[0] ?? overlayFloor
+			const viewFloor = overlayFloorForRoute ?? floors[0] ?? 'EG'
+			floor = floors.find((f) => f === viewFloor) ?? floors[0] ?? viewFloor
 			toId = roomNodeId(floor, code)
 		}
 		if (!graph.nodes.has(toId)) {
 			return null
 		}
-		let routeResult: RouteResult | null = null
-		let distanceM: number
-		let durationSec: number
-		if (fullRoute) {
-			routeResult = route(graph, fromId, toId)
-			if (routeResult == null) {
-				return null
-			}
-			distanceM = routeResult.distanceM
-			durationSec = routeResult.durationSec
-		} else {
-			const preview = routePreview(graph, fromId, toId)
-			if (preview == null) {
-				return null
-			}
-			distanceM = preview.distanceM
-			durationSec = preview.durationSec
+		const destinationBuilding = getIndoorBuildingForCode(code) ?? 'G'
+		const effectiveFromId =
+			fromId === INDOOR_DEFAULT_START_ID
+				? defaultStartForBuilding(destinationBuilding)
+				: fromId
+		if (!graph.nodes.has(effectiveFromId)) {
+			return null
 		}
-		const startNode = graph.nodes.get(fromId)
+
+		const data = getIndoorData()
+		const cross = isCrossBuildingRoute(effectiveFromId, toId, data.entrances)
+
+		let routeResult: RouteResult | null = null
+		let distanceM = 0
+		let durationSec = 0
+		let routeReady = false
+
+		if (cross) {
+			const cacheKey = campusRouteCacheKey(
+				effectiveFromId,
+				toId,
+				outdoorRouter != null
+			)
+			const campus = getCachedCampusRoute(cacheKey, () =>
+				routeCampus(graph, outdoorRouter, data, effectiveFromId, toId)
+			)
+			if (campus != null) {
+				routeResult = campus
+				distanceM = campus.distanceM
+				durationSec = campus.durationSec
+				routeReady = true
+			}
+		} else if (fullRoute) {
+			routeResult = route(graph, effectiveFromId, toId)
+			if (routeResult != null) {
+				distanceM = routeResult.distanceM
+				durationSec = routeResult.durationSec
+				routeReady = true
+			}
+		} else {
+			const preview = routePreview(graph, effectiveFromId, toId)
+			if (preview != null) {
+				distanceM = preview.distanceM
+				durationSec = preview.durationSec
+				routeReady = true
+			}
+		}
+
+		if (fullRoute && !routeReady) {
+			return null
+		}
+
+		const startNode = graph.nodes.get(effectiveFromId)
+		const summary = routeReady
+			? formatDistanceDuration(distanceM, durationSec, locale)
+			: '—'
+
 		return {
 			destinationFloor: floor,
 			destinationCode: code,
-			fromId,
+			fromId: effectiveFromId,
 			toId,
 			toLabel: code,
-			startLabel: startNode?.label ?? fromId,
-			routeResult,
-			summary: formatDistanceDuration(distanceM, durationSec, locale)
+			startLabel: startNode?.label ?? effectiveFromId,
+			routeResult: fullRoute ? routeResult : null,
+			routeReady,
+			summary
 		}
 	}, [
-		clickedElement,
 		enabled,
 		fromId,
 		fullRoute,
 		indoorData,
 		locale,
 		lockedToId,
-		overlayFloor
+		outdoorRouter,
+		overlayFloorForRoute,
+		roomCode
 	])
 }
