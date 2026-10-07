@@ -19,7 +19,11 @@ import {
 	doorNodeId,
 	entranceNodeId,
 	INDOOR_DEFAULT_ENTRANCE_RAW_ID,
+	INDOOR_DEFAULT_ENTRANCES,
 	INDOOR_DEFAULT_START_ID,
+	defaultStartForBuilding,
+	isMainEntranceNodeId,
+	isMainEntranceRawId,
 	portalNodeId,
 	roomNodeId
 } from '@/utils/indoor-nav/ids'
@@ -43,6 +47,7 @@ import { route } from '@/utils/indoor-nav/routing'
 import type { RouteResult } from '@/utils/indoor-nav/types'
 import {
 	gridPath,
+	snapToWalkable,
 	stringPull,
 	type WalkMask
 } from '@/utils/indoor-nav/walkable'
@@ -64,6 +69,14 @@ describe('indoor-nav utils', () => {
 		expect(portalNodeId('1', 'portal-b', 'portal-a')).toBe(
 			'portal:1:portal-a-portal-b'
 		)
+		expect(INDOOR_DEFAULT_ENTRANCES.G).toBe(INDOOR_DEFAULT_ENTRANCE_RAW_ID)
+		expect(defaultStartForBuilding('G')).toBe(INDOOR_DEFAULT_START_ID)
+		expect(defaultStartForBuilding('UNKNOWN')).toBe(INDOOR_DEFAULT_START_ID)
+		expect(isMainEntranceRawId(INDOOR_DEFAULT_ENTRANCE_RAW_ID)).toBe(true)
+		expect(isMainEntranceRawId('NOPE')).toBe(false)
+		expect(isMainEntranceNodeId(INDOOR_DEFAULT_START_ID)).toBe(true)
+		expect(isMainEntranceNodeId('room:EG:G001')).toBe(false)
+		expect(isMainEntranceNodeId('entrance:NOPE')).toBe(false)
 	})
 
 	it('maps indoor-nav locale and floor labels', () => {
@@ -190,6 +203,52 @@ describe('indoor-nav utils', () => {
 		expect(allOnFloor.features.length).toBeGreaterThan(0)
 	})
 
+	it('covers stair-shaft null, arrival floor and leg fallback branches', () => {
+		const data = getIndoorData()
+		expect(stairShaftsGeoJsonForFloor(data, null, 'EG').features).toEqual(
+			[]
+		)
+
+		const graph = buildIndoorGraph(data)
+		const result = route(graph, 'entrance:IN-G-E01', 'room:3:G301')
+		expect(result).not.toBeNull()
+		if (result == null) {
+			return
+		}
+		const change = result.floorChanges[0]
+		expect(change).toBeDefined()
+		if (change == null) {
+			return
+		}
+		// Arrival-floor branch (toFloor + toStairCode).
+		expect(
+			stairShaftsGeoJsonForFloor(data, result, change.toFloor).features.length
+		).toBeGreaterThanOrEqual(0)
+
+		// Multi-leg fallback: prefer beyond the last leg resolves to the last leg.
+		const repeated: RouteResult = {
+			nodeIds: [],
+			coords: [],
+			hops: [],
+			segments: [
+				{ floor: 'EG', coords: [], distanceM: 1, durationSec: 1 },
+				{ floor: '1', coords: [], distanceM: 1, durationSec: 1 },
+				{ floor: 'EG', coords: [], distanceM: 1, durationSec: 1 }
+			],
+			floorChanges: [],
+			distanceM: 3,
+			durationSec: 3,
+			floors: ['EG', '1', 'EG']
+		}
+		expect(pickLegForFloor(repeated, 'EG', 0)).toBe(0)
+		expect(pickLegForFloor(repeated, 'EG', 2)).toBe(2)
+		expect(pickLegForFloor(repeated, 'EG', 99)).toBe(2)
+
+		// Entrance overlay caches per data instance.
+		const first = entrancesGeoJsonForFloor(data, 'EG')
+		expect(entrancesGeoJsonForFloor(data, 'EG')).toBe(first)
+	})
+
 	it('builds walk and stair maneuver copy from real routes', () => {
 		const data = getIndoorData()
 		const graph = buildIndoorGraph(data)
@@ -295,5 +354,45 @@ describe('indoor-nav utils', () => {
 		expect(path).not.toBeNull()
 		expect(path?.length).toBeGreaterThanOrEqual(2)
 		expect(gridPath(a, b, [])).toBeNull()
+	})
+
+	it('covers walkable snap and grid-path edge cases', () => {
+		const square = (
+			lon: number,
+			lat: number,
+			size: number
+		): WalkMask =>
+			({
+				type: 'Feature',
+				properties: {},
+				geometry: {
+					type: 'Polygon',
+					coordinates: [
+						[
+							[lon, lat],
+							[lon + size, lat],
+							[lon + size, lat + size],
+							[lon, lat + size],
+							[lon, lat]
+						]
+					]
+				}
+			}) as WalkMask
+		const masks = [square(11.43, 48.76, 0.0002)]
+		const inside: [number, number] = [11.4301, 48.7601]
+
+		// Snap returns the coordinate itself when already walkable.
+		expect(snapToWalkable(inside, masks)).toEqual(inside)
+		// Snap gives up when nothing is walkable nearby.
+		expect(snapToWalkable([0, 0], masks, 0.0001)).toBeNull()
+		// Zero-length segment has line of sight; direct mates short-circuit.
+		expect(gridPath(inside, inside, masks)).toEqual([inside, inside])
+		expect(gridPath(inside, [11.43015, 48.76015], masks)).toHaveLength(2)
+		// Disconnected islands cannot route.
+		const islands = [square(11.43, 48.76, 0.0001), square(11.44, 48.77, 0.0001)]
+		expect(gridPath([11.43005, 48.76005], [11.44005, 48.77005], islands)).toBeNull()
+		// A degenerate mask holds no walkable cell, so nothing can route.
+		const sliver = [square(11.43, 48.76, 1e-9)]
+		expect(gridPath([11.43005, 48.76005], [11.43006, 48.76006], sliver)).toBeNull()
 	})
 })

@@ -10,10 +10,8 @@ import {
 	type PolygonGeom,
 	pointInPolygonGeom
 } from '@/utils/indoor-nav/geometry'
-import {
-	buildIndoorGraph,
-	listRoutableRooms
-} from '@/utils/indoor-nav/graph-build'
+import { buildIndoorGraph, listRoutableRooms } from '@/utils/indoor-nav/graph-build'
+import { addDirected, addUndirected } from '@/utils/indoor-nav/graph-room-utils'
 import { route } from '@/utils/indoor-nav/routing'
 import type { LonLat } from '@/utils/indoor-nav/types'
 
@@ -185,5 +183,27 @@ describe('indoor-nav graph (buildings G, J, K, W)', () => {
 		expect(r?.durationSec ?? 0).toBeGreaterThan(0)
 		expect(r?.floors).toContain('EG')
 		expect(r?.floors).toContain('3')
+	})
+
+	it('adds directed and undirected graph edges', () => {
+		const directed = new Map()
+		addDirected(directed, {
+			from: 'a',
+			to: 'b',
+			weight: 1,
+			kind: 'corridor'
+		})
+		expect(directed.get('a')).toHaveLength(1)
+		expect(directed.has('b')).toBe(false)
+
+		const undirected = new Map()
+		addUndirected(undirected, {
+			from: 'a',
+			to: 'b',
+			weight: 1,
+			kind: 'corridor'
+		})
+		expect(undirected.get('a')).toHaveLength(1)
+		expect(undirected.get('b')).toHaveLength(1)
 	})
 })

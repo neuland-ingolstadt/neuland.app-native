@@ -389,4 +389,111 @@ describe('indoor-nav journey (POC parity)', () => {
 			)
 		).toEqual(['stairs_arrive:done', 'destination:current'])
 	})
+
+	it('highlights stair codes for the active journey step', () => {
+		const change = {
+			fromFloor: 'EG',
+			toFloor: '1',
+			at: [0, 0] as [number, number],
+			viaFrom: 'a',
+			viaTo: 'b',
+			fromStairCode: 'G161',
+			toStairCode: 'G161',
+			distanceM: 1,
+			durationSec: 1
+		}
+		const result = {
+			nodeIds: [],
+			coords: [],
+			hops: [],
+			segments: [
+				{ floor: 'EG', coords: [], distanceM: 1, durationSec: 1 },
+				{ floor: '1', coords: [], distanceM: 1, durationSec: 1 }
+			],
+			floorChanges: [change],
+			distanceM: 2,
+			durationSec: 2,
+			floors: ['EG', '1']
+		}
+		expect(activeStairCodesForStep(result, undefined, 'EG')).toEqual(
+			new Set()
+		)
+		const stairs: JourneyStep = {
+			kind: 'stairs',
+			floor: 'EG',
+			afterLegIndex: 0,
+			fromFloor: 'EG',
+			toFloor: '1',
+			viaFrom: 'a',
+			viaTo: 'b',
+			distanceM: 1,
+			durationSec: 1,
+			change
+		}
+		expect(activeStairCodesForStep(result, stairs, 'EG')).toEqual(
+			new Set(['G161'])
+		)
+		expect(activeStairCodesForStep(result, stairs, '1')).toEqual(
+			new Set(['G161'])
+		)
+		expect(activeStairCodesForStep(result, stairs, '2')).toEqual(new Set())
+		expect(
+			activeStairCodesForStep(
+				result,
+				{ ...stairs, change: null as unknown as typeof change },
+				'EG'
+			)
+		).toEqual(new Set())
+
+		const walkFollow: JourneyStep = {
+			kind: 'walk',
+			floor: 'EG',
+			legIndex: 0,
+			distanceM: 1,
+			durationSec: 1,
+			segment: { floor: 'EG', coords: [[0, 0]], distanceM: 1, durationSec: 1 },
+			phase: 'follow'
+		}
+		expect(
+			activeStairCodesForStep(result, walkFollow, 'EG', [walkFollow, stairs], 0)
+		).toEqual(new Set(['G161']))
+		const walkAfter: JourneyStep = {
+			kind: 'walk',
+			floor: '1',
+			legIndex: 1,
+			distanceM: 1,
+			durationSec: 1,
+			segment: { floor: '1', coords: [[0, 0]], distanceM: 1, durationSec: 1 },
+			phase: 'follow'
+		}
+		expect(
+			activeStairCodesForStep(result, walkAfter, '1', [stairs, walkAfter], 1)
+		).toEqual(new Set(['G161']))
+		const arrival: JourneyStep = { kind: 'arrival', floor: '1', legIndex: 1 }
+		expect(activeStairCodesForStep(result, arrival, '1')).toEqual(new Set())
+
+		// Walk follow falls through when no stair change matches the floor.
+		const noChangeResult = { ...result, floorChanges: [] }
+		expect(
+			activeStairCodesForStep(
+				noChangeResult,
+				walkFollow,
+				'EG',
+				[walkFollow, stairs],
+				0
+			)
+		).toEqual(new Set())
+		const otherStairs: JourneyStep = {
+			...stairs,
+			change: { ...change, toFloor: '2', toStairCode: 'X' }
+		}
+		expect(
+			activeStairCodesForStep(result, walkAfter, '1', [otherStairs, walkAfter], 1)
+		).toEqual(new Set())
+
+		// Single-coord walk chunks are skipped in progress overlays.
+		expect(
+			routeProgressGeoJsonForFloor([walkFollow], 0, 'EG').features
+		).toEqual([])
+	})
 })
