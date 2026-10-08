@@ -2,7 +2,9 @@ import { describe, expect, it } from 'bun:test'
 import {
 	campusRouteCacheKey,
 	clearCampusRouteCache,
-	getCachedCampusRoute
+	fullRouteCacheKey,
+	getCachedCampusRoute,
+	getCachedFullRoute
 } from '@/utils/indoor-nav/campus-route-cache'
 import { stairDirection } from '@/utils/indoor-nav/floors'
 import type { RouteResult } from '@/utils/indoor-nav/types'
@@ -48,6 +50,21 @@ describe('campus-route-cache', () => {
 		}
 		expect(getCachedCampusRoute('missing', compute)).toBeNull()
 		expect(getCachedCampusRoute('missing', compute)).toBeNull()
+		expect(calls).toBe(1)
+		clearCampusRouteCache()
+	})
+
+	it('caches same-building full routes separately from campus routes', () => {
+		clearCampusRouteCache()
+		expect(fullRouteCacheKey('a', 'b')).toBe('full:a:b')
+		let calls = 0
+		const compute = () => {
+			calls += 1
+			return RESULT
+		}
+		const key = fullRouteCacheKey('a', 'b')
+		expect(getCachedFullRoute(key, compute)).toBe(RESULT)
+		expect(getCachedFullRoute(key, compute)).toBe(RESULT)
 		expect(calls).toBe(1)
 		clearCampusRouteCache()
 	})

@@ -9,7 +9,9 @@ export {
 export {
 	campusRouteCacheKey,
 	clearCampusRouteCache,
-	getCachedCampusRoute
+	fullRouteCacheKey,
+	getCachedCampusRoute,
+	getCachedFullRoute
 } from './campus-route-cache'
 export {
 	buildCorridorNet,

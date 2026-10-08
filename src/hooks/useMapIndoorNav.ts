@@ -2,7 +2,7 @@ import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
 import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { InteractionManager, Platform } from 'react-native'
 import type {
 	DetailSheetPickStartProps,
 	MapPickStartSheetChrome
@@ -114,7 +114,9 @@ export function useMapIndoorNav({
 		if (!indoorNavEnabled || !indoorDataReady) {
 			return false
 		}
-		if (navActive || overlayFloor === OUTDOOR_FLOOR) {
+		// Warm the footpath router while the user picks a start, so Start
+		// never waits on a cold fetch + rebuild.
+		if (navActive || pickStartActive || overlayFloor === OUTDOOR_FLOOR) {
 			return true
 		}
 		if (destinationCode == null || !isIndoorDataLoaded()) {
@@ -133,6 +135,7 @@ export function useMapIndoorNav({
 		indoorNavEnabled,
 		navActive,
 		overlayFloor,
+		pickStartActive,
 		startFromId
 	])
 
@@ -433,7 +436,11 @@ export function useMapIndoorNav({
 		leavePickStartUI()
 		hideDetailSheet()
 		hideSearchSheet()
-		setNavActive(true)
+		// Let the sheet-dismiss animations run first — the full route,
+		// journey steps and map layers all compute off this flag.
+		InteractionManager.runAfterInteractions(() => {
+			setNavActive(true)
+		})
 	}, [hideDetailSheet, hideSearchSheet, indoorNav, leavePickStartUI, t])
 
 	const cancelIndoorNav = useCallback(() => {

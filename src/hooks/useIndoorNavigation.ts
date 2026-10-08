@@ -20,7 +20,9 @@ import {
 } from '@/utils/indoor-nav'
 import {
 	campusRouteCacheKey,
-	getCachedCampusRoute
+	fullRouteCacheKey,
+	getCachedCampusRoute,
+	getCachedFullRoute
 } from '@/utils/indoor-nav/campus-route-cache'
 import { isCrossBuildingRoute } from '@/utils/indoor-nav/cross-building'
 import { defaultStartForBuilding } from '@/utils/indoor-nav/ids'
@@ -131,7 +133,10 @@ export function useIndoorNavigation({
 				routeReady = true
 			}
 		} else if (fullRoute) {
-			routeResult = route(graph, effectiveFromId, toId)
+			routeResult = getCachedFullRoute(
+				fullRouteCacheKey(effectiveFromId, toId),
+				() => route(graph, effectiveFromId, toId)
+			)
 			if (routeResult != null) {
 				distanceM = routeResult.distanceM
 				durationSec = routeResult.durationSec
