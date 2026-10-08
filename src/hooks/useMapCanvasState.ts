@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { getMapLayerStyles, type MapMode } from '@/components/Map/map-config'
 import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
@@ -94,27 +94,51 @@ export function useMapCanvasState({
 	})
 	const { selectionPop, triggerSelectionPop } = useMapSelectionPop()
 
-	const layerStyles = getMapLayerStyles(
-		isDark,
-		primaryColor,
-		labelColor,
-		backgroundColor,
-		incoming.opacity,
-		incoming.fadeDuration,
-		selectionPop,
-		selectionColor
+	const layerStyles = useMemo(
+		() =>
+			getMapLayerStyles(
+				isDark,
+				primaryColor,
+				labelColor,
+				backgroundColor,
+				incoming.opacity,
+				incoming.fadeDuration,
+				selectionPop,
+				selectionColor
+			),
+		[
+			isDark,
+			primaryColor,
+			labelColor,
+			backgroundColor,
+			incoming.opacity,
+			incoming.fadeDuration,
+			selectionPop,
+			selectionColor
+		]
 	)
-	const outgoingStyles =
-		outgoing == null
-			? null
-			: getMapLayerStyles(
-					isDark,
-					primaryColor,
-					labelColor,
-					backgroundColor,
-					outgoing.opacity,
-					outgoing.fadeDuration
-				)
+	const outgoingStyles = useMemo(
+		() =>
+			outgoing == null
+				? null
+				: getMapLayerStyles(
+						isDark,
+						primaryColor,
+						labelColor,
+						backgroundColor,
+						outgoing.opacity,
+						outgoing.fadeDuration
+					),
+		[
+			isDark,
+			primaryColor,
+			labelColor,
+			backgroundColor,
+			outgoing?.opacity,
+			outgoing?.fadeDuration,
+			outgoing
+		]
+	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 	const selectedFeatures = getSelectedMapFeatures(
 		clickedElement,
