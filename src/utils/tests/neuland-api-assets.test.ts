@@ -12,7 +12,7 @@ import { reactNativePlatform } from './react-native-mock'
 const EMPTY_FC: FeatureCollection = { type: 'FeatureCollection', features: [] }
 
 function stubFetch(payload: unknown = EMPTY_FC) {
-	const fetchMock = mock(async (input: RequestInfo | URL) => {
+	const fetchMock = mock(async (_input: RequestInfo | URL) => {
 		return new Response(JSON.stringify(payload), { status: 200 })
 	})
 	globalThis.fetch = fetchMock as unknown as typeof fetch

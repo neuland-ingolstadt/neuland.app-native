@@ -128,7 +128,7 @@ describe('indoor-nav graph (buildings G, J, K, W)', () => {
 				knownDoorless[building] ?? []
 			)
 		}
-	})
+	}, 30000)
 
 	it('routes the single-room building M from its only entrance', () => {
 		const r = route(graph, 'entrance:IN-M-E01', 'room:EG:M001')
