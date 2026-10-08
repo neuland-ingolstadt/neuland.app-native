@@ -1,0 +1,857 @@
+import { beforeAll, describe, expect, it } from 'bun:test'
+import { getFixedT } from '@/localization/i18n-fixed-t'
+import {
+	getIndoorData,
+	loadIndoorDataFromAssets,
+	resetIndoorDataCache
+} from '@/utils/indoor-nav/data'
+import { haversineM } from '@/utils/indoor-nav/geometry'
+import { buildIndoorGraph } from '@/utils/indoor-nav/graph-build'
+import {
+	buildJourneySteps,
+	type JourneyStep,
+	journeyStepCopy
+} from '@/utils/indoor-nav/journey-copy'
+import {
+	activeStairCodesForStep,
+	routeProgressGeoJsonForFloor,
+	stepMarkersGeoJsonForFloor
+} from '@/utils/indoor-nav/journey-visualization'
+import { splitSegmentAtRoomEntry } from '@/utils/indoor-nav/maneuvers'
+import {
+	entrancesGeoJsonForBuilding,
+	pickLegForFloor,
+	stairShaftsGeoJsonForFloor
+} from '@/utils/indoor-nav/route-geojson'
+import { route } from '@/utils/indoor-nav/routing'
+import type { LonLat, RouteResult } from '@/utils/indoor-nav/types'
+
+function routeTo(code: string, floor: string) {
+	const data = getIndoorData()
+	const graph = buildIndoorGraph(data)
+	const result = route(graph, 'entrance:IN-G-E01', `room:${floor}:${code}`)
+	if (result == null) {
+		throw new Error(`no route to ${floor}:${code}`)
+	}
+	return { graph, result }
+}
+
+describe('indoor-nav journey (POC parity)', () => {
+	const deT = getFixedT('de', 'indoor-nav')
+	const enT = getFixedT('en', 'indoor-nav')
+
+	beforeAll(async () => {
+		resetIndoorDataCache()
+		await loadIndoorDataFromAssets()
+	})
+
+	it('builds phased walk → stairs → walk → arrival steps for a multi-floor route', () => {
+		const { result } = routeTo('G301', '3')
+		const steps = buildJourneySteps(result)
+		// Shaft hops through one staircase merge into a single stairs step.
+		// EG: enter → follow; after stairs: follow → enter room (no separate stairwell steps).
+		expect(steps.map((s) => s.kind)).toEqual([
+			'walk',
+			'walk',
+			'stairs',
+			'walk',
+			'walk',
+			'arrival'
+		])
+		expect(
+			steps
+				.filter((s) => s.kind === 'walk')
+				.map((s) => (s.kind === 'walk' ? s.phase : undefined))
+		).toEqual(['enter', 'follow', 'follow', 'enterRoom'])
+		const stairs = steps.filter(
+			(s): s is Extract<JourneyStep, { kind: 'stairs' }> => s.kind === 'stairs'
+		)
+		expect(stairs.map((s) => `${s.fromFloor}→${s.toFloor}`)).toEqual(['EG→3'])
+	})
+
+	it('splits a same-floor entrance route into enter → follow → enter room', () => {
+		const { graph, result } = routeTo('G011', 'EG')
+		const steps = buildJourneySteps(result)
+		expect(steps.map((s) => s.kind)).toEqual([
+			'walk',
+			'walk',
+			'walk',
+			'arrival'
+		])
+		expect(
+			steps
+				.filter((s) => s.kind === 'walk')
+				.map((s) => (s.kind === 'walk' ? s.phase : undefined))
+		).toEqual(['enter', 'follow', 'enterRoom'])
+
+		const fromId = 'entrance:IN-G-E01'
+		const copies = steps.map((_, i) =>
+			journeyStepCopy(
+				graph,
+				fromId,
+				'room:EG:G011',
+				'G011',
+				result,
+				steps,
+				i,
+				'EG',
+				deT,
+				'de'
+			)
+		)
+		expect(copies.map((c) => c.headline)).toEqual([
+			'Gebäude betreten',
+			'Dem Weg folgen',
+			'Raum G011 betreten',
+			'Angekommen bei G011'
+		])
+		expect(copies[0].subline).toBe('Über Haupteingang')
+		expect(copies[1].subline).toBe('Der markierte Weg auf der Karte')
+		expect(copies[2].subline).toBe('Bis zur Tür dem Weg folgen')
+		expect(copies[3].arrived).toBe(true)
+		// Sub-steps partition the whole leg without gaps.
+		const legDistance = result.segments[0].distanceM
+		const walkDistance = steps
+			.filter((s) => s.kind === 'walk')
+			.reduce((sum, s) => sum + (s.kind === 'walk' ? s.distanceM : 0), 0)
+		expect(Math.abs(walkDistance - legDistance)).toBeLessThan(0.5)
+		const enterRoom = steps.find(
+			(s): s is Extract<JourneyStep, { kind: 'walk' }> =>
+				s.kind === 'walk' && s.phase === 'enterRoom'
+		)
+		const follow = steps.find(
+			(s): s is Extract<JourneyStep, { kind: 'walk' }> =>
+				s.kind === 'walk' && s.phase === 'follow' && s.legIndex === 0
+		)
+		expect(enterRoom).toBeDefined()
+		expect(follow).toBeDefined()
+		const split = splitSegmentAtRoomEntry(graph, result, result.segments[0])
+		expect(split).not.toBeNull()
+		if (!split) return
+		let stubLen = 0
+		for (let i = 1; i < split.roomStub.length; i++) {
+			stubLen += haversineM(split.roomStub[i - 1], split.roomStub[i])
+		}
+		expect(enterRoom?.distanceM).toBeCloseTo(stubLen, 0)
+		expect(enterRoom?.segment.coords).toEqual(split.roomStub)
+		expect(enterRoom?.distanceM).toBeLessThan(follow?.distanceM ?? 0)
+		expect(enterRoom?.distanceM).toBeLessThan(20)
+	})
+
+	it('gives German step copy identical to the POC', () => {
+		const { graph, result } = routeTo('G301', '3')
+		const fromId = 'entrance:IN-G-E01'
+		const toId = 'room:3:G301'
+		const steps = buildJourneySteps(result)
+
+		const first = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			0,
+			'EG',
+			deT,
+			'de'
+		)
+		expect(first.headline).toBe('Gebäude betreten')
+		expect(first.kicker).toBe('Schritt 1 von 6 · Erdgeschoss')
+
+		const stairs = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			2,
+			'EG',
+			deT,
+			'de'
+		)
+		expect(stairs.headline).toBe('Treppen hinauf')
+		expect(stairs.kicker).toBe('Schritt 3 von 6 · Treppen')
+		expect(stairs.subline).toBe('Erdgeschoss → 3. OG')
+
+		const followTop = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			3,
+			'3',
+			deT,
+			'de'
+		)
+		expect(followTop.headline).toBe('Dem Weg folgen')
+
+		const enterRoom = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			4,
+			'3',
+			deT,
+			'de'
+		)
+		expect(enterRoom.headline).toBe('Raum G301 betreten')
+
+		const arrival = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			steps.length - 1,
+			'3',
+			deT,
+			'de'
+		)
+		expect(arrival.arrived).toBe(true)
+		expect(arrival.headline).toBe('Angekommen bei G301')
+
+		const wrongFloor = journeyStepCopy(
+			graph,
+			fromId,
+			toId,
+			'G301',
+			result,
+			steps,
+			steps.length - 1,
+			'EG',
+			deT,
+			'de'
+		)
+		expect(wrongFloor.wrongFloor).toBe(true)
+	})
+
+	it('gives English step copy identical to the POC', () => {
+		const { graph, result } = routeTo('G001', 'EG')
+		const steps = buildJourneySteps(result)
+		// Decomposed entrance walk: enter → follow → enter room → arrival.
+		const headlines = steps
+			.map((_, i) =>
+				journeyStepCopy(
+					graph,
+					'entrance:IN-G-E01',
+					'room:EG:G001',
+					'G001',
+					result,
+					steps,
+					i,
+					'EG',
+					enT,
+					'en'
+				)
+			)
+			.map((c) => c.headline)
+		expect(headlines).toEqual([
+			'Enter the building',
+			'Follow the path',
+			'Enter room G001',
+			'Arrived at G001'
+		])
+	})
+
+	it('keeps the direct entrance → room leg in building M a single step', () => {
+		const data = getIndoorData()
+		const graph = buildIndoorGraph(data)
+		const result = route(graph, 'entrance:IN-M-E01', 'room:EG:M001')
+		if (result == null) {
+			throw new Error('no route to EG:M001')
+		}
+		// No corridor, door, or portal in between — padding a middle
+		// "follow" phase would describe a walk that does not exist.
+		expect(result.nodeIds).toEqual(['entrance:IN-M-E01', 'room:EG:M001'])
+		const steps = buildJourneySteps(result)
+		expect(steps.map((s) => s.kind)).toEqual(['walk', 'arrival'])
+		const headlines = steps
+			.map((_, i) =>
+				journeyStepCopy(
+					graph,
+					'entrance:IN-M-E01',
+					'room:EG:M001',
+					'M001',
+					result,
+					steps,
+					i,
+					'EG',
+					enT,
+					'en'
+				)
+			)
+			.map((c) => c.headline)
+		expect(headlines).toEqual(['Enter room M001', 'Arrived at M001'])
+	})
+
+	it('drops the middle follow phase on direct campus legs', () => {
+		const eg: LonLat[] = [
+			[11.7, 48.76],
+			[11.701, 48.761]
+		]
+		const out: LonLat[] = [
+			[11.701, 48.761],
+			[11.702, 48.762]
+		]
+		const result: RouteResult = {
+			nodeIds: [
+				'room:EG:G011',
+				'entrance:IN-G-E01',
+				'entrance:IN-G-E01',
+				'entrance:IN-M-E01',
+				'entrance:IN-M-E01',
+				'room:EG:M001'
+			],
+			coords: [],
+			hops: [
+				{ from: 'room:EG:G011', to: 'entrance:IN-G-E01', kind: 'via_door' },
+				{
+					from: 'entrance:IN-G-E01',
+					to: 'entrance:IN-M-E01',
+					kind: 'outdoor'
+				},
+				{ from: 'entrance:IN-M-E01', to: 'room:EG:M001', kind: 'entrance' }
+			],
+			segments: [
+				{
+					floor: 'EG',
+					coords: eg,
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'room:EG:G011',
+					endNodeId: 'entrance:IN-G-E01'
+				},
+				{
+					floor: 'OUT',
+					coords: out,
+					distanceM: 100,
+					durationSec: 100,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'entrance:IN-M-E01'
+				},
+				{
+					floor: 'EG',
+					coords: eg,
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'entrance:IN-M-E01',
+					endNodeId: 'room:EG:M001'
+				}
+			],
+			floorChanges: [],
+			distanceM: 140,
+			durationSec: 140,
+			floors: ['EG', 'OUT']
+		}
+		const steps = buildJourneySteps(result)
+		expect(
+			steps
+				.filter((s) => s.kind === 'walk')
+				.map((s) => (s.kind === 'walk' ? s.phase : undefined))
+		).toEqual(['leaveRoom', 'leaveBuilding', 'follow', 'enter', 'enterRoom'])
+	})
+
+	it('marks the start room when the journey begins in a room', () => {
+		const data = getIndoorData()
+		const graph = buildIndoorGraph(data)
+		const fromRoom = route(graph, 'room:EG:G001', 'room:EG:G011')
+		if (fromRoom == null) {
+			throw new Error('no route from EG:G001 to EG:G011')
+		}
+		const fromRoomSteps = buildJourneySteps(fromRoom)
+		const startMarkers = stepMarkersGeoJsonForFloor(
+			fromRoom,
+			fromRoomSteps,
+			0,
+			'EG'
+		)
+		expect(startMarkers.features.map((f) => f.properties?.kind)).toContain(
+			'start'
+		)
+		const start = startMarkers.features.find(
+			(f) => f.properties?.kind === 'start'
+		)
+		expect(start?.properties?.state).toBe('current')
+		expect(start?.geometry).toMatchObject({
+			type: 'Point',
+			coordinates: fromRoom.segments[0].coords[0]
+		})
+		// Once past the first step the start marker reads as done.
+		const later = stepMarkersGeoJsonForFloor(fromRoom, fromRoomSteps, 1, 'EG')
+		expect(
+			later.features.find((f) => f.properties?.kind === 'start')?.properties
+				?.state
+		).toBe('done')
+
+		// Entrance starts keep only the entry door marker — no start pin.
+		const fromEntrance = route(graph, 'entrance:IN-G-E01', 'room:EG:G011')
+		if (fromEntrance == null) {
+			throw new Error('no route from entrance to EG:G011')
+		}
+		const entranceMarkers = stepMarkersGeoJsonForFloor(
+			fromEntrance,
+			buildJourneySteps(fromEntrance),
+			0,
+			'EG'
+		)
+		expect(
+			entranceMarkers.features.map((f) => f.properties?.kind)
+		).not.toContain('start')
+	})
+
+	it('lists a building\u2019s entrances at their mapped positions', () => {
+		const data = getIndoorData()
+		const g = entrancesGeoJsonForBuilding(data, 'G')
+		expect(g.features.length).toBeGreaterThan(0)
+		for (const feature of g.features) {
+			expect(feature.properties?.Gebaeude).toBe('G')
+			expect(feature.geometry.type).toBe('Point')
+		}
+		expect(
+			entrancesGeoJsonForBuilding(data, 'M').features.map(
+				(f) => f.properties?.id
+			)
+		).toEqual(['IN-M-E01'])
+		// Buildings without mapped indoor data resolve to no markers.
+		expect(entrancesGeoJsonForBuilding(data, 'A').features).toEqual([])
+	})
+
+	it('exposes the active stair shaft blocks per floor', () => {
+		const data = getIndoorData()
+		const { result } = routeTo('G301', '3')
+		const change = result.floorChanges[0]
+		expect(change).toBeDefined()
+		if (change == null) {
+			return
+		}
+
+		const departure = stairShaftsGeoJsonForFloor(data, result, change.fromFloor)
+		expect(departure.features.map((f) => f.properties?.Raum)).toContain(
+			change.fromStairCode
+		)
+
+		const arrival = stairShaftsGeoJsonForFloor(data, result, change.toFloor)
+		expect(arrival.features.map((f) => f.properties?.Raum)).toContain(
+			change.toStairCode
+		)
+
+		// Floors without a change stay empty.
+		expect(stairShaftsGeoJsonForFloor(data, result, '2').features).toEqual([])
+		expect(stairShaftsGeoJsonForFloor(data, null, 'EG').features).toEqual([])
+
+		const legIndex = pickLegForFloor(result, change.fromFloor)
+		expect(result.segments[legIndex]?.floor).toBe(change.fromFloor)
+	})
+
+	it('exposes stair hop markers on the active step floor', () => {
+		const { result } = routeTo('G301', '3')
+		const steps = buildJourneySteps(result)
+		const markers = stepMarkersGeoJsonForFloor(result, steps, 0, 'EG')
+		expect(markers.features.some((f) => f.properties?.kind === 'entry')).toBe(
+			true
+		)
+	})
+
+	it('highlights stair shafts only on stairs-related steps', () => {
+		const { result } = routeTo('G301', '3')
+		const steps = buildJourneySteps(result)
+		const change = result.floorChanges[0]
+		expect(change).toBeDefined()
+		if (change == null) {
+			return
+		}
+
+		const enterStep = steps[0]
+		expect(enterStep?.kind).toBe('walk')
+		expect(
+			activeStairCodesForStep(result, enterStep, change.fromFloor).size
+		).toBe(0)
+
+		const beforeStairs = steps[1]
+		expect(beforeStairs?.kind).toBe('walk')
+		if (change.fromStairCode == null) {
+			throw new Error('expected fromStairCode')
+		}
+		const fromStairCode = change.fromStairCode
+		expect([
+			...activeStairCodesForStep(
+				result,
+				beforeStairs,
+				change.fromFloor,
+				steps,
+				1
+			)
+		]).toEqual([fromStairCode])
+
+		const stairs = steps[2]
+		expect(stairs?.kind).toBe('stairs')
+		expect([
+			...activeStairCodesForStep(result, stairs, change.fromFloor)
+		]).toEqual([fromStairCode])
+	})
+
+	it('tags route progress chunks done/current/todo per step and floor', () => {
+		const { result } = routeTo('G301', '3')
+		const steps = buildJourneySteps(result)
+		// Steps: 0 enter, 1 follow, 2 stairs, 3 follow, 4 enterRoom, 5 arrival.
+		const egFirst = routeProgressGeoJsonForFloor(steps, 0, 'EG')
+		expect(egFirst.features.map((f) => f.properties?.state)).toEqual([
+			'current'
+		])
+		expect(egFirst.features.map((f) => f.properties?.phase)).toEqual(['enter'])
+
+		const egStairs = routeProgressGeoJsonForFloor(steps, 2, 'EG')
+		expect(egStairs.features.map((f) => f.properties?.state)).toEqual([
+			'done',
+			'done'
+		])
+
+		const topLast = routeProgressGeoJsonForFloor(steps, 4, '3')
+		expect(topLast.features.map((f) => f.properties?.state)).toEqual([
+			'done',
+			'current'
+		])
+
+		// Floors without walk chunks stay empty.
+		expect(routeProgressGeoJsonForFloor(steps, 0, '2').features).toEqual([])
+	})
+
+	it('tags entry/stairs/destination markers before/after the current step', () => {
+		const { result } = routeTo('G301', '3')
+		const steps = buildJourneySteps(result)
+
+		const egStart = stepMarkersGeoJsonForFloor(result, steps, 0, 'EG')
+		expect(
+			egStart.features.map(
+				(f) => `${f.properties?.kind}:${f.properties?.state}`
+			)
+		).toEqual(['entry:current', 'stairs_up:todo'])
+
+		const egStairs = stepMarkersGeoJsonForFloor(result, steps, 2, 'EG')
+		expect(
+			egStairs.features.map(
+				(f) => `${f.properties?.kind}:${f.properties?.state}`
+			)
+		).toEqual(['entry:done', 'stairs_up:current'])
+
+		const topEnd = stepMarkersGeoJsonForFloor(result, steps, 4, '3')
+		expect(
+			topEnd.features.map((f) => `${f.properties?.kind}:${f.properties?.state}`)
+		).toEqual(['stairs_arrive_up:done', 'destination:todo'])
+
+		const topArrived = stepMarkersGeoJsonForFloor(result, steps, 5, '3')
+		expect(
+			topArrived.features.map(
+				(f) => `${f.properties?.kind}:${f.properties?.state}`
+			)
+		).toEqual(['stairs_arrive_up:done', 'destination:current'])
+	})
+
+	it('shows down arrows on both floors when going down stairs', () => {
+		const change = {
+			fromFloor: '3',
+			toFloor: 'EG',
+			at: [11.7, 48.76] as [number, number],
+			viaFrom: 'a',
+			viaTo: 'b',
+			fromStairCode: 'G161',
+			toStairCode: 'G161',
+			distanceM: 5,
+			durationSec: 30
+		}
+		const result: RouteResult = {
+			nodeIds: ['entrance:IN-G-E01', 'room:EG:G011'],
+			coords: [],
+			hops: [],
+			segments: [
+				{
+					floor: '3',
+					coords: [
+						[11.7, 48.76],
+						[11.701, 48.761]
+					] as LonLat[],
+					distanceM: 10,
+					durationSec: 10,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'room:3:G301'
+				},
+				{
+					floor: 'EG',
+					coords: [
+						[11.701, 48.761],
+						[11.702, 48.762]
+					] as LonLat[],
+					distanceM: 10,
+					durationSec: 10,
+					startNodeId: 'room:3:G301',
+					endNodeId: 'room:EG:G011'
+				}
+			],
+			floorChanges: [change],
+			distanceM: 25,
+			durationSec: 70,
+			floors: ['3', 'EG']
+		}
+		const walk = (
+			floor: string,
+			legIndex: number,
+			coords: LonLat[]
+		): JourneyStep => ({
+			kind: 'walk',
+			floor,
+			legIndex,
+			distanceM: 10,
+			durationSec: 10,
+			segment: { floor, coords, distanceM: 10, durationSec: 10 }
+		})
+		const stairs: JourneyStep = {
+			kind: 'stairs',
+			floor: '3',
+			afterLegIndex: 0,
+			fromFloor: '3',
+			toFloor: 'EG',
+			viaFrom: 'a',
+			viaTo: 'b',
+			distanceM: 5,
+			durationSec: 30,
+			change
+		}
+		const steps: JourneyStep[] = [
+			walk('3', 0, [
+				[11.7, 48.76],
+				[11.701, 48.761]
+			] as LonLat[]),
+			stairs,
+			walk('EG', 1, [
+				[11.701, 48.761],
+				[11.702, 48.762]
+			] as LonLat[]),
+			{ kind: 'arrival', floor: 'EG', legIndex: 1 }
+		]
+		const top = stepMarkersGeoJsonForFloor(result, steps, 1, '3')
+		expect(top.features.map((f) => f.properties?.kind)).toEqual([
+			'entry',
+			'stairs_down'
+		])
+		const bottom = stepMarkersGeoJsonForFloor(result, steps, 1, 'EG')
+		expect(bottom.features.map((f) => f.properties?.kind)).toEqual([
+			'stairs_arrive_down',
+			'destination'
+		])
+	})
+
+	it('shows door markers for both buildings on cross-campus routes', () => {
+		const result: RouteResult = {
+			nodeIds: [
+				'room:EG:G011',
+				'entrance:IN-G-E01',
+				'entrance:IN-G-E01',
+				'entrance:IN-J-E01',
+				'entrance:IN-J-E01',
+				'room:EG:J001'
+			],
+			coords: [],
+			hops: [],
+			segments: [
+				{
+					floor: 'EG',
+					coords: [
+						[11.7, 48.76],
+						[11.701, 48.761]
+					] as LonLat[],
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'room:EG:G011',
+					endNodeId: 'entrance:IN-G-E01'
+				},
+				{
+					floor: 'OUT',
+					coords: [
+						[11.701, 48.761],
+						[11.702, 48.762]
+					] as LonLat[],
+					distanceM: 100,
+					durationSec: 100,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'entrance:IN-J-E01'
+				},
+				{
+					floor: 'EG',
+					coords: [
+						[11.702, 48.762],
+						[11.703, 48.763]
+					] as LonLat[],
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'entrance:IN-J-E01',
+					endNodeId: 'room:EG:J001'
+				}
+			],
+			floorChanges: [],
+			distanceM: 140,
+			durationSec: 140,
+			floors: ['EG', 'OUT']
+		}
+		const walk = (
+			floor: string,
+			legIndex: number,
+			coords: LonLat[]
+		): JourneyStep => ({
+			kind: 'walk',
+			floor,
+			legIndex,
+			distanceM: 10,
+			durationSec: 10,
+			segment: { floor, coords, distanceM: 10, durationSec: 10 }
+		})
+		const steps: JourneyStep[] = [
+			walk('EG', 0, [
+				[11.7, 48.76],
+				[11.701, 48.761]
+			] as LonLat[]),
+			walk('OUT', 1, [
+				[11.701, 48.761],
+				[11.702, 48.762]
+			] as LonLat[]),
+			walk('EG', 2, [
+				[11.702, 48.762],
+				[11.703, 48.763]
+			] as LonLat[]),
+			{ kind: 'arrival', floor: 'EG', legIndex: 2 }
+		]
+		// EG shows the start room marker, the exit door of the source
+		// building and the entry door of the destination building.
+		const eg = stepMarkersGeoJsonForFloor(result, steps, 0, 'EG')
+		expect(eg.features.map((f) => f.properties?.kind)).toEqual([
+			'start',
+			'exit',
+			'entry',
+			'destination'
+		])
+		// Campus overview shows both ends of the outdoor walk.
+		const out = stepMarkersGeoJsonForFloor(result, steps, 1, 'OUT')
+		expect(out.features.map((f) => f.properties?.kind)).toEqual([
+			'exit',
+			'entry'
+		])
+	})
+
+	it('highlights stair codes for the active journey step', () => {
+		const change = {
+			fromFloor: 'EG',
+			toFloor: '1',
+			at: [0, 0] as [number, number],
+			viaFrom: 'a',
+			viaTo: 'b',
+			fromStairCode: 'G161',
+			toStairCode: 'G161',
+			distanceM: 1,
+			durationSec: 1
+		}
+		const result = {
+			nodeIds: [],
+			coords: [],
+			hops: [],
+			segments: [
+				{ floor: 'EG', coords: [], distanceM: 1, durationSec: 1 },
+				{ floor: '1', coords: [], distanceM: 1, durationSec: 1 }
+			],
+			floorChanges: [change],
+			distanceM: 2,
+			durationSec: 2,
+			floors: ['EG', '1']
+		}
+		expect(activeStairCodesForStep(result, undefined, 'EG')).toEqual(new Set())
+		const stairs: JourneyStep = {
+			kind: 'stairs',
+			floor: 'EG',
+			afterLegIndex: 0,
+			fromFloor: 'EG',
+			toFloor: '1',
+			viaFrom: 'a',
+			viaTo: 'b',
+			distanceM: 1,
+			durationSec: 1,
+			change
+		}
+		expect(activeStairCodesForStep(result, stairs, 'EG')).toEqual(
+			new Set(['G161'])
+		)
+		expect(activeStairCodesForStep(result, stairs, '1')).toEqual(
+			new Set(['G161'])
+		)
+		expect(activeStairCodesForStep(result, stairs, '2')).toEqual(new Set())
+		expect(
+			activeStairCodesForStep(
+				result,
+				{ ...stairs, change: null as unknown as typeof change },
+				'EG'
+			)
+		).toEqual(new Set())
+
+		const walkFollow: JourneyStep = {
+			kind: 'walk',
+			floor: 'EG',
+			legIndex: 0,
+			distanceM: 1,
+			durationSec: 1,
+			segment: { floor: 'EG', coords: [[0, 0]], distanceM: 1, durationSec: 1 },
+			phase: 'follow'
+		}
+		expect(
+			activeStairCodesForStep(result, walkFollow, 'EG', [walkFollow, stairs], 0)
+		).toEqual(new Set(['G161']))
+		const walkAfter: JourneyStep = {
+			kind: 'walk',
+			floor: '1',
+			legIndex: 1,
+			distanceM: 1,
+			durationSec: 1,
+			segment: { floor: '1', coords: [[0, 0]], distanceM: 1, durationSec: 1 },
+			phase: 'follow'
+		}
+		expect(
+			activeStairCodesForStep(result, walkAfter, '1', [stairs, walkAfter], 1)
+		).toEqual(new Set(['G161']))
+		const arrival: JourneyStep = { kind: 'arrival', floor: '1', legIndex: 1 }
+		expect(activeStairCodesForStep(result, arrival, '1')).toEqual(new Set())
+
+		// Walk follow falls through when no stair change matches the floor.
+		const noChangeResult = { ...result, floorChanges: [] }
+		expect(
+			activeStairCodesForStep(
+				noChangeResult,
+				walkFollow,
+				'EG',
+				[walkFollow, stairs],
+				0
+			)
+		).toEqual(new Set())
+		const otherStairs: JourneyStep = {
+			...stairs,
+			change: { ...change, toFloor: '2', toStairCode: 'X' }
+		}
+		expect(
+			activeStairCodesForStep(
+				result,
+				walkAfter,
+				'1',
+				[otherStairs, walkAfter],
+				1
+			)
+		).toEqual(new Set())
+
+		// Single-coord walk chunks are skipped in progress overlays.
+		expect(
+			routeProgressGeoJsonForFloor([walkFollow], 0, 'EG').features
+		).toEqual([])
+	})
+})

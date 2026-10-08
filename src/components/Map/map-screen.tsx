@@ -7,6 +7,7 @@ import { BottomSheetDetailModal } from '@/components/Map/bottom-sheet-detail-mod
 import MapBottomSheet from '@/components/Map/bottom-sheet-map'
 import FloorPicker from '@/components/Map/floor-picker'
 import NativeMapCanvas from '@/components/Map/map-canvas.native'
+import { MapIndoorNavOverlay } from '@/components/Map/map-indoor-nav-overlay'
 import { OsmCopyright } from '@/components/Map/osm-copyright'
 import { DETAIL_HIDDEN } from '@/components/Map/sheet-detents'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
@@ -26,40 +27,57 @@ const MapScreen = (): React.JSX.Element => {
 	}, [])
 
 	const {
-		t,
-		mapLoadState,
-		setMapLoadState,
-		mapMode,
-		primaryColor,
-		selectionColor,
-		labelColor,
-		backgroundColor,
-		searchDetents,
-		detailDetents,
-		searchIndex,
-		setSearchIndex,
-		currentPosition,
-		currentPositionModal,
-		showAllFloors,
-		toggleShowAllFloors,
-		onRegionChange,
-		animatedStyles,
-		mapCenter,
-		overlayError,
-		allRooms,
-		buildingGeoJSON,
-		uniqueEtages,
-		filteredGeoJSON,
-		availableFilteredGeoJSON,
-		clickedElement,
-		currentFloor,
-		selectMapElement,
-		roomData,
-		allSections,
-		detailIndex,
-		handleDetailIndexChange,
-		cameraResetRequestId,
-		focusPaddingBottom
+		theme: {
+			t,
+			mapMode,
+			primaryColor,
+			selectionColor,
+			labelColor,
+			backgroundColor
+		},
+		status: { mapLoadState, setMapLoadState, mapCenter, overlayError },
+		sheets: {
+			searchDetents,
+			detailDetents,
+			searchIndex,
+			setSearchIndex,
+			currentPosition,
+			currentPositionModal,
+			showAllFloors,
+			toggleShowAllFloors,
+			onRegionChange,
+			animatedStyles,
+			detailIndex,
+			handleDetailIndexChange,
+			cameraResetRequestId,
+			focusPaddingBottom
+		},
+		selection: {
+			allRooms,
+			buildingGeoJSON,
+			floorPickerFloors,
+			filteredGeoJSON,
+			availableFilteredGeoJSON,
+			clickedElement,
+			currentFloor,
+			selectMapElement,
+			selectMapElementForSearch,
+			roomData,
+			allSections
+		},
+		nav: {
+			indoorMapLayers,
+			navMode,
+			detailPickStart,
+			onPickStartEntrancePress,
+			pickStartMapPin,
+			navCameraRequestId,
+			navCameraCommand,
+			onNavCameraIdle,
+			navShowGhostCutaway,
+			navFloorPlanDimmed,
+			suppressSelectionCameraFocus
+		}
 	} = useMapScreenChrome({ onTabPress: handleTabPress })
 
 	useEffect(() => {
@@ -135,6 +153,7 @@ const MapScreen = (): React.JSX.Element => {
 					availableFilteredGeoJSON={availableFilteredGeoJSON}
 					buildingGeoJSON={buildingGeoJSON}
 					clickedElement={clickedElement}
+					pickStartSelection={pickStartMapPin}
 					selectMapElement={selectMapElement}
 					mapMode={mapMode}
 					primaryColor={primaryColor}
@@ -147,17 +166,29 @@ const MapScreen = (): React.JSX.Element => {
 					onRegionChange={onRegionChange}
 					focusPaddingBottom={focusPaddingBottom}
 					overlayFloor={currentFloor?.floor ?? 'EG'}
+					indoorMapLayers={indoorMapLayers}
+					cameraNavRequestId={navCameraRequestId}
+					cameraNavCommand={navCameraCommand}
+					onNavCameraIdle={onNavCameraIdle}
+					navShowGhostCutaway={navShowGhostCutaway}
+					floorPlanDimmed={navFloorPlanDimmed}
+					suppressSelectionCameraFocus={suppressSelectionCameraFocus}
+					onEntrancePress={onPickStartEntrancePress}
+					suppressRoomSelection={navMode != null}
 				/>
 				{overlayError === null && (
 					<FloorPicker
-						floors={uniqueEtages}
+						floors={floorPickerFloors}
 						showAllFloors={showAllFloors}
 						toggleShowAllFloors={toggleShowAllFloors}
 						locationPermissionGranted={locationPermissionGranted}
 						onLocate={handleLocate}
+						onSelectFloor={navMode?.selectFloor}
 					/>
 				)}
 			</View>
+
+			<MapIndoorNavOverlay navMode={navMode} />
 
 			{mapLoadState === LoadingState.LOADED && (
 				<OsmCopyright style={animatedStyles} />
@@ -168,7 +199,7 @@ const MapScreen = (): React.JSX.Element => {
 				detents={searchDetents}
 				currentPosition={currentPosition}
 				allRooms={allRooms}
-				selectMapElement={selectMapElement}
+				selectMapElement={selectMapElementForSearch}
 			/>
 
 			<BottomSheetDetailModal
@@ -178,6 +209,7 @@ const MapScreen = (): React.JSX.Element => {
 				currentPositionModal={currentPositionModal}
 				roomData={roomData}
 				modalSection={allSections}
+				pickStart={detailPickStart}
 			/>
 		</View>
 	)

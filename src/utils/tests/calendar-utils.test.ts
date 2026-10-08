@@ -3,6 +3,7 @@ import type { i18n } from 'i18next'
 import type { Calendar } from '@/types/data'
 import type { Exams } from '@/types/thi-api'
 import type { Exam } from '@/types/utils'
+import { i18nextModuleWithStubT } from './i18next-mock-helpers'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -20,9 +21,7 @@ mock.module(`${SRC_ROOT}localization/i18n.ts`, () => ({
 	default: { language: 'de' }
 }))
 
-mock.module('i18next', () => ({
-	t: (key: string) => key
-}))
+mock.module('i18next', i18nextModuleWithStubT)
 
 mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
 	default: {

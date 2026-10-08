@@ -6,6 +6,8 @@ import type { MaterialIcon } from './material-icons'
 export interface SectionGroup {
 	testID?: string
 	title?: string
+	/** Replaces `title` when set (e.g. styled beta pill). */
+	titleContent?: React.ReactNode
 	value?: string
 	customComponent?: (textStyle: StyleProp<TextStyle>) => React.ReactNode
 	icon?: {

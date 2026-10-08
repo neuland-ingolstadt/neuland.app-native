@@ -65,3 +65,9 @@ interface Course {
 export type SpoWeights = Record<string, Course[]>
 
 export type RoomDistances = Record<string, Record<string, number>>
+
+/** Who may use a building entrance point. */
+export type EntranceAccess = 'public' | 'badge'
+
+/** Direction a building entrance point may be used in. */
+export type EntranceKind = 'both' | 'entrance' | 'exit'

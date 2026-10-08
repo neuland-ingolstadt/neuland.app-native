@@ -9,7 +9,10 @@ import {
 	type SelectMapElement,
 	type SelectMapElementOptions
 } from '@/types/map'
-import { getRoomSelectionFromProperties } from '@/utils/map-screen-utils'
+import {
+	findRoomFeature,
+	getRoomSelectionFromProperties
+} from '@/utils/map-screen-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 
 interface UseMapRoomSelectionOptions {
@@ -75,9 +78,7 @@ export function useMapRoomSelection({
 			return
 		}
 
-		const room = allRooms.features.find(
-			(x) => x.properties?.Raum === params.room
-		)
+		const room = findRoomFeature(allRooms, params.room)
 		const selection = getRoomSelectionFromProperties(room?.properties)
 
 		if (selection == null) {

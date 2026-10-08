@@ -2,7 +2,7 @@ import type { MapCoordinate } from '@/types/map'
 
 export const MAP_CAMERA = {
 	initialZoom: 16.5,
-	focusZoom: 17,
+	focusZoom: 17.5,
 	minZoom: 14,
 	maxZoom: 19,
 	focusPaddingGap: 12,
@@ -41,6 +41,7 @@ export const BUILDINGS_IN = [
 	'J',
 	'K',
 	'M',
+	'N',
 	'P',
 	'X',
 	'W',
@@ -66,7 +67,6 @@ export const ROOM_SEARCH_DURATIONS = [
 	'05:30',
 	'06:00'
 ] as const
-export const SUGGESTION_DURATION_PRESET = 90
 export const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1'] as const
 export const FLOOR_SUBSTITUTES: Record<string, string> = {
 	0: 'EG',
@@ -75,27 +75,6 @@ export const FLOOR_SUBSTITUTES: Record<string, string> = {
 	2: '2',
 	3: '3',
 	4: '4'
-}
-
-function getFloorLevel(floor: string): number {
-	if (floor === 'EG') {
-		return 0
-	}
-	const parsed = Number.parseFloat(floor.replace(',', '.'))
-	return Number.isFinite(parsed) ? parsed : Number.NaN
-}
-
-/** +1 going to a higher floor, -1 going lower, 0 if the levels match or are unknown. */
-export function getFloorSlideDirection(
-	fromFloor: string,
-	toFloor: string
-): number {
-	const from = getFloorLevel(fromFloor)
-	const to = getFloorLevel(toFloor)
-	if (!Number.isFinite(from) || !Number.isFinite(to) || from === to) {
-		return 0
-	}
-	return to > from ? 1 : -1
 }
 
 export function sortFloors(floors: string[]): string[] {
@@ -120,4 +99,37 @@ export function getBuildingCodes(values: unknown[]): string[] {
 			)
 		)
 	).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+}
+
+/**
+ * Numeric floor level for vertical cost math (EG = 0, 1.5 = 1.5, -1 = -1).
+ * Unknown labels fall back to 0, matching the indoor-nav FLOOR_ORDER usage.
+ */
+export function getFloorLevel(floor: string): number {
+	const normalized = floor.trim().toUpperCase().replace(',', '.')
+	if (normalized === 'EG' || normalized === '0') {
+		return 0
+	}
+	const parsed = Number.parseFloat(normalized)
+	return Number.isFinite(parsed) ? parsed : 0
+}
+
+/** Absolute level difference between two floors, for proximity ranking. */
+export function getFloorDistance(a: string, b: string): number {
+	return Math.abs(getFloorLevel(a) - getFloorLevel(b))
+}
+
+/** Normalize overlay Standort values to the campus key used for ranking. */
+export function normalizeCampusKey(standort: unknown): 'IN' | 'ND' | undefined {
+	if (typeof standort !== 'string') {
+		return undefined
+	}
+	const key = standort.trim()
+	if (key === 'IN' || key === 'Ingolstadt') {
+		return 'IN'
+	}
+	if (key === 'ND' || key === 'Neuburg') {
+		return 'ND'
+	}
+	return undefined
 }

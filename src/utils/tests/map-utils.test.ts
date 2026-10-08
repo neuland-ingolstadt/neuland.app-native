@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import { SEARCH_TYPES } from '@/types/map'
+import { i18nextModuleWithStubT } from './i18next-mock-helpers'
 import { reactNativePlatform, reactNativeShareMock } from './react-native-mock'
 
 const UTILS_ROOT = new URL('../', import.meta.url).pathname
@@ -31,9 +32,7 @@ mock.module('burnt', () => ({
 	toast: () => {}
 }))
 
-mock.module('i18next', () => ({
-	t: (key: string) => key
-}))
+mock.module('i18next', i18nextModuleWithStubT)
 
 let mapUtils: typeof import('../map-utils')
 
@@ -477,14 +476,6 @@ describe('map-utils', () => {
 				]
 			] as never)
 		).toBe(0)
-	})
-
-	it('getFloorSlideDirection - Should treat higher floors as an upward elevator', () => {
-		expect(mapUtils.getFloorSlideDirection('1', '2')).toBe(1)
-		expect(mapUtils.getFloorSlideDirection('2', '1')).toBe(-1)
-		expect(mapUtils.getFloorSlideDirection('EG', '1')).toBe(1)
-		expect(mapUtils.getFloorSlideDirection('1', 'EG')).toBe(-1)
-		expect(mapUtils.getFloorSlideDirection('1', '1')).toBe(0)
 	})
 
 	it('sortFloors - Should keep known floors ordered without mutating the input', () => {
