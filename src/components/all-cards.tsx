@@ -5,7 +5,7 @@ import CalendarCard from './Cards/calendar-card'
 import EventsCard from './Cards/events-card'
 import LinkCard from './Cards/link-card'
 import LoginCard from './Cards/login-card'
-import NewsCard from './Cards/news-card'
+// import NewsCard from './Cards/news-card'
 import SportsCard from './Cards/sports-card'
 import ThiEventsCard from './Cards/thi-events-card'
 import UpNextCard from './Cards/up-next/up-next-card'
@@ -53,13 +53,14 @@ export const AllCards: Card[] = [
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <LinkCard />
 	},
-	{
-		key: 'news',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <NewsCard />
-	},
+	// TODO: temporarily disable news card till API is clarified with THI
+	// {
+	// 	key: 'news',
+	// 	removable: true,
+	// 	initial: [USER_STUDENT, USER_EMPLOYEE],
+	// 	allowed: [USER_STUDENT, USER_EMPLOYEE],
+	// 	card: () => <NewsCard />
+	// },
 	{
 		key: 'login',
 		removable: false,
