@@ -1,5 +1,6 @@
 import { FLOORS } from './floors'
 import { distM, type PolygonGeom, polygonCentroid } from './geometry'
+import { isStair } from './graph-room-utils'
 import type { JourneyStep } from './journey-copy'
 import type { IndoorData, LonLat } from './types'
 
@@ -42,7 +43,6 @@ function roomCentroid(room: GeoJSON.Feature): LonLat | null {
 		return null
 	}
 }
-
 function nearHop(
 	room: GeoJSON.Feature,
 	hop: LonLat,
@@ -96,14 +96,14 @@ export function ghostFloorsGeoJson(
 	)
 	const features: GeoJSON.Feature[] = []
 
-	const pushRoom = (room: GeoJSON.Feature, base: number, isStair: boolean) => {
+	const pushRoom = (room: GeoJSON.Feature, base: number, stair: boolean) => {
 		features.push({
 			type: 'Feature',
 			properties: {
 				...room.properties,
 				ghostBase: base,
-				ghostHeight: base + (isStair ? GHOST_STAIR_H_M : GHOST_PLATE_M),
-				ghostKind: isStair ? 'stair' : 'room'
+				ghostHeight: base + (stair ? GHOST_STAIR_H_M : GHOST_PLATE_M),
+				ghostKind: stair ? 'stair' : 'room'
 			},
 			geometry: room.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon
 		})
@@ -111,7 +111,7 @@ export function ghostFloorsGeoJson(
 
 	for (const room of data.roomsByFloor[viewFloor] ?? []) {
 		const fn = String(room.properties.Funktion_de ?? '')
-		if (fn !== 'Treppenhaus' && fn !== 'Fluchtreppe') {
+		if (!isStair(fn)) {
 			continue
 		}
 		const code = String(room.properties.Raum ?? '')
@@ -129,7 +129,7 @@ export function ghostFloorsGeoJson(
 		for (const room of data.roomsByFloor[fl] ?? []) {
 			const fn = String(room.properties.Funktion_de ?? '')
 			const code = String(room.properties.Raum ?? '')
-			const isStair = fn === 'Treppenhaus' || fn === 'Fluchtreppe'
+			const stair = isStair(fn)
 			const isRouteStair =
 				code === moment.fromStairCode || code === moment.toStairCode
 			if (!nearHop(room as GeoJSON.Feature, hop, isRouteStair)) {
@@ -138,13 +138,13 @@ export function ghostFloorsGeoJson(
 			if (fn === 'Luftraum') {
 				continue
 			}
-			if (!isStair) {
+			if (!stair) {
 				const c = roomCentroid(room as GeoJSON.Feature)
 				if (c != null && distM(c, hop) < 4) {
 					continue
 				}
 			}
-			pushRoom(room as GeoJSON.Feature, base, isStair)
+			pushRoom(room as GeoJSON.Feature, base, stair)
 		}
 	})
 	return { type: 'FeatureCollection', features }

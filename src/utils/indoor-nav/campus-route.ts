@@ -10,6 +10,7 @@ import {
 	type IndoorBuilding
 } from './data'
 import { walkDurationSec } from './format'
+import { polylineLengthPlanarM } from './geometry'
 import { entranceNodeId } from './ids'
 import { finalizeRouteResult } from './route-result'
 import { route } from './routing'
@@ -39,18 +40,7 @@ export type OutdoorRouter = {
 }
 
 function lineLen(coords: LonLat[]) {
-	let d = 0
-	for (let i = 1; i < coords.length; i++) {
-		const a = coords[i - 1]
-		const b = coords[i]
-		if (!a || !b) {
-			continue
-		}
-		const dx = (a[0] - b[0]) * 111_320 * Math.cos((48.7662 * Math.PI) / 180)
-		const dy = (a[1] - b[1]) * 111_320
-		d += Math.hypot(dx, dy)
-	}
-	return d
+	return polylineLengthPlanarM(coords)
 }
 
 export function buildOutdoorRouter(

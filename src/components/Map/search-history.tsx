@@ -1,9 +1,11 @@
-import React, { use } from 'react'
+import React, { use, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import Divider from '@/components/Universal/divider'
 import { MapContext } from '@/contexts/map'
+import { useAddToSearchHistory } from '@/hooks/useAddToSearchHistory'
 import type { SearchResult, SelectMapElement } from '@/types/map'
+import { removeSearchHistoryItem } from '@/utils/map-search-history'
 import { SearchHistoryItem } from './search-history-item'
 
 interface SearchHistoryProps {
@@ -17,27 +19,14 @@ const SearchHistory = ({
 }: SearchHistoryProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 	const { searchHistory, updateSearchHistory } = use(MapContext)
+	const addToSearchHistory = useAddToSearchHistory()
 
-	function addToSearchHistory(newHistory: SearchResult): void {
-		const newSearchHistory = searchHistory.filter(
-			(history) => history.title !== newHistory.title
-		)
-
-		newSearchHistory.unshift(newHistory)
-
-		if (newSearchHistory.length > 5) {
-			newSearchHistory.length = 5
-		}
-
-		updateSearchHistory(newSearchHistory)
-	}
-
-	function deleteSearchHistoryItem(element: SearchResult): void {
-		const newSearchHistory = searchHistory.filter(
-			(history) => history.title !== element.title
-		)
-		updateSearchHistory(newSearchHistory)
-	}
+	const deleteSearchHistoryItem = useCallback(
+		(element: SearchResult): void => {
+			updateSearchHistory(removeSearchHistoryItem(searchHistory, element))
+		},
+		[searchHistory, updateSearchHistory]
+	)
 	return (
 		<View className="mb-2.5">
 			<View className="items-end flex-row justify-between mb-1">

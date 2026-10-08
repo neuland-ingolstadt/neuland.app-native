@@ -77,9 +77,9 @@ export function useMapScreenChrome({
 		mapLoadState === LoadingState.LOADED
 	)
 
-	const toggleShowAllFloors = (): void => {
-		setShowAllFloors(!showAllFloors)
-	}
+	const toggleShowAllFloors = useCallback((): void => {
+		setShowAllFloors((previous) => !previous)
+	}, [])
 	const hideSearchSheet = useCallback(() => {
 		setSearchIndex(SEARCH_HIDDEN)
 	}, [])
@@ -254,54 +254,126 @@ export function useMapScreenChrome({
 
 	const mapMode: 'dark' | 'light' = isDark ? 'dark' : 'light'
 
-	return {
-		t,
-		mapLoadState,
-		setMapLoadState,
-		isDark,
-		mapMode,
-		primaryColor,
-		selectionColor,
-		labelColor,
-		backgroundColor,
-		searchDetents,
-		detailDetents,
-		searchIndex,
-		setSearchIndex,
-		currentPosition,
-		currentPositionModal,
-		showAllFloors,
-		toggleShowAllFloors,
-		onRegionChange,
-		animatedStyles,
-		mapCenter,
-		overlayError,
-		allRooms,
-		buildingGeoJSON,
-		uniqueEtages,
-		floorPickerFloors: navFloors ?? uniqueEtages,
-		filteredGeoJSON,
-		availableFilteredGeoJSON,
-		clickedElement,
-		currentFloor,
-		selectMapElement: selectMapElementForMap,
-		selectMapElementForSearch,
-		roomData,
-		allSections: mergedSections,
-		indoorMapLayers,
-		navMode,
-		detailPickStart,
-		onPickStartEntrancePress,
-		pickStartMapPin,
-		navCameraRequestId,
-		navCameraCommand,
-		onNavCameraIdle,
-		navShowGhostCutaway,
-		navFloorPlanDimmed,
-		suppressSelectionCameraFocus,
-		detailIndex,
-		handleDetailIndexChange: handleDetailIndexChangeWithNav,
-		cameraResetRequestId,
-		focusPaddingBottom
-	}
+	const theme = useMemo(
+		() => ({
+			t,
+			isDark,
+			mapMode,
+			primaryColor,
+			selectionColor,
+			labelColor,
+			backgroundColor
+		}),
+		[
+			backgroundColor,
+			isDark,
+			labelColor,
+			mapMode,
+			primaryColor,
+			selectionColor,
+			t
+		]
+	)
+
+	const status = useMemo(
+		() => ({ mapLoadState, setMapLoadState, overlayError, mapCenter }),
+		[mapCenter, mapLoadState, overlayError, setMapLoadState]
+	)
+
+	const sheets = useMemo(
+		() => ({
+			searchDetents,
+			detailDetents,
+			searchIndex,
+			setSearchIndex,
+			currentPosition,
+			currentPositionModal,
+			showAllFloors,
+			toggleShowAllFloors,
+			onRegionChange,
+			animatedStyles,
+			detailIndex,
+			handleDetailIndexChange: handleDetailIndexChangeWithNav,
+			cameraResetRequestId,
+			focusPaddingBottom
+		}),
+		[
+			animatedStyles,
+			cameraResetRequestId,
+			currentPosition,
+			currentPositionModal,
+			detailDetents,
+			detailIndex,
+			focusPaddingBottom,
+			handleDetailIndexChangeWithNav,
+			onRegionChange,
+			searchDetents,
+			searchIndex,
+			setSearchIndex,
+			showAllFloors,
+			toggleShowAllFloors
+		]
+	)
+
+	const selection = useMemo(
+		() => ({
+			allRooms,
+			buildingGeoJSON,
+			uniqueEtages,
+			floorPickerFloors: navFloors ?? uniqueEtages,
+			filteredGeoJSON,
+			availableFilteredGeoJSON,
+			clickedElement,
+			currentFloor,
+			selectMapElement: selectMapElementForMap,
+			selectMapElementForSearch,
+			roomData,
+			allSections: mergedSections
+		}),
+		[
+			allRooms,
+			availableFilteredGeoJSON,
+			buildingGeoJSON,
+			clickedElement,
+			currentFloor,
+			filteredGeoJSON,
+			mergedSections,
+			navFloors,
+			roomData,
+			selectMapElementForMap,
+			selectMapElementForSearch,
+			uniqueEtages
+		]
+	)
+
+	const nav = useMemo(
+		() => ({
+			indoorMapLayers,
+			navMode,
+			detailPickStart,
+			onPickStartEntrancePress,
+			pickStartMapPin,
+			navCameraRequestId,
+			navCameraCommand,
+			onNavCameraIdle,
+			navShowGhostCutaway,
+			navFloorPlanDimmed,
+			suppressSelectionCameraFocus
+		}),
+		[
+			detailPickStart,
+			indoorMapLayers,
+			navCameraCommand,
+			navCameraRequestId,
+			navFloorPlanDimmed,
+			navMode,
+			navShowGhostCutaway,
+			onNavCameraIdle,
+			onPickStartEntrancePress,
+			pickStartMapPin,
+			suppressSelectionCameraFocus
+		]
+	)
+
+	return { theme, status, sheets, selection, nav }
 }

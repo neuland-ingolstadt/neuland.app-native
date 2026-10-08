@@ -29,10 +29,8 @@ interface UseMapCanvasStateOptions {
 	selectionColor: string
 	labelColor: string
 	backgroundColor: string
-	/** Hide map-marker pin and selected-room fill (e.g. during indoor nav). */
+	/** Hide map-marker pin, selected-room fill and free-room overlay (e.g. during indoor nav). */
 	suppressRoomSelection?: boolean
-	/** Hide primary-colored free-room overlay (e.g. during indoor nav). */
-	hideAvailableRooms?: boolean
 	/** Dim the flat floor plan during the stairs cutaway moment. */
 	floorPlanDimmed?: boolean
 }
@@ -145,7 +143,6 @@ export function useMapCanvasState({
 	labelColor,
 	backgroundColor,
 	suppressRoomSelection = false,
-	hideAvailableRooms = false,
 	floorPlanDimmed = false
 }: UseMapCanvasStateOptions): {
 	incoming: ReturnType<typeof useFloorOverlaySlide>['incoming']
@@ -169,7 +166,7 @@ export function useMapCanvasState({
 	const { incoming, outgoing } = useFloorOverlaySlide({
 		floor: overlayFloor,
 		rooms: filteredGeoJSON,
-		availableRooms: hideAvailableRooms
+		availableRooms: suppressRoomSelection
 			? EMPTY_MAP_FEATURES
 			: availableFilteredGeoJSON
 	})

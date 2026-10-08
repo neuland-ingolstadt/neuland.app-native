@@ -312,7 +312,20 @@
 					"total": "Total rooms",
 					"floors": "Floors"
 				},
-				"osm": "Map data from OpenStreetMap"
+				"osm": "Map data from OpenStreetMap",
+				"directions": {
+					"title": "Directions",
+					"distance": "{{meters}} m",
+					"walkOutdoors": "Keep walking outside",
+					"turnLeft": "Turn left",
+					"turnRight": "Turn right",
+					"enterBuilding": "Enter building {{building}}",
+					"leaveBuilding": "Leave building {{building}}",
+					"takeStairs": "Take the stairs to floor {{floor}}",
+					"takeElevator": "Take the elevator to floor {{floor}}",
+					"followCorridor": "Follow the corridor",
+					"arrive": "Arrived: room {{room}}"
+				}
 			}
 		},
 		"rooms": {

@@ -312,7 +312,20 @@
 					"total": "Räume insgesamt",
 					"floors": "Etagen"
 				},
-				"osm": "Kartendaten von OpenStreetMap"
+				"osm": "Kartendaten von OpenStreetMap",
+				"directions": {
+					"title": "Wegbeschreibung",
+					"distance": "{{meters}} m",
+					"walkOutdoors": "Draußen weitergehen",
+					"turnLeft": "Links abbiegen",
+					"turnRight": "Rechts abbiegen",
+					"enterBuilding": "Gebäude {{building}} betreten",
+					"leaveBuilding": "Gebäude {{building}} verlassen",
+					"takeStairs": "Treppe zur Etage {{floor}} nehmen",
+					"takeElevator": "Aufzug zur Etage {{floor}} nehmen",
+					"followCorridor": "Dem Gang folgen",
+					"arrive": "Angekommen: Raum {{room}}"
+				}
 			}
 		},
 		"rooms": {

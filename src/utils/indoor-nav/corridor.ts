@@ -1,16 +1,17 @@
 import {
+	appendPathDistinct as appendDistinct,
 	distM,
+	hasLineOfSightM,
 	lonLatFromXY,
-	type PolygonGeom,
-	pointInPolygonGeom,
+	M_PER_DEG_LAT,
+	M_PER_DEG_LON,
+	polylineLengthPlanarM,
+	projectOnSegment,
 	xyAt
 } from './geometry'
 import type { LonLat } from './types'
 import { stringPull, type WalkMask } from './walkable'
 
-const M_PER_DEG_LAT = 111_320
-const LAT0 = 48.7662
-const M_PER_DEG_LON = 111_320 * Math.cos((LAT0 * Math.PI) / 180)
 const LOS_STEP_M = 0.35
 const KEY_DEC = 7
 
@@ -39,35 +40,11 @@ function roundCoord(c: LonLat): LonLat {
 	return [Number(c[0].toFixed(KEY_DEC)), Number(c[1].toFixed(KEY_DEC))]
 }
 
-function pointInMasks(coord: LonLat, masks: WalkMask[]): boolean {
-	if (masks.length === 0) {
-		return true
-	}
-	for (const m of masks) {
-		if (pointInPolygonGeom(coord, m.geometry as PolygonGeom)) {
-			return true
-		}
-	}
-	return false
-}
-
 function hasLineOfSight(a: LonLat, b: LonLat, masks: WalkMask[]): boolean {
 	if (masks.length === 0) {
 		return true
 	}
-	const len = distM(a, b)
-	if (len < 1e-6) {
-		return true
-	}
-	const steps = Math.max(2, Math.ceil(len / LOS_STEP_M))
-	for (let i = 0; i <= steps; i++) {
-		const t = i / steps
-		const p: LonLat = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
-		if (!pointInMasks(p, masks)) {
-			return false
-		}
-	}
-	return true
+	return hasLineOfSightM(a, b, masks, LOS_STEP_M)
 }
 
 function addEdge(
@@ -174,14 +151,7 @@ function projectOntoSegment(
 	a: LonLat,
 	b: LonLat
 ): { foot: LonLat; t: number; dist: number } {
-	const o = a
-	const [px, py] = xyAt(p, o)
-	const [bx, by] = xyAt(b, o)
-	const len2 = bx * bx + by * by
-	let t = len2 < 1e-12 ? 0 : (px * bx + py * by) / len2
-	t = Math.max(0, Math.min(1, t))
-	const foot = lonLatFromXY([bx * t, by * t], o)
-	return { foot, t, dist: distM(p, foot) }
+	return projectOnSegment(p, a, b)
 }
 
 /**
@@ -309,11 +279,7 @@ export function attachToCorridor(
 }
 
 function pathLen(coords: LonLat[]): number {
-	let d = 0
-	for (let i = 1; i < coords.length; i++) {
-		d += distM(coords[i - 1], coords[i])
-	}
-	return d
+	return polylineLengthPlanarM(coords)
 }
 
 /** Two-leg stub along building axes (≈90° turns), if walkable. */
@@ -551,12 +517,7 @@ export function routeOnCorridor(
 
 	const out: LonLat[] = []
 	const append = (pts: LonLat[]): void => {
-		for (const p of pts) {
-			const last = out[out.length - 1]
-			if (last == null || distM(last, p) > 0.05) {
-				out.push(p)
-			}
-		}
+		appendDistinct(out, pts)
 	}
 	append(snapA.stub)
 	append(netPath)

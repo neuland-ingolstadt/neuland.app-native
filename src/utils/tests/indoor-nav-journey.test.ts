@@ -23,6 +23,7 @@ import {
 	stairShaftsGeoJsonForFloor
 } from '@/utils/indoor-nav/route-geojson'
 import { route } from '@/utils/indoor-nav/routing'
+import type { LonLat, RouteResult } from '@/utils/indoor-nav/types'
 
 function routeTo(code: string, floor: string) {
 	const data = getIndoorData()
@@ -380,14 +381,202 @@ describe('indoor-nav journey (POC parity)', () => {
 		const topEnd = stepMarkersGeoJsonForFloor(result, steps, 4, '3')
 		expect(
 			topEnd.features.map((f) => `${f.properties?.kind}:${f.properties?.state}`)
-		).toEqual(['stairs_arrive:done', 'destination:todo'])
+		).toEqual(['stairs_arrive_up:done', 'destination:todo'])
 
 		const topArrived = stepMarkersGeoJsonForFloor(result, steps, 5, '3')
 		expect(
 			topArrived.features.map(
 				(f) => `${f.properties?.kind}:${f.properties?.state}`
 			)
-		).toEqual(['stairs_arrive:done', 'destination:current'])
+		).toEqual(['stairs_arrive_up:done', 'destination:current'])
+	})
+
+	it('shows down arrows on both floors when going down stairs', () => {
+		const change = {
+			fromFloor: '3',
+			toFloor: 'EG',
+			at: [11.7, 48.76] as [number, number],
+			viaFrom: 'a',
+			viaTo: 'b',
+			fromStairCode: 'G161',
+			toStairCode: 'G161',
+			distanceM: 5,
+			durationSec: 30
+		}
+		const result: RouteResult = {
+			nodeIds: ['entrance:IN-G-E01', 'room:EG:G011'],
+			coords: [],
+			hops: [],
+			segments: [
+				{
+					floor: '3',
+					coords: [
+						[11.7, 48.76],
+						[11.701, 48.761]
+					] as LonLat[],
+					distanceM: 10,
+					durationSec: 10,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'room:3:G301'
+				},
+				{
+					floor: 'EG',
+					coords: [
+						[11.701, 48.761],
+						[11.702, 48.762]
+					] as LonLat[],
+					distanceM: 10,
+					durationSec: 10,
+					startNodeId: 'room:3:G301',
+					endNodeId: 'room:EG:G011'
+				}
+			],
+			floorChanges: [change],
+			distanceM: 25,
+			durationSec: 70,
+			floors: ['3', 'EG']
+		}
+		const walk = (
+			floor: string,
+			legIndex: number,
+			coords: LonLat[]
+		): JourneyStep => ({
+			kind: 'walk',
+			floor,
+			legIndex,
+			distanceM: 10,
+			durationSec: 10,
+			segment: { floor, coords, distanceM: 10, durationSec: 10 }
+		})
+		const stairs: JourneyStep = {
+			kind: 'stairs',
+			floor: '3',
+			afterLegIndex: 0,
+			fromFloor: '3',
+			toFloor: 'EG',
+			viaFrom: 'a',
+			viaTo: 'b',
+			distanceM: 5,
+			durationSec: 30,
+			change
+		}
+		const steps: JourneyStep[] = [
+			walk('3', 0, [
+				[11.7, 48.76],
+				[11.701, 48.761]
+			] as LonLat[]),
+			stairs,
+			walk('EG', 1, [
+				[11.701, 48.761],
+				[11.702, 48.762]
+			] as LonLat[]),
+			{ kind: 'arrival', floor: 'EG', legIndex: 1 }
+		]
+		const top = stepMarkersGeoJsonForFloor(result, steps, 1, '3')
+		expect(top.features.map((f) => f.properties?.kind)).toEqual([
+			'entry',
+			'stairs_down'
+		])
+		const bottom = stepMarkersGeoJsonForFloor(result, steps, 1, 'EG')
+		expect(bottom.features.map((f) => f.properties?.kind)).toEqual([
+			'stairs_arrive_down',
+			'destination'
+		])
+	})
+
+	it('shows door markers for both buildings on cross-campus routes', () => {
+		const result: RouteResult = {
+			nodeIds: [
+				'room:EG:G011',
+				'entrance:IN-G-E01',
+				'entrance:IN-G-E01',
+				'entrance:IN-J-E01',
+				'entrance:IN-J-E01',
+				'room:EG:J001'
+			],
+			coords: [],
+			hops: [],
+			segments: [
+				{
+					floor: 'EG',
+					coords: [
+						[11.7, 48.76],
+						[11.701, 48.761]
+					] as LonLat[],
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'room:EG:G011',
+					endNodeId: 'entrance:IN-G-E01'
+				},
+				{
+					floor: 'OUT',
+					coords: [
+						[11.701, 48.761],
+						[11.702, 48.762]
+					] as LonLat[],
+					distanceM: 100,
+					durationSec: 100,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'entrance:IN-J-E01'
+				},
+				{
+					floor: 'EG',
+					coords: [
+						[11.702, 48.762],
+						[11.703, 48.763]
+					] as LonLat[],
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'entrance:IN-J-E01',
+					endNodeId: 'room:EG:J001'
+				}
+			],
+			floorChanges: [],
+			distanceM: 140,
+			durationSec: 140,
+			floors: ['EG', 'OUT']
+		}
+		const walk = (
+			floor: string,
+			legIndex: number,
+			coords: LonLat[]
+		): JourneyStep => ({
+			kind: 'walk',
+			floor,
+			legIndex,
+			distanceM: 10,
+			durationSec: 10,
+			segment: { floor, coords, distanceM: 10, durationSec: 10 }
+		})
+		const steps: JourneyStep[] = [
+			walk('EG', 0, [
+				[11.7, 48.76],
+				[11.701, 48.761]
+			] as LonLat[]),
+			walk('OUT', 1, [
+				[11.701, 48.761],
+				[11.702, 48.762]
+			] as LonLat[]),
+			walk('EG', 2, [
+				[11.702, 48.762],
+				[11.703, 48.763]
+			] as LonLat[]),
+			{ kind: 'arrival', floor: 'EG', legIndex: 2 }
+		]
+		// EG shows the exit door of the source building and the entry door
+		// of the destination building.
+		const eg = stepMarkersGeoJsonForFloor(result, steps, 0, 'EG')
+		expect(eg.features.map((f) => f.properties?.kind)).toEqual([
+			'exit',
+			'entry',
+			'destination'
+		])
+		// Campus overview shows both ends of the outdoor walk.
+		const out = stepMarkersGeoJsonForFloor(result, steps, 1, 'OUT')
+		expect(out.features.map((f) => f.properties?.kind)).toEqual([
+			'exit',
+			'entry'
+		])
 	})
 
 	it('highlights stair codes for the active journey step', () => {

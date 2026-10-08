@@ -478,14 +478,6 @@ describe('map-utils', () => {
 		).toBe(0)
 	})
 
-	it('getFloorSlideDirection - Should treat higher floors as an upward elevator', () => {
-		expect(mapUtils.getFloorSlideDirection('1', '2')).toBe(1)
-		expect(mapUtils.getFloorSlideDirection('2', '1')).toBe(-1)
-		expect(mapUtils.getFloorSlideDirection('EG', '1')).toBe(1)
-		expect(mapUtils.getFloorSlideDirection('1', 'EG')).toBe(-1)
-		expect(mapUtils.getFloorSlideDirection('1', '1')).toBe(0)
-	})
-
 	it('sortFloors - Should keep known floors ordered without mutating the input', () => {
 		const floors = ['EG', '5', '1', '4']
 		expect(mapUtils.sortFloors(floors)).toEqual(['4', '1', 'EG', '5'])

@@ -79,27 +79,18 @@ function rubberClamp(
 	return value
 }
 
-function triggerSelectionHaptic(): void {
-	if (Platform.OS !== 'web') {
+function triggerHaptic(kind: 'selection' | 'light' | 'medium'): void {
+	if (Platform.OS === 'web') {
+		return
+	}
+	if (kind === 'selection') {
 		void Haptics.selectionAsync()
-	}
-}
-
-function triggerTickHaptic(): void {
-	if (Platform.OS !== 'web') {
-		void Haptics.selectionAsync()
-	}
-}
-
-function triggerToggleHaptic(): void {
-	if (Platform.OS !== 'web') {
-		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-	}
-}
-
-function triggerResetHaptic(): void {
-	if (Platform.OS !== 'web') {
-		void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+	} else {
+		void Haptics.impactAsync(
+			kind === 'light'
+				? Haptics.ImpactFeedbackStyle.Light
+				: Haptics.ImpactFeedbackStyle.Medium
+		)
 	}
 }
 
@@ -201,7 +192,7 @@ const FloorPicker = ({
 	)
 
 	const handleToggle = useCallback(() => {
-		triggerToggleHaptic()
+		triggerHaptic('light')
 		toggleShowAllFloors()
 	}, [toggleShowAllFloors])
 
@@ -236,7 +227,7 @@ const FloorPicker = ({
 				handleToggle()
 				return
 			}
-			triggerSelectionHaptic()
+			triggerHaptic('selection')
 			if (onSelectFloor != null) {
 				onSelectFloor(floor)
 			} else {
@@ -278,7 +269,7 @@ const FloorPicker = ({
 				index < floorCountSV.get()
 			) {
 				lastTickIndex.set(index)
-				scheduleOnRN(triggerTickHaptic)
+				scheduleOnRN(() => triggerHaptic('selection'))
 			}
 		})
 		.onEnd((event) => {
@@ -289,7 +280,7 @@ const FloorPicker = ({
 			scrollY.set(withSpring(next * cellSize, SNAP_SPRING))
 			if (next !== lastTickIndex.get()) {
 				lastTickIndex.set(next)
-				scheduleOnRN(triggerTickHaptic)
+				scheduleOnRN(() => triggerHaptic('selection'))
 			}
 			scheduleOnRN(selectFloorByIndex, next)
 		})
@@ -309,7 +300,7 @@ const FloorPicker = ({
 		.minDuration(400)
 		.maxDistance(12)
 		.onStart(() => {
-			scheduleOnRN(triggerResetHaptic)
+			scheduleOnRN(() => triggerHaptic('medium'))
 			scheduleOnRN(resetToGroundFloor)
 		})
 

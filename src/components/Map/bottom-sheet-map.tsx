@@ -44,9 +44,11 @@ const MapBottomSheet = ({
 	const [searchQuery, setSearchQuery] = React.useState('')
 	const [searchFocused, setSearchFocused] = React.useState(false)
 
-	if (index <= SEARCH_HALF && searchQuery !== '') {
-		setSearchQuery('')
-	}
+	React.useEffect(() => {
+		if (index <= SEARCH_HALF && searchQuery !== '') {
+			setSearchQuery('')
+		}
+	}, [index, searchQuery])
 
 	const clearSearch = useCallback((): void => {
 		setSearchQuery('')

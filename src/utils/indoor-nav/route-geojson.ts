@@ -1,5 +1,10 @@
 import type { IndoorData, RouteResult } from './types'
 
+/** Fresh empty FeatureCollection — use instead of inline literals. */
+export function emptyFeatureCollection(): GeoJSON.FeatureCollection {
+	return { type: 'FeatureCollection', features: [] }
+}
+
 const EMPTY_FC: GeoJSON.FeatureCollection = {
 	type: 'FeatureCollection',
 	features: []
@@ -18,7 +23,7 @@ export function stairShaftsGeoJsonForFloor(
 	onlyCodes?: Set<string>
 ): GeoJSON.FeatureCollection {
 	if (result == null) {
-		return { type: 'FeatureCollection', features: [] }
+		return emptyFeatureCollection()
 	}
 	const codes = new Set<string>()
 	for (const change of result.floorChanges) {
@@ -34,7 +39,7 @@ export function stairShaftsGeoJsonForFloor(
 	}
 	if (onlyCodes != null) {
 		if (onlyCodes.size === 0) {
-			return { type: 'FeatureCollection', features: [] }
+			return emptyFeatureCollection()
 		}
 		for (const code of codes) {
 			if (!onlyCodes.has(code)) {
@@ -43,7 +48,7 @@ export function stairShaftsGeoJsonForFloor(
 		}
 	}
 	if (codes.size === 0) {
-		return { type: 'FeatureCollection', features: [] }
+		return emptyFeatureCollection()
 	}
 	return {
 		type: 'FeatureCollection',
@@ -79,13 +84,13 @@ export function destinationRoomGeoJsonForFloor(
 	highlight: boolean
 ): GeoJSON.FeatureCollection {
 	if (!highlight) {
-		return { type: 'FeatureCollection', features: [] }
+		return emptyFeatureCollection()
 	}
 	const room = (data.roomsByFloor[floor] ?? []).find(
 		(r) => r.properties.Raum === roomCode
 	)
 	if (room == null) {
-		return { type: 'FeatureCollection', features: [] }
+		return emptyFeatureCollection()
 	}
 	return { type: 'FeatureCollection', features: [room] }
 }

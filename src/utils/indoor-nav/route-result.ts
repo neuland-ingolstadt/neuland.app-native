@@ -1,4 +1,4 @@
-import type { FloorChange, FloorSegment, RouteResult } from './types'
+import type { FloorChange, RouteResult } from './types'
 
 /** One slot per segment index — change after leg `i`, if any. */
 export function alignFloorChangesWithSegments(
@@ -33,11 +33,4 @@ export function definedFloorChanges(
 	floorChanges: readonly (FloorChange | undefined)[]
 ): FloorChange[] {
 	return floorChanges.filter((c): c is FloorChange => c != null)
-}
-
-export function segmentFloorChangesForMerge(
-	segments: FloorSegment[],
-	floorChanges: readonly (FloorChange | undefined)[]
-): Array<FloorChange | undefined> {
-	return alignFloorChangesWithSegments(segments.length, floorChanges)
 }

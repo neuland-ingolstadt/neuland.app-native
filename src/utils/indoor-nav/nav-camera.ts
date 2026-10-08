@@ -1,8 +1,13 @@
 import {
+	boundsCenter,
+	NAV_FLAT_CAMERA_EASING,
 	navMapCameraDuration,
-	STAIR_MOMENT_CAMERA
+	STAIR_MOMENT_CAMERA,
+	stairMomentCameraStop
 } from './stair-moment-camera'
 import type { FitBounds, LonLat } from './types'
+
+export { boundsCenter, NAV_FLAT_CAMERA_EASING }
 
 export type NavStairsPhase = 'idle' | 'entering' | 'cutaway' | 'flat'
 
@@ -15,31 +20,13 @@ export type NavCameraCommand =
 			resetFromStairs?: boolean
 	  }
 
-export const NAV_FLAT_CAMERA_EASING = 'ease' as const
-
-export function boundsCenter(bounds: FitBounds): LonLat {
-	return [
-		(bounds.southWest[0] + bounds.northEast[0]) / 2,
-		(bounds.southWest[1] + bounds.northEast[1]) / 2
-	]
-}
-
 export function stairEnterCameraStop(
 	at: LonLat,
 	compact: boolean,
 	reducedMotion: boolean
 ) {
 	return {
-		center: at,
-		zoom: compact ? STAIR_MOMENT_CAMERA.zoomCompact : STAIR_MOMENT_CAMERA.zoom,
-		pitch: compact
-			? STAIR_MOMENT_CAMERA.pitchCompact
-			: STAIR_MOMENT_CAMERA.pitch,
-		bearing: STAIR_MOMENT_CAMERA.bearing,
-		duration: navMapCameraDuration(
-			reducedMotion,
-			STAIR_MOMENT_CAMERA.durationMs
-		),
+		...stairMomentCameraStop(at, compact, reducedMotion),
 		curve: STAIR_MOMENT_CAMERA.flyCurve
 	}
 }

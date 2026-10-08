@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import {
+	alignFloorChangesWithSegments,
 	definedFloorChanges,
 	finalizeRouteResult,
-	floorChangeAfterLeg,
-	segmentFloorChangesForMerge
+	floorChangeAfterLeg
 } from '@/utils/indoor-nav/route-result'
 
 describe('route-result', () => {
@@ -77,8 +77,6 @@ describe('route-result', () => {
 		expect(floorChangeAfterLeg(result, 1)).toBeUndefined()
 		expect(definedFloorChanges(result.floorChanges)).toEqual([change])
 		expect(definedFloorChanges([undefined])).toEqual([])
-		expect(segmentFloorChangesForMerge(result.segments, [change])).toHaveLength(
-			1
-		)
+		expect(alignFloorChangesWithSegments(1, [change])).toHaveLength(1)
 	})
 })

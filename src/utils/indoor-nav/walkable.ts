@@ -1,15 +1,15 @@
 import {
 	bboxOfGeom,
 	distM,
+	hasLineOfSightM,
+	M_PER_DEG_LAT,
+	M_PER_DEG_LON,
 	type PolygonGeom,
-	pointInPolygonGeom
+	pointInAnyMask
 } from './geometry'
 import type { LonLat } from './types'
 
 const CELL_M = 0.75
-const LAT0 = 48.7662
-const M_PER_DEG_LAT = 111_320
-const M_PER_DEG_LON = 111_320 * Math.cos((LAT0 * Math.PI) / 180)
 const LOS_STEP_M = 0.4
 
 export type WalkMask = GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>
@@ -41,29 +41,15 @@ function cellCenter(
 }
 
 function pointInAny(coord: LonLat, masks: WalkMask[]): boolean {
-	for (const m of masks) {
-		if (pointInPolygonGeom(coord, maskGeom(m))) {
-			return true
-		}
-	}
-	return false
+	return pointInAnyMask(coord, masks)
 }
 
 /** True if the straight segment stays inside walkable masks. */
 function hasLineOfSight(a: LonLat, b: LonLat, masks: WalkMask[]): boolean {
-	const len = distM(a, b)
-	if (len < 1e-6) {
-		return true
+	if (masks.length === 0) {
+		return distM(a, b) < 1e-6
 	}
-	const steps = Math.max(2, Math.ceil(len / LOS_STEP_M))
-	for (let i = 0; i <= steps; i++) {
-		const t = i / steps
-		const p: LonLat = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
-		if (!pointInAny(p, masks)) {
-			return false
-		}
-	}
-	return true
+	return hasLineOfSightM(a, b, masks, LOS_STEP_M)
 }
 
 /**

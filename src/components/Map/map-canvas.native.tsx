@@ -91,7 +91,6 @@ interface NativeMapCanvasProps {
 	navShowGhostCutaway?: boolean
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
-	indoorNavActive?: boolean
 	suppressRoomSelection?: boolean
 	onEntrancePress?: (entranceRawId: string) => void
 }
@@ -154,11 +153,10 @@ export default function NativeMapCanvas({
 	navShowGhostCutaway = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
-	indoorNavActive = false,
-	suppressRoomSelection,
+	suppressRoomSelection = false,
 	onEntrancePress
 }: NativeMapCanvasProps): React.JSX.Element {
-	const blockRoomSelection = suppressRoomSelection ?? indoorNavActive
+	const blockRoomSelection = suppressRoomSelection
 	const cameraRef = useRef<CameraRef>(null)
 	const currentZoomRef = useRef<number | undefined>(undefined)
 	const { width: windowWidth } = useWindowDimensions()
@@ -187,7 +185,6 @@ export default function NativeMapCanvas({
 		labelColor,
 		backgroundColor,
 		suppressRoomSelection: blockRoomSelection,
-		hideAvailableRooms: blockRoomSelection,
 		floorPlanDimmed
 	})
 
@@ -480,7 +477,7 @@ export default function NativeMapCanvas({
 				primaryColor={primaryColor}
 				mapMode={mapMode}
 				showGhostCutaway={navShowGhostCutaway}
-				stackCutawayLayers={indoorNavActive}
+				stackCutawayLayers={blockRoomSelection}
 				onEntrancePress={onEntrancePress}
 			/>
 		</MapLibreMap>

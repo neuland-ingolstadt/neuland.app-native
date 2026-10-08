@@ -1,5 +1,11 @@
+import { OUTDOOR_FLOOR } from './campus-route'
+import { stairDirection } from './floors'
 import type { JourneyStep } from './journey-copy'
 import type { RouteResult } from './types'
+
+function isStairsUp(fromFloor: string, toFloor: string): boolean {
+	return stairDirection(fromFloor, toFloor, 'down') === 'up'
+}
 
 /** Stair room codes to draw on `floor` for the active journey step (empty = hide). */
 export function activeStairCodesForStep(
@@ -111,9 +117,16 @@ export function routeProgressGeoJsonForFloor(
 }
 
 /**
- * Entry / staircase / destination markers for one floor, each tagged with
- * done/current/todo relative to the active step — so the map shows which
+ * Entry / exit / staircase / destination markers for one floor, each tagged
+ * with done/current/todo relative to the active step — so the map shows which
  * staircase or entry lies before or after the current step.
+ *
+ * Cross-campus routes concatenate indoor → outdoor → indoor legs. Every
+ * indoor leg that starts at an entrance (destination building after the
+ * outdoor walk) and every indoor leg that ends at an entrance (source building
+ * exit before the outdoor walk) gets a door marker, plus both ends of the
+ * outdoor leg when viewing the campus floor. Stair markers are
+ * direction-aware so going down shows a down arrow.
  */
 export function stepMarkersGeoJsonForFloor(
 	result: RouteResult,
@@ -125,31 +138,104 @@ export function stepMarkersGeoJsonForFloor(
 		steps.length > 0 ? Math.max(0, Math.min(stepIndex, steps.length - 1)) : 0
 	const features: GeoJSON.Feature[] = []
 	const stairsStepIndex = new Map<number, number>()
+	const legFirstWalkStep = new Map<number, number>()
+	const legLastWalkStep = new Map<number, number>()
 	steps.forEach((step, i) => {
 		if (step.kind === 'stairs') {
 			if (!stairsStepIndex.has(step.afterLegIndex)) {
 				stairsStepIndex.set(step.afterLegIndex, i)
 			}
 		}
+		if (step.kind === 'walk') {
+			if (!legFirstWalkStep.has(step.legIndex)) {
+				legFirstWalkStep.set(step.legIndex, i)
+			}
+			legLastWalkStep.set(step.legIndex, i)
+		}
 	})
 
-	const firstSeg = result.segments[0]
-	if (
-		firstSeg != null &&
-		firstSeg.floor === floor &&
-		result.nodeIds[0]?.startsWith('entrance:')
-	) {
-		const at = firstSeg.coords[0]
-		if (at != null) {
-			features.push({
-				type: 'Feature',
-				properties: {
-					kind: 'entry',
-					state: stepProgressState(0, safe),
-					floor
-				},
-				geometry: { type: 'Point', coordinates: at as GeoJSON.Position }
-			})
+	for (let i = 0; i < result.segments.length; i++) {
+		const seg = result.segments[i]
+		if (seg == null) {
+			continue
+		}
+		if (seg.floor === OUTDOOR_FLOOR) {
+			if (floor !== OUTDOOR_FLOOR) {
+				continue
+			}
+			const markerIndex = legFirstWalkStep.get(i) ?? -1
+			const state =
+				markerIndex < 0 ? 'todo' : stepProgressState(markerIndex, safe)
+			const start = seg.coords[0]
+			if (start != null) {
+				features.push({
+					type: 'Feature',
+					properties: {
+						kind: 'exit',
+						state,
+						floor
+					},
+					geometry: { type: 'Point', coordinates: start as GeoJSON.Position }
+				})
+			}
+			if (seg.coords.length > 1) {
+				const end = seg.coords[seg.coords.length - 1]
+				if (end != null) {
+					features.push({
+						type: 'Feature',
+						properties: {
+							kind: 'entry',
+							state,
+							floor
+						},
+						geometry: { type: 'Point', coordinates: end as GeoJSON.Position }
+					})
+				}
+			}
+			continue
+		}
+		if (seg.floor !== floor) {
+			continue
+		}
+		if (seg.startNodeId?.startsWith('entrance:')) {
+			const at = seg.coords[0]
+			if (at != null) {
+				const markerIndex = legFirstWalkStep.get(i) ?? 0
+				features.push({
+					type: 'Feature',
+					properties: {
+						kind: 'entry',
+						state: stepProgressState(markerIndex, safe),
+						floor
+					},
+					geometry: { type: 'Point', coordinates: at as GeoJSON.Position }
+				})
+			}
+		}
+		if (seg.endNodeId?.startsWith('entrance:')) {
+			const at = seg.coords[seg.coords.length - 1]
+			if (at != null) {
+				const markerIndex = legLastWalkStep.get(i) ?? 0
+				// Skip a duplicate when a single-coord entrance→entrance leg
+				// already emitted its start marker at the same position.
+				const start = seg.coords[0]
+				const isDuplicate =
+					seg.startNodeId?.startsWith('entrance:') &&
+					start != null &&
+					start[0] === at[0] &&
+					start[1] === at[1]
+				if (!isDuplicate) {
+					features.push({
+						type: 'Feature',
+						properties: {
+							kind: 'exit',
+							state: stepProgressState(markerIndex, safe),
+							floor
+						},
+						geometry: { type: 'Point', coordinates: at as GeoJSON.Position }
+					})
+				}
+			}
 		}
 	}
 
@@ -160,11 +246,12 @@ export function stepMarkersGeoJsonForFloor(
 		const markerIndex = stairsStepIndex.get(j) ?? -1
 		const state =
 			markerIndex < 0 ? 'todo' : stepProgressState(markerIndex, safe)
+		const up = isStairsUp(change.fromFloor, change.toFloor)
 		if (change.fromFloor === floor) {
 			features.push({
 				type: 'Feature',
 				properties: {
-					kind: 'stairs_up',
+					kind: up ? 'stairs_up' : 'stairs_down',
 					state,
 					toFloor: change.toFloor,
 					floor
@@ -178,7 +265,7 @@ export function stepMarkersGeoJsonForFloor(
 			features.push({
 				type: 'Feature',
 				properties: {
-					kind: 'stairs_arrive',
+					kind: up ? 'stairs_arrive_up' : 'stairs_arrive_down',
 					state,
 					fromFloor: change.fromFloor,
 					floor

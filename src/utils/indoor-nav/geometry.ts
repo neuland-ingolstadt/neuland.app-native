@@ -1,8 +1,9 @@
 import type { FitBounds, LonLat } from './types'
 
-const M_PER_DEG_LAT = 111_320
-const REF_LAT = 48.7662
-const M_PER_DEG_LON = M_PER_DEG_LAT * Math.cos((REF_LAT * Math.PI) / 180)
+export const THI_REF_LAT = 48.7662
+export const M_PER_DEG_LAT = 111_320
+export const M_PER_DEG_LON =
+	M_PER_DEG_LAT * Math.cos((THI_REF_LAT * Math.PI) / 180)
 
 export function haversineM(a: LonLat, b: LonLat): number {
 	const dLat = ((b[1] - a[1]) * Math.PI) / 180
@@ -330,4 +331,85 @@ export function bboxOfCoords(coords: LonLat[], marginM = 0): FitBounds | null {
 		northEast: [maxLon + dLon, maxLat + dLat],
 		southWest: [minLon - dLon, minLat - dLat]
 	}
+}
+
+/** Haversine polyline length in meters — single source for lineLen/chunkDistance/pathLen. */
+export function polylineLengthM(coords: LonLat[]): number {
+	let d = 0
+	for (let i = 1; i < coords.length; i++) {
+		const a = coords[i - 1]
+		const b = coords[i]
+		if (a == null || b == null) {
+			continue
+		}
+		d += haversineM(a, b)
+	}
+	return d
+}
+
+/** Fast planar polyline length in meters (equirectangular around THI). */
+export function polylineLengthPlanarM(coords: LonLat[]): number {
+	let d = 0
+	for (let i = 1; i < coords.length; i++) {
+		const a = coords[i - 1]
+		const b = coords[i]
+		if (a == null || b == null) {
+			continue
+		}
+		d += distM(a, b)
+	}
+	return d
+}
+
+/** Append coords with 5cm dedup — replaces appendPath/append closures. */
+export function appendPathDistinct(
+	dest: LonLat[],
+	next: LonLat[],
+	epsM = 0.05
+): void {
+	for (const p of next) {
+		const last = dest[dest.length - 1]
+		if (last == null || distM(last, p) > epsM) {
+			dest.push(p)
+		}
+	}
+}
+
+/** True when coord lies in any walk mask (false for empty — callers decide empty semantics). */
+export function pointInAnyMask(
+	coord: LonLat,
+	masks: Array<{
+		geometry: PolygonGeom | GeoJSON.Polygon | GeoJSON.MultiPolygon
+	}>
+): boolean {
+	for (const m of masks) {
+		if (pointInPolygonGeom(coord, m.geometry as PolygonGeom)) {
+			return true
+		}
+	}
+	return false
+}
+
+/** Shared line-of-sight: straight segment stays inside walk masks. */
+export function hasLineOfSightM(
+	a: LonLat,
+	b: LonLat,
+	masks: Array<{
+		geometry: PolygonGeom | GeoJSON.Polygon | GeoJSON.MultiPolygon
+	}>,
+	stepM = 0.35
+): boolean {
+	const len = distM(a, b)
+	if (len < 1e-6) {
+		return true
+	}
+	const steps = Math.max(2, Math.ceil(len / stepM))
+	for (let i = 0; i <= steps; i++) {
+		const t = i / steps
+		const p: LonLat = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
+		if (!pointInAnyMask(p, masks)) {
+			return false
+		}
+	}
+	return true
 }

@@ -1,9 +1,12 @@
 import { Marker } from '@vis.gl/react-maplibre'
-import type { FeatureCollection, Point } from 'geojson'
+import type { FeatureCollection } from 'geojson'
 import type React from 'react'
 import { IndoorNavStepMarkerPin } from '@/components/Map/indoor-nav-step-marker-pin'
+import {
+	getEntranceMarkerItems,
+	getStepMarkerItems
+} from '@/components/Map/indoor-nav-step-markers-shared'
 import type { MapMode } from '@/components/Map/map-config'
-import type { StepProgressState } from '@/utils/indoor-nav/journey-visualization'
 
 interface IndoorNavStepMarkersProps {
 	stepMarkersGeoJSON: FeatureCollection
@@ -11,56 +14,29 @@ interface IndoorNavStepMarkersProps {
 	mapMode: MapMode
 }
 
-function renderMarkerFeatures(
-	features: FeatureCollection['features'],
-	idPrefix: string,
-	primaryColor: string,
-	mapMode: MapMode,
-	defaultKind: string,
-	defaultState: StepProgressState
-): React.JSX.Element[] {
-	return features
-		.filter((feature) => feature.geometry.type === 'Point')
-		.map((feature, index) => {
-			const geometry = feature.geometry as Point
-			const [longitude, latitude] = geometry.coordinates
-			const kind = String(feature.properties?.kind ?? defaultKind)
-			const state = (feature.properties?.state ??
-				defaultState) as StepProgressState
-
-			return (
-				<Marker
-					key={`${idPrefix}-${kind}-${index}-${longitude}-${latitude}`}
-					longitude={longitude}
-					latitude={latitude}
-					anchor="center"
-				>
-					<IndoorNavStepMarkerPin
-						kind={kind}
-						state={state}
-						primaryColor={primaryColor}
-						mapMode={mapMode}
-					/>
-				</Marker>
-			)
-		})
-}
-
 export function IndoorNavStepMarkers({
 	stepMarkersGeoJSON,
 	primaryColor,
 	mapMode
 }: IndoorNavStepMarkersProps): React.JSX.Element {
+	const items = getStepMarkerItems(stepMarkersGeoJSON)
 	return (
 		<>
-			{renderMarkerFeatures(
-				stepMarkersGeoJSON.features,
-				'indoor-step',
-				primaryColor,
-				mapMode,
-				'entry',
-				'todo'
-			)}
+			{items.map((item) => (
+				<Marker
+					key={item.key}
+					longitude={item.longitude}
+					latitude={item.latitude}
+					anchor="center"
+				>
+					<IndoorNavStepMarkerPin
+						kind={item.kind}
+						state={item.state}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+					/>
+				</Marker>
+			))}
 		</>
 	)
 }
@@ -78,35 +54,29 @@ export function IndoorNavEntranceMarkers({
 	mapMode,
 	onEntrancePress
 }: IndoorNavEntranceMarkersProps): React.JSX.Element {
+	const items = getEntranceMarkerItems(entrancesGeoJSON)
 	return (
 		<>
-			{entrancesGeoJSON.features
-				.filter((feature) => feature.geometry.type === 'Point')
-				.map((feature, index) => {
-					const geometry = feature.geometry as Point
-					const [longitude, latitude] = geometry.coordinates
-					const rawId = String(feature.properties?.id ?? '')
-					return (
-						<Marker
-							key={`indoor-entrance-${rawId}-${index}`}
-							longitude={longitude}
-							latitude={latitude}
-							anchor="center"
-							onClick={
-								onEntrancePress != null && rawId !== ''
-									? () => onEntrancePress(rawId)
-									: undefined
-							}
-						>
-							<IndoorNavStepMarkerPin
-								kind="entrance"
-								state="todo"
-								primaryColor={primaryColor}
-								mapMode={mapMode}
-							/>
-						</Marker>
-					)
-				})}
+			{items.map((item) => (
+				<Marker
+					key={item.key}
+					longitude={item.longitude}
+					latitude={item.latitude}
+					anchor="center"
+					onClick={
+						onEntrancePress != null && item.rawId !== ''
+							? () => onEntrancePress(item.rawId)
+							: undefined
+					}
+				>
+					<IndoorNavStepMarkerPin
+						kind="entrance"
+						state="todo"
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+					/>
+				</Marker>
+			))}
 		</>
 	)
 }

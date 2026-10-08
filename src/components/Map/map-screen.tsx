@@ -27,52 +27,57 @@ const MapScreen = (): React.JSX.Element => {
 	}, [])
 
 	const {
-		t,
-		mapLoadState,
-		setMapLoadState,
-		mapMode,
-		primaryColor,
-		selectionColor,
-		labelColor,
-		backgroundColor,
-		searchDetents,
-		detailDetents,
-		searchIndex,
-		setSearchIndex,
-		currentPosition,
-		currentPositionModal,
-		showAllFloors,
-		toggleShowAllFloors,
-		onRegionChange,
-		animatedStyles,
-		mapCenter,
-		overlayError,
-		allRooms,
-		buildingGeoJSON,
-		floorPickerFloors,
-		detailPickStart,
-		onPickStartEntrancePress,
-		pickStartMapPin,
-		filteredGeoJSON,
-		availableFilteredGeoJSON,
-		clickedElement,
-		currentFloor,
-		selectMapElement,
-		selectMapElementForSearch,
-		roomData,
-		allSections,
-		detailIndex,
-		handleDetailIndexChange,
-		cameraResetRequestId,
-		focusPaddingBottom,
-		indoorMapLayers,
-		navMode,
-		navCameraRequestId,
-		navCameraCommand,
-		onNavCameraIdle,
-		navShowGhostCutaway,
-		navFloorPlanDimmed,
-		suppressSelectionCameraFocus
+		theme: {
+			t,
+			mapMode,
+			primaryColor,
+			selectionColor,
+			labelColor,
+			backgroundColor
+		},
+		status: { mapLoadState, setMapLoadState, mapCenter, overlayError },
+		sheets: {
+			searchDetents,
+			detailDetents,
+			searchIndex,
+			setSearchIndex,
+			currentPosition,
+			currentPositionModal,
+			showAllFloors,
+			toggleShowAllFloors,
+			onRegionChange,
+			animatedStyles,
+			detailIndex,
+			handleDetailIndexChange,
+			cameraResetRequestId,
+			focusPaddingBottom
+		},
+		selection: {
+			allRooms,
+			buildingGeoJSON,
+			floorPickerFloors,
+			filteredGeoJSON,
+			availableFilteredGeoJSON,
+			clickedElement,
+			currentFloor,
+			selectMapElement,
+			selectMapElementForSearch,
+			roomData,
+			allSections
+		},
+		nav: {
+			indoorMapLayers,
+			navMode,
+			detailPickStart,
+			onPickStartEntrancePress,
+			pickStartMapPin,
+			navCameraRequestId,
+			navCameraCommand,
+			onNavCameraIdle,
+			navShowGhostCutaway,
+			navFloorPlanDimmed,
+			suppressSelectionCameraFocus
+		}
 	} = useMapScreenChrome({ onTabPress: handleTabPress })
 
 	useEffect(() => {
@@ -168,7 +173,6 @@ const MapScreen = (): React.JSX.Element => {
 					navShowGhostCutaway={navShowGhostCutaway}
 					floorPlanDimmed={navFloorPlanDimmed}
 					suppressSelectionCameraFocus={suppressSelectionCameraFocus}
-					indoorNavActive={navMode != null}
 					onEntrancePress={onPickStartEntrancePress}
 					suppressRoomSelection={navMode != null}
 				/>

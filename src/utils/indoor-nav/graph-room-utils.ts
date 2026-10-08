@@ -1,11 +1,13 @@
 import {
+	appendPathDistinct,
 	distanceToPolygonM,
 	haversineM,
 	nearestPointOnPolygon,
 	type PolygonGeom,
 	pointInPolygonGeom,
 	polygonCentroid,
-	polygonsMinGapM
+	polygonsMinGapM,
+	polylineLengthM
 } from './geometry'
 import type {
 	GraphEdge,
@@ -167,18 +169,9 @@ export function matchStairShafts(
 }
 
 export function lineLen(coords: LonLat[]): number {
-	let d = 0
-	for (let i = 1; i < coords.length; i++) {
-		d += haversineM(coords[i - 1], coords[i])
-	}
-	return d
+	return polylineLengthM(coords)
 }
 
 export function appendPath(dest: LonLat[], next: LonLat[]): void {
-	for (const p of next) {
-		const last = dest[dest.length - 1]
-		if (last == null || haversineM(last, p) > 0.05) {
-			dest.push(p)
-		}
-	}
+	appendPathDistinct(dest, next)
 }

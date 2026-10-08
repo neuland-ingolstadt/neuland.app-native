@@ -90,7 +90,6 @@ interface WebMapCanvasProps {
 	navShowGhostCutaway?: boolean
 	floorPlanDimmed?: boolean
 	suppressSelectionCameraFocus?: boolean
-	indoorNavActive?: boolean
 	suppressRoomSelection?: boolean
 	onEntrancePress?: (entranceRawId: string) => void
 }
@@ -151,11 +150,10 @@ export default function WebMapCanvas({
 	navShowGhostCutaway = false,
 	floorPlanDimmed = false,
 	suppressSelectionCameraFocus = false,
-	indoorNavActive = false,
-	suppressRoomSelection,
+	suppressRoomSelection = false,
 	onEntrancePress
 }: WebMapCanvasProps): React.JSX.Element {
-	const blockRoomSelection = suppressRoomSelection ?? indoorNavActive
+	const blockRoomSelection = suppressRoomSelection
 	const mapRef = useRef<MapRef | null>(null)
 	const { width: windowWidth } = useWindowDimensions()
 	const reducedMotion = usePrefersReducedMotion()
@@ -192,7 +190,6 @@ export default function WebMapCanvas({
 		labelColor,
 		backgroundColor,
 		suppressRoomSelection: blockRoomSelection,
-		hideAvailableRooms: blockRoomSelection,
 		floorPlanDimmed
 	})
 
@@ -482,7 +479,7 @@ export default function WebMapCanvas({
 						primaryColor={primaryColor}
 						mapMode={mapMode}
 						showGhostCutaway={navShowGhostCutaway}
-						stackCutawayLayers={indoorNavActive}
+						stackCutawayLayers={blockRoomSelection}
 						onEntrancePress={onEntrancePress}
 					/>
 				)}

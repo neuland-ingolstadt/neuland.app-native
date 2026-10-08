@@ -1,4 +1,5 @@
 import type { Feature, FeatureCollection, LineString, Position } from 'geojson'
+import { haversineM } from './geometry'
 
 export const ROUTE_DRAW_MS = 1100
 
@@ -9,15 +10,7 @@ export function easeOutCubic(t: number): number {
 }
 
 function haversineDeg(a: LonLat, b: LonLat): number {
-	const R = 6371000
-	const dLat = ((b[1] - a[1]) * Math.PI) / 180
-	const dLon = ((b[0] - a[0]) * Math.PI) / 180
-	const lat1 = (a[1] * Math.PI) / 180
-	const lat2 = (b[1] * Math.PI) / 180
-	const h =
-		Math.sin(dLat / 2) ** 2 +
-		Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2
-	return 2 * R * Math.asin(Math.sqrt(h))
+	return haversineM(a, b)
 }
 
 export function cumulativeM(coords: LonLat[]): number[] {

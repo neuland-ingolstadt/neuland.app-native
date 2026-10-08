@@ -21,7 +21,6 @@ export const MAP_IDS = {
 		availableRooms: 'availableRoomsSource',
 		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
 		buildingLabels: 'buildingLettersSource',
-		selectedRoom: 'clickedElementSource',
 		selectedOverlay: 'selectedOverlaySource',
 		pickStartOverlay: 'pickStartOverlaySource',
 		indoorProgress: 'indoorProgressSource',
@@ -42,7 +41,6 @@ export const MAP_IDS = {
 		availableRoomsOutline: 'availableRoomsOutline',
 		availableRoomsOutgoingOutline: 'availableRoomsOutgoingOutline',
 		buildingLabels: 'buildingLettersLayer',
-		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
 		selectedOutline: 'selectedRoomOutline',
 		pickStartFill: 'pickStartRoomFill',
@@ -123,7 +121,6 @@ export const MAP_COLORS = {
 	availableRoomFillOpacity: 0.12,
 	buildingLabelSize: 14,
 	buildingLabelHaloWidth: 1,
-	selectedRoomMarkerSize: 0.17,
 	selectedFillOpacity: 0.14,
 	selectedFillOpacityPop: 0.22,
 	selectedOutlineWidth: 1,
@@ -273,15 +270,6 @@ export function getMapLayerStyles(
 				'text-halo-color': backgroundColor,
 				'text-halo-width': MAP_COLORS.buildingLabelHaloWidth
 			}
-		},
-		selectedRoomMarker: {
-			layout: {
-				'icon-image': 'map-marker',
-				'icon-size': MAP_COLORS.selectedRoomMarkerSize,
-				'icon-anchor': 'bottom' as const,
-				'icon-allow-overlap': true
-			},
-			paint: { 'icon-color': selectionColor }
 		},
 		selectedFill: {
 			'fill-antialias': true,

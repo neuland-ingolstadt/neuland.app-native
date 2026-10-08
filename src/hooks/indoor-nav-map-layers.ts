@@ -28,14 +28,17 @@ export const EMPTY_INDOOR_MAP_LAYERS: IndoorNavMapLayersData = {
 export function isEmptyIndoorMapLayers(
 	layers: IndoorNavMapLayersData
 ): boolean {
+	const collections = [
+		layers.stairsGeoJSON,
+		layers.entrancesGeoJSON,
+		layers.footpathsGeoJSON,
+		layers.routeProgressGeoJSON,
+		layers.stepMarkersGeoJSON,
+		layers.destinationRoomGeoJSON,
+		layers.ghostFloorsGeoJSON
+	]
 	return (
-		layers.stairsGeoJSON.features.length === 0 &&
-		layers.entrancesGeoJSON.features.length === 0 &&
-		layers.footpathsGeoJSON.features.length === 0 &&
-		layers.routeProgressGeoJSON.features.length === 0 &&
-		layers.stepMarkersGeoJSON.features.length === 0 &&
-		layers.destinationRoomGeoJSON.features.length === 0 &&
-		layers.ghostFloorsGeoJSON.features.length === 0 &&
+		collections.every((fc) => fc.features.length === 0) &&
 		layers.stairMoment == null
 	)
 }

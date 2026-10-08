@@ -6,9 +6,9 @@
 import type { TFunction } from 'i18next'
 import { OUTDOOR_FLOOR } from './campus-route'
 import { getIndoorGraph } from './data'
-import { FLOOR_ORDER } from './floors'
+import { stairDirection } from './floors'
 import { formatDistanceDuration, walkDurationSec } from './format'
-import { haversineM } from './geometry'
+import { polylineLengthM } from './geometry'
 import { type IndoorNavLocale, indoorNavFloorLabel } from './indoor-nav-i18n'
 import {
 	placeLabel,
@@ -16,6 +16,7 @@ import {
 	stairStepManeuver,
 	walkStepManeuver
 } from './maneuvers'
+import { cumulativeM } from './route-line-draw'
 import type {
 	FloorChange,
 	FloorSegment,
@@ -92,9 +93,7 @@ function walkManeuverOpts(
 }
 
 function stairDir(fromFloor: string, toFloor: string): 'up' | 'down' {
-	return (FLOOR_ORDER[toFloor] ?? 0) >= (FLOOR_ORDER[fromFloor] ?? 0)
-		? 'up'
-		: 'down'
+	return stairDirection(fromFloor, toFloor, 'up')
 }
 
 /** Primary HUD button: current step only (tap to advance). */
@@ -156,15 +155,11 @@ export function buildJourneySteps(result: RouteResult): JourneyStep[] {
 			legIndex: result.segments.length - 1
 		})
 	}
-	return splitEntranceWalk(steps, result)
+	return splitWalkLegs(steps, result)
 }
 
 function chunkDistanceM(coords: LonLat[]): number {
-	let d = 0
-	for (let i = 1; i < coords.length; i++) {
-		d += haversineM(coords[i - 1], coords[i])
-	}
-	return d
+	return polylineLengthM(coords)
 }
 
 const SHORT_PHASE_CAP_M = 14
@@ -272,10 +267,7 @@ function splitCoordsAtDistances(
 	if (coords.length < 2 || cutDistances.length === 0) {
 		return null
 	}
-	const cum: number[] = [0]
-	for (let i = 1; i < coords.length; i++) {
-		cum.push((cum[i - 1] ?? 0) + haversineM(coords[i - 1], coords[i]))
-	}
+	const cum = cumulativeM(coords)
 	const total = cum[cum.length - 1] ?? 0
 	if (!(total > 0.5)) {
 		return null
@@ -519,19 +511,6 @@ function splitWalkLegs(
 		out.push(...makePhaseSubs(step, phases, chunks))
 	}
 	return out
-}
-
-/**
- * A single-segment route from an outdoor entrance into a room collapses to
- * one walk step ("enter room") — decompose it into enter building →
- * follow the path → enter room so the beginning is guided step by step.
- * Multi-leg routes are decomposed per-leg by splitWalkLegs.
- */
-function splitEntranceWalk(
-	steps: JourneyStep[],
-	result: RouteResult
-): JourneyStep[] {
-	return splitWalkLegs(steps, result)
 }
 
 /** Guidance copy for decomposed walk phases (POC copy strings). */

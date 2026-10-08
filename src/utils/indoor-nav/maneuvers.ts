@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next'
 import { OUTDOOR_FLOOR } from './campus-route'
-import { FLOOR_ORDER } from './floors'
-import { haversineM } from './geometry'
+import { stairDirection } from './floors'
+import { haversineM, polylineLengthM } from './geometry'
 import { isCirculation, isStairRoomId } from './graph-room-utils'
 import { isMainEntranceNodeId } from './ids'
 import {
@@ -243,8 +243,7 @@ export function stairStepManeuver(
 	change: FloorChange,
 	t: TFunction<'indoor-nav'>
 ): { headline: string; subline: string } {
-	const up =
-		(FLOOR_ORDER[change.toFloor] ?? 0) > (FLOOR_ORDER[change.fromFloor] ?? 0)
+	const up = stairDirection(change.fromFloor, change.toFloor, 'down') === 'up'
 	return {
 		headline: t(`guidance.${up ? 'stairsUp' : 'stairsDown'}`),
 		subline: t('guidance.stairsSub', {
@@ -324,10 +323,7 @@ export function splitSegmentAtRoomEntry(
 	if (corridor.length < 2 || roomStub.length < 2) {
 		return null
 	}
-	let stubLen = 0
-	for (let i = 1; i < roomStub.length; i++) {
-		stubLen += haversineM(roomStub[i - 1], roomStub[i])
-	}
+	const stubLen = polylineLengthM(roomStub)
 	if (!(stubLen > 0.05)) {
 		return null
 	}

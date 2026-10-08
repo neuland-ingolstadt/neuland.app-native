@@ -12,8 +12,8 @@ import {
 } from './graph-room-utils'
 import { placeLabel } from './maneuvers'
 import {
-	finalizeRouteResult,
-	segmentFloorChangesForMerge
+	alignFloorChangesWithSegments,
+	finalizeRouteResult
 } from './route-result'
 import type {
 	FloorChange,
@@ -466,7 +466,7 @@ export function route(
 
 	const merged = mergeShaftHops(
 		segments,
-		segmentFloorChangesForMerge(segments, floorChanges)
+		alignFloorChangesWithSegments(segments.length, floorChanges)
 	)
 
 	const walkM = merged.segments.reduce((a, s) => a + s.distanceM, 0)

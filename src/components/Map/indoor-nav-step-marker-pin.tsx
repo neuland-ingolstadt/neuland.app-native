@@ -13,8 +13,12 @@ import type { StepProgressState } from '@/utils/indoor-nav/journey-visualization
 
 export type IndoorNavStepMarkerKind =
 	| 'entry'
+	| 'exit'
 	| 'stairs_up'
+	| 'stairs_down'
 	| 'stairs_arrive'
+	| 'stairs_arrive_up'
+	| 'stairs_arrive_down'
 	| 'destination'
 	| 'entrance'
 
@@ -28,13 +32,17 @@ interface IndoorNavStepMarkerPinProps {
 function markerIconForKind(kind: string): LucideIcon {
 	switch (kind) {
 		case 'entry':
+		case 'exit':
 		case 'entrance':
 			return DoorOpen
 		case 'destination':
 			return Flag
 		case 'stairs_up':
+		case 'stairs_arrive_up':
 			return ArrowUp
+		case 'stairs_down':
 		case 'stairs_arrive':
+		case 'stairs_arrive_down':
 			return ArrowDown
 		default:
 			return DoorOpen
@@ -50,7 +58,7 @@ function markerIconColor(
 	if (state === 'done') {
 		return MAP_COLORS.indoorProgressDoneColor
 	}
-	if (kind === 'entry' || kind === 'entrance') {
+	if (kind === 'entry' || kind === 'exit' || kind === 'entrance') {
 		return MAP_COLORS.indoorEntranceColor
 	}
 	if (kind === 'destination') {
