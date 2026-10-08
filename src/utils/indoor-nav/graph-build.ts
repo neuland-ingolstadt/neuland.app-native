@@ -270,13 +270,18 @@ export function buildIndoorGraph(data: IndoorData): IndoorGraph {
 	return { nodes, edges, roomsIndex, circulation, corridors, roomNodeId }
 }
 
-export function listRoutableRooms(
-	data: IndoorData
-): Array<{ floor: string; code: string; label: string; funktion?: string }> {
+export function listRoutableRooms(data: IndoorData): Array<{
+	floor: string
+	code: string
+	label: string
+	building: string
+	funktion?: string
+}> {
 	const out: Array<{
 		floor: string
 		code: string
 		label: string
+		building: string
 		funktion?: string
 	}> = []
 	for (const floor of FLOORS) {
@@ -289,6 +294,7 @@ export function listRoutableRooms(
 			out.push({
 				floor,
 				code,
+				building: room.properties.Gebaeude ?? '',
 				funktion,
 				label: `${code}${funktion != null && funktion !== '' ? ` · ${funktion}` : ''}`
 			})

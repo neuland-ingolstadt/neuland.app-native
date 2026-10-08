@@ -8,9 +8,9 @@ export const SEARCH_FULL = 3
 
 export const DETAIL_HIDDEN = 0
 export const DETAIL_OPEN = 1
-/** Compact pick-start (hint, search, confirm — no result list). */
+/** Compact pick-start (selected start card + confirm — no result list). */
 export const DETAIL_PICK_START = 2
-/** Expanded pick-start while the user is searching the start list. */
+/** Expanded pick-start while browsing or searching the start list. */
 export const DETAIL_PICK_START_SEARCH = 3
 
 const FALLBACK_WINDOW_HEIGHT = 800

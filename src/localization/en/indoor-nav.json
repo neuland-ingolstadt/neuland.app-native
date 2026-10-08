@@ -13,6 +13,7 @@
 	"pickStartBack": "Room details",
 	"pickStartOptionsHeader": "Start points",
 	"pickStartEmpty": "No matching entrances or rooms",
+	"pickStartBuilding": "Building {{building}}",
 	"pickStartMapHint": "Tap a room or entrance on the map, or search below for more start points.",
 	"pickStartSearchRoomsHint": "Search to find more room start points.",
 	"pickStartRouteSummary": "To {{destination}} · From {{from}}",

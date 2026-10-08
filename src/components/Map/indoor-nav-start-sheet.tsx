@@ -11,7 +11,7 @@ import { listPickStartOptionsForQuery } from '@/utils/indoor-nav/start-endpoints
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
-const OPTION_ROW_HEIGHT = 52
+const OPTION_ROW_HEIGHT = 60
 /** Fixed viewport — FlashList needs explicit height; shows ~4 scrollable rows. */
 const LIST_VIEWPORT_HEIGHT = OPTION_ROW_HEIGHT * 4
 
@@ -56,7 +56,9 @@ export function IndoorNavStartSheet({
 	onResetStartToDefault
 }: IndoorNavStartSheetProps): React.JSX.Element {
 	const { t } = useTranslation(['indoor-nav', 'common'])
-	const [browsing, setBrowsing] = useState(true)
+	// Show the preselected default start first, so confirming without
+	// picking is explicit. Search expands below via Edit.
+	const [browsing, setBrowsing] = useState(false)
 	const [query, setQuery] = useState('')
 	const skipCollapseRef = useRef(true)
 
@@ -74,15 +76,14 @@ export function IndoorNavStartSheet({
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
 	)
 	const contrastOnPrimary = getContrastColor(primaryColor)
-
-	const showResults = query.trim() !== ''
+	const iconColor = getContrastColor(primaryColor)
 
 	const options = useMemo(() => {
-		if (!indoorDataReady || !showResults) {
+		if (!indoorDataReady || !browsing) {
 			return []
 		}
 		return listPickStartOptionsForQuery(getIndoorData(), query, t)
-	}, [indoorDataReady, query, showResults, t])
+	}, [browsing, indoorDataReady, query, t])
 
 	const setQueryWithSheet = useCallback(
 		(text: string) => {
@@ -111,19 +112,53 @@ export function IndoorNavStartSheet({
 			item: ReturnType<typeof listPickStartOptionsForQuery>[0]
 		}) => {
 			const selected = item.id === selectedFromId
+			const isEntrance = item.kind === 'entrance'
 			return (
 				<Pressable
-					testID={`map-indoor-nav-start-option-${item.kind}`}
+					testID={`map-indoor-nav-start-option-${item.id}`}
 					onPress={() => {
 						selectOption(item.id)
 					}}
 					accessibilityRole="radio"
 					accessibilityState={{ selected }}
-					className="h-[52px] flex-row items-center justify-between border-b-hairline border-border px-4 active:opacity-80"
+					className="min-h-[60px] flex-row items-center py-2.5 border-b-hairline border-border px-4 active:opacity-80"
 				>
-					<Text className="flex-1 text-base text-text mr-2" numberOfLines={2}>
-						{item.label}
-					</Text>
+					<View
+						className="items-center rounded-full h-10 justify-center me-3.5 w-10 shrink-0"
+						style={{ backgroundColor: primaryColor }}
+					>
+						<PlatformIcon
+							ios={{
+								name: isEntrance ? 'door.left.hand.open' : 'mappin',
+								size: 18
+							}}
+							android={{
+								name: isEntrance ? 'door_open' : 'location_on',
+								size: 21
+							}}
+							web={{
+								name: isEntrance ? 'DoorOpen' : 'MapPin',
+								size: 20
+							}}
+							style={{ color: iconColor }}
+						/>
+					</View>
+					<View className="flex-1 min-w-0">
+						<Text
+							className="text-base font-semibold text-text"
+							numberOfLines={1}
+						>
+							{item.label}
+						</Text>
+						{item.subtitle !== '' && (
+							<Text
+								className="text-sm font-normal text-text mt-px"
+								numberOfLines={2}
+							>
+								{item.subtitle}
+							</Text>
+						)}
+					</View>
 					{selected && (
 						<PlatformIcon
 							ios={{ name: 'checkmark.circle.fill', size: 18 }}
@@ -135,7 +170,7 @@ export function IndoorNavStartSheet({
 				</Pressable>
 			)
 		},
-		[primaryColor, selectOption, selectedFromId]
+		[iconColor, primaryColor, selectOption, selectedFromId]
 	)
 
 	const listEmpty = useMemo(
@@ -151,7 +186,8 @@ export function IndoorNavStartSheet({
 
 	const openBrowse = useCallback(() => {
 		setQuery('')
-		onSearchingChange?.(false)
+		// The entrance list is visible immediately, so expand the sheet.
+		onSearchingChange?.(true)
 		setBrowsing(true)
 	}, [onSearchingChange])
 
@@ -192,42 +228,41 @@ export function IndoorNavStartSheet({
 								enterKeyHint="search"
 							/>
 						</View>
-						{query !== '' && (
-							<Pressable
-								testID="map-indoor-nav-start-search-clear"
-								onPress={clearSearch}
-								hitSlop={8}
-								className="shrink-0 py-2"
-								accessibilityRole="button"
-								accessibilityLabel={t('misc.cancel', { ns: 'common' })}
-							>
-								<Text className="text-primary text-[15px] font-semibold">
-									{t('misc.cancel', { ns: 'common' })}
-								</Text>
-							</Pressable>
-						)}
+						<Pressable
+							testID="map-indoor-nav-start-search-clear"
+							onPress={clearSearch}
+							hitSlop={8}
+							className="shrink-0 py-2"
+							accessibilityRole="button"
+							accessibilityLabel={t('misc.cancel', { ns: 'common' })}
+						>
+							<Text className="text-primary text-[15px] font-semibold">
+								{t('misc.cancel', { ns: 'common' })}
+							</Text>
+						</Pressable>
 					</View>
 
-					{showResults && (
-						<>
-							<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold android:text-[13px] android:font-normal android:uppercase mt-4 mb-1.5">
-								{t('pickStartOptionsHeader')}
-							</Text>
-							<View
-								className="bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden"
-								style={{ height: LIST_VIEWPORT_HEIGHT }}
-							>
-								<FlashList
-									data={options}
-									renderItem={renderItem}
-									keyboardShouldPersistTaps="handled"
-									ListEmptyComponent={listEmpty}
-									extraData={selectedFromId}
-									style={{ height: LIST_VIEWPORT_HEIGHT }}
-									showsVerticalScrollIndicator
-								/>
-							</View>
-						</>
+					<Text className="text-label-secondary ios:text-base ios:ml-[18px] ios:font-semibold android:text-[13px] android:font-normal android:uppercase mt-4 mb-1.5">
+						{t('pickStartOptionsHeader')}
+					</Text>
+					<View
+						className="bg-card-sheet ios:rounded-ios android:rounded-md web:rounded-md border-hairline border-border overflow-hidden"
+						style={{ height: LIST_VIEWPORT_HEIGHT }}
+					>
+						<FlashList
+							data={options}
+							renderItem={renderItem}
+							keyboardShouldPersistTaps="handled"
+							ListEmptyComponent={listEmpty}
+							extraData={selectedFromId}
+							style={{ height: LIST_VIEWPORT_HEIGHT }}
+							showsVerticalScrollIndicator
+						/>
+					</View>
+					{query === '' && (
+						<Text className="text-[13px] leading-4 text-label mt-2">
+							{t('pickStartSearchRoomsHint')}
+						</Text>
 					)}
 				</>
 			) : (

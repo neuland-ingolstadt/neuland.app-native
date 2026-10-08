@@ -112,7 +112,7 @@ describe('start endpoint options', () => {
 	it('formats endpoint labels', () => {
 		const graph = testGraph()
 		expect(formatEndpointLabel(graph, 'entrance:IN-G-E01', t)).toBe(
-			'Haupteingang'
+			'Haupteingang · Gebäude G'
 		)
 		expect(formatEndpointLabel(graph, 'room:EG:G001', t)).toBe('Audimax')
 		expect(formatEndpointLabel(graph, 'room:EG:G999', t)).toContain('G999')
@@ -125,13 +125,42 @@ describe('start endpoint options', () => {
 		expect(options[0]).toEqual({
 			id: 'entrance:IN-G-E01',
 			label: 'Haupteingang',
+			subtitle: 'Gebäude G',
+			building: 'G',
 			kind: 'entrance'
 		})
 		expect(options[1]).toMatchObject({
 			id: 'entrance:IN-G-E02',
 			label: 'Seiteneingang',
+			building: 'G',
 			kind: 'entrance'
 		})
+	})
+
+	it('disambiguates duplicate main entrances by building', () => {
+		const data = testData()
+		data.entrances = [
+			entrance('IN-G-E01'),
+			{
+				...entrance('IN-J-E01'),
+				properties: { ...entrance('IN-J-E01').properties, Gebaeude: 'J' }
+			}
+		]
+		const options = listEntranceStartOptions(data, t)
+		expect(options).toHaveLength(2)
+		expect(options.map((o) => o.label)).toEqual([
+			'Haupteingang',
+			'Haupteingang'
+		])
+		expect(options.map((o) => o.subtitle)).toEqual(['Gebäude G', 'Gebäude J'])
+		const filtered = filterStartOptions(
+			listStartEndpointOptions(data, t),
+			'haupteingang'
+		)
+		expect(filtered).toHaveLength(2)
+		expect(
+			new Set(filtered.map((o) => `${o.label} · ${o.subtitle}`).values()).size
+		).toBe(2)
 	})
 
 	it('falls back to english names and raw ids', () => {

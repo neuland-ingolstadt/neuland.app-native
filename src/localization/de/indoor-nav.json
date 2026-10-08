@@ -13,6 +13,7 @@
 	"pickStartBack": "Raumdetails",
 	"pickStartOptionsHeader": "Startpunkte",
 	"pickStartEmpty": "Keine passenden Eingänge oder Räume",
+	"pickStartBuilding": "Gebäude {{building}}",
 	"pickStartMapHint": "Tippe einen Raum oder Eingang auf der Karte an, oder suche unten nach weiteren Startpunkten.",
 	"pickStartSearchRoomsHint": "Suche, um weitere Räume als Startpunkt zu finden.",
 	"pickStartRouteSummary": "Nach {{destination}} · Von {{from}}",
