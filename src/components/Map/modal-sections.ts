@@ -7,7 +7,7 @@ import {
 	SEARCH_TYPES
 } from '@/types/map'
 import type { AvailableRoom } from '@/types/utils'
-import { formatFriendlyTime } from '@/utils/date-utils'
+import { formatFriendlyTime, formatRemainingDuration } from '@/utils/date-utils'
 import { formatCampusLocation } from '@/utils/map-constants'
 
 /**
@@ -27,64 +27,55 @@ export const modalSection = (
 		((roomData.occupancies !== null && roomData.occupancies !== undefined) ||
 			(roomData.properties !== null && roomData.properties !== undefined))
 	) {
-		const occupancies = roomData.occupancies as AvailableRoom
+		const occupancies = roomData.occupancies as AvailableRoom | null
+		const remaining =
+			occupancies != null ? formatRemainingDuration(occupancies.until) : null
+		const isCurrentlyAvailable = remaining != null
+		const showAvailability = !isGuest && roomData.availabilityTracked === true
 		return [
-			...(!isGuest
+			...(showAvailability
 				? [
 						{
 							header: t('pages.map.details.room.availability', {
 								ns: 'common'
 							}),
-							items:
-								roomData.occupancies == null
-									? [
-											{
-												title: t('pages.map.details.room.available', {
-													ns: 'common'
-												}),
-												value: t('pages.map.details.room.notAvailable', {
-													ns: 'common'
-												})
-											},
-											...(roomData.nextAvailable != null
-												? [
-														{
-															title: t('pages.map.details.room.nextTimeSpan', {
-																ns: 'common'
-															}),
-															value: `${formatFriendlyTime(roomData.nextAvailable.from)} - ${formatFriendlyTime(roomData.nextAvailable.until)}`
-														}
-													]
-												: [])
-										]
-									: [
-											{
-												title: t('pages.map.details.room.timeLeft', {
-													ns: 'common'
-												}),
-												value: (() => {
-													const timeLeft =
-														new Date(occupancies.until).getTime() - Date.now()
-													const minutes = Math.floor(
-														(timeLeft / 1000 / 60) % 60
-													)
-													const hours = Math.floor(
-														(timeLeft / (1000 * 60 * 60)) % 24
-													)
-													const formattedMinutes =
-														minutes < 10 ? `0${minutes.toString()}` : minutes
-													return `${hours.toString()}:${formattedMinutes.toString()}h`
-												})()
-											},
-											{
-												title: t('pages.map.details.room.timeSpan', {
-													ns: 'common'
-												}),
-												value: `${formatFriendlyTime(
-													occupancies.from
-												)} - ${formatFriendlyTime(occupancies.until)}`
-											}
-										]
+							items: !isCurrentlyAvailable
+								? [
+										{
+											title: t('pages.map.details.room.available', {
+												ns: 'common'
+											}),
+											value: t('pages.map.details.room.notAvailable', {
+												ns: 'common'
+											})
+										},
+										...(roomData.nextAvailable != null
+											? [
+													{
+														title: t('pages.map.details.room.nextTimeSpan', {
+															ns: 'common'
+														}),
+														value: `${formatFriendlyTime(roomData.nextAvailable.from)} - ${formatFriendlyTime(roomData.nextAvailable.until)}`
+													}
+												]
+											: [])
+									]
+								: [
+										{
+											title: t('pages.map.details.room.timeLeft', {
+												ns: 'common'
+											}),
+											value: remaining
+										},
+										{
+											title: t('pages.map.details.room.timeSpan', {
+												ns: 'common'
+											}),
+											value: `${formatFriendlyTime(
+												occupancies?.from
+											)} - ${formatFriendlyTime(occupancies?.until)}`
+										}
+									]
 						}
 					]
 				: []),
@@ -95,7 +86,7 @@ export const modalSection = (
 								ns: 'common'
 							}),
 							items: [
-								...(occupancies != null
+								...(isCurrentlyAvailable && occupancies != null
 									? [
 											{
 												title: t('pages.map.details.room.capacity', {
