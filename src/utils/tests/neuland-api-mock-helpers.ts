@@ -6,6 +6,7 @@ let indoorNavAssetMethods: Pick<
 	| 'getIndoorDoors'
 	| 'getIndoorEntrances'
 	| 'getIndoorCorridors'
+	| 'getIndoorFootpaths'
 > | null = null
 
 function indoorNavMethodsFromApi() {
@@ -17,7 +18,8 @@ function indoorNavMethodsFromApi() {
 		getMapOverlay: NeulandAPI.getMapOverlay.bind(NeulandAPI),
 		getIndoorDoors: NeulandAPI.getIndoorDoors.bind(NeulandAPI),
 		getIndoorEntrances: NeulandAPI.getIndoorEntrances.bind(NeulandAPI),
-		getIndoorCorridors: NeulandAPI.getIndoorCorridors.bind(NeulandAPI)
+		getIndoorCorridors: NeulandAPI.getIndoorCorridors.bind(NeulandAPI),
+		getIndoorFootpaths: NeulandAPI.getIndoorFootpaths.bind(NeulandAPI)
 	}
 	return indoorNavAssetMethods
 }
