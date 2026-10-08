@@ -35,6 +35,7 @@ import { SEARCH_TYPES } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
 	activeStairCodesForStep,
+	entrancesGeoJsonForBuilding,
 	entrancesGeoJsonForFloor,
 	FLOORS,
 	getIndoorBuildingForCode,
@@ -279,19 +280,35 @@ export function useMapIndoorNav({
 	)
 
 	const indoorMapLayers = useMemo((): IndoorNavMapLayersData | null => {
-		if (!indoorNavEnabled || !indoorDataReady || indoorNav == null) {
+		if (!indoorNavEnabled || !indoorDataReady) {
+			return null
+		}
+		// Buildings have no room destination, so indoorNav stays null for
+		// them — yet their mapped entrances are still worth previewing.
+		const selectedBuilding =
+			clickedElement?.type === SEARCH_TYPES.BUILDING
+				? clickedElement.data
+				: null
+		if (indoorNav == null && selectedBuilding == null) {
 			return null
 		}
 		const data = getIndoorData()
 		const floor = overlayFloor
 		if (!navActive) {
+			let entrancesGeoJSON = entrancesGeoJsonForFloor(data, floor)
+			if (pickStartActive) {
+				entrancesGeoJSON = entrancesGeoJsonForFloor(data, 'EG')
+			} else if (selectedBuilding != null) {
+				entrancesGeoJSON = entrancesGeoJsonForBuilding(data, selectedBuilding)
+			}
 			const previewLayers: IndoorNavMapLayersData = {
 				...EMPTY_INDOOR_MAP_LAYERS,
-				entrancesGeoJSON: pickStartActive
-					? entrancesGeoJsonForFloor(data, 'EG')
-					: entrancesGeoJsonForFloor(data, floor)
+				entrancesGeoJSON
 			}
 			return isEmptyIndoorMapLayers(previewLayers) ? null : previewLayers
+		}
+		if (indoorNav == null) {
+			return null
 		}
 		const routeResult = navRouteResult
 		if (routeResult == null || indoorSteps.steps.length === 0) {
@@ -332,6 +349,7 @@ export function useMapIndoorNav({
 		}
 		return isEmptyIndoorMapLayers(activeLayers) ? null : activeLayers
 	}, [
+		clickedElement,
 		cutawayMoment,
 		indoorDataReady,
 		indoorNav?.toId,

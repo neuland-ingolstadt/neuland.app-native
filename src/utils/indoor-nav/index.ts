@@ -112,6 +112,7 @@ export {
 } from './nav-camera'
 export {
 	destinationRoomGeoJsonForFloor,
+	entrancesGeoJsonForBuilding,
 	entrancesGeoJsonForFloor,
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor

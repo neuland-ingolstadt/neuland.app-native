@@ -19,6 +19,7 @@ import {
 } from '@/utils/indoor-nav/journey-visualization'
 import { splitSegmentAtRoomEntry } from '@/utils/indoor-nav/maneuvers'
 import {
+	entrancesGeoJsonForBuilding,
 	pickLegForFloor,
 	stairShaftsGeoJsonForFloor
 } from '@/utils/indoor-nav/route-geojson'
@@ -258,6 +259,169 @@ describe('indoor-nav journey (POC parity)', () => {
 			'Enter room G001',
 			'Arrived at G001'
 		])
+	})
+
+	it('keeps the direct entrance → room leg in building M a single step', () => {
+		const data = getIndoorData()
+		const graph = buildIndoorGraph(data)
+		const result = route(graph, 'entrance:IN-M-E01', 'room:EG:M001')
+		if (result == null) {
+			throw new Error('no route to EG:M001')
+		}
+		// No corridor, door, or portal in between — padding a middle
+		// "follow" phase would describe a walk that does not exist.
+		expect(result.nodeIds).toEqual(['entrance:IN-M-E01', 'room:EG:M001'])
+		const steps = buildJourneySteps(result)
+		expect(steps.map((s) => s.kind)).toEqual(['walk', 'arrival'])
+		const headlines = steps
+			.map((_, i) =>
+				journeyStepCopy(
+					graph,
+					'entrance:IN-M-E01',
+					'room:EG:M001',
+					'M001',
+					result,
+					steps,
+					i,
+					'EG',
+					enT,
+					'en'
+				)
+			)
+			.map((c) => c.headline)
+		expect(headlines).toEqual(['Enter room M001', 'Arrived at M001'])
+	})
+
+	it('drops the middle follow phase on direct campus legs', () => {
+		const eg: LonLat[] = [
+			[11.7, 48.76],
+			[11.701, 48.761]
+		]
+		const out: LonLat[] = [
+			[11.701, 48.761],
+			[11.702, 48.762]
+		]
+		const result: RouteResult = {
+			nodeIds: [
+				'room:EG:G011',
+				'entrance:IN-G-E01',
+				'entrance:IN-G-E01',
+				'entrance:IN-M-E01',
+				'entrance:IN-M-E01',
+				'room:EG:M001'
+			],
+			coords: [],
+			hops: [
+				{ from: 'room:EG:G011', to: 'entrance:IN-G-E01', kind: 'via_door' },
+				{
+					from: 'entrance:IN-G-E01',
+					to: 'entrance:IN-M-E01',
+					kind: 'outdoor'
+				},
+				{ from: 'entrance:IN-M-E01', to: 'room:EG:M001', kind: 'entrance' }
+			],
+			segments: [
+				{
+					floor: 'EG',
+					coords: eg,
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'room:EG:G011',
+					endNodeId: 'entrance:IN-G-E01'
+				},
+				{
+					floor: 'OUT',
+					coords: out,
+					distanceM: 100,
+					durationSec: 100,
+					startNodeId: 'entrance:IN-G-E01',
+					endNodeId: 'entrance:IN-M-E01'
+				},
+				{
+					floor: 'EG',
+					coords: eg,
+					distanceM: 20,
+					durationSec: 20,
+					startNodeId: 'entrance:IN-M-E01',
+					endNodeId: 'room:EG:M001'
+				}
+			],
+			floorChanges: [],
+			distanceM: 140,
+			durationSec: 140,
+			floors: ['EG', 'OUT']
+		}
+		const steps = buildJourneySteps(result)
+		expect(
+			steps
+				.filter((s) => s.kind === 'walk')
+				.map((s) => (s.kind === 'walk' ? s.phase : undefined))
+		).toEqual(['leaveRoom', 'leaveBuilding', 'follow', 'enter', 'enterRoom'])
+	})
+
+	it('marks the start room when the journey begins in a room', () => {
+		const data = getIndoorData()
+		const graph = buildIndoorGraph(data)
+		const fromRoom = route(graph, 'room:EG:G001', 'room:EG:G011')
+		if (fromRoom == null) {
+			throw new Error('no route from EG:G001 to EG:G011')
+		}
+		const fromRoomSteps = buildJourneySteps(fromRoom)
+		const startMarkers = stepMarkersGeoJsonForFloor(
+			fromRoom,
+			fromRoomSteps,
+			0,
+			'EG'
+		)
+		expect(startMarkers.features.map((f) => f.properties?.kind)).toContain(
+			'start'
+		)
+		const start = startMarkers.features.find(
+			(f) => f.properties?.kind === 'start'
+		)
+		expect(start?.properties?.state).toBe('current')
+		expect(start?.geometry).toMatchObject({
+			type: 'Point',
+			coordinates: fromRoom.segments[0].coords[0]
+		})
+		// Once past the first step the start marker reads as done.
+		const later = stepMarkersGeoJsonForFloor(fromRoom, fromRoomSteps, 1, 'EG')
+		expect(
+			later.features.find((f) => f.properties?.kind === 'start')?.properties
+				?.state
+		).toBe('done')
+
+		// Entrance starts keep only the entry door marker — no start pin.
+		const fromEntrance = route(graph, 'entrance:IN-G-E01', 'room:EG:G011')
+		if (fromEntrance == null) {
+			throw new Error('no route from entrance to EG:G011')
+		}
+		const entranceMarkers = stepMarkersGeoJsonForFloor(
+			fromEntrance,
+			buildJourneySteps(fromEntrance),
+			0,
+			'EG'
+		)
+		expect(
+			entranceMarkers.features.map((f) => f.properties?.kind)
+		).not.toContain('start')
+	})
+
+	it('lists a building\u2019s entrances at their mapped positions', () => {
+		const data = getIndoorData()
+		const g = entrancesGeoJsonForBuilding(data, 'G')
+		expect(g.features.length).toBeGreaterThan(0)
+		for (const feature of g.features) {
+			expect(feature.properties?.Gebaeude).toBe('G')
+			expect(feature.geometry.type).toBe('Point')
+		}
+		expect(
+			entrancesGeoJsonForBuilding(data, 'M').features.map(
+				(f) => f.properties?.id
+			)
+		).toEqual(['IN-M-E01'])
+		// Buildings without mapped indoor data resolve to no markers.
+		expect(entrancesGeoJsonForBuilding(data, 'A').features).toEqual([])
 	})
 
 	it('exposes the active stair shaft blocks per floor', () => {
@@ -563,10 +727,11 @@ describe('indoor-nav journey (POC parity)', () => {
 			] as LonLat[]),
 			{ kind: 'arrival', floor: 'EG', legIndex: 2 }
 		]
-		// EG shows the exit door of the source building and the entry door
-		// of the destination building.
+		// EG shows the start room marker, the exit door of the source
+		// building and the entry door of the destination building.
 		const eg = stepMarkersGeoJsonForFloor(result, steps, 0, 'EG')
 		expect(eg.features.map((f) => f.properties?.kind)).toEqual([
+			'start',
 			'exit',
 			'entry',
 			'destination'

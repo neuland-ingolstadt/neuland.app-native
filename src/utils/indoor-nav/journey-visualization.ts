@@ -154,6 +154,28 @@ export function stepMarkersGeoJsonForFloor(
 		}
 	})
 
+	const firstSeg = result.segments[0]
+	if (
+		firstSeg != null &&
+		firstSeg.floor === floor &&
+		firstSeg.floor !== OUTDOOR_FLOOR &&
+		result.nodeIds[0]?.startsWith('room:')
+	) {
+		const at = firstSeg.coords[0]
+		if (at != null) {
+			const markerIndex = legFirstWalkStep.get(0) ?? 0
+			features.push({
+				type: 'Feature',
+				properties: {
+					kind: 'start',
+					state: stepProgressState(markerIndex, safe),
+					floor
+				},
+				geometry: { type: 'Point', coordinates: at as GeoJSON.Position }
+			})
+		}
+	}
+
 	for (let i = 0; i < result.segments.length; i++) {
 		const seg = result.segments[i]
 		if (seg == null) {

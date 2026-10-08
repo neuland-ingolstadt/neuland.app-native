@@ -178,6 +178,31 @@ function crossesCampus(result: RouteResult): boolean {
 	return result.segments.some((s) => s.floor === OUTDOOR_FLOOR)
 }
 
+/**
+ * True when an indoor leg is a single graph edge with no corridor, door, or
+ * portal in between — e.g. building M, where the entrance opens directly into
+ * M001. Such legs must not be padded with a middle "follow" phase.
+ * Matched via `hops` (one edge per entry) rather than `nodeIds`, whose
+ * boundary nodes repeat on concatenated cross-building routes.
+ */
+function isDirectLeg(
+	result: RouteResult,
+	legIndex: number,
+	fromPrefix: 'entrance:' | 'room:',
+	toPrefix: 'entrance:' | 'room:'
+): boolean {
+	const seg = result.segments[legIndex]
+	if (
+		seg?.startNodeId?.startsWith(fromPrefix) !== true ||
+		seg?.endNodeId?.startsWith(toPrefix) !== true
+	) {
+		return false
+	}
+	return result.hops.some(
+		(h) => h.from === seg.startNodeId && h.to === seg.endNodeId
+	)
+}
+
 /** Phased indoor legs before/after the outdoor campus walk. */
 function walkPhasesForCampusLeg(
 	result: RouteResult,
@@ -203,11 +228,17 @@ function walkPhasesForCampusLeg(
 			seg.startNodeId?.startsWith('room:') ||
 			(isFirst && !startsAtEntrance)
 		) {
+			if (isDirectLeg(result, legIndex, 'room:', 'entrance:')) {
+				return ['leaveRoom', 'leaveBuilding']
+			}
 			return ['leaveRoom', 'follow', 'leaveBuilding']
 		}
 		return ['follow', 'leaveBuilding']
 	}
 	if (prevOutdoor && isLast && endsAtRoom) {
+		if (isDirectLeg(result, legIndex, 'entrance:', 'room:')) {
+			return ['enter', 'enterRoom']
+		}
 		return ['enter', 'follow', 'enterRoom']
 	}
 	if (prevOutdoor && isLast) {
@@ -466,7 +497,8 @@ function splitWalkLegs(
 			phases == null &&
 			result.segments.length === 1 &&
 			startsAtEntrance &&
-			endsAtRoom
+			endsAtRoom &&
+			!isDirectLeg(result, step.legIndex, 'entrance:', 'room:')
 		) {
 			phases = ['enter', 'follow', 'enterRoom']
 		} else if (phases == null && isFirst && hasNextStairs) {

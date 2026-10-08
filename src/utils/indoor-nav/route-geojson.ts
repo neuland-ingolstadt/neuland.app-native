@@ -112,3 +112,17 @@ export function entrancesGeoJsonForFloor(
 	entrancesEgCache = { data, fc }
 	return fc
 }
+
+/** Entrances of one building at their mapped positions (empty when unmapped). */
+export function entrancesGeoJsonForBuilding(
+	data: IndoorData,
+	building: string
+): GeoJSON.FeatureCollection {
+	const features = data.entrances.filter(
+		(entrance) => entrance.properties.Gebaeude === building
+	)
+	if (features.length === 0) {
+		return EMPTY_FC
+	}
+	return { type: 'FeatureCollection', features }
+}

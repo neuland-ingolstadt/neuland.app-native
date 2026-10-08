@@ -2,6 +2,7 @@ import {
 	ArrowDown,
 	ArrowUp,
 	Check,
+	CircleDot,
 	DoorOpen,
 	Flag,
 	type LucideIcon
@@ -21,6 +22,7 @@ export type IndoorNavStepMarkerKind =
 	| 'stairs_arrive_down'
 	| 'destination'
 	| 'entrance'
+	| 'start'
 
 interface IndoorNavStepMarkerPinProps {
 	kind: IndoorNavStepMarkerKind | string
@@ -37,6 +39,8 @@ function markerIconForKind(kind: string): LucideIcon {
 			return DoorOpen
 		case 'destination':
 			return Flag
+		case 'start':
+			return CircleDot
 		case 'stairs_up':
 		case 'stairs_arrive_up':
 			return ArrowUp
@@ -61,7 +65,7 @@ function markerIconColor(
 	if (kind === 'entry' || kind === 'exit' || kind === 'entrance') {
 		return MAP_COLORS.indoorEntranceColor
 	}
-	if (kind === 'destination') {
+	if (kind === 'destination' || kind === 'start') {
 		return primaryColor
 	}
 	return MAP_COLORS.indoorStairsMono[mapMode]

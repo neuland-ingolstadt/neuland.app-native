@@ -304,24 +304,19 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			{selectedRoomCenter != null && selectionElement != null && (
-				<Marker
-					id="map-selection-marker"
-					lngLat={selectedRoomCenter}
-					anchor={
-						selectionElement.type === SEARCH_TYPES.BUILDING
-							? 'center'
-							: 'bottom'
-					}
-				>
-					<MapSelectionMarker
-						type={selectionElement.type}
-						selectionColor={selectionColor}
-						primaryColor={primaryColor}
-						mapMode={mapMode}
-					/>
-				</Marker>
-			)}
+			{selectedRoomCenter != null &&
+				selectionElement != null &&
+				// Buildings are carried by their polygon highlight — a centered
+				// door pin would fake an entrance where there is none.
+				selectionElement.type !== SEARCH_TYPES.BUILDING && (
+					<Marker
+						id="map-selection-marker"
+						lngLat={selectedRoomCenter}
+						anchor="bottom"
+					>
+						<MapSelectionMarker selectionColor={selectionColor} />
+					</Marker>
+				)}
 			{pickStartRoomCenter != null && (
 				<Marker
 					id="map-pick-start-marker"
