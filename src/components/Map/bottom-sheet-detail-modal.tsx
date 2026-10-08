@@ -129,7 +129,9 @@ export const BottomSheetDetailModal = ({
 				<View className="self-center my-4 w-full">
 					<FormList sections={modalSection} />
 				</View>
-				<RoomReportLink roomTitle={roomData.title} />
+				{roomData.type !== SEARCH_TYPES.ENTRANCE && (
+					<RoomReportLink roomTitle={roomData.title} />
+				)}
 			</View>
 		</BottomSheet>
 	)

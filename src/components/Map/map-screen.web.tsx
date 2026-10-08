@@ -35,6 +35,7 @@ const MapScreen = (): React.JSX.Element => {
 		overlayError,
 		allRooms,
 		buildingGeoJSON,
+		mapEntrances,
 		uniqueEtages,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
@@ -78,6 +79,8 @@ const MapScreen = (): React.JSX.Element => {
 				filteredGeoJSON={filteredGeoJSON}
 				availableFilteredGeoJSON={availableFilteredGeoJSON}
 				buildingGeoJSON={buildingGeoJSON}
+				allRooms={allRooms}
+				mapEntrances={mapEntrances}
 				clickedElement={clickedElement}
 				selectMapElement={selectMapElement}
 				mapMode={mapMode}

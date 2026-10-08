@@ -12,6 +12,7 @@ import { useRef } from 'react'
 import { Platform } from 'react-native'
 import {
 	EMPTY_MAP_FEATURES,
+	ENTRANCE_PRESS_HITBOX,
 	GEOJSON_TOLERANCE,
 	MAP_CAMERA,
 	MAP_IDS,
@@ -37,6 +38,8 @@ interface NativeMapCanvasProps {
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
+	allRooms: MapScreenModel['allRooms']
+	mapEntrances: MapScreenModel['mapEntrances']
 	clickedElement: MapScreenModel['clickedElement']
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
@@ -88,6 +91,8 @@ export default function NativeMapCanvas({
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
+	allRooms,
+	mapEntrances,
 	clickedElement,
 	selectMapElement,
 	mapMode,
@@ -111,11 +116,16 @@ export default function NativeMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
-		handleRoomSelection
+		primaryEntrances,
+		mutedEntrances,
+		handleRoomSelection,
+		handleEntranceSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
+		allRooms,
+		mapEntrances,
 		clickedElement,
 		selectMapElement,
 		mapMode,
@@ -167,6 +177,10 @@ export default function NativeMapCanvas({
 				images={{
 					// https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
 					'map-marker': require('@/assets/map-marker.png'),
+					'map-entrance': {
+						source: require('@/assets/map-entrance.png'),
+						sdf: true
+					},
 					pin: 'pin'
 				}}
 			/>
@@ -241,6 +255,52 @@ export default function NativeMapCanvas({
 					type="symbol"
 					layout={layerStyles.buildingLabels.layout}
 					paint={layerStyles.buildingLabels.paint}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.buildingEntrances}
+				data={primaryEntrances}
+				hitbox={ENTRANCE_PRESS_HITBOX}
+				onPress={(event) => {
+					event.stopPropagation()
+					handleEntranceSelection(event.nativeEvent.features)
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesBadge}
+					type="circle"
+					paint={layerStyles.buildingEntrancesBadge}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesMarker}
+					type="symbol"
+					layout={layerStyles.buildingEntrancesMarker.layout}
+					paint={layerStyles.buildingEntrancesMarker.paint}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.buildingEntrancesMuted}
+				data={mutedEntrances}
+				hitbox={ENTRANCE_PRESS_HITBOX}
+				onPress={(event) => {
+					event.stopPropagation()
+					handleEntranceSelection(event.nativeEvent.features)
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesBadgeMuted}
+					type="circle"
+					paint={layerStyles.buildingEntrancesBadgeMuted}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesMarkerMuted}
+					type="symbol"
+					layout={layerStyles.buildingEntrancesMarker.layout}
+					paint={layerStyles.buildingEntrancesMarker.paint}
 					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>

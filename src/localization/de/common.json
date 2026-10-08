@@ -312,6 +312,18 @@
 					"total": "Räume insgesamt",
 					"floors": "Etagen"
 				},
+				"entrance": {
+					"title": "Eingang",
+					"details": "Eingangsdetails",
+					"buildingSubtitle": "Gebäude {{building}}",
+					"kind": "Art",
+					"kindBoth": "Eingang & Ausgang",
+					"kindEntrance": "Eingang",
+					"kindExit": "Nur Ausgang",
+					"access": "Zugang",
+					"accessPublic": "Öffentlich",
+					"accessBadge": "Nur mit Ausweis"
+				},
 				"osm": "Kartendaten von OpenStreetMap"
 			}
 		},

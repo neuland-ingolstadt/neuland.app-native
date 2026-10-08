@@ -1,13 +1,18 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import type { FeatureCollection } from 'geojson'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { getMapLayerStyles, type MapMode } from '@/components/Map/map-config'
 import { useFloorOverlaySlide } from '@/hooks/useFloorOverlaySlide'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { useMapSelectionPop } from '@/hooks/useMapSelectionPop'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	excludeEntrancesNearPoint,
+	getEntranceSelectionFromFeatures,
 	getRoomSelectionFromFeatures,
+	getSelectedBuildingEntrances,
 	getSelectedMapFeatures,
-	parseMapCoordinate
+	parseMapCoordinate,
+	splitEntrancesByStyle
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
 
@@ -15,6 +20,8 @@ interface UseMapCanvasStateOptions {
 	overlayFloor: string
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
+	allRooms: MapScreenModel['allRooms']
+	mapEntrances: MapScreenModel['mapEntrances']
 	clickedElement: MapScreenModel['clickedElement']
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
@@ -65,6 +72,8 @@ export function useMapCanvasState({
 	overlayFloor,
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
+	allRooms,
+	mapEntrances,
 	clickedElement,
 	selectMapElement,
 	mapMode,
@@ -81,9 +90,14 @@ export function useMapCanvasState({
 	outgoingStyles: ReturnType<typeof getMapLayerStyles> | null
 	selectedRoomCenter: ReturnType<typeof parseMapCoordinate>
 	selectedFeatures: ReturnType<typeof getSelectedMapFeatures>
+	primaryEntrances: FeatureCollection
+	mutedEntrances: FeatureCollection
 	isDark: boolean
 	handleRoomSelection: (
 		features: Parameters<typeof getRoomSelectionFromFeatures>[0]
+	) => boolean
+	handleEntranceSelection: (
+		features: Parameters<typeof getEntranceSelectionFromFeatures>[0]
 	) => boolean
 } {
 	const isDark = mapMode === 'dark'
@@ -120,6 +134,19 @@ export function useMapCanvasState({
 		clickedElement,
 		filteredGeoJSON
 	)
+	const { primary: primaryEntrances, muted: mutedEntrances } = useMemo(() => {
+		const selected = getSelectedBuildingEntrances(
+			clickedElement,
+			mapEntrances,
+			allRooms
+		)
+		// Keep the selected door visible under/above the pin; only cull for room/building pins.
+		const visible =
+			clickedElement?.type === SEARCH_TYPES.ENTRANCE
+				? selected
+				: excludeEntrancesNearPoint(selected, selectedRoomCenter)
+		return splitEntrancesByStyle(visible)
+	}, [allRooms, clickedElement, mapEntrances, selectedRoomCenter])
 
 	const handleRoomSelection = (
 		features: Parameters<typeof getRoomSelectionFromFeatures>[0]
@@ -141,6 +168,24 @@ export function useMapCanvasState({
 		return true
 	}
 
+	const handleEntranceSelection = (
+		features: Parameters<typeof getEntranceSelectionFromFeatures>[0]
+	): boolean => {
+		const selection = getEntranceSelectionFromFeatures(features)
+		if (selection == null) {
+			return false
+		}
+		// No selection-fill pop for entrances — the door icon is the only highlight.
+		selectMapElement({
+			room: selection.id,
+			type: SEARCH_TYPES.ENTRANCE,
+			center: selection.center,
+			origin: 'MapClick',
+			manual: true
+		})
+		return true
+	}
+
 	return {
 		incoming,
 		outgoing,
@@ -150,7 +195,10 @@ export function useMapCanvasState({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
+		primaryEntrances,
+		mutedEntrances,
 		isDark,
-		handleRoomSelection
+		handleRoomSelection,
+		handleEntranceSelection
 	}
 }
