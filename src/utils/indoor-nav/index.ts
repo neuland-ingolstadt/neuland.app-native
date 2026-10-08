@@ -4,8 +4,7 @@ export {
 	FOOTPATHS_URL,
 	OUTDOOR_FLOOR,
 	type OutdoorRouter,
-	routeCampus,
-	routeCampusPreview
+	routeCampus
 } from './campus-route'
 export {
 	campusRouteCacheKey,

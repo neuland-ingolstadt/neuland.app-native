@@ -1,4 +1,3 @@
-import { campusRouteCacheKey, getCachedCampusRoute } from './campus-route-cache'
 import {
 	buildCorridorNet,
 	corridorFeaturesFromFC,
@@ -251,21 +250,4 @@ export function routeCampus(
 	}
 
 	return best
-}
-
-export function routeCampusPreview(
-	graph: IndoorGraph,
-	outdoor: OutdoorRouter | null,
-	data: IndoorData,
-	fromId: string,
-	toId: string
-): { distanceM: number; durationSec: number } | null {
-	const cacheKey = campusRouteCacheKey(fromId, toId, outdoor != null)
-	const result = getCachedCampusRoute(cacheKey, () =>
-		routeCampus(graph, outdoor, data, fromId, toId)
-	)
-	if (result == null) {
-		return null
-	}
-	return { distanceM: result.distanceM, durationSec: result.durationSec }
 }

@@ -222,12 +222,6 @@ class NeulandAPIClient {
 		)) as FeatureCollection
 	}
 
-	async getMapFootpaths(): Promise<FeatureCollection> {
-		// Same footpath asset as getIndoorFootpaths — separate name so the map
-		// route cache reads without depending on indoor-nav query plumbing.
-		return await this.getIndoorFootpaths()
-	}
-
 	/**
 	 * Gets the course spo data (grade weights)
 	 * @returns {Promise<SpoWeights>} A promise that resolves with the course spo data
