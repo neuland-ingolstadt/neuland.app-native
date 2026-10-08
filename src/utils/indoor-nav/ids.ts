@@ -6,7 +6,9 @@ export const INDOOR_DEFAULT_ENTRANCES: Record<string, string> = {
 	G: 'IN-G-E01',
 	J: 'IN-J-E01',
 	K: 'IN-K-E01',
-	W: 'IN-W-E01'
+	W: 'IN-W-E01',
+	M: 'IN-M-E01',
+	N: 'IN-N-E01'
 }
 
 export function roomNodeId(floor: string, raum: string): string {

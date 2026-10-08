@@ -12,8 +12,8 @@ import {
 } from '@/utils/indoor-nav/data'
 import type { IndoorData } from '@/utils/indoor-nav/types'
 
-/** Bust persisted React Query cache when indoor room scope changes (e.g. G-only → G/J/K/W). */
-const INDOOR_NAV_DATA_REVISION = 'gjkw'
+/** Bust persisted React Query cache when indoor room scope changes (e.g. G/J/K/W → G/J/K/W/M/N). */
+const INDOOR_NAV_DATA_REVISION = 'gjkwnm'
 
 export const INDOOR_NAV_DATA_QUERY_KEY = [
 	'indoorNavData',

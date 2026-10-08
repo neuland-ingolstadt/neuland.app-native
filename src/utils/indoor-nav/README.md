@@ -1,6 +1,6 @@
-# Indoor navigation (buildings G, J, K, W — Ingolstadt)
+# Indoor navigation (buildings G, J, K, W, M, N — Ingolstadt)
 
-Routing and turn-by-turn UI for **Standort IN / Gebäude G, J, K, W**. Static GeoJSON is
+Routing and turn-by-turn UI for **Standort IN / Gebäude G, J, K, W, M, N**. Static GeoJSON is
 loaded from [assets.neuland.app](https://assets.neuland.app):
 
 | Asset | URL |
@@ -13,7 +13,7 @@ loaded from [assets.neuland.app](https://assets.neuland.app):
 
 Behaviour is kept in sync with
 [neuland-map-data `indoor-nav/g`](https://github.com/neuland-ingolstadt/neuland-map-data/tree/main/indoor-nav/g)
-for building G. J, K and W reuse the same routing pipeline; each building is a
+for building G. J, K, W, M and N reuse the same routing pipeline; each building is a
 disconnected graph routed from its own main entrance (`INDOOR_DEFAULT_ENTRANCES`
 in `ids.ts`). Stair/elevator shafts are matched per building, and entrances snap
 to rooms of their own building only.

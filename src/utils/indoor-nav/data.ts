@@ -13,7 +13,7 @@ import type {
 } from './types'
 
 /** Buildings with indoor navigation data (Ingolstadt). */
-export const INDOOR_BUILDINGS = ['G', 'J', 'K', 'W'] as const
+export const INDOOR_BUILDINGS = ['G', 'J', 'K', 'W', 'M', 'N'] as const
 export type IndoorBuilding = (typeof INDOOR_BUILDINGS)[number]
 /** Legacy single-building export — G was the first mapped building. */
 export const INDOOR_BUILDING = 'G' as const
@@ -64,7 +64,7 @@ function roomFeaturesFromOverlay(overlay: FeatureCollection): RoomFeature[] {
 	return out
 }
 
-/** True when the given feature belongs to a mapped building (IN/G,J,K,W). */
+/** True when the given feature belongs to a mapped building (IN/G,J,K,W,M,N). */
 export function isIndoorFeature(
 	feature:
 		| {
@@ -194,7 +194,7 @@ export function getIndoorRoomFloorsForCode(code: string): string[] {
 	return ensureRoomFloorsByCodeIndex()?.get(code) ?? []
 }
 
-/** Building (`G`, `J`, `K`, `W`) that contains `code`, if loaded. */
+/** Building (`G`, `J`, `K`, `W`, `M`, `N`) that contains `code`, if loaded. */
 export function getIndoorBuildingForCode(code: string): string | null {
 	ensureRoomFloorsByCodeIndex()
 	const mapped = cachedBuildingByCode?.get(code)

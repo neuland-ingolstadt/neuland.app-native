@@ -98,11 +98,16 @@ describe('indoor-nav graph (buildings G, J, K, W)', () => {
 		expect(failures.sort()).toEqual([...knownDoorless].sort())
 	})
 
-	it('routes every routable J/K/W room from its own building entrance', () => {
+	it('routes every routable J/K/W/N room from its own building entrance', () => {
 		const starts: Record<string, string> = {
 			J: 'entrance:IN-J-E01',
 			K: 'entrance:IN-K-E01',
-			W: 'entrance:IN-W-E01'
+			W: 'entrance:IN-W-E01',
+			N: 'entrance:IN-N-E01'
+		}
+		// Rooms without a mapped door cannot be reached via the door-only graph.
+		const knownDoorless: Record<string, string[]> = {
+			N: ['1:N106']
 		}
 		for (const [building, start] of Object.entries(starts)) {
 			const rooms = listRoutableRooms(data).filter((r) =>
@@ -119,8 +124,17 @@ describe('indoor-nav graph (buildings G, J, K, W)', () => {
 					expect(r.segments.length).toBeGreaterThan(0)
 				}
 			}
-			expect(failures, `building ${building}`).toEqual([])
+			expect(failures, `building ${building}`).toEqual(
+				knownDoorless[building] ?? []
+			)
 		}
+	})
+
+	it('routes the single-room building M from its only entrance', () => {
+		const r = route(graph, 'entrance:IN-M-E01', 'room:EG:M001')
+		expect(r).not.toBeNull()
+		expect(r?.distanceM ?? 0).toBeGreaterThan(0)
+		expect(r?.segments.length ?? 0).toBeGreaterThan(0)
 	})
 
 	it('keeps EG route geometry inside walkable rooms', () => {

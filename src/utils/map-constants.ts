@@ -41,6 +41,7 @@ export const BUILDINGS_IN = [
 	'J',
 	'K',
 	'M',
+	'N',
 	'P',
 	'X',
 	'W',
