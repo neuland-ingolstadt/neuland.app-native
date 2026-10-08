@@ -3,8 +3,8 @@ import type { FeatureCollection } from 'geojson'
 import { MAP_CAMERA } from '@/utils/map-constants'
 
 export const MAP_STYLE_URLS = {
-	light: 'https://tile.neuland.app/styles/light-3d/style.json',
-	dark: 'https://tile.neuland.app/styles/dark-3d/style.json'
+	light: 'https://tile.neuland.app/styles/light/style.json',
+	dark: 'https://tile.neuland.app/styles/dark/style.json'
 } as const
 
 export const EMPTY_MAP_FEATURES: FeatureCollection = {

@@ -98,6 +98,7 @@ describe('indoor-nav graph (buildings G, J, K, W)', () => {
 		expect(failures.sort()).toEqual([...knownDoorless].sort())
 	})
 
+	// Exhaustive per-room routing is slow on CI runners — allow 30s.
 	it('routes every routable J/K/W/N room from its own building entrance', () => {
 		const starts: Record<string, string> = {
 			J: 'entrance:IN-J-E01',
