@@ -1,20 +1,99 @@
 appId: ${APP_ID}
 ---
-# With expo-dev-client { skipOnboarding, showMenuAtLaunch: false }, the launcher
-# bottom sheet no longer appears. The deep link already carries the Metro URL.
-- openLink: ${DEV_CLIENT_URL}
-- waitForAnimationToEnd:
-    timeout: 10000
-# Optional: if the packager list still flashes on Android, pick the server.
+# clearState forgets the Metro URL. We may land on the Expo launcher or sit on
+# the native splash (palm logo, no JS testIDs) until the bundle attaches.
+# Re-open the dev-client deep link until the JS app mounts.
+- repeat:
+    times: 8
+    while:
+      notVisible:
+        id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
+    commands:
+      # Emulator ANR dialogs (e.g. Pixel Launcher) sit above the app and hide
+      # testIDs, so the while-condition keeps retrying forever. Dismiss first.
+      - runFlow:
+          when:
+            visible: ".*(isn't responding|reagiert nicht).*"
+          commands:
+            - tapOn: "(Wait|Warten)"
+      - openLink: ${DEV_CLIENT_URL}
+      - waitForAnimationToEnd:
+          timeout: 10000
+      - runFlow:
+          when:
+            visible: ".*(isn't responding|reagiert nicht).*"
+          commands:
+            - tapOn: "(Wait|Warten)"
+      # iOS may show a one-shot "Open in …" confirmation for custom schemes.
+      - runFlow:
+          when:
+            platform: iOS
+            visible: '(Open|Öffnen|Open in)'
+          commands:
+            - tapOn: '(Open|Öffnen)'
+      # Optional: if the packager list still flashes on Android, pick the server.
+      - runFlow:
+          when:
+            platform: Android
+            visible: "http://${DEV_SERVER_ADDRESS}"
+          commands:
+            - tapOn: "http://${DEV_SERVER_ADDRESS}"
+      - runFlow:
+          when:
+            platform: Android
+            visible: "Reload"
+          commands:
+            - tapOn: "Reload"
+      # Still on the Expo launcher? Re-send the deep link / type the URL.
+      - runFlow:
+          when:
+            visible: ".*(Fetch development servers|DEVELOPMENT SERVERS).*"
+          commands:
+            - openLink: ${DEV_CLIENT_URL}
+            - waitForAnimationToEnd:
+                timeout: 10000
+            - runFlow:
+                when:
+                  platform: iOS
+                  visible: '(Open|Öffnen|Open in)'
+                commands:
+                  - tapOn: '(Open|Öffnen)'
+      - runFlow:
+          when:
+            platform: Android
+            visible: "Fetch development servers"
+          commands:
+            - tapOn: "http://"
+            - eraseText
+            - inputText: "http://${DEV_SERVER_ADDRESS}"
+            - tapOn: "Connect"
+            - waitForAnimationToEnd:
+                timeout: 10000
+      # iOS launcher: tap the Metro URL if it appears in the list.
+      - runFlow:
+          when:
+            platform: iOS
+            visible: "http://${DEV_SERVER_ADDRESS}"
+          commands:
+            - tapOn: "http://${DEV_SERVER_ADDRESS}"
+            - waitForAnimationToEnd:
+                timeout: 10000
+      # Still no JS app (native splash / blank)? Wait before the next deep link.
+      - runFlow:
+          when:
+            notVisible:
+              id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
+          commands:
+            - waitForAnimationToEnd:
+                timeout: 25000
+# One more ANR dismiss before the hard wait (dialog can appear after Metro attaches).
 - runFlow:
     when:
-      platform: Android
-      visible: "http://${DEV_SERVER_ADDRESS}"
+      visible: ".*(isn't responding|reagiert nicht).*"
     commands:
-      - tapOn: "http://${DEV_SERVER_ADDRESS}"
-- runFlow:
-    when:
-      platform: Android
-      visible: "Reload"
-    commands:
-      - tapOn: "Reload"
+      - tapOn: "(Wait|Warten)"
+# Hard fail with a clear signal if JS never mounted.
+- extendedWaitUntil:
+    visible:
+      id: "onboarding-continue|home-screen|guest-login-banner|login-guest"
+    timeout: 60000
