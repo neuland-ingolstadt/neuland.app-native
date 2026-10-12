@@ -1,6 +1,5 @@
-import { trackEvent } from '@aptabase/react-native'
 import type { TFunction } from 'i18next'
-import { type ColorValue, Linking, Platform, Share } from 'react-native'
+import { type ColorValue, Linking } from 'react-native'
 import { linkIcon } from '@/components/Universal/icon'
 import allergenMap from '@/data/allergens.json'
 import { USER_GUEST } from '@/data/constants'
@@ -14,7 +13,6 @@ import {
 	formatPrice,
 	humanLocations
 } from '@/utils/food-utils'
-import { copyToClipboard } from '@/utils/ui-utils'
 
 export function isMealNutritionAvailable(foodData: Meal): boolean {
 	return (
@@ -242,8 +240,7 @@ export function buildVariantsSection(
 	foodData: Meal,
 	t: TFunction<'food'>,
 	language: LanguageKey,
-	userKind: string,
-	restaurant: string
+	userKind: string
 ): FormListSections[] {
 	return [
 		{
@@ -255,25 +252,7 @@ export function buildVariantsSection(
 						title: variant.name[language],
 						value:
 							(variant?.additional ? '+ ' : '') +
-							formatPrice(variant.prices[priceKey]),
-						onPress: () => {
-							trackEvent('Share', {
-								type: 'mealVariant'
-							})
-							const message = t('details.share.message', {
-								meal: variant.name[language],
-								price: formatPrice(variant.prices[priceKey]),
-								location: restaurant,
-								id: variant?.id
-							})
-							if (Platform.OS === 'web') {
-								void copyToClipboard(message)
-								return
-							}
-							void Share.share({
-								message
-							})
-						}
+							formatPrice(variant.prices[priceKey])
 					}
 				}) ?? []
 		}
@@ -283,15 +262,9 @@ export function buildVariantsSection(
 export function buildMealDetailSections(
 	params: MealDetailSectionsParams
 ): FormListSections[] {
-	const { foodData, t, language, userKind, restaurant } = params
+	const { foodData, t, language, userKind } = params
 
-	const variantsSection = buildVariantsSection(
-		foodData,
-		t,
-		language,
-		userKind,
-		restaurant
-	)
+	const variantsSection = buildVariantsSection(foodData, t, language, userKind)
 	const aboutSection = buildAboutSection(params)
 
 	if (isMensaRestaurant(foodData.restaurant)) {

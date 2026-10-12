@@ -2,11 +2,7 @@ import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { TFunction } from 'i18next'
 import type { Meal } from '@/types/neuland-api'
 import { neulandApiMockModule } from './neuland-api-mock-helpers'
-import {
-	reactNativeOpenURLMock,
-	reactNativePlatform,
-	reactNativeShareMock
-} from './react-native-mock'
+import { reactNativeOpenURLMock } from './react-native-mock'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -72,9 +68,6 @@ const t = ((key: string, options?: { ns?: string; [key: string]: unknown }) => {
 	}
 	if (key === 'details.formlist.allergenFooter') {
 		return `allergens:${options?.allergens}`
-	}
-	if (key === 'details.share.message') {
-		return `share:${options?.meal}:${options?.price}:${options?.location}:${options?.id}`
 	}
 	return key
 }) as TFunction<'food'>
@@ -252,54 +245,20 @@ describe('meal-detail-sections', () => {
 		)
 	})
 
-	it('buildVariantsSection - Should copy variant share message on web', () => {
-		reactNativePlatform.OS = 'web'
-		trackEventMock.mockReset()
-		clipboardSetStringAsyncMock.mockReset()
-		reactNativeShareMock.mockReset()
-
+	it('buildVariantsSection - Should render variant rows without share actions', () => {
 		const sections = mealDetailSections.buildVariantsSection(
 			makeMeal(),
 			t,
 			'de',
-			'student',
-			'IngolstadtMensa'
+			'student'
 		)
 
-		sections[0]?.items?.[0]?.onPress?.()
-
-		expect(trackEventMock).toHaveBeenCalledWith('Share', {
-			type: 'mealVariant'
-		})
-		expect(clipboardSetStringAsyncMock).toHaveBeenCalledWith(
-			'share:Groß:1.00 €:IngolstadtMensa:variant-1'
-		)
-		expect(reactNativeShareMock).not.toHaveBeenCalled()
-
-		reactNativePlatform.OS = 'web'
-	})
-
-	it('buildVariantsSection - Should use native share sheet off web', () => {
-		reactNativePlatform.OS = 'ios'
-		trackEventMock.mockReset()
-		clipboardSetStringAsyncMock.mockReset()
-		reactNativeShareMock.mockReset()
-
-		const sections = mealDetailSections.buildVariantsSection(
-			makeMeal(),
-			t,
-			'de',
-			'guest',
-			'IngolstadtMensa'
-		)
-
-		sections[0]?.items?.[0]?.onPress?.()
-
-		expect(reactNativeShareMock).toHaveBeenCalledWith({
-			message: 'share:Groß:1.00 €:IngolstadtMensa:variant-1'
-		})
-		expect(clipboardSetStringAsyncMock).not.toHaveBeenCalled()
-
-		reactNativePlatform.OS = 'web'
+		expect(sections[0]?.items).toEqual([
+			{
+				title: 'Groß',
+				value: '+ 1.00 €'
+			}
+		])
+		expect(sections[0]?.items?.[0]?.onPress).toBeUndefined()
 	})
 })
