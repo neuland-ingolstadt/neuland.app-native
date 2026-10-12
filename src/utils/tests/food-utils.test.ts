@@ -37,8 +37,7 @@ mock.module('burnt', () => ({
 }))
 
 mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {},
-	UniversitySportsFieldsFragmentDoc: {}
+	FoodFieldsFragmentDoc: {}
 }))
 
 const registerFoodApiMocks = () => {

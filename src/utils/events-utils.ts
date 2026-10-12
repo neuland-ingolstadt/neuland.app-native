@@ -1,11 +1,6 @@
 import type { SFSymbol } from 'expo-symbols'
-import { getFragmentData } from '@/__generated__/gql'
-import {
-	type UniversitySportsFieldsFragment,
-	UniversitySportsFieldsFragmentDoc,
-	type WeekdayType
-} from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
+import { listUniversitySports } from '@/api/neuland-core-api'
 import type {
 	CampusLifeEvent,
 	CampusLifeOrganizer,
@@ -14,6 +9,12 @@ import type {
 	PublicOrganizerResponse
 } from '@/types/campus-life'
 import type { MaterialIcon } from '@/types/material-icons'
+import type {
+	Sports,
+	SportsCategoryEnum,
+	WeekdayEnum
+} from '@/types/university-sports'
+import { weekdaySortIndex } from '@/types/university-sports'
 import { parseApiOrganizerKind } from '@/utils/campus-life-utils'
 
 const FALLBACK_ORGANIZER_NAME = 'Campus Life'
@@ -149,47 +150,35 @@ export async function loadCampusLifeOrganizers(
 /**
  * Groups university sports events by weekday.
  */
-type GroupedSportsEvents = {
-	title: WeekdayType
-	data: UniversitySportsFieldsFragment[]
+export type GroupedSportsEvents = {
+	title: WeekdayEnum
+	data: Sports[]
 }[]
+
 /**
- * Fetches and parses the university sports events
+ * Fetches and groups university sports by weekday (Core API contract shape).
  */
 export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents> {
-	const events = (await NeulandAPI.getUniversitySports()).universitySports
-	const universitySportsEvents = getFragmentData(
-		UniversitySportsFieldsFragmentDoc,
-		events
-	)
-	if (universitySportsEvents == null) {
+	const universitySportsEvents = await listUniversitySports()
+	if (universitySportsEvents.length === 0) {
 		return []
 	}
-	const groupedEvents: Record<string, UniversitySportsFieldsFragment[]> = {}
-	const weekdays = [
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-		'Sunday'
-	]
+	const groupedEvents: Partial<Record<WeekdayEnum, Sports[]>> = {}
 	for (const event of universitySportsEvents) {
-		if (groupedEvents[event.weekday] === undefined) {
-			groupedEvents[event.weekday] = []
+		const bucket = groupedEvents[event.weekday]
+		if (bucket == null) {
+			groupedEvents[event.weekday] = [event]
+		} else {
+			bucket.push(event)
 		}
-		groupedEvents[event.weekday].push(event)
 	}
 
-	const sections = Object.keys(groupedEvents)
+	return (Object.keys(groupedEvents) as WeekdayEnum[])
 		.map((weekday) => ({
-			title: weekday as WeekdayType,
-			data: groupedEvents[weekday]
+			title: weekday,
+			data: groupedEvents[weekday] ?? []
 		}))
-		.sort((a, b) => weekdays.indexOf(a.title) - weekdays.indexOf(b.title))
-
-	return sections
+		.sort((a, b) => weekdaySortIndex(a.title) - weekdaySortIndex(b.title))
 }
 
 interface SportsCategory {
@@ -198,138 +187,69 @@ interface SportsCategory {
 	androidIcon: MaterialIcon
 }
 
-export const sportsCategories: Record<string, SportsCategory> = {
-	Badminton: {
+export const sportsCategories: Record<SportsCategoryEnum, SportsCategory> = {
+	BADMINTON: {
 		iosIcon: 'figure.badminton',
 		androidIcon: 'sports_tennis'
 	},
-	Baseball: {
-		iosIcon: 'figure.baseball',
-		androidIcon: 'sports_baseball'
-	},
-	Basketball: {
+	BASKETBALL: {
 		iosIcon: 'figure.basketball',
 		androidIcon: 'sports_basketball'
 	},
-	Boxing: {
-		iosIcon: 'figure.boxing',
-		androidIcon: 'sports_mma'
-	},
-	Calisthenics: {
-		iosIcon: 'figure.play',
-		androidIcon: 'sports'
-	},
-	MartialArts: {
-		iosIcon: 'figure.martial.arts',
-		androidIcon: 'sports_martial_arts'
-	},
-	Running: {
-		iosIcon: 'figure.run',
-		androidIcon: 'directions_run'
-	},
-	Dancing: {
-		iosIcon: 'figure.socialdance',
-		androidIcon: 'nightlife'
-	},
-	Defense: {
-		iosIcon: 'figure.wave',
-		androidIcon: 'front_hand'
-	},
-	Frisbee: {
-		iosIcon: 'figure.disc.sports',
-		androidIcon: 'sports'
-	},
-	FullBodyWorkout: {
-		iosIcon: 'figure.core.training',
-		androidIcon: 'sports_gymnastics'
-	},
-	Handball: {
-		iosIcon: 'figure.handball',
-		androidIcon: 'sports_handball'
-	},
-	Hockey: {
-		iosIcon: 'figure.hockey',
-		androidIcon: 'sports_hockey'
-	},
-	Jogging: {
-		iosIcon: 'figure.run',
-		androidIcon: 'directions_run'
-	},
-	Kickboxing: {
-		iosIcon: 'figure.kickboxing',
-		androidIcon: 'sports_mma'
-	},
-	Climbing: {
+	BOULDERING: {
 		iosIcon: 'figure.climbing',
 		androidIcon: 'sports'
 	},
-	StrengthTraining: {
-		iosIcon: 'figure.strengthtraining.traditional',
-		androidIcon: 'fitness_center'
+	CALISTHENICS: {
+		iosIcon: 'figure.play',
+		androidIcon: 'sports'
 	},
-	Meditation: {
-		iosIcon: 'figure.mind.and.body',
-		androidIcon: 'self_improvement'
+	DANCING: {
+		iosIcon: 'figure.socialdance',
+		androidIcon: 'nightlife'
 	},
-	Cycling: {
-		iosIcon: 'figure.outdoor.cycle',
-		androidIcon: 'directions_bike'
-	},
-	Parkour: {
-		iosIcon: 'figure.track.and.field',
-		androidIcon: 'falling'
-	},
-	Rowing: {
-		iosIcon: 'figure.rower',
-		iosFallback: 'figure.rower',
-		androidIcon: 'rowing'
-	},
-	Skateboarding: {
-		iosIcon: 'figure.skating',
-		iosFallback: 'figure.skating',
-		androidIcon: 'skateboarding'
-	},
-	Soccer: {
+	FOOTBALL: {
 		iosIcon: 'figure.soccer',
 		iosFallback: 'figure.soccer',
 		androidIcon: 'sports_soccer'
 	},
-	Spikeball: {
-		iosIcon: 'figure.softball',
-		androidIcon: 'sports_and_outdoors'
+	HANDBALL: {
+		iosIcon: 'figure.handball',
+		androidIcon: 'sports_handball'
 	},
-	Swimming: {
+	MARTIAL_ARTS: {
+		iosIcon: 'figure.martial.arts',
+		androidIcon: 'sports_martial_arts'
+	},
+	SWIMMING: {
 		iosIcon: 'figure.pool.swim',
 		androidIcon: 'pool'
 	},
-	TableTennis: {
-		iosIcon: 'figure.table.tennis',
-		androidIcon: 'sports_tennis'
-	},
-	Tennis: {
+	TENNIS: {
 		iosIcon: 'figure.tennis',
 		androidIcon: 'sports_tennis'
 	},
-	Volleyball: {
+	VOLLEYBALL: {
 		iosIcon: 'figure.volleyball',
 		androidIcon: 'sports_volleyball'
 	},
-	Hiking: {
-		iosIcon: 'figure.hiking',
-		androidIcon: 'hiking'
-	},
-	Waterpolo: {
-		iosIcon: 'figure.waterpolo',
-		androidIcon: 'pool'
-	},
-	Yoga: {
+	YOGA: {
 		iosIcon: 'figure.yoga',
 		androidIcon: 'sports_gymnastics'
 	},
-	Other: {
+	OTHER: {
 		iosIcon: 'figure.mixed.cardio',
 		androidIcon: 'sports'
 	}
+}
+
+export function getSportsCategoryIcons(
+	category: SportsCategoryEnum | string | null | undefined
+): SportsCategory {
+	if (category != null && category in sportsCategories) {
+		return sportsCategories[category as SportsCategoryEnum]
+	}
+	return sportsCategories.OTHER
 }
 
 export const QUERY_KEYS = {
