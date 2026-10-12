@@ -6,7 +6,6 @@ import type { LonLat } from '@/utils/indoor-nav'
 import {
 	buildJourneySteps,
 	getIndoorGraph,
-	indoorNavLocaleFromLanguage,
 	type JourneyStep,
 	type JourneyStepCopy,
 	journeyStepCopy,
@@ -45,8 +44,6 @@ export function useIndoorNavSteps({
 }: UseIndoorNavStepsOptions): IndoorNavSteps {
 	const { currentFloor, setCurrentFloor } = use(MapContext)
 	const { t } = useTranslation('indoor-nav')
-	const { i18n } = useTranslation()
-	const locale = indoorNavLocaleFromLanguage(i18n.language)
 
 	const routeResult = navActive ? indoorNav?.routeResult : null
 	const steps = useMemo(() => {
@@ -157,10 +154,9 @@ export function useIndoorNavSteps({
 			steps,
 			safeStep,
 			viewFloor,
-			t,
-			locale
+			t
 		)
-	}, [indoorNav, locale, navActive, routeResult, safeStep, steps, t, viewFloor])
+	}, [indoorNav, navActive, routeResult, safeStep, steps, t, viewFloor])
 
 	const floorBadge =
 		!navActive || currentStep == null

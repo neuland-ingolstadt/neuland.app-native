@@ -1,13 +1,8 @@
 import type { IndoorData, RouteResult } from './types'
 
-/** Fresh empty FeatureCollection — use instead of inline literals. */
+/** Fresh empty FeatureCollection — always return a new object (never share). */
 export function emptyFeatureCollection(): GeoJSON.FeatureCollection {
 	return { type: 'FeatureCollection', features: [] }
-}
-
-const EMPTY_FC: GeoJSON.FeatureCollection = {
-	type: 'FeatureCollection',
-	features: []
 }
 
 let entrancesEgCache: {
@@ -100,7 +95,7 @@ export function entrancesGeoJsonForFloor(
 	floor: string
 ): GeoJSON.FeatureCollection {
 	if (floor !== 'EG') {
-		return EMPTY_FC
+		return emptyFeatureCollection()
 	}
 	if (entrancesEgCache?.data === data) {
 		return entrancesEgCache.fc
@@ -122,7 +117,7 @@ export function entrancesGeoJsonForBuilding(
 		(entrance) => entrance.properties.Gebaeude === building
 	)
 	if (features.length === 0) {
-		return EMPTY_FC
+		return emptyFeatureCollection()
 	}
 	return { type: 'FeatureCollection', features }
 }

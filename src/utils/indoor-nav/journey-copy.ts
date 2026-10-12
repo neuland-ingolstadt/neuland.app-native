@@ -9,7 +9,7 @@ import { getIndoorGraph } from './data'
 import { stairDirection } from './floors'
 import { formatDistanceDuration, walkDurationSec } from './format'
 import { polylineLengthM } from './geometry'
-import { type IndoorNavLocale, indoorNavFloorLabel } from './indoor-nav-i18n'
+import { indoorNavFloorLabel } from './indoor-nav-i18n'
 import {
 	placeLabel,
 	splitSegmentAtRoomEntry,
@@ -618,8 +618,7 @@ export function journeyStepCopy(
 	steps: JourneyStep[],
 	stepIndex: number,
 	viewFloor: string,
-	t: TFunction<'indoor-nav'>,
-	locale: IndoorNavLocale
+	t: TFunction<'indoor-nav'>
 ): JourneyStepCopy {
 	const total = steps.length
 	const safe = total ? Math.max(0, Math.min(stepIndex, total - 1)) : 0
@@ -668,11 +667,7 @@ export function journeyStepCopy(
 
 	if (step.kind === 'stairs') {
 		const stair = stairStepManeuver(step.change, t)
-		const meta = formatDistanceDuration(
-			step.distanceM,
-			step.durationSec,
-			locale
-		)
+		const meta = formatDistanceDuration(step.distanceM, step.durationSec, t)
 		return {
 			kicker: `${stepPos} · ${t('guidance.kickerStairs')}`,
 			headline: stair.headline,
@@ -719,11 +714,7 @@ export function journeyStepCopy(
 		}
 	}
 
-	const duration = formatDistanceDuration(
-		step.distanceM,
-		step.durationSec,
-		locale
-	)
+	const duration = formatDistanceDuration(step.distanceM, step.durationSec, t)
 	const subline = walk.subline ?? t('guidance.followMarkedPath')
 	const meta = `${duration} ${isFinalWalk ? t('guidance.remaining') : t('guidance.onThisLevel')}`
 	return {

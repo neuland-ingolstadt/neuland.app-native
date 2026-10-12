@@ -27,7 +27,11 @@ function i18nForLanguage(language: LanguageKey): i18n {
 
 export type FixedI18nNamespace = 'common' | 'indoor-nav'
 
-/** Fixed `t` for a locale without loading the Expo app i18n singleton. */
+/** Fixed `t` for a locale without loading the Expo app i18n singleton.
+ * Production use is limited to locale-free routing labels (`routing.ts`,
+ * German campus default) and unit tests. UI formatting (`format.ts`,
+ * `journey-copy.ts`) takes an injected `t` instead — do not add new
+ * `getFixedT` call sites in components or hooks. */
 export function getFixedT(
 	language: LanguageKey,
 	namespace: 'common'

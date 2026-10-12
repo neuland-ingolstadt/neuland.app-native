@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import type { ClickedMapElement } from '@/types/map'
 import { SEARCH_TYPES } from '@/types/map'
@@ -9,7 +10,6 @@ import {
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	INDOOR_DEFAULT_START_ID,
-	type IndoorNavLocale,
 	isIndoorDataLoaded,
 	type OutdoorRouter,
 	type RouteResult,
@@ -52,7 +52,7 @@ interface UseIndoorNavigationOptions {
 	/** React Query payload — re-applies module cache when persistence skips queryFn. */
 	indoorData?: IndoorData | null
 	fromId?: string
-	locale?: IndoorNavLocale
+	t?: TFunction<'indoor-nav'>
 	outdoorRouter?: OutdoorRouter | null
 }
 
@@ -64,7 +64,7 @@ export function useIndoorNavigation({
 	fullRoute = false,
 	indoorData = null,
 	fromId = INDOOR_DEFAULT_START_ID,
-	locale = 'de',
+	t,
 	outdoorRouter = null
 }: UseIndoorNavigationOptions): IndoorNavModel | null {
 	const roomCode =
@@ -156,9 +156,12 @@ export function useIndoorNavigation({
 		}
 
 		const startNode = graph.nodes.get(effectiveFromId)
-		const summary = routeReady
-			? formatDistanceDuration(distanceM, durationSec, locale)
-			: '—'
+		const summary =
+			routeReady && t != null
+				? formatDistanceDuration(distanceM, durationSec, t)
+				: routeReady
+					? `${Math.round(distanceM)} m`
+					: '—'
 
 		return {
 			destinationFloor: floor,
@@ -176,7 +179,7 @@ export function useIndoorNavigation({
 		fromId,
 		fullRoute,
 		indoorData,
-		locale,
+		t,
 		lockedToId,
 		outdoorRouter,
 		overlayFloorForRoute,

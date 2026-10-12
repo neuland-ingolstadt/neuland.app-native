@@ -104,13 +104,20 @@ export {
 	walkStepManeuver
 } from './maneuvers'
 export {
+	boundsCenter,
 	fitBoundsLngLatPair,
 	fitBoundsNeSw,
+	flatMapCameraDuration,
+	isCompactMapViewport,
 	legBoundsCameraOptions,
+	NAV_FLAT_CAMERA_EASING,
 	type NavCameraCommand,
 	type NavStairsPhase,
+	navMapCameraDuration,
+	STAIR_MOMENT_CAMERA,
 	stairEnterCameraStop,
-	stairExitFlatEaseStop
+	stairExitFlatEaseStop,
+	stairMomentCameraStop
 } from './nav-camera'
 export {
 	destinationRoomGeoJsonForFloor,
@@ -125,15 +132,6 @@ export {
 	floorChangeAfterLeg
 } from './route-result'
 export { route, routePreview } from './routing'
-export {
-	boundsCenter,
-	flatMapCameraDuration,
-	isCompactMapViewport,
-	NAV_FLAT_CAMERA_EASING,
-	navMapCameraDuration,
-	STAIR_MOMENT_CAMERA,
-	stairMomentCameraStop
-} from './stair-moment-camera'
 export {
 	filterStartOptions,
 	formatEndpointLabel,

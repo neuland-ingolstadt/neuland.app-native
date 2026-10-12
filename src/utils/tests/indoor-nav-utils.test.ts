@@ -95,9 +95,10 @@ describe('indoor-nav utils', () => {
 	it('formats distance, duration and walking pace helpers', () => {
 		expect(walkDurationSec(10)).toBeCloseTo(10 / WALK_SPEED_M_S)
 		expect(formatDistanceM(12.4)).toBe('12 m')
-		expect(formatDurationSec(45, 'de')).toBe('1 Min.')
-		expect(formatDurationSec(60, 'en')).toBe('1 min')
-		expect(formatDistanceDuration(20, 30, 'en')).toMatch(/^20 m · /)
+		expect(formatDurationSec(45, deT)).toBe('1 Min.')
+		const enT = getFixedT('en', 'indoor-nav')
+		expect(formatDurationSec(60, enT)).toBe('1 min')
+		expect(formatDistanceDuration(20, 30, enT)).toMatch(/^20 m · /)
 		expect(STAIR_DISTANCE_M).toBeGreaterThan(0)
 		expect(STAIR_DURATION_S).toBeGreaterThan(0)
 	})

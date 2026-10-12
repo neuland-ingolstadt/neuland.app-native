@@ -43,7 +43,6 @@ import {
 	getIndoorGraph,
 	getIndoorRoomFloorsForCode,
 	ghostFloorsGeoJson,
-	indoorNavLocaleFromLanguage,
 	isIndoorDataLoaded,
 	type JourneyStep,
 	OUTDOOR_FLOOR,
@@ -86,7 +85,6 @@ export function useMapIndoorNav({
 	restoreSearchSheet
 }: UseMapIndoorNavOptions) {
 	const { t } = useTranslation('indoor-nav')
-	const { i18n } = useTranslation()
 	const { setClickedElement, setCurrentFloor } = use(MapContext)
 	const preview = isIndoorNavPreviewEnabled()
 	const { enabled: flagEnabled } = useFeatureFlagEnabled(
@@ -167,7 +165,7 @@ export function useMapIndoorNav({
 		fullRoute: navActive,
 		indoorData,
 		fromId: startFromId,
-		locale: indoorNavLocaleFromLanguage(i18n.language),
+		t,
 		outdoorRouter
 	})
 

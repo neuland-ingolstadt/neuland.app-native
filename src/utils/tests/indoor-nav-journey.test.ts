@@ -95,8 +95,7 @@ describe('indoor-nav journey (POC parity)', () => {
 				steps,
 				i,
 				'EG',
-				deT,
-				'de'
+				deT
 			)
 		)
 		expect(copies.map((c) => c.headline)).toEqual([
@@ -153,8 +152,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			0,
 			'EG',
-			deT,
-			'de'
+			deT
 		)
 		expect(first.headline).toBe('Gebäude betreten')
 		expect(first.kicker).toBe('Schritt 1 von 6 · Erdgeschoss')
@@ -168,8 +166,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			2,
 			'EG',
-			deT,
-			'de'
+			deT
 		)
 		expect(stairs.headline).toBe('Treppen hinauf')
 		expect(stairs.kicker).toBe('Schritt 3 von 6 · Treppen')
@@ -184,8 +181,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			3,
 			'3',
-			deT,
-			'de'
+			deT
 		)
 		expect(followTop.headline).toBe('Dem Weg folgen')
 
@@ -198,8 +194,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			4,
 			'3',
-			deT,
-			'de'
+			deT
 		)
 		expect(enterRoom.headline).toBe('Raum G301 betreten')
 
@@ -212,8 +207,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			steps.length - 1,
 			'3',
-			deT,
-			'de'
+			deT
 		)
 		expect(arrival.arrived).toBe(true)
 		expect(arrival.headline).toBe('Angekommen bei G301')
@@ -227,8 +221,7 @@ describe('indoor-nav journey (POC parity)', () => {
 			steps,
 			steps.length - 1,
 			'EG',
-			deT,
-			'de'
+			deT
 		)
 		expect(wrongFloor.wrongFloor).toBe(true)
 	})
@@ -248,8 +241,7 @@ describe('indoor-nav journey (POC parity)', () => {
 					steps,
 					i,
 					'EG',
-					enT,
-					'en'
+					enT
 				)
 			)
 			.map((c) => c.headline)
@@ -284,8 +276,7 @@ describe('indoor-nav journey (POC parity)', () => {
 					steps,
 					i,
 					'EG',
-					enT,
-					'en'
+					enT
 				)
 			)
 			.map((c) => c.headline)

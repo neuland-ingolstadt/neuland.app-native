@@ -1,5 +1,4 @@
-import { getFixedT } from '@/localization/i18n-fixed-t'
-import type { IndoorNavLocale } from './indoor-nav-i18n'
+import type { TFunction } from 'i18next'
 
 /** Indoor walking pace (~4.5 km/h). */
 export const WALK_SPEED_M_S = 1.25
@@ -12,36 +11,25 @@ export function walkDurationSec(distanceM: number): number {
 	return distanceM / WALK_SPEED_M_S
 }
 
-function formatDurationSecForLocale(
+export function formatDistanceM(m: number): string {
+	return `${Math.round(m)} m`
+}
+
+export function formatDurationSec(
 	sec: number,
-	locale: IndoorNavLocale
+	t: TFunction<'indoor-nav'>
 ): string {
 	const halfMins = Math.max(0.5, Math.round(Math.max(0, sec) / 30) / 2)
-	const t = getFixedT(locale, 'indoor-nav')
 	if (halfMins === 1) {
 		return t('duration.oneMinute')
 	}
 	return t('duration.minutes', { count: halfMins })
 }
 
-export function formatDistanceM(
-	m: number,
-	_locale: IndoorNavLocale = 'de'
-): string {
-	return `${Math.round(m)} m`
-}
-
-export function formatDurationSec(
-	sec: number,
-	locale: IndoorNavLocale = 'de'
-): string {
-	return formatDurationSecForLocale(sec, locale)
-}
-
 export function formatDistanceDuration(
 	distanceM: number,
 	durationSec: number,
-	locale: IndoorNavLocale = 'de'
+	t: TFunction<'indoor-nav'>
 ): string {
-	return `${formatDistanceM(distanceM, locale)} · ${formatDurationSec(durationSec, locale)}`
+	return `${formatDistanceM(distanceM)} · ${formatDurationSec(durationSec, t)}`
 }
