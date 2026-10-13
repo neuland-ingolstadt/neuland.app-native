@@ -277,4 +277,23 @@ describe('events-utils', () => {
 			}
 		])
 	})
+
+	it('loadUniversitySportsEvents - Should return an empty list when the API has no sports', async () => {
+		mockListUniversitySports.mockResolvedValueOnce([])
+
+		await expect(eventsUtils.loadUniversitySportsEvents()).resolves.toEqual([])
+	})
+
+	it('getSportsCategoryIcons - Should resolve known categories and fall back to OTHER', () => {
+		expect(eventsUtils.getSportsCategoryIcons('BASKETBALL')).toEqual({
+			iosIcon: 'figure.basketball',
+			androidIcon: 'sports_basketball'
+		})
+		expect(eventsUtils.getSportsCategoryIcons(null)).toEqual(
+			eventsUtils.sportsCategories.OTHER
+		)
+		expect(eventsUtils.getSportsCategoryIcons('unknown-category')).toEqual(
+			eventsUtils.sportsCategories.OTHER
+		)
+	})
 })
