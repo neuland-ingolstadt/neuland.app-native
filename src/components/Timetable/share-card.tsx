@@ -145,31 +145,35 @@ export default function ShareCard({
 				</DetailsBody>
 			</DetailsRow>
 
-			<Separator />
+			{event.lecturer != null && event.lecturer !== '' ? (
+				<>
+					<Separator />
 
-			<DetailsRow>
-				<DetailsSymbol>
-					<PlatformIcon
-						ios={{
-							name: 'person',
-							size: 21
-						}}
-						android={{
-							name: 'person',
-							size: 24
-						}}
-						web={{
-							name: 'User',
-							size: 24
-						}}
-						style={{ color: labelColor }}
-					/>
-				</DetailsSymbol>
+					<DetailsRow>
+						<DetailsSymbol>
+							<PlatformIcon
+								ios={{
+									name: 'person',
+									size: 21
+								}}
+								android={{
+									name: 'person',
+									size: 24
+								}}
+								web={{
+									name: 'User',
+									size: 24
+								}}
+								style={{ color: labelColor }}
+							/>
+						</DetailsSymbol>
 
-				<DetailsBody>
-					<Text className="text-text text-lg">{event.lecturer}</Text>
-				</DetailsBody>
-			</DetailsRow>
+						<DetailsBody>
+							<Text className="text-text text-lg">{event.lecturer}</Text>
+						</DetailsBody>
+					</DetailsRow>
+				</>
+			) : null}
 
 			<View className="items-center bottom-4 flex flex-row gap-1.5 absolute right-6">
 				<LogoSVG size={24} />
