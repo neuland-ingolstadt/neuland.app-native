@@ -12,6 +12,8 @@ tags:
     stopApp: true
     permissions:
       notifications: deny
+- waitForAnimationToEnd:
+    timeout: 5000
 - runFlow:
     file: "../subflows/reconnect-development-client.yaml"
 - runFlow:
