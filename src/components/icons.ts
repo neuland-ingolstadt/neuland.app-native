@@ -42,12 +42,11 @@ export const cardIcons: CardIcons = {
 		android: 'sports_handball',
 		web: 'Volleyball'
 	},
-	// TODO: temporarily disable news card till API is clarified with THI
-	// news: {
-	// 	ios: 'newspaper.fill',
-	// 	android: 'newspaper',
-	// 	web: 'Newspaper'
-	// },
+	news: {
+		ios: 'newspaper.fill',
+		android: 'newspaper',
+		web: 'Newspaper'
+	},
 	login: {
 		ios: 'person.fill.questionmark',
 		android: 'person',
