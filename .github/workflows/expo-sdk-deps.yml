@@ -7,8 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: expo-sdk-deps
@@ -37,11 +36,21 @@ jobs:
         if: steps.check.outputs.needed == 'true'
         run: bunx expo install --fix -- --minimum-release-age 0
 
+      # App token so the opened PR triggers workflows (GITHUB_TOKEN does not).
+      - name: Generate GitHub App token
+        if: steps.check.outputs.needed == 'true'
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.NEULAND_ACTIONS_APP_ID }}
+          private-key: ${{ secrets.NEULAND_ACTIONS_APP_PRIVATE_KEY }}
+          installation-id: 171830819
+
       - name: Create pull request
         if: steps.check.outputs.needed == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           branch: chore/expo-sdk-deps
           base: main
           title: 'build(deps): sync expo sdk dependencies'
