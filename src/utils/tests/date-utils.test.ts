@@ -278,6 +278,25 @@ describe('date-utils', () => {
 			).toBe('Do., 09.04.2026 – Fr., 10.04.2026')
 		})
 
+		it('formatRemainingDuration - Should format positive remaining time', () => {
+			const now = new Date('2026-04-07T10:00:00')
+			expect(
+				dateUtils.formatRemainingDuration('2026-04-07T13:17:00', now)
+			).toBe('3:17h')
+			expect(
+				dateUtils.formatRemainingDuration('2026-04-07T10:05:00', now)
+			).toBe('0:05h')
+		})
+
+		it('formatRemainingDuration - Should return null when expired or invalid', () => {
+			const now = new Date('2026-04-07T10:00:00')
+			expect(
+				dateUtils.formatRemainingDuration('2026-04-07T06:43:00', now)
+			).toBeNull()
+			expect(dateUtils.formatRemainingDuration(null, now)).toBeNull()
+			expect(dateUtils.formatRemainingDuration('not-a-date', now)).toBeNull()
+		})
+
 		it('formatFriendlyTime - Should format valid datetimes as HH:mm', () => {
 			expect(dateUtils.formatFriendlyTime(fixedDate('2026-04-07', 8, 15))).toBe(
 				'08:15'
