@@ -6,12 +6,10 @@ export {
 	FLOOR_SUBSTITUTES,
 	formatCampusLocation,
 	getBuildingCodes,
-	getFloorSlideDirection,
 	INGOLSTADT_CENTER,
 	NEUBURG_CENTER,
 	ROOM_SEARCH_DURATIONS,
 	ROOMS_ALL,
-	SUGGESTION_DURATION_PRESET,
 	sortFloors
 } from './map-constants'
 export {

@@ -3,14 +3,7 @@ import { Platform, StyleSheet, View } from 'react-native'
 import { useCSSVariable, useUniwind } from 'uniwind'
 import { IosGlassSurface } from '@/components/Universal/ios-glass-surface'
 import { toColor } from '@/utils/uniwind-utils'
-import { SHEET_RADIUS } from './sheet-chrome'
-
-const surfaceCorners = {
-	borderTopLeftRadius: SHEET_RADIUS,
-	borderTopRightRadius: SHEET_RADIUS,
-	overflow: 'hidden' as const,
-	...(Platform.OS === 'ios' ? { borderCurve: 'continuous' as const } : {})
-}
+import { surfaceCornersStyle } from './sheet-chrome'
 
 const BottomSheetBackground = (): React.JSX.Element => {
 	const { theme } = useUniwind()
@@ -25,7 +18,7 @@ const BottomSheetBackground = (): React.JSX.Element => {
 			<IosGlassSurface
 				pointerEvents="none"
 				tinted={dark}
-				style={[StyleSheet.absoluteFill, surfaceCorners]}
+				style={[StyleSheet.absoluteFill, surfaceCornersStyle]}
 				fallbackBackgroundColor={backgroundColor}
 			/>
 		)
@@ -34,7 +27,11 @@ const BottomSheetBackground = (): React.JSX.Element => {
 	return (
 		<View
 			pointerEvents="none"
-			style={[StyleSheet.absoluteFill, surfaceCorners, { backgroundColor }]}
+			style={[
+				StyleSheet.absoluteFill,
+				surfaceCornersStyle,
+				{ backgroundColor }
+			]}
 		/>
 	)
 }

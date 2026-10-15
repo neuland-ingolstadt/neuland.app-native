@@ -7,6 +7,7 @@ import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 } from '@/types/campus-life'
+import { neulandApiMockModule } from './neuland-api-mock-helpers'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -38,15 +39,15 @@ const mockGetUniversitySports = mock(async () => ({
 const mockGetFragmentData = mock(() => null as unknown)
 
 const registerEventsApiMocks = () => {
-	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-		default: {
+	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () =>
+		neulandApiMockModule({
 			getPublicCampusLifeEvents: mockGetPublicCampusLifeEvents,
 			getPublicCampusLifeEvent: mockGetPublicCampusLifeEvent,
 			getPublicOrganizer: mockGetPublicOrganizer,
 			getPublicOrganizers: mockGetPublicOrganizers,
 			getUniversitySports: mockGetUniversitySports
-		}
-	}))
+		})
+	)
 
 	mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
 		getFragmentData: mockGetFragmentData

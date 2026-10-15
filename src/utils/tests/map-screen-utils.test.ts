@@ -8,6 +8,7 @@ import type { RoomOpenings } from '../map-room-utils'
 import {
 	filterAvailableRooms,
 	filterEtage,
+	findRoomFeature,
 	getBuildingData,
 	getMapFocusPadding,
 	getOngoingOrNextEvent,
@@ -160,6 +161,17 @@ const buildEvent = (
 })
 
 describe('map-screen-utils', () => {
+	it('findRoomFeature - Should find rooms in collections, arrays and handle missing input', () => {
+		expect(findRoomFeature(featureCollection, 'G101')?.properties?.Raum).toBe(
+			'G101'
+		)
+		expect(
+			findRoomFeature(featureCollection.features, 'G101')?.properties?.Raum
+		).toBe('G101')
+		expect(findRoomFeature(featureCollection, 'MISSING')).toBeUndefined()
+		expect(findRoomFeature(undefined, 'G101')).toBeUndefined()
+	})
+
 	it('getMapFocusPadding - Should pad the bottom by sheet height plus gap', () => {
 		expect(getMapFocusPadding(312)).toEqual({
 			top: 0,

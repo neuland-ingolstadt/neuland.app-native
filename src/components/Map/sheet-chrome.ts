@@ -15,3 +15,10 @@ export const sheetHostStyle: ViewStyle = {
 			}
 		: {})
 }
+
+export const surfaceCornersStyle: ViewStyle = {
+	borderTopLeftRadius: SHEET_RADIUS,
+	borderTopRightRadius: SHEET_RADIUS,
+	overflow: 'hidden',
+	...(Platform.OS === 'ios' ? { borderCurve: 'continuous' as const } : {})
+}

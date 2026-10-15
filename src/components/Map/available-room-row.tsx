@@ -2,10 +2,9 @@ import type { FeatureCollection } from 'geojson'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCSSVariable } from 'uniwind'
-import { SEARCH_TYPES, type SelectMapElement } from '@/types/map'
+import type { SelectMapElement } from '@/types/map'
 import type { AvailableRoom } from '@/types/utils'
-import { parseMapCoordinate } from '@/utils/map-screen-utils'
-import { roomNotFoundToast } from '@/utils/ui-utils'
+import { selectRoomOnMap } from '@/utils/map-room-select'
 import { toColor } from '@/utils/uniwind-utils'
 import { MapSuggestionRow } from './map-suggestion-row'
 
@@ -46,25 +45,13 @@ export const AvailableRoomRow = ({
 			startTime={room.from}
 			endTime={room.until}
 			onPress={() => {
-				const details = allRooms.features.find(
-					(x) => x.properties?.Raum === room.room
+				selectRoomOnMap(
+					allRooms,
+					room.room,
+					'AvailableRoomsSuggestion',
+					selectMapElement,
+					notificationColor
 				)
-
-				if (details == null) {
-					roomNotFoundToast(room.room, notificationColor)
-					return
-				}
-
-				const etage = details?.properties?.Ebene as string | undefined
-
-				selectMapElement({
-					room: room.room,
-					type: SEARCH_TYPES.ROOM,
-					center: parseMapCoordinate(details.properties?.center),
-					origin: 'AvailableRoomsSuggestion',
-					manual: false,
-					floor: etage ?? 'EG'
-				})
 			}}
 		/>
 	)

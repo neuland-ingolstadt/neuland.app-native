@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { i18n } from 'i18next'
 import type { Meal, Name } from '@/types/neuland-api'
+import { neulandApiMockModule } from './neuland-api-mock-helpers'
 import { reactNativePlatform, reactNativeShareMock } from './react-native-mock'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
@@ -46,11 +47,11 @@ const registerFoodApiMocks = () => {
 		getFragmentData: mockGetFragmentData
 	}))
 
-	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-		default: {
+	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () =>
+		neulandApiMockModule({
 			getFoodPlan: mockGetFoodPlan
-		}
-	}))
+		})
+	)
 }
 
 let foodUtils: typeof import('../food-utils')

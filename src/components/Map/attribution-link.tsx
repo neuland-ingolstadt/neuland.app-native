@@ -1,43 +1,20 @@
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, Text, View } from 'react-native'
-import { useCSSVariable } from 'uniwind'
-import PlatformIcon from '@/components/Universal/icon'
-import { toColor } from '@/utils/uniwind-utils'
+import { Linking } from 'react-native'
+import { MapChevronLink } from '@/components/Map/map-chevron-link'
 
 const AttributionLink = (): React.JSX.Element => {
 	const { t } = useTranslation('common')
-	const labelColor = toColor(useCSSVariable('--color-label'))
 
 	return (
-		<View className="py-10">
-			<Pressable
-				testID="map-attribution"
-				onPress={() => {
-					void Linking.openURL('https://www.openstreetmap.org/copyright')
-				}}
-				className="items-center flex-row gap-1"
-			>
-				<Text className="text-[15px] ps-1" style={{ color: labelColor }}>
-					{t('pages.map.details.osm')}
-				</Text>
-				<PlatformIcon
-					ios={{
-						name: 'chevron.forward',
-						size: 6
-					}}
-					android={{
-						name: 'chevron_right',
-						size: 16
-					}}
-					web={{
-						name: 'ChevronRight',
-						size: 16
-					}}
-					style={{ color: labelColor }}
-				/>
-			</Pressable>
-		</View>
+		<MapChevronLink
+			label={t('pages.map.details.osm')}
+			testID="map-attribution"
+			wrapperClassName="py-10"
+			onPress={() => {
+				void Linking.openURL('https://www.openstreetmap.org/copyright')
+			}}
+		/>
 	)
 }
 

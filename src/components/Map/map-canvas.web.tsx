@@ -11,7 +11,10 @@ import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
-import { useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import { useWindowDimensions } from 'react-native'
+import { IndoorNavMapLayers } from '@/components/Map/indoor-nav-map-layers.web'
+import { IndoorNavStepMarkerPin } from '@/components/Map/indoor-nav-step-marker-pin'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
@@ -20,9 +23,26 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
-import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
+import { MapSelectionMarker } from '@/components/Map/map-selection-marker'
+import type { IndoorNavMapLayersData } from '@/hooks/indoor-nav-map-layers'
+import {
+	type RunNavCamera,
+	useMapCameraSync,
+	useMapCanvasState
+} from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import type { ClickedMapElement } from '@/types/map'
+import { SEARCH_TYPES } from '@/types/map'
+import {
+	fitBoundsLngLatPair,
+	isCompactMapViewport,
+	legBoundsCameraOptions,
+	type NavCameraCommand,
+	stairEnterCameraStop,
+	stairExitFlatEaseStop
+} from '@/utils/indoor-nav'
+import { runAfterMapCamera } from '@/utils/indoor-nav/run-after-map-camera'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom,
@@ -40,6 +60,10 @@ const mapContainerStyle = {
 	width: '100%'
 }
 
+function runAfterMapCommit(fn: () => void): void {
+	setTimeout(fn, 0)
+}
+
 interface WebMapCanvasProps {
 	setMapLoadState: React.Dispatch<React.SetStateAction<LoadingState>>
 	mapLoadState: LoadingState
@@ -49,6 +73,7 @@ interface WebMapCanvasProps {
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
 	clickedElement: MapScreenModel['clickedElement']
+	pickStartSelection?: ClickedMapElement | null
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
 	primaryColor: string
@@ -58,6 +83,15 @@ interface WebMapCanvasProps {
 	onRegionChange: (changing: boolean) => void
 	focusPaddingBottom: number
 	overlayFloor: string
+	indoorMapLayers: IndoorNavMapLayersData | null
+	cameraNavRequestId: number
+	cameraNavCommand: NavCameraCommand | null
+	onNavCameraIdle?: () => void
+	navShowGhostCutaway?: boolean
+	floorPlanDimmed?: boolean
+	suppressSelectionCameraFocus?: boolean
+	suppressRoomSelection?: boolean
+	onEntrancePress?: (entranceRawId: string) => void
 }
 
 function setWebMapView(
@@ -83,7 +117,7 @@ function setWebMapView(
 			element == null
 				? MAP_CAMERA.initialZoom
 				: getSelectionFocusZoom(map.getZoom()),
-		...(element == null ? { bearing: 0 } : {}),
+		...(element == null ? { bearing: 0, pitch: 0 } : {}),
 		duration:
 			element == null ? MAP_CAMERA.resetDuration : MAP_CAMERA.focusDuration,
 		padding: getMapFocusPadding(element == null ? 0 : focusPaddingBottom)
@@ -99,6 +133,7 @@ export default function WebMapCanvas({
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
 	clickedElement,
+	pickStartSelection,
 	selectMapElement,
 	mapMode,
 	primaryColor,
@@ -107,9 +142,30 @@ export default function WebMapCanvas({
 	backgroundColor,
 	onRegionChange,
 	focusPaddingBottom,
-	overlayFloor
+	overlayFloor,
+	indoorMapLayers,
+	cameraNavRequestId,
+	cameraNavCommand,
+	onNavCameraIdle,
+	navShowGhostCutaway = false,
+	floorPlanDimmed = false,
+	suppressSelectionCameraFocus = false,
+	suppressRoomSelection = false,
+	onEntrancePress
 }: WebMapCanvasProps): React.JSX.Element {
+	const blockRoomSelection = suppressRoomSelection
 	const mapRef = useRef<MapRef | null>(null)
+	const { width: windowWidth } = useWindowDimensions()
+	const reducedMotion = usePrefersReducedMotion()
+
+	useEffect(() => {
+		const map = mapRef.current?.getMap()
+		if (map == null) {
+			return
+		}
+		map.setMaxZoom(MAP_CAMERA.maxZoom)
+	}, [])
+
 	const {
 		incoming,
 		outgoing,
@@ -117,23 +173,84 @@ export default function WebMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
+		pickStartRoomCenter,
+		pickStartFeatures,
+		selectionElement,
 		handleRoomSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
 		clickedElement,
+		pickStartSelection,
 		selectMapElement,
 		mapMode,
 		primaryColor,
 		selectionColor,
 		labelColor,
-		backgroundColor
+		backgroundColor,
+		suppressRoomSelection: blockRoomSelection,
+		floorPlanDimmed
 	})
+
+	const runNavCamera = useCallback<RunNavCamera>(
+		(command, padding, done) => {
+			const map = mapRef.current?.getMap()
+			if (map == null) {
+				done()
+				return
+			}
+			const pad = getMapFocusPadding(padding)
+			const compact = isCompactMapViewport(windowWidth)
+			map.stop()
+			if (command.kind === 'stair-enter') {
+				const stop = stairEnterCameraStop(command.at, compact, reducedMotion)
+				map.flyTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					curve: stop.curve,
+					padding: pad
+				})
+				runAfterMapCamera(map, stop.duration, done)
+				return
+			}
+			if (command.resetFromStairs) {
+				const stop = stairExitFlatEaseStop(command.bounds, reducedMotion)
+				map.easeTo({
+					center: stop.center,
+					zoom: stop.zoom,
+					pitch: stop.pitch,
+					bearing: stop.bearing,
+					duration: stop.duration,
+					padding: pad
+				})
+				runAfterMapCamera(map, stop.duration, done)
+				return
+			}
+			const duration = legBoundsCameraOptions(reducedMotion).duration
+			map.fitBounds(fitBoundsLngLatPair(command.bounds), {
+				padding: pad,
+				maxZoom: MAP_CAMERA.maxZoom,
+				duration,
+				pitch: 0,
+				bearing: 0
+			})
+			runAfterMapCamera(map, duration, done)
+		},
+		[reducedMotion, windowWidth]
+	)
 
 	useMapCameraSync({
 		mapLoadState,
 		cameraResetRequestId,
+		cameraNavRequestId,
+		cameraNavCommand,
+		onNavCameraIdle,
+		runNavCamera,
+		suppressSelectionFocus: suppressSelectionCameraFocus,
 		mapCenter,
 		clickedElement,
 		focusPaddingBottom,
@@ -141,6 +258,10 @@ export default function WebMapCanvas({
 			setWebMapView(mapRef, mapCenter, element, padding)
 		}
 	})
+
+	const handleMapDragStart = useCallback(() => {
+		runAfterMapCommit(() => onRegionChange(true))
+	}, [onRegionChange])
 
 	const handleMapClick = (event: MapMouseEvent): void => {
 		if (!filteredGeoJSON || !mapRef.current) {
@@ -164,11 +285,20 @@ export default function WebMapCanvas({
 					zoom: MAP_CAMERA.initialZoom
 				}}
 				mapStyle={MAP_STYLE_URLS[mapMode]}
+				maxZoom={MAP_CAMERA.maxZoom}
 				ref={mapRef}
-				onLoad={() => setMapLoadState(LoadingState.LOADED)}
-				onError={() => setMapLoadState(LoadingState.ERROR)}
+				onLoad={() => {
+					runAfterMapCommit(() => setMapLoadState(LoadingState.LOADED))
+				}}
+				onError={() => {
+					runAfterMapCommit(() => {
+						setMapLoadState((state) =>
+							state === LoadingState.LOADED ? state : LoadingState.ERROR
+						)
+					})
+				}}
 				onClick={handleMapClick}
-				onMoveStart={() => onRegionChange(true)}
+				onDragStart={handleMapDragStart}
 				attributionControl={false}
 			>
 				<NavigationControl position="top-left" />
@@ -188,9 +318,32 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.selectedOutline}
 						type="line"
-						paint={layerStyles.selectedOutline}
+						layout={layerStyles.selectedOutline.layout}
+						paint={layerStyles.selectedOutline.paint}
 					/>
 				</Source>
+				{pickStartFeatures.length > 0 && (
+					<Source
+						id={MAP_IDS.sources.pickStartOverlay}
+						type="geojson"
+						data={{
+							type: 'FeatureCollection',
+							features: pickStartFeatures
+						}}
+					>
+						<Layer
+							id={MAP_IDS.layers.pickStartFill}
+							type="fill"
+							paint={layerStyles.pickStartFill}
+						/>
+						<Layer
+							id={MAP_IDS.layers.pickStartOutline}
+							type="line"
+							layout={layerStyles.pickStartOutline.layout}
+							paint={layerStyles.pickStartOutline.paint}
+						/>
+					</Source>
+				)}
 				<Source
 					id={MAP_IDS.sources.buildingLabels}
 					type="geojson"
@@ -218,7 +371,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.allRoomsOutline}
 						type="line"
-						paint={layerStyles.allRoomsOutline}
+						layout={layerStyles.allRoomsOutline.layout}
+						paint={layerStyles.allRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -238,7 +392,8 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.allRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.allRoomsOutline}
+							layout={outgoingStyles.allRoomsOutline.layout}
+							paint={outgoingStyles.allRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>
@@ -258,7 +413,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.availableRoomsOutline}
 						type="line"
-						paint={layerStyles.availableRoomsOutline}
+						layout={layerStyles.availableRoomsOutline.layout}
+						paint={layerStyles.availableRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -278,16 +434,48 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.availableRoomsOutline}
+							layout={outgoingStyles.availableRoomsOutline.layout}
+							paint={outgoingStyles.availableRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>
 				)}
-				{selectedRoomCenter != null && (
+				{selectedRoomCenter != null &&
+					selectionElement != null &&
+					// Buildings are carried by their polygon highlight — a centered
+					// door pin would fake an entrance where there is none.
+					selectionElement.type !== SEARCH_TYPES.BUILDING && (
+						<Marker
+							longitude={selectedRoomCenter[0]}
+							latitude={selectedRoomCenter[1]}
+							anchor="bottom"
+						>
+							<MapSelectionMarker selectionColor={selectionColor} />
+						</Marker>
+					)}
+				{pickStartRoomCenter != null && (
 					<Marker
-						longitude={selectedRoomCenter[0]}
-						latitude={selectedRoomCenter[1]}
-						color={selectionColor}
+						longitude={pickStartRoomCenter[0]}
+						latitude={pickStartRoomCenter[1]}
+						anchor="center"
+					>
+						<IndoorNavStepMarkerPin
+							kind="entry"
+							state="current"
+							primaryColor={primaryColor}
+							mapMode={mapMode}
+						/>
+					</Marker>
+				)}
+				{mapLoadState === LoadingState.LOADED && (
+					<IndoorNavMapLayers
+						layers={indoorMapLayers}
+						overlayFloor={overlayFloor}
+						primaryColor={primaryColor}
+						mapMode={mapMode}
+						showGhostCutaway={navShowGhostCutaway}
+						stackCutawayLayers={blockRoomSelection}
+						onEntrancePress={onEntrancePress}
 					/>
 				)}
 			</Map>
