@@ -30,7 +30,8 @@ import {
 	getPersonalData,
 	guestError,
 	networkError,
-	permissionError
+	permissionError,
+	toErrorViewTitle
 } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 
@@ -126,7 +127,7 @@ export default function LibraryCode(): React.JSX.Element {
 				</View>
 			) : isError ? (
 				<ErrorView
-					title={error.message ?? t('error.title')}
+					title={toErrorViewTitle(error)}
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>

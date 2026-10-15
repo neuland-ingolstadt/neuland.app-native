@@ -26,7 +26,7 @@ import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { Food } from '@/types/neuland-api'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
@@ -69,7 +69,7 @@ function FoodScreen(): React.JSX.Element {
 	const deferredAllergenSelection = useDeferredValue(allergenSelection)
 
 	const [data, setData] = useState<Food[]>([])
-	const { t, i18n } = useTranslation('common')
+	const { i18n } = useTranslation('common')
 	const {
 		data: foodData,
 		error,
@@ -154,11 +154,7 @@ function FoodScreen(): React.JSX.Element {
 					</View>
 				) : isError ? (
 					<ErrorView
-						title={
-							error.message === 'noMeals'
-								? t('error.noMeals')
-								: (error.message ?? t('error.title'))
-						}
+						title={toErrorViewTitle(error)}
 						onRefresh={refetchByUser}
 						refreshing={isRefetchingByUser}
 					/>

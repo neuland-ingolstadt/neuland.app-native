@@ -16,6 +16,7 @@ import type {
 	CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
 import type { FormListSections, SectionGroup } from '@/types/components'
+import { toErrorViewTitle } from '@/utils/api-utils'
 import {
 	isThiDepartmentOrganizerKind,
 	parseCampusLifeOrganizerKindParam
@@ -77,9 +78,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 	}
 
 	if (organizerQuery.isError || organizerQuery.data == null) {
-		return (
-			<ErrorView title={organizerQuery.error?.message ?? t('error.title')} />
-		)
+		return <ErrorView title={toErrorViewTitle(organizerQuery.error)} />
 	}
 
 	const organizer = organizerQuery.data
@@ -249,7 +248,7 @@ export default function CampusLifeOrganizerScreen(): React.JSX.Element {
 					</View>
 				) : eventsQuery.isError ? (
 					<Text className="text-label-secondary text-sm pt-2">
-						{eventsQuery.error?.message ?? t('error.title')}
+						{t('error.title')}
 					</Text>
 				) : organizerEvents.length > 0 ? (
 					organizerEvents.map((event: CampusLifeEvent) => (

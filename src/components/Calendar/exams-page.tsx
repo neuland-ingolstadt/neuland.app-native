@@ -13,7 +13,7 @@ import { FlashList } from '@/components/Universal/styled'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import type { Exam } from '@/types/utils'
-import { guestError, networkError } from '@/utils/api-utils'
+import { guestError, networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 
@@ -80,7 +80,7 @@ export default function ExamsPage({
 				</View>
 			) : isError ? (
 				<ErrorView
-					title={error?.message ?? t('error.title')}
+					title={toErrorViewTitle(error)}
 					onButtonPress={() => {
 						void refetchByUser()
 					}}

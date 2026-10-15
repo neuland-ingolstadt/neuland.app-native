@@ -84,6 +84,39 @@ describe('api-utils', () => {
 		)
 	})
 
+	it('toErrorViewTitle - Should keep known error sentinels', () => {
+		expect(apiUtils.toErrorViewTitle(apiUtils.networkError)).toBe(
+			apiUtils.networkError
+		)
+		expect(apiUtils.toErrorViewTitle(new Error(apiUtils.guestError))).toBe(
+			apiUtils.guestError
+		)
+		expect(apiUtils.toErrorViewTitle(apiUtils.noMealsError)).toBe(
+			apiUtils.noMealsError
+		)
+	})
+
+	it('toErrorViewTitle - Should map raw API messages to unknownError', () => {
+		expect(
+			apiUtils.toErrorViewTitle(new Error('"Service unavailable" (-500)'))
+		).toBe(apiUtils.unknownError)
+		expect(apiUtils.toErrorViewTitle('GraphQL error: boom')).toBe(
+			apiUtils.unknownError
+		)
+		expect(apiUtils.toErrorViewTitle(null)).toBe(apiUtils.unknownError)
+		expect(apiUtils.toErrorViewTitle('')).toBe(apiUtils.unknownError)
+	})
+
+	it('isRawApiErrorTitle - Should detect THI status-code titles', () => {
+		expect(
+			apiUtils.isRawApiErrorTitle('"Time table does not exist" (-202)')
+		).toBe(true)
+		expect(apiUtils.isRawApiErrorTitle('{"ok":false} (500)')).toBe(true)
+		expect(apiUtils.isRawApiErrorTitle(apiUtils.permissionError)).toBe(false)
+		expect(apiUtils.isRawApiErrorTitle(apiUtils.unknownError)).toBe(false)
+		expect(apiUtils.isRawApiErrorTitle('No exams found')).toBe(false)
+	})
+
 	it('getUsername - Should read the stored username from secure storage', async () => {
 		await expect(apiUtils.getUsername()).resolves.toBe('alex.muster')
 	})

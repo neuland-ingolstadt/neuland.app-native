@@ -20,9 +20,12 @@ import { useSessionStore } from '@/hooks/useSessionStore'
 import type { MaterialIcon } from '@/types/material-icons'
 import {
 	guestError,
+	isRawApiErrorTitle,
 	networkError,
+	noMealsError,
 	notLoggedInError,
-	permissionError
+	permissionError,
+	unknownError
 } from '@/utils/api-utils'
 import type { ServiceHealth, ServiceStatus } from '@/utils/gatus-status'
 import StatusBox from './action-box'
@@ -72,7 +75,8 @@ function isTrackedError(title: string, isCritical: boolean): boolean {
 		title === networkError ||
 		title === guestError ||
 		title === notLoggedInError ||
-		title === permissionError
+		title === permissionError ||
+		title === noMealsError
 	return !isKnown && isCritical
 }
 
@@ -171,6 +175,12 @@ function ErrorDetails({
 	} else if (title === permissionError) {
 		heading = t('error.permission.title')
 		body = t('error.permission.description')
+	} else if (title === noMealsError) {
+		heading = t('error.noMeals')
+		body = message ?? t('error.description')
+	} else if (title === unknownError || isRawApiErrorTitle(title)) {
+		heading = t('error.title')
+		body = message ?? t('error.description')
 	}
 
 	return (

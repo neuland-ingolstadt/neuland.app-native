@@ -24,7 +24,7 @@ import SportsRow from '@/components/Rows/sports-row'
 import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
@@ -205,7 +205,7 @@ export default function ClSportsPage({
 				<LoadingIndicator />
 			) : sportsResult.isError ? (
 				<ErrorView
-					title={sportsResult.error?.message ?? t('error.title')}
+					title={toErrorViewTitle(sportsResult.error)}
 					onButtonPress={() => {
 						void refetchByUserSports()
 					}}

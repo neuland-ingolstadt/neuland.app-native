@@ -5,7 +5,7 @@ import ErrorView from '@/components/Error/error-view'
 import { FreeRoomsList } from '@/components/Map/free-rooms-list'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import type { AvailableRoom } from '@/types/utils'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 
 interface RoomSearchResultsProps {
@@ -49,7 +49,7 @@ export function RoomSearchResults({
 						/>
 					) : isError || filterError ? (
 						<ErrorView
-							title={error?.message ?? t('error.title')}
+							title={toErrorViewTitle(error)}
 							onButtonPress={() => {
 								void refetchByUser()
 							}}

@@ -13,6 +13,11 @@ export const networkError = 'Network request failed'
 export const guestError = 'User is logged in as guest'
 export const permissionError = '"Service for user-group not defined" (-120)'
 export const notLoggedInError = 'User is not logged in'
+/** Sentinel for unknown API/client errors — always localize in ErrorView. */
+export const unknownError = 'Unknown error'
+/** App sentinel for empty food menus — localize in ErrorView. */
+export const noMealsError = 'noMeals'
+
 /**
  * Removes the quotation marks and the error code from the error message.
  * @param str The error message string to be trimmed.
@@ -24,6 +29,45 @@ export const trimErrorMsg = (str: string): string => {
 		return match[1].trim()
 	}
 	return str
+}
+
+/**
+ * Maps a thrown/query error to an ErrorView title sentinel.
+ * Known auth/network errors stay as-is; raw API messages become {@link unknownError}
+ * so the UI never shows English backend text to users.
+ */
+export const toErrorViewTitle = (error: unknown): string => {
+	if (error == null) {
+		return unknownError
+	}
+
+	const message =
+		typeof error === 'string'
+			? error
+			: error instanceof Error
+				? error.message
+				: unknownError
+
+	if (message.length === 0) {
+		return unknownError
+	}
+
+	if (isKnownError(message) || message === noMealsError) {
+		return message
+	}
+
+	return unknownError
+}
+
+/**
+ * Detects THI/APIError-style titles like `"message" (-120)` or `{…} (500)`.
+ * Used as a safety net when a raw API message still reaches ErrorView.
+ */
+export const isRawApiErrorTitle = (title: string): boolean => {
+	if (isKnownError(title) || title === unknownError || title === noMealsError) {
+		return false
+	}
+	return /\(\s*-?\d+\s*\)\s*$/.test(title)
 }
 
 /**

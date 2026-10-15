@@ -7,7 +7,7 @@ import LecturerRow from '@/components/Rows/lecturer-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import type { NormalizedLecturer } from '@/types/utils'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { lecturersStyles as styles } from './lecturers-styles'
 
@@ -47,7 +47,7 @@ export default function LecturerList({
 	) : isError ? (
 		<View style={[styles.viewHorizontal, styles.page]}>
 			<ErrorView
-				title={error?.message ?? t('error.title')}
+				title={toErrorViewTitle(error)}
 				refreshing={isRefetchingByUser}
 				onRefresh={() => {
 					void refetchByUser()

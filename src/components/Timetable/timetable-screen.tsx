@@ -16,7 +16,7 @@ import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import { guestError, networkError } from '@/utils/api-utils'
+import { guestError, networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import {
@@ -114,7 +114,7 @@ function TimetableScreen(): React.JSX.Element {
 					<ErrorView title={guestError} />
 				) : error ? (
 					<ErrorView
-						title={error?.message ?? 'An error occurred'}
+						title={toErrorViewTitle(error)}
 						refreshing={isRefetchingByUser}
 						onRefresh={() => {
 							void refetchByUser()

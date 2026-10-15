@@ -21,7 +21,7 @@ import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import { breakpoints } from '@/styles/breakpoints'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { toColor } from '@/utils/uniwind-utils'
@@ -51,7 +51,7 @@ export default function NewsScreen(): React.JSX.Element {
 			) : isError ? (
 				<View className="ios:h-[90%] android:h-full android:pt-[100px]">
 					<ErrorView
-						title={error.message}
+						title={toErrorViewTitle(error)}
 						onRefresh={() => {
 							void refetchByUser()
 						}}

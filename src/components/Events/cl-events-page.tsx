@@ -26,7 +26,7 @@ import {
 	type CampusLifeOrganizer,
 	type CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
-import { networkError } from '@/utils/api-utils'
+import { networkError, toErrorViewTitle } from '@/utils/api-utils'
 import {
 	campusLifeOrganiserParams,
 	isThiDepartmentOrganizerKind
@@ -189,7 +189,7 @@ export default function ClEventsPage({
 				<LoadingIndicator />
 			) : clEventsResult.isError ? (
 				<ErrorView
-					title={clEventsResult.error?.message ?? t('error.title')}
+					title={toErrorViewTitle(clEventsResult.error)}
 					onButtonPress={() => {
 						void refetchByUserClEvents()
 					}}

@@ -13,6 +13,7 @@ import type {
 	CampusLifeOrganizer,
 	CampusLifePublicOrganizerKind
 } from '@/types/campus-life'
+import { toErrorViewTitle } from '@/utils/api-utils'
 import { campusLifeOrganiserParams } from '@/utils/campus-life-utils'
 import { loadCampusLifeOrganizers, QUERY_KEYS } from '@/utils/events-utils'
 import { toColor } from '@/utils/uniwind-utils'
@@ -60,7 +61,7 @@ export default function CampusLifeOrganizersList({
 				</View>
 			) : organizersQuery.isError ? (
 				<ErrorView
-					title={organizersQuery.error?.message ?? t('error.title')}
+					title={toErrorViewTitle(organizersQuery.error)}
 					onButtonPress={() => {
 						void refetchByUser()
 					}}

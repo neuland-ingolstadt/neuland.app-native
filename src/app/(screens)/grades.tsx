@@ -26,7 +26,8 @@ import type { GradeAverage } from '@/types/utils'
 import {
 	extractSpoName,
 	getPersonalData,
-	networkError
+	networkError,
+	toErrorViewTitle
 } from '@/utils/api-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
@@ -204,7 +205,7 @@ export default function GradesSCreen(): React.JSX.Element {
 						title={
 							isUnavailableError
 								? t('grades.temporarilyUnavailable')
-								: error.message
+								: toErrorViewTitle(error)
 						}
 						onRefresh={refetchByUser}
 						refreshing={isRefetchingByUser}
