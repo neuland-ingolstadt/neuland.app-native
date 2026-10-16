@@ -1,6 +1,0 @@
-{
-	"name": "app-clip",
-	"version": "1.0.0",
-	"main": "src/AppClipModule.ts",
-	"private": true
-}

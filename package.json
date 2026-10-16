@@ -53,7 +53,6 @@
 	"dependencies": {
 		"@aptabase/react-native": "^0.6.0",
 		"@babel/runtime": "^7.28.4",
-		"@bacons/apple-targets": "^5.0.0",
 		"@expo/metro-runtime": "~58.0.14",
 		"@expo/ui": "~58.0.19",
 		"@expo/vector-icons": "^15.0.3",
