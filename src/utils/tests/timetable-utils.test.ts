@@ -28,7 +28,7 @@ const mockGetTimetable = mock(
 	})
 )
 
-mock.module(`${SRC_ROOT}api/authenticated-api.ts`, () => ({
+mock.module(`${SRC_ROOT}api/thi-authenticated-api.ts`, () => ({
 	default: {
 		getTimetable: mockGetTimetable
 	}

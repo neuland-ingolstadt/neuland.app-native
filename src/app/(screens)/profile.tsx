@@ -15,7 +15,7 @@ import {
 	View
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { NoSessionError } from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import { queryClient } from '@/components/provider'

@@ -1,4 +1,4 @@
-import API from '@/api/authenticated-api'
+import API from '@/api/thi-authenticated-api'
 import dayjs from '@/lib/dayjs'
 import type { Calendar } from '@/types/data'
 import type {

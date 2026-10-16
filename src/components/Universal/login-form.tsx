@@ -14,7 +14,7 @@ import {
 	View
 } from 'react-native'
 import { useCSSVariable, useResolveClassNames } from 'uniwind'
-import { createGuestSession, createSession } from '@/api/thi-session-handler'
+import { createGuestSession, createSession } from '@/api/thi-session'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import {

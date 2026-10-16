@@ -48,7 +48,7 @@ export function useMapCameraSync({
 	}, [flyTo])
 
 	useEffect(() => {
-		if (mapLoadState !== LoadingState.LOADED) {
+		if (mapLoadState !== LoadingState.LOADED || clickedElement == null) {
 			return
 		}
 		flyToRef.current(clickedElement, focusPaddingBottom)

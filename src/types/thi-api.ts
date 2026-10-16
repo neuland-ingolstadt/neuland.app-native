@@ -220,7 +220,7 @@ export interface Details {
 	raum: string
 	fach: string
 	veranstaltung: string
-	dozent: string
+	dozent: string | null
 	/** Comma-separated lecturer IDs matching `dozent` order; may be absent. */
 	dozent_id?: string | null
 	stg: string
