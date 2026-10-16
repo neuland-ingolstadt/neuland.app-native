@@ -10,6 +10,7 @@ describe('theme-utils', () => {
 	it('resolveActiveTheme - Should follow the system color scheme for auto', () => {
 		expect(resolveActiveTheme('auto', 'dark')).toBe('dark')
 		expect(resolveActiveTheme('auto', 'light')).toBe('light')
-		expect(resolveActiveTheme('auto', 'unspecified')).toBe('light')
+		expect(resolveActiveTheme('auto', null)).toBe('light')
+		expect(resolveActiveTheme('auto', undefined)).toBe('light')
 	})
 })
