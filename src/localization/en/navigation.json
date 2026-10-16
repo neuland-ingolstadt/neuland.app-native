@@ -103,12 +103,7 @@
 			"noMoreLectures": "No more lectures today",
 			"noEvents": "No upcoming lectures",
 			"enjoyDay": "Enjoy your day!",
-			"nextEvent": "Next",
-			"liveActivity": {
-				"untilStart": "until start",
-				"left": "left",
-				"done": "Done"
-			}
+			"nextEvent": "Next"
 		},
 		"login": {
 			"title": "Timetable, grades, room status and more",

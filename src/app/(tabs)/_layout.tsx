@@ -12,7 +12,6 @@ import { UserKindContext } from '@/components/contexts'
 import TabLayout from '@/components/Layout/tab-bar'
 import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
-import { useCanteenWidgetSync, useLectureLiveActivitySync } from '@/hooks'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -22,8 +21,6 @@ import { humanLocations } from '@/utils/food-utils'
 
 export default function HomeLayout(): React.JSX.Element {
 	const router = useRouter()
-	useCanteenWidgetSync()
-	useLectureLiveActivitySync()
 
 	const { t } = useTranslation('navigation')
 	const selectedRestaurants = useFoodFilterStore(

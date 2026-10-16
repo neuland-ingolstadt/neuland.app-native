@@ -103,12 +103,7 @@
 			"noMoreLectures": "Keine weiteren Vorlesungen",
 			"noEvents": "Keine anstehenden Vorlesungen",
 			"enjoyDay": "Genieße deinen Tag!",
-			"nextEvent": "Nächste",
-			"liveActivity": {
-				"untilStart": "bis Start",
-				"left": "übrig",
-				"done": "Fertig"
-			}
+			"nextEvent": "Nächste"
 		},
 		"login": {
 			"title": "Stundenplan, Noten, Raum-Status und mehr",
