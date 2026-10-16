@@ -312,6 +312,18 @@
 					"total": "Total rooms",
 					"floors": "Floors"
 				},
+				"entrance": {
+					"title": "Entrance",
+					"details": "Entrance details",
+					"buildingSubtitle": "Building {{building}}",
+					"kind": "Type",
+					"kindBoth": "Entrance & exit",
+					"kindEntrance": "Entrance",
+					"kindExit": "Exit only",
+					"access": "Access",
+					"accessPublic": "Public",
+					"accessBadge": "Badge required"
+				},
 				"osm": "Map data from OpenStreetMap"
 			}
 		},

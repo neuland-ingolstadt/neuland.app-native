@@ -7,6 +7,7 @@ import {
 	NavigationControl,
 	Source
 } from '@vis.gl/react-maplibre'
+import { DoorClosed } from 'lucide-react-native'
 import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
@@ -16,6 +17,7 @@ import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
 	MAP_CAMERA,
+	MAP_COLORS,
 	MAP_IDS,
 	MAP_STYLE_URLS,
 	type MapMode
@@ -26,6 +28,7 @@ import type { ClickedMapElement } from '@/types/map'
 import {
 	getMapFocusPadding,
 	getSelectionFocusZoom,
+	isMutedEntrance,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -48,6 +51,8 @@ interface WebMapCanvasProps {
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
+	allRooms: MapScreenModel['allRooms']
+	mapEntrances: MapScreenModel['mapEntrances']
 	clickedElement: MapScreenModel['clickedElement']
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
@@ -98,6 +103,8 @@ export default function WebMapCanvas({
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
+	allRooms,
+	mapEntrances,
 	clickedElement,
 	selectMapElement,
 	mapMode,
@@ -117,11 +124,16 @@ export default function WebMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
-		handleRoomSelection
+		primaryEntrances,
+		mutedEntrances,
+		handleRoomSelection,
+		handleEntranceSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
+		allRooms,
+		mapEntrances,
 		clickedElement,
 		selectMapElement,
 		mapMode,
@@ -203,6 +215,49 @@ export default function WebMapCanvas({
 						paint={layerStyles.buildingLabels.paint}
 					/>
 				</Source>
+				{[...primaryEntrances.features, ...mutedEntrances.features].map(
+					(feature) => {
+						if (feature.geometry?.type !== 'Point') {
+							return null
+						}
+						const [longitude, latitude] = feature.geometry.coordinates
+						const key = String(
+							feature.properties?.id ?? `${longitude},${latitude}`
+						)
+						const muted = isMutedEntrance(feature.properties)
+						return (
+							<Marker
+								key={key}
+								longitude={longitude}
+								latitude={latitude}
+								anchor="center"
+								style={{ cursor: 'pointer' }}
+								onClick={(event) => {
+									event.originalEvent.stopPropagation()
+									handleEntranceSelection([feature])
+								}}
+							>
+								<div
+									style={{
+										width: 26,
+										height: 26,
+										borderRadius: 13,
+										backgroundColor: muted
+											? MAP_COLORS.entranceMuted
+											: primaryColor,
+										border: `2px solid ${backgroundColor}`,
+										boxSizing: 'border-box',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center'
+									}}
+								>
+									<DoorClosed size={14} color="#ffffff" strokeWidth={2.5} />
+								</div>
+							</Marker>
+						)
+					}
+				)}
 				<Source
 					id={MAP_IDS.sources.allRooms}
 					type="geojson"

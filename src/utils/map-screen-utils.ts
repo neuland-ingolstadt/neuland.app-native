@@ -237,6 +237,116 @@ export function getSelectedMapFeatures(
 	return []
 }
 
+/** Exit-only or badge-only entrances use the muted (grey) marker. */
+export function isMutedEntrance(
+	properties: GeoJsonProperties | null | undefined
+): boolean {
+	return properties?.kind === 'exit' || properties?.access === 'badge'
+}
+
+export function splitEntrancesByStyle(entrances: FeatureCollection): {
+	primary: FeatureCollection
+	muted: FeatureCollection
+} {
+	const primary: Feature[] = []
+	const muted: Feature[] = []
+	for (const feature of entrances.features) {
+		if (isMutedEntrance(feature.properties)) {
+			muted.push(feature)
+		} else {
+			primary.push(feature)
+		}
+	}
+	return {
+		primary: { type: 'FeatureCollection', features: primary },
+		muted: { type: 'FeatureCollection', features: muted }
+	}
+}
+
+/** ~6–8 m at Ingolstadt latitude — keeps door icons clear of the selection pin. */
+const ENTRANCE_MARKER_CLEARANCE = 0.00007
+
+/**
+ * Drop entrances that would sit under the selection map marker.
+ */
+export function excludeEntrancesNearPoint(
+	entrances: FeatureCollection,
+	point: MapCoordinate | undefined
+): FeatureCollection {
+	if (point == null) {
+		return entrances
+	}
+
+	const [longitude, latitude] = point
+	const thresholdSq = ENTRANCE_MARKER_CLEARANCE * ENTRANCE_MARKER_CLEARANCE
+
+	return {
+		type: 'FeatureCollection',
+		features: entrances.features.filter((feature) => {
+			if (feature.geometry?.type !== 'Point') {
+				return false
+			}
+			const [x, y] = feature.geometry.coordinates
+			if (typeof x !== 'number' || typeof y !== 'number') {
+				return false
+			}
+			const dLon = x - longitude
+			const dLat = y - latitude
+			return dLon * dLon + dLat * dLat > thresholdSq
+		})
+	}
+}
+
+/**
+ * Entrances for the current map selection.
+ * Building and room both show every entrance of that building.
+ */
+export function getSelectedBuildingEntrances(
+	clicked: ClickedMapElement | null,
+	entrances: FeatureCollection | undefined,
+	rooms?: FeatureCollection | undefined
+): FeatureCollection {
+	if (clicked == null || entrances == null) {
+		return { type: 'FeatureCollection', features: [] }
+	}
+
+	let building: string | null = null
+	if (clicked.type === SEARCH_TYPES.BUILDING) {
+		building = clicked.data
+	} else if (clicked.type === SEARCH_TYPES.ROOM) {
+		const roomFeature = rooms?.features.find(
+			(feature) =>
+				feature.properties?.rtype === SEARCH_TYPES.ROOM &&
+				feature.properties?.Raum === clicked.data
+		)
+		building =
+			typeof roomFeature?.properties?.Gebaeude === 'string'
+				? roomFeature.properties.Gebaeude
+				: null
+	} else if (clicked.type === SEARCH_TYPES.ENTRANCE) {
+		const entranceFeature = entrances.features.find(
+			(feature) => feature.properties?.id === clicked.data
+		)
+		building =
+			typeof entranceFeature?.properties?.Gebaeude === 'string'
+				? entranceFeature.properties.Gebaeude
+				: null
+	}
+
+	if (building == null) {
+		return { type: 'FeatureCollection', features: [] }
+	}
+
+	return {
+		type: 'FeatureCollection',
+		features: entrances.features.filter(
+			(feature) =>
+				feature.geometry?.type === 'Point' &&
+				feature.properties?.Gebaeude === building
+		)
+	}
+}
+
 /**
  * Ensures that we're working with an array of features
  */
@@ -319,4 +429,68 @@ export function getBuildingData(
 		},
 		type: SEARCH_TYPES.BUILDING
 	}
+}
+
+/**
+ * Get entrance data from an entrance id
+ */
+export function getEntranceData(
+	entranceId: string,
+	entrances: FeatureCollection | undefined,
+	i18n: i18n,
+	t: TFunction<'common', undefined>
+): RoomData {
+	const feature = entrances?.features.find(
+		(item) => item.properties?.id === entranceId
+	)
+	const properties = feature?.properties
+	const isGerman = i18n.language.startsWith('de')
+	const title =
+		(isGerman ? properties?.name_de : properties?.name_en) ??
+		(typeof properties?.name_en === 'string'
+			? properties.name_en
+			: typeof properties?.name_de === 'string'
+				? properties.name_de
+				: entranceId)
+	const subtitle =
+		typeof properties?.Gebaeude === 'string'
+			? t('pages.map.details.entrance.buildingSubtitle', {
+					building: properties.Gebaeude
+				})
+			: t('pages.map.details.entrance.title')
+
+	return {
+		title: typeof title === 'string' ? title : entranceId,
+		subtitle,
+		properties: properties ?? undefined,
+		occupancies: null,
+		type: SEARCH_TYPES.ENTRANCE
+	}
+}
+
+export function getEntranceSelectionFromFeatures(
+	features: Array<{
+		geometry?: { type?: string; coordinates?: unknown } | null
+		properties?: GeoJsonProperties | null
+	}> | null
+): { id: string; center?: MapCoordinate } | undefined {
+	if (features == null || features.length === 0) {
+		return undefined
+	}
+
+	for (const feature of features) {
+		const id = feature.properties?.id
+		if (typeof id !== 'string' || id.length === 0) {
+			continue
+		}
+		if (feature.geometry?.type !== 'Point') {
+			continue
+		}
+		return {
+			id,
+			center: parseMapCoordinate(feature.geometry.coordinates)
+		}
+	}
+
+	return undefined
 }

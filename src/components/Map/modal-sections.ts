@@ -186,6 +186,53 @@ export const modalSection = (
 			}
 		]
 	}
+	if (roomData.type === SEARCH_TYPES.ENTRANCE && roomData.properties != null) {
+		const properties = roomData.properties
+		const isGerman = i18n.language.startsWith('de')
+		const accessNote = isGerman
+			? properties.access_note_de
+			: properties.access_note_en
+		const kindValue =
+			properties.kind === 'exit'
+				? t('pages.map.details.entrance.kindExit', { ns: 'common' })
+				: properties.kind === 'entrance'
+					? t('pages.map.details.entrance.kindEntrance', { ns: 'common' })
+					: t('pages.map.details.entrance.kindBoth', { ns: 'common' })
+		const accessValue =
+			typeof accessNote === 'string'
+				? accessNote
+				: properties.access === 'badge'
+					? t('pages.map.details.entrance.accessBadge', { ns: 'common' })
+					: t('pages.map.details.entrance.accessPublic', { ns: 'common' })
+
+		return [
+			{
+				header: t('pages.map.details.entrance.details', { ns: 'common' }),
+				items: [
+					{
+						title: t('pages.map.details.room.building', { ns: 'common' }),
+						value:
+							(properties.Gebaeude as string | null)?.toString() ??
+							t('misc.unknown', { ns: 'common' })
+					},
+					{
+						title: t('pages.map.details.entrance.kind', { ns: 'common' }),
+						value: kindValue
+					},
+					{
+						title: t('pages.map.details.entrance.access', { ns: 'common' }),
+						value: accessValue
+					},
+					{
+						title: t('labels.campus', { ns: 'common' }),
+						value:
+							formatCampusLocation(properties.Standort) ??
+							t('misc.unknown', { ns: 'common' })
+					}
+				]
+			}
+		]
+	}
 
 	return []
 }
