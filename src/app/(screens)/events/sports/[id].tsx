@@ -13,10 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Share, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import type {
-	UniversitySportsFieldsFragment,
-	WeekdayType
-} from '@/__generated__/gql/graphql'
 import { EventErrorView } from '@/components/Error/event-error-view'
 import FormList from '@/components/Universal/form-list'
 import type { LucideIcon } from '@/components/Universal/icon'
@@ -25,6 +21,13 @@ import { useSheetDetailScroll } from '@/hooks/useSheetDetailScroll'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import type { Sports, WeekdayEnum } from '@/types/university-sports'
+import {
+	CAMPUS_ENUM_TO_LABEL,
+	hasSportsDescription,
+	sportsLocalizedDescription,
+	sportsLocalizedTitle
+} from '@/types/university-sports'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { getPlatformHeaderButtons } from '@/utils/header-buttons'
@@ -39,6 +42,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 	const successColor = toColor(useCSSVariable('--color-success'))
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { t, i18n } = useTranslation('common')
+	const language = i18n.language as LanguageKey
 
 	const {
 		data: queryData,
@@ -51,8 +55,9 @@ export default function SportsEventDetail(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 
-	const sportsEvent: UniversitySportsFieldsFragment | null | undefined =
-		queryData?.flatMap((group) => group.data).find((event) => event.id === id)
+	const sportsEvent: Sports | null | undefined = queryData
+		?.flatMap((group) => group.data)
+		.find((event) => String(event.id) === id)
 
 	const { scrollHandler, headerStyle, contentInsetAdjustmentBehavior } =
 		useSheetDetailScroll()
@@ -69,10 +74,10 @@ export default function SportsEventDetail(): React.JSX.Element {
 							type: 'sportsEvent'
 						})
 						const message = t('pages.event.shareSports', {
-							title: sportsEvent?.title[i18n.language as LanguageKey],
+							title: sportsLocalizedTitle(sportsEvent, language),
 							weekday: t(
 								`dates.weekdays.${
-									sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
+									sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayEnum>
 								}`
 							),
 							time: formatFriendlyTimeRange(
@@ -92,7 +97,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 					}
 				})
 			})
-		}, [navigation, sportsEvent, t, i18n.language])
+		}, [navigation, sportsEvent, t, language, id])
 	)
 
 	if (isLoading || !queryData) {
@@ -112,11 +117,10 @@ export default function SportsEventDetail(): React.JSX.Element {
 		return <EventErrorView eventType="sports" />
 	}
 
-	const isDescriptionAvailable =
-		!((sportsEvent?.description?.de ?? '') === '') ||
-		!((sportsEvent?.description?.en ?? '') === '')
-	const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
-	const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
+	const isDescriptionAvailable = hasSportsDescription(sportsEvent)
+	const isEmailAvailable = !((sportsEvent.email ?? '') === '')
+	const isInvitationLinkAvailable =
+		sportsEvent.invitationLink != null && sportsEvent.invitationLink !== ''
 
 	const pressLink = (url: string | null | undefined) => {
 		pressLinkUtil(url, `sportsEvent-${id}`)
@@ -130,7 +134,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 					title: t('pages.event.weekday'),
 					value: t(
 						`dates.weekdays.${
-							sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
+							sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayEnum>
 						}`
 					)
 				},
@@ -143,7 +147,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 				},
 				{
 					title: t('labels.campus'),
-					value: sportsEvent?.campus
+					value: CAMPUS_ENUM_TO_LABEL[sportsEvent.campus]
 				},
 				{
 					title: t('pages.event.location'),
@@ -155,9 +159,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 			? [
 					{
 						header: t('pages.event.description'),
-						item:
-							sportsEvent?.description?.[i18n.language as LanguageKey] ??
-							undefined
+						item: sportsLocalizedDescription(sportsEvent, language)
 					}
 				]
 			: []),
@@ -166,10 +168,10 @@ export default function SportsEventDetail(): React.JSX.Element {
 			items: [
 				{
 					title: t('pages.event.registration'),
-					value: sportsEvent?.requiresRegistration
+					value: sportsEvent.requiresRegistration
 						? t('pages.event.required')
 						: t('pages.event.optional'),
-					icon: sportsEvent?.requiresRegistration
+					icon: sportsEvent.requiresRegistration
 						? {
 								ios: 'exclamationmark.triangle.fill',
 								android: 'warning',
@@ -181,23 +183,22 @@ export default function SportsEventDetail(): React.JSX.Element {
 								androidVariant: 'outlined',
 								web: 'BadgeCheck'
 							},
-					iconColor:
-						(sportsEvent?.requiresRegistration ?? false)
-							? warningColor
-							: successColor
+					iconColor: sportsEvent.requiresRegistration
+						? warningColor
+						: successColor
 				},
 				...(isEmailAvailable
 					? [
 							{
 								title: t('pages.event.eMail'),
-								value: sportsEvent.eMail ?? undefined,
+								value: sportsEvent.email ?? undefined,
 								icon: {
 									ios: 'envelope',
 									android: 'mail' as MaterialIcon,
 									web: 'Mail' as LucideIcon
 								},
 								onPress: () => {
-									void Linking.openURL(`mailto:${sportsEvent.eMail}`)
+									void Linking.openURL(`mailto:${sportsEvent.email}`)
 								},
 								textColor: primaryColor
 							}
@@ -224,7 +225,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 		}
 	]
 
-	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
+	const title = sportsLocalizedTitle(sportsEvent, language)
 	return (
 		<Animated.ScrollView
 			testID="sports-event-detail-screen"

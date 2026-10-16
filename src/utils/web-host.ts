@@ -1,7 +1,8 @@
+import type { components } from '@neuland-ingolstadt/backend-core-api'
 import { Platform } from 'react-native'
-import type { Platform as AnnouncementPlatform } from '@/__generated__/gql/graphql'
 import { NEULAND_DEV_HOST, NEULAND_WEB_HOST } from '@/utils/neuland-hosts'
 
+export type AnnouncementPlatform = components['schemas']['PlatformEnum']
 export type WebPlatform = 'web-dev' | 'web' | 'web-local'
 
 export {
@@ -32,7 +33,7 @@ export function resolveAnnouncementPlatform(
 	return 'WEB'
 }
 
-/** Resolves the GraphQL announcement platform at call time (not module load). */
+/** Resolves the announcement platform at call time (not module load). */
 export function getAnnouncementPlatform(): AnnouncementPlatform {
 	return resolveAnnouncementPlatform()
 }
