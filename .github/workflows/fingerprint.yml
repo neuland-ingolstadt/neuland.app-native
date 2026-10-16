@@ -115,7 +115,7 @@ jobs:
       needs.fingerprint.outputs.fingerprint-diff != '[]'
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      contents: read
     steps:
       - name: Summarize fingerprint
         id: fingerprint-summary
@@ -130,12 +130,20 @@ jobs:
             echo "previous-digest=n/a" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.NEULAND_ACTIONS_CLIENT_ID }}
+          private-key: ${{ secrets.NEULAND_ACTIONS_APP_PRIVATE_KEY }}
+
       - name: Create or update stale dev client issue
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           CURRENT_DIGEST: ${{ steps.fingerprint-summary.outputs.current-digest }}
           PREVIOUS_DIGEST: ${{ steps.fingerprint-summary.outputs.previous-digest }}
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const staleLabel = 'dev-client-stale'
             const issueTitle = 'Dev client rebuild needed'
