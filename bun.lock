@@ -76,7 +76,7 @@
         "react-native-select-dropdown": "^4.0.1",
         "react-native-svg": "15.16.0",
         "react-native-view-shot": "6.1.1",
-        "react-native-wallet-manager": "2.1.0",
+        "react-native-wallet-manager": "2.2.0",
         "react-native-web": "^0.21.4",
         "react-native-webview": "14.0.1",
         "react-native-worklets": "0.13.0",
@@ -117,9 +117,6 @@
   "trustedDependencies": [
     "@biomejs/biome",
   ],
-  "patchedDependencies": {
-    "react-native-wallet-manager@2.1.0": "patches/react-native-wallet-manager@2.1.0.patch",
-  },
   "overrides": {
     "expo-server": "~58.0.5",
   },
@@ -1944,7 +1941,7 @@
 
     "react-native-view-shot": ["react-native-view-shot@6.1.1", "", { "peerDependencies": { "html2canvas-pro": "^2.0.0", "react": ">=18.0.0", "react-native": ">=0.80.0" }, "optionalPeers": ["html2canvas-pro", "react-native"] }, "sha512-eMoNXNgADlcMT5mbquHqueE55bUuJA6vpUj650ZiresuorgdRrhDCfaxI2QGL6TN1UT+76EgQMjDO6Vx/H0ZLA=="],
 
-    "react-native-wallet-manager": ["react-native-wallet-manager@2.1.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-IpJFr9ZG9XMU4Feo2zZR3YYFQM4jXRqT3yN5rWM/LilNvRKsTiQDnz7aQy5JWZyUVOo1V40yo/UINk+RBhxmAA=="],
+    "react-native-wallet-manager": ["react-native-wallet-manager@2.2.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-ZXp46scBihBdM0X/+AyU4Y+6vQCJNDzOlqWZfn9oqWHgvWs01jNdi14lYJoEZ7+zr+Zxs6zNNtFV1lh3DAzaKw=="],
 
     "react-native-web": ["react-native-web@0.21.4", "", { "dependencies": { "@babel/runtime": "^7.18.6", "@react-native/normalize-colors": "^0.74.1", "fbjs": "^3.0.4", "inline-style-prefixer": "^7.0.1", "memoize-one": "^6.0.0", "nullthrows": "^1.1.1", "postcss-value-parser": "^4.2.0", "styleq": "^0.1.3" }, "peerDependencies": { "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" } }, "sha512-77B6KlalB4osNIck91TNFixPkYPsTbuNEvw8P7IV+4v4/5wZSBRKZnw0Zhx6YjuauDTz71gc8IW+fVhcBMjr5A=="],
 
