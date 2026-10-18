@@ -45,6 +45,9 @@ const EventComponent = ({
 	const calendarItemColor = String(
 		toColor(useCSSVariable('--color-calendar-item')) ?? '#5d5d5d'
 	)
+	const personalEventColor = String(
+		toColor(useCSSVariable('--color-personal-event')) ?? '#30b0c7'
+	)
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
@@ -52,6 +55,7 @@ const EventComponent = ({
 	}
 	const isExam = event.eventType === 'exam'
 	const isCalendar = event.eventType === 'calendar'
+	const isPersonal = event.eventType === 'personal'
 	const begin = new Date(event.start.dateTime)
 	const end = new Date(event.end.dateTime)
 	const duration = end.getTime() - begin.getTime()
@@ -59,15 +63,19 @@ const EventComponent = ({
 	const nameParts = event.shortName?.split('_')?.slice(1) as string[]
 	const background = isExam
 		? eventBackgroundColor(notificationColor, isDark)
-		: isCalendar
-			? eventBackgroundColor(calendarItemColor, isDark)
-			: eventBackgroundColor(primaryColor, isDark)
+		: isPersonal
+			? eventBackgroundColor(personalEventColor, isDark)
+			: isCalendar
+				? eventBackgroundColor(calendarItemColor, isDark)
+				: eventBackgroundColor(primaryColor, isDark)
 
 	const fontColor = isExam
 		? textColor(notificationColor, background, isDark)
-		: isCalendar
-			? textColor(calendarItemColor, background, isDark)
-			: textColor(primaryColor, background, isDark)
+		: isPersonal
+			? textColor(personalEventColor, background, isDark)
+			: isCalendar
+				? textColor(calendarItemColor, background, isDark)
+				: textColor(primaryColor, background, isDark)
 	const eventName = event?.name as string
 	if (!eventName) {
 		return null
@@ -78,16 +86,18 @@ const EventComponent = ({
 			: eventName.length > 15
 				? nameParts?.join('_') !== ''
 					? (nameParts?.join('_') ?? eventName)
-					: (event.shortName as string)
+					: (event.shortName as string) || eventName
 				: eventName
 
 	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
 	const lineColorByType = isExam
 		? notificationColor
-		: isCalendar
-			? calendarItemColor
-			: primaryColor
+		: isPersonal
+			? personalEventColor
+			: isCalendar
+				? calendarItemColor
+				: primaryColor
 
 	return (
 		<View

@@ -80,5 +80,49 @@
 			"Saturday",
 			"Sunday"
 		]
+	},
+	"personalEvents": {
+		"badge": "Personal",
+		"show": "Personal events",
+		"add": "Add event",
+		"edit": "Edit event",
+		"title": "Title",
+		"location": "Location (optional)",
+		"date": "Date",
+		"time": "Time",
+		"startTime": "Start time",
+		"endTime": "End time",
+		"repeat": "Repeat",
+		"until": "Until",
+		"save": "Save event",
+		"cancel": "Cancel",
+		"delete": "Delete event",
+		"deleteSeries": "Delete entire series",
+		"deleteMessage": "Delete this personal event?",
+		"deleteSeriesMessage": "All occurrences of this series will be deleted.",
+		"saved": "Event saved",
+		"deleted": "Event deleted",
+		"notFound": "Event not found",
+		"emptyTitle": "No events yet",
+		"emptyHint": "Plan your day with personal events. They stay on this device.",
+		"guestHint": "Add your own events here. Log in to see your lectures too.",
+		"localOnly": "Personal events are stored only on this device and survive logout. Recurring events are edited and deleted as a whole.",
+		"recurrenceSummary": "{{recurrence}} until {{date}}",
+		"recurrence": {
+			"none": "Never",
+			"daily": "Daily",
+			"weekly": "Weekly",
+			"monthly": "Monthly"
+		},
+		"validation": {
+			"titleRequired": "Enter a title.",
+			"titleTooLong": "Keep the title within 80 characters.",
+			"locationTooLong": "Keep the location within 80 characters.",
+			"invalidTime": "The end time must be after the start time.",
+			"singleDay": "Start and end must be on the same day.",
+			"untilRequired": "Choose an end date for the series.",
+			"untilBeforeStart": "The series must end on or after the first event.",
+			"untilTooLate": "The series can repeat for up to two years."
+		}
 	}
 }

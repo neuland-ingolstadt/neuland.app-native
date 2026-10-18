@@ -20,9 +20,12 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
+import { useIsFeatureEnabled } from '@/hooks/useFeatureFlag'
+import { usePersonalOccurrences } from '@/hooks/usePersonalOccurrences'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import dayjs from '@/lib/dayjs'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	Exam,
@@ -30,6 +33,7 @@ import type {
 	FriendlyTimetableEntry
 } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
+import { personalOccurrencesToWeekEvents } from '@/utils/personal-events-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import { HeaderRight } from './header-buttons'
 import EventComponent from './week-event-component'
@@ -98,6 +102,10 @@ export default function TimetableWeek({
 	const [events, setEvents] = React.useState<PackedEvent[]>([])
 	const [calendarLoaded, setCalendarLoaded] = React.useState(false)
 	const [currentDate, setCurrentDate] = React.useState(today)
+	const personalEvents = usePersonalOccurrences()
+	const personalEventsEnabled = useIsFeatureEnabled(
+		FeatureFlagKeys.personalEvents
+	)
 	const router = useRouter()
 	const navigation = useNavigation()
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
@@ -169,6 +177,14 @@ export default function TimetableWeek({
 		} else if (entry.eventType === 'exam') {
 			setSelectedExam(entry as unknown as Exam)
 			router.navigate('/exam')
+		} else if (entry.eventType === 'personal') {
+			router.navigate({
+				pathname: '/personal-event',
+				params: {
+					id: String(entry.seriesId),
+					start: new Date(String(entry.start.dateTime)).toISOString()
+				}
+			})
 		} else if (entry.eventType === 'calendar') {
 			router.navigate({
 				pathname: '/calendar',
@@ -178,7 +194,6 @@ export default function TimetableWeek({
 	}
 
 	const combinedEvents = React.useMemo(() => {
-		if (timetable.length === 0) return []
 		// Process timetable lectures
 		const friendlyTimetable = timetable.map(
 			(entry: FriendlyTimetableEntry, index: number) => ({
@@ -248,7 +263,8 @@ export default function TimetableWeek({
 		return [
 			...friendlyTimetable,
 			...friendlyExams,
-			...calendarEvents
+			...calendarEvents,
+			...personalOccurrencesToWeekEvents(personalEvents)
 		] as unknown as PackedEvent[]
 	}, [
 		timetable,
@@ -256,7 +272,8 @@ export default function TimetableWeek({
 		showCalendarEvents,
 		showExams,
 		i18n.language,
-		calendarItemColor
+		calendarItemColor,
+		personalEvents
 	])
 
 	useEffect(() => {
@@ -289,13 +306,23 @@ export default function TimetableWeek({
 							calendarRef.current?.goToDate({ date: targetDate })
 						}
 					}}
+					onPressAdd={
+						personalEventsEnabled
+							? () =>
+									router.navigate({
+										pathname: '/personal-event-edit',
+										params: { origin: 'TimetableHeader' }
+									})
+							: undefined
+					}
 					onPressPreferences={() => router.navigate('/timetable-preferences')}
 					onPressPrevious={onPressPrevious}
 					onPressNext={onPressNext}
 				/>
 			)
 		})
-	}, [navigation])
+		return () => navigation.setOptions({ headerRight: undefined })
+	}, [navigation, personalEventsEnabled, currentDate, router])
 
 	const onPressPrevious = (): void => {
 		calendarRef.current?.goToPrevPage()
@@ -334,11 +361,13 @@ export default function TimetableWeek({
 			<CalendarContainer
 				onLoad={() => {
 					setCalendarLoaded(true)
+					calendarRef.current?.goToHour(7, false)
 				}}
 				useAllDayEvent
 				allowPinchToZoom={true}
-				start={420}
-				end={1320}
+				start={0}
+				end={1440}
+				initialTimeIntervalHeight={60}
 				ref={calendarRef}
 				numberOfDays={timetableNumberDays}
 				scrollByDay={

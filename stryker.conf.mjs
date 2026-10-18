@@ -22,6 +22,7 @@ const config = {
 		'src/utils/changelog-utils.ts',
 		'src/utils/lecturers-utils.ts',
 		'src/utils/map-screen-utils.ts',
+		'src/utils/personal-events-utils.ts',
 		'src/utils/universal-link.ts',
 		'src/utils/up-next-utils.ts'
 	],
@@ -49,6 +50,7 @@ const config = {
 			'src/utils/tests/changelog-utils.test.ts',
 			'src/utils/tests/lecturers-utils.test.ts',
 			'src/utils/tests/map-screen-utils.test.ts',
+			'src/utils/tests/personal-events-utils.test.ts',
 			'src/utils/tests/universal-link.test.ts',
 			'src/utils/tests/up-next-utils.test.ts'
 		]

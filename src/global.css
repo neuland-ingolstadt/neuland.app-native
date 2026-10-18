@@ -58,6 +58,7 @@
 			--color-plate-shadow: #444444;
 			--color-plate-inner-shadow: #777777;
 			--color-calendar-item: #5d5d5d;
+			--color-personal-event: rgb(48, 176, 199);
 			--color-completed-dot: #157a15;
 			--color-soon-dot: #dfdfdf;
 			--color-white: #f2f0ef;
@@ -99,6 +100,7 @@
 			--color-plate-shadow: #777777;
 			--color-plate-inner-shadow: #3d3d3d;
 			--color-calendar-item: #676767;
+			--color-personal-event: rgb(64, 200, 224);
 			--color-completed-dot: #157a15;
 			--color-soon-dot: #4b4b4b;
 			--color-white: #f2f0ef;

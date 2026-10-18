@@ -1,3 +1,5 @@
+import type { PersonalEventOccurrence } from '@/types/personal-events'
+import type { CalendarEntry } from '@/types/timetable'
 import type { Lecturers } from './thi-api'
 
 export interface Exam {
@@ -112,7 +114,7 @@ export interface ExamTimetableEntry extends Exam {
 
 export interface TimetableSections {
 	title: Date
-	data: (TimetableEntry | ExamEntry)[]
+	data: (TimetableEntry | ExamEntry | CalendarEntry | PersonalEventOccurrence)[]
 }
 
 export interface CalendarEvent {

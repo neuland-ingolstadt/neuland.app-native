@@ -10,7 +10,8 @@
 		"libraryBarcode": "Library Number as Barcode",
 		"libraryBarcodeBrightness": "Toggle brightness for barcode scanning",
 		"previous": "Previous",
-		"next": "Next"
+		"next": "Next",
+		"addPersonalEvent": "Add personal event"
 	},
 	"map": {
 		"centerOnCurrentLocation": "Center on current location",

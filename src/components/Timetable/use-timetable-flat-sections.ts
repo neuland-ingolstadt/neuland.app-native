@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { PersonalEventOccurrence } from '@/types/personal-events'
 import type { CalendarEntry } from '@/types/timetable'
 import type {
 	Exam,
@@ -9,7 +10,11 @@ import type {
 import { calendar } from '@/utils/calendar-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 
-export type TimetableItem = TimetableEntry | ExamEntry | CalendarEntry
+export type TimetableItem =
+	| TimetableEntry
+	| ExamEntry
+	| CalendarEntry
+	| PersonalEventOccurrence
 
 export type TimetableSection = {
 	title: Date
@@ -25,6 +30,7 @@ interface UseTimetableFlatSectionsParams {
 	exams: Exam[]
 	showExams: boolean
 	showCalendarEvents: boolean
+	personalEvents: PersonalEventOccurrence[]
 	today: Date
 }
 
@@ -33,6 +39,7 @@ export function useTimetableFlatSections({
 	exams,
 	showExams,
 	showCalendarEvents,
+	personalEvents,
 	today
 }: UseTimetableFlatSectionsParams) {
 	const filteredTimetableSections = useMemo(() => {
@@ -41,10 +48,11 @@ export function useTimetableFlatSections({
 			timetable,
 			examsList,
 			showCalendarEvents,
-			calendar
+			calendar,
+			personalEvents
 		)
 		return grouped.filter((section) => section.title >= today)
-	}, [timetable, exams, showExams, showCalendarEvents, today])
+	}, [timetable, exams, showExams, showCalendarEvents, today, personalEvents])
 
 	const flatData = useMemo(() => {
 		const data: FlatListItem[] = []
@@ -77,6 +85,7 @@ export function getTimetableFlatListKey(
 	}
 
 	const data = item.data
+	if (data.eventType === 'personal') return `personal-${data.id}`
 	if (data.eventType === 'exam') {
 		return `exam-${data.name}-${dateKeyPart(data.date)}`
 	}

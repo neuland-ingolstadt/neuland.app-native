@@ -4,12 +4,12 @@ import React, { act } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { renderToString } from 'react-dom/server'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import type { FeatureFlagState } from '@/lib/feature-flags'
+import type { FeatureFlagKey, FeatureFlagState } from '@/lib/feature-flags'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 function createDefaultFeatureFlagState(): FeatureFlagState {
-	return {}
+	return { 'personal-events': false }
 }
 
 let shownDashboardEntriesState: string[] | undefined
@@ -252,6 +252,7 @@ describe('dashboard context', () => {
 
 	it('mergeNewFlaggedCardsIntoDashboard - Should insert newly enabled flagged cards near neighbors', () => {
 		const flags = {
+			...createDefaultFeatureFlagState(),
 			'flagged-card': true,
 			'flagged-early': true
 		} as FeatureFlagState
@@ -275,6 +276,7 @@ describe('dashboard context', () => {
 
 	it('mergeNewFlaggedCardsIntoDashboard - Should skip flagged cards already present or disabled', () => {
 		const flags = {
+			...createDefaultFeatureFlagState(),
 			'flagged-card': true,
 			'flagged-early': false
 		} as FeatureFlagState
@@ -300,14 +302,22 @@ describe('dashboard context', () => {
 
 	it('isCardEnabled - Should read feature flag state for flagged cards', () => {
 		expect(
-			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
-				'flagged-card': true
-			} as FeatureFlagState)
+			dashboard.isCardEnabled(
+				{ featureFlag: 'flagged-card' as FeatureFlagKey },
+				{
+					...createDefaultFeatureFlagState(),
+					'flagged-card': true
+				} as FeatureFlagState
+			)
 		).toBe(true)
 		expect(
-			dashboard.isCardEnabled({ featureFlag: 'flagged-card' }, {
-				'flagged-card': false
-			} as FeatureFlagState)
+			dashboard.isCardEnabled(
+				{ featureFlag: 'flagged-card' as FeatureFlagKey },
+				{
+					...createDefaultFeatureFlagState(),
+					'flagged-card': false
+				} as FeatureFlagState
+			)
 		).toBe(false)
 	})
 
@@ -354,6 +364,7 @@ describe('dashboard context', () => {
 
 	it('syncDashboardEntriesWithFlags - Should return a merged order when flagged cards are newly enabled', () => {
 		const flags = {
+			...createDefaultFeatureFlagState(),
 			'flagged-card': true
 		} as FeatureFlagState
 
@@ -436,6 +447,7 @@ describe('dashboard context', () => {
 		hiddenAnnouncementsState = undefined
 		userKindState = USER_STUDENT
 		featureFlagsState = {
+			...createDefaultFeatureFlagState(),
 			'flagged-card': true
 		} as FeatureFlagState
 

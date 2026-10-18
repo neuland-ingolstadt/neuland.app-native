@@ -52,7 +52,9 @@
 		"roomReport": "Problem mit einem Raum melden",
 		"clEvents": "Campus Life Events",
 		"thiEvents": "THI Events",
-		"neulandMember": "Mitgliederbereich"
+		"neulandMember": "Mitgliederbereich",
+		"personalEvent": "Persönlicher Termin",
+		"personalEventEdit": "Termin hinzufügen"
 	},
 	"cards": {
 		"titles": {
@@ -71,7 +73,8 @@
 			"food": "Essen",
 			"login": "Anmelden",
 			"links": "Quick Links",
-			"sports": "Hochschulsport"
+			"sports": "Hochschulsport",
+			"personalEvents": "Meine Termine"
 		},
 		"announcements": {
 			"readMore": "Tippe, um mehr zu erfahren."

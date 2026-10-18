@@ -4,10 +4,12 @@ import { useEffect } from 'react'
 import { Platform } from 'react-native'
 import { useDashboard, useUserKind } from '@/contexts'
 import { useMemberStore } from '@/hooks'
+import { useIsFeatureEnabled } from '@/hooks/useFeatureFlag'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import i18n from '@/localization/i18n'
 
 export function usePreferenceTracking(): void {
@@ -23,9 +25,19 @@ export function usePreferenceTracking(): void {
 	)
 	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
+	const personalEventsEnabled = useIsFeatureEnabled(
+		FeatureFlagKeys.personalEvents
+	)
+	const showPersonalEvents = useTimetableStore(
+		(state) => state.showPersonalEvents
+	)
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
 	)
+	useEffect(() => {
+		if (!analyticsInitialized || !personalEventsEnabled) return
+		trackEvent('TimetableContent', { showPersonalEvents })
+	}, [showPersonalEvents, analyticsInitialized, personalEventsEnabled])
 	const isNeulandMember = useMemberStore((state) => !!state.idToken)
 	const userKind = useUserKind()
 	const dashboard = useDashboard()

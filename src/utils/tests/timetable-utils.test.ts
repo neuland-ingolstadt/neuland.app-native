@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { Calendar } from '@/types/data'
 import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
+import { expandPersonalEvents } from '@/utils/personal-events-utils'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -410,5 +411,89 @@ describe('timetable-utils', () => {
 			eventType: 'calendar',
 			isAllDay: false
 		})
+	})
+})
+
+describe('personal timetable grouping', () => {
+	it('groups 00:30 on the local date and merges with exams in time order', () => {
+		const oldTimezone = process.env.TZ
+		process.env.TZ = 'Europe/Berlin'
+		try {
+			const personal = expandPersonalEvents(
+				[
+					{
+						id: 'personal',
+						title: 'Early event',
+						start: '2026-04-08T00:30:00',
+						end: '2026-04-08T01:30:00',
+						recurrence: 'none',
+						createdAt: '',
+						updatedAt: ''
+					}
+				],
+				new Date('2026-04-01'),
+				new Date('2026-04-30')
+			)
+			expect(personal[0].startDate.toISOString().startsWith('2026-04-07')).toBe(
+				true
+			)
+			const exam: Exam = {
+				name: 'Exam',
+				type: '90 min',
+				rooms: '',
+				seat: '',
+				notes: '',
+				examiners: [],
+				date: new Date('2026-04-08T09:00:00'),
+				enrollment: new Date(),
+				aids: []
+			}
+			const groups = timetableUtils.getGroupedTimetable(
+				[],
+				[exam],
+				false,
+				[],
+				personal
+			)
+			expect(groups).toHaveLength(1)
+			expect(formatYmd(groups[0].title)).toBe('2026-04-08')
+			expect(groups[0].title.getHours()).toBe(0)
+			expect(groups[0].data.map((item) => item.eventType)).toEqual([
+				'personal',
+				'exam'
+			])
+		} finally {
+			if (oldTimezone === undefined) delete process.env.TZ
+			else process.env.TZ = oldTimezone
+		}
+	})
+	it('keeps separate days ordered even when inputs are reversed', () => {
+		const personal = expandPersonalEvents(
+			[
+				{
+					id: 'series',
+					title: 'Study',
+					start: '2026-04-08T10:00:00',
+					end: '2026-04-08T11:00:00',
+					recurrence: 'daily',
+					recurrenceUntil: '2026-04-09',
+					createdAt: '',
+					updatedAt: ''
+				}
+			],
+			new Date('2026-04-01'),
+			new Date('2026-04-30')
+		).reverse()
+		const groups = timetableUtils.getGroupedTimetable(
+			[],
+			[],
+			false,
+			[],
+			personal
+		)
+		expect(groups.map((group) => formatYmd(group.title))).toEqual([
+			'2026-04-08',
+			'2026-04-09'
+		])
 	})
 })

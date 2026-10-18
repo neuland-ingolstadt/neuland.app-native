@@ -1,3 +1,5 @@
+import { usePersonalEventsStore } from '@/hooks/usePersonalEventsStore'
+import { usePersonalOccurrences } from '@/hooks/usePersonalOccurrences'
 import { useAppState } from './useAppState'
 import {
 	useFeatureFlag,
@@ -28,6 +30,8 @@ export {
 	useMemberStore,
 	useNow,
 	useOnlineManager,
+	usePersonalEventsStore,
+	usePersonalOccurrences,
 	useRefreshByUser,
 	useRefreshOnFocus,
 	useServiceStatus,

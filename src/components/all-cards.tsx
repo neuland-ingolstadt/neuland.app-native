@@ -1,6 +1,7 @@
 import type React from 'react'
+import PersonalEventsCard from '@/components/Cards/personal-events-card'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import type { FeatureFlagKey } from '@/lib/feature-flags'
+import { type FeatureFlagKey, FeatureFlagKeys } from '@/lib/feature-flags'
 import CalendarCard from './Cards/calendar-card'
 import EventsCard from './Cards/events-card'
 import LinkCard from './Cards/link-card'
@@ -17,6 +18,14 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE],
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
 		card: () => <UpNextCard />
+	},
+	{
+		key: 'personalEvents',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		featureFlag: FeatureFlagKeys.personalEvents,
+		card: () => <PersonalEventsCard />
 	},
 	{
 		key: 'events',

@@ -10,7 +10,8 @@
 		"libraryBarcode": "Bibliotheksnummer als Barcode",
 		"libraryBarcodeBrightness": "Helligkeit zum Scannen umschalten",
 		"previous": "Zurück",
-		"next": "Weiter"
+		"next": "Weiter",
+		"addPersonalEvent": "Persönlichen Termin hinzufügen"
 	},
 	"map": {
 		"centerOnCurrentLocation": "Auf aktuellen Standort zentrieren",

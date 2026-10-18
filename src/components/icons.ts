@@ -21,6 +21,11 @@ export const cardIcons: CardIcons = {
 		android: 'calendar_month',
 		web: 'CalendarDays'
 	},
+	personalEvents: {
+		ios: 'calendar.badge.plus',
+		android: 'event_note',
+		web: 'CalendarPlus'
+	},
 	calendar: {
 		ios: 'graduationcap.fill',
 		android: 'school',

@@ -6,7 +6,7 @@ import { toColor } from '@/utils/uniwind-utils'
 
 interface BadgeProps {
 	text: string
-	type: 'exam' | 'calendar' | 'default' | 'allDay'
+	type: 'exam' | 'calendar' | 'personal' | 'default' | 'allDay'
 	backgroundColor?: string
 	textColor?: string
 }
@@ -28,6 +28,13 @@ const Badge = ({
 
 	const getBadgeStyle = () => {
 		switch (type) {
+			case 'personal':
+				return {
+					containerClassName: 'px-1.5 py-0.5 rounded-base bg-personal-event/15',
+					containerStyle: {},
+					textClassName: 'text-xs font-medium text-text',
+					textStyle: {}
+				}
 			case 'exam':
 				return {
 					containerClassName: 'px-1.5 py-0.5 rounded-base',

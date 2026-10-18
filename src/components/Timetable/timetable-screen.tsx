@@ -14,7 +14,10 @@ import TimetableWeek from '@/components/Timetable/timetable-week'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import { useIsFeatureEnabled } from '@/hooks/useFeatureFlag'
+import { usePersonalEventsStore } from '@/hooks/usePersonalEventsStore'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
@@ -44,6 +47,12 @@ const LoadingView = (): React.JSX.Element => (
 function TimetableScreen(): React.JSX.Element {
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 
+	const personalEventsEnabled = useIsFeatureEnabled(
+		FeatureFlagKeys.personalEvents
+	)
+	const hasPersonalEvents = usePersonalEventsStore(
+		(state) => state.events.length > 0
+	)
 	const { userKind } = use(UserKindContext)
 
 	const {
@@ -78,6 +87,13 @@ function TimetableScreen(): React.JSX.Element {
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
+	const emptyTimetable =
+		error?.message === '"Time table does not exist" (-202)' ||
+		error?.message === 'Timetable is empty' ||
+		(isSuccess && timetable?.length === 0)
+	const showLocalTimetable =
+		personalEventsEnabled &&
+		(userKind === USER_GUEST || (emptyTimetable && hasPersonalEvents))
 	const edges =
 		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
 			? (['top'] as Edges)
@@ -85,7 +101,13 @@ function TimetableScreen(): React.JSX.Element {
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView testID="timetable-screen" style={styles.page} edges={edges}>
-				{isLoading ? (
+				{showLocalTimetable ? (
+					timetableMode === TimetableMode.List ? (
+						<TimetableList timetable={[]} exams={[]} />
+					) : (
+						<TimetableWeek timetable={[]} exams={[]} />
+					)
+				) : isLoading ? (
 					<LoadingView />
 				) : isSuccess && timetable !== undefined && timetable.length > 0 ? (
 					timetableMode === TimetableMode.List ? (
@@ -102,8 +124,7 @@ function TimetableScreen(): React.JSX.Element {
 							void refetchByUser()
 						}}
 					/>
-				) : error?.message === '"Time table does not exist" (-202)' ||
-					error?.message === 'Timetable is empty' ? (
+				) : emptyTimetable ? (
 					<EmptyTimetableAnimation
 						isEmpty={error?.message === 'Timetable is empty'}
 						onRefresh={() => {

@@ -80,5 +80,49 @@
 			"Samstag",
 			"Sonntag"
 		]
+	},
+	"personalEvents": {
+		"badge": "Persönlich",
+		"show": "Persönliche Termine",
+		"add": "Termin hinzufügen",
+		"edit": "Termin bearbeiten",
+		"title": "Titel",
+		"location": "Ort (optional)",
+		"date": "Datum",
+		"time": "Uhrzeit",
+		"startTime": "Beginn",
+		"endTime": "Ende",
+		"repeat": "Wiederholen",
+		"until": "Bis",
+		"save": "Termin speichern",
+		"cancel": "Abbrechen",
+		"delete": "Termin löschen",
+		"deleteSeries": "Gesamte Serie löschen",
+		"deleteMessage": "Diesen persönlichen Termin löschen?",
+		"deleteSeriesMessage": "Alle Termine dieser Serie werden gelöscht.",
+		"saved": "Termin gespeichert",
+		"deleted": "Termin gelöscht",
+		"notFound": "Termin nicht gefunden",
+		"emptyTitle": "Noch keine Termine",
+		"emptyHint": "Plane deinen Tag mit persönlichen Terminen. Sie bleiben auf diesem Gerät.",
+		"guestHint": "Füge hier eigene Termine hinzu. Melde dich an, um auch deine Vorlesungen zu sehen.",
+		"localOnly": "Persönliche Termine werden nur auf diesem Gerät gespeichert und bleiben nach dem Abmelden erhalten. Wiederkehrende Termine werden als gesamte Serie bearbeitet und gelöscht.",
+		"recurrenceSummary": "{{recurrence}} bis {{date}}",
+		"recurrence": {
+			"none": "Nie",
+			"daily": "Täglich",
+			"weekly": "Wöchentlich",
+			"monthly": "Monatlich"
+		},
+		"validation": {
+			"titleRequired": "Gib einen Titel ein.",
+			"titleTooLong": "Der Titel darf höchstens 80 Zeichen lang sein.",
+			"locationTooLong": "Der Ort darf höchstens 80 Zeichen lang sein.",
+			"invalidTime": "Das Ende muss nach dem Beginn liegen.",
+			"singleDay": "Beginn und Ende müssen am selben Tag liegen.",
+			"untilRequired": "Wähle ein Enddatum für die Serie.",
+			"untilBeforeStart": "Die Serie muss am oder nach dem ersten Termin enden.",
+			"untilTooLate": "Die Serie darf sich höchstens zwei Jahre lang wiederholen."
+		}
 	}
 }

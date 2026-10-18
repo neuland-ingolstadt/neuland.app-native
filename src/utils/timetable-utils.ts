@@ -1,13 +1,14 @@
 import API from '@/api/thi-authenticated-api'
 import dayjs from '@/lib/dayjs'
 import type { Calendar } from '@/types/data'
+import type { PersonalEventOccurrence } from '@/types/personal-events'
 import type {
 	CalendarEvent,
 	Exam,
 	FriendlyTimetableEntry,
 	TimetableSections
 } from '@/types/utils'
-import { combineDateTime } from './date-utils'
+import { combineDateTime, formatISODate } from './date-utils'
 import { parseLecturerIds } from './lecturers-utils'
 
 /**
@@ -111,16 +112,21 @@ export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
 	exams: Exam[],
 	includeCalendar = false,
-	calendarEvents: Calendar[] = []
+	calendarEvents: Calendar[] = [],
+	personalEvents: PersonalEventOccurrence[] = []
 ): TimetableSections[] {
-	const combinedData = [
-		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
+	const combinedData: TimetableSections['data'] = [
+		...personalEvents,
+		...timetable.map((lecture) => ({
+			...lecture,
+			eventType: 'timetable' as const
+		})),
 		...exams.map((exam) => {
 			const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90)
 			return {
 				...exam,
 				endDate: dayjs(exam.date).add(duration, 'minute').toDate(),
-				eventType: 'exam'
+				eventType: 'exam' as const
 			}
 		})
 	]
@@ -157,9 +163,9 @@ export function getGroupedTimetable(
 						endDate: null,
 						originalStartDate,
 						originalEndDate,
-						name: event.name,
+						name: { ...event.name },
 						isAllDay: true,
-						eventType: 'calendar'
+						eventType: 'calendar' as const
 					})
 
 					currentDate.setDate(currentDate.getDate() + 1)
@@ -168,44 +174,45 @@ export function getGroupedTimetable(
 			}
 			return [
 				{
+					id: event.id,
 					date: startDate,
 					startDate,
 					endDate: isAllDay ? null : endDate,
 					originalStartDate,
 					originalEndDate,
-					name: event.name,
+					name: { ...event.name },
 					isAllDay,
-					eventType: 'calendar'
+					eventType: 'calendar' as const
 				}
 			]
 		})
 
 		const flattenedCalendarEvents = processedCalendarEvents.flat()
-		// biome-ignore lint/suspicious/noExplicitAny: TODO
-		combinedData.push(...(flattenedCalendarEvents as any))
+		combinedData.push(...flattenedCalendarEvents)
 	}
 
-	// Sort combinedData by date
-	combinedData.sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-	)
-
-	const dates = [
-		...new Set(
-			combinedData.map(
-				(item) => new Date(item.date).toISOString().split('T')[0]
-			)
-		)
-	]
-
-	const groups = dates.map((date) => ({
-		title: new Date(date),
-		data: combinedData.filter(
-			(item) => new Date(item.date).toISOString().split('T')[0] === date
-		)
-	}))
-
-	return groups as TimetableSections[]
+	const groups = new Map<string, TimetableSections>()
+	for (const item of combinedData) {
+		const date = new Date(item.date)
+		const key = formatISODate(date)
+		let group = groups.get(key)
+		if (!group) {
+			date.setHours(0, 0, 0, 0)
+			group = { title: date, data: [] }
+			groups.set(key, group)
+		}
+		group.data.push(item)
+	}
+	return [...groups.values()]
+		.sort((a, b) => a.title.getTime() - b.title.getTime())
+		.map((group) => ({
+			...group,
+			data: group.data.sort((a, b) => {
+				const startA = a.eventType === 'exam' ? a.date : a.startDate
+				const startB = b.eventType === 'exam' ? b.date : b.startDate
+				return startA.getTime() - startB.getTime()
+			})
+		}))
 }
 
 export function convertTimetableToWeekViewEvents(

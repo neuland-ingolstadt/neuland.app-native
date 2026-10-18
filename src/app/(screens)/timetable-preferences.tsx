@@ -9,7 +9,9 @@ import TimetablePreview from '@/components/Timetable/timetable-preview'
 import MultiSectionPicker from '@/components/Universal/multi-section-picker'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
+import { useIsFeatureEnabled } from '@/hooks/useFeatureFlag'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import { FeatureFlagKeys } from '@/lib/feature-flags'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
@@ -22,6 +24,15 @@ export default function TimetablePreferences(): React.JSX.Element {
 	)
 	const setShowCalendarEvents = useTimetableStore(
 		(state) => state.setShowCalendarEvents
+	)
+	const personalEventsEnabled = useIsFeatureEnabled(
+		FeatureFlagKeys.personalEvents
+	)
+	const showPersonalEvents = useTimetableStore(
+		(state) => state.showPersonalEvents
+	)
+	const setShowPersonalEvents = useTimetableStore(
+		(state) => state.setShowPersonalEvents
 	)
 	const showExams = useTimetableStore((state) => state.showExams)
 	const setShowExams = useTimetableStore((state) => state.setShowExams)
@@ -68,13 +79,21 @@ export default function TimetablePreferences(): React.JSX.Element {
 		}
 	]
 
+	if (personalEventsEnabled)
+		additionalContentElements.push({
+			key: 'showPersonalEvents',
+			title: t('personalEvents.show', { ns: 'timetable' })
+		})
 	const selectedAdditionalContent = []
+	if (showPersonalEvents) selectedAdditionalContent.push('showPersonalEvents')
 	if (showCalendarEvents) selectedAdditionalContent.push('showCalendarEvents')
 	if (showExams) selectedAdditionalContent.push('showExams')
 
 	const toggleAdditionalContent = (key: string) => {
 		if (key === 'showCalendarEvents') {
 			setShowCalendarEvents(!showCalendarEvents)
+		} else if (key === 'showPersonalEvents') {
+			setShowPersonalEvents(!showPersonalEvents)
 		} else if (key === 'showExams') {
 			setShowExams(!showExams)
 		}

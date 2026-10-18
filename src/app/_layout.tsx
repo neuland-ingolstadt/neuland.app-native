@@ -370,6 +370,27 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/personal-event"
+					options={{
+						title: t('navigation.personalEvent'),
+						...Platform.select({
+							ios: {
+								...presentationMode,
+								...getPlatformHeaderButtons({
+									noShare: true
+								})
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/personal-event-edit"
+					options={{
+						title: t('navigation.personalEventEdit'),
+						...Platform.select({ ios: { presentation: 'modal' } })
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/links"
 					options={{
 						title: t('navigation.quicklinks'),

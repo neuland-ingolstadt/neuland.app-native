@@ -9,6 +9,7 @@ interface HeaderRightProps {
 	setToday: () => void
 	onPressPreferences: () => void
 	onPressPrevious?: () => void
+	onPressAdd?: () => void
 	onPressNext?: () => void
 }
 
@@ -16,13 +17,29 @@ export function HeaderRight({
 	setToday,
 	onPressPreferences,
 	onPressPrevious,
-	onPressNext
+	onPressNext,
+	onPressAdd
 }: HeaderRightProps): React.JSX.Element {
 	const { t } = useTranslation(['accessibility'])
 	const textColor = toColor(useCSSVariable('--color-text'))
 
 	return (
 		<View className="flex-row ios:gap-5 ios:mx-[3px] android:gap-2.5 android:mx-1.5 web:gap-2.5 web:mx-1.5">
+			{onPressAdd && (
+				<Pressable
+					onPress={onPressAdd}
+					hitSlop={10}
+					accessibilityRole="button"
+					accessibilityLabel={t('button.addPersonalEvent')}
+				>
+					<PlatformIcon
+						ios={{ name: 'plus', size: 20 }}
+						android={{ name: 'add', size: 24 }}
+						web={{ name: 'Plus', size: 24 }}
+						style={{ color: textColor }}
+					/>
+				</Pressable>
+			)}
 			<Pressable
 				onPress={setToday}
 				hitSlop={10}
@@ -58,6 +75,7 @@ export function HeaderRight({
 							style={{ color: textColor }}
 						/>
 					</Pressable>
+
 					<Pressable
 						onPress={onPressNext}
 						hitSlop={10}

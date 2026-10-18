@@ -52,7 +52,9 @@
 		"roomReport": "Report Room Issue",
 		"clEvents": "Campus Life Events",
 		"thiEvents": "THI Events",
-		"neulandMember": "Member Area"
+		"neulandMember": "Member Area",
+		"personalEvent": "Personal event",
+		"personalEventEdit": "Add event"
 	},
 	"cards": {
 		"titles": {
@@ -71,7 +73,8 @@
 			"food": "Food",
 			"login": "Sign in",
 			"links": "Quick Links",
-			"sports": "University Sports"
+			"sports": "University Sports",
+			"personalEvents": "My events"
 		},
 		"announcements": {
 			"readMore": "Tap to learn more."
