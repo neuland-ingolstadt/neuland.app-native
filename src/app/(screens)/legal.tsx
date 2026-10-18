@@ -3,7 +3,7 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, View } from 'react-native'
 import FormList from '@/components/Universal/form-list'
-import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
+import { FAQ_URL, IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useTransparentHeaderPadding } from '@/hooks/useTransparentHeader'
 import type { FormListSections } from '@/types/components'
 
@@ -84,10 +84,7 @@ export default function About(): React.JSX.Element {
 						android: 'help',
 						web: 'CircleQuestionMark'
 					},
-					onPress: async () =>
-						(await Linking.openURL(
-							'https://neuland.app/docs/app/faq'
-						)) as Promise<void>
+					onPress: async () => (await Linking.openURL(FAQ_URL)) as Promise<void>
 				}
 			]
 		}
