@@ -158,6 +158,9 @@
 		"npm-license-crawler": "^0.2.1",
 		"typescript": "~6.0.3"
 	},
+	"overrides": {
+		"expo-server": "~58.0.5"
+	},
 	"patchedDependencies": {
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
 		"react-native-wallet-manager@2.1.0": "patches/react-native-wallet-manager@2.1.0.patch"
