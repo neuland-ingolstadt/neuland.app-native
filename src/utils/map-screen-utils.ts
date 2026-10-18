@@ -266,6 +266,26 @@ function ensureFeaturesArray(
 }
 
 /**
+ * THI free-room API tracks Hörsäle, Seminaräume, and PC-Pools.
+ * Match those via GeoJSON Funktion so fully booked / weekend rooms still show
+ * Verfügbarkeit ("Not available") instead of hiding the section.
+ */
+const BOOKABLE_FUNKTION_PATTERN = /lecture|h[oö]rsaal|seminar|pc[\s-]?pool/i
+
+export function isAvailabilityTrackedRoom(
+	properties: FeatureProperties | GeoJsonProperties | null | undefined
+): boolean {
+	if (properties == null) {
+		return false
+	}
+	const labels = [properties.Funktion_en, properties.Funktion_de]
+	return labels.some(
+		(label) =>
+			typeof label === 'string' && BOOKABLE_FUNKTION_PATTERN.test(label)
+	)
+}
+
+/**
  * Get room data from a room ID
  */
 export function getRoomData(
@@ -289,10 +309,11 @@ export function getRoomData(
 
 	const openings = roomOpenings?.[room]
 	const nextAvailable = openings?.find((o) => o.from > now) ?? null
-	// THI only reports bookable rooms (Hörsäle, Seminaräume, PC-Pools, …).
-	// Toilets, offices, corridors, etc. never appear — hide Verfügbarkeit for those.
+	// Prefer GeoJSON room type; fall back to THI data for odd/missing labels.
 	const availabilityTracked =
-		matchedRoom != null || (openings != null && openings.length > 0)
+		isAvailabilityTrackedRoom(properties) ||
+		matchedRoom != null ||
+		(openings != null && openings.length > 0)
 
 	return {
 		title: room,
