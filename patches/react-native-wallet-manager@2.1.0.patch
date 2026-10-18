@@ -1,0 +1,22 @@
+diff --git a/android/src/main/java/com/reactnativewalletmanager/WalletManagerModule.kt b/android/src/main/java/com/reactnativewalletmanager/WalletManagerModule.kt
+index 009d83caa44b8ec0b43676412f39aa745bb7a9ce..e89827bc5466d7432feb53d38ac292d59c664393 100644
+--- a/android/src/main/java/com/reactnativewalletmanager/WalletManagerModule.kt
++++ b/android/src/main/java/com/reactnativewalletmanager/WalletManagerModule.kt
+@@ -62,7 +62,7 @@ class WalletManagerModule(reactContext: ReactApplicationContext) : NativeWalletM
+     }
+ 
+     override fun addPassToGoogleWallet(jwt: String, promise: Promise) {
+-        val activity = currentActivity
++        val activity = reactApplicationContext.currentActivity
+         if (activity != null) {
+             addPassPromise = promise
+             try {
+@@ -98,7 +98,7 @@ class WalletManagerModule(reactContext: ReactApplicationContext) : NativeWalletM
+   }
+ 
+   override fun addPassFromUrl(url: String, headers: ReadableMap?, promise: Promise) {
+-    val activity = currentActivity
++    val activity = reactApplicationContext.currentActivity
+     if (activity == null) {
+       promise.reject("NO_ACTIVITY", "Current activity is unavailable")
+       return
