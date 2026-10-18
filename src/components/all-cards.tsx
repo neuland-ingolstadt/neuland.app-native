@@ -1,6 +1,6 @@
 import type React from 'react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import type { FeatureFlagKey } from '@/lib/feature-flags'
+import { type FeatureFlagKey, FeatureFlagKeys } from '@/lib/feature-flags'
 import CalendarCard from './Cards/calendar-card'
 import EventsCard from './Cards/events-card'
 import LinkCard from './Cards/link-card'
@@ -58,6 +58,7 @@ export const AllCards: Card[] = [
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE],
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
+		featureFlag: FeatureFlagKeys.newsCard,
 		card: () => <NewsCard />
 	},
 	{
