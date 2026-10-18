@@ -45,7 +45,7 @@ export default function TimetableDetails(): React.JSX.Element {
 	)
 	const allLecturers = useLecturerLookupSources()
 	const lecturerLinks = useMemo(() => {
-		if (lecture == null) return []
+		if (lecture == null || lecture.lecturer == null) return []
 		return resolveLecturerLinks(
 			lecture.lecturer,
 			lecture.lecturerIds ?? [],
@@ -329,7 +329,7 @@ export default function TimetableDetails(): React.JSX.Element {
 					</>
 				) : null}
 
-				{lecture.lecturer !== null ? (
+				{lecture.lecturer != null && lecturerLinks.length > 0 ? (
 					<>
 						<Separator />
 						<DetailsRow>
