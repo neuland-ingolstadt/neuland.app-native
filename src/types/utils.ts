@@ -79,7 +79,7 @@ export interface FriendlyTimetableEntry {
 	name: string
 	shortName: string
 	rooms: string[]
-	lecturer: string
+	lecturer: string | null
 	lecturerIds: string[]
 	exam?: string
 	course: string
