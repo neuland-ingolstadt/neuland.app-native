@@ -32,6 +32,8 @@
 .env.test.local
 .env.production.local
 
+*.pem
+
 # local dev files
 *.devlocal
 

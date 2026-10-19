@@ -6,9 +6,10 @@ import {
 /**
  * Flipt flag keys for namespace `neuland-app`.
  * Keep in sync with `production/neuland-app/features.yaml` in the flags repo.
- * Currently empty — former flags were phased out as always-on features.
  */
-export const FeatureFlagKeys = {} as const satisfies Record<string, string>
+export const FeatureFlagKeys = {
+	newsCard: 'news-card'
+} as const satisfies Record<string, string>
 
 type FeatureFlagKeyValues =
 	(typeof FeatureFlagKeys)[keyof typeof FeatureFlagKeys]
