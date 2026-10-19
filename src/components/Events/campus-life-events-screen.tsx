@@ -17,7 +17,6 @@ import {
 	resolveCampusLifeOrganizerKind
 } from '@/utils/campus-life-utils'
 import { loadCampusLifeEvents, QUERY_KEYS } from '@/utils/events-utils'
-import { pausedToast } from '@/utils/ui-utils'
 
 import ClEventsPage from './cl-events-page'
 
@@ -59,12 +58,6 @@ export default function CampusLifeEventsScreen({
 			}
 		})
 	}, [enableSportsTabRedirect, tab, openEvent, id])
-
-	useEffect(() => {
-		if (eventsResult.isPaused && eventsResult.data != null) {
-			pausedToast()
-		}
-	}, [eventsResult.isPaused, eventsResult.data])
 
 	useFocusEffect(
 		useCallback(() => {

@@ -30,7 +30,6 @@ import { networkError } from '@/utils/api-utils'
 import { formatISODate } from '@/utils/date-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
-import { pausedToast } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 function getFoodDayKey(day: Food): string {
@@ -134,12 +133,6 @@ function FoodScreen(): React.JSX.Element {
 			pagerViewRef.current.setPage(initialPage)
 		}
 	}, [foodData, getInitialPage])
-
-	useEffect(() => {
-		if (isPaused && data != null) {
-			pausedToast()
-		}
-	}, [data, isPaused, t])
 
 	const handleDayPress = useCallback((index: number) => {
 		setSelectedDay(index)

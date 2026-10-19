@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import NeulandAPI from '@/api/neuland-api'
-import { NoSessionError } from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session'
 import ErrorView from '@/components/Error/error-view'
 import GradesRow from '@/components/Rows/grades-row'
 import LoadingIndicator from '@/components/Universal/loading-indicator'

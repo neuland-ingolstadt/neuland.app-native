@@ -2,6 +2,8 @@
 [install]
 # Only install package versions published at least 3 days ago
 minimumReleaseAge = 259200
+# First-party npmjs packages — safe immediately after Trusted Publishing
+minimumReleaseAgeExcludes = ["@neuland-ingolstadt/backend-core-api"]
 
 [test]
 preload = ["./src/utils/tests/setup.ts"]
@@ -14,6 +16,8 @@ coveragePathIgnorePatterns = [
 	"src/hooks/**",
 	"src/assets/**",
 	"src/utils/tests/**",
+	"src/api/thi-api.ts",
+	"src/api/thi-authenticated-api.ts",
 	"ios/**",
 	"android/**"
 ]

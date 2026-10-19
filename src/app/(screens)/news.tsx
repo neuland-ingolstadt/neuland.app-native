@@ -12,7 +12,7 @@ import {
 	View
 } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import API from '@/api/authenticated-api'
+import API from '@/api/thi-authenticated-api'
 import ErrorView from '@/components/Error/error-view'
 import { EmptyEventsAnimation } from '@/components/Events/empty-events-animation'
 import Divider from '@/components/Universal/divider'

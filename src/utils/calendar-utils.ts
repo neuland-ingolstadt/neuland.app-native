@@ -1,5 +1,5 @@
 import type { i18n } from 'i18next'
-import API from '@/api/authenticated-api'
+import API from '@/api/thi-authenticated-api'
 import rawCalendar from '@/data/calendar.json'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar, Semester } from '@/types/data'

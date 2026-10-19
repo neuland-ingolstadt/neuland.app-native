@@ -4,9 +4,7 @@ import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, View } from 'react-native'
-import { getFragmentData } from '@/__generated__/gql'
-import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
-import NeulandAPI from '@/api/neuland-api'
+import { listAnnouncements } from '@/api/neuland-core-api'
 import type { Card } from '@/components/all-cards'
 import AnnouncementCard from '@/components/Cards/announcement-card'
 import { DashboardContext } from '@/components/contexts'
@@ -47,8 +45,9 @@ function HomeScreen(): React.JSX.Element {
 	)
 	const { t } = useTranslation(['navigation', 'settings'])
 	const { data } = useQuery({
-		queryKey: ['announcements'],
-		queryFn: async () => await NeulandAPI.getAnnouncements(),
+		// V2: Core API returns Announcement[] instead of GraphQL { appAnnouncements }
+		queryKey: ['announcementsV2'],
+		queryFn: async () => await listAnnouncements(),
 		staleTime: 1000 * 60 * 10,
 		gcTime: 1000 * 60 * 60 * 24 * 7
 	})
@@ -69,13 +68,8 @@ function HomeScreen(): React.JSX.Element {
 			subscription.remove()
 		}
 	}, [])
-	const announcements = getFragmentData(
-		AnnouncementFieldsFragmentDoc,
-		data?.appAnnouncements
-	)
-
 	const announcementHeader =
-		announcements != null ? <AnnouncementCard data={announcements} /> : null
+		data != null && data.length > 0 ? <AnnouncementCard data={data} /> : null
 
 	const listHeader = (
 		<View className={columns > 1 ? '-mx-1.5' : undefined}>

@@ -21,13 +21,11 @@ export class APIError extends Error {
 }
 
 /**
- * Client for accessing the API without authentication.
- * This client implements its own caching. If run in the browser,
- * responses will be cached in `localStorage` for `CACHE_TTL`.
+ * Client for accessing the THI API without authentication.
  *
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
-export class AnonymousAPIClient {
+export class ThiAPIClient {
 	/**
 	 * Submits an API request to the THI backend using a WebSocket proxy
 	 */
@@ -129,4 +127,4 @@ export class AnonymousAPIClient {
 	}
 }
 
-export default new AnonymousAPIClient()
+export default new ThiAPIClient()

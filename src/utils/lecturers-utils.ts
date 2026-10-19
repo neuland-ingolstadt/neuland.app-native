@@ -97,9 +97,10 @@ function findLecturerForTimetableEntry(
 }
 
 function pairLecturerNamesAndIds(
-	lecturerNames: string,
+	lecturerNames: string | null | undefined,
 	lecturerIds: string[]
 ): { name: string; id?: string }[] {
+	if (lecturerNames == null) return []
 	const trimmedName = lecturerNames.trim()
 	if (trimmedName === '') return []
 
@@ -121,7 +122,7 @@ function pairLecturerNamesAndIds(
 }
 
 export function resolveLecturerLinks(
-	lecturerNames: string,
+	lecturerNames: string | null | undefined,
 	lecturerIds: string[],
 	...sources: NormalizedLecturer[][]
 ): LecturerLink[] {

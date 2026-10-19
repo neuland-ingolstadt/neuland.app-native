@@ -8,8 +8,8 @@ import type {
 	ThiNews,
 	TimetableResponse
 } from '@/types/thi-api'
-import { AnonymousAPIClient, APIError } from './anonymous-api'
-import { callWithSession } from './thi-session-handler'
+import { APIError, ThiAPIClient } from './thi-api'
+import { callWithSession } from './thi-session'
 
 export interface PersonalData {
 	persdata?: {
@@ -19,11 +19,11 @@ export interface PersonalData {
 }
 
 /**
- * Client for accessing the API as a particular user.
+ * Client for accessing the THI API as a particular user.
  *
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
-export class AuthenticatedAPIClient extends AnonymousAPIClient {
+export class ThiAuthenticatedAPIClient extends ThiAPIClient {
 	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	private readonly sessionHandler: any
 
@@ -228,4 +228,4 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 	}
 }
 
-export default new AuthenticatedAPIClient()
+export default new ThiAuthenticatedAPIClient()
