@@ -6,8 +6,10 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
+import { queryClient } from '@/components/provider'
 import PlatformIcon from '@/components/Universal/icon'
 import { useSessionStore } from '@/hooks/useSessionStore'
+import { storage } from '@/utils/storage'
 import { toColor } from '@/utils/uniwind-utils'
 import StatusBox from './action-box'
 
@@ -52,6 +54,13 @@ export default function CrashView({
 	}, [analyticsInitialized, error.message, path])
 
 	const handlePress = (): void => {
+		try {
+			queryClient.clear()
+			storage.clearAll()
+		} catch (e) {
+			console.error('Failed to clear API cache', e)
+		}
+
 		retry().catch((error) => {
 			console.info('Error while retrying', error)
 		})
