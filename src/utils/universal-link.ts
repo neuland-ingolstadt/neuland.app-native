@@ -7,7 +7,7 @@ export function parseUniversalLinkPath(url: string): string | null {
 			return null
 		}
 
-		const path = `${parsed.pathname}${parsed.search}`.replace(/^\/+/, '')
+		const path = stripSurroundingSlashes(`${parsed.pathname}${parsed.search}`)
 
 		return path.length > 0 ? path : null
 	} catch {
@@ -15,6 +15,20 @@ export function parseUniversalLinkPath(url: string): string | null {
 	}
 }
 
+function stripSurroundingSlashes(path: string): string {
+	let start = 0
+	let end = path.length
+
+	while (start < end && path.charAt(start) === '/') {
+		start++
+	}
+	while (end > start && path.charAt(end - 1) === '/') {
+		end--
+	}
+
+	return path.slice(start, end)
+}
+
 export function normalizeRoutePath(path: string): string {
-	return path.replace(/^\/+/, '').replace(/\/+$/, '')
+	return stripSurroundingSlashes(path)
 }
