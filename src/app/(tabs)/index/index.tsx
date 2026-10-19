@@ -45,7 +45,8 @@ function HomeScreen(): React.JSX.Element {
 	)
 	const { t } = useTranslation(['navigation', 'settings'])
 	const { data } = useQuery({
-		queryKey: ['announcements'],
+		// V2: Core API returns Announcement[] instead of GraphQL { appAnnouncements }
+		queryKey: ['announcementsV2'],
 		queryFn: async () => await listAnnouncements(),
 		staleTime: 1000 * 60 * 10,
 		gcTime: 1000 * 60 * 60 * 24 * 7

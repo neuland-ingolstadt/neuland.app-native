@@ -70,8 +70,15 @@ describe('events-utils', () => {
 		expect(eventsUtils.sportsCategories.FOOTBALL.androidIcon).toBe(
 			'sports_soccer'
 		)
+		expect(eventsUtils.sportsCategories.FRISBEE.iosIcon).toBe(
+			'figure.disc.sports'
+		)
+		expect(eventsUtils.sportsCategories.HIKING.androidIcon).toBe('hiking')
 		expect(eventsUtils.sportsCategories.OTHER.androidIcon).toBe('sports')
 		expect(Object.keys(eventsUtils.sportsCategories)).toContain('YOGA')
+		expect(Object.keys(eventsUtils.sportsCategories)).toContain(
+			'STRENGTH_TRAINING'
+		)
 	})
 
 	it('loadCampusLifeEvents - Should map API events and filter empty titles and past events', async () => {

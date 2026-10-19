@@ -192,6 +192,10 @@ export const sportsCategories: Record<SportsCategoryEnum, SportsCategory> = {
 		iosIcon: 'figure.badminton',
 		androidIcon: 'sports_tennis'
 	},
+	BASEBALL: {
+		iosIcon: 'figure.baseball',
+		androidIcon: 'sports_baseball'
+	},
 	BASKETBALL: {
 		iosIcon: 'figure.basketball',
 		androidIcon: 'sports_basketball'
@@ -200,30 +204,100 @@ export const sportsCategories: Record<SportsCategoryEnum, SportsCategory> = {
 		iosIcon: 'figure.climbing',
 		androidIcon: 'sports'
 	},
+	BOXING: {
+		iosIcon: 'figure.boxing',
+		androidIcon: 'sports_mma'
+	},
 	CALISTHENICS: {
 		iosIcon: 'figure.play',
 		androidIcon: 'sports'
 	},
+	CYCLING: {
+		iosIcon: 'figure.outdoor.cycle',
+		androidIcon: 'directions_bike'
+	},
 	DANCING: {
 		iosIcon: 'figure.socialdance',
 		androidIcon: 'nightlife'
+	},
+	DEFENSE: {
+		iosIcon: 'figure.wave',
+		androidIcon: 'front_hand'
 	},
 	FOOTBALL: {
 		iosIcon: 'figure.soccer',
 		iosFallback: 'figure.soccer',
 		androidIcon: 'sports_soccer'
 	},
+	FRISBEE: {
+		iosIcon: 'figure.disc.sports',
+		androidIcon: 'sports'
+	},
+	FULL_BODY_WORKOUT: {
+		iosIcon: 'figure.core.training',
+		androidIcon: 'sports_gymnastics'
+	},
 	HANDBALL: {
 		iosIcon: 'figure.handball',
 		androidIcon: 'sports_handball'
+	},
+	HIKING: {
+		iosIcon: 'figure.hiking',
+		androidIcon: 'hiking'
+	},
+	HOCKEY: {
+		iosIcon: 'figure.hockey',
+		androidIcon: 'sports_hockey'
+	},
+	JOGGING: {
+		iosIcon: 'figure.run',
+		androidIcon: 'directions_run'
+	},
+	KICKBOXING: {
+		iosIcon: 'figure.kickboxing',
+		androidIcon: 'sports_mma'
 	},
 	MARTIAL_ARTS: {
 		iosIcon: 'figure.martial.arts',
 		androidIcon: 'sports_martial_arts'
 	},
+	MEDITATION: {
+		iosIcon: 'figure.mind.and.body',
+		androidIcon: 'self_improvement'
+	},
+	PARKOUR: {
+		iosIcon: 'figure.track.and.field',
+		androidIcon: 'falling'
+	},
+	ROWING: {
+		iosIcon: 'figure.rower',
+		iosFallback: 'figure.rower',
+		androidIcon: 'rowing'
+	},
+	RUNNING: {
+		iosIcon: 'figure.run',
+		androidIcon: 'directions_run'
+	},
+	SKATEBOARDING: {
+		iosIcon: 'figure.skating',
+		iosFallback: 'figure.skating',
+		androidIcon: 'skateboarding'
+	},
+	SPIKEBALL: {
+		iosIcon: 'figure.softball',
+		androidIcon: 'sports_and_outdoors'
+	},
+	STRENGTH_TRAINING: {
+		iosIcon: 'figure.strengthtraining.traditional',
+		androidIcon: 'fitness_center'
+	},
 	SWIMMING: {
 		iosIcon: 'figure.pool.swim',
 		androidIcon: 'pool'
+	},
+	TABLE_TENNIS: {
+		iosIcon: 'figure.table.tennis',
+		androidIcon: 'sports_tennis'
 	},
 	TENNIS: {
 		iosIcon: 'figure.tennis',
@@ -232,6 +306,10 @@ export const sportsCategories: Record<SportsCategoryEnum, SportsCategory> = {
 	VOLLEYBALL: {
 		iosIcon: 'figure.volleyball',
 		androidIcon: 'sports_volleyball'
+	},
+	WATERPOLO: {
+		iosIcon: 'figure.waterpolo',
+		androidIcon: 'pool'
 	},
 	YOGA: {
 		iosIcon: 'figure.yoga',
@@ -253,7 +331,8 @@ export function getSportsCategoryIcons(
 }
 
 export const QUERY_KEYS = {
-	UNIVERSITY_SPORTS: 'universitySports',
+	// V2: Core API shape (`contents` instead of GraphQL `title`)
+	UNIVERSITY_SPORTS: 'universitySportsV2',
 	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV7',
 	CAMPUS_LIFE_ORGANIZER: 'campusLifeOrganizerV2',
 	CAMPUS_LIFE_ORGANIZERS: 'campusLifeOrganizersV3'
