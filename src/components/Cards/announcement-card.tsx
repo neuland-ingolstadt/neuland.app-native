@@ -1,4 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
+import type { components } from '@neuland-ingolstadt/backend-core-api'
 import type React from 'react'
 import { memo, use, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,18 +20,18 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import type {
-	AnnouncementFieldsFragment,
-	UserKind
-} from '@/__generated__/gql/graphql'
+import type { Announcement } from '@/api/neuland-core-api'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import PlatformIcon from '@/components/Universal/icon'
+import type { LanguageKey } from '@/localization/i18n'
 import i18n from '@/localization/i18n'
 import { toColor } from '@/utils/uniwind-utils'
 import { getAnnouncementPlatform } from '@/utils/web-host'
 
+type UserKindEnum = components['schemas']['UserKindEnum']
+
 interface AnnouncementCardProps {
-	data: AnnouncementFieldsFragment[]
+	data: Announcement[]
 }
 
 const AnnouncementCard = ({
@@ -66,21 +67,19 @@ const AnnouncementCard = ({
 	}
 
 	const filterAnnouncements = useCallback(
-		(
-			announcements: AnnouncementFieldsFragment[]
-		): AnnouncementFieldsFragment[] => {
+		(announcements: Announcement[]): Announcement[] => {
 			const platform = getAnnouncementPlatform()
 			const now = Date.now()
 			return announcements
 				.filter(
 					(announcement) =>
-						announcement?.platform?.includes(platform) &&
-						announcement?.userKind?.includes(
-							userKind?.toUpperCase() as UserKind
+						announcement.platforms.includes(platform) &&
+						announcement.userKinds.includes(
+							userKind?.toUpperCase() as UserKindEnum
 						) &&
 						new Date(announcement.startDateTime).getTime() < now &&
 						new Date(announcement.endDateTime).getTime() > now &&
-						!hiddenAnnouncements.includes(announcement.id)
+						!hiddenAnnouncements.includes(String(announcement.id))
 				)
 				.sort((a, b) => a.priority - b.priority)
 		},
@@ -93,17 +92,18 @@ const AnnouncementCard = ({
 	)
 
 	const handlePressClose = useCallback(
-		(id: string) => () => {
-			trackEvent('Announcement', { close: id })
-			hideAnnouncement(id)
+		(id: number) => () => {
+			const idKey = String(id)
+			trackEvent('Announcement', { close: idKey })
+			hideAnnouncement(idKey)
 		},
 		[hideAnnouncement]
 	)
 
 	const handlePressLink = useCallback(
-		(url: string | null | undefined, id: string) => () => {
+		(url: string | null | undefined, id: number) => () => {
 			if (url != null && url !== '') {
-				trackEvent('Announcement', { link: id })
+				trackEvent('Announcement', { link: String(id) })
 				void Linking.openURL(url)
 			}
 		},
@@ -114,7 +114,9 @@ const AnnouncementCard = ({
 		return null
 	}
 
-	const { id, title, description, url, imageUrl } = filteredAnnouncements[0]
+	const { id, contents, url, imageUrl } = filteredAnnouncements[0]
+	const language = i18n.language as LanguageKey
+	const localized = contents[language] ?? contents.en
 
 	return (
 		<Pressable
@@ -135,10 +137,7 @@ const AnnouncementCard = ({
 						</Animated.View>
 					</View>
 					<Text className="text-text flex-1 text-[17px] font-semibold android:pb-0.5">
-						{
-							// @ts-expect-error type check
-							title[i18n.language]
-						}
+						{localized?.title ?? ''}
 					</Text>
 					<Pressable
 						onPress={handlePressClose(id)}
@@ -157,10 +156,7 @@ const AnnouncementCard = ({
 					className={`gap-card items-start ${isLargeScreen ? 'flex-row' : 'flex-col'}`}
 				>
 					<Text className="text-text text-[15px] mt-3 flex-1">
-						{
-							// @ts-expect-error type check
-							description[i18n.language]
-						}
+						{localized?.description ?? ''}
 					</Text>
 					{imageUrl && (
 						<Image

@@ -5,22 +5,21 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import type {
-	UniversitySportsFieldsFragment,
-	WeekdayType
-} from '@/__generated__/gql/graphql'
 import EventItem from '@/components/Universal/event-item'
 import type { LanguageKey } from '@/localization/i18n'
+import type { Sports, WeekdayEnum } from '@/types/university-sports'
+import { sportsLocalizedTitle } from '@/types/university-sports'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { loadUniversitySportsEvents, QUERY_KEYS } from '@/utils/events-utils'
 import { toColor } from '@/utils/uniwind-utils'
 import BaseCard from './base-card'
 
-function handleSportsItemPress(id: string): void {
+function handleSportsItemPress(id: number): void {
+	const idParam = String(id)
 	if (Platform.OS !== 'ios') {
 		router.navigate({
 			pathname: '/events/sports/[id]',
-			params: { id }
+			params: { id: idParam }
 		})
 		return
 	}
@@ -29,7 +28,7 @@ function handleSportsItemPress(id: string): void {
 		pathname: '/sports',
 		params: {
 			openEvent: 'true',
-			id
+			id: idParam
 		}
 	})
 }
@@ -44,7 +43,7 @@ const SportsCard = (): React.JSX.Element => {
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const sportsEvents = useMemo<UniversitySportsFieldsFragment[]>(
+	const sportsEvents = useMemo<Sports[]>(
 		() => sportsByWeekday.flatMap((section) => section.data).slice(0, 2),
 		[sportsByWeekday]
 	)
@@ -71,10 +70,13 @@ const SportsCard = (): React.JSX.Element => {
 							onPress={() => handleSportsItemPress(event.id)}
 						>
 							<EventItem
-								title={event.title[i18n.language as LanguageKey] ?? ''}
+								title={sportsLocalizedTitle(
+									event,
+									i18n.language as LanguageKey
+								)}
 								subtitle={t(
 									`dates.weekdays.${
-										event.weekday.toLowerCase() as Lowercase<WeekdayType>
+										event.weekday.toLowerCase() as Lowercase<WeekdayEnum>
 									}`
 								)}
 								timeLabel={formatFriendlyTimeRange(
