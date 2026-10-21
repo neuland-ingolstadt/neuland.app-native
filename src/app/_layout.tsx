@@ -1,4 +1,5 @@
 import CrashView from '@/components/Error/crash-view'
+import ScreenErrorBoundary from '@/components/Error/screen-error-boundary'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/splash'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -29,7 +30,9 @@ configureReanimatedLogger({
 
 export const unstable_settings = {
 	// Ensure any route can link back to `/`
-	anchor: 'index'
+	anchor: 'index',
+	// Keep headers / tabs mounted when a child screen throws.
+	screenErrorBoundary: ScreenErrorBoundary
 }
 // Ignore common React Native warnings
 LogBox.ignoreLogs([
