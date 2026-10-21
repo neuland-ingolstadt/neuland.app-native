@@ -5,6 +5,9 @@ import { storageMock } from './thi-storage-mocks'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
+// Expo packages still gate on this during module evaluation.
+;(globalThis as typeof globalThis & { __DEV__?: boolean }).__DEV__ ??= true
+
 mockReactNative()
 
 // Register shared mocks first so sticky Bun mock.module always has complete exports.
