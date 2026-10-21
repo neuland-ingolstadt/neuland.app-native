@@ -74,6 +74,7 @@ const PlatformIcon = ({
 	const primaryColor = String(
 		toColor(useCSSVariable('--color-primary')) ?? '#007aff'
 	)
+	const iconColor = String(style?.color ?? primaryColor)
 
 	const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />
 
@@ -84,7 +85,7 @@ const PlatformIcon = ({
 					<MaterialCommunityIcons
 						name={web.name as keyof typeof MaterialCommunityIcons.glyphMap}
 						size={web.size}
-						color={style?.color ?? primaryColor}
+						color={iconColor}
 						style={style as TextStyle}
 					/>
 				)
@@ -95,7 +96,7 @@ const PlatformIcon = ({
 			return (
 				<LucideIcon
 					size={web.size}
-					color={style?.color ?? primaryColor}
+					color={iconColor}
 					style={style as ViewStyle}
 					fill={web.variant === 'filled' ? 'currentColor' : 'none'}
 					fillRule="evenodd"
@@ -109,7 +110,7 @@ const PlatformIcon = ({
 			<MaterialCommunityIcons
 				name={ios.name as keyof typeof MaterialCommunityIcons.glyphMap}
 				size={ios.size}
-				color={style?.color ?? primaryColor}
+				color={iconColor}
 				style={{
 					width: ios.size,
 					height: ios.size,
@@ -129,12 +130,12 @@ const PlatformIcon = ({
 				colors={
 					ios.renderMode === 'palette' || ios.renderMode === 'hierarchical'
 						? [
-								style?.color ?? primaryColor,
+								iconColor,
 								...(ios.additionalColor != null ? [ios.additionalColor] : [])
 							]
 						: undefined
 				}
-				tintColor={style?.color ?? primaryColor}
+				tintColor={iconColor}
 				type={ios.renderMode as never}
 				resizeMode="scaleAspectFit"
 				style={style as ViewStyle}
@@ -149,7 +150,7 @@ const PlatformIcon = ({
 					: androidIconFilled),
 				fontSize: android.size,
 				lineHeight: android.size,
-				color: style?.color ?? primaryColor,
+				color: iconColor,
 				...style
 			}}
 		>
@@ -157,7 +158,7 @@ const PlatformIcon = ({
 				<MaterialCommunityIcons
 					name={android.name as keyof typeof MaterialCommunityIcons.glyphMap}
 					size={android.size}
-					color={style?.color ?? primaryColor}
+					color={iconColor}
 					style={{ paddingTop: 50, ...style }}
 				/>
 			) : (

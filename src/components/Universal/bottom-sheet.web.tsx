@@ -52,13 +52,17 @@ function isProgrammaticDetent(detent: Detent | undefined): boolean {
 }
 
 function detentToHeight(detent: Detent, maxHeight: number): number {
+	if (typeof detent === 'object' && detent != null) {
+		return detentToHeight(detent.value, maxHeight)
+	}
 	if (typeof detent === 'number') {
 		return detent
 	}
 	if (detent === 'content') {
 		return maxHeight * 0.5
 	}
-	return detentToHeight(detent.value, maxHeight)
+	const percentage = Number(detent.slice(0, -1))
+	return Number.isFinite(percentage) ? (percentage / 100) * maxHeight : 0
 }
 
 function snapToDetent(
