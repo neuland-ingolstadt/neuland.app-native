@@ -26,7 +26,7 @@ THI news, calendar, university sports, campus life events, quick links.
 
 | Area              | Tech                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| Runtime           | React Native `0.88.0-rc.0`, React `19.2.3`, Expo SDK `58` (beta)           |
+| Runtime           | React Native `0.88.0`, React `19.3.0`, Expo SDK `58`                       |
 | Language          | TypeScript `6.0` (strict mode)                                             |
 | Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
 | Routing           | **Expo Router 58** (file-based, typed routes) — *not* React Navigation directly |
@@ -45,7 +45,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
-SDK 58 requires Xcode 27 for iOS 27 support (UIScene life cycle). Hermes V1 remains the default. The project uses Continuous Native Generation — `npx expo prebuild` generates `SceneDelegate.swift` and `UIApplicationSceneManifest`.
+SDK 58 requires Xcode 27 and iOS 16.4 or newer and uses Hermes V1 by default. Xcode 27 is needed for iOS 27 UIScene support. The project uses Continuous Native Generation — `bun prebuild:ios` generates `SceneDelegate.swift` and `UIApplicationSceneManifest`.
 
 ---
 

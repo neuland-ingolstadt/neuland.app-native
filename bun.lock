@@ -14,8 +14,8 @@
         "@howljs/calendar-kit": "2.5.6",
         "@kichiyaki/react-native-barcode-generator": "^0.6.7",
         "@maplibre/maplibre-react-native": "11.5.0",
-        "@react-native-community/datetimepicker": "9.2.1",
         "@neuland-ingolstadt/backend-core-api": "1.1.1",
+        "@react-native-community/datetimepicker": "9.2.1",
         "@react-native-community/netinfo": "12.0.1",
         "@shopify/flash-list": "2.3.2",
         "@swmansion/react-native-bottom-sheet": "0.17.0",
@@ -57,8 +57,8 @@
         "idb": "^8.0.3",
         "lucide-react-native": "^1.18.0",
         "luxon": "^3.7.2",
-        "openapi-fetch": "^0.17.0",
         "maplibre-gl": "6.14.0",
+        "openapi-fetch": "^0.17.0",
         "react": "19.3.0",
         "react-content-loader": "^7.1.1",
         "react-dom": "19.3.0",
@@ -70,7 +70,7 @@
         "react-native-draggable-flatlist": "^4.0.3",
         "react-native-gesture-handler": "~3.3.0",
         "react-native-mmkv": "^4.3.2",
-        "react-native-nitro-modules": "^0.36.1",
+        "react-native-nitro-modules": "^0.37.0",
         "react-native-pager-view": "9.0.7",
         "react-native-reanimated": "4.7.1",
         "react-native-safe-area-context": "~5.10.1",
@@ -1937,7 +1937,7 @@
 
     "react-native-mmkv": ["react-native-mmkv@4.3.2", "", { "peerDependencies": { "react": "*", "react-native": "*", "react-native-nitro-modules": "*" } }, "sha512-49OAyfkg0/TMWiWELZN6VuVQPZPhizwL4DTmp8b7B1md3dB/s3LH3mGfC3T+lp9W0y/rqxZMEnotLFTIbOAenQ=="],
 
-    "react-native-nitro-modules": ["react-native-nitro-modules@0.36.5", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-SJby84+hovD70JmQ1fq+56tw3oapJeChehUqXA4Gqjm+ktJhMAcj8LGwoAjStSOUwRaK7czbzBPB0Widj+EDoQ=="],
+    "react-native-nitro-modules": ["react-native-nitro-modules@0.37.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-KpW6EQVQ/bfegpCGxN9Be+ndvsfj56t4IESEvCASu9gWpJa/NDfHpIeIwCOvZQ3eXmLEj6YD4wCLqcC1FJPr2w=="],
 
     "react-native-pager-view": ["react-native-pager-view@9.0.7", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-71kLSrjZy8onJTXkoAWF/0UtInkF+xqmqudiV/axZe8PVGG+CK6jVdh8NYFJLKetQ6UQ9ScPNliagpvLBp1xkQ=="],
 
