@@ -16,7 +16,7 @@ interface MapSearchBarProps {
 	onFocus: () => void
 	onCancel: () => void
 	onFocusChange: (focused: boolean) => void
-	inputRef: React.RefObject<TextInput | null>
+	inputRef: React.RefObject<React.ComponentRef<typeof TextInput> | null>
 }
 
 export const MapSearchBar = ({

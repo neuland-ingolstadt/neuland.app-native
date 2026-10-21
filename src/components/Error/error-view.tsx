@@ -40,7 +40,7 @@ interface ErrorViewProps {
 	icon?: ErrorIconProp
 	buttonText?: string
 	onButtonPress?: () => void
-	onRefresh?: () => unknown
+	onRefresh?: () => void | Promise<void>
 	refreshing?: boolean
 	showPullLabel?: boolean
 	inModal?: boolean
