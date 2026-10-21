@@ -249,7 +249,7 @@ Generated and binary files:
 - The `(tabs)` group is platform-specific. Always check the file that matches the
   platform you are changing:
   - iOS and Android: `src/components/Layout/tab-bar.tsx` uses
-    `expo-router/unstable-native-tabs`.
+    `expo-router/native-tabs`.
   - Web: `src/components/Layout/tab-bar.web.tsx` uses Expo Router's regular JS tabs.
 - When adding or removing a tab, keep the native and web implementations in sync unless the UX is
   intentionally platform-specific. Native tab options differ between these runtimes; copy
