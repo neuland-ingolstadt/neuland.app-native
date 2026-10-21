@@ -65,7 +65,7 @@ bun start                    # run the production-like web preview on port 3000
 bun lint                     # Biome check (read-only)
 bun fmt                      # Biome check --fix (safe auto-fixes)
 bun fmt:unsafe               # Biome check --fix --unsafe (use sparingly)
-bun tsc --noEmit             # TypeScript check (matches CI)
+bun typecheck                # TypeScript via @expo/agent-cli (or bun tsc --noEmit)
 bun i18n:check               # verify de/en locale files are complete and catch undefined keys (matches CI)
 
 bun test                     # run all unit tests
@@ -75,7 +75,11 @@ bun test:mutation:ci         # mutation tests for CI (sequential concurrency)
 
 bun codegen                  # regenerate GraphQL types from src/api/**/*.ts
 bun pkgs                     # `expo install --check` for SDK-compatible deps
+bun doctor                   # expo-doctor
 bun uniwind:types            # regenerate src/uniwind-types.d.ts after global.css changes
+
+bun agent <command>          # @expo/agent-cli (status, smoke, runtime:*, install, …)
+bun device-hub               # Expo Device Hub (browser sim/emu dashboard)
 ```
 
 ### Cursor MCP
@@ -123,6 +127,10 @@ Example agent workflows:
 - Dependency question → `add_library` or `read_documentation`, not `bun add` with a guessed version.
 
 **Local limitations:** one dev-server connection at a time; iOS automation is simulator-only on macOS (no physical devices). See the [Expo MCP docs](https://docs.expo.dev/mcp/) for the full tool list.
+
+#### `@expo/agent-cli` / Device Hub
+
+`bun typecheck` uses agent-cli. For verify loops use `bun agent status`, `smoke --ios`, and `runtime:*` (`help workflow` for exit codes). Keep `bun dev` for Metro (MapLibre + MCP). Screenshots/gestures → Argent / Expo MCP; Device Hub (`bun device-hub` or the `/_expo/plugins/expo-device-hub` link after `bun dev`) is for humans watching sims.
 
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):
@@ -241,7 +249,7 @@ Generated and binary files:
 - The `(tabs)` group is platform-specific. Always check the file that matches the
   platform you are changing:
   - iOS and Android: `src/components/Layout/tab-bar.tsx` uses
-    `expo-router/unstable-native-tabs`.
+    `expo-router/native-tabs`.
   - Web: `src/components/Layout/tab-bar.web.tsx` uses Expo Router's regular JS tabs.
 - When adding or removing a tab, keep the native and web implementations in sync unless the UX is
   intentionally platform-specific. Native tab options differ between these runtimes; copy
@@ -616,7 +624,7 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   existing layout.
 - **Don't bump dependencies casually.** Native modules (`react-native-mmkv`, MapLibre,
   Reanimated, etc.) are pinned because of native build compatibility. Run `bun pkgs`
-  (which calls `expo install --check`) when in doubt.
+  when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, `bun uniwind:types` for `src/uniwind-types.d.ts`,
   and `bun changelog` for `CHANGELOG.md`.

@@ -1,5 +1,5 @@
 import Color from 'color'
-import { NativeTabs } from 'expo-router/unstable-native-tabs'
+import { NativeTabs } from 'expo-router/native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
@@ -44,6 +44,7 @@ export default function TabLayout(): React.JSX.Element {
 
 	return (
 		<NativeTabs
+			activityEnabled
 			badgeBackgroundColor={primaryColor}
 			iconColor={tabbarInactiveColor}
 			tintColor={primaryColor}
