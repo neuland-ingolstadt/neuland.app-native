@@ -1,12 +1,8 @@
 import type { FeatureCollection } from 'geojson'
 import { Platform } from 'react-native'
 import type {
-	AppAnnouncementsQuery,
-	CreateRoomReportMutation,
 	FoodPlanQuery,
-	RoomReportInput,
-	TypedDocumentString,
-	UniversitySportsQuery
+	TypedDocumentString
 } from '@/__generated__/gql/graphql'
 import { appHomepage, appVersion } from '@/data/app-version'
 import type { SpoWeights } from '@/types/asset-api'
@@ -16,17 +12,11 @@ import {
 	type PublicEventResponse,
 	type PublicOrganizerResponse
 } from '@/types/campus-life'
-import {
-	ANNOUNCEMENT_QUERY,
-	CREATE_ROOM_REPORT,
-	FOOD_QUERY,
-	UNIVERSITY_SPORTS_QUERY
-} from './gql-documents'
+import { FOOD_QUERY } from './gql-documents'
 
 const GRAPHQL_ENDPOINT: string =
 	process.env.EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT ??
 	'https://api.neuland.app/graphql'
-const GRAPHQL_ENDPOINT_PROD = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT = 'https://assets.neuland.app'
 const CAMPUS_LIFE_API_ENDPOINT = 'https://cl.neuland-ingolstadt.de'
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
@@ -80,24 +70,20 @@ class NeulandAPIClient {
 	 */
 	async executeGql<TResult, TVariables>(
 		query: TypedDocumentString<TResult, TVariables>,
-		forceProd = false,
 		...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
 	): Promise<TResult> {
-		const resp = await fetch(
-			forceProd ? GRAPHQL_ENDPOINT_PROD : GRAPHQL_ENDPOINT,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/graphql-response+json',
-					'User-Agent': USER_AGENT
-				},
-				body: JSON.stringify({
-					query,
-					variables
-				})
-			}
-		)
+		const resp = await fetch(GRAPHQL_ENDPOINT, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/graphql-response+json',
+				'User-Agent': USER_AGENT
+			},
+			body: JSON.stringify({
+				query,
+				variables
+			})
+		})
 
 		const json = (await resp.json()) as { data?: TResult; errors?: unknown }
 
@@ -109,16 +95,8 @@ class NeulandAPIClient {
 		throw new Error(`GraphQL error: ${errorMessage}`)
 	}
 
-	/**
-	 * Get the announcement ndata from the GraphQL API
-	 * @returns {Promise<AppAnnouncementsQuery>} A promise that resolves with the announcement data
-	 */
-	async getAnnouncements(): Promise<AppAnnouncementsQuery> {
-		return await this.executeGql(ANNOUNCEMENT_QUERY, true)
-	}
-
 	async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
-		return await this.executeGql(FOOD_QUERY, false, { locations })
+		return await this.executeGql(FOOD_QUERY, { locations })
 	}
 
 	/**
@@ -176,14 +154,6 @@ class NeulandAPIClient {
 	}
 
 	/**
-	 * Gets the university sports events
-	 * @returns {Promise<GetUniversitySportsData>} A promise that resolves with the university sports events data
-	 */
-	async getUniversitySports(): Promise<UniversitySportsQuery> {
-		return await this.executeGql(UNIVERSITY_SPORTS_QUERY)
-	}
-
-	/**
 	 * Gets the map overlay
 	 * @returns {Promise<any>} A promise that resolves with the map overlay data
 	 */
@@ -201,16 +171,6 @@ class NeulandAPIClient {
 		return (await this.performRequest(
 			`${ASSET_ENDPOINT}/generated/spo-grade-weights.json`
 		)) as SpoWeights
-	}
-
-	/**
-	 * Create a new room report
-	 * @returns {Promise<CreateRoomReportMutation>} A promise that resolves with the created report id
-	 */
-	async createRoomReport(
-		input: RoomReportInput
-	): Promise<CreateRoomReportMutation> {
-		return await this.executeGql(CREATE_ROOM_REPORT, false, { input })
 	}
 }
 
