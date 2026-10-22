@@ -20,8 +20,7 @@
 	"labels": ["dependencies"],
 	"ignoreDeps": [
 		"getenv",
-		"@types/node",
-		"react-native-collapsible"
+		"@types/node"
 	],
 	"prBodyNotes": [
 		"Expo / React Native SDK packages are synced by the daily Expo SDK dependencies workflow or `bun pkgs`.",

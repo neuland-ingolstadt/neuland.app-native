@@ -12,10 +12,10 @@ import {
 	Text,
 	View
 } from 'react-native'
-import Collapsible from 'react-native-collapsible'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import SportsRow from '@/components/Rows/sports-row'
+import Collapsible from '@/components/Universal/collapsible'
 import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
