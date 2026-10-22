@@ -28,30 +28,33 @@ export default function Collapsible({
 	const isInitial = useRef(true)
 
 	useEffect(() => {
-		if (contentHeight.value === 0) {
+		if (contentHeight.get() === 0) {
 			return
 		}
 
-		const target = collapsed ? 0 : contentHeight.value
+		const target = collapsed ? 0 : contentHeight.get()
 
 		if (isInitial.current) {
-			height.value = target
+			height.set(target)
 			isInitial.current = false
 			return
 		}
 
-		height.value = withTiming(target, {
-			duration,
-			easing: Easing.out(Easing.cubic)
-		})
+		height.set(
+			withTiming(target, {
+				duration,
+				easing: Easing.out(Easing.cubic)
+			})
+		)
 	}, [collapsed, duration, contentHeight, height])
 
 	const animatedStyle = useAnimatedStyle(() => {
-		if (height.value === undefined) {
+		const currentHeight = height.get()
+		if (currentHeight === undefined) {
 			return { overflow: 'hidden' as const }
 		}
 		return {
-			height: height.value,
+			height: currentHeight,
 			overflow: 'hidden' as const
 		}
 	})
@@ -70,20 +73,20 @@ export default function Collapsible({
 				}
 				onLayout={(event) => {
 					const next = Math.ceil(event.nativeEvent.layout.height)
-					if (next <= 0 || next === contentHeight.value) {
+					if (next <= 0 || next === contentHeight.get()) {
 						return
 					}
 
-					contentHeight.value = next
+					contentHeight.set(next)
 
 					if (isInitial.current) {
-						height.value = collapsed ? 0 : next
+						height.set(collapsed ? 0 : next)
 						isInitial.current = false
 						return
 					}
 
 					if (!collapsed) {
-						height.value = next
+						height.set(next)
 					}
 				}}
 			>
