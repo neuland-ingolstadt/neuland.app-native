@@ -114,7 +114,6 @@
 		"react-dom": "19.3.0",
 		"react-i18next": "17.0.18",
 		"react-native": "0.88.0",
-		"react-native-collapsible": "1.6.1",
 		"react-native-context-menu-view": "^1.21.0",
 		"react-native-device-info": "^15.0.2",
 		"react-native-draggable-flatlist": "^4.0.3",
