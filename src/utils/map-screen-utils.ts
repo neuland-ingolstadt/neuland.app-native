@@ -314,7 +314,8 @@ export function excludeEntrancesNearPoint(
 
 /**
  * Entrances for the current map selection.
- * Building and room both show every entrance of that building.
+ * Any selected building or room shows every mapped entrance of that building
+ * (campus-wide asset — not limited to indoor-nav buildings).
  */
 export function getSelectedBuildingEntrances(
 	clicked: ClickedMapElement | null,
@@ -536,6 +537,35 @@ export function getEntranceSelectionFromFeatures(
 		return {
 			id,
 			center: parseMapCoordinate(feature.geometry.coordinates)
+		}
+	}
+
+	return undefined
+}
+
+/** Building letter (+ center) from a tapped building-label feature. */
+export function getBuildingSelectionFromFeatures(
+	features: Array<{
+		properties?: GeoJsonProperties | null
+	}> | null
+): { building: string; center?: MapCoordinate } | undefined {
+	if (features == null || features.length === 0) {
+		return undefined
+	}
+
+	for (const feature of features) {
+		const building =
+			typeof feature.properties?.Gebaeude === 'string'
+				? feature.properties.Gebaeude
+				: typeof feature.properties?.Raum === 'string'
+					? feature.properties.Raum
+					: null
+		if (building == null || building.length === 0) {
+			continue
+		}
+		return {
+			building,
+			center: parseMapCoordinate(feature.properties?.center)
 		}
 	}
 

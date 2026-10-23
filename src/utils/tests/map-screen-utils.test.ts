@@ -10,6 +10,7 @@ import {
 	filterAvailableRooms,
 	filterEtage,
 	getBuildingData,
+	getBuildingSelectionFromFeatures,
 	getEntranceData,
 	getEntranceSelectionFromFeatures,
 	getMapFocusPadding,
@@ -766,6 +767,25 @@ describe('map-screen-utils', () => {
 			center: [11.433, 48.7664]
 		})
 		expect(getEntranceSelectionFromFeatures([])).toBeUndefined()
+	})
+
+	it('getBuildingSelectionFromFeatures - Should read building letter and center', () => {
+		expect(
+			getBuildingSelectionFromFeatures([
+				{
+					properties: {
+						Gebaeude: 'A',
+						Raum: 'A',
+						rtype: SEARCH_TYPES.BUILDING,
+						center: [11.43, 48.76]
+					}
+				}
+			])
+		).toEqual({
+			building: 'A',
+			center: [11.43, 48.76]
+		})
+		expect(getBuildingSelectionFromFeatures([])).toBeUndefined()
 	})
 
 	it('getSelectedBuildingEntrances - Should keep building entrances when an entrance is selected', () => {

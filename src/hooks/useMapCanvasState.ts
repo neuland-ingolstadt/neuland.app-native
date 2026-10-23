@@ -164,9 +164,12 @@ export function useMapCanvasState({
 			mapEntrances,
 			allRooms
 		)
-		// Keep the selected door visible under/above the pin; only cull for room/building pins.
+		// Buildings use mapped doors instead of a center pin — keep every entrance.
+		// For rooms, drop doors that would sit under the selection marker.
+		// For an entrance selection, keep the tapped door visible under the pin.
 		const visible =
-			clickedElement?.type === SEARCH_TYPES.ENTRANCE
+			clickedElement?.type === SEARCH_TYPES.ENTRANCE ||
+			clickedElement?.type === SEARCH_TYPES.BUILDING
 				? selected
 				: excludeEntrancesNearPoint(selected, selectedRoomCenter)
 		return splitEntrancesByStyle(visible)

@@ -116,13 +116,14 @@ export const MAP_COLORS = {
 	buildingLabelSize: 14,
 	buildingLabelHaloWidth: 1,
 	selectedRoomMarkerSize: 0.17,
-	selectedFillOpacity: 0.38,
-	selectedFillOpacityPop: 0.58,
-	selectedOutlineWidth: 2.8,
-	selectedOutlineWidthPop: 3.4,
+	/** Soft tint — whole-building selection paints many polygons at once. */
+	selectedFillOpacity: 0.16,
+	selectedFillOpacityPop: 0.24,
+	selectedOutlineWidth: 1.5,
+	selectedOutlineWidthPop: 2,
 	entranceBadgeRadius: 11,
 	entranceBadgeStrokeWidth: 2,
-	entranceMarkerSize: 0.2,
+	entranceMarkerSize: 0.12,
 	entranceMuted: '#8e8e93'
 } as const
 

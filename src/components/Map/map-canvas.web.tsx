@@ -24,8 +24,9 @@ import {
 } from '@/components/Map/map-config'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
-import type { ClickedMapElement } from '@/types/map'
+import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	getBuildingSelectionFromFeatures,
 	getMapFocusPadding,
 	getSelectionFocusZoom,
 	isMutedEntrance,
@@ -163,11 +164,30 @@ export default function WebMapCanvas({
 	}, [onRegionChange])
 
 	const handleMapClick = (event: MapMouseEvent): void => {
-		if (!filteredGeoJSON || !mapRef.current) {
+		if (!mapRef.current) {
 			return
 		}
 
 		const map = mapRef.current.getMap()
+		const buildingSelection = getBuildingSelectionFromFeatures(
+			map.queryRenderedFeatures(event.point, {
+				layers: [MAP_IDS.layers.buildingLabels]
+			})
+		)
+		if (buildingSelection != null) {
+			selectMapElement({
+				room: buildingSelection.building,
+				type: SEARCH_TYPES.BUILDING,
+				center: buildingSelection.center,
+				origin: 'MapClick',
+				manual: true
+			})
+			return
+		}
+
+		if (!filteredGeoJSON) {
+			return
+		}
 		const features = map.queryRenderedFeatures(event.point, {
 			layers: [MAP_IDS.layers.allRoomsFill]
 		})
@@ -265,7 +285,7 @@ export default function WebMapCanvas({
 										justifyContent: 'center'
 									}}
 								>
-									<DoorClosed size={14} color="#ffffff" strokeWidth={2.5} />
+									<DoorClosed size={11} color="#ffffff" strokeWidth={2.25} />
 								</div>
 							</Marker>
 						)
@@ -355,13 +375,15 @@ export default function WebMapCanvas({
 						/>
 					</Source>
 				)}
-				{selectedRoomCenter != null && (
-					<Marker
-						longitude={selectedRoomCenter[0]}
-						latitude={selectedRoomCenter[1]}
-						color={selectionColor}
-					/>
-				)}
+				{/* Buildings use polygon highlight + mapped entrances, not a center pin. */}
+				{selectedRoomCenter != null &&
+					clickedElement?.type !== SEARCH_TYPES.BUILDING && (
+						<Marker
+							longitude={selectedRoomCenter[0]}
+							latitude={selectedRoomCenter[1]}
+							color={selectionColor}
+						/>
+					)}
 			</Map>
 		</div>
 	)

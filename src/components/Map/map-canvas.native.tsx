@@ -22,8 +22,9 @@ import {
 } from '@/components/Map/map-config'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
-import type { ClickedMapElement } from '@/types/map'
+import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	getBuildingSelectionFromFeatures,
 	getMapFocusPadding,
 	getSelectionFocusZoom
 } from '@/utils/map-screen-utils'
@@ -202,12 +203,15 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
+			{/* Buildings are carried by polygon highlight + mapped entrances — a
+			    centered pin would fake a single “navigation” door where there is none. */}
 			<GeoJSONSource
 				id={MAP_IDS.sources.selectedRoom}
 				data={{
 					type: 'FeatureCollection',
 					features:
-						selectedRoomCenter == null
+						selectedRoomCenter == null ||
+						clickedElement?.type === SEARCH_TYPES.BUILDING
 							? []
 							: [
 									{
@@ -250,58 +254,32 @@ export default function NativeMapCanvas({
 					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
-			<GeoJSONSource id={MAP_IDS.sources.buildingLabels} data={buildingGeoJSON}>
+			<GeoJSONSource
+				id={MAP_IDS.sources.buildingLabels}
+				data={buildingGeoJSON}
+				hitbox={ENTRANCE_PRESS_HITBOX}
+				onPress={(event) => {
+					event.stopPropagation()
+					const selection = getBuildingSelectionFromFeatures(
+						event.nativeEvent.features
+					)
+					if (selection == null) {
+						return
+					}
+					selectMapElement({
+						room: selection.building,
+						type: SEARCH_TYPES.BUILDING,
+						center: selection.center,
+						origin: 'MapClick',
+						manual: true
+					})
+				}}
+			>
 				<Layer
 					id={MAP_IDS.layers.buildingLabels}
 					type="symbol"
 					layout={layerStyles.buildingLabels.layout}
 					paint={layerStyles.buildingLabels.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
-				/>
-			</GeoJSONSource>
-			<GeoJSONSource
-				id={MAP_IDS.sources.buildingEntrances}
-				data={primaryEntrances}
-				hitbox={ENTRANCE_PRESS_HITBOX}
-				onPress={(event) => {
-					event.stopPropagation()
-					handleEntranceSelection(event.nativeEvent.features)
-				}}
-			>
-				<Layer
-					id={MAP_IDS.layers.buildingEntrancesBadge}
-					type="circle"
-					paint={layerStyles.buildingEntrancesBadge}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
-				/>
-				<Layer
-					id={MAP_IDS.layers.buildingEntrancesMarker}
-					type="symbol"
-					layout={layerStyles.buildingEntrancesMarker.layout}
-					paint={layerStyles.buildingEntrancesMarker.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
-				/>
-			</GeoJSONSource>
-			<GeoJSONSource
-				id={MAP_IDS.sources.buildingEntrancesMuted}
-				data={mutedEntrances}
-				hitbox={ENTRANCE_PRESS_HITBOX}
-				onPress={(event) => {
-					event.stopPropagation()
-					handleEntranceSelection(event.nativeEvent.features)
-				}}
-			>
-				<Layer
-					id={MAP_IDS.layers.buildingEntrancesBadgeMuted}
-					type="circle"
-					paint={layerStyles.buildingEntrancesBadgeMuted}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
-				/>
-				<Layer
-					id={MAP_IDS.layers.buildingEntrancesMarkerMuted}
-					type="symbol"
-					layout={layerStyles.buildingEntrancesMarker.layout}
-					paint={layerStyles.buildingEntrancesMarker.paint}
 					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
@@ -388,6 +366,53 @@ export default function NativeMapCanvas({
 					layout={layerStyles.availableRoomsOutline.layout}
 					paint={layerStyles.availableRoomsOutline.paint}
 					beforeId={MAP_IDS.layers.selectedFill}
+				/>
+			</GeoJSONSource>
+			{/* Entrances above floor-plan fills so doors inside polygons stay visible. */}
+			<GeoJSONSource
+				id={MAP_IDS.sources.buildingEntrances}
+				data={primaryEntrances}
+				hitbox={ENTRANCE_PRESS_HITBOX}
+				onPress={(event) => {
+					event.stopPropagation()
+					handleEntranceSelection(event.nativeEvent.features)
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesBadge}
+					type="circle"
+					paint={layerStyles.buildingEntrancesBadge}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesMarker}
+					type="symbol"
+					layout={layerStyles.buildingEntrancesMarker.layout}
+					paint={layerStyles.buildingEntrancesMarker.paint}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+			</GeoJSONSource>
+			<GeoJSONSource
+				id={MAP_IDS.sources.buildingEntrancesMuted}
+				data={mutedEntrances}
+				hitbox={ENTRANCE_PRESS_HITBOX}
+				onPress={(event) => {
+					event.stopPropagation()
+					handleEntranceSelection(event.nativeEvent.features)
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesBadgeMuted}
+					type="circle"
+					paint={layerStyles.buildingEntrancesBadgeMuted}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
+				/>
+				<Layer
+					id={MAP_IDS.layers.buildingEntrancesMarkerMuted}
+					type="symbol"
+					layout={layerStyles.buildingEntrancesMarker.layout}
+					paint={layerStyles.buildingEntrancesMarker.paint}
+					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 			</GeoJSONSource>
 		</MapLibreMap>
