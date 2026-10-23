@@ -5,10 +5,8 @@ import { storageMock } from './thi-storage-mocks'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
-const globalWithDev = globalThis as typeof globalThis & { __DEV__?: boolean }
-if (globalWithDev.__DEV__ === undefined) {
-	globalWithDev.__DEV__ = false
-}
+// Expo packages still gate on this during module evaluation.
+;(globalThis as typeof globalThis & { __DEV__?: boolean }).__DEV__ ??= true
 
 type ExpoGlobalStub = {
 	expo?: {

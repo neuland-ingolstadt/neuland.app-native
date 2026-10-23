@@ -7,7 +7,7 @@ import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_THI_DEPARTMENT
 } from '@/types/campus-life'
-import { neulandApiMockModule } from './neuland-api-mock-helpers'
+import type { Sports } from '@/types/university-sports'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
@@ -33,30 +33,25 @@ const mockGetPublicOrganizer = mock(
 const mockGetPublicOrganizers = mock(
 	async (): Promise<PublicOrganizerResponse[]> => []
 )
-const mockGetUniversitySports = mock(async () => ({
-	universitySports: []
-}))
-const mockGetFragmentData = mock(() => null as unknown)
+const mockListUniversitySports = mock(async (): Promise<Sports[]> => [])
 
 const registerEventsApiMocks = () => {
-	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () =>
-		neulandApiMockModule({
+	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
+		default: {
 			getPublicCampusLifeEvents: mockGetPublicCampusLifeEvents,
 			getPublicCampusLifeEvent: mockGetPublicCampusLifeEvent,
 			getPublicOrganizer: mockGetPublicOrganizer,
-			getPublicOrganizers: mockGetPublicOrganizers,
-			getUniversitySports: mockGetUniversitySports
-		})
-	)
+			getPublicOrganizers: mockGetPublicOrganizers
+		}
+	}))
 
-	mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
-		getFragmentData: mockGetFragmentData
+	mock.module(`${SRC_ROOT}api/neuland-core-api.ts`, () => ({
+		listUniversitySports: mockListUniversitySports
 	}))
 }
 
 mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {},
-	UniversitySportsFieldsFragmentDoc: {}
+	FoodFieldsFragmentDoc: {}
 }))
 
 let eventsUtils: typeof import('../events-utils')
@@ -67,17 +62,23 @@ beforeAll(async () => {
 })
 
 describe('events-utils', () => {
-	it('sportsCategories - Should expose expected sport keys and icon mappings', () => {
-		expect(eventsUtils.sportsCategories.Basketball).toEqual({
+	it('sportsCategories - Should expose Core sports category keys and icon mappings', () => {
+		expect(eventsUtils.sportsCategories.BASKETBALL).toEqual({
 			iosIcon: 'figure.basketball',
 			androidIcon: 'sports_basketball'
 		})
-		expect(eventsUtils.sportsCategories.Running).toEqual({
-			iosIcon: 'figure.run',
-			androidIcon: 'directions_run'
-		})
-		expect(eventsUtils.sportsCategories.Other.androidIcon).toBe('sports')
-		expect(Object.keys(eventsUtils.sportsCategories)).toContain('Yoga')
+		expect(eventsUtils.sportsCategories.FOOTBALL.androidIcon).toBe(
+			'sports_soccer'
+		)
+		expect(eventsUtils.sportsCategories.FRISBEE.iosIcon).toBe(
+			'figure.disc.sports'
+		)
+		expect(eventsUtils.sportsCategories.HIKING.androidIcon).toBe('hiking')
+		expect(eventsUtils.sportsCategories.OTHER.androidIcon).toBe('sports')
+		expect(Object.keys(eventsUtils.sportsCategories)).toContain('YOGA')
+		expect(Object.keys(eventsUtils.sportsCategories)).toContain(
+			'STRENGTH_TRAINING'
+		)
 	})
 
 	it('loadCampusLifeEvents - Should map API events and filter empty titles and past events', async () => {
@@ -219,47 +220,39 @@ describe('events-utils', () => {
 		)
 	})
 
-	it('loadUniversitySportsEvents - Should return an empty list when fragment data is missing', async () => {
-		mockGetUniversitySports.mockResolvedValueOnce({
-			universitySports: null
-		} as unknown as Awaited<ReturnType<typeof mockGetUniversitySports>>)
-		mockGetFragmentData.mockReturnValueOnce(null)
-
-		await expect(eventsUtils.loadUniversitySportsEvents()).resolves.toEqual([])
-	})
-
 	it('loadUniversitySportsEvents - Should group events by weekday in calendar order', async () => {
-		mockGetUniversitySports.mockResolvedValueOnce({
-			universitySports: ['payload']
-		} as unknown as Awaited<ReturnType<typeof mockGetUniversitySports>>)
-		mockGetFragmentData.mockReturnValueOnce([
+		mockListUniversitySports.mockResolvedValueOnce([
 			{
-				id: '1',
-				weekday: 'Wednesday',
+				id: 1,
+				weekday: 'WEDNESDAY',
 				campus: 'INGOLSTADT',
 				location: 'Sports hall',
-				startTime: '18:00',
-				endTime: '19:30',
+				startTime: '18:00:00Z',
+				endTime: '19:30:00Z',
 				requiresRegistration: false,
 				invitationLink: null,
-				eMail: null,
-				sportsCategory: 'Basketball',
-				title: { de: 'Basketball', en: 'Basketball' },
-				description: null
+				email: null,
+				sportsCategory: 'BASKETBALL',
+				contents: {
+					de: { title: 'Basketball', description: null },
+					en: { title: 'Basketball', description: null }
+				}
 			},
 			{
-				id: '2',
-				weekday: 'Monday',
+				id: 2,
+				weekday: 'MONDAY',
 				campus: 'INGOLSTADT',
 				location: 'Gym',
-				startTime: '17:00',
+				startTime: '17:00:00Z',
 				endTime: null,
 				requiresRegistration: true,
 				invitationLink: null,
-				eMail: null,
-				sportsCategory: 'Yoga',
-				title: { de: 'Yoga', en: 'Yoga' },
-				description: null
+				email: null,
+				sportsCategory: 'YOGA',
+				contents: {
+					de: { title: 'Yoga', description: null },
+					en: { title: 'Yoga', description: null }
+				}
 			}
 		])
 
@@ -267,23 +260,47 @@ describe('events-utils', () => {
 
 		expect(sections).toEqual([
 			{
-				title: 'Monday',
+				title: 'MONDAY',
 				data: [
 					expect.objectContaining({
-						id: '2',
-						weekday: 'Monday'
+						id: 2,
+						weekday: 'MONDAY',
+						email: null,
+						contents: expect.objectContaining({
+							en: expect.objectContaining({ title: 'Yoga' })
+						})
 					})
 				]
 			},
 			{
-				title: 'Wednesday',
+				title: 'WEDNESDAY',
 				data: [
 					expect.objectContaining({
-						id: '1',
-						weekday: 'Wednesday'
+						id: 1,
+						weekday: 'WEDNESDAY',
+						sportsCategory: 'BASKETBALL'
 					})
 				]
 			}
 		])
+	})
+
+	it('loadUniversitySportsEvents - Should return an empty list when the API has no sports', async () => {
+		mockListUniversitySports.mockResolvedValueOnce([])
+
+		await expect(eventsUtils.loadUniversitySportsEvents()).resolves.toEqual([])
+	})
+
+	it('getSportsCategoryIcons - Should resolve known categories and fall back to OTHER', () => {
+		expect(eventsUtils.getSportsCategoryIcons('BASKETBALL')).toEqual({
+			iosIcon: 'figure.basketball',
+			androidIcon: 'sports_basketball'
+		})
+		expect(eventsUtils.getSportsCategoryIcons(null)).toEqual(
+			eventsUtils.sportsCategories.OTHER
+		)
+		expect(eventsUtils.getSportsCategoryIcons('unknown-category')).toEqual(
+			eventsUtils.sportsCategories.OTHER
+		)
 	})
 })

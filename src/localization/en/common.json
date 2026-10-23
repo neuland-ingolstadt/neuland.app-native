@@ -55,6 +55,11 @@
 			"reload": "Reload App",
 			"feedback": "Send Feedback",
 			"status": "Check System Status"
+		},
+		"screen": {
+			"title": "Page unavailable",
+			"description": "Something went wrong on this page.",
+			"retry": "Try Again"
 		}
 	},
 	"dates": {

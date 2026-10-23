@@ -12,41 +12,42 @@ import {
 	Text,
 	View
 } from 'react-native'
-import Collapsible from 'react-native-collapsible'
-import type {
-	CampusType,
-	UniversitySportsFieldsFragment,
-	WeekdayType
-} from '@/__generated__/gql/graphql'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import SportsRow from '@/components/Rows/sports-row'
+import Collapsible from '@/components/Universal/collapsible'
 import PlatformIcon from '@/components/Universal/icon'
 import LoadingIndicator from '@/components/Universal/loading-indicator'
 import { useRefreshByUser } from '@/hooks'
+import type {
+	Sports,
+	SportsCampusLabel,
+	WeekdayEnum
+} from '@/types/university-sports'
+import {
+	CAMPUS_LABEL_TO_ENUM,
+	SPORTS_CAMPUS_LABELS
+} from '@/types/university-sports'
 import { networkError } from '@/utils/api-utils'
+import type { GroupedSportsEvents } from '@/utils/events-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { EmptyEventsAnimation } from './empty-events-animation'
-
-const sportsCampusLocations = ['Ingolstadt', 'Neuburg'] as const
 
 export default function ClSportsPage({
 	sportsResult
 }: {
-	sportsResult: UseQueryResult<
-		{
-			title: WeekdayType
-			data: UniversitySportsFieldsFragment[]
-		}[],
-		Error
-	>
+	sportsResult: UseQueryResult<GroupedSportsEvents, Error>
 }): React.JSX.Element {
 	const { userCampus } = use(UserKindContext)
-	const [selectedLocation, setSelectedLocation] = useState<string>('Ingolstadt')
+	const [selectedLocation, setSelectedLocation] =
+		useState<SportsCampusLabel>('Ingolstadt')
 
 	useEffect(() => {
-		if (userCampus != null) {
-			setSelectedLocation(userCampus)
+		if (
+			userCampus != null &&
+			(SPORTS_CAMPUS_LABELS as readonly string[]).includes(userCampus)
+		) {
+			setSelectedLocation(userCampus as SportsCampusLabel)
 		}
 	}, [userCampus])
 
@@ -54,12 +55,11 @@ export default function ClSportsPage({
 		if (sportsResult.data == null) {
 			return []
 		}
+		const selectedCampus = CAMPUS_LABEL_TO_ENUM[selectedLocation]
 		return sportsResult.data
 			.map((section) => ({
 				...section,
-				data: section.data.filter(
-					(event) => event.campus === (selectedLocation as CampusType)
-				)
+				data: section.data.filter((event) => event.campus === selectedCampus)
 			}))
 			.filter((section) => section.data.length > 0)
 	}, [sportsResult.data, selectedLocation])
@@ -75,16 +75,13 @@ export default function ClSportsPage({
 	const EventList = ({
 		data
 	}: {
-		data: {
-			title: WeekdayType
-			data: UniversitySportsFieldsFragment[]
-		}[]
+		data: GroupedSportsEvents
 	}): React.JSX.Element => {
 		return (
 			<View>
 				{data.map((section) => (
 					<SportsWeekday
-						title={section.title.toLowerCase() as Lowercase<WeekdayType>}
+						title={section.title.toLowerCase() as Lowercase<WeekdayEnum>}
 						data={section.data}
 						key={section.title}
 					/>
@@ -97,8 +94,8 @@ export default function ClSportsPage({
 		title,
 		data
 	}: {
-		title: Lowercase<WeekdayType>
-		data: UniversitySportsFieldsFragment[]
+		title: Lowercase<WeekdayEnum>
+		data: Sports[]
 	}): React.JSX.Element => {
 		const [collapsed, setCollapsed] = useState(false)
 
@@ -149,7 +146,7 @@ export default function ClSportsPage({
 	const LocationButton = ({
 		location
 	}: {
-		location: string
+		location: SportsCampusLabel
 	}): React.JSX.Element => {
 		const isSelected = selectedLocation === location
 
@@ -221,7 +218,7 @@ export default function ClSportsPage({
 						{t('labels.campus')}
 					</Text>
 					<View className="flex-row items-center gap-2 pb-1 pt-2">
-						{sportsCampusLocations.map((location) => (
+						{SPORTS_CAMPUS_LABELS.map((location) => (
 							<LocationButton location={location} key={location} />
 						))}
 					</View>

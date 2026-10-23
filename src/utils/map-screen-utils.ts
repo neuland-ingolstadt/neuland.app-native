@@ -196,17 +196,32 @@ export function getOngoingOrNextEvent(
 /**
  * Filter available rooms from a GeoJSON collection
  */
+function isCurrentAvailability(
+	room: { until?: Date | string },
+	now: number = Date.now()
+): boolean {
+	if (room.until == null) {
+		return true
+	}
+	const untilMs = new Date(room.until).getTime()
+	return !Number.isNaN(untilMs) && untilMs > now
+}
+
 export function filterAvailableRooms(
 	rooms: FeatureCollection | undefined,
-	availableRooms: Array<{ room: string }> | null
+	availableRooms: Array<{ room: string; until?: Date | string }> | null
 ): Feature[] {
 	if (rooms == null) {
 		return []
 	}
+	const now = Date.now()
 	return rooms.features.filter(
 		(feature) =>
 			feature.properties != null &&
-			availableRooms?.find((x) => x.room === feature.properties?.Raum)
+			availableRooms?.find(
+				(x) =>
+					x.room === feature.properties?.Raum && isCurrentAvailability(x, now)
+			)
 	)
 }
 
@@ -266,25 +281,55 @@ function ensureFeaturesArray(
 }
 
 /**
+ * THI free-room API tracks Hörsäle, Seminaräume, and PC-Pools.
+ * Match those via GeoJSON Funktion so fully booked / weekend rooms still show
+ * Verfügbarkeit ("Not available") instead of hiding the section.
+ */
+const BOOKABLE_FUNKTION_PATTERN = /lecture|h[oö]rsaal|seminar|pc[\s-]?pool/i
+
+export function isAvailabilityTrackedRoom(
+	properties: FeatureProperties | GeoJsonProperties | null | undefined
+): boolean {
+	if (properties == null) {
+		return false
+	}
+	const labels = [properties.Funktion_en, properties.Funktion_de]
+	return labels.some(
+		(label) =>
+			typeof label === 'string' && BOOKABLE_FUNKTION_PATTERN.test(label)
+	)
+}
+
+/**
  * Get room data from a room ID
  */
 export function getRoomData(
 	room: string,
-	availableRooms: Array<{ room: string }> | null,
+	availableRooms: Array<{ room: string; until?: Date | string }> | null,
 	allRoomsFeatures: Feature[] | FeatureCollection,
 	i18n: i18n,
 	t: TFunction<'common', undefined>,
 	roomOpenings?: RoomOpenings | null
 ): RoomData {
 	const features = ensureFeaturesArray(allRoomsFeatures)
-	const occupancies = availableRooms?.find((x) => x.room === room)
+	const now = new Date()
+	const matchedRoom = availableRooms?.find((x) => x.room === room)
+	// Stale free-room lists can outlive the slot; drop expired matches.
+	const occupancies =
+		matchedRoom != null && isCurrentAvailability(matchedRoom, now.getTime())
+			? matchedRoom
+			: null
 	const properties = findRoomFeature(features, room)?.properties as
 		| FeatureProperties
 		| undefined
 
 	const openings = roomOpenings?.[room]
-	const now = new Date()
 	const nextAvailable = openings?.find((o) => o.from > now) ?? null
+	// Prefer GeoJSON room type; fall back to THI data for odd/missing labels.
+	const availabilityTracked =
+		isAvailabilityTrackedRoom(properties) ||
+		matchedRoom != null ||
+		(openings != null && openings.length > 0)
 
 	return {
 		title: room,
@@ -297,6 +342,7 @@ export function getRoomData(
 		properties,
 		occupancies,
 		nextAvailable,
+		availabilityTracked,
 		type: SEARCH_TYPES.ROOM
 	} as RoomData
 }
@@ -307,7 +353,7 @@ export function getRoomData(
 export function getBuildingData(
 	building: string,
 	allRoomsFeatures: Feature[] | FeatureCollection,
-	availableRooms: Array<{ room: string }> | null,
+	availableRooms: Array<{ room: string; until?: Date | string }> | null,
 	t: TFunction<'common', undefined>
 ): RoomData {
 	const features = ensureFeaturesArray(allRoomsFeatures)
@@ -316,8 +362,9 @@ export function getBuildingData(
 			x.properties?.Gebaeude === building &&
 			x.properties.rtype === SEARCH_TYPES.BUILDING
 	)
-	const numberOfFreeRooms = availableRooms?.filter((x) =>
-		x.room.startsWith(building)
+	const now = Date.now()
+	const numberOfFreeRooms = availableRooms?.filter(
+		(x) => x.room.startsWith(building) && isCurrentAvailability(x, now)
 	).length
 	const numberOfRooms = features.filter(
 		(x) =>

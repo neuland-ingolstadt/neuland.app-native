@@ -20,13 +20,13 @@ function windowHeight(height: number): number {
 }
 
 export function detentHeight(detent: Detent | undefined): number {
-	if (typeof detent === 'number') {
-		return detent
-	}
-	if (detent == null || detent === 'content') {
+	if (detent == null) {
 		return 0
 	}
-	return typeof detent.value === 'number' ? detent.value : 0
+	if (typeof detent === 'object') {
+		return detentHeight(detent.value)
+	}
+	return typeof detent === 'number' ? detent : 0
 }
 
 export function getMapSearchDetents(height: number): Detent[] {

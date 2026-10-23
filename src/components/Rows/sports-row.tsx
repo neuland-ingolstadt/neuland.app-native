@@ -1,24 +1,25 @@
 import type { RelativePathString } from 'expo-router'
 import type React from 'react'
 import { Platform, Text, View } from 'react-native'
-import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
 import PlatformIcon from '@/components/Universal/icon'
 import RowEntry from '@/components/Universal/row-entry'
 import i18n, { type LanguageKey } from '@/localization/i18n'
+import type { Sports } from '@/types/university-sports'
+import {
+	CAMPUS_ENUM_TO_LABEL,
+	sportsLocalizedTitle
+} from '@/types/university-sports'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { sportsCategories } from '@/utils/events-utils'
+import { getSportsCategoryIcons } from '@/utils/events-utils'
 
-const SportsRow = ({
-	event
-}: {
-	event: UniversitySportsFieldsFragment
-}): React.JSX.Element => {
+const SportsRow = ({ event }: { event: Sports }): React.JSX.Element => {
 	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
+	const icons = getSportsCategoryIcons(event.sportsCategory)
 
 	return (
 		<RowEntry
 			testID="sports-event-row"
-			title={event.title[i18n.language as LanguageKey] ?? ''}
+			title={sportsLocalizedTitle(event, i18n.language as LanguageKey)}
 			href={`/events/sports/${event.id}` as RelativePathString}
 			leftChildren={
 				<View className="mt-0.5">
@@ -29,7 +30,7 @@ const SportsRow = ({
 						{event.location}
 					</Text>
 					<Text className="text-[13px] text-label" numberOfLines={1}>
-						{event.campus}
+						{CAMPUS_ENUM_TO_LABEL[event.campus]}
 					</Text>
 				</View>
 			}
@@ -44,11 +45,11 @@ const SportsRow = ({
 				Platform.OS === 'web' ? undefined : (
 					<PlatformIcon
 						ios={{
-							name: sportsCategories[event.sportsCategory].iosIcon,
+							name: icons.iosIcon,
 							size: 16
 						}}
 						android={{
-							name: sportsCategories[event.sportsCategory].androidIcon,
+							name: icons.androidIcon,
 							size: 22
 						}}
 						web={{

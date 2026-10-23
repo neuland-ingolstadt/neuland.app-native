@@ -1,5 +1,5 @@
 import Color from 'color'
-import { NativeTabs } from 'expo-router/unstable-native-tabs'
+import { NativeTabs } from 'expo-router/native-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
@@ -44,6 +44,7 @@ export default function TabLayout(): React.JSX.Element {
 
 	return (
 		<NativeTabs
+			activityEnabled
 			badgeBackgroundColor={primaryColor}
 			iconColor={tabbarInactiveColor}
 			tintColor={primaryColor}
@@ -57,7 +58,7 @@ export default function TabLayout(): React.JSX.Element {
 				<Label>{t('navigation.home')}</Label>
 				<Icon
 					sf={{ default: 'house', selected: 'house.fill' }}
-					md="home"
+					drawable={{ default: 'tab_home', selected: 'tab_home_fill' }}
 					selectedColor={primaryColor}
 				/>
 			</NativeTabs.Trigger>
@@ -65,7 +66,10 @@ export default function TabLayout(): React.JSX.Element {
 				<Label>{t('navigation.timetable')}</Label>
 				<Icon
 					sf={{ default: 'clock', selected: 'clock.fill' }}
-					md="calendar_month"
+					drawable={{
+						default: 'tab_calendar_month',
+						selected: 'tab_calendar_month_fill'
+					}}
 					selectedColor={primaryColor}
 				/>
 			</NativeTabs.Trigger>
@@ -73,7 +77,7 @@ export default function TabLayout(): React.JSX.Element {
 				<Label>{t('navigation.map')}</Label>
 				<Icon
 					sf={{ default: 'map', selected: 'map.fill' }}
-					md="map"
+					drawable={{ default: 'tab_map', selected: 'tab_map_fill' }}
 					selectedColor={primaryColor}
 				/>
 			</NativeTabs.Trigger>
@@ -81,7 +85,7 @@ export default function TabLayout(): React.JSX.Element {
 				<Label>{t('navigation.food')}</Label>
 				<Icon
 					sf={{ default: 'fork.knife', selected: 'fork.knife' }}
-					md="restaurant"
+					drawable={{ default: 'tab_food', selected: 'tab_food_fill' }}
 					selectedColor={primaryColor}
 				/>
 			</NativeTabs.Trigger>
@@ -89,7 +93,10 @@ export default function TabLayout(): React.JSX.Element {
 				<Label>{t('navigation.profile')}</Label>
 				<Icon
 					sf={{ default: 'person', selected: 'person.fill' }}
-					md="account_circle"
+					drawable={{
+						default: 'tab_account_circle',
+						selected: 'tab_account_circle_fill'
+					}}
 					selectedColor={primaryColor}
 				/>
 			</NativeTabs.Trigger>

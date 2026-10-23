@@ -40,7 +40,7 @@ const MapBottomSheet = ({
 	const { searchHistory } = use(MapContext)
 	const params = useLocalSearchParams<{ room: string }>()
 	const sheetPosition = useSheetPosition(currentPosition)
-	const textInputRef = useRef<TextInput>(null)
+	const textInputRef = useRef<React.ComponentRef<typeof TextInput>>(null)
 	const [searchQuery, setSearchQuery] = React.useState('')
 	const [searchFocused, setSearchFocused] = React.useState(false)
 
@@ -57,7 +57,7 @@ const MapBottomSheet = ({
 	const handleSearchChange = (text: string): void => {
 		setSearchQuery(text)
 		if (params.room != null && params.room !== '') {
-			router.setParams(undefined)
+			router.setParams({ room: '' })
 		}
 	}
 

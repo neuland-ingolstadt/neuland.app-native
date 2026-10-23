@@ -5,9 +5,15 @@ import {
 	withSpring
 } from 'react-native-reanimated'
 
-export const useWiggleAnimation = (
-	options = { rotation: 5, damping: 3, stiffness: 300 }
-) => {
+export const useWiggleAnimation = ({
+	rotation = 5,
+	damping = 3,
+	stiffness = 300
+}: {
+	rotation?: number
+	damping?: number
+	stiffness?: number
+} = {}) => {
 	const iconRotation = useSharedValue(0)
 
 	const iconAnimatedStyle = useAnimatedStyle(() => {
@@ -22,19 +28,19 @@ export const useWiggleAnimation = (
 
 	const triggerWiggle = async () => {
 		await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-		iconRotation.value = withSpring(-options.rotation, {
-			damping: options.damping,
-			stiffness: options.stiffness
+		iconRotation.value = withSpring(-rotation, {
+			damping,
+			stiffness
 		})
 		setTimeout(() => {
-			iconRotation.value = withSpring(options.rotation, {
-				damping: options.damping,
-				stiffness: options.stiffness
+			iconRotation.value = withSpring(rotation, {
+				damping,
+				stiffness
 			})
 			setTimeout(() => {
 				iconRotation.value = withSpring(0, {
-					damping: options.damping,
-					stiffness: options.stiffness
+					damping,
+					stiffness
 				})
 			}, 100)
 		}, 100)

@@ -38,8 +38,7 @@ mock.module('burnt', () => ({
 }))
 
 mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {},
-	UniversitySportsFieldsFragmentDoc: {}
+	FoodFieldsFragmentDoc: {}
 }))
 
 mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
