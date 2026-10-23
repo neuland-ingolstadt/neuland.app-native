@@ -262,7 +262,7 @@ export default {
 		],
 		[
 			'./config/plugins/withDrawableAssets.js',
-			'./src/assets/android/check.xml'
+			['./src/assets/android/check.xml', './src/assets/android/tabbar']
 		],
 		'./config/plugins/withIosCiArtifacts.js',
 		'./config/plugins/withCiScriptsSymlink.js',
