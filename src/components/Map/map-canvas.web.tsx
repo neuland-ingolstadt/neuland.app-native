@@ -248,49 +248,6 @@ export default function WebMapCanvas({
 						paint={layerStyles.buildingLabels.paint}
 					/>
 				</Source>
-				{[...primaryEntrances.features, ...mutedEntrances.features].map(
-					(feature) => {
-						if (feature.geometry?.type !== 'Point') {
-							return null
-						}
-						const [longitude, latitude] = feature.geometry.coordinates
-						const key = String(
-							feature.properties?.id ?? `${longitude},${latitude}`
-						)
-						const muted = isMutedEntrance(feature.properties)
-						return (
-							<Marker
-								key={key}
-								longitude={longitude}
-								latitude={latitude}
-								anchor="center"
-								style={{ cursor: 'pointer' }}
-								onClick={(event) => {
-									event.originalEvent.stopPropagation()
-									handleEntranceSelection([feature])
-								}}
-							>
-								<div
-									style={{
-										width: 26,
-										height: 26,
-										borderRadius: 13,
-										backgroundColor: muted
-											? MAP_COLORS.entranceMuted
-											: primaryColor,
-										border: `2px solid ${backgroundColor}`,
-										boxSizing: 'border-box',
-										display: 'flex',
-										alignItems: 'center',
-										justifyContent: 'center'
-									}}
-								>
-									<DoorClosed size={11} color="#ffffff" strokeWidth={2.25} />
-								</div>
-							</Marker>
-						)
-					}
-				)}
 				<Source
 					id={MAP_IDS.sources.allRooms}
 					type="geojson"
@@ -375,13 +332,57 @@ export default function WebMapCanvas({
 						/>
 					</Source>
 				)}
-				{/* Buildings use polygon highlight + mapped entrances, not a center pin. */}
+				{[...primaryEntrances.features, ...mutedEntrances.features].map(
+					(feature) => {
+						if (feature.geometry?.type !== 'Point') {
+							return null
+						}
+						const [longitude, latitude] = feature.geometry.coordinates
+						const key = String(
+							feature.properties?.id ?? `${longitude},${latitude}`
+						)
+						const muted = isMutedEntrance(feature.properties)
+						return (
+							<Marker
+								key={key}
+								longitude={longitude}
+								latitude={latitude}
+								anchor="center"
+								style={{ cursor: 'pointer', zIndex: 1 }}
+								onClick={(event) => {
+									event.originalEvent.stopPropagation()
+									handleEntranceSelection([feature])
+								}}
+							>
+								<div
+									style={{
+										width: 26,
+										height: 26,
+										borderRadius: 13,
+										backgroundColor: muted
+											? MAP_COLORS.entranceMuted
+											: primaryColor,
+										border: `2px solid ${backgroundColor}`,
+										boxSizing: 'border-box',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center'
+									}}
+								>
+									<DoorClosed size={11} color="#ffffff" strokeWidth={2.25} />
+								</div>
+							</Marker>
+						)
+					}
+				)}
 				{selectedRoomCenter != null &&
 					clickedElement?.type !== SEARCH_TYPES.BUILDING && (
 						<Marker
+							key={mapMode}
 							longitude={selectedRoomCenter[0]}
 							latitude={selectedRoomCenter[1]}
 							color={selectionColor}
+							style={{ zIndex: 2 }}
 						/>
 					)}
 			</Map>

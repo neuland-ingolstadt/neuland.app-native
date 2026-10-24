@@ -102,7 +102,7 @@ export const MAP_COLORS = {
 	},
 	corridorFillOpacity: {
 		light: 0.5,
-		dark: 0.42
+		dark: 0.62
 	},
 	roomOutline: {
 		light: '#b3b3b3',

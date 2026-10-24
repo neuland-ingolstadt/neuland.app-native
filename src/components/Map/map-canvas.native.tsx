@@ -203,35 +203,8 @@ export default function NativeMapCanvas({
 				}
 			/>
 			{locationPermissionGranted && <NativeUserLocation mode="heading" />}
-			{/* Buildings are carried by polygon highlight + mapped entrances — a
-			    centered pin would fake a single “navigation” door where there is none. */}
-			<GeoJSONSource
-				id={MAP_IDS.sources.selectedRoom}
-				data={{
-					type: 'FeatureCollection',
-					features:
-						selectedRoomCenter == null ||
-						clickedElement?.type === SEARCH_TYPES.BUILDING
-							? []
-							: [
-									{
-										type: 'Feature',
-										geometry: {
-											type: 'Point',
-											coordinates: selectedRoomCenter
-										},
-										properties: {}
-									}
-								]
-				}}
-			>
-				<Layer
-					id={MAP_IDS.layers.selectedRoomMarker}
-					type="symbol"
-					layout={layerStyles.selectedRoomMarker.layout}
-					paint={layerStyles.selectedRoomMarker.paint}
-				/>
-			</GeoJSONSource>
+			{/* Selection under labels under doors; room pin is mounted last with
+			    afterId so it always stacks above entrance markers. */}
 			<GeoJSONSource
 				id={MAP_IDS.sources.selectedOverlay}
 				data={{
@@ -244,14 +217,14 @@ export default function NativeMapCanvas({
 					id={MAP_IDS.layers.selectedFill}
 					type="fill"
 					paint={layerStyles.selectedFill}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					beforeId={MAP_IDS.layers.buildingLabels}
 				/>
 				<Layer
 					id={MAP_IDS.layers.selectedOutline}
 					type="line"
 					layout={layerStyles.selectedOutline.layout}
 					paint={layerStyles.selectedOutline.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					beforeId={MAP_IDS.layers.buildingLabels}
 				/>
 			</GeoJSONSource>
 			<GeoJSONSource
@@ -280,7 +253,7 @@ export default function NativeMapCanvas({
 					type="symbol"
 					layout={layerStyles.buildingLabels.layout}
 					paint={layerStyles.buildingLabels.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					beforeId={MAP_IDS.layers.buildingEntrancesBadge}
 				/>
 			</GeoJSONSource>
 			{outgoingStyles != null && outgoing != null && (
@@ -382,14 +355,13 @@ export default function NativeMapCanvas({
 					id={MAP_IDS.layers.buildingEntrancesBadge}
 					type="circle"
 					paint={layerStyles.buildingEntrancesBadge}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
 				/>
 				<Layer
 					id={MAP_IDS.layers.buildingEntrancesMarker}
 					type="symbol"
 					layout={layerStyles.buildingEntrancesMarker.layout}
 					paint={layerStyles.buildingEntrancesMarker.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					afterId={MAP_IDS.layers.buildingEntrancesBadge}
 				/>
 			</GeoJSONSource>
 			<GeoJSONSource
@@ -405,14 +377,45 @@ export default function NativeMapCanvas({
 					id={MAP_IDS.layers.buildingEntrancesBadgeMuted}
 					type="circle"
 					paint={layerStyles.buildingEntrancesBadgeMuted}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					afterId={MAP_IDS.layers.buildingEntrancesMarker}
 				/>
 				<Layer
 					id={MAP_IDS.layers.buildingEntrancesMarkerMuted}
 					type="symbol"
 					layout={layerStyles.buildingEntrancesMarker.layout}
 					paint={layerStyles.buildingEntrancesMarker.paint}
-					beforeId={MAP_IDS.layers.selectedRoomMarker}
+					afterId={MAP_IDS.layers.buildingEntrancesBadgeMuted}
+				/>
+			</GeoJSONSource>
+			{/* Buildings use polygon highlight + mapped entrances — a centered pin
+			    would fake a single “navigation” door where there is none.
+			    Mount last + afterId so the pin always draws above door layers. */}
+			<GeoJSONSource
+				id={MAP_IDS.sources.selectedRoom}
+				data={{
+					type: 'FeatureCollection',
+					features:
+						selectedRoomCenter == null ||
+						clickedElement?.type === SEARCH_TYPES.BUILDING
+							? []
+							: [
+									{
+										type: 'Feature',
+										geometry: {
+											type: 'Point',
+											coordinates: selectedRoomCenter
+										},
+										properties: {}
+									}
+								]
+				}}
+			>
+				<Layer
+					id={MAP_IDS.layers.selectedRoomMarker}
+					type="symbol"
+					layout={layerStyles.selectedRoomMarker.layout}
+					paint={layerStyles.selectedRoomMarker.paint}
+					afterId={MAP_IDS.layers.buildingEntrancesMarkerMuted}
 				/>
 			</GeoJSONSource>
 		</MapLibreMap>
