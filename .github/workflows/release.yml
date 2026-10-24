@@ -22,22 +22,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Determine if prerelease
         id: prerelease_check
+        env:
+          REF: ${{ github.ref }}
         run: |
-          if [[ "${{ github.ref }}" =~ - ]]; then
-            echo "PRERELEASE=true" >> $GITHUB_ENV
+          if [[ "$REF" =~ - ]]; then
+            echo "PRERELEASE=true" >> "$GITHUB_ENV"
           else
-            echo "PRERELEASE=false" >> $GITHUB_ENV
+            echo "PRERELEASE=false" >> "$GITHUB_ENV"
           fi
 
       - name: Find latest stable tag
         id: latest_stable_tag
         run: |
           LATEST_TAG=$(git tag --sort=-creatordate | grep -v "-" | head -n2 | tail -n1)
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "LATEST_TAG=$LATEST_TAG" >> "$GITHUB_ENV"
 
       - name: Generate changelog
         id: git-cliff
@@ -51,13 +54,15 @@ jobs:
 
       - name: Create release
         id: create_release
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
-          body_path: CHANGES.md
-          prerelease: ${{ env.PRERELEASE }}
-          draft: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          args=(--draft --notes-file CHANGES.md --title "$TAG_NAME" "$TAG_NAME")
+          if [ "$PRERELEASE" = "true" ]; then
+            args+=(--prerelease)
+          fi
+          gh release create "${args[@]}"
 
   build-docker-image:
     name: Build and publish Docker image
@@ -70,17 +75,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Determine if prerelease
+        env:
+          REF: ${{ github.ref }}
         run: |
-          if [[ "${{ github.ref }}" =~ - ]]; then
-              echo "PRERELEASE=true" >> $GITHUB_ENV
-              echo "TAG_TYPE=beta" >> $GITHUB_ENV
-              echo "ENDPOINT=DEV" >> $GITHUB_ENV
+          if [[ "$REF" =~ - ]]; then
+              echo "PRERELEASE=true" >> "$GITHUB_ENV"
+              echo "TAG_TYPE=beta" >> "$GITHUB_ENV"
+              echo "ENDPOINT=DEV" >> "$GITHUB_ENV"
           else
-              echo "PRERELEASE=false" >> $GITHUB_ENV
-              echo "TAG_TYPE=release" >> $GITHUB_ENV
-              echo "ENDPOINT=PROD" >> $GITHUB_ENV
+              echo "PRERELEASE=false" >> "$GITHUB_ENV"
+              echo "TAG_TYPE=release" >> "$GITHUB_ENV"
+              echo "ENDPOINT=PROD" >> "$GITHUB_ENV"
           fi
 
       - name: Log in to the Container registry
@@ -135,16 +144,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
         with:
           ignore-scripts: 'true'
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - uses: ./.github/actions/android-prepare
+      - uses: $/.github/actions/android-prepare
 
       - name: Build with EAS
         env:
@@ -167,12 +178,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
         with:
           ignore-scripts: 'true'
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -216,31 +229,35 @@ jobs:
 
       - name: Upload APK to release
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          APK_PATH: ${{ steps.convert_aab.outputs.apk-path }}
+          REF_NAME: ${{ github.ref_name }}
         with:
           script: |
             const fs = require('fs');
-            
-            const apkPath = '${{ steps.convert_aab.outputs.apk-path }}';
+
+            const apkPath = process.env.APK_PATH;
+            const refName = process.env.REF_NAME;
             const assetName = 'neuland-next.apk';
-            
+
             if (!fs.existsSync(apkPath)) {
               throw new Error(`APK file not found at ${apkPath}`);
             }
-            
+
             // Find the release by tag name
             const releases = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            
-            const release = releases.data.find(r => r.tag_name === '${{ github.ref_name }}');
-            
+
+            const release = releases.data.find(r => r.tag_name === refName);
+
             if (!release) {
-              throw new Error(`Release with tag ${{ github.ref_name }} not found`);
+              throw new Error(`Release with tag ${refName} not found`);
             }
-            
+
             const fileBuffer = fs.readFileSync(apkPath);
-            
+
             await github.rest.repos.uploadReleaseAsset({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -258,5 +275,5 @@ jobs:
               release_id: release.id,
               draft: false
             });
-            
+
             console.log(`Successfully uploaded ${assetName} and published release ${release.id}`);

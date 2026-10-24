@@ -23,9 +23,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Detect changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
         id: detect
 
   android-compile:
@@ -40,10 +42,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
-      - uses: ./.github/actions/android-prepare
+      - uses: $/.github/actions/android-prepare
 
       - name: Compile debug APK
         working-directory: android

@@ -24,9 +24,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Detect changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
         id: detect
 
   web-export:
@@ -37,8 +39,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Export web bundle
         env:
@@ -71,10 +75,11 @@ jobs:
       - name: Checkout PR
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
         with:
           no-bun-cache: 'true'
 

@@ -26,9 +26,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Detect changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
         id: detect
 
   static-checks:
@@ -42,8 +44,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Check for merge conflict markers
         run: bash config/check-merge-conflicts.sh
@@ -71,8 +75,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Run Expo Doctor
         run: |
@@ -118,10 +124,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Run unit tests with coverage
         run: bun run test:coverage
@@ -145,9 +152,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Run mutation tests
         run: bun run test:mutation:ci
