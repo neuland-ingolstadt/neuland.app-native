@@ -7,25 +7,29 @@ import {
 	NavigationControl,
 	Source
 } from '@vis.gl/react-maplibre'
+import { DoorClosed } from 'lucide-react-native'
 import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
 import type React from 'react'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import {
 	EMPTY_MAP_FEATURES,
 	GEOJSON_TOLERANCE,
 	MAP_CAMERA,
+	MAP_COLORS,
 	MAP_IDS,
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
-import type { ClickedMapElement } from '@/types/map'
+import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
+	getBuildingSelectionFromFeatures,
 	getMapFocusPadding,
 	getSelectionFocusZoom,
+	isMutedEntrance,
 	parseMapCoordinate
 } from '@/utils/map-screen-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -40,6 +44,10 @@ const mapContainerStyle = {
 	width: '100%'
 }
 
+function runAfterMapCommit(fn: () => void): void {
+	setTimeout(fn, 0)
+}
+
 interface WebMapCanvasProps {
 	setMapLoadState: React.Dispatch<React.SetStateAction<LoadingState>>
 	mapLoadState: LoadingState
@@ -48,6 +56,8 @@ interface WebMapCanvasProps {
 	filteredGeoJSON: MapScreenModel['filteredGeoJSON']
 	availableFilteredGeoJSON: MapScreenModel['availableFilteredGeoJSON']
 	buildingGeoJSON: MapScreenModel['buildingGeoJSON']
+	allRooms: MapScreenModel['allRooms']
+	mapEntrances: MapScreenModel['mapEntrances']
 	clickedElement: MapScreenModel['clickedElement']
 	selectMapElement: MapScreenModel['selectMapElement']
 	mapMode: MapMode
@@ -98,6 +108,8 @@ export default function WebMapCanvas({
 	filteredGeoJSON,
 	availableFilteredGeoJSON,
 	buildingGeoJSON,
+	allRooms,
+	mapEntrances,
 	clickedElement,
 	selectMapElement,
 	mapMode,
@@ -117,11 +129,16 @@ export default function WebMapCanvas({
 		outgoingStyles,
 		selectedRoomCenter,
 		selectedFeatures,
-		handleRoomSelection
+		primaryEntrances,
+		mutedEntrances,
+		handleRoomSelection,
+		handleEntranceSelection
 	} = useMapCanvasState({
 		overlayFloor,
 		filteredGeoJSON,
 		availableFilteredGeoJSON,
+		allRooms,
+		mapEntrances,
 		clickedElement,
 		selectMapElement,
 		mapMode,
@@ -142,12 +159,35 @@ export default function WebMapCanvas({
 		}
 	})
 
+	const handleMapDragStart = useCallback(() => {
+		runAfterMapCommit(() => onRegionChange(true))
+	}, [onRegionChange])
+
 	const handleMapClick = (event: MapMouseEvent): void => {
-		if (!filteredGeoJSON || !mapRef.current) {
+		if (!mapRef.current) {
 			return
 		}
 
 		const map = mapRef.current.getMap()
+		const buildingSelection = getBuildingSelectionFromFeatures(
+			map.queryRenderedFeatures(event.point, {
+				layers: [MAP_IDS.layers.buildingLabels]
+			})
+		)
+		if (buildingSelection != null) {
+			selectMapElement({
+				room: buildingSelection.building,
+				type: SEARCH_TYPES.BUILDING,
+				center: buildingSelection.center,
+				origin: 'MapClick',
+				manual: true
+			})
+			return
+		}
+
+		if (!filteredGeoJSON) {
+			return
+		}
 		const features = map.queryRenderedFeatures(event.point, {
 			layers: [MAP_IDS.layers.allRoomsFill]
 		})
@@ -165,10 +205,14 @@ export default function WebMapCanvas({
 				}}
 				mapStyle={MAP_STYLE_URLS[mapMode]}
 				ref={mapRef}
-				onLoad={() => setMapLoadState(LoadingState.LOADED)}
-				onError={() => setMapLoadState(LoadingState.ERROR)}
+				onLoad={() => {
+					runAfterMapCommit(() => setMapLoadState(LoadingState.LOADED))
+				}}
+				onError={() => {
+					runAfterMapCommit(() => setMapLoadState(LoadingState.ERROR))
+				}}
 				onClick={handleMapClick}
-				onMoveStart={() => onRegionChange(true)}
+				onDragStart={handleMapDragStart}
 				attributionControl={false}
 			>
 				<NavigationControl position="top-left" />
@@ -188,7 +232,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.selectedOutline}
 						type="line"
-						paint={layerStyles.selectedOutline}
+						layout={layerStyles.selectedOutline.layout}
+						paint={layerStyles.selectedOutline.paint}
 					/>
 				</Source>
 				<Source
@@ -218,7 +263,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.allRoomsOutline}
 						type="line"
-						paint={layerStyles.allRoomsOutline}
+						layout={layerStyles.allRoomsOutline.layout}
+						paint={layerStyles.allRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -238,7 +284,8 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.allRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.allRoomsOutline}
+							layout={outgoingStyles.allRoomsOutline.layout}
+							paint={outgoingStyles.allRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>
@@ -258,7 +305,8 @@ export default function WebMapCanvas({
 					<Layer
 						id={MAP_IDS.layers.availableRoomsOutline}
 						type="line"
-						paint={layerStyles.availableRoomsOutline}
+						layout={layerStyles.availableRoomsOutline.layout}
+						paint={layerStyles.availableRoomsOutline.paint}
 						beforeId={MAP_IDS.layers.selectedFill}
 					/>
 				</Source>
@@ -278,18 +326,65 @@ export default function WebMapCanvas({
 						<Layer
 							id={MAP_IDS.layers.availableRoomsOutgoingOutline}
 							type="line"
-							paint={outgoingStyles.availableRoomsOutline}
+							layout={outgoingStyles.availableRoomsOutline.layout}
+							paint={outgoingStyles.availableRoomsOutline.paint}
 							beforeId={MAP_IDS.layers.allRoomsFill}
 						/>
 					</Source>
 				)}
-				{selectedRoomCenter != null && (
-					<Marker
-						longitude={selectedRoomCenter[0]}
-						latitude={selectedRoomCenter[1]}
-						color={selectionColor}
-					/>
+				{[...primaryEntrances.features, ...mutedEntrances.features].map(
+					(feature) => {
+						if (feature.geometry?.type !== 'Point') {
+							return null
+						}
+						const [longitude, latitude] = feature.geometry.coordinates
+						const key = String(
+							feature.properties?.id ?? `${longitude},${latitude}`
+						)
+						const muted = isMutedEntrance(feature.properties)
+						return (
+							<Marker
+								key={key}
+								longitude={longitude}
+								latitude={latitude}
+								anchor="center"
+								style={{ cursor: 'pointer', zIndex: 1 }}
+								onClick={(event) => {
+									event.originalEvent.stopPropagation()
+									handleEntranceSelection([feature])
+								}}
+							>
+								<div
+									style={{
+										width: 26,
+										height: 26,
+										borderRadius: 13,
+										backgroundColor: muted
+											? MAP_COLORS.entranceMuted
+											: primaryColor,
+										border: `2px solid ${backgroundColor}`,
+										boxSizing: 'border-box',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center'
+									}}
+								>
+									<DoorClosed size={11} color="#ffffff" strokeWidth={2.25} />
+								</div>
+							</Marker>
+						)
+					}
 				)}
+				{selectedRoomCenter != null &&
+					clickedElement?.type !== SEARCH_TYPES.BUILDING && (
+						<Marker
+							key={mapMode}
+							longitude={selectedRoomCenter[0]}
+							latitude={selectedRoomCenter[1]}
+							color={selectionColor}
+							style={{ zIndex: 2 }}
+						/>
+					)}
 			</Map>
 		</div>
 	)
