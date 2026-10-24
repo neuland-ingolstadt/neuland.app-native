@@ -716,6 +716,57 @@ describe('map-screen-utils', () => {
 		])
 	})
 
+	it('excludeEntrancesNearPoint - Should keep all entrances when no clearance point is set', () => {
+		expect(excludeEntrancesNearPoint(entrancesCollection, undefined)).toBe(
+			entrancesCollection
+		)
+	})
+
+	it('excludeEntrancesNearPoint - Should ignore non-point geometry and non-numeric coordinates', () => {
+		const mixed: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: { id: 'polygon' },
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[11.433, 48.7664],
+								[11.4331, 48.7664],
+								[11.4331, 48.7665],
+								[11.433, 48.7665],
+								[11.433, 48.7664]
+							]
+						]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: { id: 'bad-coords' },
+					geometry: {
+						type: 'Point',
+						coordinates: ['11.433', '48.7664'] as unknown as [number, number]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: { id: 'far' },
+					geometry: {
+						type: 'Point',
+						coordinates: [11.4317, 48.7671]
+					}
+				}
+			]
+		}
+		expect(
+			excludeEntrancesNearPoint(mixed, [11.433, 48.7664]).features.map(
+				(feature) => feature.properties?.id
+			)
+		).toEqual(['far'])
+	})
+
 	it('splitEntrancesByStyle - Should mute exit and badge entrances', () => {
 		const withExitKind: FeatureCollection = {
 			type: 'FeatureCollection',
@@ -759,6 +810,63 @@ describe('map-screen-utils', () => {
 		expect(result.subtitle).toBe('Building G')
 	})
 
+	it('getEntranceData - Should fall back across missing localized names', () => {
+		const tEntrance = ((key: string) => key) as TFunction<'common', undefined>
+		const englishOnly: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {
+						id: 'EN-ONLY',
+						name_en: 'English only entrance'
+					},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+		const germanOnly: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {
+						id: 'DE-ONLY',
+						Gebaeude: 'G',
+						name_de: 'Nur Deutsch'
+					},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+		const unnamed: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: { id: 'NO-NAME' },
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+
+		expect(
+			getEntranceData('EN-ONLY', englishOnly, i18nDe, tEntrance).title
+		).toBe('English only entrance')
+		expect(
+			getEntranceData('DE-ONLY', germanOnly, i18nEn, tEntrance).title
+		).toBe('Nur Deutsch')
+		expect(
+			getEntranceData('NO-NAME', unnamed, i18nEn, tEntrance)
+		).toMatchObject({
+			title: 'NO-NAME',
+			subtitle: 'pages.map.details.entrance.title'
+		})
+		expect(
+			getEntranceData('MISSING', entrancesCollection, i18nEn, tEntrance).title
+		).toBe('MISSING')
+	})
+
 	it('getEntranceSelectionFromFeatures - Should read id and coordinates', () => {
 		expect(
 			getEntranceSelectionFromFeatures(entrancesCollection.features)
@@ -767,6 +875,26 @@ describe('map-screen-utils', () => {
 			center: [11.433, 48.7664]
 		})
 		expect(getEntranceSelectionFromFeatures([])).toBeUndefined()
+	})
+
+	it('getEntranceSelectionFromFeatures - Should skip features without a point id', () => {
+		expect(
+			getEntranceSelectionFromFeatures([
+				{
+					properties: { id: '' },
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				},
+				{
+					properties: { id: 'poly' },
+					geometry: { type: 'Polygon', coordinates: [] }
+				},
+				{
+					properties: {},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			])
+		).toBeUndefined()
+		expect(getEntranceSelectionFromFeatures(null)).toBeUndefined()
 	})
 
 	it('getBuildingSelectionFromFeatures - Should read building letter and center', () => {
@@ -786,6 +914,25 @@ describe('map-screen-utils', () => {
 			center: [11.43, 48.76]
 		})
 		expect(getBuildingSelectionFromFeatures([])).toBeUndefined()
+	})
+
+	it('getBuildingSelectionFromFeatures - Should fall back to Raum and skip empty labels', () => {
+		expect(
+			getBuildingSelectionFromFeatures([
+				{ properties: { Gebaeude: '', Raum: '' } },
+				{ properties: { Raum: 'B', center: [11.44, 48.77] } }
+			])
+		).toEqual({
+			building: 'B',
+			center: [11.44, 48.77]
+		})
+		expect(
+			getBuildingSelectionFromFeatures([
+				{ properties: {} },
+				{ properties: { Gebaeude: 12 as unknown as string } }
+			])
+		).toBeUndefined()
+		expect(getBuildingSelectionFromFeatures(null)).toBeUndefined()
 	})
 
 	it('getSelectedBuildingEntrances - Should keep building entrances when an entrance is selected', () => {
