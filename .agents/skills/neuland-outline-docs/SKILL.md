@@ -66,6 +66,8 @@ Re-verify with `list_collection_documents` on the Projekte collection. Nest new 
 | **Release & Betrieb** | `3fcbd9a6-3571-4e2f-a1a2-aee195295fa3` | Stores, Analytics, Kosten |
 | **Rechtliches & Compliance** | `ae738e7f-1f39-4405-817e-686cdc800c64` | Meldepflichten, THI-Korrespondenz |
 
+**Release Highlights** (stable-release changelog for humans) lives directly under **App** (`2d5ba011-4e51-419f-a1cb-2ec7e603ff1b`), not under Release & Betrieb. See the `release-highlights` skill.
+
 **Placement rules**
 
 1. Run `list_documents` with `query` + `collectionId` (Projekte) — **update** an existing page instead of duplicating.
