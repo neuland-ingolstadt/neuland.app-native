@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: "19 20 * * 3"
 
+permissions:
+  contents: read
+
 jobs:
   changes:
     name: Detect code changes
@@ -30,8 +33,11 @@ jobs:
     needs: changes
     if: |
       github.event_name != 'pull_request' ||
-      needs.changes.outputs.code == 'true' ||
-      needs.changes.outputs.workflows == 'true'
+      (matrix.language == 'actions' && needs.changes.outputs.workflows == 'true') ||
+      (matrix.language == 'javascript-typescript' && (
+        needs.changes.outputs.code == 'true' ||
+        needs.changes.outputs.workflows == 'true'
+      ))
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
@@ -45,6 +51,8 @@ jobs:
       matrix:
         include:
           - language: javascript-typescript
+            build-mode: none
+          - language: actions
             build-mode: none
 
     steps:
