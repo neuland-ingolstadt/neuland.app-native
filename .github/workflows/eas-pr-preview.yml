@@ -5,6 +5,9 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+
 concurrency:
   group: eas-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -30,11 +33,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -44,7 +48,7 @@ jobs:
       - name: Create preview
         # Publishes to an EAS branch named after the PR — isolated from production.
         # Requires a dev client build; does not OTA-update App Store / Play Store users.
-        uses: expo/expo-github-action/preview@eab7a230208c952974db8c3245cfd78402c7b385 # v9
+        uses: expo/expo-github-action/preview@9da89d3617bb88139671bad31b09c65714c2ee06 # v9
         with:
           command: eas update --environment preview --auto --branch ${{ github.event.pull_request.head.ref }}
 
@@ -58,11 +62,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -82,11 +87,14 @@ jobs:
 
       - name: Comment web preview URL
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs.preview_url }}
+          DASHBOARD_URL: ${{ steps.deploy.outputs.dashboard_url }}
         with:
           script: |
             const marker = '<!-- eas-web-preview -->'
-            const url = '${{ steps.deploy.outputs.preview_url }}'
-            const dashboard = '${{ steps.deploy.outputs.dashboard_url }}'
+            const url = process.env.PREVIEW_URL
+            const dashboard = process.env.DASHBOARD_URL
             const body = [
               marker,
               '## Web preview (EAS Hosting)',

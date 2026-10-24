@@ -10,28 +10,50 @@ on:
   schedule:
     - cron: "19 20 * * 3"
 
+permissions:
+  contents: read
+
 jobs:
   changes:
     name: Detect code changes
     runs-on: ubuntu-latest
     outputs:
-      code: ${{ steps.detect.outputs.code }}
-      workflows: ${{ steps.detect.outputs.workflows }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Detect changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
         id: detect
+
+      # Job-level `if` cannot reference `matrix`; build the include list here instead.
+      - name: Build analysis matrix
+        id: matrix
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          CODE_CHANGED: ${{ steps.detect.outputs.code }}
+          WORKFLOWS_CHANGED: ${{ steps.detect.outputs.workflows }}
+        run: |
+          include='[]'
+          if [ "$EVENT_NAME" != "pull_request" ]; then
+            include='[{"language":"javascript-typescript","build-mode":"none"},{"language":"actions","build-mode":"none"}]'
+          else
+            if [ "$CODE_CHANGED" = "true" ] || [ "$WORKFLOWS_CHANGED" = "true" ]; then
+              include=$(jq -c '. + [{"language":"javascript-typescript","build-mode":"none"}]' <<<"$include")
+            fi
+            if [ "$WORKFLOWS_CHANGED" = "true" ]; then
+              include=$(jq -c '. + [{"language":"actions","build-mode":"none"}]' <<<"$include")
+            fi
+          fi
+          echo "matrix=$(jq -cn --argjson include "$include" '{include:$include}')" >> "$GITHUB_OUTPUT"
 
   analyze:
     name: Analyze (${{ matrix.language }})
     needs: changes
-    if: |
-      github.event_name != 'pull_request' ||
-      needs.changes.outputs.code == 'true' ||
-      needs.changes.outputs.workflows == 'true'
+    if: fromJSON(needs.changes.outputs.matrix).include[0] != null
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
@@ -42,14 +64,13 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - language: javascript-typescript
-            build-mode: none
+      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0

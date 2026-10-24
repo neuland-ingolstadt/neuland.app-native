@@ -45,6 +45,20 @@ describe('grades-utils', () => {
 		})
 	})
 
+	it('loadGrades - Should drop grades without a title', async () => {
+		mockGetGrades.mockResolvedValueOnce([
+			makeGrade({ titel: '', note: '', ects: '0' }),
+			makeGrade({ titel: '   ', note: '', ects: '0', kztn: 'empty' }),
+			makeGrade({ titel: 'Mathematik', note: '1.7', ects: '5' })
+		])
+
+		const { finished, missing } = await gradesUtils.loadGrades()
+
+		expect(finished).toHaveLength(1)
+		expect(finished[0].titel).toBe('Mathematik')
+		expect(missing).toHaveLength(0)
+	})
+
 	it('loadGrades - Should normalize empty notes to E* when anrech is asterisk', async () => {
 		mockGetGrades.mockResolvedValueOnce([
 			makeGrade({ note: '', anrech: '*', titel: 'Praktikum' })

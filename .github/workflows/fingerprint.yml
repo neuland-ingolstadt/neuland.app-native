@@ -7,6 +7,9 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+
 env:
   EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
   EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
@@ -35,13 +38,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
       - name: Check fingerprint
         id: fingerprint
-        uses: expo/expo-github-action/fingerprint@eab7a230208c952974db8c3245cfd78402c7b385 # v9
+        uses: expo/expo-github-action/fingerprint@9da89d3617bb88139671bad31b09c65714c2ee06 # v9
 
       - name: Label compatible PR
         if: ${{ github.event_name == 'pull_request' && steps.fingerprint.outputs.fingerprint-diff == '[]' }}
@@ -136,6 +140,7 @@ jobs:
         with:
           client-id: ${{ vars.NEULAND_ACTIONS_CLIENT_ID }}
           private-key: ${{ secrets.NEULAND_ACTIONS_APP_PRIVATE_KEY }}
+          permission-issues: write
 
       - name: Create or update stale dev client issue
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0

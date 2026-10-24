@@ -42,8 +42,10 @@ jobs:
       build-ios: ${{ steps.platform.outputs.build-ios }}
     steps:
       - id: platform
+        env:
+          PLATFORM: ${{ github.event.inputs.platform }}
         run: |
-          case "${{ github.event.inputs.platform }}" in
+          case "$PLATFORM" in
             android)
               echo "build-android=true" >> "$GITHUB_OUTPUT"
               echo "build-ios=false" >> "$GITHUB_OUTPUT"
@@ -69,10 +71,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -95,10 +99,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
@@ -129,6 +135,7 @@ jobs:
         with:
           client-id: ${{ vars.NEULAND_ACTIONS_CLIENT_ID }}
           private-key: ${{ secrets.NEULAND_ACTIONS_APP_PRIVATE_KEY }}
+          permission-issues: write
 
       - name: Update stale dev client issue
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -194,6 +201,7 @@ jobs:
         with:
           client-id: ${{ vars.NEULAND_ACTIONS_CLIENT_ID }}
           private-key: ${{ secrets.NEULAND_ACTIONS_APP_PRIVATE_KEY }}
+          permission-issues: write
 
       - name: Comment on open stale issues
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
