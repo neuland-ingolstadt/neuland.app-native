@@ -48,6 +48,7 @@ expo-env.d.ts
 # @end expo-cli
 
 junit.xml
+maestro-results/
 
 # nvim
 .nvimlog

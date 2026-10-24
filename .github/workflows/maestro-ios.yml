@@ -1,0 +1,243 @@
+# PoC: iOS Maestro E2E on GitHub Actions.
+# PRs run the smoke suite by default. Full guest regression runs with label
+# `e2e` / `e2e-ios`, or via workflow_dispatch.
+#
+# Two stages: build restores or compiles a Simulator .app (fingerprint-keyed
+# actions/cache), uploads it as a GHA artifact; test installs it and runs Maestro.
+name: Maestro iOS E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Flow set to run
+        type: choice
+        options: [smoke, full]
+        default: full
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: maestro-ios-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+  EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
+  EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
+  EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+  EXPO_PUBLIC_FLIPT_URL: https://flipt.neuland.ing
+  EXPO_PUBLIC_FLIPT_NAMESPACE: neuland-app
+  EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+  MAESTRO_SUITE: ${{ github.event.inputs.suite || (github.event_name == 'pull_request' && (contains(toJSON(github.event.pull_request.labels.*.name), '"e2e"') || contains(toJSON(github.event.pull_request.labels.*.name), '"e2e-ios"')) && 'full') || 'smoke' }}
+
+jobs:
+  build-ios:
+    name: Build iOS Simulator app
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.action != 'labeled' ||
+      contains(toJSON(github.event.pull_request.labels.*.name), '"e2e"') ||
+      contains(toJSON(github.event.pull_request.labels.*.name), '"e2e-ios"')
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Compute native fingerprint
+        id: fingerprint
+        run: |
+          set -euo pipefail
+          HASH="$(bunx --bun @expo/fingerprint fingerprint:generate --platform ios | bun -e 'console.log(JSON.parse(await Bun.stdin.text()).hash)')"
+          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
+          echo "ios fingerprint=$HASH"
+
+      - name: Restore cached Simulator app
+        id: cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: artifacts/neuland-ios-app.zip
+          key: maestro-ios-app-${{ runner.os }}-${{ steps.fingerprint.outputs.hash }}
+
+      - name: Set up Java
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Bundle licenses and prebuild iOS
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          bun run licences:bundle
+          bun run prebuild:ios
+
+      - name: Build Simulator debug app
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          # --device generic: build only (no install/launch).
+          # --no-build-cache: skip remote Expo build-cache resolve/upload for this PoC.
+          OUT="${RUNNER_TEMP}/neuland-ios-app"
+          rm -rf "$OUT"
+          npx expo run:ios --device generic --no-bundler --no-build-cache -o "$OUT"
+
+          APP="$(find "$OUT" -name '*.app' -type d | head -1)"
+          if [ -z "$APP" ]; then
+            echo "No .app found under $OUT" >&2
+            find "$OUT" -maxdepth 3 >&2 || true
+            exit 1
+          fi
+
+          mkdir -p artifacts
+          # Zip keeps the .app bundle intact across artifact upload/download.
+          ditto -c -k --sequesterRsrc --keepParent "$APP" artifacts/neuland-ios-app.zip
+          ls -lh artifacts/neuland-ios-app.zip
+
+      - name: Save Simulator app cache
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: artifacts/neuland-ios-app.zip
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Upload Simulator app
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-ios-app
+          path: artifacts/neuland-ios-app.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  test-ios:
+    name: Maestro iOS suite
+    needs: build-ios
+    runs-on: macos-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Download Simulator app
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: maestro-ios-app
+          path: artifacts
+
+      - name: Unpack Simulator app
+        id: app
+        run: |
+          set -euo pipefail
+          unzip -q artifacts/neuland-ios-app.zip -d artifacts/app
+          APP="$(find artifacts/app -name '*.app' -type d | head -1)"
+          if [ -z "$APP" ]; then
+            echo 'No .app found in downloaded artifact' >&2
+            find artifacts -maxdepth 4 >&2 || true
+            exit 1
+          fi
+          echo "path=$APP" >> "$GITHUB_OUTPUT"
+          echo "Using app: $APP"
+
+      - name: Resolve and boot iOS Simulator
+        id: simulator
+        run: |
+          set -euo pipefail
+
+          SIM_NAME=''
+          for candidate in 'iPhone 16' 'iPhone 16 Pro' 'iPhone 15' 'iPhone 15 Pro'; do
+            if xcrun simctl list devices available | grep -F "$candidate (" >/dev/null; then
+              SIM_NAME="$candidate"
+              break
+            fi
+          done
+
+          if [ -z "$SIM_NAME" ]; then
+            SIM_NAME="$(
+              xcrun simctl list devices available |
+                sed -nE 's/^[[:space:]]+(iPhone[^()]*) \(([0-9A-F-]+)\).*/\1/p' |
+                head -1 |
+                sed 's/[[:space:]]*$//'
+            )"
+          fi
+
+          if [ -z "$SIM_NAME" ]; then
+            echo 'No available iPhone simulator found' >&2
+            xcrun simctl list devices available >&2 || true
+            exit 1
+          fi
+
+          echo "Using simulator: $SIM_NAME"
+          echo "name=$SIM_NAME" >> "$GITHUB_OUTPUT"
+
+          xcrun simctl boot "$SIM_NAME" 2>/dev/null || true
+          xcrun simctl bootstatus "$SIM_NAME" -b
+
+      - name: Install app on simulator
+        run: |
+          set -euo pipefail
+          echo "Installing ${{ steps.app.outputs.path }} on ${{ steps.simulator.outputs.name }}"
+          xcrun simctl install booted "${{ steps.app.outputs.path }}"
+
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL --retry 3 --retry-all-errors 'https://get.maestro.mobile.dev' | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.maestro/bin:$PATH"
+          maestro --version
+
+      - name: Start Metro and run Maestro
+        run: |
+          set -euo pipefail
+
+          bun start:e2e > /tmp/maestro-ios-metro.log 2>&1 &
+          for _ in $(seq 1 90); do
+            if curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 || curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+              echo 'Metro is ready'
+              break
+            fi
+            sleep 2
+          done
+          if ! curl -fsS 'http://127.0.0.1:8081/status' >/dev/null 2>&1 && ! curl -fsS 'http://127.0.0.1:8081/' >/dev/null 2>&1; then
+            echo 'Metro failed to become ready' >&2
+            cat /tmp/maestro-ios-metro.log >&2 || true
+            exit 1
+          fi
+
+          # Cold first-bundle in CI was ~50s; pre-warm so the first Maestro reconnect does not race it.
+          echo 'Pre-warming iOS Metro bundle...'
+          curl -fsS \
+            'http://127.0.0.1:8081/node_modules/expo-router/entry.bundle?platform=ios&dev=false&minify=true' \
+            -o /dev/null \
+            || curl -fsS \
+              'http://127.0.0.1:8081/index.bundle?platform=ios&dev=false&minify=true' \
+              -o /dev/null
+
+          MAESTRO_SUITE="${MAESTRO_SUITE}" bun e2e:ios
+
+      - name: Publish Maestro report
+        if: ${{ always() }}
+        uses: ./.github/actions/maestro-report
+        with:
+          check-name: Maestro iOS Results (${{ env.MAESTRO_SUITE }})
+
+      - name: Upload Maestro artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: maestro-ios-${{ github.run_id }}
+          path: |
+            ~/.maestro/tests
+            maestro-results
+            /tmp/maestro-ios-metro.log
+          if-no-files-found: ignore
+          retention-days: 14
+          include-hidden-files: true
