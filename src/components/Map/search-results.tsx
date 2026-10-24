@@ -2,11 +2,11 @@ import { trackEvent } from '@aptabase/react-native'
 import Fuse from 'fuse.js'
 import type { FeatureCollection } from 'geojson'
 import type React from 'react'
-import { memo, use, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, SectionList, Text } from 'react-native'
 import Divider from '@/components/Universal/divider'
-import { MapContext } from '@/contexts/map'
+import { useAddToSearchHistory } from '@/hooks/useAddToSearchHistory'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { useSessionStore } from '@/hooks/useSessionStore'
 import type { SearchResult, SelectMapElement } from '@/types/map'
@@ -26,7 +26,7 @@ const SearchResults = ({
 	onClearSearch
 }: SearchResultsProps): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
-	const { searchHistory, updateSearchHistory } = use(MapContext)
+	const addToSearchHistory = useAddToSearchHistory()
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
 	)
@@ -88,11 +88,12 @@ const SearchResults = ({
 
 	const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
 		const results = fuse.search(searchQuery.trim().toUpperCase())
+		const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 		const roomResults = results.map((result) => {
 			const room = result.item.properties?.Raum as string | undefined
 			return {
 				title: room as string,
-				subtitle: result.item.properties?.Funktion_en as string,
+				subtitle: result.item.properties?.[roomTypeKey] as string,
 				isExactMatch: Boolean(
 					room?.toUpperCase().includes(searchQuery.toUpperCase())
 				),
@@ -104,24 +105,7 @@ const SearchResults = ({
 		const fuzzyMatches = roomResults.filter((result) => !result.isExactMatch)
 
 		return [exactMatches, fuzzyMatches]
-	}, [fuse, searchQuery])
-
-	const addToSearchHistory = useCallback(
-		(newHistory: SearchResult): void => {
-			const newSearchHistory = searchHistory.filter(
-				(history) => history.title !== newHistory.title
-			)
-
-			newSearchHistory.unshift(newHistory)
-
-			if (newSearchHistory.length > 5) {
-				newSearchHistory.length = 5
-			}
-
-			updateSearchHistory(newSearchHistory)
-		},
-		[searchHistory, updateSearchHistory]
-	)
+	}, [fuse, i18n.language, searchQuery])
 
 	const renderItem = useCallback(
 		({ item }: { item: SearchResult }): React.JSX.Element => (

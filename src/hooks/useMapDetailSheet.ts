@@ -2,24 +2,22 @@ import { useNavigation } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Appearance } from 'react-native'
 import { DETAIL_HIDDEN, DETAIL_OPEN } from '@/components/Map/sheet-detents'
-import type { ClickedMapElement } from '@/types/map'
 
 interface UseMapDetailSheetOptions {
-	clickedElement: ClickedMapElement | null
-	currentFloor: { floor: string; manual: boolean } | null
 	handleSheetChangesModal: () => void
 	onTabPress?: () => void
 }
 
 export function useMapDetailSheet({
-	clickedElement,
-	currentFloor,
 	handleSheetChangesModal,
 	onTabPress
 }: UseMapDetailSheetOptions): {
 	detailIndex: number
 	handleDetailIndexChange: (next: number) => void
-	presentDetailSheet: () => void
+	/** Hides the sheet without running the close callback (keeps selection). */
+	hideDetailSheet: () => void
+	presentDetailSheet: (index?: number) => void
+	requestCameraReset: () => void
 	cameraResetRequestId: number
 } {
 	const navigation = useNavigation()
@@ -43,8 +41,18 @@ export function useMapDetailSheet({
 		[handleSheetChangesModal]
 	)
 
-	const presentDetailSheet = useCallback(() => {
-		setDetailIndex(DETAIL_OPEN)
+	const presentDetailSheet = useCallback((index: number = DETAIL_OPEN) => {
+		detailIndexRef.current = index
+		setDetailIndex(index)
+	}, [])
+
+	const hideDetailSheet = useCallback(() => {
+		detailIndexRef.current = DETAIL_HIDDEN
+		setDetailIndex(DETAIL_HIDDEN)
+	}, [])
+
+	const requestCameraReset = useCallback(() => {
+		setCameraResetRequestId((previous) => previous + 1)
 	}, [])
 
 	useEffect(() => {
@@ -62,25 +70,18 @@ export function useMapDetailSheet({
 		const unsubscribe = navigation.addListener('tabPress', () => {
 			onTabPress?.()
 			handleDetailIndexChange(DETAIL_HIDDEN)
-			setCameraResetRequestId((previous) => previous + 1)
+			requestCameraReset()
 		})
 
 		return unsubscribe
-	}, [handleDetailIndexChange, navigation, onTabPress])
-
-	useEffect(() => {
-		if (clickedElement == null || currentFloor?.manual !== true) {
-			return
-		}
-		handleDetailIndexChange(DETAIL_HIDDEN)
-		// clickedElement is read from this render on purpose: a room tap must
-		// not re-run this when the floor was already chosen manually.
-	}, [currentFloor, handleDetailIndexChange])
+	}, [handleDetailIndexChange, navigation, onTabPress, requestCameraReset])
 
 	return {
 		detailIndex,
 		handleDetailIndexChange,
+		hideDetailSheet,
 		presentDetailSheet,
+		requestCameraReset,
 		cameraResetRequestId
 	}
 }

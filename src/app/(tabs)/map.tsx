@@ -3,7 +3,7 @@ import Head from 'expo-router/head'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import {
 	type Edges,
 	SafeAreaProvider,
@@ -79,10 +79,8 @@ export default function MapRootScreen(): React.JSX.Element {
 		updateSearchHistory
 	}
 
-	const edges =
-		Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 26
-			? []
-			: ['bottom']
+	// Full-bleed map under the native tab bar; floating chrome applies its own insets.
+	const edges: Edges = []
 	return (
 		<>
 			<Head>

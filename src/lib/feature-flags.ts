@@ -8,6 +8,7 @@ import {
  * Keep in sync with `production/neuland-app/features.yaml` in the flags repo.
  */
 export const FeatureFlagKeys = {
+	indoorNavigation: 'indoor-navigation',
 	newsCard: 'news-card'
 } as const satisfies Record<string, string>
 

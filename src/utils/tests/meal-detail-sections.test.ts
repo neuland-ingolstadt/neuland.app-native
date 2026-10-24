@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, mock } from 'bun:test'
 import type { TFunction } from 'i18next'
 import type { Meal } from '@/types/neuland-api'
+import { neulandApiMockModule } from './neuland-api-mock-helpers'
 import { reactNativeOpenURLMock } from './react-native-mock'
 
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
@@ -44,11 +45,11 @@ mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
 	getFragmentData: mockGetFragmentData
 }))
 
-mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-	default: {
+mock.module(`${SRC_ROOT}api/neuland-api.ts`, () =>
+	neulandApiMockModule({
 		getFoodPlan: mockGetFoodPlan
-	}
-}))
+	})
+)
 
 mock.module(`${SRC_ROOT}components/Universal/icon.tsx`, () => ({
 	linkIcon: {

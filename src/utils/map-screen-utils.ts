@@ -26,6 +26,21 @@ const ZERO_MAP_CAMERA_PADDING: MapCameraPadding = {
 	left: 0
 }
 
+/**
+ * Find a room feature by its Raum code. Accepts a FeatureCollection or a
+ * plain feature array.
+ */
+export function findRoomFeature(
+	features: Feature[] | FeatureCollection | undefined,
+	room: string
+): Feature | undefined {
+	if (features == null) {
+		return undefined
+	}
+	const list = Array.isArray(features) ? features : (features.features ?? [])
+	return list.find((x) => x.properties?.Raum === room)
+}
+
 export function getMapFocusPadding(sheetHeightPx: number): MapCameraPadding {
 	if (!(sheetHeightPx > 0)) {
 		return ZERO_MAP_CAMERA_PADDING
@@ -304,8 +319,9 @@ export function getRoomData(
 		matchedRoom != null && isCurrentAvailability(matchedRoom, now.getTime())
 			? matchedRoom
 			: null
-	const properties = features.find((x) => x.properties?.Raum === room)
-		?.properties as FeatureProperties | undefined
+	const properties = findRoomFeature(features, room)?.properties as
+		| FeatureProperties
+		| undefined
 
 	const openings = roomOpenings?.[room]
 	const nextAvailable = openings?.find((o) => o.from > now) ?? null
