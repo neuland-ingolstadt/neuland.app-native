@@ -107,7 +107,9 @@ jobs:
 
       - name: Checkout PR branch
         if: steps.download-base.outcome == 'failure'
-        run: git checkout ${{ github.event.pull_request.head.sha }}
+        env:
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git checkout "$PR_SHA"
 
       - name: Sync PR dependencies
         if: steps.download-base.outcome == 'failure'
