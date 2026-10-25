@@ -24,7 +24,6 @@ import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
-	getBuildingSelectionFromFeatures,
 	getMapFocusPadding,
 	getSelectionFocusZoom
 } from '@/utils/map-screen-utils'
@@ -227,27 +226,9 @@ export default function NativeMapCanvas({
 					beforeId={MAP_IDS.layers.buildingLabels}
 				/>
 			</GeoJSONSource>
-			<GeoJSONSource
-				id={MAP_IDS.sources.buildingLabels}
-				data={buildingGeoJSON}
-				hitbox={ENTRANCE_PRESS_HITBOX}
-				onPress={(event) => {
-					event.stopPropagation()
-					const selection = getBuildingSelectionFromFeatures(
-						event.nativeEvent.features
-					)
-					if (selection == null) {
-						return
-					}
-					selectMapElement({
-						room: selection.building,
-						type: SEARCH_TYPES.BUILDING,
-						center: selection.center,
-						origin: 'MapClick',
-						manual: true
-					})
-				}}
-			>
+			{/* Labels are visual only — a press hitbox here steals room taps when
+			    text-allow-overlap keeps the letter visible over nearby rooms. */}
+			<GeoJSONSource id={MAP_IDS.sources.buildingLabels} data={buildingGeoJSON}>
 				<Layer
 					id={MAP_IDS.layers.buildingLabels}
 					type="symbol"

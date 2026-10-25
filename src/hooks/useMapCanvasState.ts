@@ -143,15 +143,7 @@ export function useMapCanvasState({
 						outgoing.opacity,
 						outgoing.fadeDuration
 					),
-		[
-			isDark,
-			primaryColor,
-			labelColor,
-			backgroundColor,
-			outgoing?.opacity,
-			outgoing?.fadeDuration,
-			outgoing
-		]
+		[isDark, primaryColor, labelColor, backgroundColor, outgoing]
 	)
 	const selectedRoomCenter = parseMapCoordinate(clickedElement?.center)
 	const selectedFeatures = getSelectedMapFeatures(

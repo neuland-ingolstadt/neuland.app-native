@@ -124,8 +124,15 @@ export const MAP_COLORS = {
 	entranceBadgeRadius: 11,
 	entranceBadgeStrokeWidth: 2,
 	entranceMarkerSize: 0.12,
+	/** Lucide door icon size inside the web HTML entrance badge. */
+	entranceIconSize: 11,
+	entranceIcon: '#ffffff',
 	entranceMuted: '#8e8e93'
 } as const
+
+/** Full web badge diameter including stroke (matches native circle + stroke). */
+export const ENTRANCE_BADGE_SIZE =
+	2 * (MAP_COLORS.entranceBadgeRadius + MAP_COLORS.entranceBadgeStrokeWidth)
 
 export const SELECTED_POP_HOLD_MS = 80
 export const SELECTED_POP_TRANSITION_MS = 120
@@ -275,7 +282,7 @@ export function getMapLayerStyles(
 				'icon-anchor': 'center' as const
 			},
 			paint: {
-				'icon-color': '#ffffff'
+				'icon-color': MAP_COLORS.entranceIcon
 			}
 		}
 	}

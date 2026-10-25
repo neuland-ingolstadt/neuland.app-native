@@ -7,7 +7,6 @@ import {
 	NavigationControl,
 	Source
 } from '@vis.gl/react-maplibre'
-import { DoorClosed } from 'lucide-react-native'
 import type { MapMouseEvent } from 'maplibre-gl'
 import * as maplibregl from 'maplibre-gl'
 import { setWorkerUrl } from 'maplibre-gl'
@@ -15,6 +14,7 @@ import type React from 'react'
 import { useCallback, useRef } from 'react'
 import {
 	EMPTY_MAP_FEATURES,
+	ENTRANCE_BADGE_SIZE,
 	GEOJSON_TOLERANCE,
 	MAP_CAMERA,
 	MAP_COLORS,
@@ -22,11 +22,11 @@ import {
 	MAP_STYLE_URLS,
 	type MapMode
 } from '@/components/Map/map-config'
+import PlatformIcon from '@/components/Universal/icon'
 import { useMapCameraSync, useMapCanvasState } from '@/hooks/useMapCanvasState'
 import type { MapScreenModel } from '@/hooks/useMapScreenModel'
 import { type ClickedMapElement, SEARCH_TYPES } from '@/types/map'
 import {
-	getBuildingSelectionFromFeatures,
 	getMapFocusPadding,
 	getSelectionFocusZoom,
 	isMutedEntrance,
@@ -164,30 +164,11 @@ export default function WebMapCanvas({
 	}, [onRegionChange])
 
 	const handleMapClick = (event: MapMouseEvent): void => {
-		if (!mapRef.current) {
+		if (!mapRef.current || !filteredGeoJSON) {
 			return
 		}
 
 		const map = mapRef.current.getMap()
-		const buildingSelection = getBuildingSelectionFromFeatures(
-			map.queryRenderedFeatures(event.point, {
-				layers: [MAP_IDS.layers.buildingLabels]
-			})
-		)
-		if (buildingSelection != null) {
-			selectMapElement({
-				room: buildingSelection.building,
-				type: SEARCH_TYPES.BUILDING,
-				center: buildingSelection.center,
-				origin: 'MapClick',
-				manual: true
-			})
-			return
-		}
-
-		if (!filteredGeoJSON) {
-			return
-		}
 		const features = map.queryRenderedFeatures(event.point, {
 			layers: [MAP_IDS.layers.allRoomsFill]
 		})
@@ -356,20 +337,34 @@ export default function WebMapCanvas({
 							>
 								<div
 									style={{
-										width: 26,
-										height: 26,
-										borderRadius: 13,
+										width: ENTRANCE_BADGE_SIZE,
+										height: ENTRANCE_BADGE_SIZE,
+										borderRadius: ENTRANCE_BADGE_SIZE / 2,
 										backgroundColor: muted
 											? MAP_COLORS.entranceMuted
 											: primaryColor,
-										border: `2px solid ${backgroundColor}`,
+										border: `${MAP_COLORS.entranceBadgeStrokeWidth}px solid ${backgroundColor}`,
 										boxSizing: 'border-box',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center'
 									}}
 								>
-									<DoorClosed size={11} color="#ffffff" strokeWidth={2.25} />
+									<PlatformIcon
+										ios={{
+											name: 'door.left.hand.closed',
+											size: MAP_COLORS.entranceIconSize
+										}}
+										android={{
+											name: 'door_front',
+											size: MAP_COLORS.entranceIconSize
+										}}
+										web={{
+											name: 'DoorClosed',
+											size: MAP_COLORS.entranceIconSize
+										}}
+										style={{ color: MAP_COLORS.entranceIcon }}
+									/>
 								</div>
 							</Marker>
 						)
