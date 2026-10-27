@@ -1,6 +1,6 @@
 import { selectionAsync } from 'expo-haptics'
 import React from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, Text } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 import Divider from '@/components/Universal/divider'
 import PlatformIcon from '@/components/Universal/icon'
@@ -28,41 +28,39 @@ const MultiSectionRadio = ({
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
-					<View className="h-[52px]">
-						<Pressable
-							testID={`radio-option-${item.key}`}
-							accessibilityRole="radio"
-							accessibilityState={{ selected: selectedItem === item.key }}
-							onPress={() => {
-								if (Platform.OS === 'ios') {
-									void selectionAsync()
-								}
-								action(item.key)
-							}}
-							className="bg-card ios:rounded-ios android:rounded-lg p-4 flex-row items-center justify-between h-full active:opacity-80"
-						>
-							<Text className="text-text text-base flex-1 mr-2">
-								{item.title}
-							</Text>
-							{selectedItem === item.key && (
-								<PlatformIcon
-									ios={{
-										name: 'checkmark.circle.fill',
-										size: 18
-									}}
-									android={{
-										name: 'check_circle',
-										size: 21
-									}}
-									web={{
-										name: 'Check',
-										size: 18
-									}}
-									style={{ color: primaryColor }}
-								/>
-							)}
-						</Pressable>
-					</View>
+					<Pressable
+						testID={`radio-option-${item.key}`}
+						accessibilityRole="radio"
+						accessibilityState={{ selected: selectedItem === item.key }}
+						onPress={() => {
+							if (Platform.OS === 'ios') {
+								void selectionAsync()
+							}
+							action(item.key)
+						}}
+						className="bg-card ios:rounded-ios android:rounded-lg min-h-[52px] px-4 py-3.5 flex-row items-center justify-between active:opacity-80"
+					>
+						<Text className="text-text text-base flex-1 mr-2">
+							{item.title}
+						</Text>
+						{selectedItem === item.key && (
+							<PlatformIcon
+								ios={{
+									name: 'checkmark.circle.fill',
+									size: 18
+								}}
+								android={{
+									name: 'check_circle',
+									size: 21
+								}}
+								web={{
+									name: 'Check',
+									size: 18
+								}}
+								style={{ color: primaryColor }}
+							/>
+						)}
+					</Pressable>
 					{index < elements.length - 1 && (
 						<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 					)}
