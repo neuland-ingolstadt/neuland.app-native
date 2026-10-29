@@ -48,7 +48,7 @@ jobs:
       - name: Create preview
         # Publishes to an EAS branch named after the PR — isolated from production.
         # Requires a dev client build; does not OTA-update App Store / Play Store users.
-        uses: expo/expo-github-action/preview@9da89d3617bb88139671bad31b09c65714c2ee06 # v9
+        uses: expo/expo-github-action/preview@9da89d3617bb88139671bad31b09c65714c2ee06 # 9.0.1
         with:
           command: eas update --environment preview --auto --branch ${{ github.event.pull_request.head.ref }}
 
