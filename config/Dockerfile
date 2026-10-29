@@ -1,5 +1,5 @@
 # Base stage: Install dependencies and build the project using Bun
-FROM oven/bun:1@sha256:ec06c3b6cea04192ae6770c434f668ca41d343ad19fa6472216c7b48be39c598 AS bun
+FROM oven/bun:1@sha256:1d22548f177f4ff38e0c15baa3c2c46c6c2060ba2d1bc573bb4720b407548f1d AS bun
 WORKDIR /usr/src/app
 
 # Copy necessary files and install dependencies
