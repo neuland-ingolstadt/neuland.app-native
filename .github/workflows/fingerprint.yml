@@ -45,7 +45,7 @@ jobs:
 
       - name: Check fingerprint
         id: fingerprint
-        uses: expo/expo-github-action/fingerprint@9da89d3617bb88139671bad31b09c65714c2ee06 # v9
+        uses: expo/expo-github-action/fingerprint@9da89d3617bb88139671bad31b09c65714c2ee06 # 9.0.1
 
       - name: Label compatible PR
         if: ${{ github.event_name == 'pull_request' && steps.fingerprint.outputs.fingerprint-diff == '[]' }}
