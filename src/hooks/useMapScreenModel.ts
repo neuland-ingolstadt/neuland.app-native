@@ -17,7 +17,11 @@ import {
 } from '@/types/map'
 import type { NormalizedLecturer } from '@/types/utils'
 import { INGOLSTADT_CENTER, NEUBURG_CENTER } from '@/utils/map-constants'
-import { getBuildingData, getRoomData } from '@/utils/map-screen-utils'
+import {
+	getBuildingData,
+	getEntranceData,
+	getRoomData
+} from '@/utils/map-screen-utils'
 import type { LoadingState } from '@/utils/ui-utils'
 
 interface UseMapScreenModelOptions {
@@ -31,6 +35,7 @@ interface UseMapScreenModelOptions {
 export interface MapScreenModel {
 	mapCenter: [number, number]
 	mapOverlay: ReturnType<typeof useMapQueries>['mapOverlay']
+	mapEntrances: ReturnType<typeof useMapQueries>['mapEntrances']
 	overlayError: ReturnType<typeof useMapQueries>['overlayError']
 	lecturers: ReturnType<typeof useMapQueries>['lecturers']
 	allRooms: ReturnType<typeof useMapQueries>['allRooms']
@@ -110,6 +115,13 @@ export function useMapScreenModel({
 					clickedElement.data,
 					mapQueries.allRooms,
 					availableRooms,
+					t
+				)
+			case SEARCH_TYPES.ENTRANCE:
+				return getEntranceData(
+					clickedElement.data,
+					mapQueries.mapEntrances,
+					i18n,
 					t
 				)
 			default:

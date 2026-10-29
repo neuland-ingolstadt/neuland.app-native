@@ -7,7 +7,8 @@ export type MapCoordinate = [number, number]
 export enum SEARCH_TYPES {
 	BUILDING = 0,
 	ROOM = 1,
-	LECTURE = 2
+	LECTURE = 2,
+	ENTRANCE = 3
 }
 export interface RoomData {
 	title: string

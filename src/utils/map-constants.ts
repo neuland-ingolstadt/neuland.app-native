@@ -2,7 +2,7 @@ import type { MapCoordinate } from '@/types/map'
 
 export const MAP_CAMERA = {
 	initialZoom: 16.5,
-	focusZoom: 17,
+	focusZoom: 17.5,
 	minZoom: 14,
 	maxZoom: 19,
 	focusPaddingGap: 12,
