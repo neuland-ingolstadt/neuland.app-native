@@ -5,6 +5,8 @@ export const STATUS_URL = 'https://status.neuland.ing'
 export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
+/** Change for each survey round so the home prompt is shown again. */
+export const FEEDBACK_CAMPAIGN_ID = 'feedback-campaign-2026-10-29_18-55'
 export const primussLink =
 	'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
 const moodleLink = 'https://moodle.thi.de/'
