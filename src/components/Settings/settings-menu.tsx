@@ -164,6 +164,18 @@ export default function SettingsMenu(): React.JSX.Element {
 					}
 				},
 				{
+					testID: 'settings-feedback-link',
+					title: t('menu.formlist.legal.feedback'),
+					icon: {
+						ios: 'star.bubble',
+						android: 'rate_review',
+						web: 'MessageSquareHeart'
+					},
+					onPress: () => {
+						router.navigate('/feedback')
+					}
+				},
+				{
 					testID: 'settings-share-link',
 					title: t('menu.formlist.legal.share'),
 					icon: {

@@ -8,6 +8,7 @@ import { listAnnouncements } from '@/api/neuland-core-api'
 import type { Card } from '@/components/all-cards'
 import AnnouncementCard from '@/components/Cards/announcement-card'
 import { DashboardContext } from '@/components/contexts'
+import FeedbackPromptContainer from '@/components/Dashboard/feedback-prompt-container'
 import RueWarningBannerContainer from '@/components/Dashboard/rue-warning-banner-container'
 import ServiceStatusBannerContainer from '@/components/Dashboard/service-status-banner-container'
 import ErrorView from '@/components/Error/error-view'
@@ -76,6 +77,7 @@ function HomeScreen(): React.JSX.Element {
 			<ServiceStatusBannerContainer />
 			<RueWarningBannerContainer />
 			{announcementHeader}
+			<FeedbackPromptContainer />
 		</View>
 	)
 
