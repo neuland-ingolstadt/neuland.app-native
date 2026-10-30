@@ -37,7 +37,7 @@ const RatingOption = ({
 	const scale = useSharedValue(1)
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }]
+		transform: [{ scale: scale.get() }]
 	}))
 
 	return (
@@ -54,10 +54,10 @@ const RatingOption = ({
 				onSelect(rating)
 			}}
 			onPressIn={() => {
-				scale.value = withSpring(0.92, { damping: 15 })
+				scale.set(withSpring(0.92, { damping: 15 }))
 			}}
 			onPressOut={() => {
-				scale.value = withSpring(1, { damping: 15 })
+				scale.set(withSpring(1, { damping: 15 }))
 			}}
 			className="flex-1 items-center gap-1.5"
 		>
