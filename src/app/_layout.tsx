@@ -469,6 +469,17 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/feedback"
+					options={{
+						title: t('navigation.feedback'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/events/cl/[id]"
 					options={{
 						title: t('navigation.eventDetails'),
