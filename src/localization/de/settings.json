@@ -44,12 +44,78 @@
 				"share": "Teile die App",
 				"shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀",
 				"shareMessageAndroid": "Hol dir Neuland Next für dein Smartphone! 🚀\n\nhttps://neuland.app/get",
-				"download": "App herunterladen"
+				"download": "App herunterladen",
+				"feedback": "Feedback geben"
 			}
 		},
 		"copyright": "© {{year}} von Neuland Ingolstadt e.V.",
 		"infrastructureBy": "Infrastruktur von",
 		"loadPersonalDataError": "Persönliche Daten konnten nicht geladen werden"
+	},
+	"feedback": {
+		"intro": "Hilf uns, Neuland Next besser zu machen – das dauert weniger als eine Minute.",
+		"rating": {
+			"title": "Wie gefällt dir die App?",
+			"accessibilityLabel": "{{rating}} von 5: {{label}}",
+			"labels": {
+				"1": "Sehr schlecht",
+				"2": "Schlecht",
+				"3": "Okay",
+				"4": "Gut",
+				"5": "Sehr gut"
+			}
+		},
+		"ratingSaved": "Danke, deine Bewertung ist angekommen! Magst du uns noch kurz verraten, warum?",
+		"optional": "Optional",
+		"followUp": {
+			"improvements": "Wo hakt es?",
+			"highlights": "Was gefällt dir am besten?"
+		},
+		"categories": {
+			"bugs": "Fehler & Abstürze",
+			"performance": "Geschwindigkeit",
+			"login": "Login & Datenabruf",
+			"usability": "Bedienung",
+			"design": "Design",
+			"missingFeature": "Fehlende Funktionen",
+			"timetable": "Stundenplan",
+			"food": "Mensa",
+			"grades": "Noten & Prüfungen",
+			"map": "Campuskarte"
+		},
+		"comment": {
+			"title": "Was können wir verbessern?",
+			"placeholder": "z. B. etwas, das nicht funktioniert oder dich stört …",
+			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen oder deine Matrikelnummer an."
+		},
+		"features": {
+			"title": "Wie gern hättest du diese Funktionen in der App?",
+			"accessibilityLabel": "{{feature}}: {{level}}",
+			"items": {
+				"digitalId": "Ausweis in der App",
+				"mensaPayment": "In der Mensa bezahlen",
+				"librarySeats": "Sitzplätze in der Bibliothek buchen",
+				"roomNavigation": "Navigation zu Räumen auf der Karte"
+			},
+			"levels": {
+				"1": "Gar nicht",
+				"2": "Eher nicht",
+				"3": "Eher ja",
+				"4": "Unbedingt"
+			}
+		},
+		"missing": {
+			"title": "Fehlt dir sonst noch etwas in der App?",
+			"placeholder": "z. B. eine Funktion, die du dir schon lange wünschst …"
+		},
+		"prompt": {
+			"message": "Ein Tipp genügt – du hilfst uns damit sehr.",
+			"dismiss": "Umfrage ausblenden"
+		},
+		"submit": "Feedback senden",
+		"submitHint": "Wähle zuerst eine Bewertung aus.",
+		"success": "Danke für dein Feedback!",
+		"error": "Feedback konnte nicht gesendet werden"
 	},
 	"about": {
 		"header": {
