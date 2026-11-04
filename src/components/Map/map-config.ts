@@ -1,4 +1,6 @@
+import type { ExpressionSpecification } from '@maplibre/maplibre-gl-style-spec'
 import type { FeatureCollection } from 'geojson'
+import { MAP_CAMERA } from '@/utils/map-constants'
 
 export const MAP_STYLE_URLS = {
 	light: 'https://tile.neuland.app/styles/light/style.json',
@@ -20,7 +22,9 @@ export const MAP_IDS = {
 		availableRoomsOutgoing: 'availableRoomsOutgoingSource',
 		buildingLabels: 'buildingLettersSource',
 		selectedRoom: 'clickedElementSource',
-		selectedOverlay: 'selectedOverlaySource'
+		selectedOverlay: 'selectedOverlaySource',
+		buildingEntrances: 'buildingEntrancesSource',
+		buildingEntrancesMuted: 'buildingEntrancesMutedSource'
 	},
 	layers: {
 		allRoomsFill: 'allRoomsFill',
@@ -34,11 +38,15 @@ export const MAP_IDS = {
 		buildingLabels: 'buildingLettersLayer',
 		selectedRoomMarker: 'clickedElementMarker',
 		selectedFill: 'selectedRoomFill',
-		selectedOutline: 'selectedRoomOutline'
+		selectedOutline: 'selectedRoomOutline',
+		buildingEntrancesBadge: 'buildingEntrancesBadge',
+		buildingEntrancesBadgeMuted: 'buildingEntrancesBadgeMuted',
+		buildingEntrancesMarker: 'buildingEntrancesMarker',
+		buildingEntrancesMarkerMuted: 'buildingEntrancesMarkerMuted'
 	}
 } as const
 
-export { MAP_CAMERA } from '@/utils/map-constants'
+export { MAP_CAMERA }
 
 export const ROOM_PRESS_HITBOX = {
 	top: 2,
@@ -47,31 +55,84 @@ export const ROOM_PRESS_HITBOX = {
 	left: 2
 } as const
 
+export const ENTRANCE_PRESS_HITBOX = {
+	top: 16,
+	right: 16,
+	bottom: 16,
+	left: 16
+} as const
+
 export const GEOJSON_TOLERANCE = 0
 
 export const FLOOR_OVERLAY_FADE_MS = 200
 
+const MAP_CORRIDOR_MATCH: ExpressionSpecification = [
+	'any',
+	['>=', ['index-of', 'Corridor', ['coalesce', ['get', 'Funktion_en'], '']], 0],
+	['>=', ['index-of', 'Hallway', ['coalesce', ['get', 'Funktion_en'], '']], 0],
+	['>=', ['index-of', 'Stair', ['coalesce', ['get', 'Funktion_en'], '']], 0],
+	['>=', ['index-of', 'Korridor', ['coalesce', ['get', 'Funktion_de'], '']], 0],
+	['>=', ['index-of', 'Flur', ['coalesce', ['get', 'Funktion_de'], '']], 0],
+	['>=', ['index-of', 'Gang', ['coalesce', ['get', 'Funktion_de'], '']], 0],
+	[
+		'>=',
+		['index-of', 'Treppenhaus', ['coalesce', ['get', 'Funktion_de'], '']],
+		0
+	]
+]
+
+const MAP_LINE_OUTLINE_LAYOUT = {
+	'line-join': 'round' as const,
+	'line-cap': 'round' as const
+}
+
 export const MAP_COLORS = {
 	roomFill: {
-		light: '#a4a4a4',
-		dark: '#6a7178'
+		light: '#fcfcfd',
+		dark: '#7c8a9f'
+	},
+	/** Slightly different from rooms — halls, stairs, Treppenhaus (see MAP_CORRIDOR_MATCH). */
+	corridorFill: {
+		light: '#e2e4e8',
+		dark: '#4a5870'
+	},
+	roomFillOpacity: {
+		light: 0.68,
+		dark: 0.29
+	},
+	corridorFillOpacity: {
+		light: 0.5,
+		dark: 0.62
 	},
 	roomOutline: {
-		light: '#8e8e8e',
-		dark: '#2d3035'
+		light: '#b3b3b3',
+		dark: '#3d4552'
 	},
-	roomFillOpacity: 0.1,
-	availableRoomFillOpacity: 0.2,
-	roomOutlineWidth: 2.3,
-	availableRoomOutlineWidth: 2.4,
+	roomOutlineWidth: {
+		light: 1.5,
+		dark: 1.5
+	},
+	availableRoomFillOpacity: 0.12,
 	buildingLabelSize: 14,
 	buildingLabelHaloWidth: 1,
 	selectedRoomMarkerSize: 0.17,
-	selectedFillOpacity: 0.38,
-	selectedFillOpacityPop: 0.58,
-	selectedOutlineWidth: 2.8,
-	selectedOutlineWidthPop: 3.4
+	/** Soft tint — whole-building selection paints many polygons at once. */
+	selectedFillOpacity: 0.16,
+	selectedFillOpacityPop: 0.24,
+	selectedOutlineWidth: 1.5,
+	selectedOutlineWidthPop: 2,
+	entranceBadgeRadius: 11,
+	entranceBadgeStrokeWidth: 2,
+	entranceMarkerSize: 0.12,
+	/** Lucide door icon size inside the web HTML entrance badge. */
+	entranceIconSize: 11,
+	entranceIcon: '#ffffff',
+	entranceMuted: '#8e8e93'
 } as const
+
+/** Full web badge diameter including stroke (matches native circle + stroke). */
+export const ENTRANCE_BADGE_SIZE =
+	2 * (MAP_COLORS.entranceBadgeRadius + MAP_COLORS.entranceBadgeStrokeWidth)
 
 export const SELECTED_POP_HOLD_MS = 80
 export const SELECTED_POP_TRANSITION_MS = 120
@@ -96,23 +157,54 @@ export function getMapLayerStyles(
 		delay: 0
 	} as const
 
-	return {
-		allRooms: {
-			'fill-antialias': true,
-			'fill-color': isDark
-				? MAP_COLORS.roomFill.dark
-				: MAP_COLORS.roomFill.light,
-			'fill-opacity': MAP_COLORS.roomFillOpacity * overlayOpacity,
-			'fill-opacity-transition': overlayFadeTransition
-		},
-		allRoomsOutline: {
-			'line-color': isDark
-				? MAP_COLORS.roomOutline.dark
-				: MAP_COLORS.roomOutline.light,
-			'line-width': MAP_COLORS.roomOutlineWidth,
+	const roomFillColor = isDark
+		? MAP_COLORS.roomFill.dark
+		: MAP_COLORS.roomFill.light
+	const corridorFillColor = isDark
+		? MAP_COLORS.corridorFill.dark
+		: MAP_COLORS.corridorFill.light
+	const outlineColor = isDark
+		? MAP_COLORS.roomOutline.dark
+		: MAP_COLORS.roomOutline.light
+	const roomFillOpacity = isDark
+		? MAP_COLORS.roomFillOpacity.dark
+		: MAP_COLORS.roomFillOpacity.light
+	const corridorFillOpacity = isDark
+		? MAP_COLORS.corridorFillOpacity.dark
+		: MAP_COLORS.corridorFillOpacity.light
+	const outlineWidth = isDark
+		? MAP_COLORS.roomOutlineWidth.dark
+		: MAP_COLORS.roomOutlineWidth.light
+
+	const allRooms = {
+		'fill-antialias': true,
+		'fill-color': [
+			'case',
+			MAP_CORRIDOR_MATCH,
+			corridorFillColor,
+			roomFillColor
+		] as ExpressionSpecification,
+		'fill-opacity': [
+			'*',
+			overlayOpacity,
+			['case', MAP_CORRIDOR_MATCH, corridorFillOpacity, roomFillOpacity]
+		] as ExpressionSpecification,
+		'fill-opacity-transition': overlayFadeTransition
+	}
+
+	const allRoomsOutline = {
+		layout: MAP_LINE_OUTLINE_LAYOUT,
+		paint: {
+			'line-color': outlineColor,
+			'line-width': outlineWidth,
 			'line-opacity': overlayOpacity,
 			'line-opacity-transition': overlayFadeTransition
-		},
+		}
+	}
+
+	return {
+		allRooms,
+		allRoomsOutline,
 		availableRooms: {
 			'fill-antialias': true,
 			'fill-color': primaryColor,
@@ -120,10 +212,13 @@ export function getMapLayerStyles(
 			'fill-opacity-transition': overlayFadeTransition
 		},
 		availableRoomsOutline: {
-			'line-color': primaryColor,
-			'line-width': MAP_COLORS.availableRoomOutlineWidth,
-			'line-opacity': overlayOpacity,
-			'line-opacity-transition': overlayFadeTransition
+			layout: MAP_LINE_OUTLINE_LAYOUT,
+			paint: {
+				'line-color': primaryColor,
+				'line-width': outlineWidth,
+				'line-opacity': overlayOpacity,
+				'line-opacity-transition': overlayFadeTransition
+			}
 		},
 		buildingLabels: {
 			layout: {
@@ -155,11 +250,40 @@ export function getMapLayerStyles(
 			'fill-opacity-transition': SELECTED_POP_TRANSITION
 		},
 		selectedOutline: {
-			'line-color': selectionColor,
-			'line-width': selectionPop
-				? MAP_COLORS.selectedOutlineWidthPop
-				: MAP_COLORS.selectedOutlineWidth,
-			'line-width-transition': SELECTED_POP_TRANSITION
+			layout: MAP_LINE_OUTLINE_LAYOUT,
+			paint: {
+				'line-color': selectionColor,
+				'line-width': selectionPop
+					? MAP_COLORS.selectedOutlineWidthPop
+					: MAP_COLORS.selectedOutlineWidth,
+				'line-width-transition': SELECTED_POP_TRANSITION
+			}
+		},
+		buildingEntrancesBadge: {
+			'circle-radius': MAP_COLORS.entranceBadgeRadius,
+			'circle-color': primaryColor,
+			'circle-stroke-width': MAP_COLORS.entranceBadgeStrokeWidth,
+			'circle-stroke-color': backgroundColor,
+			'circle-opacity': 0.95
+		},
+		buildingEntrancesBadgeMuted: {
+			'circle-radius': MAP_COLORS.entranceBadgeRadius,
+			'circle-color': MAP_COLORS.entranceMuted,
+			'circle-stroke-width': MAP_COLORS.entranceBadgeStrokeWidth,
+			'circle-stroke-color': backgroundColor,
+			'circle-opacity': 0.95
+		},
+		buildingEntrancesMarker: {
+			layout: {
+				'icon-image': 'map-entrance',
+				'icon-size': MAP_COLORS.entranceMarkerSize,
+				'icon-allow-overlap': true,
+				'icon-ignore-placement': true,
+				'icon-anchor': 'center' as const
+			},
+			paint: {
+				'icon-color': MAP_COLORS.entranceIcon
+			}
 		}
 	}
 }

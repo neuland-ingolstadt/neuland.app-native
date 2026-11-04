@@ -1,11 +1,11 @@
-import type { FeatureCollection } from 'geojson'
+import type { FeatureCollection, Point } from 'geojson'
 import { Platform } from 'react-native'
 import type {
 	FoodPlanQuery,
 	TypedDocumentString
 } from '@/__generated__/gql/graphql'
 import { appHomepage, appVersion } from '@/data/app-version'
-import type { SpoWeights } from '@/types/asset-api'
+import type { EntranceProperties, SpoWeights } from '@/types/asset-api'
 import {
 	CAMPUS_LIFE_PUBLIC_ORGANIZER_KIND_STUDENT_ASSOCIATION,
 	type CampusLifePublicOrganizerKind,
@@ -161,6 +161,18 @@ class NeulandAPIClient {
 		return (await this.performRequest(
 			`${ASSET_ENDPOINT}/rooms_neuland_v2.7.geojson`
 		)) as FeatureCollection
+	}
+
+	/**
+	 * Gets the campus entrance points
+	 * @returns {Promise<FeatureCollection>} A promise that resolves with the entrances GeoJSON
+	 */
+	async getMapEntrances(): Promise<
+		FeatureCollection<Point, EntranceProperties>
+	> {
+		return (await this.performRequest(
+			`${ASSET_ENDPOINT}/entrances_neuland.geojson`
+		)) as FeatureCollection<Point, EntranceProperties>
 	}
 
 	/**

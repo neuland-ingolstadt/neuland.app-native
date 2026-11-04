@@ -65,3 +65,21 @@ interface Course {
 export type SpoWeights = Record<string, Course[]>
 
 export type RoomDistances = Record<string, Record<string, number>>
+
+export type EntranceAccess = 'public' | 'badge'
+/** Live asset currently only ships `both` and `exit`. */
+export type EntranceKind = 'both' | 'entrance' | 'exit'
+
+export interface EntranceProperties {
+	id: string
+	Standort: string
+	Gebaeude: string
+	Etage: string
+	Ebene: string
+	name_de: string
+	name_en: string
+	kind: EntranceKind
+	access: EntranceAccess
+	access_note_de?: string
+	access_note_en?: string
+}

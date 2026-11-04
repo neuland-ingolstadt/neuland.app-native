@@ -6,19 +6,91 @@ import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatCampusLocation, MAP_CAMERA } from '@/utils/map-constants'
 import type { RoomOpenings } from '../map-room-utils'
 import {
+	excludeEntrancesNearPoint,
 	filterAvailableRooms,
 	filterEtage,
 	getBuildingData,
+	getBuildingSelectionFromFeatures,
+	getEntranceData,
+	getEntranceSelectionFromFeatures,
 	getMapFocusPadding,
 	getOngoingOrNextEvent,
 	getRoomData,
 	getRoomSelectionFromFeatures,
 	getRoomSelectionFromProperties,
+	getSelectedBuildingEntrances,
 	getSelectedMapFeatures,
 	getSelectionFocusZoom,
 	isAvailabilityTrackedRoom,
-	parseMapCoordinate
+	isMutedEntrance,
+	parseMapCoordinate,
+	splitEntrancesByStyle
 } from '../map-screen-utils'
+
+const entrancesCollection: FeatureCollection = {
+	type: 'FeatureCollection',
+	features: [
+		{
+			type: 'Feature',
+			properties: {
+				id: 'IN-G-E01',
+				Standort: 'IN',
+				Gebaeude: 'G',
+				Etage: 'EG',
+				Ebene: '0',
+				name_de: 'Eingang G 1',
+				name_en: 'Entrance G 1',
+				kind: 'both',
+				access: 'public'
+			},
+			geometry: {
+				type: 'Point',
+				coordinates: [11.433, 48.7664]
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {
+				id: 'IN-G-E02',
+				Standort: 'IN',
+				Gebaeude: 'G',
+				Etage: 'EG',
+				Ebene: '0',
+				name_de: 'Eingang G 2',
+				name_en: 'Entrance G 2',
+				kind: 'both',
+				access: 'badge',
+				access_note_de: 'Nur mit Ausweis',
+				access_note_en: 'Badge required'
+			},
+			geometry: {
+				type: 'Point',
+				// Closer to G101 than the public entrance, but badge-only
+				coordinates: [11.4329, 48.7664]
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {
+				id: 'IN-A-E01',
+				Standort: 'IN',
+				Gebaeude: 'A',
+				Etage: 'EG',
+				Ebene: '0',
+				name_de: 'Bibliothek Schleuse',
+				name_en: 'Library airlock',
+				kind: 'both',
+				access: 'badge',
+				access_note_de: 'Nur mit Ausweis',
+				access_note_en: 'Badge required'
+			},
+			geometry: {
+				type: 'Point',
+				coordinates: [11.4317, 48.7671]
+			}
+		}
+	]
+}
 
 const featureCollection: FeatureCollection = {
 	type: 'FeatureCollection',
@@ -577,6 +649,301 @@ describe('map-screen-utils', () => {
 				featureCollection
 			)
 		).toEqual([])
+	})
+
+	it('getSelectedBuildingEntrances - Should return all entrances for a building', () => {
+		const result = getSelectedBuildingEntrances(
+			{ type: SEARCH_TYPES.BUILDING, data: 'G' },
+			entrancesCollection
+		)
+		expect(result.features.map((feature) => feature.properties?.id)).toEqual([
+			'IN-G-E01',
+			'IN-G-E02'
+		])
+	})
+
+	it('getSelectedBuildingEntrances - Should return all building entrances for a room', () => {
+		const result = getSelectedBuildingEntrances(
+			{
+				type: SEARCH_TYPES.ROOM,
+				data: 'G101',
+				center: [11.4329, 48.7664]
+			},
+			entrancesCollection,
+			featureCollection
+		)
+		expect(result.features.map((feature) => feature.properties?.id)).toEqual([
+			'IN-G-E01',
+			'IN-G-E02'
+		])
+	})
+
+	it('getSelectedBuildingEntrances - Should return nothing for missing data', () => {
+		expect(
+			getSelectedBuildingEntrances(
+				{ type: SEARCH_TYPES.ROOM, data: 'G101' },
+				entrancesCollection
+			).features
+		).toEqual([])
+		expect(
+			getSelectedBuildingEntrances(
+				{ type: SEARCH_TYPES.BUILDING, data: 'G' },
+				undefined
+			).features
+		).toEqual([])
+		expect(
+			getSelectedBuildingEntrances(null, entrancesCollection).features
+		).toEqual([])
+	})
+
+	it('isMutedEntrance - Should mute exit kind and badge access', () => {
+		expect(isMutedEntrance({ access: 'badge', kind: 'both' })).toBe(true)
+		expect(isMutedEntrance({ access: 'public', kind: 'exit' })).toBe(true)
+		expect(isMutedEntrance({ access: 'badge', kind: 'exit' })).toBe(true)
+		expect(isMutedEntrance({ access: 'public', kind: 'both' })).toBe(false)
+		expect(isMutedEntrance({ access: 'public', kind: 'entrance' })).toBe(false)
+		expect(isMutedEntrance(null)).toBe(false)
+	})
+
+	it('excludeEntrancesNearPoint - Should drop entrances under the map marker', () => {
+		const result = excludeEntrancesNearPoint(
+			entrancesCollection,
+			[11.433, 48.7664]
+		)
+		expect(result.features.map((feature) => feature.properties?.id)).toEqual([
+			'IN-G-E02',
+			'IN-A-E01'
+		])
+	})
+
+	it('excludeEntrancesNearPoint - Should keep all entrances when no clearance point is set', () => {
+		expect(excludeEntrancesNearPoint(entrancesCollection, undefined)).toBe(
+			entrancesCollection
+		)
+	})
+
+	it('excludeEntrancesNearPoint - Should ignore non-point geometry and non-numeric coordinates', () => {
+		const mixed: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: { id: 'polygon' },
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[11.433, 48.7664],
+								[11.4331, 48.7664],
+								[11.4331, 48.7665],
+								[11.433, 48.7665],
+								[11.433, 48.7664]
+							]
+						]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: { id: 'bad-coords' },
+					geometry: {
+						type: 'Point',
+						coordinates: ['11.433', '48.7664'] as unknown as [number, number]
+					}
+				},
+				{
+					type: 'Feature',
+					properties: { id: 'far' },
+					geometry: {
+						type: 'Point',
+						coordinates: [11.4317, 48.7671]
+					}
+				}
+			]
+		}
+		expect(
+			excludeEntrancesNearPoint(mixed, [11.433, 48.7664]).features.map(
+				(feature) => feature.properties?.id
+			)
+		).toEqual(['far'])
+	})
+
+	it('splitEntrancesByStyle - Should mute exit and badge entrances', () => {
+		const withExitKind: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: entrancesCollection.features.map((feature) =>
+				feature.properties?.id === 'IN-G-E02'
+					? {
+							...feature,
+							properties: {
+								...feature.properties,
+								kind: 'exit',
+								access: 'public'
+							}
+						}
+					: feature
+			)
+		}
+		const result = splitEntrancesByStyle(withExitKind)
+		expect(result.primary.features.map((f) => f.properties?.id)).toEqual([
+			'IN-G-E01'
+		])
+		expect(result.muted.features.map((f) => f.properties?.id)).toEqual([
+			'IN-G-E02',
+			'IN-A-E01'
+		])
+	})
+
+	it('getEntranceData - Should resolve localized entrance metadata', () => {
+		const result = getEntranceData(
+			'IN-G-E01',
+			entrancesCollection,
+			{ language: 'en' } as i18n,
+			((key: string, options?: { building?: string }) => {
+				if (key === 'pages.map.details.entrance.buildingSubtitle') {
+					return `Building ${options?.building ?? ''}`
+				}
+				return key
+			}) as TFunction<'common', undefined>
+		)
+		expect(result.type).toBe(SEARCH_TYPES.ENTRANCE)
+		expect(result.title).toBe('Entrance G 1')
+		expect(result.subtitle).toBe('Building G')
+	})
+
+	it('getEntranceData - Should fall back across missing localized names', () => {
+		const tEntrance = ((key: string) => key) as TFunction<'common', undefined>
+		const englishOnly: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {
+						id: 'EN-ONLY',
+						name_en: 'English only entrance'
+					},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+		const germanOnly: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {
+						id: 'DE-ONLY',
+						Gebaeude: 'G',
+						name_de: 'Nur Deutsch'
+					},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+		const unnamed: FeatureCollection = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: { id: 'NO-NAME' },
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			]
+		}
+
+		expect(
+			getEntranceData('EN-ONLY', englishOnly, i18nDe, tEntrance).title
+		).toBe('English only entrance')
+		expect(
+			getEntranceData('DE-ONLY', germanOnly, i18nEn, tEntrance).title
+		).toBe('Nur Deutsch')
+		expect(
+			getEntranceData('NO-NAME', unnamed, i18nEn, tEntrance)
+		).toMatchObject({
+			title: 'NO-NAME',
+			subtitle: 'pages.map.details.entrance.title'
+		})
+		expect(
+			getEntranceData('MISSING', entrancesCollection, i18nEn, tEntrance).title
+		).toBe('MISSING')
+	})
+
+	it('getEntranceSelectionFromFeatures - Should read id and coordinates', () => {
+		expect(
+			getEntranceSelectionFromFeatures(entrancesCollection.features)
+		).toEqual({
+			id: 'IN-G-E01',
+			center: [11.433, 48.7664]
+		})
+		expect(getEntranceSelectionFromFeatures([])).toBeUndefined()
+	})
+
+	it('getEntranceSelectionFromFeatures - Should skip features without a point id', () => {
+		expect(
+			getEntranceSelectionFromFeatures([
+				{
+					properties: { id: '' },
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				},
+				{
+					properties: { id: 'poly' },
+					geometry: { type: 'Polygon', coordinates: [] }
+				},
+				{
+					properties: {},
+					geometry: { type: 'Point', coordinates: [11.43, 48.76] }
+				}
+			])
+		).toBeUndefined()
+		expect(getEntranceSelectionFromFeatures(null)).toBeUndefined()
+	})
+
+	it('getBuildingSelectionFromFeatures - Should read building letter and center', () => {
+		expect(
+			getBuildingSelectionFromFeatures([
+				{
+					properties: {
+						Gebaeude: 'A',
+						Raum: 'A',
+						rtype: SEARCH_TYPES.BUILDING,
+						center: [11.43, 48.76]
+					}
+				}
+			])
+		).toEqual({
+			building: 'A',
+			center: [11.43, 48.76]
+		})
+		expect(getBuildingSelectionFromFeatures([])).toBeUndefined()
+	})
+
+	it('getBuildingSelectionFromFeatures - Should fall back to Raum and skip empty labels', () => {
+		expect(
+			getBuildingSelectionFromFeatures([
+				{ properties: { Gebaeude: '', Raum: '' } },
+				{ properties: { Raum: 'B', center: [11.44, 48.77] } }
+			])
+		).toEqual({
+			building: 'B',
+			center: [11.44, 48.77]
+		})
+		expect(
+			getBuildingSelectionFromFeatures([
+				{ properties: {} },
+				{ properties: { Gebaeude: 12 as unknown as string } }
+			])
+		).toBeUndefined()
+		expect(getBuildingSelectionFromFeatures(null)).toBeUndefined()
+	})
+
+	it('getSelectedBuildingEntrances - Should keep building entrances when an entrance is selected', () => {
+		const result = getSelectedBuildingEntrances(
+			{ type: SEARCH_TYPES.ENTRANCE, data: 'IN-G-E02' },
+			entrancesCollection
+		)
+		expect(result.features.map((feature) => feature.properties?.id)).toEqual([
+			'IN-G-E01',
+			'IN-G-E02'
+		])
 	})
 
 	it('getRoomData - Should resolve room metadata, occupancy and next availability', () => {
