@@ -64,15 +64,17 @@ export const useSharedPlateAnimations = ({
 
 	const plateAnimatedStyle = useAnimatedStyle<ViewStyle>(() => {
 		const tapScale = enableTapAnimations ? 1 - platePressPulse.value * 0.05 : 1
+		// Glow via scale only — animating shadowOpacity on every frame spams
+		// RCTViewComponentView "shadow efficiently" advice logs on iOS.
+		const glowScale = 1 + plateGlowIntensity.value * 0.02
 
 		return {
 			transform: [
-				{ scale: plateScale.value * tapScale },
+				{ scale: plateScale.value * tapScale * glowScale },
 				{ translateY: plateLift.value },
 				{ rotate: enableTapAnimations ? `${plateRotation.value}rad` : '0rad' }
 			],
-			opacity: plateOpacity.value,
-			shadowOpacity: 0.25 + plateGlowIntensity.value * 0.15
+			opacity: plateOpacity.value
 		}
 	})
 
@@ -88,12 +90,10 @@ export const useSharedPlateAnimations = ({
 				[baseInnerColor as unknown as number, tapTintColor as unknown as number]
 			)
 			return {
-				shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1,
 				backgroundColor: mixed as unknown as string
 			}
 		}
 		return {
-			shadowOpacity: 0.15 + plateGlowIntensity.value * 0.1,
 			backgroundColor: baseInnerColor
 		}
 	})

@@ -7,6 +7,16 @@ const UTILS_ROOT = new URL('../', import.meta.url).pathname
 const trackEventMock = mock(() => {})
 const clipboardSetStringAsyncMock = mock(async () => {})
 
+// map-utils re-exports map-actions, which imports expo-router. Register the
+// mock here so this file does not depend on map-actions.test running first.
+mock.module('expo-router', () => ({
+	router: {
+		dismissAll: () => {},
+		push: () => {},
+		navigate: () => {}
+	}
+}))
+
 mock.module(`${UTILS_ROOT}../localization/i18n.ts`, () => ({
 	default: { language: 'de' }
 }))

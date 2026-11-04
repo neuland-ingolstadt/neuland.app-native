@@ -5,7 +5,7 @@ import { Linking, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import WhatsNewBox from '@/components/Flow/whats-new-box'
 import LoginForm from '@/components/Universal/login-form'
-import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
+import { FAQ_URL, IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
 import LoginAnimatedText from './login-animated-text'
@@ -114,7 +114,7 @@ export default function Login(): React.JSX.Element {
 						<Text
 							className="text-label text-sm text-center"
 							onPress={() => {
-								void Linking.openURL(PRIVACY_URL)
+								void Linking.openURL(FAQ_URL)
 							}}
 						>
 							{t('onboarding.links.faq')}

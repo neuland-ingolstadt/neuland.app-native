@@ -37,7 +37,9 @@ export async function loadGrades(): Promise<{
 	finished: Grade[]
 	missing: Grade[]
 }> {
-	const gradeList = await getGradeList()
+	const gradeList = (await getGradeList()).filter((x) =>
+		Boolean(x.titel?.trim())
+	)
 
 	const duplicateGrades = gradeList.filter((x, i) =>
 		gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim())

@@ -26,10 +26,10 @@ THI news, calendar, university sports, campus life events, quick links.
 
 | Area              | Tech                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| Runtime           | React Native `0.86.3`, React `19.2.3`, Expo SDK `57`                       |
+| Runtime           | React Native `0.88.0`, React `19.3.0`, Expo SDK `58`                       |
 | Language          | TypeScript `6.0` (strict mode)                                             |
 | Package manager   | **Bun** (`bun.lock`) — use Bun for installs and script execution           |
-| Routing           | **Expo Router 57** (file-based, typed routes) — *not* React Navigation directly |
+| Routing           | **Expo Router 58** (file-based, typed routes) — *not* React Navigation directly |
 | Server state      | TanStack React Query 5 (persisted via MMKV)                                |
 | Client state      | Zustand 5 (persisted via MMKV) + a few React Contexts                      |
 | Storage           | `react-native-mmkv` (settings/cache), `expo-secure-store` (mobile creds), `idb` + WebCrypto (web creds) |
@@ -45,7 +45,7 @@ THI news, calendar, university sports, campus life events, quick links.
 | Dev client        | `expo-dev-client` — the app does **not** run in Expo Go                    |
 | Compiler          | React Compiler is **enabled** (`reactCompiler: true` in `app.config.ts`) |
 
-SDK 57 requires Xcode 26.4 and iOS 16.4 or newer and uses Hermes V1 by default.
+SDK 58 requires Xcode 27 and iOS 16.4 or newer and uses Hermes V1 by default. Xcode 27 is needed for iOS 27 UIScene support. The project uses Continuous Native Generation — `bun prebuild:ios` generates `SceneDelegate.swift` and `UIApplicationSceneManifest`.
 
 ---
 
@@ -65,7 +65,7 @@ bun start                    # run the production-like web preview on port 3000
 bun lint                     # Biome check (read-only)
 bun fmt                      # Biome check --fix (safe auto-fixes)
 bun fmt:unsafe               # Biome check --fix --unsafe (use sparingly)
-bun tsc --noEmit             # TypeScript check (matches CI)
+bun typecheck                # TypeScript via @expo/agent-cli (or bun tsc --noEmit)
 bun i18n:check               # verify de/en locale files are complete and catch undefined keys (matches CI)
 
 bun test                     # run all unit tests
@@ -75,7 +75,11 @@ bun test:mutation:ci         # mutation tests for CI (sequential concurrency)
 
 bun codegen                  # regenerate GraphQL types from src/api/**/*.ts
 bun pkgs                     # `expo install --check` for SDK-compatible deps
+bun doctor                   # expo-doctor
 bun uniwind:types            # regenerate src/uniwind-types.d.ts after global.css changes
+
+bun agent <command>          # @expo/agent-cli (status, smoke, runtime:*, install, …)
+bun device-hub               # Expo Device Hub (browser sim/emu dashboard)
 ```
 
 ### Cursor MCP
@@ -123,6 +127,10 @@ Example agent workflows:
 - Dependency question → `add_library` or `read_documentation`, not `bun add` with a guessed version.
 
 **Local limitations:** one dev-server connection at a time; iOS automation is simulator-only on macOS (no physical devices). See the [Expo MCP docs](https://docs.expo.dev/mcp/) for the full tool list.
+
+#### `@expo/agent-cli` / Device Hub
+
+`bun typecheck` uses agent-cli. For verify loops use `bun agent status`, `smoke --ios`, and `runtime:*` (`help workflow` for exit codes). Keep `bun dev` for Metro (MapLibre + MCP). Screenshots/gestures → Argent / Expo MCP; Device Hub (`bun device-hub` or the `/_expo/plugins/expo-device-hub` link after `bun dev`) is for humans watching sims.
 
 Release / tooling scripts (rarely needed during day-to-day dev — usually CI or a release
 maintainer runs these):
@@ -228,11 +236,11 @@ Generated and binary files:
 - Use the typed `router` (`import { router } from 'expo-router'`) — typed routes are enabled.
 - Import `ThemeProvider`, `DarkTheme`, and `DefaultTheme` from `expo-router`.
   Their exports from `expo-router/react-navigation` are deprecated aliases.
-- `HeaderTitle` and `useHeaderHeight` still use the SDK 56 compatibility exports
-  from `expo-router/react-navigation` to preserve the existing headers and form-sheet
-  padding. These exports are deprecated; revisit them during the next SDK upgrade.
-  The installed Router guidance recommends local implementations. Preserve access
-  to the navigator's header-height context when replacing the hook.
+- `HeaderTitle` and `useHeaderHeight` still use the deprecated
+  `expo-router/react-navigation` compatibility exports to preserve the existing
+  headers and form-sheet padding. Copy them into the app before a future SDK
+  removes those exports. Preserve access to the navigator's header-height
+  context when replacing the hook.
 - Web builds use `output: 'single'` (SPA). Some screens have a `*.web.tsx` variant
   (e.g. `map-screen.web.tsx`) for layout differences.
 
@@ -241,7 +249,7 @@ Generated and binary files:
 - The `(tabs)` group is platform-specific. Always check the file that matches the
   platform you are changing:
   - iOS and Android: `src/components/Layout/tab-bar.tsx` uses
-    `expo-router/unstable-native-tabs`.
+    `expo-router/native-tabs`.
   - Web: `src/components/Layout/tab-bar.web.tsx` uses Expo Router's regular JS tabs.
 - When adding or removing a tab, keep the native and web implementations in sync unless the UX is
   intentionally platform-specific. Native tab options differ between these runtimes; copy
@@ -616,7 +624,7 @@ Android uses Material Symbols (custom font), Web uses `lucide-react-native`.
   existing layout.
 - **Don't bump dependencies casually.** Native modules (`react-native-mmkv`, MapLibre,
   Reanimated, etc.) are pinned because of native build compatibility. Run `bun pkgs`
-  (which calls `expo install --check`) when in doubt.
+  when in doubt.
 - **Don't edit generated files by hand.** Use `bun codegen` for `src/__generated__/`,
   `bun licences` for `src/data/licenses.json`, `bun uniwind:types` for `src/uniwind-types.d.ts`,
   and `bun changelog` for `CHANGELOG.md`.

@@ -252,6 +252,14 @@
 		"missingAverage": "The exact average cannot be calculated and ranges between {{min}} and {{max}}.",
 		"exactAverage": "Based on {{number}} weighted grades.",
 		"temporarilyUnavailable": "Grades are temporarily unavailable.",
+		"empty": {
+			"title": "No grades yet",
+			"subtitle": "Once exams are graded or scheduled, they'll show up here."
+		},
+		"noResults": {
+			"title": "No subjects found",
+			"subtitle": "No subjects match your search."
+		},
 		"footer": "This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information."
 	},
 	"infoBoxes": {

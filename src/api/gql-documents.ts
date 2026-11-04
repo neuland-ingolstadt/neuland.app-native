@@ -2,35 +2,6 @@
 
 import { graphql } from '@/__generated__/gql'
 
-export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
-    query AppAnnouncements {
-        appAnnouncements(active: true) {
-            ...AnnouncementFields
-        }
-    }
-`)
-
-const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
-    fragment AnnouncementFields on Announcement {
-        id
-        title {
-            de
-            en
-        }
-        description {
-            de
-            en
-        }
-        startDateTime
-        endDateTime
-        priority
-        url
-        platform
-        userKind
-        imageUrl
-    }
-`)
-
 export const FOOD_QUERY = graphql(/* GraphQL */ `
     query FoodPlan($locations: [LocationInput!]!) {
         food(locations: $locations) {
@@ -98,45 +69,6 @@ const FOOD_FRAGMENT = graphql(/* GraphQL */ `
         errors {
             location
             message
-        }
-    }
-`)
-
-export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
-    query UniversitySports {
-        universitySports {
-            ...UniversitySportsFields
-        }
-    }
-`)
-
-const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
-    fragment UniversitySportsFields on UniversitySports {
-        id
-        title {
-            de
-            en
-        }
-        description {
-            de
-            en
-        }
-        campus
-        location
-        weekday
-        startTime
-        endTime
-        requiresRegistration
-        invitationLink
-        eMail
-        sportsCategory
-    }
-`)
-
-export const CREATE_ROOM_REPORT = graphql(/* GraphQL */ `
-    mutation CreateRoomReport($input: RoomReportInput!) {
-        createRoomReport(input: $input) {
-            id
         }
     }
 `)

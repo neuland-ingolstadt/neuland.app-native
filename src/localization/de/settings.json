@@ -217,6 +217,14 @@
 		"missingAverage": "Der genaue Durchschnitt kann nicht berechnet werden und liegt zwischen {{min}} und {{max}}.",
 		"averageError": "Noten-Durchschnitt ist derzeit nicht verfügbar.",
 		"temporarilyUnavailable": "Noten sind vorübergehend nicht verfügbar.",
+		"empty": {
+			"title": "Noch keine Noten",
+			"subtitle": "Sobald Prüfungen bewertet oder geplant sind, erscheinen sie hier."
+		},
+		"noResults": {
+			"title": "Keine Fächer gefunden",
+			"subtitle": "Kein Fach entspricht deiner Suche."
+		},
 		"footer": "Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss."
 	},
 	"infoBoxes": {

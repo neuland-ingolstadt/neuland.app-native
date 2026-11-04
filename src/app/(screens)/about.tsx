@@ -181,16 +181,18 @@ export default function About(): React.JSX.Element {
 						android: 'mail',
 						web: 'Mail'
 					},
-					onPress: async () =>
-						(await Linking.openURL(
+					onPress: async () => {
+						await Linking.openURL(
 							'mailto:feedback@neuland.app?subject=Feedback%20Neuland-Next'
-						)) as Promise<void>
+						)
+					}
 				},
 				{
 					title: t('about.formlist.appWebsite'),
 					icon: linkIcon,
-					onPress: async () =>
-						(await Linking.openURL('https://neuland.app')) as Promise<void>
+					onPress: async () => {
+						await Linking.openURL('https://neuland.app')
+					}
 				},
 				...(Platform.OS === 'ios' || Platform.OS === 'android'
 					? [

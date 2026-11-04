@@ -110,7 +110,7 @@ export default function GradesSCreen(): React.JSX.Element {
 		refetch,
 		isError
 	} = useQuery({
-		queryKey: ['grades'],
+		queryKey: ['grades', 'v3'],
 		queryFn: loadGrades,
 		staleTime: 1000 * 60 * 30,
 		gcTime: 1000 * 60 * 60 * 24 * 7,
@@ -222,59 +222,83 @@ export default function GradesSCreen(): React.JSX.Element {
 			)}
 			{isSuccess && grades !== null && (
 				<>
-					{filteredGrades?.finished.length !== 0 && (
+					{filteredGrades?.finished.length === 0 &&
+					filteredGrades.missing.length === 0 ? (
+						<ErrorView
+							title={
+								localSearch === ''
+									? t('grades.empty.title')
+									: t('grades.noResults.title')
+							}
+							message={
+								localSearch === ''
+									? t('grades.empty.subtitle')
+									: t('grades.noResults.subtitle')
+							}
+							icon={{
+								ios: 'list.clipboard',
+								android: 'assignment',
+								web: 'ClipboardList'
+							}}
+							isCritical={false}
+						/>
+					) : (
 						<>
-							<SectionView title={t('grades.average')}>
-								<View className="self-center rounded-md justify-center mx-page my-4 min-h-[70px] w-full">
-									{averageLoadingState === LoadingState.LOADING && (
-										<LoadingIndicator />
-									)}
-									{averageLoadingState === LoadingState.ERROR && (
-										<Text className="text-text text-[15px] text-center">
-											{t('grades.averageError')}
-										</Text>
-									)}
-									{averageLoadingState === LoadingState.LOADED &&
-										gradeAverage !== undefined &&
-										gradeAverage !== null && (
-											<View className="items-start justify-center mx-page">
-												<Text className="text-text text-[25px] font-bold mb-1.5 text-center">
-													{gradeAverage.resultMin !== gradeAverage.resultMax &&
-														'~ '}
-													{gradeAverage.result}
+							{filteredGrades?.finished.length !== 0 && (
+								<>
+									<SectionView title={t('grades.average')}>
+										<View className="self-center rounded-md justify-center mx-page my-4 min-h-[70px] w-full">
+											{averageLoadingState === LoadingState.LOADING && (
+												<LoadingIndicator />
+											)}
+											{averageLoadingState === LoadingState.ERROR && (
+												<Text className="text-text text-[15px] text-center">
+													{t('grades.averageError')}
 												</Text>
+											)}
+											{averageLoadingState === LoadingState.LOADED &&
+												gradeAverage !== undefined &&
+												gradeAverage !== null && (
+													<View className="items-start justify-center mx-page">
+														<Text className="text-text text-[25px] font-bold mb-1.5 text-center">
+															{gradeAverage.resultMin !==
+																gradeAverage.resultMax && '~ '}
+															{gradeAverage.result}
+														</Text>
 
-												<Text className="text-label text-sm text-left">
-													{gradeAverage.resultMin === gradeAverage.resultMax
-														? t('grades.exactAverage', {
-																number: gradeAverage.entries.length
-															})
-														: t('grades.missingAverage', {
-																min: gradeAverage.resultMin,
-																max: gradeAverage.resultMax
-															})}
-												</Text>
+														<Text className="text-label text-sm text-left">
+															{gradeAverage.resultMin === gradeAverage.resultMax
+																? t('grades.exactAverage', {
+																		number: gradeAverage.entries.length
+																	})
+																: t('grades.missingAverage', {
+																		min: gradeAverage.resultMin,
+																		max: gradeAverage.resultMax
+																	})}
+														</Text>
+													</View>
+												)}
+										</View>
+									</SectionView>
+									<SectionView title={t('grades.finished')} hideBackground>
+										{filteredGrades?.finished.map((grade) => (
+											<View key={getGradeKey(grade)} className="mb-2">
+												<GradesRow item={grade} />
 											</View>
-										)}
-								</View>
-							</SectionView>
-							<SectionView title={t('grades.finished')} hideBackground>
-								{filteredGrades?.finished.map((grade) => (
-									<View key={getGradeKey(grade)} className="mb-2">
-										<GradesRow item={grade} />
-									</View>
-								))}
-							</SectionView>
+										))}
+									</SectionView>
+								</>
+							)}
+							{filteredGrades?.missing.length !== 0 && (
+								<SectionView title={t('grades.open')} hideBackground>
+									{filteredGrades?.missing.map((grade) => (
+										<View key={getGradeKey(grade)} className="mb-2">
+											<GradesRow item={grade} />
+										</View>
+									))}
+								</SectionView>
+							)}
 						</>
-					)}
-					{filteredGrades?.missing.length !== 0 && (
-						<SectionView title={t('grades.open')} hideBackground>
-							{filteredGrades?.missing.map((grade) => (
-								<View key={getGradeKey(grade)} className="mb-2">
-									<GradesRow item={grade} />
-								</View>
-							))}
-						</SectionView>
 					)}
 					<View className="self-start pb-8 px-page pt-4">
 						<Text className="text-label text-xs font-normal pt-2 text-left">

@@ -1,7 +1,15 @@
 import { mock } from 'bun:test'
 
+type PlatformSelectSpec<T> = { [platform: string]: T | undefined; default?: T }
+
 export const reactNativePlatform = {
-	OS: 'web' as 'web' | 'ios' | 'android'
+	OS: 'web' as 'web' | 'ios' | 'android',
+	select<T>(spec: PlatformSelectSpec<T>): T | undefined {
+		if (Object.hasOwn(spec, this.OS)) {
+			return spec[this.OS]
+		}
+		return spec.default
+	}
 }
 
 export const reactNativeShareMock = mock(async () => {})
@@ -19,35 +27,35 @@ const turboModuleRegistry = {
 	getEnforcing: () => null
 }
 
+const appState = {
+	currentState: 'active' as string,
+	addEventListener: () => ({ remove: () => {} })
+}
+
 export function buildReactNativeMock() {
 	const platform = reactNativePlatform
 	const share = { share: reactNativeShareMock }
 	const linking = { openURL: reactNativeOpenURLMock }
+	const styleSheet = {
+		create: (styles: unknown) => styles,
+		hairlineWidth: 1
+	}
 
-	return {
+	const exports = {
 		__esModule: true as const,
-		default: {
-			Platform: platform,
-			Share: share,
-			Linking: linking,
-			NativeEventEmitter: ReactNativeNativeEventEmitter,
-			TurboModuleRegistry: turboModuleRegistry,
-			NativeModules: {},
-			StyleSheet: {
-				create: (styles: unknown) => styles,
-				hairlineWidth: 1
-			}
-		},
 		Platform: platform,
 		Share: share,
 		Linking: linking,
+		AppState: appState,
 		NativeEventEmitter: ReactNativeNativeEventEmitter,
 		TurboModuleRegistry: turboModuleRegistry,
 		NativeModules: {},
-		StyleSheet: {
-			create: (styles: unknown) => styles,
-			hairlineWidth: 1
-		}
+		StyleSheet: styleSheet
+	}
+
+	return {
+		...exports,
+		default: exports
 	}
 }
 

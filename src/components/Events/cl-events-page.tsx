@@ -80,7 +80,7 @@ export default function ClEventsPage({
 		null
 	)
 	const didLongPressRef = useRef(false)
-	const clubsScrollRef = useRef<ScrollView>(null)
+	const clubsScrollRef = useRef<React.ComponentRef<typeof ScrollView>>(null)
 	const skipClubScrollRef = useRef(true)
 	const selectedOrganizerIdRef = useRef(selectedOrganizerId)
 	selectedOrganizerIdRef.current = selectedOrganizerId

@@ -100,7 +100,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						<PagerView
 							style={styles.page}
 							initialPage={selectedPage}
-							onPageSelected={(e) => {
+							onPageSelected={(e: { nativeEvent: { position: number } }) => {
 								setSelectedPage(e.nativeEvent.position)
 							}}
 							ref={pagerViewRef}

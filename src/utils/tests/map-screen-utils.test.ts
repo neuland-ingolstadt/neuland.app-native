@@ -16,6 +16,7 @@ import {
 	getRoomSelectionFromProperties,
 	getSelectedMapFeatures,
 	getSelectionFocusZoom,
+	isAvailabilityTrackedRoom,
 	parseMapCoordinate
 } from '../map-screen-utils'
 
@@ -499,6 +500,14 @@ describe('map-screen-utils', () => {
 		expect(filterAvailableRooms(featureCollection, null)).toEqual([])
 	})
 
+	it('filterAvailableRooms - Should ignore rooms whose free slot has already ended', () => {
+		expect(
+			filterAvailableRooms(featureCollection, [
+				{ room: 'G101', until: new Date(Date.now() - 60_000) }
+			])
+		).toEqual([])
+	})
+
 	it('filterEtage - Should return only features on the requested floor', () => {
 		expect(
 			filterEtage('EG', featureCollection).map(
@@ -603,8 +612,107 @@ describe('map-screen-utils', () => {
 		const occupancies = result.occupancies as { room?: string } | null
 		expect(occupancies?.room).toBe('G101')
 		expect(result.nextAvailable?.from).toEqual(roomOpenings.G101[1].from)
+		expect(result.availabilityTracked).toBe(true)
 		expect(result.type).toBe(SEARCH_TYPES.ROOM)
 		expect(result.properties?.Raum).toBe('G101')
+	})
+
+	it('getRoomData - Should treat expired free slots as not currently available', () => {
+		const result = getRoomData(
+			'G101',
+			[
+				{
+					room: 'G101',
+					until: new Date(Date.now() - 3 * 60 * 60 * 1000)
+				}
+			],
+			featureCollection,
+			i18nEn,
+			t,
+			{}
+		)
+
+		expect(result.occupancies).toBeNull()
+		expect(result.availabilityTracked).toBe(true)
+	})
+
+	it('getRoomData - Should track lecture halls even with no openings today', () => {
+		const result = getRoomData('G101', null, featureCollection, i18nEn, t, {})
+
+		expect(result.occupancies).toBeNull()
+		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(true)
+	})
+
+	it('getRoomData - Should not track availability for non-bookable room types', () => {
+		const result = getRoomData('G001', null, featureCollection, i18nEn, t, {})
+
+		expect(result.title).toBe('G001')
+		expect(result.occupancies).toBeNull()
+		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(false)
+	})
+
+	it('getRoomData - Should track availability when openings exist but room is occupied', () => {
+		const now = new Date()
+		const result = getRoomData('G101', null, featureCollection, i18nEn, t, {
+			G101: [
+				{
+					type: 'Lecture hall',
+					from: new Date(now.getTime() - 2 * 60 * 60 * 1000),
+					until: new Date(now.getTime() - 60 * 60 * 1000),
+					capacity: 120
+				}
+			]
+		})
+
+		expect(result.occupancies).toBeNull()
+		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(true)
+	})
+
+	it('getRoomData - Should fall back to THI openings for non-allowlist Funktion', () => {
+		const now = new Date()
+		const result = getRoomData('G001', null, featureCollection, i18nEn, t, {
+			G001: [
+				{
+					type: 'Seminarraum',
+					from: new Date(now.getTime() + 60 * 60 * 1000),
+					until: new Date(now.getTime() + 2 * 60 * 60 * 1000),
+					capacity: 20
+				}
+			]
+		})
+
+		expect(result.subtitle).toBe('Entrance')
+		expect(result.availabilityTracked).toBe(true)
+		expect(result.nextAvailable?.type).toBe('Seminarraum')
+	})
+
+	it('isAvailabilityTrackedRoom - Should match bookable Funktion labels', () => {
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'Lecture Hall' })).toBe(
+			true
+		)
+		expect(
+			isAvailabilityTrackedRoom({ Funktion_de: 'Vorlesungssaal / Hörsaal' })
+		).toBe(true)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'Seminar room' })).toBe(
+			true
+		)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'PC-Pool' })).toBe(true)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'PC Pool' })).toBe(true)
+	})
+
+	it('isAvailabilityTrackedRoom - Should reject non-bookable Funktion labels', () => {
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'Toilet' })).toBe(false)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'Office' })).toBe(false)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'Entrance' })).toBe(false)
+		expect(isAvailabilityTrackedRoom({ Funktion_en: 'PC Lab' })).toBe(false)
+		expect(
+			isAvailabilityTrackedRoom({ Funktion_en: 'Experimental Laboratory' })
+		).toBe(false)
+		expect(isAvailabilityTrackedRoom(null)).toBe(false)
+		expect(isAvailabilityTrackedRoom({})).toBe(false)
 	})
 
 	it('getRoomData - Should skip openings that have already started', () => {
@@ -648,8 +756,9 @@ describe('map-screen-utils', () => {
 		)
 
 		expect(result.subtitle).toBe('fallback:misc.unknown')
-		expect(result.occupancies).toBeUndefined()
+		expect(result.occupancies).toBeNull()
 		expect(result.nextAvailable).toBeNull()
+		expect(result.availabilityTracked).toBe(false)
 	})
 
 	it('getBuildingData - Should count total and available rooms for a building', () => {

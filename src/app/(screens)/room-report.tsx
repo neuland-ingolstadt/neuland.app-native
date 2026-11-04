@@ -8,13 +8,15 @@ import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Pressable, Text, View } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useCSSVariable, useUniwind } from 'uniwind'
-import type { RoomReportCategory } from '@/__generated__/gql/graphql'
-import neulandApi from '@/api/neuland-api'
+import {
+	createRoomReport,
+	type RoomReportCategoryEnum
+} from '@/api/neuland-core-api'
 import { CustomDropdown } from '@/components/Menu/custom-dropdown'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
-const reportCategories: RoomReportCategory[] = [
+const reportCategories: RoomReportCategoryEnum[] = [
 	'WRONG_DESCRIPTION',
 	'WRONG_LOCATION',
 	'NOT_EXISTING',
@@ -34,7 +36,7 @@ export default function RoomReport(): React.JSX.Element {
 	const contrastOnPrimary = getContrastColor(primaryColor)
 
 	const [reportCategory, setReportCategory] = useState<
-		RoomReportCategory | undefined
+		RoomReportCategoryEnum | undefined
 	>()
 	const { room } = useLocalSearchParams<{ room: string }>()
 
@@ -47,9 +49,9 @@ export default function RoomReport(): React.JSX.Element {
 		mutationFn: async (input: {
 			room: string
 			description: string
-			reason: RoomReportCategory
+			reason: RoomReportCategoryEnum
 		}) => {
-			return await neulandApi.createRoomReport(input)
+			return await createRoomReport(input)
 		},
 		onSuccess: () => {
 			toast({

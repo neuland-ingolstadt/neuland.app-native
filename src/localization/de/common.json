@@ -55,6 +55,11 @@
 			"reload": "App neu laden",
 			"feedback": "Feedback senden",
 			"status": "Systemstatus prüfen"
+		},
+		"screen": {
+			"title": "Seite nicht verfügbar",
+			"description": "Auf dieser Seite ist ein Fehler aufgetreten.",
+			"retry": "Erneut versuchen"
 		}
 	},
 	"dates": {

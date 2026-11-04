@@ -104,9 +104,6 @@ export default {
 		[
 			'expo-build-properties',
 			{
-				ios: {
-					enableSceneSupport: true
-				},
 				android: {
 					// R8 minify/obfuscation for Play Console DEX optimization (≥25% obfuscation).
 					// Resource shrinking left off until release builds are validated with minify alone.
@@ -265,7 +262,7 @@ export default {
 		],
 		[
 			'./config/plugins/withDrawableAssets.js',
-			'./src/assets/android/check.xml'
+			['./src/assets/android/check.xml', './src/assets/android/tabbar']
 		],
 		'./config/plugins/withIosCiArtifacts.js',
 		'./config/plugins/withCiScriptsSymlink.js',

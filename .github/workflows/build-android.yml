@@ -8,22 +8,27 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: ./.github/actions/setup
+      - uses: $/.github/actions/setup
         with:
           ignore-scripts: 'true'
 
-      - uses: ./.github/actions/setup-eas
+      - uses: $/.github/actions/setup-eas
         with:
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - uses: ./.github/actions/android-prepare
+      - uses: $/.github/actions/android-prepare
 
       - name: Build with EAS
         env:
@@ -32,14 +37,16 @@ jobs:
         run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Determine submission profile
+        env:
+          INTERNAL: ${{ github.event.inputs.internal }}
         run: |
-          if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
-            echo "SUBMIT_PROFILE=internal" >> $GITHUB_ENV
+          if [[ "$INTERNAL" == "true" ]]; then
+            echo "SUBMIT_PROFILE=internal" >> "$GITHUB_ENV"
           else
-            echo "SUBMIT_PROFILE=preview" >> $GITHUB_ENV
+            echo "SUBMIT_PROFILE=preview" >> "$GITHUB_ENV"
           fi
 
       - name: Submit to Google Play
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas submit --platform android --profile ${{ env.SUBMIT_PROFILE }} --non-interactive --path neuland-next.aab
+        run: eas submit --platform android --profile "$SUBMIT_PROFILE" --non-interactive --path neuland-next.aab

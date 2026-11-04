@@ -30,7 +30,7 @@ import AnimatedText from '@/components/Flow/svgs/animated-text'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logo-text'
 import PlatformIcon from '@/components/Universal/icon'
-import { PRIVACY_URL } from '@/data/constants'
+import { FAQ_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { OnboardingCardData } from '@/types/data'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -450,7 +450,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 			<Animated.View style={helpAnimatedStyle}>
 				<Pressable
 					onPress={() => {
-						void Linking.openURL('https://neuland.app/docs/app/faq')
+						void Linking.openURL(FAQ_URL)
 					}}
 				>
 					<PlatformIcon

@@ -11,28 +11,25 @@ import type { FriendlyDateOptions } from '@/types/utils'
  */
 export function formatFriendlyDate(
 	datetime: Date | string,
-	options: FriendlyDateOptions = {
-		weekday: 'short',
-		relative: true
-	}
+	{ weekday = 'short', relative = true }: FriendlyDateOptions = {}
 ): string {
 	const date = dayjs(datetime)
 	const today = dayjs()
 	const tomorrow = dayjs().add(1, 'day')
 
-	if (date.isSame(today, 'day') && options.relative !== false) {
+	if (date.isSame(today, 'day') && relative !== false) {
 		return t('dates.today', { ns: 'common' })
 	}
-	if (date.isSame(tomorrow, 'day') && options.relative !== false) {
+	if (date.isSame(tomorrow, 'day') && relative !== false) {
 		return t('dates.tomorrow', { ns: 'common' })
 	}
 	// Format the weekday in English
-	const weekday = date
+	const weekdayLabel = date
 		.locale(i18n.language)
-		.format(options.weekday === 'short' ? 'ddd' : 'dddd')
+		.format(weekday === 'short' ? 'ddd' : 'dddd')
 	// Format the day, month, and year in German
 	const dayMonthYear = date.locale('de').format('DD.MM.YYYY')
-	return `${weekday}, ${dayMonthYear}`
+	return `${weekdayLabel}, ${dayMonthYear}`
 }
 
 /**
@@ -69,6 +66,31 @@ export function diffInMinutes(
 	end: Date | string
 ): number {
 	return dayjs(end).diff(dayjs(start), 'minute')
+}
+
+/**
+ * Formats remaining time until a deadline as "H:MMh".
+ * Returns null when the deadline is missing, invalid, or already past.
+ */
+export function formatRemainingDuration(
+	until?: Date | string | null,
+	now: Date = new Date()
+): string | null {
+	if (until == null) {
+		return null
+	}
+	const untilMs = new Date(until).getTime()
+	if (Number.isNaN(untilMs)) {
+		return null
+	}
+	const remainingMs = untilMs - now.getTime()
+	if (remainingMs <= 0) {
+		return null
+	}
+	const totalMinutes = Math.floor(remainingMs / (1000 * 60))
+	const hours = Math.floor(totalMinutes / 60)
+	const minutes = totalMinutes % 60
+	return `${hours.toString()}:${minutes.toString().padStart(2, '0')}h`
 }
 
 /**

@@ -18,6 +18,29 @@ declare global {
 	var nativeFabricUIManager: unknown
 }
 
+function stripParentheticalGroups(value: string): string {
+	let result = ''
+	let depth = 0
+
+	for (const char of value) {
+		if (char === '(') {
+			depth++
+			continue
+		}
+		if (char === ')') {
+			if (depth > 0) {
+				depth--
+			}
+			continue
+		}
+		if (depth === 0) {
+			result += char
+		}
+	}
+
+	return result.trim().split(' ').filter(Boolean).join(' ')
+}
+
 export default function Version(): React.JSX.Element {
 	const { t, i18n } = useTranslation(['settings', 'common'])
 	const notAvailable = t('misc.notAvailable', { ns: 'common' })
@@ -36,8 +59,7 @@ export default function Version(): React.JSX.Element {
 
 		const loadSystemInfo = async () => {
 			if (Platform.OS === 'web') {
-				const userAgent = navigator.userAgent
-				const browserInfo = userAgent.replace(/\([^)]*\)/g, '').trim()
+				const browserInfo = stripParentheticalGroups(navigator.userAgent)
 				setSystemInfo((prev) => ({
 					...prev,
 					browserInfo

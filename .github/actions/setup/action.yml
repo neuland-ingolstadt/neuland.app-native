@@ -25,9 +25,11 @@ runs:
 
     - name: Install dependencies
       shell: bash
+      env:
+        IGNORE_SCRIPTS: ${{ inputs.ignore-scripts }}
       run: |
         install_flags=(--frozen-lockfile)
-        if [ "${{ inputs.ignore-scripts }}" = "true" ]; then
+        if [ "$IGNORE_SCRIPTS" = "true" ]; then
           install_flags+=(--ignore-scripts)
         fi
         bun install "${install_flags[@]}"

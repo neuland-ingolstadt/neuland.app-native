@@ -40,7 +40,7 @@ interface ErrorViewProps {
 	icon?: ErrorIconProp
 	buttonText?: string
 	onButtonPress?: () => void
-	onRefresh?: () => unknown
+	onRefresh?: () => void | Promise<void>
 	refreshing?: boolean
 	showPullLabel?: boolean
 	inModal?: boolean
@@ -312,7 +312,7 @@ export default function ErrorView({
 		>
 			<Animated.View
 				entering={FadeIn.duration(400)}
-				className="flex-1 items-center justify-evenly gap-3 p-5"
+				className="flex-1 items-center justify-center gap-6 p-5"
 			>
 				<ErrorDetails
 					title={title}

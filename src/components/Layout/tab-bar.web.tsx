@@ -24,6 +24,7 @@ const TabLayout = (): React.JSX.Element => {
 
 	return (
 		<Tabs
+			activityEnabled
 			screenOptions={{
 				tabBarPosition: isMobile ? 'bottom' : 'left',
 				tabBarActiveTintColor: primaryColor,

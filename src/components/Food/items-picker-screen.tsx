@@ -107,34 +107,32 @@ const ItemsPickerScreen = ({
 		}
 
 		return (
-			<View className="mb-2 h-[52px]">
-				<Pressable
-					testID={`${type}-option-${item.key}`}
-					accessibilityRole="checkbox"
-					accessibilityState={{ checked: isSelected }}
-					className="bg-card rounded-2xl p-4 flex-row items-center justify-between h-full"
-					onPress={toggleItem}
-				>
-					<Text className="text-text text-base flex-1 mr-2">{item.title}</Text>
-					{isSelected && (
-						<PlatformIcon
-							ios={{
-								name: 'checkmark.circle.fill',
-								size: 18
-							}}
-							android={{
-								name: 'check_circle',
-								size: 21
-							}}
-							web={{
-								name: 'Check',
-								size: 18
-							}}
-							style={{ color: primaryColor }}
-						/>
-					)}
-				</Pressable>
-			</View>
+			<Pressable
+				testID={`${type}-option-${item.key}`}
+				accessibilityRole="checkbox"
+				accessibilityState={{ checked: isSelected }}
+				className="bg-card rounded-2xl mb-2 min-h-[52px] px-4 py-3.5 flex-row items-center justify-between"
+				onPress={toggleItem}
+			>
+				<Text className="text-text text-base flex-1 mr-2">{item.title}</Text>
+				{isSelected && (
+					<PlatformIcon
+						ios={{
+							name: 'checkmark.circle.fill',
+							size: 18
+						}}
+						android={{
+							name: 'check_circle',
+							size: 21
+						}}
+						web={{
+							name: 'Check',
+							size: 18
+						}}
+						style={{ color: primaryColor }}
+					/>
+				)}
+			</Pressable>
 		)
 	}
 

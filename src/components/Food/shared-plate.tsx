@@ -36,26 +36,20 @@ export const SharedPlate = ({
 	return (
 		<Animated.View
 			className="items-center justify-center absolute z-[1]"
-			style={[
-				{
-					shadowColor: plateShadow,
-					shadowOffset: { width: 0, height: 6 },
-					shadowOpacity: 0.25,
-					shadowRadius: 15
-				},
-				plateAnimatedStyle
-			]}
+			style={plateAnimatedStyle}
 		>
+			{/* Shadows sit on opaque layers — RN warns (and spams) when shadow
+			    is on a view without a solid background, especially while animated. */}
 			<View
 				style={{
 					alignItems: 'center',
 					justifyContent: 'center',
 					borderRadius: 999,
 					backgroundColor: plateOuter,
-					shadowColor: plateInnerShadow,
-					shadowOffset: { width: 0, height: 4 },
-					shadowOpacity: 0.2,
-					shadowRadius: 10,
+					shadowColor: plateShadow,
+					shadowOffset: { width: 0, height: 6 },
+					shadowOpacity: 0.25,
+					shadowRadius: 15,
 					borderWidth: 0.5,
 					borderColor: plateOuterBorder,
 					width: size * 1.3,
@@ -77,6 +71,10 @@ export const SharedPlate = ({
 						justifyContent: 'center',
 						borderRadius: 999,
 						backgroundColor: plateRim,
+						shadowColor: plateInnerShadow,
+						shadowOffset: { width: 0, height: 4 },
+						shadowOpacity: 0.2,
+						shadowRadius: 10,
 						borderWidth: 0.5,
 						borderColor: plateRimBorder,
 						width: size * 1.17,
@@ -90,10 +88,6 @@ export const SharedPlate = ({
 								borderRadius: 999,
 								alignItems: 'center',
 								justifyContent: 'center',
-								shadowColor: plateShadow,
-								shadowOffset: { width: 0, height: 2 },
-								shadowOpacity: 0.15,
-								shadowRadius: 5,
 								overflow: 'hidden',
 								borderWidth: 0.5,
 								borderColor: plateInnerBorder,
