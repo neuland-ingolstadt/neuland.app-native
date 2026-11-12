@@ -93,3 +93,65 @@ export async function createRoomReport(
 	const result = await neulandCoreApi.POST('/room-reports', { body })
 	return unwrapData(result, 'room-reports')
 }
+
+export type FeedbackRating = 1 | 2 | 3 | 4 | 5
+
+export type FeedbackCategory =
+	| 'bugs'
+	| 'performance'
+	| 'login'
+	| 'usability'
+	| 'design'
+	| 'missingFeature'
+	| 'timetable'
+	| 'food'
+	| 'grades'
+	| 'map'
+
+export type FeatureIdea =
+	| 'digitalId'
+	| 'mensaPayment'
+	| 'librarySeats'
+	| 'roomNavigation'
+
+/** 1 = not wanted at all, 4 = absolutely wanted. Even scale, no neutral option. */
+export type FeatureInterest = 1 | 2 | 3 | 4
+
+export type FeatureInterestAnswers = Partial<
+	Record<FeatureIdea, FeatureInterest>
+>
+
+export interface FeedbackSubmission {
+	/**
+	 * Generated on the client so the rating can be stored right away and the
+	 * details added later under the same id (upsert).
+	 */
+	id: string
+	campaign: string
+	rating: FeedbackRating
+	categories?: FeedbackCategory[]
+	comment?: string
+	featureInterest?: FeatureInterestAnswers
+	missingFeatures?: string
+}
+
+const SIMULATED_FEEDBACK_LATENCY_MS = 800
+
+/**
+ * Public: create or update an app feedback entry.
+ *
+ * The backend endpoint does not exist yet, so this only simulates a request.
+ * Once it ships, replace the body with `neulandCoreApi.PUT(...)` + `unwrapData`
+ * and derive the types from the generated schema — callers stay unchanged.
+ */
+export async function submitFeedback(
+	submission: FeedbackSubmission
+): Promise<void> {
+	const body = { ...submission, platform: Platform.OS, appVersion }
+	if (__DEV__) {
+		console.debug('[feedback] simulated submit', body)
+	}
+	await new Promise((resolve) =>
+		setTimeout(resolve, SIMULATED_FEEDBACK_LATENCY_MS)
+	)
+}
