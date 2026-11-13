@@ -13,7 +13,6 @@ import {
 	ScrollView,
 	StyleSheet,
 	Text,
-	UIManager,
 	View
 } from 'react-native'
 import ErrorView from '@/components/Error/error-view'
@@ -145,13 +144,6 @@ export default function ClEventsPage({
 		isRefetchingByUser: isRefetchingByUserClEvents,
 		refetchByUser: refetchByUserClEvents
 	} = useRefreshByUser(clEventsResult.refetch)
-
-	useEffect(() => {
-		if (Platform.OS !== 'android') {
-			return
-		}
-		UIManager.setLayoutAnimationEnabledExperimental?.(true)
-	}, [])
 
 	const onFilterPress = (organizerId: number | null): void => {
 		const current = selectedOrganizerIdRef.current
