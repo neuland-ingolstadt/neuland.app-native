@@ -1,0 +1,18 @@
+/* App Shortcut phrases and short titles (German) */
+"Open food in ${applicationName}" = "Öffne Essen in ${applicationName}";
+"Show the menu in ${applicationName}" = "Zeige den Speiseplan in ${applicationName}";
+"Open cafeteria in ${applicationName}" = "Öffne die Mensa in ${applicationName}";
+"Food" = "Essen";
+
+"Open timetable in ${applicationName}" = "Öffne den Stundenplan in ${applicationName}";
+"Open calendar in ${applicationName}" = "Öffne den Kalender in ${applicationName}";
+"Show my lectures in ${applicationName}" = "Zeige meine Vorlesungen in ${applicationName}";
+"Timetable" = "Stundenplan";
+
+"Open map in ${applicationName}" = "Öffne die Karte in ${applicationName}";
+"Show campus map in ${applicationName}" = "Zeige den Campusplan in ${applicationName}";
+"Map" = "Karte";
+
+"Open grades in ${applicationName}" = "Öffne Noten in ${applicationName}";
+"Show my grades in ${applicationName}" = "Zeige meine Noten in ${applicationName}";
+"Grades" = "Noten";
