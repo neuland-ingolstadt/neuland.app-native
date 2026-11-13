@@ -7,6 +7,5 @@ export type {
 export {
 	BottomSheet,
 	BottomSheetProvider,
-	ModalBottomSheet,
-	programmatic
+	ModalBottomSheet
 } from '@swmansion/react-native-bottom-sheet'
