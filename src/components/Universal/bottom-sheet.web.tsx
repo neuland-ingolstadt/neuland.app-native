@@ -36,12 +36,6 @@ export type {
 	PositionChangeEventData
 }
 
-export function programmatic(
-	value: Exclude<Detent, { value: unknown }>
-): Detent {
-	return { value, programmatic: true }
-}
-
 function isProgrammaticDetent(detent: Detent | undefined): boolean {
 	return (
 		typeof detent === 'object' &&
