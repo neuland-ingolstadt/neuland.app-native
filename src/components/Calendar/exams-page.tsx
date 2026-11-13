@@ -5,6 +5,7 @@ import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, RefreshControl, ScrollView, Text, View } from 'react-native'
 import { NoSessionError } from '@/api/thi-session'
+import { CalendarFooter } from '@/components/Calendar/calendar-footer'
 import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/error-view'
 import { ExamRow } from '@/components/Rows/calendar-row'
@@ -58,20 +59,6 @@ export default function ExamsPage({
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-	const CalendarFooter = (): React.JSX.Element => {
-		return (
-			<View className="my-1 pb-bottom-safe">
-				<Text className="text-label text-xs font-normal pb-[25px] text-justify">
-					{t('pages.calendar.footer.part1')}
-					<Text className="text-text font-semibold" onPress={handleLinkPress}>
-						{t('pages.calendar.footer.part2')}
-					</Text>
-					{t('pages.calendar.footer.part3')}
-				</Text>
-			</View>
-		)
-	}
-
 	return (
 		<View className="flex-1 w-full">
 			{isLoading ? (
@@ -116,7 +103,9 @@ export default function ExamsPage({
 									{t('pages.calendar.exams.subtitle')}
 								</Text>
 							}
-							ListFooterComponent={<CalendarFooter />}
+							ListFooterComponent={
+								<CalendarFooter onLinkPress={handleLinkPress} />
+							}
 						/>
 					) : (
 						<ScrollView contentContainerClassName="px-page">
@@ -135,7 +124,7 @@ export default function ExamsPage({
 								inModal
 								isCritical={false}
 							/>
-							<CalendarFooter />
+							<CalendarFooter onLinkPress={handleLinkPress} />
 						</ScrollView>
 					)}
 				</View>
