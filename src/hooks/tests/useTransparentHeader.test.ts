@@ -93,7 +93,7 @@ describe('useFormSheetHeaderPadding', () => {
 			})
 			measuredHeaderHeight = height
 
-			expect(useFormSheetHeaderPadding()).toBe(height > 56 ? height : 56)
+			expect(useFormSheetHeaderPadding()).toBe(Math.max(height, 56))
 		}
 	)
 

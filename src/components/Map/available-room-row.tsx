@@ -33,15 +33,9 @@ export const AvailableRoomRow = ({
 			webIcon="Notebook"
 			title={room.room}
 			subtitle={
-				<>
-					{room.type}
-					{room.capacity !== undefined && (
-						<>
-							{' '}
-							({room.capacity} {t('pages.rooms.options.seats')})
-						</>
-					)}
-				</>
+				room.capacity !== undefined
+					? `${room.type} (${room.capacity} ${t('pages.rooms.options.seats')})`
+					: room.type
 			}
 			startTime={room.from}
 			endTime={room.until}

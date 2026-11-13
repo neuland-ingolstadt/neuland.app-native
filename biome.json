@@ -41,7 +41,13 @@
 				"noUnusedImports": "error",
 				"noUnusedVariables": "error",
 				"noNestedComponentDefinitions": "off",
-				"useUniqueElementIds": "off"
+				"useUniqueElementIds": "off",
+				"noReactNativeRawText": {
+					"level": "error",
+					"options": {
+						"skip": ["title"]
+					}
+				}
 			},
 			"style": {
 				"noParameterAssign": "error",
