@@ -437,14 +437,8 @@ function RootLayout(): React.JSX.Element {
 					name="(screens)/onboarding"
 					options={{
 						headerShown: false,
-
 						animation: 'none',
-						gestureEnabled: false,
-						...Platform.select({
-							ios: {
-								presentation: 'fullScreenModal'
-							}
-						})
+						gestureEnabled: false
 					}}
 				/>
 

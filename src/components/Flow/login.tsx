@@ -1,8 +1,4 @@
-import {
-	router,
-	useLocalSearchParams,
-	useNavigationContainerRef
-} from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,13 +44,11 @@ export default function Login(): React.JSX.Element {
 	const { fromOnboarding } = useLocalSearchParams<{
 		fromOnboarding: string
 	}>()
-	const rootNavigation = useNavigationContainerRef()
 
 	const navigateHome = (): void => {
 		if (fromOnboarding === 'true') {
-			rootNavigation.reset({
-				routes: [{ name: '(tabs)' }]
-			})
+			// resetRoot / incomplete reset is invalid in Expo Router SDK 58
+			router.replace('/')
 			return
 		}
 		router.dismiss()
