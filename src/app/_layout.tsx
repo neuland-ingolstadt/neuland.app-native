@@ -2,6 +2,7 @@ import CrashView from '@/components/Error/crash-view'
 import ScreenErrorBoundary from '@/components/Error/screen-error-boundary'
 import Provider from '@/components/provider'
 import { Splash } from '@/components/splash'
+import { useAppIntentsHandler } from '@/hooks/useAppIntentsHandler'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { usePresentationMode } from '@/hooks/usePresentationMode'
 import { useTransparentHeaderStyle } from '@/hooks/useTransparentHeader'
@@ -51,6 +52,7 @@ function RootLayout(): React.JSX.Element {
 
 	useQuickActionRouting()
 	useUniversalLinkHandler()
+	useAppIntentsHandler()
 
 	useEffect(() => {
 		const loadLanguage = async (): Promise<void> => {

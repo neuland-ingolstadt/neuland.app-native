@@ -1,0 +1,230 @@
+{
+	"sourceLanguage": "en",
+	"strings": {
+		"Open food in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open food in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne Essen in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Show the menu in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Show the menu in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Zeige den Speiseplan in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Open cafeteria in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open cafeteria in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne die Mensa in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Food": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Food"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Essen"
+					}
+				}
+			}
+		},
+		"Open timetable in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open timetable in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne den Stundenplan in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Open calendar in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open calendar in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne den Kalender in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Show my lectures in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Show my lectures in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Zeige meine Vorlesungen in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Timetable": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Timetable"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Stundenplan"
+					}
+				}
+			}
+		},
+		"Open map in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open map in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne die Karte in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Show campus map in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Show campus map in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Zeige den Campusplan in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Map": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Map"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Karte"
+					}
+				}
+			}
+		},
+		"Open grades in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Open grades in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Öffne Noten in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Show my grades in ${applicationName}": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Show my grades in ${applicationName}"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Zeige meine Noten in ${applicationName}"
+					}
+				}
+			}
+		},
+		"Grades": {
+			"localizations": {
+				"en": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Grades"
+					}
+				},
+				"de": {
+					"stringUnit": {
+						"state": "translated",
+						"value": "Noten"
+					}
+				}
+			}
+		}
+	},
+	"version": "1.0"
+}

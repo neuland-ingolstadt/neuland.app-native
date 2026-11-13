@@ -77,6 +77,7 @@
 		"dayjs": "^1.11.21",
 		"expo": "~58.0.25",
 		"expo-alternate-app-icons": "3.0.0",
+		"expo-app-intents": "~0.5.17",
 		"expo-application": "~58.1.2",
 		"expo-auth-session": "~58.0.18",
 		"expo-blur": "~58.0.6",

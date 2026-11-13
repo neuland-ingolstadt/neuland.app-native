@@ -3,7 +3,11 @@
 # Only install package versions published at least 3 days ago
 minimumReleaseAge = 259200
 # First-party npmjs packages — safe immediately after Trusted Publishing
-minimumReleaseAgeExcludes = ["@neuland-ingolstadt/backend-core-api"]
+# expo-app-intents: alpha SDK 58 package; releases often land inside the 3-day window
+minimumReleaseAgeExcludes = [
+	"@neuland-ingolstadt/backend-core-api",
+	"expo-app-intents"
+]
 
 [test]
 preload = ["./src/utils/tests/setup.ts"]
