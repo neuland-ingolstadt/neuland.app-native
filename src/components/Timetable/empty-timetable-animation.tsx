@@ -30,26 +30,27 @@ export const EmptyTimetableAnimation = ({
 
 	return (
 		<ScrollView
-			contentContainerClassName="flex-1 items-center justify-center w-full px-5 py-2.5 pb-bottom-safe"
+			contentContainerClassName="grow items-center justify-center w-full px-5 py-4 pb-bottom-safe"
 			showsVerticalScrollIndicator={false}
+			bounces={false}
 		>
 			<Animated.View
 				entering={FadeIn.duration(600).delay(300)}
-				className="w-full max-w-[480px] items-center py-4"
+				className="w-full max-w-[480px] items-center"
 			>
-				<View className="mb-10 items-center">
-					<TimetableAnimation size={130} />
+				<View className="mb-5 items-center">
+					<TimetableAnimation size={110} />
 				</View>
 
 				<View className="items-center w-full">
 					<Text
-						className="text-2xl font-bold mb-9 text-center"
+						className="text-2xl font-bold mb-5 text-center"
 						style={{ color: textColor }}
 					>
 						{isEmpty ? t('error.empty.title2') : t('error.empty.title')}
 					</Text>
 
-					<View className="w-full self-center mb-10 mt-2 gap-4 px-4">
+					<View className="w-full self-center mb-6 gap-3 px-4">
 						<View className="flex-row gap-5 items-center">
 							<PlatformIcon
 								ios={{
