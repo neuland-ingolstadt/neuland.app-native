@@ -68,7 +68,7 @@ const t = ((key: string, options?: { ns?: string; [key: string]: unknown }) => {
 		return `allergens:${options?.allergens}`
 	}
 	return key
-}) as TFunction<'food'>
+}) as unknown as TFunction<'food'>
 
 const makeMeal = (overrides: Partial<Meal> = {}): Meal =>
 	({
