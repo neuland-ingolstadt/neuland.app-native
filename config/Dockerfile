@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Copy necessary files and install dependencies
 COPY package.json bun.lock ./
 COPY patches patches 
-RUN bun install --ignore-scripts --freeze-lockfile
+RUN bun install --ignore-scripts --frozen-lockfile
 
 # Build stage: Use a Node.js image for the build process
 FROM node:26@sha256:1b84b89ada025e3b14543cbb837ffaa1c1b5273b841c5b94dd1a8f9c1d8cf7fe AS build
