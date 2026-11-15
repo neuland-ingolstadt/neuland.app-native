@@ -7,7 +7,7 @@ import Animated, {
 	useSharedValue,
 	withSpring
 } from 'react-native-reanimated'
-import type { FeedbackRating } from '@/api/neuland-core-api'
+import type { FeedbackRating } from '@/api/feedback-api'
 import { FEEDBACK_RATINGS } from '@/utils/feedback-utils'
 
 const RATING_EMOJIS: Record<FeedbackRating, string> = {

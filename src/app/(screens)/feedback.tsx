@@ -14,7 +14,7 @@ import {
 	type FeedbackCategory,
 	type FeedbackRating,
 	submitFeedback
-} from '@/api/neuland-core-api'
+} from '@/api/feedback-api'
 import CategoryChips from '@/components/Feedback/category-chips'
 import FeatureInterestList from '@/components/Feedback/feature-interest-list'
 import RatingScale from '@/components/Feedback/rating-scale'

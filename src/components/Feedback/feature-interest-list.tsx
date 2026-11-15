@@ -7,7 +7,7 @@ import type {
 	FeatureIdea,
 	FeatureInterest,
 	FeatureInterestAnswers
-} from '@/api/neuland-core-api'
+} from '@/api/feedback-api'
 import type { LucideIcon } from '@/components/Universal/icon'
 import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'

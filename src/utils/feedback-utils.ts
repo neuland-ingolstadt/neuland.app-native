@@ -3,7 +3,7 @@ import type {
 	FeatureInterest,
 	FeedbackCategory,
 	FeedbackRating
-} from '@/api/neuland-core-api'
+} from '@/api/feedback-api'
 
 export type FeedbackFollowUp = 'improvements' | 'highlights'
 

@@ -2,7 +2,7 @@ import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
-import type { FeedbackCategory } from '@/api/neuland-core-api'
+import type { FeedbackCategory } from '@/api/feedback-api'
 
 interface CategoryChipsProps {
 	categories: readonly FeedbackCategory[]
