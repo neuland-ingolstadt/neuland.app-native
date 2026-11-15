@@ -1,3 +1,4 @@
+import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -94,8 +95,9 @@ export default function Feedback(): React.JSX.Element {
 	const { t } = useTranslation('settings')
 	const markHandled = useFeedbackPromptStore((state) => state.markHandled)
 	const params = useLocalSearchParams<{ id?: string; rating?: string }>()
-	// A rating passed in from the home prompt has already been submitted.
+	// Home prompt passes rating after starting the rating PUT (upsert by id).
 	const savedRating = parseFeedbackRating(params.rating)
+	const origin = savedRating !== undefined ? 'home' : 'settings'
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
 	const [rating, setRating] = useState<FeedbackRating | undefined>(savedRating)
@@ -108,6 +110,7 @@ export default function Feedback(): React.JSX.Element {
 	const { mutate, isPending } = useMutation({
 		mutationFn: submitFeedback,
 		onSuccess: () => {
+			trackEvent('Feedback', { action: 'submit', origin })
 			markHandled(FEEDBACK_CAMPAIGN_ID)
 			toast({
 				title: t('feedback.success'),
@@ -119,6 +122,7 @@ export default function Feedback(): React.JSX.Element {
 			router.back()
 		},
 		onError: (error) => {
+			trackEvent('Feedback', { action: 'submitError', origin })
 			toast({
 				title: t('feedback.error'),
 				preset: 'error',
@@ -161,7 +165,7 @@ export default function Feedback(): React.JSX.Element {
 			id: submissionId,
 			campaign: FEEDBACK_CAMPAIGN_ID,
 			rating,
-			categories,
+			categories: categories.length > 0 ? categories : undefined,
 			comment: toOptionalText(comment),
 			featureInterest:
 				Object.keys(featureInterest).length > 0 ? featureInterest : undefined,

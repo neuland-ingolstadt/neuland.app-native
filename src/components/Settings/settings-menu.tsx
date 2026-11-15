@@ -172,6 +172,7 @@ export default function SettingsMenu(): React.JSX.Element {
 						web: 'MessageSquareHeart'
 					},
 					onPress: () => {
+						trackEvent('Feedback', { action: 'open', origin: 'settings' })
 						router.navigate('/feedback')
 					}
 				},

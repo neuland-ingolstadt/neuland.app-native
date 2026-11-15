@@ -4,10 +4,8 @@ import { appVersion } from '@/data/app-version'
 const FEEDBACK_API_BASE_URL =
 	process.env.EXPO_PUBLIC_FEEDBACK_API ?? 'https://survey.neuland.app'
 
-/** Shared write key — public in the client bundle by design; rate limits still apply. */
-const FEEDBACK_WRITE_KEY =
-	process.env.EXPO_PUBLIC_FEEDBACK_KEY ??
-	'abf190878a496571f1ec20db9e78ed1ba13f9aa4a2a74bc3'
+/** Write key from env — still embedded in the client bundle; rate limits apply. */
+const FEEDBACK_WRITE_KEY = process.env.EXPO_PUBLIC_FEEDBACK_KEY ?? ''
 
 export type FeedbackRating = 1 | 2 | 3 | 4 | 5
 

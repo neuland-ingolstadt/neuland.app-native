@@ -1,5 +1,6 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'burnt'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,15 +25,26 @@ export default function FeedbackPrompt({
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const markHandled = useFeedbackPromptStore((state) => state.markHandled)
 
-	const { mutate } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: submitFeedback,
+		onSuccess: () => {
+			markHandled(campaignId)
+		},
 		onError: (error) => {
-			// The details sheet re-submits the rating under the same id.
 			console.error('Error when sending feedback rating', error)
+			toast({
+				title: t('feedback.error'),
+				preset: 'error',
+				haptic: 'error',
+				duration: 2.5,
+				from: 'top'
+			})
 		}
 	})
 
 	const handleRate = (rating: FeedbackRating): void => {
+		if (isPending) return
+
 		const id = createFeedbackId()
 		trackEvent('Feedback', { action: 'rate', origin: 'home' })
 		mutate({ id, campaign: campaignId, rating })
@@ -40,7 +52,6 @@ export default function FeedbackPrompt({
 			pathname: '/feedback',
 			params: { id, rating: String(rating) }
 		})
-		markHandled(campaignId)
 	}
 
 	const handleDismiss = (): void => {
