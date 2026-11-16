@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
-import { useMemo, useState } from 'react'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useEffect, useMemo, useState } from 'react'
 import API from '@/api/thi-authenticated-api'
 import { NoSessionError } from '@/api/thi-session'
 import { useRefreshByUser } from '@/hooks/useRefreshByUser'
@@ -41,14 +41,37 @@ export interface RoomSearchState {
 	buildings: string[]
 }
 
+function resolveBuildingParam(
+	building: string | string[] | undefined
+): string | undefined {
+	const value = Array.isArray(building) ? building[0] : building
+	if (value == null || value.trim() === '') {
+		return undefined
+	}
+	return value
+}
+
 export function useRoomSearch(): RoomSearchState {
 	const router = useRouter()
+	const { building: buildingParam } = useLocalSearchParams<{
+		building?: string | string[]
+	}>()
 	const { startDate, wasModified } = getNextValidDate()
 
-	const [building, setBuilding] = useState(BUILDINGS_ALL)
+	const [building, setBuilding] = useState(
+		() => resolveBuildingParam(buildingParam) ?? BUILDINGS_ALL
+	)
 	const [date, setDate] = useState(() => formatISODate(startDate))
 	const [time, setTime] = useState(() => formatISOTime(startDate))
 	const [duration, setDuration] = useState(DURATION_PRESET)
+
+	useEffect(() => {
+		const resolved = resolveBuildingParam(buildingParam)
+		if (resolved != null) {
+			setBuilding(resolved)
+		}
+	}, [buildingParam])
+
 	const { data: mapOverlay } = useMapOverlayQuery()
 	const buildings = useMemo(
 		() =>
