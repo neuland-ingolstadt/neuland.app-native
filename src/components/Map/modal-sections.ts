@@ -15,11 +15,13 @@ import { formatCampusLocation } from '@/utils/map-constants'
  * Formats the content of the room details section
  * @param {RoomData} roomData - Data for the room
  * @param {boolean} isGuest - Whether the current user is a guest
+ * @param {string} [primaryColor] - Accent color for pressable rows
  * @returns {FormListSections[]}
  * */
 export const modalSection = (
 	roomData: RoomData,
-	isGuest: boolean
+	isGuest: boolean,
+	primaryColor?: string
 ): FormListSections[] => {
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 
@@ -163,6 +165,7 @@ export const modalSection = (
 							? {}
 							: {
 									testID: 'building-free-rooms',
+									textColor: primaryColor,
 									onPress: () => {
 										router.navigate({
 											pathname: '/room-search',

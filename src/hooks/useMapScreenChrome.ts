@@ -96,7 +96,8 @@ export function useMapScreenChrome({
 		hideSearchSheet,
 		restoreSearchSheet,
 		handlePresentModalPress,
-		notificationColor
+		notificationColor,
+		primaryColor
 	})
 
 	const {
