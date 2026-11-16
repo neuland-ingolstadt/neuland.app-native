@@ -1,3 +1,4 @@
+import { router } from 'expo-router'
 import { t } from 'i18next'
 import i18n from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
@@ -157,7 +158,18 @@ export const modalSection = (
 						}),
 						value:
 							occupancies.available.toString() ??
-							t('misc.unknown', { ns: 'common' })
+							t('misc.unknown', { ns: 'common' }),
+						...(isGuest
+							? {}
+							: {
+									testID: 'building-free-rooms',
+									onPress: () => {
+										router.navigate({
+											pathname: '/room-search',
+											params: { building: roomData.title }
+										})
+									}
+								})
 					},
 					{
 						title: t('pages.map.details.building.floors', {
