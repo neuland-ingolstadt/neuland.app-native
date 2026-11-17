@@ -16,7 +16,7 @@ env:
   EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
   EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
   EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
-  EXPO_PUBLIC_NEULAND_CORE_API: https://core.api.neuland.app
+  EXPO_PUBLIC_NEULAND_CORE_API: https://api.neuland.app/core/v1
   EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
   EXPO_PUBLIC_FEEDBACK_API: https://survey.neuland.app
   EXPO_PUBLIC_FEEDBACK_KEY: ${{ secrets.EXPO_PUBLIC_FEEDBACK_KEY }}
@@ -50,7 +50,7 @@ jobs:
       - name: Create preview
         # Publishes to an EAS branch named after the PR — isolated from production.
         # Requires a dev client build; does not OTA-update App Store / Play Store users.
-        uses: expo/expo-github-action/preview@9da89d3617bb88139671bad31b09c65714c2ee06 # v9
+        uses: expo/expo-github-action/preview@5273c2136bd09c2a341fe3340d3e767ce5a13015 # 9.0.2
         with:
           command: eas update --environment preview --auto --branch ${{ github.event.pull_request.head.ref }}
 

@@ -13,7 +13,7 @@ export type RoomReportResponse = components['schemas']['RoomReportResponse']
 export type Sports = components['schemas']['Sports']
 
 const CORE_API_BASE_URL =
-	process.env.EXPO_PUBLIC_NEULAND_CORE_API ?? 'https://core.api.neuland.app'
+	process.env.EXPO_PUBLIC_NEULAND_CORE_API ?? 'https://api.neuland.app/core/v1'
 
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 

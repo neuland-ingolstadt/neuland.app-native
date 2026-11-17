@@ -33,6 +33,112 @@ import type { GroupedSportsEvents } from '@/utils/events-utils'
 import { ServiceStatus } from '@/utils/gatus-status'
 import { EmptyEventsAnimation } from './empty-events-animation'
 
+interface SportsWeekdayProps {
+	title: Lowercase<WeekdayEnum>
+	data: Sports[]
+}
+
+function SportsWeekday({ title, data }: SportsWeekdayProps): React.JSX.Element {
+	const { t } = useTranslation('common')
+	const [collapsed, setCollapsed] = useState(false)
+
+	return (
+		<View className="mb-2.5">
+			<Pressable
+				onPress={() => {
+					setCollapsed(!collapsed)
+				}}
+				style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+				hitSlop={{ top: 6, bottom: 6 }}
+			>
+				<View className="flex-row items-center justify-between pb-2.5">
+					<Text className="text-text text-base font-semibold pt-2.5">
+						{t(`dates.weekdays.${title}`)}
+					</Text>
+					<PlatformIcon
+						ios={{
+							name: collapsed ? 'chevron.down' : 'chevron.up',
+							size: 13,
+							weight: 'semibold'
+						}}
+						android={{
+							name: collapsed ? 'expand_more' : 'expand_less',
+							size: 20
+						}}
+						web={{
+							name: collapsed ? 'ChevronDown' : 'ChevronUp',
+							size: 20
+						}}
+						style={{ alignSelf: 'flex-end', marginRight: 4 }}
+					/>
+				</View>
+			</Pressable>
+			<Collapsible collapsed={collapsed}>
+				<View className="rounded-md overflow-hidden">
+					{data.map((event) => (
+						<View key={event.id} className="mb-2">
+							<SportsRow event={event} />
+						</View>
+					))}
+				</View>
+			</Collapsible>
+		</View>
+	)
+}
+
+interface EventListProps {
+	data: GroupedSportsEvents
+}
+
+function EventList({ data }: EventListProps): React.JSX.Element {
+	return (
+		<View>
+			{data.map((section) => (
+				<SportsWeekday
+					title={section.title.toLowerCase() as Lowercase<WeekdayEnum>}
+					data={section.data}
+					key={section.title}
+				/>
+			))}
+		</View>
+	)
+}
+
+interface LocationButtonProps {
+	location: SportsCampusLabel
+	selected: boolean
+	onSelect: (location: SportsCampusLabel) => void
+}
+
+function LocationButton({
+	location,
+	selected,
+	onSelect
+}: LocationButtonProps): React.JSX.Element {
+	return (
+		<Pressable
+			className="items-center bg-card border-hairline border-border rounded-md justify-center p-2 px-4"
+			onPress={() => {
+				onSelect(location)
+				if (Platform.OS === 'ios') {
+					void selectionAsync()
+				}
+			}}
+		>
+			<View className="items-center relative">
+				<Text className="text-transparent font-semibold">{location}</Text>
+				<Text
+					className={`absolute top-0 left-0 right-0 text-center ${
+						selected ? 'text-primary font-semibold' : 'text-text'
+					}`}
+				>
+					{location}
+				</Text>
+			</View>
+		</Pressable>
+	)
+}
+
 export default function ClSportsPage({
 	sportsResult
 }: {
@@ -71,108 +177,6 @@ export default function ClSportsPage({
 		refetchByUser: refetchByUserSports
 	} = useRefreshByUser(sportsResult.refetch)
 	const scrollY = new Animated.Value(0)
-
-	const EventList = ({
-		data
-	}: {
-		data: GroupedSportsEvents
-	}): React.JSX.Element => {
-		return (
-			<View>
-				{data.map((section) => (
-					<SportsWeekday
-						title={section.title.toLowerCase() as Lowercase<WeekdayEnum>}
-						data={section.data}
-						key={section.title}
-					/>
-				))}
-			</View>
-		)
-	}
-
-	const SportsWeekday = ({
-		title,
-		data
-	}: {
-		title: Lowercase<WeekdayEnum>
-		data: Sports[]
-	}): React.JSX.Element => {
-		const [collapsed, setCollapsed] = useState(false)
-
-		return (
-			<View className="mb-2.5">
-				<Pressable
-					onPress={() => {
-						setCollapsed(!collapsed)
-					}}
-					style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
-					hitSlop={{ top: 6, bottom: 6 }}
-				>
-					<View className="flex-row items-center justify-between pb-2.5">
-						<Text className="text-text text-base font-semibold pt-2.5">
-							{t(`dates.weekdays.${title}`)}
-						</Text>
-						<PlatformIcon
-							ios={{
-								name: collapsed ? 'chevron.down' : 'chevron.up',
-								size: 13,
-								weight: 'semibold'
-							}}
-							android={{
-								name: collapsed ? 'expand_more' : 'expand_less',
-								size: 20
-							}}
-							web={{
-								name: collapsed ? 'ChevronDown' : 'ChevronUp',
-								size: 20
-							}}
-							style={{ alignSelf: 'flex-end', marginRight: 4 }}
-						/>
-					</View>
-				</Pressable>
-				<Collapsible collapsed={collapsed}>
-					<View className="rounded-md overflow-hidden">
-						{data.map((event) => (
-							<View key={event.id} className="mb-2">
-								<SportsRow event={event} />
-							</View>
-						))}
-					</View>
-				</Collapsible>
-			</View>
-		)
-	}
-
-	const LocationButton = ({
-		location
-	}: {
-		location: SportsCampusLabel
-	}): React.JSX.Element => {
-		const isSelected = selectedLocation === location
-
-		return (
-			<Pressable
-				className="items-center bg-card border-hairline border-border rounded-md justify-center p-2 px-4"
-				onPress={() => {
-					setSelectedLocation(location)
-					if (Platform.OS === 'ios') {
-						void selectionAsync()
-					}
-				}}
-			>
-				<View className="items-center relative">
-					<Text className="text-transparent font-semibold">{location}</Text>
-					<Text
-						className={`absolute top-0 left-0 right-0 text-center ${
-							isSelected ? 'text-primary font-semibold' : 'text-text'
-						}`}
-					>
-						{location}
-					</Text>
-				</View>
-			</Pressable>
-		)
-	}
 
 	return (
 		<ScrollView
@@ -219,7 +223,12 @@ export default function ClSportsPage({
 					</Text>
 					<View className="flex-row items-center gap-2 pb-1 pt-2">
 						{SPORTS_CAMPUS_LABELS.map((location) => (
-							<LocationButton location={location} key={location} />
+							<LocationButton
+								location={location}
+								key={location}
+								selected={selectedLocation === location}
+								onSelect={setSelectedLocation}
+							/>
 						))}
 					</View>
 					<View className="rounded-md">

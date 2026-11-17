@@ -1,0 +1,16 @@
+/* App Intent titles, descriptions, and dialogs (German) */
+"Open Food" = "Essen öffnen";
+"Shows today's cafeteria menu." = "Zeigt den heutigen Speiseplan.";
+"Opening Food." = "Öffne Essen.";
+
+"Open Timetable" = "Stundenplan öffnen";
+"Shows your lecture timetable." = "Zeigt deinen Vorlesungsplan.";
+"Opening Timetable." = "Öffne Stundenplan.";
+
+"Open Map" = "Karte öffnen";
+"Shows the campus map." = "Zeigt den Campusplan.";
+"Opening Map." = "Öffne Karte.";
+
+"Open Grades" = "Noten öffnen";
+"Shows your exam grades." = "Zeigt deine Prüfungsnoten.";
+"Opening Grades." = "Öffne Noten.";

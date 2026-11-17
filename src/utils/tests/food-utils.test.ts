@@ -331,7 +331,7 @@ describe('food-utils', () => {
 				key === 'details.share.message'
 					? `share:${options?.meal}:${options?.price}:${options?.location}:${options?.id}`
 					: key
-		} as i18n
+		} as unknown as i18n
 
 		foodUtils.shareMeal(meal, i18nMock, 'student')
 
@@ -364,7 +364,7 @@ describe('food-utils', () => {
 				key === 'details.share.message'
 					? `native:${options?.meal}:${options?.id}`
 					: key
-		} as i18n
+		} as unknown as i18n
 
 		foodUtils.shareMeal(meal, i18nMock, 'guest')
 

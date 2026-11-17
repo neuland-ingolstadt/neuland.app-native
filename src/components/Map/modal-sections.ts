@@ -1,3 +1,4 @@
+import { router } from 'expo-router'
 import { t } from 'i18next'
 import i18n from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
@@ -14,11 +15,13 @@ import { formatCampusLocation } from '@/utils/map-constants'
  * Formats the content of the room details section
  * @param {RoomData} roomData - Data for the room
  * @param {boolean} isGuest - Whether the current user is a guest
+ * @param {string} [primaryColor] - Accent color for pressable rows
  * @returns {FormListSections[]}
  * */
 export const modalSection = (
 	roomData: RoomData,
-	isGuest: boolean
+	isGuest: boolean,
+	primaryColor?: string
 ): FormListSections[] => {
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 
@@ -157,7 +160,19 @@ export const modalSection = (
 						}),
 						value:
 							occupancies.available.toString() ??
-							t('misc.unknown', { ns: 'common' })
+							t('misc.unknown', { ns: 'common' }),
+						...(isGuest
+							? {}
+							: {
+									testID: 'building-free-rooms',
+									textColor: primaryColor,
+									onPress: () => {
+										router.navigate({
+											pathname: '/room-search',
+											params: { building: roomData.title }
+										})
+									}
+								})
 					},
 					{
 						title: t('pages.map.details.building.floors', {

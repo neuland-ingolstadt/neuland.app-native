@@ -143,31 +143,41 @@ mock.module(`${SRC_ROOT}contexts/userKind.ts`, () => ({
 	useUserKind: () => ({ userKind: userKindState })
 }))
 
-function renderDashboardHookWithEffects() {
-	let dashboardValue: ReturnType<typeof dashboard.useDashboard> | undefined
+let dashboard: typeof import('@/contexts/dashboard')
+type DashboardValue = ReturnType<
+	typeof import('@/contexts/dashboard')['useDashboard']
+>
+let dashboardHookValue: DashboardValue | undefined
+
+function DashboardHookProbe(): null {
+	dashboardHookValue = dashboard.useDashboard()
+	return null
+}
+
+function renderDashboardHookWithEffects(): {
+	value: DashboardValue
+	unmount: () => void
+} {
+	dashboardHookValue = undefined
 	let root: Root | undefined
 	const container = document.createElement('div')
 
-	function TestComponent() {
-		dashboardValue = dashboard.useDashboard()
-		return null
-	}
-
 	act(() => {
 		root = createRoot(container)
-		root.render(React.createElement(TestComponent))
+		root.render(React.createElement(DashboardHookProbe))
 	})
 
 	act(() => {
-		root?.render(React.createElement(TestComponent))
+		root?.render(React.createElement(DashboardHookProbe))
 	})
 
-	if (dashboardValue == null) {
+	const value = dashboardHookValue
+	if (value == null) {
 		throw new Error('useDashboard did not return a value')
 	}
 
 	return {
-		value: dashboardValue,
+		value,
 		unmount: () => {
 			act(() => {
 				root?.unmount()
@@ -176,24 +186,17 @@ function renderDashboardHookWithEffects() {
 	}
 }
 
-function renderDashboardHook() {
-	let dashboardValue: ReturnType<typeof dashboard.useDashboard> | undefined
+function renderDashboardHook(): DashboardValue {
+	dashboardHookValue = undefined
+	renderToString(React.createElement(DashboardHookProbe))
 
-	function TestComponent() {
-		dashboardValue = dashboard.useDashboard()
-		return null
-	}
-
-	renderToString(React.createElement(TestComponent))
-
-	if (dashboardValue == null) {
+	const value = dashboardHookValue
+	if (value == null) {
 		throw new Error('useDashboard did not return a value')
 	}
 
-	return dashboardValue
+	return value
 }
-
-let dashboard: typeof import('@/contexts/dashboard')
 
 let happyDomWindow: HappyDomWindow | undefined
 

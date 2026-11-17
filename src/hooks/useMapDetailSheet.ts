@@ -4,6 +4,9 @@ import { Appearance } from 'react-native'
 import { DETAIL_HIDDEN, DETAIL_OPEN } from '@/components/Map/sheet-detents'
 import type { ClickedMapElement } from '@/types/map'
 
+/** Wait for the detail sheet close animation before restoring search. */
+const DETAIL_CLOSE_CLEANUP_MS = 320
+
 interface UseMapDetailSheetOptions {
 	clickedElement: ClickedMapElement | null
 	currentFloor: { floor: string; manual: boolean } | null
@@ -26,26 +29,51 @@ export function useMapDetailSheet({
 	const [detailIndex, setDetailIndex] = useState(DETAIL_HIDDEN)
 	const [cameraResetRequestId, setCameraResetRequestId] = useState(0)
 	const detailIndexRef = useRef(detailIndex)
+	const closeCleanupTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	)
+
+	const clearCloseCleanupTimeout = useCallback(() => {
+		if (closeCleanupTimeoutRef.current != null) {
+			clearTimeout(closeCleanupTimeoutRef.current)
+			closeCleanupTimeoutRef.current = null
+		}
+	}, [])
 
 	useEffect(() => {
 		detailIndexRef.current = detailIndex
 	}, [detailIndex])
+
+	useEffect(() => {
+		return () => {
+			clearCloseCleanupTimeout()
+		}
+	}, [clearCloseCleanupTimeout])
 
 	const handleDetailIndexChange = useCallback(
 		(next: number) => {
 			const wasOpen = detailIndexRef.current !== DETAIL_HIDDEN
 			detailIndexRef.current = next
 			setDetailIndex(next)
+			clearCloseCleanupTimeout()
 			if (wasOpen && next === DETAIL_HIDDEN) {
-				handleSheetChangesModal()
+				// Defer clearing selection / restoring the search sheet until
+				// after the close animation. Doing both in the same tick races
+				// two Reanimated sheet commits and can SIGABRT in ShadowTree.
+				closeCleanupTimeoutRef.current = setTimeout(() => {
+					closeCleanupTimeoutRef.current = null
+					handleSheetChangesModal()
+				}, DETAIL_CLOSE_CLEANUP_MS)
 			}
 		},
-		[handleSheetChangesModal]
+		[clearCloseCleanupTimeout, handleSheetChangesModal]
 	)
 
 	const presentDetailSheet = useCallback(() => {
+		clearCloseCleanupTimeout()
+		detailIndexRef.current = DETAIL_OPEN
 		setDetailIndex(DETAIL_OPEN)
-	}, [])
+	}, [clearCloseCleanupTimeout])
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {

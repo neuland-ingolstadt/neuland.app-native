@@ -2,6 +2,7 @@ import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, type SectionListData, Text, View } from 'react-native'
+import { CalendarFooter } from '@/components/Calendar/calendar-footer'
 import { CalendarRow } from '@/components/Rows/calendar-row'
 import type { Calendar } from '@/types/data'
 import { semesters } from '@/utils/calendar-utils'
@@ -45,7 +46,7 @@ export default function CalendarEventsPage({
 	handleLinkPress: () => void
 	selectedEventId?: string
 }): React.JSX.Element {
-	const { t, i18n } = useTranslation('common')
+	const { i18n } = useTranslation('common')
 	const sectionListRef = useRef<SectionList<Calendar, Section>>(null)
 	const [isReady, setIsReady] = useState(false)
 	const currentLang = i18n.language === 'de' ? 'de' : 'en'
@@ -82,20 +83,6 @@ export default function CalendarEventsPage({
 		}
 	}, [selectedEventId, isReady])
 
-	const CalendarFooter = (): React.JSX.Element => {
-		return (
-			<View className="my-1 pb-bottom-safe">
-				<Text className="text-label text-xs font-normal pb-[25px] text-justify">
-					{t('pages.calendar.footer.part1')}
-					<Text className="text-text font-semibold" onPress={handleLinkPress}>
-						{t('pages.calendar.footer.part2')}
-					</Text>
-					{t('pages.calendar.footer.part3')}
-				</Text>
-			</View>
-		)
-	}
-
 	return (
 		<View className="flex-1 w-full">
 			{semesters && semesters.length > 0 && (
@@ -112,7 +99,7 @@ export default function CalendarEventsPage({
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
 					stickySectionHeadersEnabled={true}
-					ListFooterComponent={<CalendarFooter />}
+					ListFooterComponent={<CalendarFooter onLinkPress={handleLinkPress} />}
 					getItemLayout={getItemLayout}
 					onLayout={() => setIsReady(true)}
 					initialNumToRender={10}

@@ -91,7 +91,10 @@ export default {
 		autolinkingModuleResolution: true,
 		reactCompiler: true,
 		tsconfigPaths: true,
-		typedRoutes: true
+		typedRoutes: true,
+		inlineModules: {
+			watchedDirectories: ['app-intents']
+		}
 	},
 	buildCacheProvider: {
 		plugin: '@eggl-js/expo-github-cache',
@@ -101,6 +104,7 @@ export default {
 		}
 	},
 	plugins: [
+		'expo-app-intents',
 		[
 			'expo-build-properties',
 			{

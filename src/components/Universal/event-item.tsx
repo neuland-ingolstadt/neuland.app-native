@@ -54,9 +54,9 @@ const EventItem = ({
 				{subtitle && (
 					<Text className="text-label text-sm mt-0.5 mb-1" numberOfLines={1}>
 						{subtitleTranslationKey && subtitleTranslationParams
-							? (t as (key: string, params?: Record<string, string>) => string)(
-									subtitleTranslationKey,
-									subtitleTranslationParams
+							? t(
+									subtitleTranslationKey as 'cards.events.by',
+									subtitleTranslationParams as { name: string }
 								)
 							: subtitle}
 					</Text>

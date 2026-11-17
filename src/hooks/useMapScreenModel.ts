@@ -26,6 +26,7 @@ interface UseMapScreenModelOptions {
 	restoreSearchSheet: () => void
 	handlePresentModalPress: () => void
 	notificationColor: string
+	primaryColor?: string
 }
 
 export interface MapScreenModel {
@@ -54,7 +55,8 @@ export function useMapScreenModel({
 	hideSearchSheet,
 	restoreSearchSheet,
 	handlePresentModalPress,
-	notificationColor
+	notificationColor,
+	primaryColor
 }: UseMapScreenModelOptions): MapScreenModel {
 	const { userKind, userFaculty } = use(UserKindContext)
 	const { t, i18n } = useTranslation('common')
@@ -159,7 +161,11 @@ export function useMapScreenModel({
 		]
 	})()
 
-	const baseSections = modalSection(roomData, userKind === USER_GUEST)
+	const baseSections = modalSection(
+		roomData,
+		userKind === USER_GUEST,
+		primaryColor
+	)
 	const allSections = [...lecturerSection, ...baseSections]
 
 	return {

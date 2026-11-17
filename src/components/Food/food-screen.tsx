@@ -139,7 +139,7 @@ function FoodScreen(): React.JSX.Element {
 		pagerViewRef.current?.setPage(index)
 	}, [])
 
-	const daysCount = data.length < 5 ? data.length : 5
+	const daysCount = Math.min(data.length, 5)
 	const scrollY = new Animated.Value(0)
 	const showAllergensBanner =
 		deferredAllergenSelection.length === 1 &&

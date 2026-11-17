@@ -1,5 +1,5 @@
 import { Platform } from 'react-native'
-import { type Detent, programmatic } from '@/components/Universal/bottom-sheet'
+import type { Detent } from '@/components/Universal/bottom-sheet'
 
 export const SEARCH_HIDDEN = 0
 export const SEARCH_PEEK = 1
@@ -30,7 +30,7 @@ export function getMapSearchDetents(height: number): Detent[] {
 		Platform.OS === 'ios' ? [0, 0.2, 0.39, 0.9] : [0, 0.1, 0.3, 0.92]
 	return fractions.map((fraction, index) => {
 		const value = fraction * windowHeight(height)
-		return index === SEARCH_HIDDEN ? programmatic(value) : value
+		return index === SEARCH_HIDDEN ? { value, programmatic: true } : value
 	})
 }
 

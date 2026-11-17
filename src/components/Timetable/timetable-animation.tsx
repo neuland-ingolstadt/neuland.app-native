@@ -179,10 +179,20 @@ const FloatingTimetableIcon = ({
 		}
 	})
 
+	const iconSize = size * 0.35
+
 	return (
 		<Animated.View
 			className="absolute items-center justify-center z-[2]"
-			style={[{ width: size * 0.35, height: size * 0.35 }, animatedStyle]}
+			style={[
+				{
+					width: iconSize,
+					height: iconSize,
+					top: size * 0.9 - iconSize / 2,
+					left: size - iconSize / 2
+				},
+				animatedStyle
+			]}
 		>
 			<PlatformIcon
 				ios={{ name: timetableIcon.ios, size: size * 0.23 }}
