@@ -44,12 +44,78 @@
 				"share": "Share the app",
 				"shareMessage": "Get Neuland Next for your phone! 🚀",
 				"shareMessageAndroid": "Get Neuland Next for your phone! 🚀\n\nhttps://neuland.app/get",
-				"download": "Download the app"
+				"download": "Download the app",
+				"feedback": "Give Feedback"
 			}
 		},
 		"copyright": "© {{year}} by Neuland Ingolstadt e.V.",
 		"infrastructureBy": "Infrastructure by",
 		"loadPersonalDataError": "Failed to load personal data"
+	},
+	"feedback": {
+		"intro": "Help us make Neuland Next better – it takes less than a minute.",
+		"rating": {
+			"title": "How do you like the app?",
+			"accessibilityLabel": "{{rating}} of 5: {{label}}",
+			"labels": {
+				"1": "Very bad",
+				"2": "Bad",
+				"3": "Okay",
+				"4": "Good",
+				"5": "Very good"
+			}
+		},
+		"ratingSaved": "Thanks, we got your rating! Want to tell us a bit more about why?",
+		"optional": "Optional",
+		"followUp": {
+			"improvements": "What's not working well?",
+			"highlights": "What do you like most?"
+		},
+		"categories": {
+			"bugs": "Bugs & crashes",
+			"performance": "Speed",
+			"login": "Login & data sync",
+			"usability": "Ease of use",
+			"design": "Design",
+			"missingFeature": "Missing features",
+			"timetable": "Timetable",
+			"food": "Food",
+			"grades": "Grades & exams",
+			"map": "Campus map"
+		},
+		"comment": {
+			"title": "What can we improve?",
+			"placeholder": "e.g. something that doesn't work or bugs you …",
+			"footer": "Please don't include personal data such as your name or student ID."
+		},
+		"features": {
+			"title": "How much would you like these features in the app?",
+			"accessibilityLabel": "{{feature}}: {{level}}",
+			"items": {
+				"digitalId": "ID card in the app",
+				"mensaPayment": "Pay in the cafeteria",
+				"librarySeats": "Book library seats",
+				"roomNavigation": "Navigation to rooms on the map"
+			},
+			"levels": {
+				"1": "Not at all",
+				"2": "Not really",
+				"3": "Somewhat",
+				"4": "Absolutely"
+			}
+		},
+		"missing": {
+			"title": "Is anything else missing from the app?",
+			"placeholder": "e.g. a feature you've wanted for a long time …"
+		},
+		"prompt": {
+			"message": "One tap is all it takes – it really helps us.",
+			"dismiss": "Dismiss survey"
+		},
+		"submit": "Send Feedback",
+		"submitHint": "Select a rating first.",
+		"success": "Thanks for your feedback!",
+		"error": "Feedback could not be sent"
 	},
 	"version": {
 		"formlist": {

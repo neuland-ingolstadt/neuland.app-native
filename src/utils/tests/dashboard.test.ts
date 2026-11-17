@@ -9,7 +9,7 @@ import type { FeatureFlagState } from '@/lib/feature-flags'
 const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 function createDefaultFeatureFlagState(): FeatureFlagState {
-	return { 'news-card': false }
+	return { 'news-card': false, 'feedback-prompt': false }
 }
 
 let shownDashboardEntriesState: string[] | undefined
@@ -309,6 +309,7 @@ describe('dashboard context', () => {
 			dashboard.isCardEnabled(
 				{ featureFlag: 'news-card' },
 				{
+					...createDefaultFeatureFlagState(),
 					'news-card': true
 				}
 			)
@@ -317,6 +318,7 @@ describe('dashboard context', () => {
 			dashboard.isCardEnabled(
 				{ featureFlag: 'news-card' },
 				{
+					...createDefaultFeatureFlagState(),
 					'news-card': false
 				}
 			)
@@ -474,7 +476,10 @@ describe('dashboard context', () => {
 			expect(savedWhileDisabled).not.toContain('news')
 			disabled.unmount()
 
-			featureFlagsState = { 'news-card': true }
+			featureFlagsState = {
+				...createDefaultFeatureFlagState(),
+				'news-card': true
+			}
 			const enabled = renderDashboardHookWithEffects()
 			const expected = [...savedWhileDisabled]
 			expected.splice(expected.indexOf('links') + 1, 0, 'news')
@@ -511,7 +516,10 @@ describe('dashboard context', () => {
 		).not.toContain('news')
 		disabled.unmount()
 
-		featureFlagsState = { 'news-card': true }
+		featureFlagsState = {
+			...createDefaultFeatureFlagState(),
+			'news-card': true
+		}
 		const enabled = renderDashboardHookWithEffects()
 		expect(enabled.value.shownDashboardEntries.map((card) => card.key)).toEqual(
 			savedOrder
@@ -525,7 +533,7 @@ describe('dashboard context', () => {
 		const merged = dashboard.mergeNewFlaggedCardsIntoDashboard(
 			customOrder,
 			USER_STUDENT,
-			{ 'news-card': true }
+			{ ...createDefaultFeatureFlagState(), 'news-card': true }
 		)
 
 		expect(merged).toEqual(['calendar', 'events', 'links', 'news'])
@@ -533,7 +541,7 @@ describe('dashboard context', () => {
 	})
 
 	it('getDefaultDashboardOrder - Should show enabled news only to students and employees', () => {
-		const flags = { 'news-card': true }
+		const flags = { ...createDefaultFeatureFlagState(), 'news-card': true }
 		for (const userKind of [USER_STUDENT, USER_EMPLOYEE]) {
 			expect(
 				dashboard.getDefaultDashboardOrder(userKind, flags).shown

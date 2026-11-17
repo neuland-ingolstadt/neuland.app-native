@@ -34,6 +34,8 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
+          EXPO_PUBLIC_FEEDBACK_API: https://survey.neuland.app
+          EXPO_PUBLIC_FEEDBACK_KEY: ${{ secrets.EXPO_PUBLIC_FEEDBACK_KEY }}
         run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Determine submission profile
