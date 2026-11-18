@@ -1,7 +1,7 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import type { FeedbackCategory } from '@/api/feedback-api'
 
 interface CategoryChipsProps {
@@ -29,7 +29,7 @@ const CategoryChips = ({
 						accessibilityRole="checkbox"
 						accessibilityState={{ checked: isSelected }}
 						onPress={() => {
-							void selectionAsync()
+							if (Platform.OS === 'ios') void selectionAsync()
 							onToggle(category)
 						}}
 						className={`px-3.5 py-2 rounded-infinite border active:opacity-70 ${

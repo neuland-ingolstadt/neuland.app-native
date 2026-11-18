@@ -6,7 +6,14 @@ import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
+import {
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	TextInput,
+	View
+} from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import {
@@ -105,7 +112,7 @@ export default function Feedback(): React.JSX.Element {
 					? t('feedback.successUnlock')
 					: t('feedback.success'),
 				preset: 'done',
-				haptic: 'success',
+				...(Platform.OS === 'ios' ? { haptic: 'success' as const } : {}),
 				duration: 2.5,
 				from: 'top'
 			})
@@ -116,7 +123,7 @@ export default function Feedback(): React.JSX.Element {
 			toast({
 				title: t('feedback.error'),
 				preset: 'error',
-				haptic: 'error',
+				...(Platform.OS === 'ios' ? { haptic: 'error' as const } : {}),
 				duration: 2.5,
 				from: 'top'
 			})
@@ -187,7 +194,7 @@ export default function Feedback(): React.JSX.Element {
 	const primaryLabel = isLastStep ? t('feedback.submit') : t('feedback.next')
 
 	const handlePrimary = (): void => {
-		void selectionAsync()
+		if (Platform.OS === 'ios') void selectionAsync()
 		if (isLastStep) {
 			handleSubmit()
 			return
@@ -328,7 +335,7 @@ export default function Feedback(): React.JSX.Element {
 						accessibilityRole="button"
 						accessibilityLabel={t('feedback.back')}
 						onPress={() => {
-							void selectionAsync()
+							if (Platform.OS === 'ios') void selectionAsync()
 							goBack()
 						}}
 						className="h-12 px-5 items-center justify-center rounded-base bg-card-button active:opacity-70"
