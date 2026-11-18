@@ -56,7 +56,7 @@
 		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
 		"back": "Zurück",
 		"next": "Nächste Frage",
-		"rewardTeaser": "Schaltet die Akzentfarbe Orange frei.",
+		"rewardTeaser": "Schaltet eine exklusive Akzentfarbe frei.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -115,12 +115,12 @@
 			}
 		},
 		"prompt": {
-			"reward": "Schaltet die Akzentfarbe Orange frei.",
+			"reward": "Schaltet eine exklusive Akzentfarbe frei.",
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
 		"success": "Danke für dein Feedback!",
-		"successUnlock": "Danke – Orange ist freigeschaltet.",
+		"successUnlock": "Danke – exklusive Akzentfarbe freigeschaltet.",
 		"error": "Feedback konnte nicht gesendet werden"
 	},
 	"about": {
@@ -246,11 +246,11 @@
 			"green": "Grün",
 			"purple": "Lila",
 			"orange": "Orange",
-			"footer": "Grün und Lila für Mitglieder. Orange über Feedback.",
+			"footer": "Grün und Lila für Mitglieder. Eine weitere Farbe über Feedback.",
 			"lockedMember": "Mitglied",
 			"lockedFeedback": "Feedback",
 			"lockedMemberToast": "Grün und Lila für Neuland-Mitglieder.",
-			"lockedFeedbackToast": "Orange gibt’s über die Feedback-Umfrage."
+			"lockedFeedbackToast": "Diese Farbe schaltest du über die Feedback-Umfrage frei."
 		}
 	},
 	"dashboard": {
