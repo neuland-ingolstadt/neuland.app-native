@@ -57,7 +57,7 @@
 		"back": "Back",
 		"next": "Continue",
 		"skip": "Skip",
-		"rewardTeaser": "As a thank-you, you'll unlock the orange accent color.",
+		"rewardTeaser": "Unlocks the orange accent color.",
 		"rating": {
 			"title": "How do you like the app?",
 			"accessibilityLabel": "{{rating}} of 5: {{label}}",
@@ -117,12 +117,12 @@
 		},
 		"prompt": {
 			"message": "One tap is all it takes – it really helps us.",
-			"reward": "Thank-you reward: unlock the orange accent color.",
+			"reward": "Unlocks the orange accent color.",
 			"dismiss": "Dismiss survey"
 		},
 		"submit": "Send Feedback",
 		"success": "Thanks for your feedback!",
-		"successUnlock": "Thanks! Orange accent color unlocked.",
+		"successUnlock": "Thanks – orange is unlocked.",
 		"error": "Feedback could not be sent"
 	},
 	"version": {
@@ -283,11 +283,11 @@
 			"green": "Green",
 			"purple": "Purple",
 			"orange": "Orange",
-			"footer": "Green and purple are for Neuland members. Orange unlocks via feedback – similar to secret app icons.",
+			"footer": "Green and purple for members. Orange via feedback.",
 			"lockedMember": "Member",
 			"lockedFeedback": "Feedback",
-			"lockedMemberToast": "Green and purple are for Neuland members.",
-			"lockedFeedbackToast": "Unlock orange by completing the feedback survey."
+			"lockedMemberToast": "Green and purple for Neuland members.",
+			"lockedFeedbackToast": "Orange is available via the feedback survey."
 		}
 	},
 	"dashboard": {
