@@ -39,7 +39,7 @@ ENV NODE_ENV=production
 RUN npm run licences:bundle && node --experimental-strip-types config/sync-maplibre-worker.ts && npx expo export -p web -c
 
 # Final stage: Serve static files using NGINX
-FROM nginx:alpine@sha256:fed7e14be83cbd2661a75cdc5b872d936cf155d46c327084d30b8df19ae88d72 AS final
+FROM nginx:1.31.9-alpine AS final
 
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
