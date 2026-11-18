@@ -55,8 +55,7 @@
 	"feedback": {
 		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
 		"back": "Zurück",
-		"next": "Weiter",
-		"skip": "Überspringen",
+		"next": "Nächste Frage",
 		"rewardTeaser": "Schaltet die Akzentfarbe Orange frei.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",

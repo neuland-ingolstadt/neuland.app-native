@@ -55,8 +55,7 @@
 	"feedback": {
 		"intro": "A few taps are enough – it takes under a minute.",
 		"back": "Back",
-		"next": "Continue",
-		"skip": "Skip",
+		"next": "Next question",
 		"rewardTeaser": "Unlocks the orange accent color.",
 		"rating": {
 			"title": "How do you like the app?",

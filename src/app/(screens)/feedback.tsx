@@ -184,14 +184,7 @@ export default function Feedback(): React.JSX.Element {
 		}, AUTO_ADVANCE_MS)
 	}
 
-	const primaryLabel = (() => {
-		if (isLastStep) return t('feedback.submit')
-		if (step.kind === 'categories' && categories.length === 0) {
-			return t('feedback.skip')
-		}
-		if (step.kind === 'feature') return t('feedback.skip')
-		return t('feedback.next')
-	})()
+	const primaryLabel = isLastStep ? t('feedback.submit') : t('feedback.next')
 
 	const handlePrimary = (): void => {
 		void selectionAsync()
@@ -343,9 +336,9 @@ export default function Feedback(): React.JSX.Element {
 							void selectionAsync()
 							goBack()
 						}}
-						className="h-12 px-5 items-center justify-center rounded-base bg-card border-hairline border-border active:opacity-70"
+						className="h-12 px-5 items-center justify-center rounded-base bg-card-button active:opacity-70"
 					>
-						<Text className="text-text text-[16px] font-medium">
+						<Text className="text-label-secondary text-[16px] font-medium">
 							{t('feedback.back')}
 						</Text>
 					</Pressable>
