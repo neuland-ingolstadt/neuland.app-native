@@ -53,7 +53,11 @@
 		"loadPersonalDataError": "Failed to load personal data"
 	},
 	"feedback": {
-		"intro": "Help us make Neuland Next better – it takes less than a minute.",
+		"intro": "A few taps are enough – it takes under a minute.",
+		"progress": "Step {{current}} of {{total}}",
+		"back": "Back",
+		"next": "Continue",
+		"skip": "Skip",
 		"rating": {
 			"title": "How do you like the app?",
 			"accessibilityLabel": "{{rating}} of 5: {{label}}",
@@ -65,12 +69,13 @@
 				"5": "Very good"
 			}
 		},
-		"ratingSaved": "Thanks, we got your rating! Want to tell us a bit more about why?",
+		"ratingSaved": "Thanks for your rating! Want to tell us a bit more?",
 		"optional": "Optional",
 		"followUp": {
 			"improvements": "What's not working well?",
 			"highlights": "What do you like most?"
 		},
+		"categoriesHint": "Tap as many as you like – or just continue.",
 		"categories": {
 			"bugs": "Bugs & crashes",
 			"performance": "Speed",
@@ -84,12 +89,14 @@
 			"map": "Campus map"
 		},
 		"comment": {
-			"title": "What can we improve?",
-			"placeholder": "e.g. something that doesn't work or bugs you …",
+			"title": "Anything else on your mind?",
+			"hint": "Wishes, bugs, praise – all welcome. Skipping is fine too.",
+			"placeholder": "e.g. something that bugs you or that you'd love to see …",
 			"footer": "Please don't include personal data such as your name."
 		},
 		"features": {
 			"title": "How much would you like these features in the app?",
+			"prompt": "How much would you like this?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "ID card in the app",
@@ -108,16 +115,11 @@
 				"4": "Absolutely"
 			}
 		},
-		"missing": {
-			"title": "Is anything else missing from the app?",
-			"placeholder": "e.g. a feature you've wanted for a long time …"
-		},
 		"prompt": {
 			"message": "One tap is all it takes – it really helps us.",
 			"dismiss": "Dismiss survey"
 		},
 		"submit": "Send Feedback",
-		"submitHint": "Select a rating first.",
 		"success": "Thanks for your feedback!",
 		"error": "Feedback could not be sent"
 	},

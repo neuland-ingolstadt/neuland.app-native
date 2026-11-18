@@ -1,20 +1,16 @@
 import { selectionAsync } from 'expo-haptics'
-import React from 'react'
+import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import type {
-	FeatureIdea,
-	FeatureInterest,
-	FeatureInterestAnswers
-} from '@/api/feedback-api'
+import type { FeatureIdea, FeatureInterest } from '@/api/feedback-api'
 import type { LucideIcon } from '@/components/Universal/icon'
 import PlatformIcon from '@/components/Universal/icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import { FEATURE_INTEREST_LEVELS } from '@/utils/feedback-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
-const FEATURE_ICONS: Record<
+export const FEATURE_ICONS: Record<
 	FeatureIdea,
 	{ ios: string; android: MaterialIcon; web: LucideIcon }
 > = {
@@ -44,41 +40,47 @@ const FEATURE_ICONS: Record<
 	mensaRatings: { ios: 'star', android: 'star', web: 'Star' }
 }
 
-interface FeatureInterestRowProps {
+interface FeatureInterestStepProps {
 	idea: FeatureIdea
 	value?: FeatureInterest
 	onChange: (idea: FeatureIdea, level: FeatureInterest) => void
 }
 
-const FeatureInterestRow = ({
+const FeatureInterestStep = ({
 	idea,
 	value,
 	onChange
-}: FeatureInterestRowProps): React.JSX.Element => {
+}: FeatureInterestStepProps): React.JSX.Element => {
 	const { t } = useTranslation('settings')
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const icon = FEATURE_ICONS[idea]
 	const featureName = t(`feedback.features.items.${idea}` as const)
 
 	return (
-		<View className="gap-2.5 py-3">
-			<View className="flex-row items-center gap-2.5">
-				<View className="w-6 items-center">
+		<View className="gap-6">
+			<View className="items-center gap-4 pt-2">
+				<View className="w-16 h-16 rounded-full items-center justify-center bg-primary-background">
 					<PlatformIcon
-						ios={{ name: icon.ios, size: 16 }}
-						android={{ name: icon.android, size: 20 }}
-						web={{ name: icon.web, size: 18 }}
+						ios={{ name: icon.ios, size: 28 }}
+						android={{ name: icon.android, size: 30 }}
+						web={{ name: icon.web, size: 28 }}
 						style={{ color: primaryColor }}
 					/>
 				</View>
-				<Text className="text-text text-[15px] font-medium flex-1">
-					{featureName}
-				</Text>
+				<View className="items-center gap-1.5 px-2">
+					<Text className="text-label-secondary text-[13px] font-medium text-center">
+						{t('feedback.features.prompt')}
+					</Text>
+					<Text className="text-text text-[22px] font-semibold text-center leading-7">
+						{featureName}
+					</Text>
+				</View>
 			</View>
+
 			<View
 				accessibilityRole="radiogroup"
 				accessibilityLabel={featureName}
-				className="flex-row gap-1.5"
+				className="gap-2"
 			>
 				{FEATURE_INTEREST_LEVELS.map((level) => {
 					const isSelected = value === level
@@ -98,17 +100,14 @@ const FeatureInterestRow = ({
 								void selectionAsync()
 								onChange(idea, level)
 							}}
-							className={`flex-1 h-9 px-1 items-center justify-center rounded-sm border active:opacity-70 ${
+							className={`h-12 px-4 items-center justify-center rounded-base border active:opacity-70 ${
 								isSelected
 									? 'bg-primary-background border-primary'
 									: 'bg-card-button border-transparent'
 							}`}
 						>
 							<Text
-								numberOfLines={1}
-								adjustsFontSizeToFit
-								minimumFontScale={0.8}
-								className={`text-[13px] ${
+								className={`text-[16px] ${
 									isSelected ? 'text-primary font-semibold' : 'text-text'
 								}`}
 							>
@@ -122,31 +121,4 @@ const FeatureInterestRow = ({
 	)
 }
 
-interface FeatureInterestListProps {
-	ideas: readonly FeatureIdea[]
-	value: FeatureInterestAnswers
-	onChange: (idea: FeatureIdea, level: FeatureInterest) => void
-}
-
-const FeatureInterestList = ({
-	ideas,
-	value,
-	onChange
-}: FeatureInterestListProps): React.JSX.Element => {
-	return (
-		<View>
-			{ideas.map((idea, index) => (
-				<React.Fragment key={idea}>
-					{index > 0 && <View className="h-hairline bg-border" />}
-					<FeatureInterestRow
-						idea={idea}
-						value={value[idea]}
-						onChange={onChange}
-					/>
-				</React.Fragment>
-			))}
-		</View>
-	)
-}
-
-export default FeatureInterestList
+export default FeatureInterestStep

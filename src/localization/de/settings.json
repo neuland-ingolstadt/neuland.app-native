@@ -53,7 +53,11 @@
 		"loadPersonalDataError": "Persönliche Daten konnten nicht geladen werden"
 	},
 	"feedback": {
-		"intro": "Hilf uns, Neuland Next besser zu machen – das dauert weniger als eine Minute.",
+		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
+		"progress": "Schritt {{current}} von {{total}}",
+		"back": "Zurück",
+		"next": "Weiter",
+		"skip": "Überspringen",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -65,12 +69,13 @@
 				"5": "Sehr gut"
 			}
 		},
-		"ratingSaved": "Danke, deine Bewertung ist angekommen! Magst du uns noch kurz verraten, warum?",
+		"ratingSaved": "Danke für deine Bewertung! Magst du uns noch kurz mehr verraten?",
 		"optional": "Optional",
 		"followUp": {
 			"improvements": "Wo hakt es?",
 			"highlights": "Was gefällt dir am besten?"
 		},
+		"categoriesHint": "Du kannst mehrere Bereiche tippen – oder einfach weiter.",
 		"categories": {
 			"bugs": "Fehler & Abstürze",
 			"performance": "Geschwindigkeit",
@@ -84,12 +89,14 @@
 			"map": "Campuskarte"
 		},
 		"comment": {
-			"title": "Was können wir verbessern?",
-			"placeholder": "z. B. etwas, das nicht funktioniert oder dich stört …",
+			"title": "Noch etwas auf dem Herzen?",
+			"hint": "Wünsche, Bugs, Lob – alles hilft. Leer lassen geht auch.",
+			"placeholder": "z. B. etwas, das dich stört oder das du dir wünschst …",
 			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen an."
 		},
 		"features": {
 			"title": "Wie gern hättest du diese Funktionen in der App?",
+			"prompt": "Wie gern hättest du das?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "Ausweis in der App",
@@ -108,16 +115,11 @@
 				"4": "Unbedingt"
 			}
 		},
-		"missing": {
-			"title": "Fehlt dir sonst noch etwas in der App?",
-			"placeholder": "z. B. eine Funktion, die du dir schon lange wünschst …"
-		},
 		"prompt": {
 			"message": "Ein Tipp genügt – du hilfst uns damit sehr.",
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
-		"submitHint": "Wähle zuerst eine Bewertung aus.",
 		"success": "Danke für dein Feedback!",
 		"error": "Feedback konnte nicht gesendet werden"
 	},
