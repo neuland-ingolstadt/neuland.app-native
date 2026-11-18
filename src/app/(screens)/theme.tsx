@@ -52,12 +52,7 @@ export default function Theme(): React.JSX.Element {
 			return
 		}
 
-		toast({
-			title: t('theme.accent.lockedMemberToast'),
-			preset: 'none',
-			duration: 2.5,
-			from: 'top'
-		})
+		router.navigate('/member')
 	}
 
 	const elements = [
