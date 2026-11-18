@@ -1,4 +1,4 @@
-import { selectionAsync } from 'expo-haptics'
+import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -29,7 +29,7 @@ const CategoryChips = ({
 						accessibilityRole="checkbox"
 						accessibilityState={{ checked: isSelected }}
 						onPress={() => {
-							void selectionAsync()
+							void impactAsync(ImpactFeedbackStyle.Light)
 							onToggle(category)
 						}}
 						className={`px-3.5 py-2 rounded-infinite border active:opacity-70 ${

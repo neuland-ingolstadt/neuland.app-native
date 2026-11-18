@@ -1,4 +1,4 @@
-import { selectionAsync } from 'expo-haptics'
+import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -50,7 +50,7 @@ const RatingOption = ({
 				label: t(`feedback.rating.labels.${rating}` as const)
 			})}
 			onPress={() => {
-				void selectionAsync()
+				void impactAsync(ImpactFeedbackStyle.Light)
 				onSelect(rating)
 			}}
 			onPressIn={() => {

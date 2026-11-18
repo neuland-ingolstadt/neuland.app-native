@@ -94,7 +94,7 @@
 		},
 		"features": {
 			"title": "Wie gern hättest du diese Funktionen in der App?",
-			"prompt": "Wie gern hättest du das?",
+			"prompt": "Wie gern hättest du das in der App?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "Ausweis in der App",

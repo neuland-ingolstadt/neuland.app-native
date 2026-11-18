@@ -1,19 +1,18 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
-import { selectionAsync } from 'expo-haptics'
+import {
+	ImpactFeedbackStyle,
+	impactAsync,
+	NotificationFeedbackType,
+	notificationAsync,
+	selectionAsync
+} from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	ActivityIndicator,
-	Pressable,
-	ScrollView,
-	Text,
-	TextInput,
-	View
-} from 'react-native'
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import {
@@ -42,8 +41,18 @@ import {
 	shuffled,
 	toOptionalText
 } from '@/utils/feedback-utils'
-import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
+
+function playSubmitRumble(): void {
+	void notificationAsync(NotificationFeedbackType.Success)
+	void impactAsync(ImpactFeedbackStyle.Medium)
+	setTimeout(() => {
+		void impactAsync(ImpactFeedbackStyle.Heavy)
+	}, 70)
+	setTimeout(() => {
+		void impactAsync(ImpactFeedbackStyle.Medium)
+	}, 150)
+}
 
 const TEXT_MAX_LENGTH = 2000
 const AUTO_ADVANCE_MS = 280
@@ -80,7 +89,6 @@ export default function Feedback(): React.JSX.Element {
 	const origin = savedRating !== undefined ? 'home' : 'settings'
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
-	const primaryContrast = getContrastColor(String(primaryColor ?? '#007aff'))
 
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
@@ -109,12 +117,12 @@ export default function Feedback(): React.JSX.Element {
 				trackEvent('Feedback', { action: 'accentUnlock', origin })
 			}
 
+			playSubmitRumble()
 			toast({
 				title: newlyUnlocked
 					? t('feedback.successUnlock')
 					: t('feedback.success'),
 				preset: 'done',
-				haptic: 'success',
 				duration: 2.5,
 				from: 'top'
 			})
@@ -326,7 +334,12 @@ export default function Feedback(): React.JSX.Element {
 			</ScrollView>
 
 			<View className="px-page pt-3 pb-bottom-safe gap-2 border-t-hairline border-border bg-background">
-				<View className="flex-row gap-2 items-stretch">
+				{isLastStep && !accentUnlocked && (
+					<Text className="text-label-secondary text-[12px] text-center">
+						{t('feedback.submitUnlockHint')}
+					</Text>
+				)}
+				<View className="flex-row gap-2 items-center">
 					<Pressable
 						testID="feedback-back"
 						accessibilityRole="button"
@@ -342,45 +355,14 @@ export default function Feedback(): React.JSX.Element {
 						</Text>
 					</Pressable>
 					<View className="flex-1">
-						{isLastStep && !accentUnlocked ? (
-							<Pressable
-								testID="feedback-submit"
-								accessibilityRole="button"
-								accessibilityLabel={t('feedback.submitUnlock')}
-								disabled={isPending}
-								onPress={handlePrimary}
-								className="h-12 px-4 items-center justify-center rounded-base active:opacity-90"
-								style={{ backgroundColor: primaryColor }}
-							>
-								{isPending ? (
-									<ActivityIndicator color={primaryContrast} size={15} />
-								) : (
-									<View className="items-center">
-										<Text
-											className="text-[15px] font-semibold leading-[18px]"
-											style={{ color: primaryContrast }}
-										>
-											{t('feedback.submit')}
-										</Text>
-										<Text
-											className="text-[11px] leading-[14px] opacity-80"
-											style={{ color: primaryContrast }}
-										>
-											{t('feedback.submitUnlockHint')}
-										</Text>
-									</View>
-								)}
-							</Pressable>
-						) : (
-							<Button
-								testID={isLastStep ? 'feedback-submit' : 'feedback-next'}
-								disabled={primaryDisabled}
-								loading={isPending}
-								onPress={handlePrimary}
-							>
-								{primaryLabel}
-							</Button>
-						)}
+						<Button
+							testID={isLastStep ? 'feedback-submit' : 'feedback-next'}
+							disabled={primaryDisabled}
+							loading={isPending}
+							onPress={handlePrimary}
+						>
+							{primaryLabel}
+						</Button>
 					</View>
 				</View>
 			</View>

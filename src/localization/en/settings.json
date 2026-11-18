@@ -94,7 +94,7 @@
 		},
 		"features": {
 			"title": "How much would you like these features in the app?",
-			"prompt": "How much would you like this?",
+			"prompt": "How much would you like this in the app?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "ID card in the app",
