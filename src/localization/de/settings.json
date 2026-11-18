@@ -115,7 +115,6 @@
 			}
 		},
 		"prompt": {
-			"message": "Ein Tipp genügt – du hilfst uns damit sehr.",
 			"reward": "Schaltet die Akzentfarbe Orange frei.",
 			"dismiss": "Umfrage ausblenden"
 		},

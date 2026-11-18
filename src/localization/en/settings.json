@@ -115,7 +115,6 @@
 			}
 		},
 		"prompt": {
-			"message": "One tap is all it takes – it really helps us.",
 			"reward": "Unlocks the orange accent color.",
 			"dismiss": "Dismiss survey"
 		},

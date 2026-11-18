@@ -95,9 +95,6 @@ export default function FeedbackPrompt({
 						/>
 					</Pressable>
 				</View>
-				<Text className="text-label text-[15px]">
-					{t('feedback.prompt.message')}
-				</Text>
 				{!accentUnlocked && (
 					<View className="bg-primary-background border-hairline border-primary rounded-sm px-3 py-2.5 flex-row items-center gap-2.5">
 						<PlatformIcon
