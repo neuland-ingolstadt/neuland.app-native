@@ -282,7 +282,8 @@
 			"green": "Green",
 			"purple": "Purple",
 			"orange": "Orange",
-			"lockedMember": "Member",
+			"footer": "Green and purple for Neuland members. Another color via feedback.",
+			"lockedMember": "Neuland",
 			"lockedFeedback": "Feedback",
 			"lockedMemberToast": "Green and purple for Neuland members.",
 			"lockedFeedbackToast": "Unlock this color via the feedback survey."

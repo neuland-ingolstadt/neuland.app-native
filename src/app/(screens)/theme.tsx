@@ -128,7 +128,10 @@ export default function Theme(): React.JSX.Element {
 				/>
 			</SectionView>
 
-			<SectionView title={t('theme.accent.title')}>
+			<SectionView
+				title={t('theme.accent.title')}
+				footer={t('theme.accent.footer')}
+			>
 				<AccentColorPicker
 					options={accentOptions}
 					selected={themeColor}

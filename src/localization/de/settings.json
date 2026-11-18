@@ -247,7 +247,8 @@
 			"green": "Grün",
 			"purple": "Lila",
 			"orange": "Orange",
-			"lockedMember": "Mitglied",
+			"footer": "Grün und Lila für Neuland-Mitglieder. Eine weitere Farbe über Feedback.",
+			"lockedMember": "Neuland",
 			"lockedFeedback": "Feedback",
 			"lockedMemberToast": "Grün und Lila für Neuland-Mitglieder.",
 			"lockedFeedbackToast": "Diese Farbe schaltest du über die Feedback-Umfrage frei."
