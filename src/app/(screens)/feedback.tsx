@@ -1,13 +1,7 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
-import {
-	ImpactFeedbackStyle,
-	impactAsync,
-	NotificationFeedbackType,
-	notificationAsync,
-	selectionAsync
-} from 'expo-haptics'
+import { selectionAsync } from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
@@ -42,17 +36,6 @@ import {
 	toOptionalText
 } from '@/utils/feedback-utils'
 import { toColor } from '@/utils/uniwind-utils'
-
-function playSubmitRumble(): void {
-	void notificationAsync(NotificationFeedbackType.Success)
-	void impactAsync(ImpactFeedbackStyle.Medium)
-	setTimeout(() => {
-		void impactAsync(ImpactFeedbackStyle.Heavy)
-	}, 70)
-	setTimeout(() => {
-		void impactAsync(ImpactFeedbackStyle.Medium)
-	}, 150)
-}
 
 const TEXT_MAX_LENGTH = 2000
 const AUTO_ADVANCE_MS = 280
@@ -117,12 +100,12 @@ export default function Feedback(): React.JSX.Element {
 				trackEvent('Feedback', { action: 'accentUnlock', origin })
 			}
 
-			playSubmitRumble()
 			toast({
 				title: newlyUnlocked
 					? t('feedback.successUnlock')
 					: t('feedback.success'),
 				preset: 'done',
+				haptic: 'success',
 				duration: 2.5,
 				from: 'top'
 			})

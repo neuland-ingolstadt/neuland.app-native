@@ -1,4 +1,4 @@
-import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
+import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -97,7 +97,7 @@ const FeatureInterestStep = ({
 								level: label
 							})}
 							onPress={() => {
-								void impactAsync(ImpactFeedbackStyle.Light)
+								void selectionAsync()
 								onChange(idea, level)
 							}}
 							className={`h-12 px-4 items-center justify-center rounded-base border active:opacity-70 ${
