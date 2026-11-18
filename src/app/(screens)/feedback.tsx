@@ -2,7 +2,6 @@ import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
-import { LinearGradient } from 'expo-linear-gradient'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
@@ -16,7 +15,7 @@ import {
 	View
 } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
-import { useCSSVariable, useUniwind } from 'uniwind'
+import { useCSSVariable } from 'uniwind'
 import {
 	type FeatureIdea,
 	type FeatureInterest,
@@ -34,7 +33,6 @@ import PlatformIcon from '@/components/Universal/icon'
 import { FEEDBACK_CAMPAIGN_ID } from '@/data/constants'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { themeColorMap } from '@/styles/theme-colors'
 import {
 	createFeedbackId,
 	FEEDBACK_FEATURE_IDEAS,
@@ -44,14 +42,11 @@ import {
 	shuffled,
 	toOptionalText
 } from '@/utils/feedback-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
 const TEXT_MAX_LENGTH = 2000
 const AUTO_ADVANCE_MS = 280
-const UNLOCK_GRADIENT = [
-	themeColorMap.orange.light,
-	themeColorMap.orange.dark
-] as const
 
 type SurveyStep =
 	| { kind: 'rating' }
@@ -83,11 +78,9 @@ export default function Feedback(): React.JSX.Element {
 	const params = useLocalSearchParams<{ id?: string; rating?: string }>()
 	const savedRating = parseFeedbackRating(params.rating)
 	const origin = savedRating !== undefined ? 'home' : 'settings'
-	const { theme } = useUniwind()
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
-	const unlockAccentColor =
-		theme === 'dark' ? themeColorMap.orange.dark : themeColorMap.orange.light
+	const primaryContrast = getContrastColor(String(primaryColor ?? '#007aff'))
 
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
@@ -356,38 +349,27 @@ export default function Feedback(): React.JSX.Element {
 								accessibilityLabel={t('feedback.submitUnlock')}
 								disabled={isPending}
 								onPress={handlePrimary}
-								className="overflow-hidden rounded-base active:opacity-90"
+								className="min-h-12 px-4 py-2.5 items-center justify-center rounded-base active:opacity-90"
+								style={{ backgroundColor: primaryColor }}
 							>
-								<LinearGradient
-									colors={[...UNLOCK_GRADIENT]}
-									start={{ x: 0, y: 0.5 }}
-									end={{ x: 1, y: 0.5 }}
-									style={{
-										minHeight: 48,
-										paddingHorizontal: 16,
-										paddingVertical: 10,
-										justifyContent: 'center'
-									}}
-								>
-									{isPending ? (
-										<ActivityIndicator color="#fff" size={15} />
-									) : (
-										<View className="flex-row items-center justify-center gap-2.5">
-											<View
-												className="w-3.5 h-3.5 rounded-infinite border border-white/40"
-												style={{ backgroundColor: unlockAccentColor }}
-											/>
-											<View className="items-start">
-												<Text className="text-white text-[16px] font-semibold leading-5">
-													{t('feedback.submit')}
-												</Text>
-												<Text className="text-white/80 text-[12px] leading-4">
-													{t('feedback.submitUnlockHint')}
-												</Text>
-											</View>
-										</View>
-									)}
-								</LinearGradient>
+								{isPending ? (
+									<ActivityIndicator color={primaryContrast} size={15} />
+								) : (
+									<View className="items-center">
+										<Text
+											className="text-[16px] font-semibold leading-5"
+											style={{ color: primaryContrast }}
+										>
+											{t('feedback.submit')}
+										</Text>
+										<Text
+											className="text-[12px] leading-4 opacity-80"
+											style={{ color: primaryContrast }}
+										>
+											{t('feedback.submitUnlockHint')}
+										</Text>
+									</View>
+								)}
 							</Pressable>
 						) : (
 							<Button
