@@ -349,7 +349,7 @@ export default function Feedback(): React.JSX.Element {
 								accessibilityLabel={t('feedback.submitUnlock')}
 								disabled={isPending}
 								onPress={handlePrimary}
-								className="min-h-12 px-4 py-2.5 items-center justify-center rounded-base active:opacity-90"
+								className="h-12 px-4 items-center justify-center rounded-base active:opacity-90"
 								style={{ backgroundColor: primaryColor }}
 							>
 								{isPending ? (
@@ -357,13 +357,13 @@ export default function Feedback(): React.JSX.Element {
 								) : (
 									<View className="items-center">
 										<Text
-											className="text-[16px] font-semibold leading-5"
+											className="text-[15px] font-semibold leading-[18px]"
 											style={{ color: primaryContrast }}
 										>
 											{t('feedback.submit')}
 										</Text>
 										<Text
-											className="text-[12px] leading-4 opacity-80"
+											className="text-[11px] leading-[14px] opacity-80"
 											style={{ color: primaryContrast }}
 										>
 											{t('feedback.submitUnlockHint')}
