@@ -57,7 +57,7 @@
 		"back": "Zurück",
 		"next": "Weiter",
 		"skip": "Überspringen",
-		"rewardTeaser": "Als Dankeschön: Akzentfarben freischalten – inklusive exklusivem Orange.",
+		"rewardTeaser": "Als Dankeschön schaltest du die Akzentfarbe Orange frei.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -117,6 +117,7 @@
 		},
 		"prompt": {
 			"message": "Ein Tipp genügt – du hilfst uns damit sehr.",
+			"reward": "Als Dankeschön: Akzentfarbe Orange freischalten.",
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
@@ -247,8 +248,11 @@
 			"green": "Grün",
 			"purple": "Lila",
 			"orange": "Orange",
-			"memberOnly": "Als Neuland Mitglied kannst du die Akzentfarbe anpassen.",
-			"feedbackUnlock": "Akzentfarben durch Feedback freigeschaltet – Orange ist exklusiv."
+			"footer": "Grün und Lila sind für Neuland-Mitglieder. Orange schaltest du durch Feedback frei – ähnlich wie geheime App-Icons.",
+			"lockedMember": "Mitglied",
+			"lockedFeedback": "Feedback",
+			"lockedMemberToast": "Grün und Lila sind für Neuland-Mitglieder.",
+			"lockedFeedbackToast": "Orange schaltest du durch die Feedback-Umfrage frei."
 		}
 	},
 	"dashboard": {

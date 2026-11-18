@@ -1,9 +1,13 @@
+import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
+import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import MultiSectionRadio from '@/components/Food/food-language-section'
-import AccentColorPicker from '@/components/Theme/accent-color-picker'
+import AccentColorPicker, {
+	type AccentOption
+} from '@/components/Theme/accent-color-picker'
 import ThemePreview from '@/components/Theme/theme-preview'
 import SectionView from '@/components/Universal/sections-view'
 import SingleSectionPicker from '@/components/Universal/single-section-picker'
@@ -35,6 +39,27 @@ export default function Theme(): React.JSX.Element {
 		setThemeColor(color)
 	}
 
+	const onLockedAccentPress = (option: AccentOption): void => {
+		void selectionAsync()
+		if (option.key === 'orange') {
+			toast({
+				title: t('theme.accent.lockedFeedbackToast'),
+				preset: 'none',
+				duration: 2.5,
+				from: 'top'
+			})
+			router.navigate('/feedback')
+			return
+		}
+
+		toast({
+			title: t('theme.accent.lockedMemberToast'),
+			preset: 'none',
+			duration: 2.5,
+			from: 'top'
+		})
+	}
+
 	const elements = [
 		{
 			key: 'auto',
@@ -50,20 +75,32 @@ export default function Theme(): React.JSX.Element {
 		}
 	]
 
-	const showAccentPicker = memberInfo != null || accentUnlocked
-	const accentOptions: { key: ThemeColor; title: string }[] = [
-		{ key: 'blue', title: t('theme.accent.blue') },
-		{ key: 'green', title: t('theme.accent.green') },
-		{ key: 'purple', title: t('theme.accent.purple') },
-		...(accentUnlocked
-			? [{ key: 'orange' as const, title: t('theme.accent.orange') }]
-			: [])
+	const isMember = memberInfo != null
+	const accentOptions: AccentOption[] = [
+		{
+			key: 'blue',
+			title: t('theme.accent.blue'),
+			unlocked: true
+		},
+		{
+			key: 'green',
+			title: t('theme.accent.green'),
+			unlocked: isMember,
+			lockHint: t('theme.accent.lockedMember')
+		},
+		{
+			key: 'purple',
+			title: t('theme.accent.purple'),
+			unlocked: isMember,
+			lockHint: t('theme.accent.lockedMember')
+		},
+		{
+			key: 'orange',
+			title: t('theme.accent.orange'),
+			unlocked: accentUnlocked,
+			lockHint: t('theme.accent.lockedFeedback')
+		}
 	]
-	const accentFooter = accentUnlocked
-		? t('theme.accent.feedbackUnlock')
-		: memberInfo != null
-			? t('theme.accent.memberOnly')
-			: undefined
 
 	return (
 		<ScrollView
@@ -91,15 +128,17 @@ export default function Theme(): React.JSX.Element {
 				/>
 			</SectionView>
 
-			{showAccentPicker && (
-				<SectionView title={t('theme.accent.title')} footer={accentFooter}>
-					<AccentColorPicker
-						options={accentOptions}
-						selected={themeColor}
-						onSelect={onSelectThemeColor}
-					/>
-				</SectionView>
-			)}
+			<SectionView
+				title={t('theme.accent.title')}
+				footer={t('theme.accent.footer')}
+			>
+				<AccentColorPicker
+					options={accentOptions}
+					selected={themeColor}
+					onSelect={onSelectThemeColor}
+					onLockedPress={onLockedAccentPress}
+				/>
+			</SectionView>
 			<View className="mx-page mt-[42px]">
 				<Text className="text-label-secondary text-[13px] font-normal mb-1.5 mt-4 uppercase">
 					{t('timetable:preferences.preview')}

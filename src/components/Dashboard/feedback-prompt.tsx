@@ -10,6 +10,7 @@ import { type FeedbackRating, submitFeedback } from '@/api/feedback-api'
 import RatingScale from '@/components/Feedback/rating-scale'
 import PlatformIcon from '@/components/Universal/icon'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { createFeedbackId } from '@/utils/feedback-utils'
 import { toColor } from '@/utils/uniwind-utils'
 
@@ -24,6 +25,7 @@ export default function FeedbackPrompt({
 	const labelColor = toColor(useCSSVariable('--color-label'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 	const markHandled = useFeedbackPromptStore((state) => state.markHandled)
+	const accentUnlocked = usePreferencesStore((state) => state.accentUnlocked)
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: submitFeedback,
@@ -96,6 +98,19 @@ export default function FeedbackPrompt({
 				<Text className="text-label text-[15px]">
 					{t('feedback.prompt.message')}
 				</Text>
+				{!accentUnlocked && (
+					<View className="bg-primary-background border-hairline border-primary rounded-sm px-3 py-2.5 flex-row items-center gap-2.5">
+						<PlatformIcon
+							ios={{ name: 'paintpalette.fill', size: 14 }}
+							android={{ name: 'palette', size: 18 }}
+							web={{ name: 'Palette', size: 16 }}
+							style={{ color: primaryColor }}
+						/>
+						<Text className="text-primary text-[14px] font-medium flex-1 leading-5">
+							{t('feedback.prompt.reward')}
+						</Text>
+					</View>
+				)}
 				<RatingScale
 					onChange={handleRate}
 					testIDPrefix="feedback-prompt-rating"

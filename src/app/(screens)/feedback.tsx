@@ -22,6 +22,7 @@ import FeatureInterestStep from '@/components/Feedback/feature-interest-step'
 import RatingScale from '@/components/Feedback/rating-scale'
 import SurveyProgress from '@/components/Feedback/survey-progress'
 import Button from '@/components/Universal/button'
+import PlatformIcon from '@/components/Universal/icon'
 import { FEEDBACK_CAMPAIGN_ID } from '@/data/constants'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -70,6 +71,7 @@ export default function Feedback(): React.JSX.Element {
 	const savedRating = parseFeedbackRating(params.rating)
 	const origin = savedRating !== undefined ? 'home' : 'settings'
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
+	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
@@ -236,6 +238,19 @@ export default function Feedback(): React.JSX.Element {
 										: t('feedback.ratingSaved')}
 								</Text>
 							</View>
+							{!accentUnlocked && (
+								<View className="bg-primary-background border-hairline border-primary ios:rounded-ios android:rounded-md web:rounded-md px-card py-3.5 flex-row items-center gap-2.5">
+									<PlatformIcon
+										ios={{ name: 'paintpalette.fill', size: 16 }}
+										android={{ name: 'palette', size: 20 }}
+										web={{ name: 'Palette', size: 18 }}
+										style={{ color: primaryColor }}
+									/>
+									<Text className="text-primary text-[15px] font-medium flex-1 leading-5">
+										{t('feedback.rewardTeaser')}
+									</Text>
+								</View>
+							)}
 							<View className="bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md p-card">
 								<RatingScale value={rating} onChange={handleRatingChange} />
 							</View>
