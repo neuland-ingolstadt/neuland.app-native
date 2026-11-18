@@ -18,18 +18,18 @@ const FEATURE_ICONS: Record<
 	FeatureIdea,
 	{ ios: string; android: MaterialIcon; web: LucideIcon }
 > = {
-	digitalId: { ios: 'person.text.rectangle', android: 'badge', web: 'IdCard' },
-	mensaPayment: {
-		ios: 'creditcard',
-		android: 'credit_card',
-		web: 'CreditCard'
+	studentExchange: { ios: 'person.2', android: 'group', web: 'Users' },
+	campusUpdates: {
+		ios: 'newspaper.fill',
+		android: 'newspaper',
+		web: 'Newspaper'
 	},
-	librarySeats: { ios: 'chair.lounge', android: 'chair', web: 'Armchair' },
-	roomNavigation: {
-		ios: 'signpost.right',
-		android: 'directions_walk',
-		web: 'Signpost'
-	}
+	eventSignup: {
+		ios: 'calendar.badge.plus',
+		android: 'event',
+		web: 'CalendarPlus'
+	},
+	mensaRatings: { ios: 'star', android: 'star', web: 'Star' }
 }
 
 interface FeatureInterestRowProps {

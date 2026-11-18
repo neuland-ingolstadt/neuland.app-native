@@ -89,13 +89,13 @@
 			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen an."
 		},
 		"features": {
-			"title": "Wie gern hättest du diese Funktionen in der App?",
+			"title": "Würdest du dich gern …",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
-				"digitalId": "Ausweis in der App",
-				"mensaPayment": "Mensa Guthaben aufladen",
-				"librarySeats": "Sitzplätze in der Bibliothek buchen",
-				"roomNavigation": "Navigation zu Räumen auf der Karte"
+				"studentExchange": "mit anderen Studierenden austauschen",
+				"campusUpdates": "mehr tagesaktuelle Updates vom Campus bekommen",
+				"eventSignup": "direkt in der App für Events / Hochschulsport anmelden",
+				"mensaRatings": "Mensa-Gerichte bewerten"
 			},
 			"levels": {
 				"1": "Gar nicht",

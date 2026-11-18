@@ -12,10 +12,10 @@ export const FEEDBACK_RATINGS: readonly FeedbackRating[] = [1, 2, 3, 4, 5]
 export const FEATURE_INTEREST_LEVELS: readonly FeatureInterest[] = [1, 2, 3, 4]
 
 export const FEEDBACK_FEATURE_IDEAS: readonly FeatureIdea[] = [
-	'digitalId',
-	'mensaPayment',
-	'librarySeats',
-	'roomNavigation'
+	'studentExchange',
+	'campusUpdates',
+	'eventSignup',
+	'mensaRatings'
 ]
 
 const FOLLOW_UP_CATEGORIES: Record<

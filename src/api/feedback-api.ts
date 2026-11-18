@@ -22,10 +22,10 @@ export type FeedbackCategory =
 	| 'map'
 
 export type FeatureIdea =
-	| 'digitalId'
-	| 'mensaPayment'
-	| 'librarySeats'
-	| 'roomNavigation'
+	| 'studentExchange'
+	| 'campusUpdates'
+	| 'eventSignup'
+	| 'mensaRatings'
 
 /** 1 = not wanted at all, 4 = absolutely wanted. Even scale, no neutral option. */
 export type FeatureInterest = 1 | 2 | 3 | 4
