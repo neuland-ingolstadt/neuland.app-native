@@ -88,9 +88,8 @@
 			"map": "Campuskarte"
 		},
 		"comment": {
-			"title": "Noch etwas auf dem Herzen?",
-			"hint": "Wünsche, Bugs, Lob – alles hilft. Leer lassen geht auch.",
-			"placeholder": "z. B. etwas, das dich stört oder das du dir wünschst …",
+			"title": "Noch etwas?",
+			"placeholder": "Optional – Wünsche, Bugs, Lob …",
 			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen an."
 		},
 		"features": {
@@ -119,6 +118,8 @@
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
+		"submitUnlock": "Feedback senden und Akzentfarbe freischalten",
+		"submitUnlockHint": "Akzentfarbe freischalten",
 		"success": "Danke für dein Feedback!",
 		"successUnlock": "Danke – exklusive Akzentfarbe freigeschaltet.",
 		"error": "Feedback konnte nicht gesendet werden"

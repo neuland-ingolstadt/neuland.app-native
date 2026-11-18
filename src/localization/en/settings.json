@@ -88,9 +88,8 @@
 			"map": "Campus map"
 		},
 		"comment": {
-			"title": "Anything else on your mind?",
-			"hint": "Wishes, bugs, praise – all welcome. Skipping is fine too.",
-			"placeholder": "e.g. something that bugs you or that you'd love to see …",
+			"title": "Anything else?",
+			"placeholder": "Optional – wishes, bugs, praise …",
 			"footer": "Please don't include personal data such as your name."
 		},
 		"features": {
@@ -119,6 +118,8 @@
 			"dismiss": "Dismiss survey"
 		},
 		"submit": "Send Feedback",
+		"submitUnlock": "Send feedback and unlock accent color",
+		"submitUnlockHint": "Unlock accent color",
 		"success": "Thanks for your feedback!",
 		"successUnlock": "Thanks – exclusive accent color unlocked.",
 		"error": "Feedback could not be sent"

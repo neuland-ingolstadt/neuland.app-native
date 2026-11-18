@@ -2,13 +2,21 @@ import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
+import { LinearGradient } from 'expo-linear-gradient'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
+import {
+	ActivityIndicator,
+	Pressable,
+	ScrollView,
+	Text,
+	TextInput,
+	View
+} from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
-import { useCSSVariable } from 'uniwind'
+import { useCSSVariable, useUniwind } from 'uniwind'
 import {
 	type FeatureIdea,
 	type FeatureInterest,
@@ -26,6 +34,7 @@ import PlatformIcon from '@/components/Universal/icon'
 import { FEEDBACK_CAMPAIGN_ID } from '@/data/constants'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { themeColorMap } from '@/styles/theme-colors'
 import {
 	createFeedbackId,
 	FEEDBACK_FEATURE_IDEAS,
@@ -39,6 +48,10 @@ import { toColor } from '@/utils/uniwind-utils'
 
 const TEXT_MAX_LENGTH = 2000
 const AUTO_ADVANCE_MS = 280
+const UNLOCK_GRADIENT = [
+	themeColorMap.orange.light,
+	themeColorMap.orange.dark
+] as const
 
 type SurveyStep =
 	| { kind: 'rating' }
@@ -70,8 +83,11 @@ export default function Feedback(): React.JSX.Element {
 	const params = useLocalSearchParams<{ id?: string; rating?: string }>()
 	const savedRating = parseFeedbackRating(params.rating)
 	const origin = savedRating !== undefined ? 'home' : 'settings'
+	const { theme } = useUniwind()
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
+	const unlockAccentColor =
+		theme === 'dark' ? themeColorMap.orange.dark : themeColorMap.orange.light
 
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
@@ -294,23 +310,13 @@ export default function Feedback(): React.JSX.Element {
 								<Text className="text-text text-[26px] font-bold leading-8">
 									{t('feedback.comment.title')}
 								</Text>
-								<Text className="text-label text-[15px] leading-5">
-									{t('feedback.comment.hint')}
-								</Text>
 							</View>
-							{!accentUnlocked && (
-								<View className="bg-primary-background border-hairline border-primary ios:rounded-ios android:rounded-md web:rounded-md px-card py-3.5">
-									<Text className="text-primary text-[15px] font-medium leading-5">
-										{t('feedback.rewardTeaser')}
-									</Text>
-								</View>
-							)}
 							<View className="bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md p-card gap-3">
 								<TextInput
 									testID="feedback-comment"
 									multiline
 									maxLength={TEXT_MAX_LENGTH}
-									className="text-text text-base min-h-[140px] bg-card-button rounded-sm px-3 pt-2.5 pb-2.5"
+									className="text-text text-base min-h-[120px] bg-card-button rounded-sm px-3 pt-2.5 pb-2.5"
 									style={{ textAlignVertical: 'top' }}
 									placeholder={t('feedback.comment.placeholder')}
 									placeholderTextColor={labelTertiaryColor}
@@ -327,7 +333,7 @@ export default function Feedback(): React.JSX.Element {
 			</ScrollView>
 
 			<View className="px-page pt-3 pb-bottom-safe gap-2 border-t-hairline border-border bg-background">
-				<View className="flex-row gap-2">
+				<View className="flex-row gap-2 items-stretch">
 					<Pressable
 						testID="feedback-back"
 						accessibilityRole="button"
@@ -343,14 +349,56 @@ export default function Feedback(): React.JSX.Element {
 						</Text>
 					</Pressable>
 					<View className="flex-1">
-						<Button
-							testID={isLastStep ? 'feedback-submit' : 'feedback-next'}
-							disabled={primaryDisabled}
-							loading={isPending}
-							onPress={handlePrimary}
-						>
-							{primaryLabel}
-						</Button>
+						{isLastStep && !accentUnlocked ? (
+							<Pressable
+								testID="feedback-submit"
+								accessibilityRole="button"
+								accessibilityLabel={t('feedback.submitUnlock')}
+								disabled={isPending}
+								onPress={handlePrimary}
+								className="overflow-hidden rounded-base active:opacity-90"
+							>
+								<LinearGradient
+									colors={[...UNLOCK_GRADIENT]}
+									start={{ x: 0, y: 0.5 }}
+									end={{ x: 1, y: 0.5 }}
+									style={{
+										minHeight: 48,
+										paddingHorizontal: 16,
+										paddingVertical: 10,
+										justifyContent: 'center'
+									}}
+								>
+									{isPending ? (
+										<ActivityIndicator color="#fff" size={15} />
+									) : (
+										<View className="flex-row items-center justify-center gap-2.5">
+											<View
+												className="w-3.5 h-3.5 rounded-infinite border border-white/40"
+												style={{ backgroundColor: unlockAccentColor }}
+											/>
+											<View className="items-start">
+												<Text className="text-white text-[16px] font-semibold leading-5">
+													{t('feedback.submit')}
+												</Text>
+												<Text className="text-white/80 text-[12px] leading-4">
+													{t('feedback.submitUnlockHint')}
+												</Text>
+											</View>
+										</View>
+									)}
+								</LinearGradient>
+							</Pressable>
+						) : (
+							<Button
+								testID={isLastStep ? 'feedback-submit' : 'feedback-next'}
+								disabled={primaryDisabled}
+								loading={isPending}
+								onPress={handlePrimary}
+							>
+								{primaryLabel}
+							</Button>
+						)}
 					</View>
 				</View>
 			</View>
