@@ -54,10 +54,10 @@
 	},
 	"feedback": {
 		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
-		"progress": "Schritt {{current}} von {{total}}",
 		"back": "Zurück",
 		"next": "Weiter",
 		"skip": "Überspringen",
+		"rewardTeaser": "Als Dankeschön: Akzentfarben freischalten – inklusive exklusivem Orange.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -121,6 +121,7 @@
 		},
 		"submit": "Feedback senden",
 		"success": "Danke für dein Feedback!",
+		"successUnlock": "Danke! Akzentfarbe Orange freigeschaltet.",
 		"error": "Feedback konnte nicht gesendet werden"
 	},
 	"about": {
@@ -245,7 +246,9 @@
 			"blue": "Blau",
 			"green": "Grün",
 			"purple": "Lila",
-			"memberOnly": "Als Neuland Mitglied kannst du die Akzentfarbe anpassen."
+			"orange": "Orange",
+			"memberOnly": "Als Neuland Mitglied kannst du die Akzentfarbe anpassen.",
+			"feedbackUnlock": "Akzentfarben durch Feedback freigeschaltet – Orange ist exklusiv."
 		}
 	},
 	"dashboard": {

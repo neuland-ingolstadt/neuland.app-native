@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useEffect } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -10,13 +10,11 @@ import Animated, {
 interface SurveyProgressProps {
 	step: number
 	total: number
-	label: string
 }
 
 const SurveyProgress = ({
 	step,
-	total,
-	label
+	total
 }: SurveyProgressProps): React.JSX.Element => {
 	const progress = total > 0 ? Math.min(Math.max(step / total, 0), 1) : 0
 	const width = useSharedValue(progress)
@@ -41,14 +39,10 @@ const SurveyProgress = ({
 			accessibilityValue={{
 				min: 0,
 				max: total,
-				now: step,
-				text: label
+				now: step
 			}}
-			className="gap-2 px-page"
+			className="px-page"
 		>
-			<Text className="text-label-secondary text-[13px] font-medium">
-				{label}
-			</Text>
 			<View className="h-1.5 bg-card-button rounded-infinite overflow-hidden">
 				<Animated.View
 					className="h-full rounded-infinite bg-primary"

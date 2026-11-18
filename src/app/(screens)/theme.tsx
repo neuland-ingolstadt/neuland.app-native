@@ -20,6 +20,7 @@ export default function Theme(): React.JSX.Element {
 	const headerPadding = useTransparentHeaderPadding()
 	const themeColor = usePreferencesStore((s) => s.themeColor)
 	const setThemeColor = usePreferencesStore((s) => s.setThemeColor)
+	const accentUnlocked = usePreferencesStore((s) => s.accentUnlocked)
 	const memberInfo = useMemberStore((s) => s.info)
 	const showSplashScreen = usePreferencesStore(
 		(state) => state.showSplashScreen
@@ -49,11 +50,20 @@ export default function Theme(): React.JSX.Element {
 		}
 	]
 
+	const showAccentPicker = memberInfo != null || accentUnlocked
 	const accentOptions: { key: ThemeColor; title: string }[] = [
 		{ key: 'blue', title: t('theme.accent.blue') },
 		{ key: 'green', title: t('theme.accent.green') },
-		{ key: 'purple', title: t('theme.accent.purple') }
+		{ key: 'purple', title: t('theme.accent.purple') },
+		...(accentUnlocked
+			? [{ key: 'orange' as const, title: t('theme.accent.orange') }]
+			: [])
 	]
+	const accentFooter = accentUnlocked
+		? t('theme.accent.feedbackUnlock')
+		: memberInfo != null
+			? t('theme.accent.memberOnly')
+			: undefined
 
 	return (
 		<ScrollView
@@ -81,11 +91,8 @@ export default function Theme(): React.JSX.Element {
 				/>
 			</SectionView>
 
-			{memberInfo && (
-				<SectionView
-					title={t('theme.accent.title')}
-					footer={memberInfo ? t('theme.accent.memberOnly') : undefined}
-				>
+			{showAccentPicker && (
+				<SectionView title={t('theme.accent.title')} footer={accentFooter}>
 					<AccentColorPicker
 						options={accentOptions}
 						selected={themeColor}

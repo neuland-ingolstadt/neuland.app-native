@@ -7,5 +7,6 @@ export const themeColorMap: Record<
 > = {
 	blue: { light: lightTheme.colors.primary, dark: darkTheme.colors.primary },
 	green: { light: '#2d9e66', dark: '#24ff88' },
-	purple: { light: '#990eda', dark: '#9e10f0' }
+	purple: { light: '#990eda', dark: '#9e10f0' },
+	orange: { light: '#e85d04', dark: '#ff8c42' }
 }

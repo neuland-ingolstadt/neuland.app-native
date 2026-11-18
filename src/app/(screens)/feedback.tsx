@@ -24,6 +24,7 @@ import SurveyProgress from '@/components/Feedback/survey-progress'
 import Button from '@/components/Universal/button'
 import { FEEDBACK_CAMPAIGN_ID } from '@/data/constants'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import {
 	createFeedbackId,
 	FEEDBACK_FEATURE_IDEAS,
@@ -61,6 +62,10 @@ function buildSteps(featureIdeas: readonly FeatureIdea[]): SurveyStep[] {
 export default function Feedback(): React.JSX.Element {
 	const { t } = useTranslation('settings')
 	const markHandled = useFeedbackPromptStore((state) => state.markHandled)
+	const accentUnlocked = usePreferencesStore((state) => state.accentUnlocked)
+	const unlockAccent = usePreferencesStore((state) => state.unlockAccent)
+	const themeColor = usePreferencesStore((state) => state.themeColor)
+	const setThemeColor = usePreferencesStore((state) => state.setThemeColor)
 	const params = useLocalSearchParams<{ id?: string; rating?: string }>()
 	const savedRating = parseFeedbackRating(params.rating)
 	const origin = savedRating !== undefined ? 'home' : 'settings'
@@ -83,8 +88,20 @@ export default function Feedback(): React.JSX.Element {
 		onSuccess: () => {
 			trackEvent('Feedback', { action: 'submit', origin })
 			markHandled(FEEDBACK_CAMPAIGN_ID)
+
+			const newlyUnlocked = !accentUnlocked
+			if (newlyUnlocked) {
+				unlockAccent()
+				if (themeColor === 'blue') {
+					setThemeColor('orange')
+				}
+				trackEvent('Feedback', { action: 'accentUnlock', origin })
+			}
+
 			toast({
-				title: t('feedback.success'),
+				title: newlyUnlocked
+					? t('feedback.successUnlock')
+					: t('feedback.success'),
 				preset: 'done',
 				haptic: 'success',
 				duration: 2.5,
@@ -108,10 +125,6 @@ export default function Feedback(): React.JSX.Element {
 	const step = steps[stepIndex]
 	const isFirstStep = stepIndex === 0
 	const isLastStep = stepIndex === steps.length - 1
-	const progressLabel = t('feedback.progress', {
-		current: stepIndex + 1,
-		total: steps.length
-	})
 
 	const goNext = (): void => {
 		setStepIndex((current) => Math.min(current + 1, steps.length - 1))
@@ -194,11 +207,7 @@ export default function Feedback(): React.JSX.Element {
 	return (
 		<View testID="feedback-screen" className="flex-1 bg-background">
 			<View className="pt-3 pb-2">
-				<SurveyProgress
-					step={stepIndex + 1}
-					total={steps.length}
-					label={progressLabel}
-				/>
+				<SurveyProgress step={stepIndex + 1} total={steps.length} />
 			</View>
 
 			<ScrollView
@@ -281,6 +290,13 @@ export default function Feedback(): React.JSX.Element {
 									{t('feedback.comment.hint')}
 								</Text>
 							</View>
+							{!accentUnlocked && (
+								<View className="bg-primary-background border-hairline border-primary ios:rounded-ios android:rounded-md web:rounded-md px-card py-3.5">
+									<Text className="text-primary text-[15px] font-medium leading-5">
+										{t('feedback.rewardTeaser')}
+									</Text>
+								</View>
+							)}
 							<View className="bg-card border-hairline border-border ios:rounded-ios android:rounded-md web:rounded-md p-card gap-3">
 								<TextInput
 									testID="feedback-comment"

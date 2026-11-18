@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
 
-export type ThemeColor = 'blue' | 'green' | 'purple'
+export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange'
 
 interface PreferencesStore {
 	theme: string
@@ -11,6 +11,8 @@ interface PreferencesStore {
 	language: 'de' | 'en' | undefined
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
+	/** Unlocks accent colors (incl. exclusive orange) after feedback survey. */
+	accentUnlocked: boolean
 	recentQuicklinks: string[]
 	showSplashScreen: boolean
 	autoShowNextDay: boolean
@@ -20,6 +22,7 @@ interface PreferencesStore {
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
 	addUnlockedAppIcon: (name: string) => void
+	unlockAccent: () => void
 	addRecentQuicklink: (quicklink: string) => void
 	setShowSplashScreen: (show: boolean) => void
 	setAutoShowNextDay: (show: boolean) => void
@@ -33,6 +36,7 @@ const initialState: Omit<
 	| 'setThemeColor'
 	| 'setAppIcon'
 	| 'addUnlockedAppIcon'
+	| 'unlockAccent'
 	| 'addRecentQuicklink'
 	| 'reset'
 	| 'setLanguage'
@@ -45,6 +49,7 @@ const initialState: Omit<
 	theme: 'auto',
 	themeColor: 'blue',
 	unlockedAppIcons: [],
+	accentUnlocked: false,
 	recentQuicklinks: defaultQuicklinks,
 	showSplashScreen: false,
 	autoShowNextDay: false,
@@ -75,6 +80,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 					const newUnlockedAppIcons = new Set([...state.unlockedAppIcons, name])
 					return { unlockedAppIcons: Array.from(newUnlockedAppIcons) }
 				})
+			},
+			unlockAccent: () => {
+				set({ accentUnlocked: true })
 			},
 			addRecentQuicklink: (quicklink: string) => {
 				set((state) => {
