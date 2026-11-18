@@ -62,7 +62,7 @@ export function useUniwindThemeSync(): void {
 	}, [theme])
 
 	useEffect(() => {
-		const colors = themeColorMap[themeColor]
+		const colors = themeColorMap[themeColor] ?? themeColorMap.blue
 		const lightVariables = {
 			'--color-primary': colors.light,
 			'--color-secondary': colors.light,
