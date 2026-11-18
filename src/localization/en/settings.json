@@ -89,13 +89,17 @@
 			"footer": "Please don't include personal data such as your name."
 		},
 		"features": {
-			"title": "Would you like to …",
+			"title": "How much would you like these features in the app?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
-				"studentExchange": "connect with other students",
-				"campusUpdates": "get more daily campus updates",
-				"eventSignup": "sign up for events / university sports in the app",
-				"mensaRatings": "rate cafeteria meals"
+				"digitalId": "ID card in the app",
+				"mensaPayment": "Top up cafeteria balance",
+				"librarySeats": "Book library seats",
+				"roomNavigation": "Navigation to rooms on the map",
+				"studentExchange": "Connect with other students",
+				"campusUpdates": "More daily campus updates",
+				"eventSignup": "Sign up for events / university sports",
+				"mensaRatings": "Cafeteria ratings"
 			},
 			"levels": {
 				"1": "Not at all",

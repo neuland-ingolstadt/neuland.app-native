@@ -22,6 +22,10 @@ export type FeedbackCategory =
 	| 'map'
 
 export type FeatureIdea =
+	| 'digitalId'
+	| 'mensaPayment'
+	| 'librarySeats'
+	| 'roomNavigation'
 	| 'studentExchange'
 	| 'campusUpdates'
 	| 'eventSignup'
