@@ -115,7 +115,10 @@ export const useMemberStore = create<MemberStore>()(
 		{
 			name: 'member-store',
 			storage: createJSONStorage(() => zustandStorage),
-			partialize: (state) => ({ info: state.info }),
+			// Claims stay in memory only; decode from the secure id token on rehydrate.
+			// Ignore any legacy MMKV payload that used to store email/name/groups.
+			partialize: () => ({}),
+			merge: (_persistedState, currentState) => currentState,
 			onRehydrateStorage: () => async (state) => {
 				if (!state) return
 
@@ -128,6 +131,8 @@ export const useMemberStore = create<MemberStore>()(
 					if (idToken) {
 						state.idToken = idToken
 						state.info = decodeJwt(idToken) as MemberInfo
+					} else {
+						state.info = null
 					}
 
 					if (refreshToken) {
@@ -135,6 +140,7 @@ export const useMemberStore = create<MemberStore>()(
 					}
 				} catch (error) {
 					console.error('Failed to rehydrate member tokens:', error)
+					state.info = null
 				}
 			}
 		}
