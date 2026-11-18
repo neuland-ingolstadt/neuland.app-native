@@ -86,14 +86,14 @@
 		"comment": {
 			"title": "Was können wir verbessern?",
 			"placeholder": "z. B. etwas, das nicht funktioniert oder dich stört …",
-			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen oder deine Matrikelnummer an."
+			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen an."
 		},
 		"features": {
 			"title": "Wie gern hättest du diese Funktionen in der App?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "Ausweis in der App",
-				"mensaPayment": "In der Mensa bezahlen",
+				"mensaPayment": "Mensa Guthaben aufladen",
 				"librarySeats": "Sitzplätze in der Bibliothek buchen",
 				"roomNavigation": "Navigation zu Räumen auf der Karte"
 			},

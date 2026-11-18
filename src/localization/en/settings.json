@@ -86,14 +86,14 @@
 		"comment": {
 			"title": "What can we improve?",
 			"placeholder": "e.g. something that doesn't work or bugs you …",
-			"footer": "Please don't include personal data such as your name or student ID."
+			"footer": "Please don't include personal data such as your name."
 		},
 		"features": {
 			"title": "How much would you like these features in the app?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
 				"digitalId": "ID card in the app",
-				"mensaPayment": "Pay in the cafeteria",
+				"mensaPayment": "Top up cafeteria balance",
 				"librarySeats": "Book library seats",
 				"roomNavigation": "Navigation to rooms on the map"
 			},
