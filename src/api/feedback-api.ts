@@ -49,7 +49,6 @@ export interface FeedbackSubmission {
 	categories?: FeedbackCategory[]
 	comment?: string
 	featureInterest?: FeatureInterestAnswers
-	missingFeatures?: string
 }
 
 export class FeedbackApiError extends Error {
