@@ -55,7 +55,7 @@
 	},
 	"dependencies": {
 		"@aptabase/react-native": "^0.6.0",
-		"@babel/runtime": "^7.28.4",
+		"@babel/runtime": "^8.0.0",
 		"@expo/metro-runtime": "~58.0.17",
 		"@expo/ui": "~58.0.29",
 		"@expo/vector-icons": "^15.0.3",
@@ -67,7 +67,7 @@
 		"@react-native-community/datetimepicker": "9.2.1",
 		"@react-native-community/netinfo": "12.0.1",
 		"@shopify/flash-list": "2.3.2",
-		"@swmansion/react-native-bottom-sheet": "0.17.0",
+		"@swmansion/react-native-bottom-sheet": "1.1.0",
 		"@tanstack/query-sync-storage-persister": "5.107.1",
 		"@tanstack/react-query": "5.107.1",
 		"@tanstack/react-query-persist-client": "5.107.1",
