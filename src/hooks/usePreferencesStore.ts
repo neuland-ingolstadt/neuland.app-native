@@ -5,6 +5,15 @@ import { zustandStorage } from '@/utils/storage'
 
 export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange'
 
+const VALID_THEME_COLORS: readonly ThemeColor[] = ['blue', 'green', 'purple']
+
+function isThemeColor(value: unknown): value is ThemeColor {
+	return (
+		typeof value === 'string' &&
+		(VALID_THEME_COLORS as readonly string[]).includes(value)
+	)
+}
+
 interface PreferencesStore {
 	theme: string
 	themeColor: ThemeColor
@@ -117,7 +126,18 @@ export const usePreferencesStore = create<PreferencesStore>()(
 		}),
 		{
 			name: 'app-storage',
-			storage: createJSONStorage(() => zustandStorage)
+			storage: createJSONStorage(() => zustandStorage),
+			merge: (persistedState, currentState) => {
+				const persisted = (persistedState ?? {}) as Partial<PreferencesStore>
+				return {
+					...currentState,
+					...persisted,
+					// Drop unknown accents left from feature branches (e.g. orange).
+					themeColor: isThemeColor(persisted.themeColor)
+						? persisted.themeColor
+						: currentState.themeColor
+				}
+			}
 		}
 	)
 )

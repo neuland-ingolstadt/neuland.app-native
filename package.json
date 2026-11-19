@@ -104,7 +104,7 @@
 		"expo-web-browser": "~58.1.0",
 		"fuse.js": "^7.4.2",
 		"graphql": "^17.0.1",
-		"i18next": "27.1.1",
+		"i18next": "27.1.2",
 		"idb": "^8.0.3",
 		"lucide-react-native": "^1.18.0",
 		"luxon": "^3.7.2",
@@ -141,7 +141,7 @@
 	"devDependencies": {
 		"@0no-co/graphqlsp": "^1.17.3",
 		"@babel/core": "^7.29.7",
-		"@biomejs/biome": "2.6.7",
+		"@biomejs/biome": "2.6.8",
 		"@eggl-js/expo-github-cache": "^0.5.0",
 		"@expo/agent-cli": "^1.0.19",
 		"@graphql-codegen/cli": "8.0.0",
