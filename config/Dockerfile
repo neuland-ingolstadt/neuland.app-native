@@ -1,5 +1,5 @@
 # Base stage: Install dependencies and build the project using Bun
-FROM oven/bun:1@sha256:1d22548f177f4ff38e0c15baa3c2c46c6c2060ba2d1bc573bb4720b407548f1d AS bun
+FROM oven/bun:1@sha256:3aa040e5445efa09d75bb428a64ba50db13e2b3ac9b6b0c7f145615f62b2ee18 AS bun
 WORKDIR /usr/src/app
 
 # Copy necessary files and install dependencies
@@ -39,7 +39,7 @@ ENV NODE_ENV=production
 RUN npm run licences:bundle && node --experimental-strip-types config/sync-maplibre-worker.ts && npx expo export -p web -c
 
 # Final stage: Serve static files using NGINX
-FROM nginx:1.31.9-alpine AS final
+FROM nginx:1.31.9-alpine@sha256:90b6bd2aec278b16b98221d64deb1d6d35d164567f507ab0716e6053878315aa AS final
 
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
