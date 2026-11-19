@@ -14,7 +14,6 @@ import {
 	TextInput,
 	View
 } from 'react-native'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
 import {
 	type FeatureIdea,
@@ -220,10 +219,8 @@ export default function Feedback(): React.JSX.Element {
 				keyboardShouldPersistTaps="handled"
 				keyboardDismissMode="interactive"
 			>
-				<Animated.View
+				<View
 					key={`${step.kind}-${step.kind === 'feature' ? step.idea : stepIndex}`}
-					entering={FadeIn.duration(220)}
-					exiting={FadeOut.duration(120)}
 					className="flex-1"
 				>
 					{step.kind === 'rating' && (
@@ -260,9 +257,6 @@ export default function Feedback(): React.JSX.Element {
 					{step.kind === 'categories' && rating !== undefined && (
 						<View className="gap-5">
 							<View className="gap-2">
-								<Text className="text-label-secondary text-[13px] font-medium">
-									{t('feedback.optional')}
-								</Text>
 								<Text className="text-text text-[26px] font-bold leading-8">
 									{t(
 										`feedback.followUp.${getFeedbackFollowUp(rating)}` as const
@@ -295,9 +289,6 @@ export default function Feedback(): React.JSX.Element {
 					{step.kind === 'comment' && (
 						<View className="gap-5">
 							<View className="gap-2">
-								<Text className="text-label-secondary text-[13px] font-medium">
-									{t('feedback.optional')}
-								</Text>
 								<Text className="text-text text-[26px] font-bold leading-8">
 									{t('feedback.comment.title')}
 								</Text>
@@ -320,7 +311,7 @@ export default function Feedback(): React.JSX.Element {
 							</View>
 						</View>
 					)}
-				</Animated.View>
+				</View>
 			</ScrollView>
 
 			<View className="px-page pt-3 pb-bottom-safe gap-2 border-t-hairline border-border bg-background">

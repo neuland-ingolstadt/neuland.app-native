@@ -71,9 +71,11 @@ const FeatureInterestStep = ({
 					<Text className="text-label-secondary text-[13px] font-medium text-center">
 						{t('feedback.features.prompt')}
 					</Text>
-					<Text className="text-text text-[22px] font-semibold text-center leading-7">
-						{featureName}
-					</Text>
+					<View className="min-h-14 justify-center">
+						<Text className="text-text text-[22px] font-semibold text-center leading-7">
+							{featureName}
+						</Text>
+					</View>
 				</View>
 			</View>
 

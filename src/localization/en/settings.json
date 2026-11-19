@@ -69,7 +69,6 @@
 			}
 		},
 		"ratingSaved": "Thanks for your rating! Want to tell us a bit more?",
-		"optional": "Optional",
 		"followUp": {
 			"improvements": "What's not working well?",
 			"highlights": "What do you like most?"
@@ -97,7 +96,7 @@
 			"prompt": "How much would you like this in the app?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
-				"digitalId": "ID card in the app",
+				"digitalId": "Student ID card in the app",
 				"mensaPayment": "Top up cafeteria balance",
 				"librarySeats": "Book library seats",
 				"roomNavigation": "Navigation to rooms on the map",
