@@ -16,7 +16,8 @@ const SurveyProgress = ({
 	step,
 	total
 }: SurveyProgressProps): React.JSX.Element => {
-	const progress = total > 0 ? Math.min(Math.max(step / total, 0), 1) : 0
+	const linearProgress = total > 0 ? Math.min(Math.max(step / total, 0), 1) : 0
+	const progress = 1 - (1 - linearProgress) ** 1.5
 	const width = useSharedValue(progress)
 
 	useEffect(() => {
