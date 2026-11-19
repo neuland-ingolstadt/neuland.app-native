@@ -15,7 +15,11 @@ export const FEEDBACK_FEATURE_IDEAS: readonly FeatureIdea[] = [
 	'digitalId',
 	'mensaPayment',
 	'librarySeats',
-	'roomNavigation'
+	'roomNavigation',
+	'studentExchange',
+	'campusUpdates',
+	'eventSignup',
+	'mensaRatings'
 ]
 
 const FOLLOW_UP_CATEGORIES: Record<

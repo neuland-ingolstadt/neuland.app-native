@@ -53,7 +53,10 @@
 		"loadPersonalDataError": "Persönliche Daten konnten nicht geladen werden"
 	},
 	"feedback": {
-		"intro": "Hilf uns, Neuland Next besser zu machen – das dauert weniger als eine Minute.",
+		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
+		"back": "Zurück",
+		"next": "Weiter",
+		"rewardTeaser": "Schaltet eine exklusive Akzentfarbe frei.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -65,12 +68,12 @@
 				"5": "Sehr gut"
 			}
 		},
-		"ratingSaved": "Danke, deine Bewertung ist angekommen! Magst du uns noch kurz verraten, warum?",
-		"optional": "Optional",
+		"ratingSaved": "Danke für deine Bewertung! Magst du uns noch kurz mehr verraten?",
 		"followUp": {
 			"improvements": "Wo hakt es?",
 			"highlights": "Was gefällt dir am besten?"
 		},
+		"categoriesHint": "Du kannst mehrere Bereiche tippen – oder einfach weiter.",
 		"categories": {
 			"bugs": "Fehler & Abstürze",
 			"performance": "Geschwindigkeit",
@@ -84,18 +87,23 @@
 			"map": "Campuskarte"
 		},
 		"comment": {
-			"title": "Was können wir verbessern?",
-			"placeholder": "z. B. etwas, das nicht funktioniert oder dich stört …",
-			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen oder deine Matrikelnummer an."
+			"title": "Noch etwas?",
+			"placeholder": "Optional – Wünsche, Bugs, Lob …",
+			"footer": "Bitte gib keine persönlichen Daten wie deinen Namen an."
 		},
 		"features": {
 			"title": "Wie gern hättest du diese Funktionen in der App?",
+			"prompt": "Wie gern hättest du das in der App?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
-				"digitalId": "Ausweis in der App",
-				"mensaPayment": "In der Mensa bezahlen",
+				"digitalId": "Hochschulausweis in der App",
+				"mensaPayment": "Mensa Guthaben aufladen",
 				"librarySeats": "Sitzplätze in der Bibliothek buchen",
-				"roomNavigation": "Navigation zu Räumen auf der Karte"
+				"roomNavigation": "Navigation zu Räumen auf der Karte",
+				"studentExchange": "Mit anderen Studierenden austauschen",
+				"campusUpdates": "Mehr tagesaktuelle Updates vom Campus",
+				"eventSignup": "Für Events / Hochschulsport anmelden",
+				"mensaRatings": "Mensa-Bewertungen"
 			},
 			"levels": {
 				"1": "Gar nicht",
@@ -104,17 +112,15 @@
 				"4": "Unbedingt"
 			}
 		},
-		"missing": {
-			"title": "Fehlt dir sonst noch etwas in der App?",
-			"placeholder": "z. B. eine Funktion, die du dir schon lange wünschst …"
-		},
 		"prompt": {
-			"message": "Ein Tipp genügt – du hilfst uns damit sehr.",
+			"reward": "Schaltet eine exklusive Akzentfarbe frei.",
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
-		"submitHint": "Wähle zuerst eine Bewertung aus.",
+		"submitUnlock": "Feedback senden und Akzentfarbe freischalten",
+		"submitUnlockHint": "Akzentfarbe freischalten",
 		"success": "Danke für dein Feedback!",
+		"successUnlock": "Danke – exklusive Akzentfarbe freigeschaltet.",
 		"error": "Feedback konnte nicht gesendet werden"
 	},
 	"about": {
@@ -239,7 +245,11 @@
 			"blue": "Blau",
 			"green": "Grün",
 			"purple": "Lila",
-			"memberOnly": "Als Neuland Mitglied kannst du die Akzentfarbe anpassen."
+			"orange": "Orange",
+			"footer": "Als Neuland-Mitglied schaltest du exklusive Farben frei.",
+			"lockedMember": "Neuland",
+			"lockedFeedback": "Feedback",
+			"lockedFeedbackToast": "Diese Farbe schaltest du über die Feedback-Umfrage frei."
 		}
 	},
 	"dashboard": {

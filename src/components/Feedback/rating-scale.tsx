@@ -1,7 +1,7 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -50,7 +50,7 @@ const RatingOption = ({
 				label: t(`feedback.rating.labels.${rating}` as const)
 			})}
 			onPress={() => {
-				void selectionAsync()
+				if (Platform.OS === 'ios') void selectionAsync()
 				onSelect(rating)
 			}}
 			onPressIn={() => {

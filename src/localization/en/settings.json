@@ -53,7 +53,10 @@
 		"loadPersonalDataError": "Failed to load personal data"
 	},
 	"feedback": {
-		"intro": "Help us make Neuland Next better – it takes less than a minute.",
+		"intro": "A few taps are enough – it takes under a minute.",
+		"back": "Back",
+		"next": "Next",
+		"rewardTeaser": "Unlocks an exclusive accent color.",
 		"rating": {
 			"title": "How do you like the app?",
 			"accessibilityLabel": "{{rating}} of 5: {{label}}",
@@ -65,12 +68,12 @@
 				"5": "Very good"
 			}
 		},
-		"ratingSaved": "Thanks, we got your rating! Want to tell us a bit more about why?",
-		"optional": "Optional",
+		"ratingSaved": "Thanks for your rating! Want to tell us a bit more?",
 		"followUp": {
 			"improvements": "What's not working well?",
 			"highlights": "What do you like most?"
 		},
+		"categoriesHint": "Tap as many as you like – or just continue.",
 		"categories": {
 			"bugs": "Bugs & crashes",
 			"performance": "Speed",
@@ -84,18 +87,23 @@
 			"map": "Campus map"
 		},
 		"comment": {
-			"title": "What can we improve?",
-			"placeholder": "e.g. something that doesn't work or bugs you …",
-			"footer": "Please don't include personal data such as your name or student ID."
+			"title": "Anything else?",
+			"placeholder": "Optional – wishes, bugs, praise …",
+			"footer": "Please don't include personal data such as your name."
 		},
 		"features": {
 			"title": "How much would you like these features in the app?",
+			"prompt": "How much would you like this in the app?",
 			"accessibilityLabel": "{{feature}}: {{level}}",
 			"items": {
-				"digitalId": "ID card in the app",
-				"mensaPayment": "Pay in the cafeteria",
+				"digitalId": "Student ID card in the app",
+				"mensaPayment": "Top up cafeteria balance",
 				"librarySeats": "Book library seats",
-				"roomNavigation": "Navigation to rooms on the map"
+				"roomNavigation": "Navigation to rooms on the map",
+				"studentExchange": "Connect with other students",
+				"campusUpdates": "More daily campus updates",
+				"eventSignup": "Sign up for events / university sports",
+				"mensaRatings": "Cafeteria ratings"
 			},
 			"levels": {
 				"1": "Not at all",
@@ -104,17 +112,15 @@
 				"4": "Absolutely"
 			}
 		},
-		"missing": {
-			"title": "Is anything else missing from the app?",
-			"placeholder": "e.g. a feature you've wanted for a long time …"
-		},
 		"prompt": {
-			"message": "One tap is all it takes – it really helps us.",
+			"reward": "Unlocks an exclusive accent color.",
 			"dismiss": "Dismiss survey"
 		},
 		"submit": "Send Feedback",
-		"submitHint": "Select a rating first.",
+		"submitUnlock": "Send feedback and unlock accent color",
+		"submitUnlockHint": "Unlock accent color",
 		"success": "Thanks for your feedback!",
+		"successUnlock": "Thanks – exclusive accent color unlocked.",
 		"error": "Feedback could not be sent"
 	},
 	"version": {
@@ -274,7 +280,11 @@
 			"blue": "Blue",
 			"green": "Green",
 			"purple": "Purple",
-			"memberOnly": "As a Neuland member, you can customize the accent color."
+			"orange": "Orange",
+			"footer": "As a Neuland member, you unlock exclusive colors.",
+			"lockedMember": "Neuland",
+			"lockedFeedback": "Feedback",
+			"lockedFeedbackToast": "Unlock this color via the feedback survey."
 		}
 	},
 	"dashboard": {
