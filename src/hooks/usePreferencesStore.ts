@@ -2,17 +2,9 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
+import { resolvePersistedThemeColor } from '@/utils/theme-utils'
 
 export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange'
-
-const VALID_THEME_COLORS: readonly ThemeColor[] = ['blue', 'green', 'purple']
-
-function isThemeColor(value: unknown): value is ThemeColor {
-	return (
-		typeof value === 'string' &&
-		(VALID_THEME_COLORS as readonly string[]).includes(value)
-	)
-}
 
 interface PreferencesStore {
 	theme: string
@@ -132,10 +124,11 @@ export const usePreferencesStore = create<PreferencesStore>()(
 				return {
 					...currentState,
 					...persisted,
-					// Drop unknown accents left from feature branches (e.g. orange).
-					themeColor: isThemeColor(persisted.themeColor)
-						? persisted.themeColor
-						: currentState.themeColor
+					themeColor:
+						resolvePersistedThemeColor(
+							persisted.themeColor,
+							persisted.accentUnlocked === true
+						) ?? currentState.themeColor
 				}
 			}
 		}
