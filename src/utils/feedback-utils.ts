@@ -34,7 +34,18 @@ const FOLLOW_UP_CATEGORIES: Record<
 		'design',
 		'missingFeature'
 	],
-	highlights: ['timetable', 'food', 'grades', 'map', 'design', 'performance']
+	highlights: [
+		'timetable',
+		'food',
+		'grades',
+		'map',
+		'events',
+		'news',
+		'sports',
+		'calendar',
+		'design',
+		'performance'
+	]
 }
 
 export function getFeedbackFollowUp(rating: FeedbackRating): FeedbackFollowUp {

@@ -84,7 +84,11 @@
 			"timetable": "Stundenplan",
 			"food": "Mensa",
 			"grades": "Noten & Prüfungen",
-			"map": "Campuskarte"
+			"map": "Campuskarte",
+			"events": "Events",
+			"news": "THI News",
+			"sports": "Hochschulsport",
+			"calendar": "THI-Termine"
 		},
 		"comment": {
 			"title": "Noch etwas?",

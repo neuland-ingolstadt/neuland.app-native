@@ -20,6 +20,10 @@ export type FeedbackCategory =
 	| 'food'
 	| 'grades'
 	| 'map'
+	| 'events'
+	| 'news'
+	| 'sports'
+	| 'calendar'
 
 export type FeatureIdea =
 	| 'digitalId'
