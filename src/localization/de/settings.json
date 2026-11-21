@@ -44,8 +44,7 @@
 				"share": "Teile die App",
 				"shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀",
 				"shareMessageAndroid": "Hol dir Neuland Next für dein Smartphone! 🚀\n\nhttps://neuland.app/get",
-				"download": "App herunterladen",
-				"feedback": "Feedback geben"
+				"download": "App herunterladen"
 			}
 		},
 		"copyright": "© {{year}} von Neuland Ingolstadt e.V.",
@@ -56,7 +55,6 @@
 		"intro": "Ein paar Tipps reichen – dauert unter einer Minute.",
 		"back": "Zurück",
 		"next": "Weiter",
-		"rewardTeaser": "Schaltet eine exklusive Akzentfarbe frei.",
 		"rating": {
 			"title": "Wie gefällt dir die App?",
 			"accessibilityLabel": "{{rating}} von 5: {{label}}",
@@ -121,11 +119,15 @@
 			"dismiss": "Umfrage ausblenden"
 		},
 		"submit": "Feedback senden",
-		"submitUnlock": "Feedback senden und Akzentfarbe freischalten",
-		"submitUnlockHint": "Akzentfarbe freischalten",
-		"success": "Danke für dein Feedback!",
-		"successUnlock": "Danke – exklusive Akzentfarbe freigeschaltet.",
-		"error": "Feedback konnte nicht gesendet werden"
+		"submitUnlockHint": "Schaltet eine exklusive Akzentfarbe frei",
+		"accentUnlock": {
+			"title": "Akzentfarbe wählen",
+			"subtitle": "Behalte deine aktuelle Akzentfarbe oder probiere die exklusive.",
+			"keep": "{{color}} behalten",
+			"new": "{{color}} ausprobieren",
+			"exclusive": "Exklusiv",
+			"continue": "Weiter"
+		}
 	},
 	"about": {
 		"header": {
@@ -250,10 +252,7 @@
 			"green": "Grün",
 			"purple": "Lila",
 			"orange": "Orange",
-			"footer": "Als Neuland-Mitglied schaltest du exklusive Farben frei.",
-			"lockedMember": "Neuland",
-			"lockedFeedback": "Feedback",
-			"lockedFeedbackToast": "Diese Farbe schaltest du über die Feedback-Umfrage frei."
+			"footer": "Als Neuland-Mitglied schaltest du exklusive Farben frei."
 		}
 	},
 	"dashboard": {

@@ -44,8 +44,7 @@
 				"share": "Share the app",
 				"shareMessage": "Get Neuland Next for your phone! 🚀",
 				"shareMessageAndroid": "Get Neuland Next for your phone! 🚀\n\nhttps://neuland.app/get",
-				"download": "Download the app",
-				"feedback": "Give Feedback"
+				"download": "Download the app"
 			}
 		},
 		"copyright": "© {{year}} by Neuland Ingolstadt e.V.",
@@ -56,7 +55,6 @@
 		"intro": "A few taps are enough – it takes under a minute.",
 		"back": "Back",
 		"next": "Next",
-		"rewardTeaser": "Unlocks an exclusive accent color.",
 		"rating": {
 			"title": "How do you like the app?",
 			"accessibilityLabel": "{{rating}} of 5: {{label}}",
@@ -121,11 +119,15 @@
 			"dismiss": "Dismiss survey"
 		},
 		"submit": "Send Feedback",
-		"submitUnlock": "Send feedback and unlock accent color",
-		"submitUnlockHint": "Unlock accent color",
-		"success": "Thanks for your feedback!",
-		"successUnlock": "Thanks – exclusive accent color unlocked.",
-		"error": "Feedback could not be sent"
+		"submitUnlockHint": "Unlocks an exclusive accent color",
+		"accentUnlock": {
+			"title": "Choose your accent",
+			"subtitle": "Keep your current accent or try the exclusive one.",
+			"keep": "Keep {{color}}",
+			"new": "Try {{color}}",
+			"exclusive": "Exclusive",
+			"continue": "Continue"
+		}
 	},
 	"version": {
 		"formlist": {
@@ -285,10 +287,7 @@
 			"green": "Green",
 			"purple": "Purple",
 			"orange": "Orange",
-			"footer": "As a Neuland member, you unlock exclusive colors.",
-			"lockedMember": "Neuland",
-			"lockedFeedback": "Feedback",
-			"lockedFeedbackToast": "Unlock this color via the feedback survey."
+			"footer": "As a Neuland member, you unlock exclusive colors."
 		}
 	},
 	"dashboard": {

@@ -57,20 +57,17 @@ export default function Theme(): React.JSX.Element {
 	const accentOptions: AccentOption[] = [
 		{
 			key: 'blue',
-			title: t('theme.accent.blue'),
-			unlocked: true
+			title: t('theme.accent.blue')
 		},
 		...(isMember
 			? ([
 					{
 						key: 'green',
-						title: t('theme.accent.green'),
-						unlocked: true
+						title: t('theme.accent.green')
 					},
 					{
 						key: 'purple',
-						title: t('theme.accent.purple'),
-						unlocked: true
+						title: t('theme.accent.purple')
 					}
 				] as const satisfies readonly AccentOption[])
 			: []),
@@ -78,8 +75,7 @@ export default function Theme(): React.JSX.Element {
 			? ([
 					{
 						key: 'orange',
-						title: t('theme.accent.orange'),
-						unlocked: true
+						title: t('theme.accent.orange')
 					}
 				] as const satisfies readonly AccentOption[])
 			: [])

@@ -175,7 +175,25 @@ To force `false`, set `query.state.data = false` instead.
 
 Then `restart-app` (not only Metro reload) so in-memory stores die.
 
-### 4. Reload and verify
+### 4. Leave sticky routes, then reload and verify
+
+Expo Router **keeps the current route across Metro reload**. Modal screens like
+`/feedback` stay open after reload — leave them before resetting survey state.
+
+Before reload, navigate home (and dismiss modals):
+
+```js
+(() => {
+  const { router } = __r(ROUTER) // resolve export name `router` like other modules
+  try {
+    if (typeof router.dismissAll === 'function') router.dismissAll()
+  } catch {}
+  router.replace('/')
+  return true
+})()
+```
+
+Then:
 
 ```bash
 ./node_modules/.bin/argent run debugger-reload-metro --device_id "<ID>" --json
@@ -191,6 +209,7 @@ Confirm the fields the user asked for. Report `before` → `after` briefly.
 | `Property 'require' doesn't exist` | Use `__r(id)`, not `require` |
 | Banner still hidden after Preset A | Check feature-flag cache (Preset B) or remote Flipt |
 | Values snap back after reload | Persist write missed — update `appStorage` / call `reset()` |
+| Still on survey modal after reset | Navigate `/` (or `dismissAll`) **before** reload; prefer `restart-app` over Metro reload |
 | Module scan returns `{}` | App not on new JS bundle; reload or raise scan limit |
 | Wrong device mutated | Always pass the same `device_id` as `debugger-connect` |
 

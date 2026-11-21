@@ -1,6 +1,5 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
-import { toast } from 'burnt'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,13 +30,6 @@ export default function FeedbackPrompt({
 		mutationFn: submitFeedback,
 		onError: (error) => {
 			console.error('Error when sending feedback rating', error)
-			toast({
-				title: t('feedback.error'),
-				preset: 'error',
-				haptic: 'error',
-				duration: 2.5,
-				from: 'top'
-			})
 		}
 	})
 

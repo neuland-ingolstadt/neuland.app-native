@@ -4,8 +4,12 @@ import type {
 	FeedbackCategory,
 	FeedbackRating
 } from '@/api/feedback-api'
+import type { ThemeColor } from '@/hooks/usePreferencesStore'
 
 export type FeedbackFollowUp = 'improvements' | 'highlights'
+
+/** Accent unlocked by completing the feedback survey. */
+export const FEEDBACK_REWARD_ACCENT = 'orange' as const satisfies ThemeColor
 
 export const FEEDBACK_RATINGS: readonly FeedbackRating[] = [1, 2, 3, 4, 5]
 

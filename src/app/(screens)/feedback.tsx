@@ -1,10 +1,9 @@
 import { trackEvent } from '@aptabase/react-native'
 import { useMutation } from '@tanstack/react-query'
-import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Platform,
@@ -23,6 +22,9 @@ import {
 	type FeedbackRating,
 	submitFeedback
 } from '@/api/feedback-api'
+import AccentChoiceStep, {
+	type AccentChoice
+} from '@/components/Feedback/accent-choice-step'
 import CategoryChips from '@/components/Feedback/category-chips'
 import FeatureInterestStep from '@/components/Feedback/feature-interest-step'
 import RatingScale from '@/components/Feedback/rating-scale'
@@ -31,10 +33,14 @@ import Button from '@/components/Universal/button'
 import PlatformIcon from '@/components/Universal/icon'
 import { FEEDBACK_CAMPAIGN_ID } from '@/data/constants'
 import { useFeedbackPromptStore } from '@/hooks/useFeedbackPromptStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import {
+	type ThemeColor,
+	usePreferencesStore
+} from '@/hooks/usePreferencesStore'
 import {
 	createFeedbackId,
 	FEEDBACK_FEATURE_IDEAS,
+	FEEDBACK_REWARD_ACCENT,
 	getFeedbackCategories,
 	getFeedbackFollowUp,
 	parseFeedbackRating,
@@ -51,6 +57,7 @@ type SurveyStep =
 	| { kind: 'categories' }
 	| { kind: 'feature'; idea: FeatureIdea }
 	| { kind: 'comment' }
+	| { kind: 'accent' }
 
 function buildSteps(featureIdeas: readonly FeatureIdea[]): SurveyStep[] {
 	return [
@@ -68,6 +75,7 @@ function buildSteps(featureIdeas: readonly FeatureIdea[]): SurveyStep[] {
 
 export default function Feedback(): React.JSX.Element {
 	const { t } = useTranslation('settings')
+	const navigation = useNavigation()
 	const markHandled = useFeedbackPromptStore((state) => state.markHandled)
 	const accentUnlocked = usePreferencesStore((state) => state.accentUnlocked)
 	const unlockAccent = usePreferencesStore((state) => state.unlockAccent)
@@ -75,13 +83,13 @@ export default function Feedback(): React.JSX.Element {
 	const setThemeColor = usePreferencesStore((state) => state.setThemeColor)
 	const params = useLocalSearchParams<{ id?: string; rating?: string }>()
 	const savedRating = parseFeedbackRating(params.rating)
-	const origin = savedRating !== undefined ? 'home' : 'settings'
+	const origin = savedRating !== undefined ? 'home' : 'direct'
 	const labelTertiaryColor = toColor(useCSSVariable('--color-label-tertiary'))
 	const primaryColor = toColor(useCSSVariable('--color-primary'))
 
 	const [submissionId] = useState(() => params.id ?? createFeedbackId())
 	const [featureIdeas] = useState(() => shuffled(FEEDBACK_FEATURE_IDEAS))
-	const [steps] = useState(() => buildSteps(featureIdeas))
+	const [steps, setSteps] = useState(() => buildSteps(featureIdeas))
 	const [stepIndex, setStepIndex] = useState(() =>
 		savedRating !== undefined ? 1 : 0
 	)
@@ -90,6 +98,22 @@ export default function Feedback(): React.JSX.Element {
 	const [comment, setComment] = useState('')
 	const [featureInterest, setFeatureInterest] =
 		useState<FeatureInterestAnswers>({})
+	const [previousAccent, setPreviousAccent] = useState<ThemeColor>(themeColor)
+	const [accentChoice, setAccentChoice] = useState<AccentChoice>('keep')
+
+	const step = steps[stepIndex]
+	const isAccentStep = step?.kind === 'accent'
+	const isFirstStep = stepIndex === 0
+	const isLastSurveyStep =
+		step?.kind === 'comment' ||
+		(stepIndex === steps.length - 1 && !isAccentStep)
+
+	useEffect(() => {
+		navigation.setOptions({
+			gestureEnabled: !isAccentStep,
+			headerBackVisible: !isAccentStep
+		})
+	}, [isAccentStep, navigation])
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: submitFeedback,
@@ -97,53 +121,54 @@ export default function Feedback(): React.JSX.Element {
 			trackEvent('Feedback', { action: 'submit', origin })
 			markHandled(FEEDBACK_CAMPAIGN_ID)
 
-			const newlyUnlocked = !accentUnlocked
-			if (newlyUnlocked) {
-				unlockAccent()
-				if (themeColor === 'blue') {
-					setThemeColor('orange')
+			if (!accentUnlocked) {
+				setPreviousAccent(themeColor)
+				setAccentChoice('keep')
+				setSteps((current) =>
+					current.some((item) => item.kind === 'accent')
+						? current
+						: [...current, { kind: 'accent' }]
+				)
+				setStepIndex((current) => current + 1)
+				if (Platform.OS === 'ios') {
+					void selectionAsync()
 				}
-				trackEvent('Feedback', { action: 'accentUnlock', origin })
+				return
 			}
 
-			toast({
-				title: newlyUnlocked
-					? t('feedback.successUnlock')
-					: t('feedback.success'),
-				preset: 'done',
-				...(Platform.OS === 'ios' ? { haptic: 'success' as const } : {}),
-				duration: 2.5,
-				from: 'top'
-			})
 			router.back()
 		},
 		onError: (error) => {
 			trackEvent('Feedback', { action: 'submitError', origin })
-			toast({
-				title: t('feedback.error'),
-				preset: 'error',
-				...(Platform.OS === 'ios' ? { haptic: 'error' as const } : {}),
-				duration: 2.5,
-				from: 'top'
-			})
 			console.error('Error when sending feedback', error)
 		}
 	})
-
-	const step = steps[stepIndex]
-	const isFirstStep = stepIndex === 0
-	const isLastStep = stepIndex === steps.length - 1
 
 	const goNext = (): void => {
 		setStepIndex((current) => Math.min(current + 1, steps.length - 1))
 	}
 
 	const goBack = (): void => {
+		if (isAccentStep) return
 		if (isFirstStep) {
 			router.back()
 			return
 		}
 		setStepIndex((current) => Math.max(current - 1, 0))
+	}
+
+	const finishWithAccent = (): void => {
+		const nextColor =
+			accentChoice === 'reward' ? FEEDBACK_REWARD_ACCENT : previousAccent
+		unlockAccent()
+		setThemeColor(nextColor)
+		trackEvent('Feedback', { action: 'accentUnlock', origin })
+		trackEvent('Feedback', {
+			action: 'accentPick',
+			choice: accentChoice,
+			color: nextColor
+		})
+		router.back()
 	}
 
 	const handleSubmit = (): void => {
@@ -190,11 +215,20 @@ export default function Feedback(): React.JSX.Element {
 		}, AUTO_ADVANCE_MS)
 	}
 
-	const primaryLabel = isLastStep ? t('feedback.submit') : t('feedback.next')
+	const primaryLabel = isAccentStep
+		? t('feedback.accentUnlock.continue')
+		: isLastSurveyStep
+			? t('feedback.submit')
+			: t('feedback.next')
+	const showUnlockHint = isLastSurveyStep && !accentUnlocked && !isAccentStep
 
 	const handlePrimary = (): void => {
 		if (Platform.OS === 'ios') void selectionAsync()
-		if (isLastStep) {
+		if (isAccentStep) {
+			finishWithAccent()
+			return
+		}
+		if (isLastSurveyStep) {
 			handleSubmit()
 			return
 		}
@@ -203,7 +237,8 @@ export default function Feedback(): React.JSX.Element {
 	}
 
 	const primaryDisabled =
-		(step.kind === 'rating' && rating === undefined) || isPending
+		(!isAccentStep && step.kind === 'rating' && rating === undefined) ||
+		isPending
 
 	return (
 		<View testID="feedback-screen" className="flex-1 bg-background">
@@ -244,7 +279,7 @@ export default function Feedback(): React.JSX.Element {
 										style={{ color: primaryColor }}
 									/>
 									<Text className="text-primary text-[15px] font-medium flex-1 leading-5">
-										{t('feedback.rewardTeaser')}
+										{t('feedback.prompt.reward')}
 									</Text>
 								</View>
 							)}
@@ -311,33 +346,57 @@ export default function Feedback(): React.JSX.Element {
 							</View>
 						</View>
 					)}
+
+					{step.kind === 'accent' && (
+						<AccentChoiceStep
+							previousColor={previousAccent}
+							choice={accentChoice}
+							onChoiceChange={setAccentChoice}
+						/>
+					)}
 				</View>
 			</ScrollView>
 
-			<View className="px-page pt-3 pb-bottom-safe gap-2 border-t-hairline border-border bg-background">
-				{isLastStep && !accentUnlocked && (
-					<Text className="text-label-secondary text-[12px] text-center">
-						{t('feedback.submitUnlockHint')}
-					</Text>
+			<View className="px-page pt-3 pb-bottom-safe gap-2.5 border-t-hairline border-border bg-background">
+				{showUnlockHint && (
+					<View className="flex-row items-center justify-center gap-1.5 px-2">
+						<PlatformIcon
+							ios={{ name: 'paintpalette.fill', size: 12 }}
+							android={{ name: 'palette', size: 14 }}
+							web={{ name: 'Palette', size: 13 }}
+							style={{ color: primaryColor }}
+						/>
+						<Text className="text-primary text-[13px] font-medium">
+							{t('feedback.submitUnlockHint')}
+						</Text>
+					</View>
 				)}
 				<View className="flex-row gap-2 items-center">
-					<Pressable
-						testID="feedback-back"
-						accessibilityRole="button"
-						accessibilityLabel={t('feedback.back')}
-						onPress={() => {
-							if (Platform.OS === 'ios') void selectionAsync()
-							goBack()
-						}}
-						className="h-12 px-5 items-center justify-center rounded-base bg-card-button active:opacity-70"
-					>
-						<Text className="text-label-secondary text-[16px] font-medium">
-							{t('feedback.back')}
-						</Text>
-					</Pressable>
+					{!isAccentStep && (
+						<Pressable
+							testID="feedback-back"
+							accessibilityRole="button"
+							accessibilityLabel={t('feedback.back')}
+							onPress={() => {
+								if (Platform.OS === 'ios') void selectionAsync()
+								goBack()
+							}}
+							className="h-12 px-5 items-center justify-center rounded-base bg-card-button active:opacity-70"
+						>
+							<Text className="text-label-secondary text-[16px] font-medium">
+								{t('feedback.back')}
+							</Text>
+						</Pressable>
+					)}
 					<View className="flex-1">
 						<Button
-							testID={isLastStep ? 'feedback-submit' : 'feedback-next'}
+							testID={
+								isAccentStep
+									? 'feedback-accent-continue'
+									: isLastSurveyStep
+										? 'feedback-submit'
+										: 'feedback-next'
+							}
 							disabled={primaryDisabled}
 							loading={isPending}
 							onPress={handlePrimary}
