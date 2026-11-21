@@ -1,6 +1,4 @@
-import { toast } from 'burnt'
 import { selectionAsync } from 'expo-haptics'
-import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
@@ -39,22 +37,6 @@ export default function Theme(): React.JSX.Element {
 		setThemeColor(color)
 	}
 
-	const onLockedAccentPress = (option: AccentOption): void => {
-		void selectionAsync()
-		if (option.key === 'orange') {
-			toast({
-				title: t('theme.accent.lockedFeedbackToast'),
-				preset: 'none',
-				duration: 2.5,
-				from: 'top'
-			})
-			router.navigate('/feedback')
-			return
-		}
-
-		router.navigate('/member')
-	}
-
 	const elements = [
 		{
 			key: 'auto',
@@ -71,30 +53,36 @@ export default function Theme(): React.JSX.Element {
 	]
 
 	const isMember = memberInfo != null
+	const hasExtraAccents = isMember || accentUnlocked
 	const accentOptions: AccentOption[] = [
 		{
 			key: 'blue',
 			title: t('theme.accent.blue'),
 			unlocked: true
 		},
-		{
-			key: 'green',
-			title: t('theme.accent.green'),
-			unlocked: isMember,
-			lockHint: t('theme.accent.lockedMember')
-		},
-		{
-			key: 'purple',
-			title: t('theme.accent.purple'),
-			unlocked: isMember,
-			lockHint: t('theme.accent.lockedMember')
-		},
-		{
-			key: 'orange',
-			title: t('theme.accent.orange'),
-			unlocked: accentUnlocked,
-			lockHint: t('theme.accent.lockedFeedback')
-		}
+		...(isMember
+			? ([
+					{
+						key: 'green',
+						title: t('theme.accent.green'),
+						unlocked: true
+					},
+					{
+						key: 'purple',
+						title: t('theme.accent.purple'),
+						unlocked: true
+					}
+				] as const satisfies readonly AccentOption[])
+			: []),
+		...(accentUnlocked
+			? ([
+					{
+						key: 'orange',
+						title: t('theme.accent.orange'),
+						unlocked: true
+					}
+				] as const satisfies readonly AccentOption[])
+			: [])
 	]
 
 	return (
@@ -123,17 +111,18 @@ export default function Theme(): React.JSX.Element {
 				/>
 			</SectionView>
 
-			<SectionView
-				title={t('theme.accent.title')}
-				footer={t('theme.accent.footer')}
-			>
-				<AccentColorPicker
-					options={accentOptions}
-					selected={themeColor}
-					onSelect={onSelectThemeColor}
-					onLockedPress={onLockedAccentPress}
-				/>
-			</SectionView>
+			{hasExtraAccents && (
+				<SectionView
+					title={t('theme.accent.title')}
+					footer={isMember ? t('theme.accent.footer') : undefined}
+				>
+					<AccentColorPicker
+						options={accentOptions}
+						selected={themeColor}
+						onSelect={onSelectThemeColor}
+					/>
+				</SectionView>
+			)}
 			<View className="mx-page mt-[42px]">
 				<Text className="text-label-secondary text-[13px] font-normal mb-1.5 mt-4 uppercase">
 					{t('timetable:preferences.preview')}

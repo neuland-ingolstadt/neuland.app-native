@@ -139,6 +139,11 @@ JS EVALUATION, METRO CONNECTION, REACT NATIVE
 Skill: `argent-metro-debugger`
 When: evaluating expressions, inspecting React component tree at source level, finding element placement via `debugger-component-tree`.
 
+RESET MMKV / ZUSTAND PERSISTED STATE (SIMULATOR)
+Skill: `argent-mmkv-reset`
+When: Clearing MMKV keys, resetting Zustand stores on a connected device, restoring the feedback survey banner, locking accent colors, clearing handledCampaignId / app-storage fields, or forcing a local feature-flag cache value for testing.
+Prompt keywords: reset mmkv, clear storage, reset survey, feedback banner, accentUnlocked, handledCampaignId
+
 REACT APP & COMPONENT PROFILING
 Use skill: `argent-react-native-profiler`
 When: To measure performance of specific components, to find app-wide bottlenecks. Investigating re-renders or CPU hotspots, producing ranked performance reports.

@@ -29,9 +29,6 @@ export default function FeedbackPrompt({
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: submitFeedback,
-		onSuccess: () => {
-			markHandled(campaignId)
-		},
 		onError: (error) => {
 			console.error('Error when sending feedback rating', error)
 			toast({
