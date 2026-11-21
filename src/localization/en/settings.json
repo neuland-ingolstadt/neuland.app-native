@@ -84,7 +84,11 @@
 			"timetable": "Timetable",
 			"food": "Food",
 			"grades": "Grades & exams",
-			"map": "Campus map"
+			"map": "Campus map",
+			"events": "Events",
+			"news": "THI News",
+			"sports": "University sports",
+			"calendar": "THI calendar"
 		},
 		"comment": {
 			"title": "Anything else?",

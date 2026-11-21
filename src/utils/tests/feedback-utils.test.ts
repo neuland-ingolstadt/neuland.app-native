@@ -28,6 +28,10 @@ describe('getFeedbackCategories', () => {
 
 	it('returns feature categories for high ratings', () => {
 		expect(getFeedbackCategories(5)).toContain('timetable')
+		expect(getFeedbackCategories(5)).toContain('events')
+		expect(getFeedbackCategories(5)).toContain('news')
+		expect(getFeedbackCategories(5)).toContain('sports')
+		expect(getFeedbackCategories(5)).toContain('calendar')
 		expect(getFeedbackCategories(5)).not.toContain('bugs')
 	})
 })
