@@ -7,10 +7,7 @@ const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 const clipboardSetStringAsyncMock = mock(async () => {})
 const trackEventMock = mock(() => {})
-const mockGetFoodPlan = mock(
-	async (): Promise<{ food: unknown }> => ({ food: [] })
-)
-const mockGetFragmentData = mock(() => ({ foodData: [] as unknown[] }))
+const mockListMeals = mock(async (): Promise<unknown[]> => [])
 
 mock.module(`${SRC_ROOT}localization/i18n.ts`, () => ({
 	default: { language: 'de' }
@@ -36,19 +33,9 @@ mock.module('burnt', () => ({
 	toast: () => {}
 }))
 
-mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {}
-}))
-
 const registerFoodApiMocks = () => {
-	mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
-		getFragmentData: mockGetFragmentData
-	}))
-
-	mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-		default: {
-			getFoodPlan: mockGetFoodPlan
-		}
+	mock.module(`${SRC_ROOT}api/neuland-food-api.ts`, () => ({
+		listMeals: mockListMeals
 	}))
 }
 
@@ -71,7 +58,7 @@ const makeMeal = (id: string, isStatic: boolean): Meal =>
 		id,
 		static: isStatic,
 		name: { de: `Gericht ${id}`, en: `Meal ${id}` },
-		category: 'Hauptgericht',
+		category: 'main',
 		prices: { guest: 4.5, employee: 3.5, student: 2.5 },
 		allergens: null,
 		flags: null,
@@ -265,21 +252,40 @@ describe('food-utils', () => {
 		const isoDates = weekdayIsoDates()
 		const targetDay = isoDates[0] as string
 
-		mockGetFoodPlan.mockReset()
-		mockGetFragmentData.mockReset()
-		mockGetFoodPlan.mockResolvedValue({ food: 'graphql-payload' })
-		mockGetFragmentData.mockReturnValue({
-			foodData: [
-				{
-					timestamp: targetDay,
-					meals: [makeMeal('static', true), makeMeal('daily', false)]
-				}
-			]
-		})
+		mockListMeals.mockReset()
+		mockListMeals.mockResolvedValue([
+			{
+				date: targetDay,
+				meals: [
+					{
+						id: 'static',
+						name: { de: 'Gericht static', en: 'Meal static' },
+						category: 'MAIN',
+						price: { guest: 4.5, employee: 3.5, student: 2.5 },
+						originalLanguage: 'de',
+						static: true,
+						restaurant: 'INGOLSTADT_MENSA'
+					},
+					{
+						id: 'daily',
+						name: { de: 'Gericht daily', en: 'Meal daily' },
+						category: 'MAIN',
+						price: { guest: 4.5, employee: 3.5, student: 2.5 },
+						originalLanguage: 'de',
+						static: false,
+						restaurant: 'INGOLSTADT_MENSA'
+					}
+				]
+			}
+		])
 
 		const result = await foodUtils.loadFoodEntries(['IngolstadtMensa'])
 
-		expect(mockGetFoodPlan).toHaveBeenCalledWith(['IngolstadtMensa'])
+		expect(mockListMeals).toHaveBeenCalledWith({
+			restaurants: ['INGOLSTADT_MENSA'],
+			mealDateFrom: isoDates[0],
+			mealDateTo: isoDates[isoDates.length - 1]
+		})
 		expect(result).toHaveLength(isoDates.length)
 		expect(result.map((entry) => entry.timestamp)).toEqual(isoDates)
 		expect(
@@ -288,19 +294,35 @@ describe('food-utils', () => {
 	})
 
 	it('loadFoodEntries - Should keep static meals when includeStatic is true', async () => {
-		const targetDay = weekdayIsoDates()[0] as string
+		const isoDates = weekdayIsoDates()
+		const targetDay = isoDates[0] as string
 
-		mockGetFoodPlan.mockReset()
-		mockGetFragmentData.mockReset()
-		mockGetFoodPlan.mockResolvedValue({ food: 'graphql-payload' })
-		mockGetFragmentData.mockReturnValue({
-			foodData: [
-				{
-					timestamp: targetDay,
-					meals: [makeMeal('static', true), makeMeal('daily', false)]
-				}
-			]
-		})
+		mockListMeals.mockReset()
+		mockListMeals.mockResolvedValue([
+			{
+				date: targetDay,
+				meals: [
+					{
+						id: 'static',
+						name: { de: 'Gericht static', en: 'Meal static' },
+						category: 'MAIN',
+						price: { guest: 4.5, employee: 3.5, student: 2.5 },
+						originalLanguage: 'de',
+						static: true,
+						restaurant: 'INGOLSTADT_MENSA'
+					},
+					{
+						id: 'daily',
+						name: { de: 'Gericht daily', en: 'Meal daily' },
+						category: 'MAIN',
+						price: { guest: 4.5, employee: 3.5, student: 2.5 },
+						originalLanguage: 'de',
+						static: false,
+						restaurant: 'INGOLSTADT_MENSA'
+					}
+				]
+			}
+		])
 
 		const result = await foodUtils.loadFoodEntries(['IngolstadtMensa'], true)
 

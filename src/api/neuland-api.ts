@@ -1,9 +1,5 @@
 import type { FeatureCollection } from 'geojson'
 import { Platform } from 'react-native'
-import type {
-	FoodPlanQuery,
-	TypedDocumentString
-} from '@/__generated__/gql/graphql'
 import { appHomepage, appVersion } from '@/data/app-version'
 import type { SpoWeights } from '@/types/asset-api'
 import {
@@ -12,11 +8,7 @@ import {
 	type PublicEventResponse,
 	type PublicOrganizerResponse
 } from '@/types/campus-life'
-import { FOOD_QUERY } from './gql-documents'
 
-const GRAPHQL_ENDPOINT: string =
-	process.env.EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT ??
-	'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT = 'https://assets.neuland.app'
 const CAMPUS_LIFE_API_ENDPOINT = 'https://cl.neuland-ingolstadt.de'
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
@@ -60,43 +52,6 @@ class NeulandAPIClient {
 			})
 		}
 		return (await this.performRequest(url.toString())) as TResult
-	}
-
-	/**
-	 * Executes a GraphQL query against an endpoint
-	 * @param query     The query to execute
-	 * @param variables The variables to pass to the query
-	 * @returns       The query result as a promise
-	 */
-	async executeGql<TResult, TVariables>(
-		query: TypedDocumentString<TResult, TVariables>,
-		...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
-	): Promise<TResult> {
-		const resp = await fetch(GRAPHQL_ENDPOINT, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/graphql-response+json',
-				'User-Agent': USER_AGENT
-			},
-			body: JSON.stringify({
-				query,
-				variables
-			})
-		})
-
-		const json = (await resp.json()) as { data?: TResult; errors?: unknown }
-
-		if (resp.ok && json.errors == null) {
-			return json.data as TResult
-		}
-		const errorMessage =
-			json.errors != null ? JSON.stringify(json.errors) : resp.statusText
-		throw new Error(`GraphQL error: ${errorMessage}`)
-	}
-
-	async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
-		return await this.executeGql(FOOD_QUERY, { locations })
 	}
 
 	/**

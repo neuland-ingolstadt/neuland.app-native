@@ -64,6 +64,7 @@
 		"@kichiyaki/react-native-barcode-generator": "^0.6.7",
 		"@maplibre/maplibre-react-native": "11.5.1",
 		"@neuland-ingolstadt/backend-core-api": "1.2.2",
+		"@neuland-ingolstadt/backend-food-api": "1.2.4",
 		"@react-native-community/datetimepicker": "9.2.1",
 		"@react-native-community/netinfo": "12.0.1",
 		"@shopify/flash-list": "2.3.2",

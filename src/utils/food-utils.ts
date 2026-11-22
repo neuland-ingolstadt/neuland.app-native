@@ -1,9 +1,8 @@
 import { trackEvent } from '@aptabase/react-native'
 import type { i18n, TFunction } from 'i18next'
 import { Platform } from 'react-native'
-import { getFragmentData } from '@/__generated__/gql'
-import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
-import NeulandAPI from '@/api/neuland-api'
+import { mapMealDaysToFood, toApiRestaurant } from '@/api/food-meal-mapping'
+import { listMeals } from '@/api/neuland-food-api'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flapMap from '@/data/mensa-flags.json'
@@ -52,43 +51,50 @@ export function capitalizeRestaurant(
 }
 
 /**
- * Fetches and parses the meal plan
- * @param {string[]} restaurants Requested restaurants
+ * Fetches and parses the meal plan from the Food REST API
+ * @param {string[]} restaurants Requested restaurants (UI PascalCase ids)
  * @returns {object[]}
  */
 export async function loadFoodEntries(
 	restaurants: string[],
 	includeStatic = false
 ): Promise<Food[]> {
-	const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
-	const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
-
-	// create day entries for next 7 days (current and next week including the weekend) starting from monday
+	// Next 7 calendar days, then drop weekends (same window as before)
 	let days: Date[] = Array.from({ length: 7 }, (_, i) => {
 		const date = new Date()
 		date.setDate(date.getDate() + i)
 		return date
 	})
-
-	// remove weekend
 	days = days.filter((x) => x.getDay() !== 0 && x.getDay() !== 6)
-
-	// map to ISO date
 	const isoDates = days.map((x) => formatISODate(x))
+
+	const apiRestaurants = restaurants
+		.map(toApiRestaurant)
+		.filter((r): r is NonNullable<typeof r> => r != null)
+
+	if (apiRestaurants.length === 0 || isoDates.length === 0) {
+		return isoDates.map((day) => ({ timestamp: day, meals: [] }))
+	}
+
+	const mealDateFrom = isoDates[0] as string
+	const mealDateTo = isoDates[isoDates.length - 1] as string
+	const mealDays = await listMeals({
+		restaurants: apiRestaurants,
+		mealDateFrom,
+		mealDateTo
+	})
+	const foodData = mapMealDaysToFood(mealDays)
+
 	return isoDates.map((day) => {
-		const dayEntries: Meal[] = data.flatMap(
-			// biome-ignore lint/suspicious/noExplicitAny: TODO
-			(r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
-		) as Meal[]
-		// remove static meals if includeStatic is false. otherwise return all meals
+		const dayEntries: Meal[] =
+			foodData.find((x) => x.timestamp === day)?.meals ?? []
 		const filteredDayEntries = dayEntries.filter(
 			(meal) => includeStatic || !meal.static
 		)
-		const x = {
+		return {
 			timestamp: day,
 			meals: filteredDayEntries
 		}
-		return x
 	})
 }
 

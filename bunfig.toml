@@ -6,6 +6,7 @@ minimumReleaseAge = 259200
 # expo-app-intents: alpha SDK 58 package; releases often land inside the 3-day window
 minimumReleaseAgeExcludes = [
 	"@neuland-ingolstadt/backend-core-api",
+	"@neuland-ingolstadt/backend-food-api",
 	"expo-app-intents"
 ]
 
