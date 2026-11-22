@@ -48,7 +48,6 @@ jobs:
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
           EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
-          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_NEULAND_CORE_API: https://api.neuland.app/core/v1
           EXPO_PUBLIC_NEULAND_FOOD_API: https://api.neuland.app/food/v1
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
@@ -98,7 +97,6 @@ jobs:
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
           EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
-          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_NEULAND_CORE_API: https://api.neuland.app/core/v1
           EXPO_PUBLIC_NEULAND_FOOD_API: https://api.neuland.app/food/v1
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
@@ -125,7 +123,6 @@ jobs:
         env:
           EXPO_PUBLIC_THI_API_KEY: ${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
           EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_NEULAND_AUTHENTIK_CLIENT_ID }}
-          EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT_DEV }}
           EXPO_PUBLIC_NEULAND_CORE_API: https://api.neuland.app/core/v1
           EXPO_PUBLIC_NEULAND_FOOD_API: https://api.neuland.app/food/v1
           EXPO_PUBLIC_APTABASE_KEY: ${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}

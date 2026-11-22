@@ -7,7 +7,6 @@ interface FileEditInput {
 const BIOME_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.jsonc'])
 
 const SKIP_PATTERNS = [
-	/\/src\/__generated__\//,
 	/\/src\/data\/licenses\.json$/,
 	/\.svg$/,
 ]
