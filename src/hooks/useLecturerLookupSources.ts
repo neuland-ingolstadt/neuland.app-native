@@ -14,7 +14,7 @@ export function useLecturerLookupSources(): NormalizedLecturer[] {
 	const { userKind } = use(UserKindContext)
 	const { data: allLecturers = [] } = useQuery({
 		queryKey: ['allLecturers'],
-		queryFn: async () => normalizeLecturers(await API.getLecturers('0', 'z')),
+		queryFn: async () => normalizeLecturers(await API.getLecturers('a', 'z')),
 		staleTime: LECTURER_STALE_TIME_MS,
 		gcTime: LECTURER_GC_TIME_MS,
 		enabled: userKind !== USER_GUEST

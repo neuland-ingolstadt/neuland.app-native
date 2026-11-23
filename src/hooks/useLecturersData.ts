@@ -71,7 +71,7 @@ export function useLecturersData(localSearch: string): {
 			{
 				queryKey: ['allLecturers'],
 				queryFn: async () => {
-					const rawData = await API.getLecturers('0', 'z')
+					const rawData = await API.getLecturers('a', 'z')
 					const data = normalizeLecturers(rawData)
 					return data
 				},
