@@ -35,7 +35,7 @@ export function toApiRestaurant(restaurant: string): Restaurant | undefined {
 	return UI_TO_API_RESTAURANT[restaurant]
 }
 
-export function toUiRestaurant(restaurant: Restaurant): string {
+export function toUiRestaurant(restaurant: Restaurant): string | undefined {
 	return API_TO_UI_RESTAURANT[restaurant]
 }
 

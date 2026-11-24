@@ -19,6 +19,7 @@ describe('food-meal-mapping', () => {
 		expect(toUiRestaurant('NEUBURG_MENSA')).toBe('NeuburgMensa')
 		expect(toUiRestaurant('REIMANNS')).toBe('Reimanns')
 		expect(toUiRestaurant('CANISIUS')).toBe('Canisius')
+		expect(toUiRestaurant('UNKNOWN' as never)).toBeUndefined()
 	})
 
 	it('maps API categories to UI i18n keys', () => {

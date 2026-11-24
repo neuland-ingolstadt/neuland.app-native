@@ -293,6 +293,26 @@ describe('food-utils', () => {
 		).toEqual([makeMeal('daily', false)])
 	})
 
+	it('loadFoodEntries - Should track unmapped restaurant ids and skip the API when none map', async () => {
+		const isoDates = weekdayIsoDates()
+
+		mockListMeals.mockReset()
+		trackEventMock.mockReset()
+
+		const result = await foodUtils.loadFoodEntries(['Mensa', 'UnknownPlace'])
+
+		expect(mockListMeals).not.toHaveBeenCalled()
+		expect(trackEventMock).toHaveBeenCalledWith('UnmappedRestaurant', {
+			restaurant: 'Mensa'
+		})
+		expect(trackEventMock).toHaveBeenCalledWith('UnmappedRestaurant', {
+			restaurant: 'UnknownPlace'
+		})
+		expect(result).toEqual(
+			isoDates.map((timestamp) => ({ timestamp, meals: [] }))
+		)
+	})
+
 	it('loadFoodEntries - Should keep static meals when includeStatic is true', async () => {
 		const isoDates = weekdayIsoDates()
 		const targetDay = isoDates[0] as string

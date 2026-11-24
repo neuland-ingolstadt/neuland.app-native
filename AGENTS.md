@@ -161,7 +161,7 @@ unless you are explicitly updating the script itself.
 
 ```
 src/
-├── api/                  # API clients (fetch + GraphQL)
+├── api/                  # API clients (fetch + openapi-fetch)
 │   ├── thi-api.ts                  # THI REST API, no auth
 │   ├── thi-authenticated-api.ts    # THI REST API, with session
 │   ├── thi-session.ts              # THI session lifecycle
@@ -299,16 +299,19 @@ Generated and binary files:
 
 ### API layer
 
-- Three clients live in `src/api/`. Pick one:
+- Clients live in `src/api/`. Pick one:
   - `ThiAPIClient` — public THI REST endpoints, no login.
   - `ThiAuthenticatedAPIClient` — extends the public THI client, wraps requests with
     `callWithSession`, throws `NoSessionError` / `UnavailableSessionError` /
     `APIError` with a status code. Always handle these in the caller.
-  - `NeulandAPI` — Campus Life REST and asset endpoints (map overlay, SPO weights).
-  - `NeulandCoreAPI` — backend-core REST (announcements, etc.).
-  - `NeulandFoodAPI` — food microservice REST (`/food/v1` meals).
-- Components must **not** call `fetch` directly. Add a method to the relevant client and
-  consume it through React Query.
+  - `NeulandAPI` (default export from `neuland-api.ts`) — Campus Life REST and asset
+    endpoints (map overlay, SPO weights).
+  - `neulandCoreApi` / helpers in `neuland-core-api.ts` (`listAnnouncements`,
+    `listUniversitySports`, `createRoomReport`, …) — backend-core REST.
+  - `neulandFoodApi` / helpers in `neuland-food-api.ts` (`listMeals`, …) — food
+    microservice REST (`/food/v1` meals); UI mapping lives in `food-meal-mapping.ts`.
+- Components must **not** call `fetch` directly. Add a method/helper to the relevant
+  client and consume it through React Query.
 - Endpoints are configured via `EXPO_PUBLIC_*` env vars (see `.env.local.example`).
   Treat them as read-only at runtime.
 
@@ -551,13 +554,15 @@ Biome enforces almost everything. The non-obvious rules:
 
 ### Add a new API endpoint
 
-1. Add a method to the matching client in `src/api/` (REST → THI clients,
-   Food → `NeulandFoodAPI`, Core → `NeulandCoreAPI`).
+1. Add a method/helper to the matching module in `src/api/` (REST → THI clients,
+   Food → `neuland-food-api.ts` / `listMeals`, Core → `neuland-core-api.ts` /
+   `listAnnouncements`, Campus Life → `neuland-api.ts`).
 2. Consume it from a component or hook through `useQuery` / `useMutation`. Pick a
    stable `queryKey`, an explicit `staleTime`, and a `gcTime` that fits how often the
    data changes.
 3. Handle the typed errors (`APIError`, `NoSessionError`, `UnavailableSessionError`,
-   plus the strings in `@/utils/api-utils` like `networkError`, `guestError`).
+   `NeulandFoodApiError`, `NeulandCoreApiError`, plus the strings in
+   `@/utils/api-utils` like `networkError`, `guestError`).
 
 ### Add a Zustand store
 

@@ -9,7 +9,7 @@ export type MealDay = components['schemas']['MealDay']
 export type { Restaurant }
 
 const FOOD_API_BASE_URL =
-	process.env.EXPO_PUBLIC_NEULAND_FOOD_API ?? 'https://api.neuland.app/food/v1'
+	process.env.EXPO_PUBLIC_NEULAND_FOOD_API || 'https://api.neuland.app/food/v1'
 
 const USER_AGENT = `neuland.app-native/${appVersion} (+${appHomepage})`
 

@@ -68,9 +68,14 @@ export async function loadFoodEntries(
 	days = days.filter((x) => x.getDay() !== 0 && x.getDay() !== 6)
 	const isoDates = days.map((x) => formatISODate(x))
 
-	const apiRestaurants = restaurants
-		.map(toApiRestaurant)
-		.filter((r): r is NonNullable<typeof r> => r != null)
+	const apiRestaurants = restaurants.flatMap((restaurant) => {
+		const mapped = toApiRestaurant(restaurant)
+		if (mapped == null) {
+			trackEvent('UnmappedRestaurant', { restaurant })
+			return []
+		}
+		return [mapped]
+	})
 
 	if (apiRestaurants.length === 0 || isoDates.length === 0) {
 		return isoDates.map((day) => ({ timestamp: day, meals: [] }))
