@@ -561,7 +561,8 @@ Biome enforces almost everything. The non-obvious rules:
    stable `queryKey`, an explicit `staleTime`, and a `gcTime` that fits how often the
    data changes.
 3. Handle the typed errors (`APIError`, `NoSessionError`, `UnavailableSessionError`,
-   `NeulandFoodApiError`, `NeulandCoreApiError`, plus the strings in
+   `NeulandOpenApiError` (Food/Core clients set `error.name` to
+   `NeulandFoodApiError` / `NeulandCoreApiError`), plus the strings in
    `@/utils/api-utils` like `networkError`, `guestError`).
 
 ### Add a Zustand store
