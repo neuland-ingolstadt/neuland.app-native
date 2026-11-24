@@ -76,7 +76,7 @@ export function useMapQueries(): {
 	const { data: lecturers } = useQuery({
 		queryKey: ['allLecturers'],
 		queryFn: async () => {
-			const rawData = await API.getLecturers('0', 'z')
+			const rawData = await API.getLecturers('a', 'z')
 			return normalizeLecturers(rawData)
 		},
 		staleTime: LECTURER_STALE_TIME_MS,

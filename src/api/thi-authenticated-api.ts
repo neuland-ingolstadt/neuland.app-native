@@ -198,7 +198,8 @@ export class ThiAuthenticatedAPIClient extends ThiAPIClient {
 
 	/**
 	 * Fetches the lecturers for a specific range of characters
-	 * @param {string} from Single character indicating where to start listing the lecturers
+	 * @param {string} from Single letter (a-z) indicating where to start listing the lecturers.
+	 * Digits such as '0' are rejected by the API with status -104 "Wrong or missing parameter".
 	 * @param {string} to Single character indicating where to end listing the lecturers
 	 */
 	async getLecturers(from: string, to: string): Promise<Lecturers[]> {
