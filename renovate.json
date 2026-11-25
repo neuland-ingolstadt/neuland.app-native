@@ -83,16 +83,6 @@
 			"labels": ["dependencies", "ci"]
 		},
 		{
-			"description": "GraphQL codegen packages are upgraded together",
-			"matchManagers": ["bun"],
-			"matchPackageNames": [
-				"@graphql-codegen/**",
-				"graphql-codegen-typescript-operation-types"
-			],
-			"groupName": "graphql-codegen",
-			"groupSlug": "graphql-codegen"
-		},
-		{
 			"description": "Stryker mutation testing packages are upgraded together",
 			"matchManagers": ["bun"],
 			"matchPackageNames": ["@stryker-mutator/**", "@hughescr/stryker-bun-runner"],
@@ -135,8 +125,6 @@
 			"matchDepTypes": ["devDependencies"],
 			"matchPackageNames": [
 				"!@biomejs/biome",
-				"!@graphql-codegen/**",
-				"!graphql-codegen-typescript-operation-types",
 				"!@stryker-mutator/**",
 				"!@hughescr/stryker-bun-runner",
 				"!bun-types",

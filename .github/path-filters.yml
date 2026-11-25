@@ -46,7 +46,6 @@ code:
   - 'package.json'
   - 'bun.lock'
   - 'patches/**'
-  - 'config/codegen.yml'
 
 dependencies:
   - 'package.json'

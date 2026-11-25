@@ -9,7 +9,6 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"src/**",
-			"!src/__generated__",
 			"!src/data/licenses.json",
 			"!**/*.svg",
 			"!src/uniwind-types.d.ts",

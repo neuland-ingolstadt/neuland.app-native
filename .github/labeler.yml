@@ -54,8 +54,6 @@ api:
   - changed-files:
       - any-glob-to-any-file:
           - 'src/api/**'
-          - 'src/__generated__/**'
-          - 'config/codegen.yml'
 
 config:
   - changed-files:

@@ -7,10 +7,6 @@ const SRC_ROOT = new URL('../../', import.meta.url).pathname
 
 const clipboardSetStringAsyncMock = mock(async () => {})
 const trackEventMock = mock(() => {})
-const mockGetFoodPlan = mock(
-	async (): Promise<{ food: unknown }> => ({ food: [] })
-)
-const mockGetFragmentData = mock(() => ({ foodData: [] as unknown[] }))
 
 mock.module(`${SRC_ROOT}localization/i18n.ts`, () => ({
 	default: { language: 'de' }
@@ -34,20 +30,6 @@ mock.module('expo-clipboard', () => ({
 
 mock.module('burnt', () => ({
 	toast: () => {}
-}))
-
-mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {}
-}))
-
-mock.module(`${SRC_ROOT}__generated__/gql/index.ts`, () => ({
-	getFragmentData: mockGetFragmentData
-}))
-
-mock.module(`${SRC_ROOT}api/neuland-api.ts`, () => ({
-	default: {
-		getFoodPlan: mockGetFoodPlan
-	}
 }))
 
 mock.module(`${SRC_ROOT}components/Universal/icon.tsx`, () => ({
@@ -75,7 +57,7 @@ const makeMeal = (overrides: Partial<Meal> = {}): Meal =>
 		id: 'meal-1',
 		static: false,
 		name: { de: 'Gericht', en: 'Meal' },
-		category: 'Hauptgericht',
+		category: 'main',
 		prices: { guest: 4.5, employee: 3.5, student: 2.5 },
 		allergens: ['Ei'],
 		flags: ['V'],

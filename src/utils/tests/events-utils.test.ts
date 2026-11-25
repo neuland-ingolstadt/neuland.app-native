@@ -50,10 +50,6 @@ const registerEventsApiMocks = () => {
 	}))
 }
 
-mock.module(`${SRC_ROOT}__generated__/gql/graphql.ts`, () => ({
-	FoodFieldsFragmentDoc: {}
-}))
-
 let eventsUtils: typeof import('../events-utils')
 
 beforeAll(async () => {
