@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
 	resolveActiveTheme,
+	resolveLoggedOutThemeColor,
 	resolvePersistedThemeColor
 } from '@/utils/theme-utils'
 
@@ -28,5 +29,16 @@ describe('theme-utils', () => {
 		expect(resolvePersistedThemeColor('orange', false)).toBeUndefined()
 		expect(resolvePersistedThemeColor('magenta', true)).toBeUndefined()
 		expect(resolvePersistedThemeColor(undefined, true)).toBeUndefined()
+	})
+
+	it('resolveLoggedOutThemeColor - Should keep the unlocked orange accent', () => {
+		expect(resolveLoggedOutThemeColor('orange', true)).toBe('orange')
+	})
+
+	it('resolveLoggedOutThemeColor - Should reset member and locked accents to blue', () => {
+		expect(resolveLoggedOutThemeColor('green', true)).toBe('blue')
+		expect(resolveLoggedOutThemeColor('purple', false)).toBe('blue')
+		expect(resolveLoggedOutThemeColor('orange', false)).toBe('blue')
+		expect(resolveLoggedOutThemeColor('blue', true)).toBe('blue')
 	})
 })
