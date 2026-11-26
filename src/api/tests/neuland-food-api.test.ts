@@ -35,6 +35,7 @@ describe('food-meal-mapping', () => {
 			name: { de: 'Suppe', en: 'Soup' },
 			category: 'SOUP',
 			price: { student: 1.5, employee: 2.5, guest: 3.5 },
+			allergens: ['Mi', 'Wz'],
 			originalLanguage: 'de',
 			static: false,
 			restaurant: 'INGOLSTADT_MENSA',
@@ -56,7 +57,7 @@ describe('food-meal-mapping', () => {
 			name: { de: 'Suppe', en: 'Soup' },
 			category: 'soup',
 			prices: { student: 1.5, employee: 2.5, guest: 3.5 },
-			allergens: null,
+			allergens: ['Mi', 'Wz'],
 			flags: null,
 			nutrition: null,
 			variants: [
@@ -71,6 +72,33 @@ describe('food-meal-mapping', () => {
 			static: false,
 			restaurant: 'IngolstadtMensa'
 		})
+	})
+
+	it('treats empty allergen arrays as unknown (null) for UI safety', () => {
+		expect(
+			mapApiMeal({
+				id: 'r1',
+				name: { de: 'Thai Curry', en: 'Thai Curry' },
+				category: 'MAIN',
+				price: { student: 6.9, employee: 7.9, guest: 8.9 },
+				allergens: [],
+				originalLanguage: 'de',
+				static: true,
+				restaurant: 'REIMANNS'
+			}).allergens
+		).toBeNull()
+
+		expect(
+			mapApiMeal({
+				id: 'r2',
+				name: { de: 'Currywurst', en: 'Currywurst' },
+				category: 'MAIN',
+				price: { student: 6.9, employee: 7.9, guest: 8.9 },
+				originalLanguage: 'de',
+				static: true,
+				restaurant: 'REIMANNS'
+			}).allergens
+		).toBeNull()
 	})
 
 	it('maps MealDay date to Food timestamp', () => {

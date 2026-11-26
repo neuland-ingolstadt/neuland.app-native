@@ -221,7 +221,11 @@ export function userMealRating(
 	if (meal.flags?.some((x) => preferencesSelection.includes(x)) ?? false) {
 		return 2
 	}
-	if (meal.allergens == null && allergenSelection !== null) {
+	// Empty allergen lists mean "unknown / not provided" — same as null (never score as safe).
+	if (
+		(meal.allergens == null || meal.allergens.length === 0) &&
+		allergenSelection !== null
+	) {
 		return 0
 	}
 	return 1

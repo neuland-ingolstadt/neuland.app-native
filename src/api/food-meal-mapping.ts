@@ -52,13 +52,21 @@ function mapVariation(variation: ApiMealVariation): Variation {
 	}
 }
 
+/** Empty / omitted allergen lists mean "unknown" for UI safety scoring — map to null. */
+function mapAllergens(allergens: string[] | undefined): string[] | null {
+	if (allergens == null || allergens.length === 0) {
+		return null
+	}
+	return allergens
+}
+
 export function mapApiMeal(meal: ApiMeal): Meal {
 	return {
 		id: meal.id,
 		name: meal.name,
 		category: toUiCategory(meal.category),
 		prices: meal.price,
-		allergens: meal.allergens ?? null,
+		allergens: mapAllergens(meal.allergens),
 		flags: meal.flags ?? null,
 		nutrition: meal.nutrition ?? null,
 		variants: (meal.variations ?? []).map(mapVariation),

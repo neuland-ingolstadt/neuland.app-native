@@ -248,6 +248,15 @@ describe('food-utils', () => {
 		expect(foodUtils.userMealRating(meal as never, ['Ei'], ['V'])).toBe(0)
 	})
 
+	it('userMealRating - Empty allergen list must stay unknown (not "safe") when user filters allergens', () => {
+		// API may send [] for Reimanns/Canisius; that must not score as "no conflict" (1).
+		const meal = {
+			allergens: [] as string[],
+			flags: null
+		}
+		expect(foodUtils.userMealRating(meal as never, ['Ei'], [])).toBe(0)
+	})
+
 	it('loadFoodEntries - Should map weekday meal plans and exclude static meals by default', async () => {
 		const isoDates = weekdayIsoDates()
 		const targetDay = isoDates[0] as string
