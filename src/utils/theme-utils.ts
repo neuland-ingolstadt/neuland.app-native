@@ -34,3 +34,12 @@ export function resolvePersistedThemeColor(
 	if (color === 'orange' && !accentUnlocked) return undefined
 	return color
 }
+
+/** Green and purple require a member login; the unlocked orange does not. */
+export function resolveLoggedOutThemeColor(
+	color: ThemeColor,
+	accentUnlocked: boolean
+): ThemeColor {
+	if (color === 'orange' && accentUnlocked) return color
+	return 'blue'
+}

@@ -8,6 +8,7 @@ import {
 	saveSecureAsync,
 	zustandStorage
 } from '@/utils/storage'
+import { resolveLoggedOutThemeColor } from '@/utils/theme-utils'
 import { usePreferencesStore } from './usePreferencesStore'
 
 // Simple JWT decoder using built-in React Native APIs
@@ -80,8 +81,9 @@ export const useMemberStore = create<MemberStore>()(
 
 				set({ idToken: null, refreshToken: null, info: null })
 				setOfficeTogglePending(false)
-				// Only reset accent color to blue on logout
-				usePreferencesStore.getState().setThemeColor('blue')
+				const { themeColor, accentUnlocked, setThemeColor } =
+					usePreferencesStore.getState()
+				setThemeColor(resolveLoggedOutThemeColor(themeColor, accentUnlocked))
 				await Promise.all([
 					deleteSecure('member_id_token'),
 					deleteSecure('member_refresh_token')
