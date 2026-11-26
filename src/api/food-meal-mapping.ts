@@ -52,8 +52,8 @@ function mapVariation(variation: ApiMealVariation): Variation {
 	}
 }
 
-/** Empty allergen lists mean "unknown / not provided" for UI safety scoring — same as null. */
-function mapAllergens(allergens: string[] | null | undefined): string[] | null {
+/** Empty / omitted allergen lists mean "unknown" for UI safety scoring — map to null. */
+function mapAllergens(allergens: string[] | undefined): string[] | null {
 	if (allergens == null || allergens.length === 0) {
 		return null
 	}

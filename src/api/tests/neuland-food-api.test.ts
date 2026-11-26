@@ -94,7 +94,6 @@ describe('food-meal-mapping', () => {
 				name: { de: 'Currywurst', en: 'Currywurst' },
 				category: 'MAIN',
 				price: { student: 6.9, employee: 7.9, guest: 8.9 },
-				allergens: null,
 				originalLanguage: 'de',
 				static: true,
 				restaurant: 'REIMANNS'
