@@ -2,7 +2,10 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { defaultQuicklinks } from '@/data/constants'
 import { zustandStorage } from '@/utils/storage'
-import { resolvePersistedThemeColor } from '@/utils/theme-utils'
+import {
+	resolveLoggedOutThemeColor,
+	resolvePersistedThemeColor
+} from '@/utils/theme-utils'
 
 export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange'
 
@@ -112,8 +115,12 @@ export const usePreferencesStore = create<PreferencesStore>()(
 				set({ autoShowNextDayTimeMinutes })
 			},
 			reset: () => {
-				set(initialState)
-				zustandStorage.removeItem('app-storage')
+				// Intentional: the survey reward survives a logout
+				set(({ accentUnlocked, themeColor }) => ({
+					...initialState,
+					accentUnlocked,
+					themeColor: resolveLoggedOutThemeColor(themeColor, accentUnlocked)
+				}))
 			}
 		}),
 		{
