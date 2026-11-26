@@ -103,7 +103,7 @@
 		"expo-updates": "~58.0.22",
 		"expo-web-browser": "~58.1.0",
 		"fuse.js": "^7.4.2",
-		"i18next": "27.2.2",
+		"i18next": "27.2.4",
 		"idb": "^8.0.3",
 		"lucide-react-native": "^1.18.0",
 		"luxon": "^3.7.2",
