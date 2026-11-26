@@ -124,7 +124,8 @@ const MapScreen = (): React.JSX.Element => {
 				</View>
 			)}
 
-			<View testID="map-canvas" className="flex-1">
+			{/* z-0 keeps the map controls' zIndex local, below the bottom sheets */}
+			<View testID="map-canvas" className="flex-1 z-0">
 				<NativeMapCanvas
 					mapKey={mapKey}
 					cameraResetRequestId={cameraResetRequestId}
